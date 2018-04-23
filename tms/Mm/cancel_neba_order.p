@@ -10,8 +10,18 @@
   MODIFIED .....: 
   VERSION ......: yoigo
   -------------------------------------------------------------------------- */
-DEF INPUT  PARAMETER iiOrder  AS INT  NO-UNDO.
+
+
+
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+
+DEF INPUT  PARAMETER iiOrderId  AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER ocError AS CHAR NO-UNDO.
+
+DEF VAR liCashCust AS INT NO-UNDO.
+DEF VAR lcSelectedFee AS CHAR NO-UNDO.
+DEF VAR ldNebaAmt AS DECIMAL NO-UNDO.
 
 RUN pInitializeReturnValue.
 
@@ -19,27 +29,24 @@ IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
-   DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
-   lhInvoice = BUFFER Invoice:HANDLE.
-
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
-   cError = "Error:Neba fee not found for order " +
+   ocError = "Error:Neba fee not found for order " +
                                          STRING(iiOrderID).
    lhSingleFee = BUFFER SingleFee:HANDLE.
 
-   DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
-   lhCustomer = BUFFER Customer:HANDLE.
 END.
 
 /*Function contails logig for selecting correct fee in NEBA case cancellation*/
 FUNCTION fSelectNebaFee RETURNS CHAR
-   (iiOrderID AS CHAR
-    OUTPUT odValue AS DECIMAL,
-    OUTPUT ocFeeName):
+   (INPUT iiOrderID  AS INT,
+    OUTPUT odValue   AS DEC,
+    OUTPUT ocFeeName AS CHAR):
    /*TODO: select correct permanency - finding method unclear...offers?*/
+
    odValue = 110.0.
    ocFeeName = "NEBTERMPERIOD".
    RETURN "". /*Error handling: add error message to ret valua.*/
+
 END.   
 
 FUNCTION fCreateSingleFee RETURNS LOGICAL
@@ -47,6 +54,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
     idAmount    AS DEC,
     ilVatIncl   AS LOG,
     icFeeModel  AS CHAR,
+    iiCustNum   AS INT,
     iiOrderId   AS INT):
 
    DO TRANS:
@@ -55,12 +63,13 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       ASSIGN
       SingleFee.Brand       = Syst.Var:gcBrand
       SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
-      SingleFee.CustNum     = liCashCust
+      SingleFee.CustNum     = iiCustnum
       SingleFee.BillTarget  = 1
-      SingleFee.CalcObj     = lcCalcObj
+      SingleFee.CalcObj     = "NBTERM"
       SingleFee.BillCode    = icBillCode
-      SingleFee.BillPeriod  = liBillPeriod     /* billing Period   */
-      SingleFee.Concerns[1] = liConcerns       /* period concerned */
+      SingleFee.BillPeriod  = YEAR(TODAY) * 100 + MONTH(TODAY)
+      SingleFee.Concerns[1] = (YEAR(TODAY) * 100 + MONTH(TODAY)) * 100 + 
+                               DAY(TODAY)
       SingleFee.Amt         = idAmount         /* Payment          */
       SingleFee.Memo[1]     = ""
       SingleFee.Memo[2]     = ""
@@ -70,7 +79,8 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       SingleFee.Contract    = ""
       SingleFee.Active      = TRUE
       SingleFee.FeeModel    = icFeeModel
-      SingleFee.VATIncl     = ilVatIncl
+      /*SingleFee.VATIncl     = ilVatIncl*/
+      . 
 
       IF llDoEvent THEN
          RUN StarEventMakeCreateEventWithMemo(lhSingleFee,
@@ -85,7 +95,7 @@ END FUNCTION.
 /*Actual logic*/
 
 FIND FIRST Order NO-LOCK WHERE 
-           Order.Brand eq AND
+           Order.Brand eq Syst.Var:gcBrand AND
            Order.OrderID EQ iiOrderId NO-ERROR.
 IF NOT AVAILABLE OrderCustomer THEN DO:
    ocError = "Error:Order not available".
@@ -118,7 +128,7 @@ IF NOT AVAIL Customer THEN DO:
 END.
 
 /*Select NEBA permanency for the customer. */
-lcSelectedFee =  fSelectNebaFee(iiOrderId
+lcSelectedFee =  fSelectNebaFee(iiOrderId,
                                 OUTPUT ldNebaAmt,
                                 OUTPUT lcSelectedFee).
 IF ocError NE "" THEN RETURN. ocError = "Error:Neba fee not found for order " +
@@ -129,13 +139,14 @@ IF ocError NE "" THEN RETURN. ocError = "Error:Neba fee not found for order " +
 fCreateSingleFee(lcSelectedFee,
                  ldNebaAmt,
                  FALSE,
-                 "").
+                 "",
+                 liCashCust,
+                 iiOrderId).
 
 FINALLY :
 
 fCleanEventObjects().
 
-TODO:
 END.
 
 
