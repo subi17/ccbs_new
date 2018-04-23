@@ -45,6 +45,7 @@ DEF VAR lcPortStat   AS CHAR NO-UNDO.
 DEF VAR lcPortDate   AS CHAR NO-UNDO.
 DEF VAR lcRouterStat AS CHAR NO-UNDO.
 DEF VAR lcIUA        AS CHAR NO-UNDO.
+DEF VAR lcNebaErr    AS CHAR NO-UNDO.
 
 top_struct = get_struct(param_toplevel_id, "0").
 
@@ -324,7 +325,18 @@ CASE FusionMessage.FixedStatus:
       /*NEBA TODO*/
       /*If this is cancelled in NEBA PERMANENCY period,
         the penalty must be handled.*/
-    /*cashfee???vai osa siitä*/      
+     IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW} AND
+        Order.Clitype MATCHES ("*CONTFHNB*") THEN DO:
+        RUN Mm/neba_cancellation_action.p(OrderFusion.OrderID, 
+                                          lcNebaErr).
+        IF RETURN-VALUE NE "" THEN DO:
+           Func.Common:mWriteMemo("Order",
+                             STRING(Order.OrderID),
+                             Order.CustNum,
+                             "NEBA cancellation fee creation failed",
+                             lcNebaErr).
+           FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+     END.
 
       IF llOldStructure THEN
          ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
