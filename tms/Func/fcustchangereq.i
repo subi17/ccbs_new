@@ -34,6 +34,7 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
    DEF VAR liReqType    AS INT  NO-UNDO.
    DEF VAR ldFirstAct   AS DEC  NO-UNDO.
    DEF VAR liReqCreated AS INT  NO-UNDO.
+   DEF VAR liOrderID    AS INT NO-UNDO. 
 
    DEF BUFFER bReqMobSub   FOR MobSub.   
 
@@ -41,6 +42,10 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
       ocResult = "Invalid new customer data".
       RETURN 0.
    END. 
+
+   IF icNewData BEGINS "orderid:" THEN ASSIGN
+      liOrderID = INT(ENTRY(2,icNewData,":")) 
+      icNewData = "" NO-ERROR.
 
    CASE icChgType:
    WHEN "user"    THEN liReqType = 3.
@@ -83,6 +88,7 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
       bCreaReq.ReqDParam1 = idChgStamp
       bCreaReq.ReqDParam2 = ideFee
       bCreaReq.ReqSource  = icSource
+      bCreaReq.ReqIParam4 = liOrderID
       bCreaReq.OrigRequest = iiOrigReq. 
 
    If icChgType = "tarj3" THEN

@@ -47,6 +47,11 @@
  * @output success;boolean
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+
+{Mm/msagrcustchg.i}
+{Func/fcustchangereq.i}
+{Func/fcharge_comp_loaded.i}
+{Func/orderchk.i}
 {Syst/tmsconst.i}
 
 /* Input parameters */
@@ -79,12 +84,6 @@ DEF VAR llProCust AS LOG NO-UNDO.
 DEF VAR llSelfEmployed AS LOG NO-UNDO.
 
 DEF BUFFER bOriginalCustomer FOR Customer.
-
-DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
-   FIELD cBirthDay AS CHAR
-   FIELD CityCode LIKE CustomerReport.CityCode
-   FIELD StreetCode LIKE CustomerReport.StreetCode
-   FIELD TownCode LIKE CustomerReport.TownCode.
 
 DEF VAR lcAgrCustID AS CHARACTER NO-UNDO.
 DEF VAR lcAgrCustIDType AS CHARACTER NO-UNDO.
@@ -212,14 +211,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* PARSING ENDS */
 
-{Syst/commpaa.i}
 ASSIGN
-   Syst.Var:katun = "VISTA_" + pcSalesMan
-   Syst.Var:gcBrand = "1".
-{Mm/msagrcustchg.i}
-{Func/fcustchangereq.i}
-{Func/fcharge_comp_loaded.i}
-{Func/orderchk.i}
+   Syst.Var:katun = "VISTA_" + pcSalesMan.
 
 /*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
 IF AVAIL Customer THEN

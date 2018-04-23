@@ -33,6 +33,8 @@
 {Func/orderfunc.i}
 {Func/custfunc.i}
 {Func/addline_discount.i}
+   
+DEF TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -168,12 +170,8 @@ PROCEDURE pOwnerChange:
    DEF VAR lcDataField  AS CHAR NO-UNDO.
    DEF VAR lcInvGroup   AS CHAR NO-UNDO. 
    DEF VAR liOrigStat   AS INT  NO-UNDO.
-   DEF VAR lcCustIDType AS CHAR NO-UNDO.
    DEF VAR llValue      AS LOG  NO-UNDO.
    DEF VAR liNewValue   AS INT  NO-UNDO.
-   DEF VAR lcCityCode   AS CHAR NO-UNDO. 
-   DEF VAR lcStreetCode AS CHAR NO-UNDO. 
-   DEF VAR lcTownCode   AS CHAR NO-UNDO.
    DEF VAR lcEmail      AS CHAR NO-UNDO.
    DEF VAR lcResult     AS CHAR NO-UNDO.
    DEF VAR liRequest    AS INT  NO-UNDO.
@@ -188,20 +186,50 @@ PROCEDURE pOwnerChange:
    DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bMsRequest    FOR MsRequest.
    DEF BUFFER bOldCustCat   FOR CustCat.
-   
+   DEF BUFFER bACCOrder     FOR Order.
+
    liOrigStat = MsRequest.ReqStat.
       
    /* Set request under work status */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
    
    ASSIGN liNewOwner = MsRequest.ReqIParam1.
+      
+   IF MsRequest.ReqIParam4 > 0 THEN DO:
+
+      FIND bAccOrder NO-LOCK WHERE
+           bAccOrder.brand = Syst.Var:gcBrand AND
+           bAccOrder.OrderID = MsRequest.ReqIParam4 NO-ERROR. 
+
+      IF NOT AVAIL bAccOrder THEN RETURN "ERROR: Order not found".
+
+      IF bAccOrder.StatusCode NE {&ORDER_STATUS_ONGOING} THEN
+         RETURN SUBST("ERROR: Incorrect order status &1", bAccOrder.StatusCode).
+
+      IF NOT fParseAccOrderCustomer(
+         bAccOrder.OrderID,
+         OUTPUT TABLE ttCustomer BY-REFERENCE) THEN
+         RETURN "ERROR: New customer data parsing failed".
+      
+   END.
+   ELSE DO:
+
+      IF NOT fParseAccDataParam(
+        MsRequest.ReqCParam1,
+        OUTPUT TABLE ttCustomer BY-REFERENCE) THEN
+        RETURN "ERROR: New customer data parsing failed".
+   END.
+
+   IF NOT AVAIL ttCustomer THEN 
+      RETURN "ERROR: New customer data not available§".
+
    /* Double check existing customer */
    IF liNewOwner = 0 THEN DO: 
       
       FIND FIRST bNewCust WHERE
          bNewCust.Brand      = Syst.Var:gcBrand AND
-         bNewCust.OrgId      = ENTRY(13,MsRequest.ReqCParam1,";") AND
-         bNewCust.CustIdType = ENTRY(12,MsRequest.ReqCParam1,";") AND
+         bNewCust.OrgId      = ttCustomer.OrgID AND
+         bNewCust.CustIdType = ttCustomer.CustIDType AND
          bNewCust.Roles NE "inactive"
       NO-LOCK NO-ERROR.
       
@@ -273,7 +301,9 @@ PROCEDURE pOwnerChange:
    END. 
  
    /* nor an existing customer nbr or a name for the new customer is given */
-   IF MsRequest.ReqIParam1 = 0 AND MsRequest.ReqCParam1 = "" THEN DO:
+   IF MsRequest.ReqIParam1 = 0 AND 
+      MsRequest.ReqCParam1 = "" AND
+      MsRequest.ReqIparam4 = 0 THEN DO:
       fReqError("Nothing to do").
       RETURN. 
    END.
@@ -291,8 +321,6 @@ PROCEDURE pOwnerChange:
    Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
-
-   lcCustIDType = ENTRY(12,MsRequest.ReqCParam1,";").
    
    /* 1. phase for normal agr.cust change */
    IF liOrigStat = 0 AND MsRequest.ReqIParam3 NE 1 THEN DO:
@@ -300,7 +328,7 @@ PROCEDURE pOwnerChange:
       /* credit check for postpaid (not for companies) */
       IF MobSub.PayType = FALSE THEN DO:
       
-         IF lcCustIDType = "CIF" THEN DO:
+         IF ttCustomer.CustIdType = "CIF" THEN DO:
             fReqStatus(8,"").
          END.
             
@@ -452,7 +480,7 @@ PROCEDURE pOwnerChange:
          
          /* default group using region */  
          IF lcInvGroup = "" THEN 
-            lcInvGroup = fDefInvGroup(ENTRY(17,lcDataField,";")).
+            lcInvGroup = fDefInvGroup(ttCustomer.Region).
 
          liDefCust = fCParamI("DefCust" + lcInvGroup).
       
@@ -499,7 +527,7 @@ PROCEDURE pOwnerChange:
          lcMemo = "ACC" + CHR(255) +
                   STRING(bNewCust.CustNum) + CHR(255) +
                   STRING(MobSub.MsSeq) + CHR(255) +
-                  ENTRY(11,MsRequest.ReqCParam1,";") + CHR(255) +
+                  ttCustomer.SalesMan + CHR(255) +
                   lcChannel.
 
          /* DCH */
@@ -511,40 +539,35 @@ PROCEDURE pOwnerChange:
                                 bMobSub.CustNum   = bNewCust.CustNum AND
                                 bMobSub.PayType   = FALSE)) THEN DO:
             ASSIGN
-               bNewCust.BirthDay        = DATE(ENTRY(14,lcDataField,";"))
-               bNewCust.HonTitle        = ENTRY(16,lcDataField,";")
-               bNewCust.FirstName       = ENTRY(2,lcDataField,";")
-               bNewCust.CustName        = ENTRY(1,lcDataField,";")
-               bNewCust.Surname2        = ENTRY(3,lcDataField,";")
-               bNewCust.Companyname     = ENTRY(5,lcDataField,";")
-               bNewCust.COName          = ENTRY(4,lcDataField,";")
-               bNewCust.Address         = ENTRY(6,lcDataField,";")
-               bNewCust.ZipCode         = ENTRY(7,lcDataField,";")
-               bNewCust.PostOffice      = ENTRY(8,lcDataField,";")
-               bNewCust.Country         = ENTRY(9,lcDataField,";")
-               bNewCust.CustIdType      = ENTRY(12,lcDataField,";")
-               bNewCust.OrgId           = ENTRY(13,lcDataField,";")
-               bNewCust.Nationality     = ENTRY(19,lcDataField,";")
-               bNewCust.Language        = INT(ENTRY(15,lcDataField,";"))
-               bNewCust.Region          = ENTRY(17,lcDataField,";")
-               bNewCust.BankAcc         = ENTRY(18,lcDataField,";")
-               bNewCust.FoundationDate  = DATE(ENTRY(20,lcDataField,";"))
-               bNewCust.smsnumber       = ENTRY(21,lcDataField,";")
-               bNewCust.phone           = ENTRY(22,lcDataField,";")
-               bNewCust.DirMarkSMS      = LOGICAL(ENTRY(23,lcDataField,";"))
-               bNewCust.DirMarkEmail    = LOGICAL(ENTRY(24,lcDataField,";"))
-               bNewCust.DirMarkPost     = LOGICAL(ENTRY(25,lcDataField,";"))
-               bNewCust.OutMarkSMS      = LOGICAL(ENTRY(26,lcDataField,";"))
-               bNewCust.OutMarkEmail    = LOGICAL(ENTRY(27,lcDataField,";"))
-               bNewCust.OutMarkPost     = LOGICAL(ENTRY(28,lcDataField,";"))
-               lcStreetCode             = ENTRY(29,lcDataField,";")
-               lcCityCode               = ENTRY(30,lcDataField,";") 
-               bNewCust.AuthCustIdType  = ENTRY(32,lcDataField,";")
-               bNewCust.AuthCustId      = ENTRY(33,lcDataField,";")
-               lcTownCode               = ENTRY(34,lcDataField,";") WHEN
-                                          NUM-ENTRIES(lcDataField,";") >= 34
-               bNewCust.SearchName      = SUBSTRING(bNewCust.CustName + " " + 
-                                                    bNewCust.FirstName,1,8)
+               bNewCust.BirthDay        = ttCustomer.BirthDay
+               bNewCust.HonTitle        = ttCustomer.HonTitle
+               bNewCust.FirstName       = ttCustomer.FirstName
+               bNewCust.CustName        = ttCustomer.CustName
+               bNewCust.Surname2        = ttCustomer.SurName2
+               bNewCust.Companyname     = ttCustomer.CompanyName
+               bNewCust.COName          = ttCustomer.COName
+               bNewCust.Address         = ttCustomer.Address
+               bNewCust.ZipCode         = ttCustomer.ZipCode
+               bNewCust.PostOffice      = ttCustomer.PostOffice
+               bNewCust.Country         = ttCustomer.Country
+               bNewCust.CustIdType      = ttCustomer.CustIDType
+               bNewCust.OrgId           = ttCustomer.OrgId
+               bNewCust.Nationality     = ttCustomer.Nationality
+               bNewCust.Language        = ttCustomer.Language
+               bNewCust.Region          = ttCustomer.Region
+               bNewCust.BankAcc         = ttCustomer.BankAcc
+               bNewCust.FoundationDate  = ttCustomer.FoundationDate
+               bNewCust.smsnumber       = ttCustomer.SMSNumber
+               bNewCust.phone           = ttCustomer.Phone
+               bNewCust.DirMarkSMS      = ttCustomer.DirMarkSMS
+               bNewCust.DirMarkEmail    = ttCustomer.DirMarkEmail
+               bNewCust.DirMarkPost     = ttCustomer.DirMarkPost
+               bNewCust.OutMarkSMS      = ttCustomer.OutMarkSMS
+               bNewCust.OutMarkEmail    = ttCustomer.OutMarkEmail
+               bNewCust.OutMarkPost     = ttCustomer.OutMarkPost
+               bNewCust.AuthCustIdType  = ttCustomer.AuthCustIdType
+               bNewCust.AuthCustId      = ttCustomer.AuthCustId
+               bNewCust.SearchName      = ttCustomer.SearchName
                bNewCust.InvGroup        = fDefInvGroup(bNewCust.Region)
                                         WHEN bNewCust.Region NE "00"
                NO-ERROR.
@@ -560,9 +583,9 @@ PROCEDURE pOwnerChange:
             IF NOT AVAIL CustomerReport THEN CREATE CustomerReport.
             ASSIGN
                CustomerReport.Custnum = bNewCust.Custnum
-               CustomerReport.StreetCode = lcStreetCode
-               CustomerReport.CityCode = lcCityCode
-               CustomerReport.TownCode = lcTownCode.
+               CustomerReport.StreetCode = ttCustomer.StreetCode
+               CustomerReport.CityCode = ttCustomer.CityCode
+               CustomerReport.TownCode = ttCustomer.TownCode.
 
             /* If customer makes an ACC to company customer and in Vista 
                there is no possibility to provide Contact person information 
@@ -586,8 +609,7 @@ PROCEDURE pOwnerChange:
             END.
 
             /* Electronic Invoice project */
-            IF NUM-ENTRIES(lcDataField,";") >= 10 THEN
-               lcEmail = ENTRY(10,lcDataField,";").
+            lcEmail = ttCustomer.Email.
          END.
 
          IF liReqCnt = 1 AND lcEmail > "" AND
@@ -888,6 +910,8 @@ PROCEDURE pOwnerChange:
                     MsRequest.MsSeq,
                     MsRequest.Cli).
       fReqStatus(2,""). 
+      IF AVAIL bAccOrder THEN
+         fSetOrderStatus(bAccOrder.OrderId,"6").  
    END.
    
 END PROCEDURE.
@@ -924,6 +948,16 @@ PROCEDURE pMsCustMove:
    DEF BUFFER bLimit      FOR Limit. 
    DEF BUFFER bCounter    FOR TMCounter.
    DEF BUFFER lbMLMobSub  FOR MobSub.
+
+   IF MsRequest.ReqIParam4 > 0 THEN DO:
+      FIND OrderAction NO-LOCK WHERE
+           OrderAction.Brand = Syst.Var:gcBrand AND
+           OrderAction.OrderID = Order.OrderID AND
+           OrderAction.ItemType = "Mandate" NO-ERROR.
+      IF AVAIL OrderAction THEN lcMandate = OrderAction.ItemKey.
+   END.
+   ELSE IF NUM-ENTRIES(MsRequest.ReqCParam1,";") >= 35 THEN
+       lcMandate = ENTRY(35,MsRequest.ReqCParam1,";").
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK.
    
@@ -1278,10 +1312,8 @@ PROCEDURE pMsCustMove:
       /* Create Mandate for Subscription and store it into MsOwner */
       Func.Common:mSplitTS(MsRequest.CreStamp, OUTPUT ldaDate, OUTPUT liManTime).
    
-      IF NUM-ENTRIES(MsRequest.ReqCParam1,";") >= 35 AND
-         LENGTH(ENTRY(35,MsRequest.ReqCParam1,";")) EQ 30 THEN
+      IF LENGTH(lcMandate) >= 30 THEN
          ASSIGN
-             lcMandate          = ENTRY(35,MsRequest.ReqCParam1,";")
              bOwner.MandateId   = lcMandate
              lcDate             = SUBSTRING(lcMandate,25,6)
              bOwner.MandateDate = DATE(INT(SUBSTR(lcDate,3,2)),
