@@ -336,6 +336,7 @@ CASE FusionMessage.FixedStatus:
                              "NEBA cancellation fee creation failed",
                              lcNebaErr).
            FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+        END.
      END.
 
       IF llOldStructure THEN
