@@ -21,15 +21,25 @@ FUNCTION fGetAddLinePayType RETURNS CHAR
 
    DEF VAR lcPayType AS CHAR NO-UNDO.
    DEF VAR lcCLIType AS CHAR NO-UNDO.
+   DEF VAR ldaCreationDate AS DATE NO-UNDO INIT ?.
+   DEFINE BUFFER bMobSub FOR MobSub.
 
    /* YDR-2883 Handle correctly Way of payment for 66 and 67 */
-   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
-                                 MobSub.CustNum = iiCustNum 
-                                 BY CreationDate:
+   FOR EACH bMobSub NO-LOCK WHERE 
+            bMobSub.Brand   EQ Syst.Var:gcBrand AND
+            bMobSub.CustNum EQ iiCustNum 
+            BY CreationDate:
       /* Additional line main line */
-      IF fIsAddLineTariff(MobSub.CLI) THEN DO:
-         lcCLIType = MobSub.CLIType.
-         LEAVE.
+      IF fIsAddLineTariff(bMobSub.CLI) THEN DO:
+         /* two or more subscriptions with the same activation date */
+         IF lcCLIType > "" AND
+            ldaCreationDate NE ? AND
+            bMobSub.CreationDate > ldaCreationDate THEN LEAVE.
+         
+         lcCLIType = bMobSub.CLIType.
+         ldaCreationDate =  bMobSub.CreationDate.
+         /* Fiber has priority over DSL. Correct found */
+         IF INDEX(lcCLIType,"TFH") > 0 THEN LEAVE.
       END.
    END.
 
@@ -47,17 +57,27 @@ END FUNCTION.
 FUNCTION fGetExtraPayType RETURNS CHAR
    (INPUT iiCustNum AS INT):
 
-   DEF VAR lcPayType AS CHAR NO-UNDO.
-   DEF VAR lcCLIType AS CHAR NO-UNDO.
+   DEF VAR lcPayType       AS CHAR NO-UNDO.
+   DEF VAR lcCLIType       AS CHAR NO-UNDO.
+   DEF VAR ldaCreationDate AS DATE NO-UNDO INIT ?.
+   DEFINE BUFFER bMobSub FOR MobSub.
 
    /* YDR-2883 Handle correctly Way of payment for 66 and 67 */
-   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
-                                 MobSub.CustNum = iiCustNum 
-                                 BY CreationDate:
+   FOR EACH bMobSub NO-LOCK WHERE 
+            bMobSub.Brand   EQ Syst.Var:gcBrand AND
+            bMobSub.CustNum EQ iiCustNum 
+            BY CreationDate:
       /* Search Extra Line Main line */
-      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
-         lcCLIType = MobSub.CLIType.
-         LEAVE.
+      IF fCLITypeIsMainLine(bMobSub.CLIType) THEN DO:
+         /* two or more subscriptions with the same activation date */
+         IF lcCLIType > "" AND
+            ldaCreationDate NE ? AND
+            bMobSub.CreationDate > ldaCreationDate THEN LEAVE.
+         
+         lcCLIType = bMobSub.CLIType.
+         ldaCreationDate =  bMobSub.CreationDate.
+         /* Fiber has priority over DSL. Correct found */
+         IF INDEX(lcCLIType,"TFH") > 0 THEN LEAVE.
       END.
    END.
 
@@ -85,19 +105,19 @@ FUNCTION fIsAddLineMsOwnerTariff RETURNS LOGICAL
    Func.Common:mTS2Date(idToPeriod, OUTPUT LDaValidTo).
 
    FOR FIRST bMobSub NO-LOCK WHERE
-             bMobSub.Brand = Syst.Var:gcBrand AND
-             bMobSub.CLI   = icCli AND
+             bMobSub.Brand EQ Syst.Var:gcBrand AND
+             bMobSub.CLI   EQ icCli AND
       LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0,
          EACH bDiscountPlan NO-LOCK WHERE
-              bDiscountPlan.Brand  = Syst.Var:gcBrand AND
+              bDiscountPlan.Brand  EQ Syst.Var:gcBrand AND
        LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + ","
                                    + {&ADDLINE_DISCOUNTS_20} + ","
                                    + {&ADDLINE_DISCOUNTS_HM}) > 0 AND
               bDiscountPlan.ValidTo >= LDaValidTo,
          FIRST bDPMember NO-LOCK WHERE
-               bDPMember.DPID       = bDiscountPlan.DPID AND
-               bDPMember.HostTable  = "MobSub" AND
-               bDPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
+               bDPMember.DPID       EQ bDiscountPlan.DPID AND
+               bDPMember.HostTable  EQ "MobSub" AND
+               bDPMember.KeyValue   EQ STRING(bMobSub.MsSeq) AND
                bDPMember.ValidTo   >= LDaValidTo AND
                bDPMember.ValidFrom <= bDPMember.ValidTo:
 
@@ -123,11 +143,11 @@ FUNCTION fIfsWayOfPayment RETURNS CHAR
 
    /* service invoices with MsOwner */
    FOR FIRST bMsOwner NO-LOCK USE-INDEX CLI_S WHERE
-       bMsOwner.CLI   = icCli AND
-       bMsOwner.MsSeq = iiMsSeq AND
-       bMsOwner.TSEnd >= idFromPeriod AND
-       bMsOwner.TsBeg <= idToPeriod AND
-       bMsOwner.PayType = FALSE:
+             bMsOwner.CLI   EQ icCli AND
+             bMsOwner.MsSeq EQ iiMsSeq AND
+             bMsOwner.TSEnd >= idFromPeriod AND
+             bMsOwner.TsBeg <= idToPeriod AND
+             bMsOwner.PayType EQ FALSE:
       /* MSISDN active in the subscription */
       FIND FIRST bMobSub NO-LOCK WHERE
                  bMobSub.Brand EQ Syst.Var:gcBrand AND
