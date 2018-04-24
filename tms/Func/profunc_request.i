@@ -235,11 +235,12 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEF VAR liReqCreated AS INT NO-UNDO.
    DEF VAR ldActStamp   AS DEC NO-UNDO.
 
-   DEFINE BUFFER bCustomer  FOR Customer.
-   DEFINE BUFFER bMobSub    FOR MobSub.
-   DEFINE BUFFER bCustCat   FOR Custcat.
-   DEFINE BUFFER bOrder     FOR Order.
-   DEFINE BUFFER bClitype   FOR CLIType.
+   DEFINE BUFFER bCustomer      FOR Customer.
+   DEFINE BUFFER bMobSub        FOR MobSub.
+   DEFINE BUFFER bCustCat       FOR Custcat.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bClitype       FOR CLIType.
 
    DEFINE VARIABLE llHasMappingMissingForLegacyTariff AS LOGICAL NO-UNDO INIT TRUE.
 
@@ -289,10 +290,16 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
        END.
 
        /* Convergent in ONGOING status */
-       FOR EACH bOrder
-          WHERE bOrder.Brand   = Syst.Var:gcBrand 
-            AND bOrder.CustNum = bCustomer.CustNum 
-            AND LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK:
+       FOR EACH bOrderCustomer NO-LOCK WHERE
+                bOrderCustomer.Brand      EQ Syst.Var:gcBrand     AND
+                bOrderCustomer.CustId     EQ bCustomer.OrgId      AND
+                bOrderCustomer.CustIdType EQ bCustomer.CustIdType AND
+                bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+           FIRST bOrder NO-LOCK WHERE
+                 bOrder.Brand              EQ Syst.Var:gcBrand       AND
+                 bOrder.Orderid            EQ bOrderCustomer.Orderid AND
+                 bOrder.OrderType          NE {&ORDER_TYPE_RENEWAL}  AND
+                 LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK:
 
             FIND bClitype WHERE bClitype.Brand = Syst.Var:gcBrand AND bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
             IF AVAILABLE bCliType AND 
