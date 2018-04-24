@@ -299,7 +299,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                  bOrder.Brand              EQ Syst.Var:gcBrand       AND
                  bOrder.Orderid            EQ bOrderCustomer.Orderid AND
                  bOrder.OrderType          NE {&ORDER_TYPE_RENEWAL}  AND
-                 LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK:
+                 LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
 
             FIND bClitype WHERE bClitype.Brand = Syst.Var:gcBrand AND bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
             IF AVAILABLE bCliType AND 
