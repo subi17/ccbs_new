@@ -18,11 +18,9 @@ put stream slog unformatted
     "Item"  chr(9)
     "Name"  chr(9)
     "Group" chr(9)
-    "Account" chr(9)
     "Section" chr(9)
     "Tax Class" chr(9)
-    "SAP Code"  chr(9)
-    "Cost Centre" chr(9).
+    .
     
 do i = 1 to 5:
    put stream slog unformatted
@@ -39,11 +37,9 @@ put stream sarda unformatted
     "Item"  lcsep
     "Name"  lcsep
     "Group" lcsep
-    "Account" lcsep
     "Section" lcsep
     "Tax Class" lcsep
-    "SAP Code"  lcsep
-    "Cost Centre" lcsep.
+    .
     
 do i = 1 to 5:
    put stream sarda unformatted
@@ -60,22 +56,18 @@ for each billitem no-lock where
       billitem.billcode chr(9)
       billitem.biname   chr(9)
       billitem.bigroup  chr(9)
-      billitem.accnum   chr(9)
       billitem.invsect  chr(9)
       billitem.taxclass chr(9)
-      billitem.saprid   chr(9)
-      billitem.CostCentre chr(9).
+      .
 
    put stream sarda unformatted
                         lcsep
       billitem.billcode lcsep
       billitem.biname   lcsep
-      billitem.bigroup  lcsep
-      billitem.accnum   lcsep
+      billitem.bigroup  lcsep     
      (if billitem.invsect = "" then "None" else billitem.invsect) lcsep
      (if billitem.taxclass = "" then "None" else billitem.taxclass) lcsep
-     (if billitem.saprid = "" then "None" else billitem.saprid) lcsep
-      billitem.CostCentre lcSep.
+     .
       
    do i = 1 to 5:
       lctrans = "".
