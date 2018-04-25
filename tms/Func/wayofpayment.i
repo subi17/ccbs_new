@@ -48,6 +48,7 @@ FUNCTION fGetAddLinePayType RETURNS CHAR
       lcPayType = "66".
    ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
       lcPayType = "67".
+   ELSE lcPayType = "20".
     
    RETURN lcPayType.    
       
