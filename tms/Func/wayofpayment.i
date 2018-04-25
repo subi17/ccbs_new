@@ -15,7 +15,8 @@
 {Func/fixedlinefunc.i}
 {Func/extralinefunc.i}
 
-/* Function returns additional line main line Way of Payment value */
+/* Function returns convergent additional line 
+   main line Way of Payment value */
 FUNCTION fGetAddLinePayType RETURNS CHAR
    (INPUT iiCustNum AS INT):
 
@@ -29,8 +30,8 @@ FUNCTION fGetAddLinePayType RETURNS CHAR
             bMobSub.Brand   EQ Syst.Var:gcBrand AND
             bMobSub.CustNum EQ iiCustNum 
             BY CreationDate:
-      /* Additional line main line */
-      IF fIsAddLineTariff(bMobSub.CLI) THEN DO:
+      /* Additional line convergent main line */
+      IF fIsConvergentORFixedOnly(bMobSub.CLIType) THEN DO:
          /* two or more subscriptions with the same activation date */
          IF lcCLIType > "" AND
             ldaCreationDate NE ? AND
@@ -47,7 +48,6 @@ FUNCTION fGetAddLinePayType RETURNS CHAR
       lcPayType = "66".
    ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
       lcPayType = "67".
-   ELSE lcPayType = "68".
     
    RETURN lcPayType.    
       
@@ -95,7 +95,8 @@ END FUNCTION.
    MsOwner period */
 FUNCTION fIsAddLineMsOwnerTariff RETURNS LOGICAL
    (INPUT icCli      AS CHAR,
-    INPUT idToPeriod AS DEC):
+    INPUT idToPeriod AS DEC,
+    OUTPUT icPayType AS CHAR):
 
    DEF VAR LDaValidTo AS DATE NO-UNDO.
    DEFINE BUFFER bMobSub FOR MobSub.
@@ -103,7 +104,7 @@ FUNCTION fIsAddLineMsOwnerTariff RETURNS LOGICAL
    DEFINE BUFFER bDPMember FOR DPMember.
 
    Func.Common:mTS2Date(idToPeriod, OUTPUT LDaValidTo).
-
+   icPayType = "".
    FOR FIRST bMobSub NO-LOCK WHERE
              bMobSub.Brand EQ Syst.Var:gcBrand AND
              bMobSub.CLI   EQ icCli AND
@@ -121,6 +122,8 @@ FUNCTION fIsAddLineMsOwnerTariff RETURNS LOGICAL
                bDPMember.ValidTo   >= LDaValidTo AND
                bDPMember.ValidFrom <= bDPMember.ValidTo:
 
+         IF LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 
+            THEN icPayType = "68".
          RETURN TRUE.
    END.
 
@@ -174,9 +177,9 @@ FUNCTION fIfsWayOfPayment RETURNS CHAR
          lcPayType = fGetExtraPayType(bMsOwner.CustNum).
       END.
       /* Subscription discount type additional line  */
-      ELSE IF fIsAddLineMsOwnerTariff(bMsOwner.CLI, idToPeriod) AND
+      ELSE IF fIsAddLineMsOwnerTariff(bMsOwner.CLI, idToPeriod, OUTPUT lcPayType) AND
               NOT bMsOwner.PayType THEN DO:
-         lcPayType = fGetAddLinePayType(bMsOwner.CustNum).
+         IF lcPayType = "" THEN lcPayType = fGetAddLinePayType(bMsOwner.CustNum).
       END.
       /* Subscription type Like CONT% */
       ELSE ASSIGN lcPayType = "20". /* All other cases */
