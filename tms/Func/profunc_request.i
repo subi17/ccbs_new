@@ -233,13 +233,16 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
     OUTPUT ocResult       AS CHARACTER):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
-   DEF VAR ldActStamp AS DEC NO-UNDO.
-   DEFINE BUFFER bCustomer  FOR Customer.
-   DEFINE BUFFER bMobSub    FOR MobSub.
-   DEFINE BUFFER bCustCat   FOR Custcat.
-   DEFINE BUFFER bOrder     FOR Order.
-   DEFINE BUFFER bClitype   FOR CLIType.
-   DEFINE VARIABLE llHasLegacyTariff AS LOGICAL NO-UNDO.
+   DEF VAR ldActStamp   AS DEC NO-UNDO.
+
+   DEFINE BUFFER bCustomer      FOR Customer.
+   DEFINE BUFFER bMobSub        FOR MobSub.
+   DEFINE BUFFER bCustCat       FOR Custcat.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bClitype       FOR CLIType.
+
+   DEFINE VARIABLE llHasMappingMissingForLegacyTariff AS LOGICAL NO-UNDO INIT TRUE.
 
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_PRO_MIGRATION},
@@ -248,9 +251,10 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
 
    IF ocResult > "" THEN RETURN 0.
    
-   IF ilValidate THEN DO:
+   IF ilValidate THEN 
+   DO:
        FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
-       FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.CustNum NO-LOCK NO-ERROR.
+       FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
        FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
        /* Is category available */
        IF NOT AVAILABLE bCustCat THEN DO:
@@ -262,42 +266,58 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
            ocResult = "102".
            RETURN 0.
        END.
-       /* Does customer have legacy tariffs */
+
+       /* Does customer have subscriptions with legacy tariffs not mapped to active tariffs */
+       MOBSUB-CHK:
        FOR EACH bMobSub 
-          WHERE bMobSub.Brand = Syst.Var:gcBrand 
-            AND bMobSub.InvCust = bCustomer.CustNum 
-            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
-           IF bMobSub.Clitype EQ "CONT23" OR 
-              bMobSub.Clitype EQ "CONT24" OR 
-              bMobSub.Clitype EQ "CONT9" THEN 
-              llHasLegacyTariff = TRUE.
+          WHERE bMobSub.Brand   = Syst.Var:gcBrand 
+            AND bMobSub.AgrCust = bCustomer.CustNum NO-LOCK:
+           FIND FIRST Clitype WHERE 
+                      Clitype.brand   EQ Syst.Var:gcBrand AND
+                      Clitype.clitype EQ bMobsub.clitype  NO-LOCK NO-ERROR.
+           IF AVAIL Clitype                                            AND 
+              Clitype.webstatuscode <> {&CLITYPE_WEBSTATUSCODE_ACTIVE} AND 
+              fgetActiveReplacement(bMobsub.clitype) = ""              THEN 
+           DO:
+               ASSIGN llHasMappingMissingForLegacyTariff = FALSE.  
+               LEAVE MOBSUB-CHK. 
+           END.
        END.
-       IF NOT llHasLegacyTariff THEN DO:
+
+       IF NOT llHasMappingMissingForLegacyTariff THEN DO:
             ocResult = "103".
             RETURN 0.
        END.
+
        /* Convergent in ONGOING status */
-       FOR EACH bOrder
-          WHERE bOrder.Brand = Syst.Var:gcBrand 
-            AND bOrder.CustNum = bCustomer.CustNum 
-            AND bOrder.StatusCode = {&ORDER_STATUS_ONGOING} NO-LOCK:
-            FIND bClitype WHERE bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
+       FOR EACH bOrderCustomer NO-LOCK WHERE
+                bOrderCustomer.Brand      EQ Syst.Var:gcBrand     AND
+                bOrderCustomer.CustId     EQ bCustomer.OrgId      AND
+                bOrderCustomer.CustIdType EQ bCustomer.CustIdType AND
+                bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+           FIRST bOrder NO-LOCK WHERE
+                 bOrder.Brand              EQ Syst.Var:gcBrand       AND
+                 bOrder.Orderid            EQ bOrderCustomer.Orderid AND
+                 bOrder.OrderType          NE {&ORDER_TYPE_RENEWAL}  AND
+                 LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
+
+            FIND bClitype WHERE bClitype.Brand = Syst.Var:gcBrand AND bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
             IF AVAILABLE bCliType AND 
                (bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
                 bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  )  THEN DO:
                 ocResult = "104".
                 RETURN 0.
             END.  
-       END.         
+       END. 
+
        /* Customer having a active prepaid subscription */
-       FOR EACH bMobSub 
-          WHERE bMobSub.Brand = Syst.Var:gcBrand
-            AND bMobSub.InvCust = bCustomer.CustNum 
-            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
-           IF bMobSub.paytype THEN DO:
-               ocResult = "105".
-               RETURN 0.
-           END.
+       IF CAN-FIND(FIRST bMobSub 
+                   WHERE bMobSub.Brand   = Syst.Var:gcBrand
+                     AND bMobSub.AgrCust = bCustomer.CustNum 
+                     AND bMobSub.paytype = TRUE NO-LOCK) THEN 
+       DO:
+           ocResult = "105".
+           RETURN 0. 
        END.
    END.
 
