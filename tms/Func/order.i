@@ -207,13 +207,18 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
     DEFINE BUFFER bf_CustCat   FOR CustCat.
 
     DEF VARIABLE ldeCurrentTime AS DECIMAL NO-UNDO.
+    DEF VAR liCount AS INT NO-UNDO.
+    DEF VAR liLoop AS INT NO-UNDO.
 
-    ASSIGN ldeCurrentTime = Func.Common:mMakeTS().
+    ASSIGN ldeCurrentTime = Func.Common:mMakeTS()
+           licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
 
-    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = Syst.Var:gcBrand                                      AND 
-                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
-                                LOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
-                                bf_MsRequest.ActStamp >= ldeCurrentTime                               NO-LOCK:
+   do liLoop = 1 to licount:
+   FOR EACH bf_MsRequest WHERE
+            bf_MsRequest.Brand     = Syst.Var:gcBrand                             AND
+            bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND
+            bf_MsRequest.ReqStatus = INT(ENTRY(liLoop,({&REQ_ONGOING_STATUSES}))) and
+            bf_MsRequest.ActStamp >= ldeCurrentTime                           NO-LOCK:
 
         IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = "" OR 
            ENTRY(13,bf_MsRequest.ReqCParam1,";") = "" THEN
@@ -258,6 +263,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
             END.    
         END.   
            
+    END.
     END.
     RELEASE bf_MsRequest.
     
