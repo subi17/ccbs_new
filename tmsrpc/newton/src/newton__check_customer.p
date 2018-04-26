@@ -17,6 +17,7 @@
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
                    extra_line_allowed;string;mandatory;comma separated list of allowed extra lines
                    segment;string;mandatory;
+                   extra_line_status;integer;mandatory;status for extra lines orders (YCO-272). Only make sense if asking for a Extra Line CliType.
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -65,6 +66,10 @@ DEF VAR lii                           AS INT  NO-UNDO.
 DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
 DEF VAR liMLMsSeq                     AS INT  NO-UNDO. 
 DEF VAR lcReasons                     AS CHAR NO-UNDO.
+DEF VAR llAllowedELCliTypeCurrent     AS LOG  NO-UNDO.  
+DEF VAR llAllowedELCliTypeOther       AS LOG  NO-UNDO. 
+DEF VAR lcClitypeAux                  AS CHAR NO-UNDO.
+DEF VAR liExtraLineStatus             AS INT  NO-UNDO.
 
 DEF BUFFER bCustomer  FOR Customer.
 DEF BUFFER bMobSub    FOR MobSub.
@@ -584,6 +589,61 @@ END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 
+YCO-272: /* When asking about a new Extra Line... */
+DO: 
+   liExtraLineStatus = -1. /* Initializing variable */      
+   IF LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 THEN DO: 
+      
+      /* Check if current extra line CliType is allowed for this customer */
+      llAllowedELCliTypeCurrent = fELCliTypeAllowedForCustomer (INPUT pcIdType,
+                                                                INPUT pcPersonId,
+                                                                INPUT pcCliType).
+   
+      /* Check if other extra line CliType is allowed for this customer */
+      llAllowedELCliTypeOther = FALSE.
+      DO lii = 1 TO NUM-ENTRIES(lcExtraLineCliTypes):
+         lcCliTypeAux = TRIM(ENTRY(lii,lcExtraLineCliTypes)).
+         IF lcCliTypeAux = pcCliType THEN 
+           NEXT.
+         llAllowedELCliTypeOther = fELCliTypeAllowedForCustomer (INPUT pcIdType,
+                                                                 INPUT pcPersonId,
+                                                                 INPUT lcCliTypeAux).
+         IF llAllowedELCliTypeOther THEN
+           LEAVE.                                                                           
+      END.               
+      
+      /* Cases */
+      IF LOOKUP(pcCliType, lcExtraLineAllowed) > 0 THEN DO:
+         liExtraLineStatus = 0. /* Extra Line allowed. Go on. */
+         LEAVE YCO-272.         
+      END.               
+      IF (NOT llAllowedELCliTypeCurrent) AND (NOT llAllowedELCliTypeOther) THEN DO:
+         liExtraLineStatus = 1. /* No subscriptions compatible with Extra Lines */
+         fSetError ("Extra Line not allowed").
+         LEAVE YCO-272.         
+      END.               
+      IF lcExtraLineAllowed = "" THEN DO:
+         liExtraLineStatus = 2. /* No more Extra Lines allowed */
+         fSetError ("Extra Line not allowed").         
+         LEAVE YCO-272.         
+      END.                 
+      IF lcExtraLineAllowed <> "" AND (NOT llAllowedELCliTypeCurrent) THEN DO:
+         liExtraLineStatus = 3. /* Extra Line allowed, but no this one that is not compatible */
+         fSetError ("Extra Line not allowed").        
+         LEAVE YCO-272.         
+      END.                                                
+      IF lcExtraLineAllowed <> "" AND LOOKUP(pcCliType, lcExtraLineAllowed) = 0 THEN DO:
+         IF LOOKUP(pcCliType, lcExtraLineCliTypes) = 1 THEN 
+           liExtraLineStatus = 5. /* Not allowed itself, but you can try other one of the allowed */
+         ELSE
+           liExtraLineStatus = 4. /* Not allowed itself, but you can try other one of the allowed */
+         fSetError ("Extra Line not allowed").
+         LEAVE YCO-272.             
+      END.                                                                                       
+   END. /* IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 */
+   
+END. /* YCO-272 */
+
 lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
@@ -606,6 +666,8 @@ ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).
 
 add_string(lcReturnStruct, 'segment',lcSegment).
+
+add_int(lcReturnStruct, 'extra_line_status',liExtraLineStatus).
 
 FINALLY:
    END.

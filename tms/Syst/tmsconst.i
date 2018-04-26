@@ -846,6 +846,7 @@
 &GLOBAL-DEFINE DMS_CASE_TYPE_ID_CANCEL "6"
 &GLOBAL-DEFINE DMS_CASE_TYPE_ID_Q25_TERM_RETURN "9"
 &GLOBAL-DEFINE DMS_CASE_TYPE_ID_Q25_STE "10"
+&GLOBAL-DEFINE DMS_CASE_TYPE_ID_TELESALES "14"
 &GLOBAL-DEFINE DMS_CASE_TYPE_ID_CATEGORY_CHG "15"
 
 &GLOBAL-DEFINE DMS_HOST_TABLE_ORDER "Order"
@@ -860,6 +861,8 @@
 &GLOBAL-DEFINE DMS_INITIAL_NOTIF_CASE "1"
 &GLOBAL-DEFINE DMS_INIT_STATUS_SENT "SENT"
 &GLOBAL-DEFINE DMS_INIT_STATUS_COMMENT "SENT"
+
+&GLOBAL-DEFINE DMS_CASE_14_FILTER "fusion_telesales,fusion_cc,cc,telesales,renewal_telesales,cc_pro,telesales_pro,fusion_telesales_pro,renewal_ctc,fusion_cc_pro,emission_pro,retention,emission,retention_stc"
 
 /*Barring */
 /*Barring status*/
