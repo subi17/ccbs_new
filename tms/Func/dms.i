@@ -20,6 +20,21 @@ DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DMSStatusTS    AS DEC FORMAT "99999999.99999"
    FIELD Comment        AS CHAR.
 
+FUNCTION fChkDMSExists RETURNS LOGICAL
+   (icHostTable   AS CHARACTER,
+    iiHostID      AS INTEGER):
+
+   DEFINE BUFFER bDMS FOR DMS.
+
+   FIND FIRST bDMS NO-LOCK WHERE
+              bDMS.HostTable   = icHostTable  AND
+              bDMS.HostID      = iiHostID
+              NO-ERROR.
+
+   RETURN AVAILABLE(bDMS).
+
+END.
+
 FUNCTION fGetOrderStatusDMS RETURNS CHAR
    (icContractID AS CHAR):
    FIND FIRST DMS NO-LOCK WHERE
