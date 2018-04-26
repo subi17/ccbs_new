@@ -433,14 +433,14 @@ BROWSE:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-          FOR FIRST CCRule NO-LOCK WHERE
-              CCRule.Brand      = Syst.Var:gcBrand AND
-              CCRule.CostCentre = CostCentre.CostCentre:
-              MESSAGE "Cost centre is used on Account Rule(s) with BillCode:" 
-                  CCRule.BillCode ". Delete not allowed."
+       FOR FIRST CCRule NO-LOCK WHERE
+                 CCRule.Brand      = Syst.Var:gcBrand AND
+                 CCRule.CostCentre = CostCentre.CostCentre:
+           MESSAGE "Cost centre is used on Account Rule(s) with BillCode:" 
+                   CCRule.BillCode ". Delete not allowed."
                   VIEW-AS ALERT-BOX ERROR.
-              NEXT LOOP.
-          END.
+           NEXT LOOP.
+       END.
        
        /* Highlight */
        COLOR DISPLAY VALUE(Syst.Var:ctc)

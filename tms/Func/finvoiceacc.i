@@ -27,10 +27,10 @@ FUNCTION fInvRowAccount RETURNS INTEGER
    */
    
    FIND FIRST bCCRule NO-LOCK WHERE 
-              bCCRule.Brand      = BillItem.Brand AND 
-              bCCRule.BillCode   = BillItem.BillCode AND 
-             (bCCRule.Category   = "*" OR
+              bCCRule.Brand      = BillItem.Brand    AND 
+             (bCCRule.Category   = "*"      OR
               bCCRule.Category   = icCategory )      AND 
+              bCCRule.BillCode   = BillItem.BillCode AND              
               bCCRule.ValidTo    >= TODAY USE-INDEX Category NO-ERROR. 
          
    IF AVAILABLE bCCRule THEN 

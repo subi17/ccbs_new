@@ -759,7 +759,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                   CCRule.Brand      =   BillItem.Brand      AND 
                   CCRule.Category   =   "*"                 AND 
                   CCRule.BillCode   =   BillItem.BillCode   AND
-                  CCRule.ValidTo    >=  TODAY NO-ERROR.
+                  CCRule.ValidTo    >=  TODAY USE-INDEX Category NO-ERROR.
 
       IF llSalesInv THEN DO:
          IF LOOKUP(STRING(InvRow.SlsAcc),lcSkipSlsCode) > 0 THEN
@@ -968,7 +968,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                           CCRule.Brand      =   BillItem.Brand      AND 
                           CCRule.Category   =   "*"                 AND  
                           CCRule.BillCode   =   BillItem.BillCode   AND
-                          CCRule.ValidTo    >=  TODAY NO-ERROR.
+                          CCRule.ValidTo    >=  TODAY USE-INDEX Category NO-ERROR.
                 
                IF AVAILABLE CCRule       
                THEN ASSIGN ttRow.SlsAcc     = CCRule.AccNum /* Only used account number currently */
