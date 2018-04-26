@@ -23,8 +23,8 @@ DO lii = 1 TO NUM-ENTRIES(lcDiscountList):
          IF NOT AVAILABLE DPTarget THEN DO:
             CREATE DPTarget.
             ASSIGN
-               DPTarget.DPId        =  DiscountPlan.DPId      
-               DPTarget.ValidFrom   = TODAY  
+               DPTarget.DPId        = DiscountPlan.DPId      
+               DPTarget.ValidFrom   = 03/01/2018  
                DPTarget.ValidTo     = 12/31/49
                DPTarget.TargetTable = "BillItem"    
                DPTarget.TargetKey   = ENTRY(lij, lcBillItemList)       
