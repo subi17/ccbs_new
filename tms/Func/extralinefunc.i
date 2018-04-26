@@ -704,6 +704,69 @@ FUNCTION fGetExtraLineMandatoryCLIType RETURN CHARACTER
                       
 END FUNCTION.             
    
+/* Returns true if there is any Extra Line CliType allowed for any 
+   subscription (active or ongoing) for this customer.             */ 
+FUNCTION fELCliTypeAllowedForCustomer RETURNS LOGICAL 
+   (INPUT icIDType    AS CHAR,
+    INPUT icPersonID  AS CHAR,
+    INPUT icELCliType AS CHAR):
+   
+   DEF VAR llAllowedActive  AS LOG NO-UNDO.
+   DEF VAR llAllowedOnGoing AS LOG NO-UNDO.
+                   
+   /* Active subscriptions */
+   llAllowedActive = FALSE.
+   FOR FIRST Customer NO-LOCK WHERE
+             Customer.Brand      EQ Syst.Var:gcBrand AND
+             Customer.OrgId      EQ icPersonID       AND
+             Customer.CustidType EQ icIDType         AND
+             Customer.Roles      NE "inactive",      
+       EACH MobSub NO-LOCK WHERE
+            MobSub.Brand    EQ Syst.Var:gcBrand   AND
+            MobSub.CustNum  EQ Customer.CustNum   AND
+            MobSub.PayType  EQ FALSE              AND
+           (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
+            MobSub.MsStatus EQ {&MSSTATUS_BARRED})    
+       USE-INDEX CustNum 
+       BY MobSub.ActivationTS:  
+      IF CAN-FIND(FIRST TMSRelation WHERE 
+                        TMSRelation.TableName   EQ {&ELTABLENAME} AND 
+                        TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND 
+                        TMSRelation.ParentValue EQ MobSub.CLIType AND  
+                        TMSRelation.ChildValue  EQ icELCliType    AND
+                        INT(TMSRelation.RelationType) > 0)
+      THEN DO:
+         llAllowedActive = TRUE.      
+         LEAVE.                
+      END.                                                   
+   END.
+   
+   /* Ongoing orders */
+   llAllowedOnGoing = FALSE.
+   FOR EACH OrderCustomer NO-LOCK WHERE   
+            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
+            OrderCustomer.CustId     EQ icPersonID       AND
+            OrderCustomer.CustIdType EQ icIDType         AND
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH Order NO-LOCK WHERE
+            Order.Brand     EQ Syst.Var:gcBrand       AND
+            Order.orderid   EQ OrderCustomer.Orderid  AND
+            Order.OrderType NE {&ORDER_TYPE_RENEWAL} 
+       BY Order.CrStamp:
+      IF CAN-FIND(FIRST TMSRelation WHERE 
+                        TMSRelation.TableName   EQ {&ELTABLENAME} AND 
+                        TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND 
+                        TMSRelation.ParentValue EQ Order.CLIType  AND  
+                        TMSRelation.ChildValue  EQ icELCliType    AND
+                        INT(TMSRelation.RelationType) > 0) 
+      THEN DO:
+         llAllowedOnGoing = TRUE.      
+         LEAVE.                
+      END.       
+   END.
+   
+   RETURN (llAllowedActive OR llAllowedOnGoing).        
 
+END. /* fELCliTypeAllowedForCustomer */
 
 &ENDIF
