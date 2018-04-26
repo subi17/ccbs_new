@@ -6,11 +6,9 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 /* lang, stomp adpter, logic  libs*/ 
 USING Progress.Lang.*.
 USING Syst.Configuration.
-USING Syst.ExternalMap.
+// USING Syst.ExternalMap.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
-
-{Func/multitenantfunc.i}
 
 CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
                      IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
@@ -40,7 +38,11 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    DEF VAR lcReplyTo AS CHAR NO-UNDO.
    DEF VAR lcCorrelationID AS CHAR NO-UNDO. 
    
+   DEF VAR lhTenantInfo AS HANDLE NO-UNDO.
+   
    DEF EVENT leTooManyErrors SIGNATURE VOID (  ).
+   
+   FUNCTION fsetEffectiveTenantForAllDB RETURNS CHAR() IN lhTenantInfo.
    
    CONSTRUCTOR PUBLIC PCListener ():
       ASSIGN
@@ -54,6 +56,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          logMsg( STRING( SUBSTITUTE("SETTINGS: hostname=&1," ,lcHostName) )   +
                  STRING( SUBSTITUTE("port=&1," ,lcPortNumber) )     +
                  STRING( SUBSTITUTE("queueName=&1" ,lcQueueName) ), "INIT").
+                 
+      RUN TMSCodes.p PERSISTENT SET lhTenantInfo.
    END CONSTRUCTOR.
    
    METHOD PROTECTED VOID logMsg (icMsg AS CHAR, icMsgType AS CHAR):
@@ -270,19 +274,19 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
            
       CASE lcModel:
          WHEN "account" THEN DO:
-            loLogicModule = NEW Gwy.AccountModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.AccountModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
          END.
          WHEN "account_rule" THEN DO:
-            loLogicModule = NEW Gwy.CCRuleModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.AccountRulesModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                 lcCorrelationID, lcReplyTo).
          END.
          WHEN "billing_item" THEN DO:
-            loLogicModule = NEW Gwy.BillItemModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.BillItemModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
          END.
          WHEN "billing_item_group" THEN DO:
-            loLogicModule = NEW Gwy.BItemGroupModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.BItemGroupModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                     lcCorrelationID, lcReplyTo).
          END.
          WHEN "billing_text" THEN DO:
@@ -322,7 +326,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                                                  lcCorrelationID, lcReplyTo).
          END.
          WHEN "rating_bucket" THEN DO:
-            loLogicModule = NEW Gwy.SLTemplateModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.RatingBucketsModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
          END.
          OTHERWISE DO:

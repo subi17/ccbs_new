@@ -55,7 +55,7 @@ METHOD PUBLIC CHAR validate_reptext
       END.
          
       FIND FIRST Language WHERE 
-         Language.IsoCode = lhText::language NO-LOCK NO-ERROR.
+         Language.LanguageCode = lhText::language NO-LOCK NO-ERROR.
       IF AVAILABLE Language THEN lhText::rt_language = Language.Language.
       ELSE DO:
          lcResult = "Invalid commercial name language". 
