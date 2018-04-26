@@ -79,6 +79,9 @@ FUNCTION fAnalBsub RETURNS LOGICAL
             ELSE       b_callType = 24.
          END.   
          ELSE DO: /* temporary, old functionality */
+            b_CallType =  1.
+            IF ttCall.BillDur <= 11 THEN b_callType = 23.
+            ELSE b_callType = 24.
          END. /* temporary */
       END.
       WHEN 1074 THEN b_CallType =  1.
@@ -106,7 +109,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 105  THEN b_CallType =  10.
       WHEN 106  THEN b_CallType =  10.
       WHEN 66 THEN DO:
-         IF ttCall DateSt >= 05/09/2018 THEN DO: /* temporary 9.5.2018 */
+         IF ttCall.DateSt >= 05/09/2018 THEN DO: /* temporary 9.5.2018 */
             /* YDR-2876 duration conditions changed */
             IF ttCall.BillDur <= 20 THEN 
                         b_callType =  20.
