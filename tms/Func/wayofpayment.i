@@ -156,10 +156,6 @@ FUNCTION fIfsWayOfPayment RETURNS CHAR
    DEFINE BUFFER bOrder   FOR Order.
    DEFINE BUFFER bMsOwner FOR MsOwner.
 
-   /* Subscription type Like CONT% or terminated before period*/
-   ASSIGN lcPayType = "20". /* All other cases */
-
-
    /* service invoices with MsOwner */
    FOR FIRST bMsOwner NO-LOCK USE-INDEX CLI_S WHERE
              bMsOwner.CLI   EQ icCli AND
@@ -198,6 +194,8 @@ FUNCTION fIfsWayOfPayment RETURNS CHAR
          IF lcPayType = "" THEN lcPayType = fGetAddLinePayType(bMsOwner.CustNum).
       END.
    END.
+   /* Subscription type Like CONT% or terminated before period*/
+   IF lcPayType = "" THEN ASSIGN lcPayType = "20". /* All other cases */
 
    RETURN lcPayType.
 
