@@ -8,7 +8,6 @@
 {Func/forderstamp.i}
 {Func/orderchk.i}
 {Func/orderfunc.i}
-{Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
 {Func/profunc.i}
 {Func/main_add_lines.i}
@@ -161,7 +160,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
     Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT})  AND /* shouldn't never get this value because of YDR-2575 */
     Order.OrderType  EQ {&ORDER_TYPE_STC}           AND
-    fIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
+    Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
 
    IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP_RETENTION}).
@@ -343,7 +342,7 @@ END.
 
 /* MNP Retention Project */
 IF Order.OrderChannel BEGINS "retention" AND
-   fIsMNPOutOngoing(INPUT Order.CLI) THEN DO:
+   Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) THEN DO:
    lcNewStatus = {&ORDER_STATUS_MNP_RETENTION}.
 END. /* IF Order.statuscode NE "4" AND */
 

@@ -94,7 +94,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.
 
-llOrderAllowed = fSubscriptionLimitCheck(
+llOrderAllowed = Func.ValidateACC:mSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,

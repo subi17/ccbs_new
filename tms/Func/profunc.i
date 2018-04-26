@@ -258,25 +258,6 @@ FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
    RETURN "".
 END.
 
-FUNCTION fCheckOngoingOrders RETURNS LOGICAL (INPUT icCustId AS CHAR,
-                                              INPUT icCustIdType AS CHAR,
-                                              INPUT iimsseq AS INT):
-   FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
-            OrderCustomer.CustId     EQ icCustId AND
-            OrderCustomer.CustIdType EQ icCustIDType AND
-            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-      FIRST Order NO-LOCK WHERE
-            Order.Brand              EQ Syst.Var:gcBrand AND
-            Order.orderid            EQ Ordercustomer.Orderid AND
-            Order.msseq              NE iimsseq AND
-           LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
-      RETURN TRUE.
-   END.
-   RETURN FALSE.
-
-END FUNCTION.
-
 /*SVA of Yoigo PRO*/
 /*This function provides a dirty solution.
 Later in YPRO project we will consider if it is reason to make 

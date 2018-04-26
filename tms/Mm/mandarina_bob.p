@@ -193,7 +193,7 @@ REPEAT:
       END.
 
       /* Check DEBT barring status */
-      lcBarrings = fGetActiveBarrings (mobsub.MsSeq).
+      lcBarrings = Func.BarrMethod:mGetActiveBarrings(mobsub.MsSeq).
       IF lcBarrings <> "" THEN DO:
          IF LOOKUP("DEBT_LP", lcBarrings) <> 0 OR LOOKUP("DEBT_HOTLP", lcBarrings) <> 0 THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED

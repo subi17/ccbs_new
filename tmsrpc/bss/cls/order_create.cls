@@ -28,10 +28,6 @@
 
 USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.JsonObject.
-USING Progress.Json.ObjectModel.JsonArray.
-USING Progress.Json.JsonError.
-USING profcgi.RPC.JSON.*.
-USING profcgi.lib.Logger.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW. 
 
@@ -45,7 +41,7 @@ CLASS bss.cls.order_create INHERITS profcgi.RPC.JSON.Response:
       DEFINE VARIABLE loOrder AS CLASS bss.cls.Order NO-UNDO.
 
       loOrder = NEW bss.cls.Order().
-      loOrder:mCreateOrder(ioJsonObject).
+      loOrder:mCreateData(ioJsonObject).
 
       DO TRANSACTION ON ERROR UNDO, THROW:
          loOrder:mStoreData().

@@ -216,11 +216,15 @@ ASSIGN
 
 /*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
 IF AVAIL Customer THEN
-   lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
-                                  Customer.Custnum).
+   lcError = Func.ValidateACC:mExistingCustomerACCCompability
+                                    (bOriginalCustomer.Category,
+                                     Customer.Category,
+                                     Customer.CustNum,
+                                     Customer.CustIdType,
+                                     Customer.OrgId).
 IF lcError > "" THEN RETURN appl_err(lcError).                               
 
-lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
+lcError = Func.ValidateACC:mPreCheckSubscriptionForACC(MobSub.MsSeq).
 IF lcError > "" THEN RETURN appl_err(lcError).
 
 IF pdeCharge > 0 THEN
@@ -235,36 +239,23 @@ ASSIGN lcReqSource = (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
                       ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
                       ELSE {&REQUEST_SOURCE_MANUAL_TMS}).
 
-RUN pCheckSubscriptionForACC (
-   MobSub.MsSeq,
-   0,
-   lcReqSource,
-   OUTPUT lcError).
-IF lcError > "" THEN RETURN appl_err(lcError).
+lcError = Func.ValidateACC:mCheckSubscriptionForACC(MobSub.MsSeq,
+                                                    0,
+                                                    lcReqSource).
+
+IF lcError > "" THEN RETURN appl_err(SUBSTRING(lcError,INDEX(lcError,"|") + 1)).
 
 IF AVAIL Customer THEN DO:
-   RUN pCheckTargetCustomerForACC (
-      Customer.Custnum,
-      OUTPUT lcError).
-   IF lcError > "" THEN
-      RETURN appl_err(lcError).
+   lcError = Func.ValidateACC:mCheckTargetCustomerForACC(Customer.Custnum).
+   IF lcError > ""
+   THEN RETURN appl_err(SUBSTRING(lcError,INDEX(lcError,"|") + 1)).
 END.
 ELSE DO:
-
-   llProCust = fIsPro(bOriginalCustomer.category).
-   IF llProCust THEN 
-      llSelfEmployed = fIsSelfEmpl(bOriginalCustomer.category).
-
-   IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
-                                  INPUT ttCustomer.CustIdType,
-                                  llProCust,
-                                  llSelfEmployed, 
-                                  1,
-                                  OUTPUT liSubLimit,
-                                  OUTPUT liSubs,
-                                  OUTPUT liActLimit,
-                                  OUTPUT liActs) THEN
-   RETURN appl_err("Subscription limit exceeded").
+   lcError = Func.ValidateACC:mNewCustomerACCCompability(bOriginalCustomer.category,
+                                                         ttCustomer.OrgId,
+                                                         ttCustomer.CustIdType).
+   IF lcError > ""
+   THEN RETURN appl_err(lcError).
 END.
 
 lcCode = fCreateAccDataParam(

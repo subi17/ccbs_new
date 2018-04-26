@@ -655,7 +655,7 @@ END FUNCTION.
 
 IF icAction NE "view" THEN DO:
    
-   lcError = fPreCheckSubscriptionForACC(iiMsSeq).
+   lcError = Func.ValidateACC:mPreCheckSubscriptionForACC(iiMsSeq).
    
    IF lcError > "" THEN DO:
       MESSAGE lcerror SKIP
@@ -664,16 +664,18 @@ IF icAction NE "view" THEN DO:
       RETURN.
    END.
    
-   RUN pCheckSubscriptionForACC (iiMsSeq, 0, "",OUTPUT lcError).
-   
+   lcError = Func.ValidateACC:mCheckSubscriptionForACC(iiMsSeq,
+                                                       0,
+                                                       "").
+
    IF lcError > "" THEN DO:
       
       /* 'superuser' can skip some rules */
-      IF RETURN-VALUE BEGINS "CHECK" AND
+      IF ENTRY(1,lcError,"|") EQ "CHECK" AND
          fTokenRights(Syst.Var:katun,"CCSUPER") = "RW"
       THEN DO:
          llOk = FALSE.
-         MESSAGE lcError SKIP
+         MESSAGE SUBSTRING(lcError,INDEX(lcError,"|") + 1) SKIP
                  "Do You still want to start ACC process?"
          VIEW-AS ALERT-BOX QUESTION
          BUTTONS YES-NO
@@ -682,7 +684,7 @@ IF icAction NE "view" THEN DO:
       END.
     
       ELSE DO:
-         MESSAGE lcerror SKIP
+         MESSAGE SUBSTRING(lcError,INDEX(lcError,"|") + 1) SKIP
                 "Function not allowed."
          VIEW-AS ALERT-BOX ERROR.
          RETURN.
@@ -903,9 +905,10 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          END.
       END.
       
-      RUN pCheckTargetCustomerForACC(liNewCust1,OUTPUT lcError).
+      lcError = Func.ValidateACC:mCheckTargetCustomerForACC(liNewCust1).
+     
       IF lcError NE "" THEN DO:
-         MESSAGE lcError 
+         MESSAGE SUBSTRING(lcError,INDEX(lcError,"|") + 1) 
          VIEW-AS ALERT-BOX ERROR.
          NEXT.
       END.
@@ -1249,7 +1252,13 @@ PROCEDURE pUpdateNewOwner:
                                                bf_NewCustomer.OrgId      = INPUT lcNewCustId       NO-LOCK NO-ERROR.
                IF AVAIL bf_NewCustomer THEN
                DO:
-                   ASSIGN lcErrMsg = fCheckACCCompability(bCurrentCust.CustNum,bf_NewCustomer.CustNum). 
+                   ASSIGN lcErrMsg = Func.ValidateACC:mExistingCustomerACCCompability
+                                             (bCurrentCust.Category,
+                                              bf_NewCustomer.Category,
+                                              bf_NewCustomer.CustNum,
+                                              bf_NewCustomer.CustIdType,
+                                              bf_NewCustomer.OrgId). 
+
                    IF lcErrMsg <> "" THEN
                    DO:
                        MESSAGE lcErrMsg VIEW-AS ALERT-BOX ERROR.

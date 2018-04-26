@@ -25,6 +25,8 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
    
    DEFINE TEMP-TABLE ttOrderProduct NO-UNDO
       FIELD opobject AS CLASS Progress.Lang.Object
+      FIELD ordernb  AS INTEGER
+      INDEX ordernb IS PRIMARY UNIQUE ordernb
       .
 
 	CONSTRUCTOR PUBLIC OrderProductFactory():
@@ -43,6 +45,16 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
       UNDO, THROW NEW InternalError("OrderProductFactory doesn't support " +
                                     "mCreateData method with JsonObject " +
                                     "parameter").
+   END METHOD.
+
+   METHOD PRIVATE INTEGER mNextOrderNb():
+
+      FIND LAST ttOrderProduct USE-INDEX ordernb.
+      IF NOT AVAILABLE ttOrderProduct
+      THEN RETURN 1.
+
+      RETURN ttOrderProduct.ordernb + 1.
+
    END METHOD.
 
 	METHOD PUBLIC VOID mCreateData
@@ -65,7 +77,9 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
          END.
 
          CREATE ttOrderProduct.
-         ttOrderProduct.opobject = loOrderProduct.
+         ASSIGN
+            ttOrderProduct.opobject = loOrderProduct
+            ttOrderProduct.ordernb  = mNextOrderNb().
 
          loOrderProduct:mCreateData(loItemObject).
       END.
@@ -77,6 +91,21 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
       FOR EACH ttOrderProduct:
          CAST(ttOrderProduct.opobject, bss.cls.OrderProduct):mStoreData().
       END.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mResult
+      (ioJsonObject AS CLASS JsonObject):
+
+      DEFINE VARIABLE loJsonArray AS CLASS JsonArray NO-UNDO.
+
+      loJsonArray = NEW JsonArray().
+
+      FOR EACH ttOrderProduct:
+         CAST(ttOrderProduct.opobject, bss.cls.OrderProduct):mResult(loJsonArray).
+      END.
+
+      ioJsonObject:Add("items", loJsonArray).
 
    END METHOD.
 

@@ -168,4 +168,17 @@ CLASS bss.cls.Order IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
 
    END METHOD.
 
+   METHOD PUBLIC JsonObject mResult():
+
+      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
+
+      loJsonObject = NEW JsonObject().
+      loJsonObject:Add("order-id", THIS-OBJECT:OrderId).
+
+      aoOrderProductFactory:mResult(loJsonObject).
+
+      RETURN loJsonObject.
+
+   END METHOD.
+
 END CLASS.

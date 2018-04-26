@@ -23,7 +23,6 @@
 {Func/dss_matrix.i}
 {Func/msisdn_prefix.i}
 {Func/fsubstermreq.i}
-{Mnp/mnpoutchk.i}
 {Func/ordercancel.i}
 {Func/dextra.i}
 {Func/add_lines_request.i}
@@ -1604,7 +1603,7 @@ PROCEDURE pMultiSIMTermination:
           MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
           LOOKUP(STRING(MsRequest.ReqStatus),
           {&REQ_INACTIVE_STATUSES}) = 0) AND
-      NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
+      NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
 
       ASSIGN ldaSecSIMTermDate  = ADD-INTERVAL(TODAY, 1,"months")
              ldaSecSIMTermDate  = Func.Common:mLastDayOfMonth(ldaSecSIMTermDate)

@@ -131,7 +131,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                fSetError ("PRO migration not possible because of prepaid subscription").
              END.
              /* Check any ongoing orders */
-             ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+             ELSE IF Func.ValidateACC:mCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                     0) THEN DO:
                    fSetError ("PRO migration not possible because of active non pro orders").
              END.
@@ -217,7 +217,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                fSetError ("PRO migration not possible because of prepaid subscription").
              END.
              /* Check any ongoing orders */
-             ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+             ELSE IF Func.ValidateACC:mCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                     0) THEN DO:
              ASSIGN
                 llOrderAllowed = FALSE
@@ -285,7 +285,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
               fSetError ("PRO migration not possible because of multiple mobile lines") .
       ELSE IF AVAIL MobSub THEN
       DO:
-         IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+         IF Func.ValidateACC:mCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                 mobsub.msseq) THEN DO:
                fSetError ("PRO migration not possible because of active non pro orders").
          END.         
@@ -328,7 +328,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
    END.
 END.
 
-llOrderAllowed = fSubscriptionLimitCheck(
+llOrderAllowed = Func.ValidateACC:mSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,

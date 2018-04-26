@@ -240,44 +240,42 @@ PROCEDURE pOwnerChange:
       END.
    END.
 
-   RUN pCheckSubscriptionForACC (MsRequest.MsSeq,
-                                 MsRequest.MsRequest,
-                                 MsRequest.ReqSource,
-                                 OUTPUT lcInfo).
+   lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(MsRequest.MsSeq,
+                                                      MsRequest.MsRequest,
+                                                      MsRequest.ReqSource).
    
-   IF lcInfo = "" AND MsRequest.ReqIParam1 > 0 THEN
-      RUN pCheckTargetCustomerForACC (MsRequest.ReqIParam1,
-                                      OUTPUT lcInfo).
+   IF lcInfo EQ "" AND MsRequest.ReqIParam1 > 0
+   THEN lcInfo = Func.ValidateACC:mCheckTargetCustomerForACC(MsRequest.ReqIParam1).
    
    IF lcInfo > "" THEN DO:
 
       /* 'superuser' can skip some rules */
-      IF RETURN-VALUE BEGINS "CHECK" AND
+      IF ENTRY(1,lcInfo,"|") EQ "CHECK" AND
          fTokenRights(MsRequest.UserCode,"CCSUPER") = "RW"
       THEN DO:
-         IF INDEX(MsRequest.Memo,lcInfo) = 0 THEN DO:   
+         IF INDEX(MsRequest.Memo,SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1)) = 0 THEN DO:   
             FIND CURRENT MsRequest EXCLUSIVE-LOCK.
             MsRequest.Memo = MsRequest.Memo + 
                             (IF MsRequest.Memo > ""
                              THEN ", " 
                              ELSE "") +
                              "Superuser " + MsRequest.UserCode + 
-                             " overrode rejection reason: " + lcInfo.
+                             " overrode rejection reason: " + SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1).
          END.
       END.
    
       ELSE DO:
-         IF liOrigStat > 0 AND INDEX(RETURN-VALUE,"SMS") > 0 THEN DO:
+         IF liOrigStat > 0 AND INDEX(ENTRY(1,lcInfo,"|"),"SMS") > 0 THEN DO:
             
             RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Rejected",
-                            IF NUM-ENTRIES(RETURN-VALUE,"/") >= 3 
-                            THEN "HT:" + ENTRY(3,RETURN-VALUE,"/")
-                            ELSE lcInfo).
+                            IF NUM-ENTRIES(ENTRY(1,lcInfo,"|"),"/") >= 3 
+                            THEN "HT:" + ENTRY(3,ENTRY(1,lcInfo,"|"),"/")
+                            ELSE SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1)).
          END.
                
-         fReqError(lcInfo).
+         fReqError(SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1)).
          RETURN "ERROR:Subscr. not valid".
       END.   
    END.
@@ -779,13 +777,12 @@ PROCEDURE pOwnerChange:
          FIND FIRST CustomerReport WHERE
                     CustomerReport.Custnum = Customer.Custnum NO-LOCK NO-ERROR.
          
-         RUN pCheckSubscriptionForACC (
-            bMobSub.MsSeq,
-            0,
-            MsRequest.ReqSource,
-            OUTPUT lcInfo).
 
-         IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
+         lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(bMobSub.MsSeq,
+                                                            0,
+                                                            MsRequest.ReqSource).
+      
+         IF NOT ENTRY(1,lcInfo,"|") BEGINS "ERROR" THEN DO:
 
             lcCode = fCreateAccDataParam(
                       (BUFFER Customer:HANDLE),
@@ -1865,7 +1862,7 @@ PROCEDURE pHandleAdditionalLines:
       RETURN.
    END.
 
-   llIsACCAllowed = fSubscriptionLimitCheck(INPUT Customer.OrgId,
+   llIsACCAllowed = Func.ValidateACC:mSubscriptionLimitCheck(INPUT Customer.OrgId,
                                           INPUT Customer.CustIdType,
                                           fIsSelfEmpl(Customer.Category),
                                           fIsPro(Customer.Category),
@@ -1912,13 +1909,12 @@ PROCEDURE pHandleAdditionalLines:
       IF llIsACCAllowed AND
          liSubs < liSubLimit THEN DO:
 
-         RUN pCheckSubscriptionForACC (
-            bMobSub.MsSeq,
-            0,
-            MsRequest.ReqSource,
-            OUTPUT lcInfo).
 
-         IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
+         lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(bMobSub.MsSeq,
+                                                            0,
+                                                            MsRequest.ReqSource).
+
+         IF NOT ENTRY(1,lcInfo,"|") BEGINS "ERROR" THEN DO:
             liRequest = fMSCustChangeRequest(
                bMobSub.MsSeq,
                "agrcust",

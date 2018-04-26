@@ -73,11 +73,17 @@ Syst.Var:katun = "VISTA_" + Order.Salesman.
 
 /*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
 IF AVAIL Customer THEN
-   lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
-                                  Customer.Custnum).
+   lcError = Func.ValidateACC:mExistingCustomerACCCompability
+                                    (bOriginalCustomer.Category,
+                                     Customer.Category,
+                                     Customer.CustNum,
+                                     Customer.CustIdType,
+                                     Customer.OrgId).
+
+
 IF lcError > "" THEN RETURN lcError.                               
 
-lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
+lcError = Func.ValidateACC:mPreCheckSubscriptionForACC(MobSub.MsSeq).
 IF lcError > "" THEN lcError.
 
 CASE Order.OrderChannel:
@@ -86,35 +92,22 @@ CASE Order.OrderChannel:
    OTHERWISE  lcReqSource = {&REQUEST_SOURCE_MANUAL_TMS}.
 END.
 
-RUN pCheckSubscriptionForACC (
-   MobSub.MsSeq,
-   0,
-   {&REQUEST_SOURCE_NEWTON},
-   OUTPUT lcError).
-IF lcError > "" THEN RETURN lcError.
+lcError = Func.ValidateACC:mCheckSubscriptionForACC(MobSub.MsSeq,
+                                                    0,
+                                                    {&REQUEST_SOURCE_NEWTON}).
+IF lcError > ""
+THEN RETURN SUBSTRING(lcError,INDEX(lcError,"|") + 1).
 
 IF AVAIL Customer THEN DO:
-   RUN pCheckTargetCustomerForACC (
-      Customer.Custnum,
-      OUTPUT lcError).
-   IF lcError > "" THEN RETURN lcError.
+   lcError = Func.ValidateACC:mCheckTargetCustomerForACC(Customer.Custnum).
+   IF lcError > "" THEN RETURN SUBSTRING(lcError,INDEX(lcError,"|") + 1).
 END.
 ELSE DO:
-
-   llProCust = fIsPro(bOriginalCustomer.category).
-   IF llProCust THEN 
-      llSelfEmployed = fIsSelfEmpl(bOriginalCustomer.category).
-
-   IF NOT fSubscriptionLimitCheck(OrderCustomer.CustId,
-                                  OrderCustomer.CustIdType,
-                                  llProCust,
-                                  llSelfEmployed, 
-                                  1,
-                                  OUTPUT liSubLimit,
-                                  OUTPUT liSubs,
-                                  OUTPUT liActLimit,
-                                  OUTPUT liActs) THEN
-   RETURN "Subscription limit exceeded".
+   lcError = Func.ValidateACC:mNewCustomerACCCompability(bOriginalCustomer.category,
+                                                         OrderCustomer.CustId,
+                                                         OrderCustomer.CustIdType).
+   IF lcError > ""
+   THEN RETURN lcError.
 END.
 
 ldaAccDate = fGetOPParamDate(OrderProduct.OrderProductID,

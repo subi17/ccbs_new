@@ -36,7 +36,6 @@ DEFINE INPUT PARAMETER piMsSeq LIKE MobSub.MsSeq.
 {Func/msisdn_prefix.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
-{Mnp/mnpoutchk.i}
 {Func/add_lines_request.i}
 
 IF lcRight NE "RW" THEN DO:
@@ -641,7 +640,7 @@ REPEAT WITH FRAME main:
                    MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                    LOOKUP(STRING(MsRequest.ReqStatus),
                    {&REQ_INACTIVE_STATUSES}) = 0) AND
-               NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
+               NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
                MESSAGE "Termination will also trigger subscription " +
                        lbMobSub.CLI + " termination (multisim secondary subscription)"
                VIEW-AS ALERT-BOX.

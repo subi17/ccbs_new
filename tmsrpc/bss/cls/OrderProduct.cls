@@ -91,7 +91,23 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
 
       mStoreDataForType().
 
+      IF VALID-OBJECT(aoOrderProductFactory)
+      THEN aoOrderProductFactory:mStoreData().
+
    END METHOD.
 
+   METHOD PUBLIC VOID mResult
+      (ioJsonArray AS CLASS JsonArray):
+
+      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
+
+      loJsonObject = NEW JsonObject().
+      loJsonObject:Add("order-item-id", THIS-OBJECT:OrderProductID).
+      ioJsonArray:Add(loJsonObject).
+
+      IF VALID-OBJECT(aoOrderProductFactory)
+      THEN aoOrderProductFactory:mStoreData(loJsonObject).
+
+   END METHOD.
 
 END CLASS.

@@ -68,14 +68,24 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF aoOrder:aoCustomer:CustNum EQ 0
       THEN UNDO, THROW NEW ParamError("ACC source customer cannot be a new customer").
 
-      DEFINE VARIABLE loAttributes AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loMemo       AS CLASS JsonObject NO-UNDO.
+      DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
+      DEFINE VARIABLE loMemo        AS CLASS JsonObject NO-UNDO.
+      DEFINE VARIABLE lcReturnValue AS CHARACTER        NO-UNDO.
 
       ASSIGN
          loAttributes  = ioItemObject:GetJsonObject("attributes")
-         aoOrder:MsSeq = loAttributes:GetInteger("subscription-id").
+         aoOrder:MsSeq = loAttributes:GetInteger("subscription-id")
+         lcReturnValue = Func.ValidateACC:mPreCheckSubscriptionForACC(aoOrder:MsSeq).
 
-      mPreCheckSubscriptionForACC().
+      IF lcReturnValue > ""
+      THEN UNDO, THROW NEW InternalError(lcReturnValue)
+
+      lcReturnValue = Func.ValidateACC:mCheckSubscriptionForACC(aoOrder:MsSeq,
+                                                                0,
+                                                                {&REQUEST_SOURCE_NEWTON}).
+
+      IF lcReturnValue > ""
+      THEN UNDO, THROW NEW InternalError(SUBSTRING(lcReturnValue,INDEX(lcReturnValue,"|") + 1)).
 
       IF loAttributes:Has("memo")
       THEN DO:
@@ -97,154 +107,37 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF loAttributes:Has("custnum")
       THEN DO:
          aoOrderCustomer:mCreateData(loAttributes:GetInteger("custnum")).
-         mCheckACCCompability().
+         lcReturnValue = Func.ValidateACC:mExistingCustomerACCCompability
+                                          (aoOrder:aoCustomer:Category,
+                                           aoOrderCustomer:Category,
+                                           aoOrderCustomer:CustNum,
+                                           aoOrderCustomer:CustIdType,
+                                           aoOrderCustomer:OrgId).
+         IF lcReturnValue > ""
+         THEN UNDO, THROW NEW InternalError(lcReturnValue).
       END.
-      
+
+      /* OrderCustomer data will be updated from the customer property */
       IF loAttributes:Has("customer")
       THEN aoOrderCustomer:mCreateData(loAttributes:GetJsonObject("customer")).
 
-/*
-      IF NOT loAttributes:Has("custnum")
-      THEN mNewCustomerACCCompability().
-*/
+      IF loAttributes:Has("custnum")
+      THEN DO:
+         lcReturnValue = Func.ValidateACC:mCheckTargetCustomerForACC(aoOrderCustomer:CustNum).
+         IF lcReturnValue > ""
+         THEN UNDO, THROW NEW InternalError(SUBSTRING(lcReturnValue,INDEX(lcReturnValue,"|") + 1)).
+      END.
+      ELSE DO:
+         lcReturnValue = Func.ValidateACC:mNewCustomerACCCompability(aoOrder:aoCustomer:Category,
+                                                                     aoOrderCustomer:OrgId, /* or CustId ??? */
+                                                                     aoOrderCustomer:CustIdType).
+         IF lcReturnValue > ""
+         THEN UNDO, THROW NEW InternalError(lcReturnValue).
+      END.
 
       IF aoOrderCustomer:CustNum EQ aoOrder:aoCustomer:CustNum
       THEN UNDO, THROW NEW ParamError("New agreement customer is the same as current one").
 
 	END METHOD.
-
-   METHOD PRIVATE LOGICAL mGetPROStatus
-      ( icCategory AS CHARACTER,
-        ilOld      AS LOGICAL ):
-
-      DEFINE BUFFER CustCat FOR CustCat.
-
-      FOR CustCat NO-LOCK WHERE
-          CustCat.Brand    EQ Syst.Var:gcBrand AND
-          CustCat.Category EQ icCategory:
-          RETURN CustCat.PRO.   
-      END.
-
-      UNDO, THROW NEW InternalError
-            (SUBSTITUTE("Incorrect &1 customer category '&2'",
-                        STRING(ilOld,"old/new"),
-                        icCategory)).
-
-   END METHOD.
-
-/*
-   METHOD PRIVATE VOID mNewCustomerACCCompability():
-   
-      DEFINE VARIABLE llSRCPRO       AS LOGICAL NO-UNDO.
-      DEFINE VARIABLE llSelfEmployed AS LOGICAL NO-UNDO.
-   
-      llSRCPRO = mGetPROStatus(aoOrder:aoCustomer:Category, YES).
-   
-      IF llSRCPRO
-      THEN llSelfEmployed = mIsSelfEmpl(aoOrder:aoCustomer:Category).
-
-      IF NOT fSubscriptionLimitCheck(INPUT aoOrderCustomer:OrgId,
-                                     INPUT aoOrderCustomer:CustIdType,
-                                     llProCust,
-                                     llSelfEmployed, 
-                                     1,
-                                     OUTPUT liSubLimit,
-                                     OUTPUT liSubs,
-                                     OUTPUT liActLimit,
-                                     OUTPUT liActs)
-      THEN UNDO, THROW NEW InternalError("Subscription limit exceeded").
-
-   END METHOD.
-*/
-
-   /* check self employee */
-   METHOD PRIVATE LOGICAL mIsSelfEmpl
-      (icCategory AS CHARACTER):
-   
-      DEFINE BUFFER CustCat FOR CustCat.
-
-      FOR CustCat NO-LOCK WHERE
-          CustCat.Brand    EQ Syst.Var:gcBrand AND
-          CustCat.Category EQ icCategory:
-          RETURN INDEX(custcat.catname, "self") > 0.   
-      END.
-
-      RETURN FALSE.
-   
-   END.
-
-   METHOD PRIVATE VOID mExistingCustomerACCCompability():
-   
-      DEFINE VARIABLE llSRCPRO AS LOGICAL NO-UNDO.      
-      DEFINE VARIABLE llDSTPRO AS LOGICAL NO-UNDO.      
-   
-      ASSIGN
-         llSRCPRO = mGetPROStatus(aoOrder:aoCustomer:Category, YES)
-         llDSTPRO = mGetPROStatus(aoOrderCustomer:Category, NO).
-   
-      IF llSRCPRO NE llDSTPRO
-      THEN DO:
-         IF NOT llSRCPRO AND llDSTPRO
-         THEN UNDO, THROW NEW InternalError("ACC is not allowed from NON-PRO " +
-                                            "to PRO customer").
-
-         /* Check for any active/ongoing subscriptions */
-         IF CAN-FIND(FIRST MobSub NO-LOCK WHERE
-                           MobSub.Brand   = Syst.Var:gcBrand        AND 
-                           MobSub.AgrCust = aoOrderCustomer:CustNum AND 
-                           MobSub.Cli     > "") OR 
-            mCheckOngoingOrders()
-         THEN UNDO, THROW NEW InternalError("ACC is not allowed from PRO " +
-                                            "to NON-PRO customer due to " +
-                                            "active subscriptions or " +
-                                            "ongoing order").
-      END.   
-   
-   END METHOD.
-
-   METHOD PRIVATE LOGICAL mCheckOngoingOrders():
-
-      DEFINE BUFFER OrderCustomer FOR OrderCustomer.
-      DEFINE BUFFER Order FOR Order.
-      
-      FOR EACH OrderCustomer NO-LOCK WHERE
-               OrderCustomer.Brand      EQ Syst.Var:gcBrand           AND
-               OrderCustomer.CustId     EQ aoOrderCustomer:OrgId      AND
-               OrderCustomer.CustIdType EQ aoOrderCustomer:CustIdType AND
-               OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-         FIRST Order NO-LOCK WHERE
-               Order.Brand              EQ Syst.Var:gcBrand AND
-               Order.OrderId            EQ Ordercustomer.OrderId AND
-               Order.MsSeq              NE 0 AND
-               LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
-         RETURN TRUE.
-      END.
-      RETURN FALSE.
-   
-   END METHOD.
-
-   METHOD PRIVATE VOID mPreCheckSubscriptionForACC():
-
-      DEFINE BUFFER MobSub FOR MobSub.
-
-      FOR MobSub NO-LOCK WHERE
-          MobSub.MsSeq = aoOrder:MsSeq:
-
-         IF MobSub.MultiSimId > 0 AND
-            MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY}
-         THEN UNDO, THROW NEW ParamError("ACC is not allowed for multi SIM " +
-                                         "secondary subscription").
-
-         IF CAN-FIND(FIRST CLIType WHERE
-                           CLIType.Brand = Syst.Var:gcBrand AND
-                           CLIType.CLIType = (IF MobSub.TariffBundle > ""
-                                              THEN MobSub.TariffBundle
-                                              ELSE MobSub.CLIType) AND
-                           CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL})
-         THEN UNDO, THROW NEW ParamError("ACC is not allowed for additional line").
-
-      END.
-
-   END METHOD.
 
 END CLASS.
