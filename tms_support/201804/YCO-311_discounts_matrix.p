@@ -1,0 +1,351 @@
+/* YCO-311. Commercial offering. Replace 20% cross sell promotion by 10%   */
+
+
+/* GET [CONVDISC_CS10F12] */
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS100_6",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCFH300P",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).      
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCFH300P_PRO",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).        
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS20F12",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).                                 
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "LRDISC2",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).       
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC20_3",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).                                                                                                                  
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT10H",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).      
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT15H",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT25H",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT26H",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT33H",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT34H",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT10HM",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT15HM",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT25HM",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT26HM",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT33HM",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT34HM",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT15",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT10",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT26",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT25",
+                              "CONVDISC_CS10F12",
+                              "ChildValue",
+                              YES).            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+/* HAVE [CONVDISC_CS10F12] */   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10F12",
+                              "CONVDISC_CS100_6",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10F12",
+                              "DISCFH300P",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10F12",
+                              "DISCFH300P_PRO",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10F12",
+                              "CONVDISC_CS20F12",
+                              "ParentValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10F12",
+                              "LRDISC2",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10F12",
+                              "CONVDISC20_3",
+                              "ChildValue",
+                              YES).
+                              
+/* GET [CONVDISC_CS10M12] */
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS100_6",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCFH300P",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).      
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCFH300P_PRO",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).                                       
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "LRDISC2",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).       
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC20_3",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS20M12",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).                                                                                                                                                
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT10H",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).      
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT15H",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT25H",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT26H",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT33H",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT34H",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT10HM",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT15HM",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT25HM",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT26HM",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT33HM",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT34HM",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT15",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT10",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT26",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCCONT25",
+                              "CONVDISC_CS10M12",
+                              "ChildValue",
+                              YES).                                  
+
+/* HAVE [CONVDISC_CS10M12] */   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10M12",
+                              "CONVDISC_CS100_6",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10M12",
+                              "DISCFH300P",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10M12",
+                              "DISCFH300P_PRO",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10M12",
+                              "LRDISC2",
+                              "ChildValue",
+                              YES).   
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS10M12",
+                              "CONVDISC20_3",
+                              "ChildValue",
+                              YES).
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS20M12",
+                              "CONVDISC_CS10M12",
+                              "ParentValue",
+                              YES).
+
+
+
+                           
+                                                                             
