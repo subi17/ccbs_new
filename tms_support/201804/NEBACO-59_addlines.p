@@ -6,8 +6,9 @@ DEF VAR lcAddLineCliTypes AS CHAR NO-UNDO INITIAL
    "CONT10,CONT15,CONT25,CONT26,CONT33,CONT34".
    
 DEF VAR lcNebaCliTypes AS CHAR NO-UNDO INITIAL
-   "CONTFHNB109_300,CONTFHNB2G_300,CONTFHNB3G_300,CONTFHNB58_300,CONTFHNB62_300,CONTFHNB69_300,CONTFHNB7G_300". 
-   /* CONTFHNB45_300 doesn't admit additional lines */ 
+   "CONTFHNB45_300,CONTFHNB109_300,CONTFHNB2G_300,CONTFHNB3G_300,CONTFHNB58_300,CONTFHNB62_300,CONTFHNB69_300,CONTFHNB7G_300". 
+ 
+DEF BUFFER bMXItem FOR MXItem.    
     
 DEF VAR lii AS INT NO-UNDO.
 DEF VAR lij AS INT NO-UNDO.
@@ -25,7 +26,12 @@ DO lii = 1 TO NUM-ENTRIES (lcAddLineClitypes):
                  MXItem.MXName  EQ "SubsTypeFrom"             AND 
                  MXItem.MXValue EQ ENTRY(lij, lcNebaCliTypes)
             NO-ERROR.
-      IF NOT AVAILABLE MXItem THEN DO:
+      IF NOT AVAILABLE MXItem AND 
+         CAN-FIND(FIRST bMXItem WHERE 
+                        bMXItem.MXSeq   EQ Matrix.MXSeq               AND
+                        bMXItem.MXName  EQ "SubsTypeFrom"             AND 
+                        bMXItem.MXValue EQ REPLACE(ENTRY(lij, lcNebaCliTypes), "CONTFHNB","CONTFH"))
+      THEN DO:
          CREATE MXItem.
          ASSIGN 
             MXItem.MXSeq   = Matrix.MXSeq
