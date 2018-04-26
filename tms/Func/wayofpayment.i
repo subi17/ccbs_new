@@ -132,7 +132,19 @@ FUNCTION fIsAddLineMsOwnerTariff RETURNS LOGICAL
 
 END FUNCTION.
 
-/* Return Way of Payment value YDR-2883 and YOT-5729 */
+/* Return Way of Payment value YDR-2883 and YOT-5729
+   Different values 
+   20 Postpaid and default value.
+   30 Subscription Type CONTDR% or CONTD
+   60 Subscription Type CONTDSL% and MSISDN active in the subscription
+   61 Subscription Type CONTFH% and MSISDN active in the subscription
+   62 Subscription Type CONTDSL% and MSISDN Not active in the subscription
+   63 Subscription Type CONTFH% and MSISDN Not active in the subscription
+   66 Convergent Extra- or Additional line. Mainline type CONTDSL%
+   67 Convergent Extra- or Additional line. Mainline type CONTFH%
+   68 Mobile Additional line. No need to check main line. 
+*/
+
 FUNCTION fIfsWayOfPayment RETURNS CHAR
    (INPUT icCli        AS CHAR,
     INPUT iiMsSeq      AS INT,
@@ -143,6 +155,9 @@ FUNCTION fIfsWayOfPayment RETURNS CHAR
    DEFINE BUFFER bMobSub  FOR MobSub.
    DEFINE BUFFER bOrder   FOR Order.
    DEFINE BUFFER bMsOwner FOR MsOwner.
+
+   /* Subscription type Like CONT% or terminated before period*/
+   ASSIGN lcPayType = "20". /* All other cases */
 
 
    /* service invoices with MsOwner */
@@ -182,8 +197,6 @@ FUNCTION fIfsWayOfPayment RETURNS CHAR
               NOT bMsOwner.PayType THEN DO:
          IF lcPayType = "" THEN lcPayType = fGetAddLinePayType(bMsOwner.CustNum).
       END.
-      /* Subscription type Like CONT% */
-      ELSE ASSIGN lcPayType = "20". /* All other cases */
    END.
 
    RETURN lcPayType.
