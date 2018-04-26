@@ -771,7 +771,7 @@ PROCEDURE pWriteDumpFile:
             
             ELSE DO:
                /* value to file */
-               lcvalue = REPLACE(lcValue, lcDelimiter , " ").
+               /*lcvalue = REPLACE(lcValue, lcDelimiter , " "). REMOVED LOCALLY - TODO: clarify this with DWH before removing comments!!! */
                PUT STREAM sFile UNFORMATTED lcValue.
          
                /* delimiter between fields */
