@@ -771,7 +771,9 @@ PROCEDURE pWriteDumpFile:
             
             ELSE DO:
                /* value to file */
-               /*lcvalue = REPLACE(lcValue, lcDelimiter , " "). REMOVED LOCALLY - TODO: clarify this with DWH before removing comments!!! */
+               IF LOOKUP(DumpFile.DumpName, "CustDumpTXT") > 0 THEN  
+                   lcvalue = REPLACE(lcValue, lcDelimiter , " ").
+
                PUT STREAM sFile UNFORMATTED lcValue.
          
                /* delimiter between fields */
