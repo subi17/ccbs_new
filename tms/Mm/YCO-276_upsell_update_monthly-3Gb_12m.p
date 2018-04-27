@@ -58,7 +58,7 @@ ASSIGN
 
 ASSIGN 
    ldaReadDate  = TODAY
-   lcLogDir     = fCParam("YCO-276-FID3GB_Xm-Logs","YCO-276-Dir").
+   lcLogDir     = fCParam("YCO-276-Dir","YCO-276-FID3GB_Xm-Logs").
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
 ASSIGN 
