@@ -304,7 +304,8 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	
    METHOD PUBLIC VOID mStoreData():
 
-      aoMandate:mStoreData().
+      IF VALID-OBJECT(aoMandate)
+      THEN aoMandate:mStoreData().
 
       CREATE OrderCustomer.
       ASSIGN

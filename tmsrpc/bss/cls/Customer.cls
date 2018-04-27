@@ -61,6 +61,9 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
    METHOD PUBLIC VOID mStoreData():
 
+      IF THIS-OBJECT:CustNum > 0 
+      THEN RETURN.
+
       UNDO, THROW NEW InternalError("mStoreData is not implemented").
 
    END METHOD.

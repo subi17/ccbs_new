@@ -56,7 +56,8 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 
    METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
       
-      aoMemo:mStoreData().
+      IF VALID-OBJECT(aoMemo)
+      THEN aoMemo:mStoreData().
       aoExecutionDate:mStoreData().
       aoOrderCustomer:mStoreData().
       
@@ -78,7 +79,10 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          Currently due to subtype checking is not allowed
          to update the existing customer data. (the code support this
          so removing the subtype check would allow it again) */
-      lcSubType = ioItemObject:GetCharacter("subtype").
+      ASSIGN
+         loAttributes  = ioItemObject:GetJsonObject("attributes")
+         lcSubType = ioItemObject:GetCharacter("subtype").
+
       CASE lcSubType:
          WHEN "existing-customer"
          THEN IF loAttributes:Has("customer")
@@ -94,7 +98,6 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       END CASE.
 
       ASSIGN
-         loAttributes  = ioItemObject:GetJsonObject("attributes")
          aoOrder:MsSeq = loAttributes:GetInteger("subscription-id")
          lcReturnValue = Func.ValidateACC:mPreCheckSubscriptionForACC(aoOrder:MsSeq).
 

@@ -187,9 +187,13 @@ CLASS Func.ValidateACC FINAL:
 
       /* ACC is not allowed for convergent tariffs YPR-4772
          but bypass check if MsSeg set to cparam */
-      IF LOOKUP(STRING(iiMsSeq), Syst.Parameters:getc("PassConvergentACC", "MobSub")) = 0 AND
-         mIsConvergenceTariff(MobSub.CLIType)
-      THEN RETURN "ERROR|Not allowed for fixed line tariffs".
+      DO ON ERROR UNDO, THROW:
+         IF LOOKUP(STRING(iiMsSeq), Syst.Parameters:getc("PassConvergentACC", "MobSub")) = 0 AND
+            mIsConvergenceTariff(MobSub.CLIType)
+         THEN RETURN "ERROR|Not allowed for fixed line tariffs".
+         CATCH loError AS Progress.Lang.AppError:
+         END.
+      END.
    
       IF TODAY - MobSub.ActivationDate < 30
       THEN RETURN "CHECK|Subscription has not been active long enough".

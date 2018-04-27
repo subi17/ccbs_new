@@ -23,7 +23,7 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
 	 Notes:
 	------------------------------------------------------------------------------*/
    
-   DEFINE TEMP-TABLE ttOrderProduct NO-UNDO
+   DEFINE PRIVATE TEMP-TABLE ttOrderProduct NO-UNDO
       FIELD opobject AS CLASS Progress.Lang.Object
       FIELD ordernb  AS INTEGER
       INDEX ordernb IS PRIMARY UNIQUE ordernb
