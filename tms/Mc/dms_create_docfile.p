@@ -41,10 +41,13 @@ DEF TEMP-TABLE ttOrderList NO-UNDO
    FIELD CaseID    AS CHAR
    FIELD Direct    AS LOGICAL
    FIELD MsRequest AS INT
-INDEX OrderID OrderID
-INDEX CaseID CaseID
-INDEX Direct Direct
-INDEX MsRequest MsRequest.
+   FIELD TeleSales AS LOGICAL
+   INDEX OrderID OrderID
+   INDEX CaseID CaseID
+   INDEX Direct Direct
+   INDEX MsRequest MsRequest
+   INDEX TeleSales TeleSales
+   .
 
 ASSIGN
    lcInitStatus    = {&DMS_INIT_STATUS_SENT}
@@ -81,6 +84,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR llgDirect AS LOG NO-UNDO. /*Direct chanel order that is sent to BS*/
    DEF VAR llgAddEntry AS LOG NO-UNDO.
    DEF VAR llgOrderSeek AS LOG NO-UNDO.
+   DEF VAR llTeleSales  AS LOG NO-UNDO.
    DEF VAR llgDirectNeeded AS LOG NO-UNDO.
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
@@ -106,6 +110,11 @@ FUNCTION fMakeTempTable RETURNS CHAR
             llgDirectNeeded = TRUE.
          END.
          WHEN {&DMS_CASE_TYPE_ID_CANCEL}         THEN llgOrderSeek = TRUE.
+         WHEN {&DMS_CASE_TYPE_ID_TELESALES}      THEN
+            ASSIGN
+               llgOrderSeek = TRUE
+               llTeleSales  = TRUE
+               .
      END.
    END.
    IF llgOrderSeek EQ TRUE THEN DO:
@@ -132,6 +141,16 @@ FUNCTION fMakeTempTable RETURNS CHAR
                llgDirect = FALSE
                llgAddEntry = FALSE
                lcCase = "".
+            /* Case 14 TeleSales */
+            IF llTeleSales AND LOOKUP(Order.OrderChannel, {&DMS_CASE_14_FILTER}) > 0 THEN DO:
+               IF fChkDMSExists({&DMS_HOST_TABLE_ORDER},OrderTimestamp.OrderId) = FALSE THEN
+                  CREATE ttOrderList.
+                  ASSIGN
+                     ttOrderList.OrderID     = OrderTimestamp.OrderId
+                     ttOrderList.CaseID      = {&DMS_CASE_TYPE_ID_TELESALES}
+                     ttOrderList.TeleSales   = TRUE
+                     .
+            END.
             /*Case 5: Direct channels*/
             /*This can NOT be parallell with other cases.*/
             /*Reason to store llgDirect information is that the case is easy
@@ -749,6 +768,49 @@ FUNCTION fFixNumberAndDonorInformation RETURNS CHARACTER
 
    RETURN lcReturnValue.
 
+END FUNCTION.
+
+FUNCTION fGetFixNumber RETURNS CHARACTER
+   ( iiOrderID AS INTEGER):
+
+   DEFINE BUFFER bOrderFusion FOR OrderFusion.
+   
+   FIND FIRST bOrderFusion NO-LOCK WHERE
+              bOrderFusion.Brand EQ Syst.Var:gcBrand AND
+              bOrderFusion.OrderID EQ iiOrderId NO-ERROR.
+
+   IF AVAILABLE bOrderFusion THEN
+      RETURN bOrderFusion.FixedNumber.
+
+   RETURN "".
+
+END FUNCTION.
+
+
+FUNCTION fGetTarrifType RETURNS CHARACTER
+   (icCLIType AS CHARACTER):
+
+   /* Ideally should never return -1 or -2 */
+   
+   DEFINE BUFFER bCLIType FOR CLIType.
+   DEFINE VARIABLE liTarrifType  AS INTEGER   NO-UNDO INITIAL -2.
+   
+   FIND FIRST bCLIType NO-LOCK WHERE
+              bCLIType.Brand      = Syst.Var:gcBrand           AND
+              bCLIType.CLIType    = icCLIType
+        NO-ERROR.
+   
+   IF AVAILABLE bCLIType THEN
+   
+      CASE bCLIType.TariffType:
+         WHEN {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN liTarrifType =  0.
+         WHEN {&CLITYPE_TARIFFTYPE_MOBILEONLY}  THEN liTarrifType =  1.
+         WHEN {&CLITYPE_TARIFFTYPE_FIXEDONLY}   THEN liTarrifType =  2.
+         OTHERWISE                                   liTarrifType = -1.
+      END CASE.
+
+   RETURN STRING(liTarrifType).
+   
 END FUNCTION.
 
 /*Order activation*/
@@ -1615,6 +1677,72 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
 
 END.
 
+/* {14} TeleSales */
+FUNCTION fCreateDocumentCase14 RETURNS CHARACTER
+   (iiOrderId AS INT):
+   DEFINE VARIABLE lcCaseTypeID        AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE lcCasefileRow       AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE lcCreateDMS         AS CHARACTER   NO-UNDO.
+
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.Brand = Syst.Var:gcBrand  AND
+              Order.OrderID EQ iiOrderId NO-ERROR.
+   IF NOT AVAIL Order THEN RETURN "14:Order not available" + STRING(iiOrderId).
+
+   FIND FIRST OrderCustomer NO-LOCK  WHERE
+              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
+              OrderCustomer.OrderID EQ iiOrderID      AND
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN
+      RETURN "14:Ordercustomer not available" + STRING(iiOrderId).
+   
+   ASSIGN
+      lcCaseTypeId  = "14"
+      lcCaseFileRow =
+         lcCaseTypeId                     + lcDelim +
+         /*Contract_ID : EB5CB2*/
+         Order.ContractID                 + lcDelim +
+         /*Order_ID : 14566933*/
+         STRING(Order.OrderID)            + lcDelim +
+         /* Brand */ /* Hard coding to be removed using some function to get Brand */
+         "YOI"                            + lcDelim +
+         /* Convergence */
+         fGetTarrifType(Order.CliType)    + lcDelim +
+         /*MSISDN : 609321999*/
+         Order.CLI                        + lcDelim +
+         /* Fixed Number */
+         fGetFixNumber(Order.OrderID)     + lcDelim +
+         /*SFID: WEB*/
+         Order.Salesman                   + lcDelim +
+         /* DNI */
+         OrderCustomer.CustID             + lcDelim +
+         /*Order_date : 23-04-2015*/
+         fPrintDate(Order.CrStamp)        + lcDelim +
+         /* ReplacedContract : Always empty*/
+         ""
+         .
+
+   OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+   PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+   OUTPUT STREAM sOutFile CLOSE.
+
+   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+                            lcCaseTypeID,
+                            Order.ContractID,
+                            {&DMS_HOST_TABLE_ORDER},
+                            Order.OrderId,
+                            lcInitStatus,/*StatusCode*/
+                            lcDMSStatusDesc,
+                            Order.StatusCode,
+                            0,
+                            "" /*DocList*/,
+                            {&DMS_DOCLIST_SEP}).
+   fLogLine(lcCaseFileRow,lcCreateDMS).
+
+   RETURN "".
+
+END.
+
 /*Customer category change*/
 FUNCTION fCreateDocumentCase15 RETURNS CHAR
    (idStartTS AS DECIMAL,
@@ -1744,6 +1872,13 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
       WHEN {&DMS_CASE_TYPE_ID_Q25_STE} THEN DO:
          /*From MsRequest*/
          lcStatus = fCreateDocumentCase10(idPeriodStart, idPeriodEnd).
+      END.
+      WHEN {&DMS_CASE_TYPE_ID_TELESALES} THEN DO:
+         FOR EACH ttOrderList WHERE
+                  ttOrderList.TeleSales EQ TRUE:
+            lcStatus = fCreateDocumentCase14(ttOrderList.OrderID).
+            IF lcStatus NE "" THEN fLogLine("",lcStatus).
+         END.
       END.
       WHEN {&DMS_CASE_TYPE_ID_CATEGORY_CHG} THEN DO:
           lcStatus = fCreateDocumentCase15(idPeriodStart, idPeriodEnd).

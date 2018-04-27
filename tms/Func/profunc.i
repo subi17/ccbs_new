@@ -206,6 +206,7 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
 
    FOR EACH bOrder NO-LOCK WHERE
             bOrder.MsSeq EQ iiMsSeq BY CrStamp DESC:
+      IF bOrder.OrderType EQ {&ORDER_TYPE_ACC} THEN NEXT.
       IF fIsConvergenceTariff(bOrder.CLIType) THEN
          RETURN STRING(bOrder.OrderId).
    END.
