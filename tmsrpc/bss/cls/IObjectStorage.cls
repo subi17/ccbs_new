@@ -12,7 +12,7 @@
 USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.JsonObject.
 
-INTERFACE tmsrpc.bss.cls.IObjectStorage:  
+INTERFACE bss.cls.IObjectStorage:  
 
    METHOD PUBLIC VOID mCreateData(ioJsonObject AS CLASS JsonObject).
 

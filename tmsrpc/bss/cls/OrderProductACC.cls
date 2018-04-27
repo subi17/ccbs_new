@@ -68,9 +68,30 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF aoOrder:aoCustomer:CustNum EQ 0
       THEN UNDO, THROW NEW ParamError("ACC source customer cannot be a new customer").
 
+
+      DEFINE VARIABLE lcSubType     AS CHARACTER        NO-UNDO.
       DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE loMemo        AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE lcReturnValue AS CHARACTER        NO-UNDO.
+
+      /* The code should work even without the subtype checking.
+         Currently due to subtype checking is not allowed
+         to update the existing customer data. (the code support this
+         so removing the subtype check would allow it again) */
+      lcSubType = ioItemObject:GetCharacter("subtype").
+      CASE lcSubType:
+         WHEN "existing-customer"
+         THEN IF loAttributes:Has("customer")
+              THEN UNDO, THROW NEW ParamError
+                  (SUBSTRING("A new target customer is not allowed when " +
+                             "subtype is '&1'", lcSubType)).
+         WHEN "new-consumer-with-billing-data"
+         THEN IF loAttributes:Has("custnum")
+              THEN UNDO, THROW NEW ParamError
+                  (SUBSTRING("An existing target customer is not allowed when " +
+                             "subtype is '&1'", lcSubType)).
+         OTHERWISE UNDO, THROW NEW ParamError(SUBSTRING("Invalid subtype '&1'", lcSubType)).
+      END CASE.
 
       ASSIGN
          loAttributes  = ioItemObject:GetJsonObject("attributes")
@@ -98,6 +119,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
                                                "execution-date",
                                                "Date").
 
+
       IF (NOT loAttributes:Has("custnum")) AND
          (NOT loAttributes:Has("customer"))
       THEN UNDO, THROW NEW ParamError("Either custnum or customer property is mandatory").
@@ -112,7 +134,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
                                            aoOrderCustomer:Category,
                                            aoOrderCustomer:CustNum,
                                            aoOrderCustomer:CustIdType,
-                                           aoOrderCustomer:OrgId).
+                                           aoOrderCustomer:CustId).
          IF lcReturnValue > ""
          THEN UNDO, THROW NEW InternalError(lcReturnValue).
       END.
@@ -129,7 +151,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       END.
       ELSE DO:
          lcReturnValue = Func.ValidateACC:mNewCustomerACCCompability(aoOrder:aoCustomer:Category,
-                                                                     aoOrderCustomer:OrgId, /* or CustId ??? */
+                                                                     aoOrderCustomer:CustId,
                                                                      aoOrderCustomer:CustIdType).
          IF lcReturnValue > ""
          THEN UNDO, THROW NEW InternalError(lcReturnValue).
