@@ -845,8 +845,16 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
                                                                         lbMLOrderCustomer.CustIdType,
                                                                         lbMLOrderCustomer.CustID,
                                                                         OUTPUT liMLMsSeq).
-                  IF liMLOrderID > 0 THEN 
+                  IF liMLOrderID > 0 THEN DO: 
                      lbELOrder.MultiSimId = liMLOrderId.
+                     
+                     /* If we reassign the extraline to exisiting Mainline of a 
+                        customer then release it immediately */
+                     lcNewOrderStatus = fGetReleaseStatus(lbELOrder.OrderType).
+
+                     fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+                  END.   
                   ELSE DO:
                      liMLOrderId = fCheckOngoingMainLineAvailForExtraLine(lbELOrder.CLIType,
                                                                           lbMLOrderCustomer.CustIdType,
