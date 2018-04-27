@@ -275,6 +275,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          FixedFee.BegPeriod ";"
          DCCLI.ValidFrom ";"
          DCCLI.ValidTo ";"
+         DCCLI.ContractDate ";"
          (IF AVAIL SingleFee THEN SingleFee.billperiod ELSE ?) ";"
          (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) ";".
 
@@ -316,6 +317,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          FixedFee.BegPeriod ";"
          DCCLI.ValidFrom ";"
          DCCLI.ValidTo ";"
+         DCCLI.ContractDate ";"
          (IF AVAIL SingleFee THEN SingleFee.billperiod ELSE ?) ";"
          (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) skip.
      
