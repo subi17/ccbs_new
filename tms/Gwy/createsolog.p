@@ -156,10 +156,12 @@ PROCEDURE pSolog:
 
    ELSE IF MsRequest.ReqCParam1 = "CREATE" THEN DO:
       
-      FIND FIRST BufOrder WHERE 
-                 BufOrder.MSSeq = MsreQuest.MsSeq AND
-                 BufOrder.OrderType NE 2
-      NO-LOCK NO-ERROR.
+      FOR EACH BufOrder NO-LOCK WHERE
+               BufOrder.MSSeq = MsreQuest.MSSeq AND
+               LOOKUP(STRING(BufOrder.OrderType),"0,1,3") > 0
+         BY BufOrder.CrStamp DESC:
+         LEAVE.
+      END.
 
       IF NOT AVAILABLE bufOrder THEN DO:
          fReqError("Order Subscription not found").

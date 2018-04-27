@@ -1,3 +1,4 @@
+p
 /**
  * Check if customer may do an order.
  *
@@ -566,6 +567,7 @@ IF lcAddLineAllowed = "" THEN DO:
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
             Order.OrderType          NE {&ORDER_TYPE_STC} AND 
+            Order.OrderType          NE {&ORDER_TYPE_ACC} AND 
             Order.SalesMan NE "GIFT" AND
             LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0,
        FIRST CLIType NO-LOCK WHERE

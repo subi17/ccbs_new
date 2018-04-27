@@ -252,7 +252,8 @@ add_int(resp_struct, "mnp_available", liMNPOutExists).
 order_array = add_array(resp_struct,"orders").
 liMNPStatus = ?.
 FOR EACH Order NO-LOCK WHERE
-         Order.MsSeq = MobSub.MsSeq BY Order.CrStamp:
+         Order.MsSeq = MobSub.MsSeq AND
+         Order.OrderType <= {&ORDER_TYPE_STC} BY Order.CrStamp:
 
    order_struct = add_struct(order_array,"").
    add_int(order_struct,"id",Order.OrderId).

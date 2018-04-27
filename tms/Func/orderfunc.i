@@ -151,7 +151,8 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
          /* orders to status new should not be reported to ROI */
          IF LOOKUP(icStatus,"1,3,30") = 0 AND
-            bfOrder.Ordertype NE {&ORDER_TYPE_STC} THEN 
+            bfOrder.Ordertype NE {&ORDER_TYPE_STC} AND
+            bfOrder.OrderType NE {&ORDER_TYPE_ACC} THEN 
             bfOrder.SendToROI  = {&ROI_HISTORY_TO_SEND}.
 
          /* RES-538 Digital Signature for Tienda and Telesales only */

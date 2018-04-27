@@ -318,6 +318,7 @@
 &GLOBAL-DEFINE ORDER_CHANNEL_DIRECT "cc,telesales,self,emission,fusion_telesales,fusion_emission,fusion_cc,inversa,cc_pro,telesales_pro,emission_pro,fusion_telesales_pro,fusion_emission_pro,fusion_cc_pro,fusion_self"
 &GLOBAL-DEFINE ORDER_CHANNEL_DIRECT_RENEWAL "renewal,renewal_telesales,retention,renewal_ctc,retention_stc"
 &GLOBAL-DEFINE ORDER_CHANNEL_INDIRECT "pos,fusion_pos,pos_pro,fusion_pos_pro"
+&GLOBAL-DEFINE ORDER_CHANNEL_INDIRECT_RENEWAL "renewal_pos,renewal_pos_stc"
 
 /* Request Statuses */
 &GLOBAL-DEFINE REQUEST_STATUS_NEW 0

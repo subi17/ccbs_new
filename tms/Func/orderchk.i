@@ -81,8 +81,8 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
             lbOtherOrder.brand EQ Syst.Var:gcBrand AND
             lbOtherOrder.CLI EQ pcCLI AND
             LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
-            lbOtherOrder.OrderType NE liExcludeOrderType:
-
+            lbOtherOrder.OrderType NE liExcludeOrderType AND
+            lbOtherOrder.OrderType <= {&ORDER_TYPE_STC}:
       /* YPR-2105 */
       IF pcNumberType EQ "retention" AND
          lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT. /* shouldn't never happen because of YDR-2575 */
@@ -97,23 +97,19 @@ FUNCTION fOngoingFixedOrders RETURNS CHARACTER
 (pcFixedNumber AS CHAR,
  pcNumberType  AS CHAR):
 
-   DEF VAR liExcludeOrderType AS INT NO-UNDO. 
-
-   IF pcNumberType EQ "stc" THEN liExcludeOrderType = {&ORDER_TYPE_RENEWAL}.
-   ELSE IF pcNumberType EQ "renewal" OR
-           pcNumberType EQ "retention" THEN liExcludeOrderType = {&ORDER_TYPE_STC}.
-   ELSE liExcludeOrderType = -1.
-
    /* Check if same number in ongoing Fusion order */
    DEF BUFFER lbOtherOrder  FOR Order.
    DEF BUFFER lbOrderFusion FOR OrderFusion.
+
    FOR EACH lbOrderFusion NO-LOCK WHERE
             lbOrderFusion.FixedNumber EQ pcFixedNumber,
       EACH  lbOtherOrder NO-LOCK WHERE
             lbOtherOrder.brand EQ Syst.Var:gcBrand AND
             lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
-            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
-            lbOtherOrder.OrderType NE liExcludeOrderType:
+            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0:
+   
+     IF (pcNumberType EQ "renewal" OR pcNumberType EQ "retention") AND 
+        lbOtherOrder.OrderType EQ {&ORDER_TYPE_STC} THEN NEXT.
 
       RETURN "Ongoing order for number|" + pcFixedNumber.
    END.
