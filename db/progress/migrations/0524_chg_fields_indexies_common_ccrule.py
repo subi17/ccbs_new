@@ -16,16 +16,21 @@ class AddTableCCRule(Migration):
         t.column('ReportingID', 'character', format="X(8)", initial="", max_width=16, label="Reporting ID", column_label="Reporting ID", position=14, order=130, help="Reporting ID")
         t.column('CLIType', 'character', format="X(8)", initial="", max_width=26, label="CLIType", column_label="CLIType", position=15, order=140, help="CLIType")
         t.column('AccountingID', 'character', format="X(12)", initial="", max_width=24, label="AccountingID", column_label="AccountingID", position=16, order=150, help="AccountingID")
-        t.index('CCRuleID', [['CCRuleID']], area="Dyn_Index_1", unique=True)
-        t.index('BillCode', [['Brand'], ['BillCode'], ['ValidTo']], area="Dyn_Index_1")
-        t.index('CLIType', [['Brand'], ['CLIType'], ['Category'], ['ValidTo']], area="Dyn_Index_1")
-        t.alter_index('Category', [['Brand'], ['Category'], ['BillCode'], ['CLIType'], ['ValidTo']], area="Dyn_Index_1", primary=True, unique=True)
-
+        t.index('BillCode', [['Brand'], ['BillCode'], ['ValidTo']], area="Sta_Index_2")
+        t.index('CCRuleID', [['CCRuleID']], area="Sta_Index_2", unique=True)        
+        t.index('CLIType', [['Brand'], ['CLIType'], ['Category'], ['ValidTo']], area="Sta_Index_2")
+        t.alter_index('Category', [['Brand'], ['Category'], ['BillCode'], ['CLIType'], ['ValidTo']], area="Sta_Index_2", primary=True, unique=True)
+        t.drop_index('Pgcode')
+        t.drop_column('BIGroup')        
+        
     def down(self):
         t = self.alter_table('CCRule')
-        t.alter_index('Category', [['Brand'], ['Category'], ['BIGroup'], ['ValidFrom']], area="Dyn_Index_1", primary=True, unique=True)
-        t.drop_index('Pgcode')
-        t.drop_column('BIGroup')
+        t.column('BIGroup', 'character', format="x(8)", initial="", max_width=16, label="Product group", column_label="Prod.grp", position=3, order=20, help="Product group")
+        t.alter_index('Category', [['Brand'], ['Category'], ['BIGroup'], ['ValidFrom']], area="Sta_Index_2", primary=True, unique=True)
+        t.index('Pgcode', [['Brand'], ['BIGroup'], ['Category'], ['ValidFrom']], area="Sta_Index_2")        
+        t.drop_index('BillCode')
+        t.drop_index('CCRuleID') 
+        t.drop_index('CLIType')               
         t.drop_column('CCRuleID')
         t.drop_column('BillCode')
         t.drop_column('ValidTo')
@@ -35,5 +40,6 @@ class AddTableCCRule(Migration):
         t.drop_column('FSAccNum')
         t.drop_column('ReportingID')
         t.drop_column('CLIType')
-        t.drop_column('AccountingID')        
+        t.drop_column('AccountingID')
+             
         

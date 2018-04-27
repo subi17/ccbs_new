@@ -108,13 +108,13 @@ ADD FIELD "AccountingID" OF "CCRule" AS character
 RENAME INDEX "Category" TO "temp-36034" ON "CCRule"
 
 ADD INDEX "BillCode" ON "CCRule"
-  AREA "Dyn_Index_1"
+  AREA "Sta_Index_2"
   INDEX-FIELD "Brand" ASCENDING
   INDEX-FIELD "BillCode" ASCENDING
   INDEX-FIELD "ValidTo" DESCENDING
 
 ADD INDEX "Category" ON "CCRule"
-  AREA "Dyn_Index_1"
+  AREA "Sta_Index_2"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING
   INDEX-FIELD "Category" ASCENDING
@@ -123,12 +123,12 @@ ADD INDEX "Category" ON "CCRule"
   INDEX-FIELD "ValidTo"  DESCENDING
 
 ADD INDEX "CCRuleID" ON "CCRule"
-  AREA "Dyn_Index_1"
+  AREA "Sta_Index_2"
   UNIQUE
   INDEX-FIELD "CCRuleID" ASCENDING
 
 ADD INDEX "CLIType" ON "CCRule"
-  AREA "Dyn_Index_1"
+  AREA "Sta_Index_2"
   INDEX-FIELD "Brand" ASCENDING
   INDEX-FIELD "CLIType"  ASCENDING
   INDEX-FIELD "Category" ASCENDING
