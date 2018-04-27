@@ -17,7 +17,7 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS bss.cls.OrderProductFactory IMPLEMENTS tmsrpc.bss.cls.IObjectStorage: 
+CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:

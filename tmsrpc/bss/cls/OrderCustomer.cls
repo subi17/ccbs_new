@@ -15,13 +15,17 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS bss.cls.OrderCustomer IMPLEMENTS tmsrpc.bss.cls.IObjectStorage: 
+CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
 	------------------------------------------------------------------------------*/
 
    DEFINE PUBLIC PROPERTY CustNum AS INTEGER NO-UNDO
+      GET.
+      SET.
+
+   DEFINE PUBLIC PROPERTY Title AS CHARACTER NO-UNDO
       GET.
       SET.
 
@@ -53,11 +57,19 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
       GET.
       SET.
 
+   DEFINE PUBLIC PROPERTY AuthCustIdType AS CHARACTER NO-UNDO
+      GET.
+      SET.
+
+   DEFINE PUBLIC PROPERTY AuthCustId AS CHARACTER NO-UNDO
+      GET.
+      SET.
+
    DEFINE PUBLIC PROPERTY BirthDay AS DATE NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY Address AS CHARACTER NO-UNDO
+   DEFINE PUBLIC PROPERTY Street AS CHARACTER NO-UNDO
       GET.
       SET.
 
@@ -149,7 +161,11 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY OrgId AS CHARACTER NO-UNDO
+   DEFINE PUBLIC PROPERTY Company AS CHARACTER NO-UNDO
+      GET.
+      SET.
+
+   DEFINE PUBLIC PROPERTY FoundationDate AS DATE NO-UNDO
       GET.
       SET.
 
@@ -177,40 +193,43 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
                (SUBSTITUTE("CustNum '&1' doesn't exists", iiCustNum)).
 
       ASSIGN
-         CustNum            = iiCustNum
-         FirstName          = Customer.FirstName
-         SurName1           = Customer.CustName
-         SurName2           = Customer.SurName2
-         Nationality        = Customer.Nationality
-         Language           = STRING(Customer.Language)
-         CustIdType         = Customer.CustIdType
-         CustId             = Customer.CustId
-         BirthDay           = Customer.Birthday
-         Address            = Customer.Address
-         PostOffice         = Customer.PostOffice
-         Region             = Customer.Region
-         ZipCode            = Customer.ZipCode
-         Country            = Customer.Country
-         Email              = Customer.Email
-         MobileNumber       = Customer.MobileNumber
-         FixedNumber        = Customer.Phone
-         BankCode           = Customer.BankAcc
-         OutBankMarketing   = Customer.OutMarkBank
-         DontSharePersData  = Customer.DontSharePersData
-         OperEMailMarketing = Customer.DirMarkEmail
-         OutEMailMarketing  = Customer.OutMarkEmail
-         OperAllMarketing   = Customer.DirMarkEmail OR
-                              Customer.OutMarkEmail OR
-                              Customer.DirMarkPost  OR
-                              Customer.OutMarkPost  OR
-                              Customer.DirMarkSMS   OR
-                              Customer.OutMarkSMS
-         OperPostMarketing  = Customer.DirMarkPost
-         OutPostMarketing   = Customer.OutMarkPost
-         OperSMSMarketing   = Customer.DirMarkSMS
-         OutSMSMarketing    = Customer.OutMarkSMS
-         Category           = Customer.Category
-         OrgId              = Customer.OrgId.
+         THIS-OBJECT:CustNum            = iiCustNum
+         THIS-OBJECT:FirstName          = Customer.FirstName
+         THIS-OBJECT:SurName1           = Customer.CustName
+         THIS-OBJECT:SurName2           = Customer.SurName2
+         THIS-OBJECT:Nationality        = Customer.Nationality
+         THIS-OBJECT:Language           = STRING(Customer.Language)
+         THIS-OBJECT:CustIdType         = Customer.CustIdType
+         THIS-OBJECT:CustId             = Customer.OrgId
+         THIS-OBJECT:AuthCustIdType     = Customer.AuthCustIdType
+         THIS-OBJECT:AuthCustId         = Customer.AuthCustId
+         THIS-OBJECT:BirthDay           = Customer.Birthday
+         THIS-OBJECT:Street             = Customer.Address
+         THIS-OBJECT:PostOffice         = Customer.PostOffice
+         THIS-OBJECT:Region             = Customer.Region
+         THIS-OBJECT:ZipCode            = Customer.ZipCode
+         THIS-OBJECT:Country            = Customer.Country
+         THIS-OBJECT:Email              = Customer.Email
+         THIS-OBJECT:MobileNumber       = Customer.SMSNumber
+         THIS-OBJECT:FixedNumber        = Customer.Phone
+         THIS-OBJECT:BankCode           = Customer.BankAcc
+         THIS-OBJECT:OutBankMarketing   = Customer.OutMarkBank
+         THIS-OBJECT:DontSharePersData  = Customer.DontSharePersData
+         THIS-OBJECT:OperEMailMarketing = Customer.DirMarkEmail
+         THIS-OBJECT:OutEMailMarketing  = Customer.OutMarkEmail
+         THIS-OBJECT:OperAllMarketing   = Customer.DirMarkEmail OR
+                                          Customer.OutMarkEmail OR
+                                          Customer.DirMarkPost  OR
+                                          Customer.OutMarkPost  OR
+                                          Customer.DirMarkSMS   OR
+                                          Customer.OutMarkSMS
+         THIS-OBJECT:OperPostMarketing  = Customer.DirMarkPost
+         THIS-OBJECT:OutPostMarketing   = Customer.OutMarkPost
+         THIS-OBJECT:OperSMSMarketing   = Customer.DirMarkSMS
+         THIS-OBJECT:OutSMSMarketing    = Customer.OutMarkSMS
+         THIS-OBJECT:Category           = Customer.Category
+         THIS-OBJECT:Company            = Customer.CompanyName
+         THIS-OBJECT:FoundationDate     = Customer.FoundationDate.
 
       FIND CustomerReport NO-LOCK WHERE
            CustomerReport.Custnum = Customer.Custnum NO-ERROR.
@@ -226,40 +245,54 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
-      DEFINE VARIABLE loAddressValData AS CLASS JsonObject NO-UNDO.
+      IF ioJsonObject:Has("company_id")
+      THEN ASSIGN
+              THIS-OBJECT:CustIdType     = "CIF"
+              THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("company_id")
+              THIS-OBJECT:Company        = ioJsonObject:GetCharacter("company_name")
+              THIS-OBJECT:FoundationDate = ioJsonObject:GetCharacter("company_foundation_date")
+              THIS-OBJECT:AuthCustIdType = ioJsonObject:GetCharacter("id-type")
+              THIS-OBJECT:AuthCustId     = ioJsonObject:GetCharacter("person-id").
+      ELSE ASSIGN
+              THIS-OBJECT:CustIdType     = ioJsonObject:GetCharacter("id-type")
+              THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("person-id").
 
       ASSIGN
-         THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("firstname")
-         THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("surname")
-         THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("surname2")
+         THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname")
+         THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname")
+         THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2")
          THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality")
          THIS-OBJECT:Language           = STRING(LOOKUP(ioJsonObject:GetCharacter("language"),
                                                  "es_ES,es_CA,es_EU,es_GA,en"))
-         THIS-OBJECT:CustIdType         = ioJsonObject:GetCharacter("person-id-type")
+         THIS-OBJECT:CustIdType         = ioJsonObject:GetCharacter("id-type")
          THIS-OBJECT:CustId             = ioJsonObject:GetCharacter("person-id")
          THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday")
-         THIS-OBJECT:Address            = ioJsonObject:GetCharacter("address")
+         THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street")
          THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city")
          THIS-OBJECT:Region             = ioJsonObject:GetCharacter("region")
-         THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zipcode")
+         THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zip")
          THIS-OBJECT:Country            = ioJsonObject:GetCharacter("country")
          THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email")
-         THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("mobile-number")
-         THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("fixed-number")
-         THIS-OBJECT:BankCode           = ioJsonObject:GetCharacter("iban")
+         THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number")
+         THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number")
+         THIS-OBJECT:BankCode           = ioJsonObject:GetCharacter("bankaccount")
          THIS-OBJECT:OutBankMarketing   = ioJsonObject:GetLogical("mark-bank-3rd")
          THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark-dont-share-personal-data")
          THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark-email")
          THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark-email-3rd")
-         THIS-OBJECT:OperAllMarketing   = ioJsonObject:GetLogical("mark-perso")
          THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark-post")
          THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark-post-3rd")
          THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark-sms")
          THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark-sms-3rd")
-         loAddressValData               = ioJsonObject:GetJsonObject("address-validation-data")
-         THIS-OBJECT:AddressCodC        = loAddressValData:GetCharacter("city-validation-code")
-         THIS-OBJECT:AddressCodP        = loAddressValData:GetCharacter("street-validation-code")
-         THIS-OBJECT:AddressCodM        = loAddressValData:GetCharacter("municipality-validation-code").
+         THIS-OBJECT:OperAllMarketing   = THIS-OBJECT:OperEMailMarketing OR
+                                          THIS-OBJECT:OutEMailMarketing  OR
+                                          THIS-OBJECT:OperPostMarketing  OR
+                                          THIS-OBJECT:OutPostMarketing   OR
+                                          THIS-OBJECT:OperSMSMarketing   OR
+                                          THIS-OBJECT:OutSMSMarketing
+         THIS-OBJECT:AddressCodC        = ioJsonObject:GetCharacter("city_code")
+         THIS-OBJECT:AddressCodP        = ioJsonObject:GetCharacter("street_code")
+         THIS-OBJECT:AddressCodM        = ioJsonObject:GetCharacter("municipality_code").
 
       IF ioJsonObject:Has("mandate")
       THEN DO:
@@ -285,8 +318,10 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS tmsrpc.bss.cls.IObjectStorage:
          OrderCustomer.Language           = THIS-OBJECT:Language
          OrderCustomer.CustIdType         = THIS-OBJECT:CustIdType
          OrderCustomer.CustId             = THIS-OBJECT:CustId
+         OrderCustomer.AuthCustIdType     = THIS-OBJECT:AuthCustIdType
+         OrderCustomer.AuthCustId         = THIS-OBJECT:AuthCustId
          OrderCustomer.BirthDay           = THIS-OBJECT:BirthDay
-         OrderCustomer.Address            = THIS-OBJECT:Address
+         OrderCustomer.Street             = THIS-OBJECT:Street
          OrderCustomer.PostOffice         = THIS-OBJECT:PostOffice
          OrderCustomer.Region             = THIS-OBJECT:Region
          OrderCustomer.ZipCode            = THIS-OBJECT:ZipCode
