@@ -250,7 +250,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
               THIS-OBJECT:CustIdType     = "CIF"
               THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("company_id")
               THIS-OBJECT:Company        = ioJsonObject:GetCharacter("company_name")
-              THIS-OBJECT:FoundationDate = ioJsonObject:GetCharacter("company_foundation_date")
+              THIS-OBJECT:FoundationDate = ioJsonObject:GetDate("company_foundation_date")
               THIS-OBJECT:AuthCustIdType = ioJsonObject:GetCharacter("id-type")
               THIS-OBJECT:AuthCustId     = ioJsonObject:GetCharacter("person-id").
       ELSE ASSIGN

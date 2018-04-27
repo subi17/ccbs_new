@@ -47,7 +47,7 @@ CLASS bss.cls.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS OrderProduct NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS bss.cls.OrderProduct NO-UNDO
       GET.
       SET.
 

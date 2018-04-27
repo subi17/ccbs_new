@@ -31,7 +31,7 @@ CLASS bss.cls.Memo IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS OrderProduct NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS bss.cls.OrderProduct NO-UNDO
       GET.
       SET.
 
@@ -56,7 +56,7 @@ CLASS bss.cls.Memo IMPLEMENTS bss.cls.IObjectStorage:
    METHOD PUBLIC VOID mStoreData():
 
       Func.Common:mWriteMemo("OrderProduct",
-                             aoOrderProduct:OrderProductId,
+                             STRING(aoOrderProduct:OrderProductId),
                              aoOrderProduct:aoOrder:aoCustomer:CustNum,
                              THIS-OBJECT:MemoTitle,
                              THIS-OBJECT:MemoText).

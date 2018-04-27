@@ -12,6 +12,7 @@
 USING Progress.Lang.*.
 USING profcgi.RPC.JSON.InternalError.
 USING Progress.Json.ObjectModel.JsonObject.
+USING Progress.Json.ObjectModel.JsonArray.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -43,7 +44,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
+   DEFINE PUBLIC VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
 
 	CONSTRUCTOR PUBLIC OrderProduct
      ( ioOrder AS CLASS bss.cls.Order ):
@@ -66,7 +67,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
          ProductID          = ioItemObject:GetCharacter("product-id") 
          ProductOfferingID  = ioItemObject:GetCharacter("product-offering-id").
 
-      mCreateOrderProductForType(ioItemObject).
+      mCreateDataForType(ioItemObject).
 
       IF ioItemObject:Has("items")
       THEN DO:
@@ -106,7 +107,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       ioJsonArray:Add(loJsonObject).
 
       IF VALID-OBJECT(aoOrderProductFactory)
-      THEN aoOrderProductFactory:mStoreData(loJsonObject).
+      THEN aoOrderProductFactory:mResult(loJsonObject).
 
    END METHOD.
 

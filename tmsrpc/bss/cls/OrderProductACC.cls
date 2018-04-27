@@ -83,14 +83,14 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          WHEN "existing-customer"
          THEN IF loAttributes:Has("customer")
               THEN UNDO, THROW NEW ParamError
-                  (SUBSTRING("A new target customer is not allowed when " +
+                  (SUBSTITUTE("A new target customer is not allowed when " +
                              "subtype is '&1'", lcSubType)).
          WHEN "new-consumer-with-billing-data"
          THEN IF loAttributes:Has("custnum")
               THEN UNDO, THROW NEW ParamError
-                  (SUBSTRING("An existing target customer is not allowed when " +
+                  (SUBSTITUTE("An existing target customer is not allowed when " +
                              "subtype is '&1'", lcSubType)).
-         OTHERWISE UNDO, THROW NEW ParamError(SUBSTRING("Invalid subtype '&1'", lcSubType)).
+         OTHERWISE UNDO, THROW NEW ParamError(SUBSTITUTE("Invalid subtype '&1'", lcSubType)).
       END CASE.
 
       ASSIGN
@@ -99,7 +99,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          lcReturnValue = Func.ValidateACC:mPreCheckSubscriptionForACC(aoOrder:MsSeq).
 
       IF lcReturnValue > ""
-      THEN UNDO, THROW NEW InternalError(lcReturnValue)
+      THEN UNDO, THROW NEW InternalError(lcReturnValue).
 
       lcReturnValue = Func.ValidateACC:mCheckSubscriptionForACC(aoOrder:MsSeq,
                                                                 0,
@@ -111,13 +111,13 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF loAttributes:Has("memo")
       THEN DO:
          aoMemo = NEW bss.cls.Memo(THIS-OBJECT).
-         aoMemo:mCreateMemo(loAttributes:GetJsonObject("memo")).
+         aoMemo:mCreateData(loAttributes:GetJsonObject("memo")).
       END.
       
       aoExecutionDate = NEW bss.cls.OrderProductParam(THIS-OBJECT).
-      aoExecutionDate:mCreateOrderProductParam(loAttributes,
-                                               "execution-date",
-                                               "Date").
+      aoExecutionDate:mCreateData(loAttributes,
+                                  "execution-date",
+                                  "Date").
 
 
       IF (NOT loAttributes:Has("custnum")) AND
