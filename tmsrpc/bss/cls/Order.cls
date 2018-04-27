@@ -16,6 +16,8 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -99,46 +101,6 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
                                     DAY(ldaCreateDate)
          .
 
-         /*
-         Order.InvCustRole     = 1
-         Order.UserRole        = 1
-         Order.StatusCode      = "1"
-         Order.Reseller        = pcReseller
-         Order.Source          = "newton"
-         Order.OrdererIP       = pcIP
-         Order.CLI        = pcCLI
-         Order.CLIType    = pcSubType
-         Order.mnpstatus  = INT(pcNumberType EQ "mnp")
-         Order.paytype    = (IF CLIType.PayType = 2 THEN TRUE ELSE FALSE)  
-         Order.oldpaytype = (pcOldBillCat EQ "prepaid")
-         Order.ICC        = pcIcc
-         Order.OldIcc     = pcOldIcc
-         Order.CurrOper   = pcOldOperator
-         Order.PortingDate = pcMNPPortingDate
-         Order.FAT        = pfFAT WHEN pfFAT NE 0
-         Order.FTGrp    = pcFATGrp
-         Order.SMSType  = INT(plSendSMS)
-         Order.Campaign = pcCampaignCode
-         Order.CampaignType = pcCampaignType 
-         Order.Referee  = pcReferee
-         Order.Offer = pcOfferId 
-         Order.ROIResult = pcROIresult
-         Order.RiskCode = pcROIriskcode
-         Order.MultiSimID = piMultiSimID
-         Order.UsageType = pcUsageType
-         Order.DeliveryType = piDeliveryType
-         Order.DeliverySecure = piDeliverySecure
-         Order.SendOffer = plSendOffer
-         Order.ResignationPeriod  = plResignationPeriod 
-         Order.RoiLevel = INT(pcRoilevel)
-         Order.MultiSimType = piMultiSimType
-         Order.MsSeq = (IF 
-                        LOOKUP(pcNumberType,"new,mnp,migration") > 0 
-                        THEN NEXT-VALUE(MobSub)
-                        ELSE MobSub.MsSeq).
-         Order.Multiorder = plMultiOrder.               
-         */
-
       IF ioJsonObject:Has("items")
       THEN DO:
          aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
@@ -157,6 +119,8 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       ASSIGN
          Order.OrderId       = NEXT-VALUE(OrderId)
          THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
+         Order.StatusCode    = {&ORDER_STATUS_NEW}
+         Order.Source        = "bssapi"
          Order.CustNum       = aoCustomer:CustNum
          Order.MsSeq         = THIS-OBJECT:MsSeq
          Order.ContractID    = THIS-OBJECT:ContractId
