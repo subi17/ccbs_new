@@ -168,6 +168,7 @@ CLASS Func.ValidateACC FINAL:
 
       DEFINE VARIABLE lcSRCCategory  AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lcReturnValue  AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcPassMsSeq    AS CHARACTER NO-UNDO.
      
       FIND MobSub NO-LOCK WHERE MobSub.MsSeq = iiMsSeq NO-ERROR.
       
@@ -188,12 +189,16 @@ CLASS Func.ValidateACC FINAL:
       /* ACC is not allowed for convergent tariffs YPR-4772
          but bypass check if MsSeg set to cparam */
       DO ON ERROR UNDO, THROW:
-         IF LOOKUP(STRING(iiMsSeq), Syst.Parameters:getc("PassConvergentACC", "MobSub")) = 0 AND
-            mIsConvergenceTariff(MobSub.CLIType)
-         THEN RETURN "ERROR|Not allowed for fixed line tariffs".
+         lcPassMsSeq = Syst.Parameters:getc("PassConvergentACC", "MobSub").
          CATCH loError AS Progress.Lang.AppError:
+            lcPassMsSeq = "".
          END.
       END.
+
+      IF LOOKUP(STRING(iiMsSeq), lcPassMsSeq) = 0 AND
+         mIsConvergenceTariff(MobSub.CLIType)
+      THEN RETURN "ERROR|Not allowed for fixed line tariffs".
+
    
       IF TODAY - MobSub.ActivationDate < 30
       THEN RETURN "CHECK|Subscription has not been active long enough".
