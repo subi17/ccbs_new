@@ -200,6 +200,18 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   RELEASE OrderFusion.
                END.
 
+               IF bfOrder.OrderType EQ {&ORDER_TYPE_ACC} THEN
+                  FOR EACH MsRequest WHERE 
+                           MsRequest.MsSeq = Order.Msseq AND
+                           MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
+                           MsRequest.ReqIParam4 = Order.OrderID AND
+                           MsRequest.Actstamp > Func.Common:mMakeTS() AND
+                     LOOKUP(STRING(MsRequest.ReqStatus),
+                           {&REQ_INACTIVE_STATUSES}) = 0:
+                     fChangeReqStatus(MsRequest.MsRequest,
+                                      4,"Cancelled by ACC order closing").
+                  END.
+
                /* Convergent mobile part closing */
                IF fIsConvergenceTariff (bfOrder.CLIType) THEN DO:
                   /* Mark subscription partially terminated */

@@ -157,6 +157,7 @@ CLASS Func.ValidateACC FINAL:
    METHOD PUBLIC STATIC CHARACTER mCheckSubscriptionForACC
       ( iiMsSeq      AS INTEGER,
         iiCurrentReq AS INTEGER,
+        iiCurrentOrderID AS INTEGER,
         icChannel    AS CHARACTER ):
       
       DEFINE BUFFER Barring FOR Barring.
@@ -165,6 +166,7 @@ CLASS Func.ValidateACC FINAL:
       DEFINE BUFFER Customer FOR Customer.
       DEFINE BUFFER Limit FOR Limit.
       DEFINE BUFFER MsRequest FOR MsRequest.
+      DEFINE BUFFER Order FOR Order.
 
       DEFINE VARIABLE lcSRCCategory  AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lcReturnValue  AS CHARACTER NO-UNDO.
@@ -212,6 +214,13 @@ CLASS Func.ValidateACC FINAL:
           THEN IF MsRequest.ReqType EQ 18
                THEN RETURN "ERROR/SMS/312|Subscription has a pending termination request.".
                ELSE RETURN "ERROR/SMS/310|Subscription has a pending request.".
+      END.
+
+      FOR EACH Order NO-LOCK USE-INDEX MsSeq WHERE
+               Order.MsSeq EQ Mobsub.MsSeq AND
+               Order.OrderID NE iiCurrentOrderID AND
+            LOOKUP(STRING(Order.StatusCode), {&ORDER_INACTIVE_STATUSES}) = 0:
+         RETURN "ERROR/SMS/310|Subscription has a pending request.".
       END.
    
       IF LOOKUP(STRING(MobSub.MsStat),"4,8") = 0
