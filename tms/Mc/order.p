@@ -385,20 +385,19 @@ FORM
 form
     "OrderID/status:" Order.OrderID "/" Order.Statuscode FORMAT "X(2)"
         lcStatus FORMAT "X(15)"
-
-    "Orderer .:" AT 48 Order.Orderer FORMAT "X(20)" 
+    "OrderType:" AT 48 Order.OrderType FORMAT ">9"
     SKIP
 
     "ContractID ...:" Order.ContractID 
-    "AuthCType:" AT 48 lcAuthCustIdType
+    "Custnum .:" AT 48 Order.Custnum FORMAT ">>>>>>>>9" 
     SKIP
 
     "MSISDN .......:" Order.CLI FORMAT "X(30)"
-    "AuthCusID:" AT 48 lcAuthCustId
+    "AuthCType:" AT 48 lcAuthCustIdType
     SKIP
     
     "ICC ..........:" Order.ICC FORMAT "X(30)" 
-    "OrdererIP:" AT 48 Order.OrdererIP FORMAT "X(20)"
+    "AuthCusID:" AT 48 lcAuthCustId
     SKIP
 
     "CLIType ......:" Order.CLIType FORMAT "X(12)"                     
@@ -1203,7 +1202,7 @@ PROCEDURE pOrderView:
                         THEN 2242 /* invoice customer */
                         ELSE 0)
               Syst.Var:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
-                              RowType = {&ORDERCUSTOMER_ROWTYPE_USER})
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_ACC})
                         THEN 2247 /* user customer */
                         ELSE 0)
               Syst.Var:ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
@@ -1238,7 +1237,7 @@ PROCEDURE pOrderView:
            END.
 
            ELSE IF Syst.Var:toimi = 3 THEN DO:
-              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_USER},FALSE).
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_ACC},FALSE).
            END.
 
            ELSE IF Syst.Var:toimi = 4 THEN DO:
@@ -1787,6 +1786,11 @@ PROCEDURE local-find-others.
                     MSRequest.MSSeq      = Order.MSSeq    AND 
                     MSrequest.ReqType    = 46             AND 
                     MSrequest.ReqIparam1 = Order.OrderId No-LOCK NO-ERROR.
+      ELSE IF Order.OrderType = {&ORDER_TYPE_ACC} THEN
+         FIND FIRST Msrequest WHERE 
+                    MSRequest.MSSeq      = Order.MSSeq    AND 
+                    MSrequest.ReqType    = 10             AND 
+                    MSrequest.ReqIparam4 = Order.OrderId No-LOCK NO-ERROR.
       ELSE DO:
          FIND FIRST Msrequest WHERE 
                     MSRequest.MSSeq      = Order.MSSeq    AND 
@@ -1825,10 +1829,10 @@ PROCEDURE local-disp-lis:
          Order.StatusCode
          lcStatus
          Order.ContractID
-         Order.Orderer
+         Order.Custnum
          lcAuthCustIdType
          lcAuthCustId
-         Order.OrdererIP
+         Order.OrderType
          Order.CLIType
          Order.CLI 
          Order.CLI + " / " + OrderFusion.FixedNumber WHEN 
@@ -2023,6 +2027,9 @@ PROCEDURE local-update-customer:
       END.
       WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER} THEN DO:
          lcNewHeader = " FIX DONOR".
+      END.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_ACC} THEN DO:
+         lcNewHeader = " ACC".
       END.
    END CASE.
 
