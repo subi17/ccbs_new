@@ -72,7 +72,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 1063 THEN b_CallType =  1.
       WHEN 1064 THEN b_CallType =  1.
       WHEN 1066 THEN DO: 
-         IF ttCall DateSt >= 05/09/2018 THEN DO: /* temporary 9.5.2018 */
+         IF ttCall.DateSt >= 05/09/2018 THEN DO: /* temporary 9.5.2018 */
             /* YDR-2876 duration conditions changed 05/2018 */
             IF ttCall.BillDur <= 20 THEN 
                        b_callType = 23.
