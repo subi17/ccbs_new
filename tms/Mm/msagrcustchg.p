@@ -242,6 +242,7 @@ PROCEDURE pOwnerChange:
 
    lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(MsRequest.MsSeq,
                                                       MsRequest.MsRequest,
+                                                      MsRequest.ReqIParam4,
                                                       MsRequest.ReqSource).
    
    IF lcInfo EQ "" AND MsRequest.ReqIParam1 > 0
@@ -779,6 +780,7 @@ PROCEDURE pOwnerChange:
          
 
          lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(bMobSub.MsSeq,
+                                                            0,
                                                             0,
                                                             MsRequest.ReqSource).
       
@@ -1911,6 +1913,7 @@ PROCEDURE pHandleAdditionalLines:
 
 
          lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(bMobSub.MsSeq,
+                                                            0,
                                                             0,
                                                             MsRequest.ReqSource).
 

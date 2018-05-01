@@ -51,7 +51,7 @@ IF NOT AVAIL bOriginalCustomer THEN RETURN "ERROR:Old customer not found".
 
 IF OrderCustomer.Custnum > 0 THEN DO:
    FIND Customer NO-LOCK WHERE
-        Customer.Custnum = Order.Custnum NO-ERROR.
+        Customer.Custnum = OrderCustomer.Custnum NO-ERROR.
    IF NOT AVAIL Customer THEN RETUrN "ERROR:New customer not found".
 END.
 
@@ -94,6 +94,7 @@ END.
 
 lcError = Func.ValidateACC:mCheckSubscriptionForACC(MobSub.MsSeq,
                                                     0,
+                                                    Order.OrderID,
                                                     {&REQUEST_SOURCE_NEWTON}).
 IF lcError > ""
 THEN RETURN SUBSTRING(lcError,INDEX(lcError,"|") + 1).

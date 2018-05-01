@@ -666,6 +666,7 @@ IF icAction NE "view" THEN DO:
    
    lcError = Func.ValidateACC:mCheckSubscriptionForACC(iiMsSeq,
                                                        0,
+                                                       0,
                                                        "").
 
    IF lcError > "" THEN DO:

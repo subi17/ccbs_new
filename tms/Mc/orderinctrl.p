@@ -98,15 +98,16 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrder).
 END.               
       
-FIND FIRST OrderCustomer WHERE
-   OrderCustomer.Brand = Syst.Var:gcBrand AND
-   OrderCustomer.OrderId = Order.OrderId AND
-   OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+FIND OrderCustomer WHERE
+     OrderCustomer.Brand = Syst.Var:gcBrand AND
+     OrderCustomer.OrderId = Order.OrderId AND
+     OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
-llCompanyScoringNeeded = 
-   (Order.CREventQty = 0 AND 
-   Order.CredOk = FALSE AND
-   OrderCustomer.CustidType = "CIF").
+IF AVAIL OrderCustomer THEN
+   llCompanyScoringNeeded = 
+      (Order.CREventQty = 0 AND 
+      Order.CredOk = FALSE AND
+      OrderCustomer.CustidType = "CIF").
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 
@@ -429,9 +430,10 @@ END.
 /* Release pending additional lines, in case of pending convergent 
    or mobile main line order is released */
 /* YTS-10832 fix, checking correct status of order */
-IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
-   lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
-   lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+IF LOOKUP(STRING(Order.OrderType),"0,1,3,4") > 0 AND
+   (lcNewStatus = {&ORDER_STATUS_NEW}                 OR
+    lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
+    lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE}) THEN DO:
   
    fActionOnAdditionalLines (OrderCustomer.CustIdType,
                              OrderCustomer.CustID,
