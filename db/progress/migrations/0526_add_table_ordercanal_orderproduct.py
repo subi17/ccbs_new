@@ -2,10 +2,10 @@ from gearbox.migrations import Migration
 
 class AddTableOrderProduct(Migration):
 
-    database = "common"
+    database = "ordercanal"
 
     def up(self):
-        t = self.table('OrderProduct', area="Sta_Data_64", multitenant="yes", dump_name="orderproduct")
+        t = self.table('OrderProduct', area="Sta_Data_64", multitenant="yes", dump_name="orderproduct", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-orderproduct.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-orderproduct.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}])
         t.column('OrderId', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="OrderId", column_label="OrderId", position=2, order=10, description="Order sequence number")
         t.column('OrderProductID', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="OrderProductID", column_label="OrderProductID", position=3, order=20, description="Order product internal id")
         t.column('ParentID', 'integer', format=">>9", initial="0", max_width=4, label="Parent ID", column_label="ParentID", position=4, order=30)

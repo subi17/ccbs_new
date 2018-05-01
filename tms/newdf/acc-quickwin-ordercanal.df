@@ -1,9 +1,7 @@
-DROP TABLE "OrderProduct"
-DROP TABLE "OrderProductParam"
-DROP SEQUENCE "OrderProductID"
-
 ADD TABLE "OrderProduct"
   MULTITENANT yes
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderproduct.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderproduct.p" CRC "?" 
   AREA "Sta_Data_64"
   DUMP-NAME "orderproduct"
 
@@ -54,18 +52,20 @@ ADD FIELD "ActionType" OF "OrderProduct" AS character
   ORDER 60
 
 ADD INDEX "OrderProductID" ON "OrderProduct"
-  AREA "Sta_Index_64"
+  AREA "Dyn_Index_1"
   PRIMARY
   UNIQUE
   INDEX-FIELD "OrderProductID" ASCENDING
 
 ADD INDEX "OrderID" ON "OrderProduct"
-  AREA "Sta_Index_64"
+  AREA "Dyn_Index_1"
   INDEX-FIELD "OrderId" ASCENDING
 
 ADD TABLE "OrderProductParam"
   MULTITENANT yes
-  AREA "Sta_Data_64"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderproductparam.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderproductparam.p" CRC "?" 
+  AREA "Sta_Data_128"
   DUMP-NAME "orderproductparam"
 
 ADD FIELD "OrderProductID" OF "OrderProductParam" AS integer
@@ -100,13 +100,13 @@ ADD FIELD "CharValue" OF "OrderProductParam" AS character
 ADD FIELD "DateValue" OF "OrderProductParam" AS date
   FORMAT "99-99-9999"
   INITIAL ?
-  LABEL "DecValue"
-  COLUMN-LABEL "DecValue"
+  LABEL "DateValue"
+  COLUMN-LABEL "DateValue"
   ORDER 50
 
 ADD FIELD "DecValue" OF "OrderProductParam" AS decimal
   FORMAT "->>>>>>>9.99<<"
-  DECIMALS 4
+  DECIMALS 5
   INITIAL "0"
   LABEL "DecValue"
   COLUMN-LABEL "DecValue"
@@ -120,8 +120,9 @@ ADD FIELD "IntValue" OF "OrderProductParam" AS  integer
   ORDER 70
 
 ADD INDEX "OrderProductID" ON "OrderProductParam"
-  AREA "Sta_Index_64"
+  AREA "Dyn_Index_1"
   PRIMARY
+  UNIQUE
   INDEX-FIELD "OrderProductID" ASCENDING
   INDEX-FIELD "ParamName" ASCENDING
 
