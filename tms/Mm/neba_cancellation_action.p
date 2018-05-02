@@ -123,6 +123,10 @@ IF NOT AVAIL Customer THEN DO:
       RETURN.
    END.
 END.
+ELSE DO:
+   /*Customer already exists*/
+   liCashCust = Customer.Custnum.
+END.
 
 /*Select NEBA permanency for the customer. */
 ocError =  fSelectNebaFee(iiOrderId,
