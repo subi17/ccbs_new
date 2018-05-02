@@ -145,6 +145,8 @@ oiRequest = fMSCustChangeRequest(
 IF oiRequest = 0 THEN
    RETURN "ACC request creation failed: " +  lcError.
 
+RETURN "".
+
 FINALLY:
    IF lcOrigKatun > "" THEN
       Syst.Var:katun = lcOrigKatun.

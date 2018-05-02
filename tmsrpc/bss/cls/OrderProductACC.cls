@@ -55,12 +55,22 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 	END DESTRUCTOR.
 
    METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
-      
+
+      DEFINE VARIABLE liRequestID AS INTEGER NO-UNDO.
+
       IF VALID-OBJECT(aoMemo)
       THEN aoMemo:mStoreData().
       aoExecutionDate:mStoreData().
       aoOrderCustomer:mStoreData().
-      
+
+      RUN Mm/acc_order.p(INPUT aoOrder:OrderId, OUTPUT liRequestID).
+
+      IF RETURN-VALUE > ""
+      THEN UNDO, THROW NEW InternalError(SUBSTITUTE("acc_order failed with error '&1'", RETURN-VALUE)).
+
+      IF liRequestID EQ 0
+      THEN UNDO, THROW NEW InternalError("Failed to create ACC request").
+
    END METHOD.
 
 	METHOD PUBLIC OVERRIDE VOID mCreateDataForType
