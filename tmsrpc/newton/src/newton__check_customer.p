@@ -1,4 +1,3 @@
-p
 /**
  * Check if customer may do an order.
  *
