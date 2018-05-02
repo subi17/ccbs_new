@@ -61,8 +61,9 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          IF NOT AVAILABLE MobSub
          THEN UNDO, THROW NEW InternalError
                   (SUBSTITUTE("MobSub having msseq '&1' doesn't exists", iiMSSeq)).
-         THIS-OBJECT:MsSeq = iiMSSeq.
-         THIS-OBJECT:CLI = MobSub.CLI.
+         ASSIGN
+            THIS-OBJECT:MsSeq = iiMSSeq
+            THIS-OBJECT:CLI   = MobSub.CLI.
       END SET.
 
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
@@ -93,7 +94,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          aoCustomer = NEW bss.cls.Customer().
       
       IF loAgrCust:Has("custnum")
-      THEN aoCustomer:mFindCustomer(loAgrCust:GetInteger("custnum")).
+      THEN aoCustomer:mFindData(loAgrCust:GetInteger("custnum")).
       ELSE aoCustomer:mCreateData(loAgrCust).
 
       ASSIGN

@@ -35,7 +35,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 	DESTRUCTOR PUBLIC Customer():
 	END DESTRUCTOR.
 	
-	METHOD PUBLIC VOID mFindCustomer
+	METHOD PUBLIC VOID mFindData
 	  (iiCustNum AS INTEGER):
 
       DEFINE BUFFER Customer FOR Customer.

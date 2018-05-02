@@ -75,27 +75,19 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       DEFINE VARIABLE loMemo        AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE lcReturnValue AS CHARACTER        NO-UNDO.
 
-      /* The code should work even without the subtype checking.
-         Currently due to subtype checking is not allowed
-         to update the existing customer data. (the code support this
-         so removing the subtype check would allow it again) */
       ASSIGN
          loAttributes  = ioItemObject:GetJsonObject("attributes")
          lcSubType = ioItemObject:GetCharacter("subtype").
 
-      CASE lcSubType:
-         WHEN "existing-customer"
-         THEN IF loAttributes:Has("customer")
-              THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("A new target customer is not allowed when " +
+      IF lcSubType BEGINS "existing" AND NOT loAttributes:Has("custnum")
+      THEN UNDO, THROW NEW ParamError
+                  (SUBSTITUTE("An existing customer id is mandatory when " +
                              "subtype is '&1'", lcSubType)).
-         WHEN "new-consumer-with-billing-data"
-         THEN IF loAttributes:Has("custnum")
-              THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("An existing target customer is not allowed when " +
-                             "subtype is '&1'", lcSubType)).
-         OTHERWISE UNDO, THROW NEW ParamError(SUBSTITUTE("Invalid subtype '&1'", lcSubType)).
-      END CASE.
+
+      IF lcSubType BEGINS "new" AND NOT loAttributes:Has("customer")
+      THEN UNDO, THROW NEW ParamError
+                  (SUBSTITUTE("A customer object data is mandatory when " +
+                              "subtype is '&1'", lcSubType)).
 
       ASSIGN
          aoOrder:MsSeq = loAttributes:GetInteger("subscription-id")
@@ -164,6 +156,68 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF aoOrderCustomer:CustNum EQ aoOrder:aoCustomer:CustNum
       THEN UNDO, THROW NEW ParamError("New agreement customer is the same as current one").
 
+      mSubTypeValidations(lcSubType).
+
 	END METHOD.
+
+   METHOD PRIVATE VOID mSubTypeValidations
+      (icSubType AS CHARACTER):
+
+      DEFINE VARIABLE llPrePaid AS LOGICAL NO-UNDO.
+      DEFINE VARIABLE llCompany AS LOGICAL NO-UNDO.
+      DEFINE BUFFER MobSub FOR MobSub.
+
+      CASE icSubType:
+         WHEN "new-corporate-postpaid"
+         THEN ASSIGN
+                 llPrePaid = NO
+                 llCompany = YES.
+         WHEN "new-corporate-prepaid"
+         THEN ASSIGN
+                 llPrePaid = YES
+                 llCompany = YES.
+         WHEN "new-consumer-postpaid"
+         THEN ASSIGN
+                 llPrePaid = NO
+                 llCompany = NO.
+         WHEN "new-consumer-prepaid"
+         THEN ASSIGN
+                 llPrePaid = YES
+                 llCompany = NO.
+         WHEN "existing-customer"
+         THEN RETURN.
+         OTHERWISE UNDO, THROW NEW ParamError
+                     (SUBSTITUTE("Invalid subtype '&1'",icSubType)).
+      END CASE.
+
+      IF llCompany AND aoOrderCustomer:CustIdType NE "CIF"
+      THEN UNDO, THROW NEW ParamError
+                     (SUBSTITUTE("Company id is mandatory when " +
+                                 "subtype is in value '&1'",icSubType)).
+
+      IF NOT CAN-FIND(FIRST Mobsub NO-LOCK WHERE
+                            MobSub.MsSeq   EQ aoOrder:MsSeq AND
+                            MobSub.PayType EQ llPrePaid)
+      THEN UNDO, THROW NEW ParamError
+                     (SUBSTITUTE("Subscription which MsSeq '&1' is &2 subscription " +
+                                 "which contradicts the subtype '&3'",
+                                 aoOrder:MsSeq,
+                                 STRING(llPrepaid,"prepaid/postpaid"),
+                                 icSubType)).
+
+      IF (NOT llPrePaid) AND
+         aoOrderCustomer:BankCode EQ "" OR
+         NOT VALID-OBJECT(aoOrderCustomer:aoMandate)
+      THEN UNDO, THROW NEW ParamError
+                     (SUBSTITUTE("Both bankaccount and mandate fields are " +
+                                 "mandatory when subtype is in value '&1'",
+                                 icSubType)).
+
+      IF (NOT llPrePaid) AND (aoOrderCustomer:CustIdType     EQ "Passport" OR
+                              aoOrderCustomer:AuthCustIdType EQ "Passport")
+      THEN UNDO, THROW NEW ParamError("Passport is not accepted for postpaid subscription").
+
+
+   END METHOD.
 
 END CLASS.
