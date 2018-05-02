@@ -47,6 +47,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY CrStamp AS DECIMAL NO-UNDO
       GET.
       SET.
+   
+   DEFINE PUBLIC PROPERTY CLI AS CHARACTER NO-UNDO
+      GET.
+      SET.
 
    /* A value for this property is populated in OrderProduct class */
    DEFINE PUBLIC PROPERTY MsSeq AS INTEGER NO-UNDO
@@ -58,6 +62,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          THEN UNDO, THROW NEW InternalError
                   (SUBSTITUTE("MobSub having msseq '&1' doesn't exists", iiMSSeq)).
          THIS-OBJECT:MsSeq = iiMSSeq.
+         THIS-OBJECT:CLI = MobSub.CLI.
       END SET.
 
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
@@ -117,12 +122,15 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       
       CREATE Order.
       ASSIGN
+         Order.Brand         = Syst.Var:gcBrand
          Order.OrderId       = NEXT-VALUE(OrderId)
          THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
          Order.StatusCode    = {&ORDER_STATUS_NEW}
+         Order.OrderType     = {&ORDER_TYPE_ACC}
          Order.Source        = "bssapi"
          Order.CustNum       = aoCustomer:CustNum
          Order.MsSeq         = THIS-OBJECT:MsSeq
+         Order.CLI           = THIS-OBJECT:CLI
          Order.ContractID    = THIS-OBJECT:ContractId
          Order.SalesMan      = THIS-OBJECT:Salesman
          Order.OrderChannel  = THIS-OBJECT:OrderChannel

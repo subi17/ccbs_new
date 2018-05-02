@@ -84,6 +84,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       CREATE abOrderProduct.
       ASSIGN
          abOrderProduct.OrderProductId     = NEXT-VALUE(OrderProductID)
+         abOrderProduct.OrderId            = aoOrder:OrderId
          THIS-OBJECT:OrderProductID        = abOrderProduct.OrderProductId
          abOrderProduct.ActionType         = THIS-OBJECT:ActionType
          abOrderProduct.ProductID          = THIS-OBJECT:ProductID

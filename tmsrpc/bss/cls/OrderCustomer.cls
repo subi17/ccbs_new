@@ -15,6 +15,8 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -311,6 +313,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       ASSIGN
          OrderCustomer.Brand              = Syst.Var:gcBrand
          OrderCustomer.OrderId            = aoOrder:OrderId
+         OrderCustomer.RowType            = {&ORDERCUSTOMER_ROWTYPE_ACC}
          OrderCustomer.CustNum            = THIS-OBJECT:CustNum
          OrderCustomer.FirstName          = THIS-OBJECT:FirstName
          OrderCustomer.SurName1           = THIS-OBJECT:SurName1
