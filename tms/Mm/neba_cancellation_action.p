@@ -70,8 +70,8 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       SingleFee.Amt         = idAmount         /* Payment          */
       SingleFee.Memo[1]     = ""
       SingleFee.Memo[2]     = ""
-      SingleFee.HostTable   = "Order"
-      SingleFee.KeyValue    = STRING(iiOrderID)
+      SingleFee.HostTable   = "Customer"
+      SingleFee.KeyValue    = STRING(iiCustnum)
       SingleFee.BillType    = "SF"
       SingleFee.Contract    = ""
       SingleFee.Active      = TRUE
