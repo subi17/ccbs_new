@@ -325,8 +325,7 @@ CASE FusionMessage.FixedStatus:
       /*NEBA TODO*/
       /*If this is cancelled in NEBA PERMANENCY period,
         the penalty must be handled.*/
-     IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW} AND
-        Order.Clitype MATCHES ("*CONTFHNB*") THEN DO:
+     IF Order.Clitype MATCHES ("*CONTFHNB*") THEN DO:
         RUN Mm/neba_cancellation_action.p(OrderFusion.OrderID, 
                                           lcNebaErr).
         IF RETURN-VALUE NE "" THEN DO:
@@ -337,6 +336,14 @@ CASE FusionMessage.FixedStatus:
                              lcNebaErr).
            FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
         END.
+        ELSE DO:
+           Func.Common:mWriteMemo("Order",
+                             STRING(Order.OrderID),
+                             Order.CustNum,
+                             "NEBA cancellation done",
+                             "").
+        END.
+        
      END.
 
       IF llOldStructure THEN
