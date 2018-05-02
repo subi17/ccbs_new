@@ -29,8 +29,6 @@ IF llDoEvent THEN DO:
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
-   ocError = "Error:Neba fee not found for order " +
-                                         STRING(iiOrderID).
    lhSingleFee = BUFFER SingleFee:HANDLE.
 
 END.
@@ -127,12 +125,10 @@ IF NOT AVAIL Customer THEN DO:
 END.
 
 /*Select NEBA permanency for the customer. */
-lcSelectedFee =  fSelectNebaFee(iiOrderId,
+ocError =  fSelectNebaFee(iiOrderId,
                                 OUTPUT ldNebaAmt,
                                 OUTPUT lcSelectedFee).
-IF ocError NE "" THEN RETURN. ocError = "Error:Neba fee not found for order " +
-                                      STRING(iiOrderID).
-
+IF ocError NE "" THEN RETURN. 
 
 /*create fee.*/
 fCreateSingleFee(lcSelectedFee,

@@ -334,7 +334,7 @@ CASE FusionMessage.FixedStatus:
  
         RUN Mm/neba_cancellation_action.p(OrderFusion.OrderID, 
                                           lcNebaErr).
-        IF RETURN-VALUE NE "" THEN DO:
+        IF lcNebaErr NE "" THEN DO:
            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              Order.CustNum,
