@@ -96,12 +96,15 @@ FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
     INPUT ideActStamp    AS DEC,
     INPUT lcBundleId     AS CHAR):
 
+   DEF VAR lcDSSBundleId AS CHAR NO-UNDO. 
+
    DEFINE BUFFER lbMLMobSub FOR MobSub.
    DEFINE BUFFER lbELMobSub FOR MobSub.
 
    IF NOT fCheckExtraLineMatrixSubscription(iiMsSeq,
-                                            icCLIType) THEN
-   RETURN FALSE.
+                                            icCLIType,
+                                            OUTPUT lcDSSBundleId) THEN
+      RETURN FALSE.
 
    IF fCLITypeIsExtraLine(icCLIType) THEN DO:
 

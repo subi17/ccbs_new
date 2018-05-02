@@ -69,7 +69,9 @@ DEF VAR lcBundleId            AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO. 
 DEF VAR liDSSPriMsSeq         AS INT  NO-UNDO.
-DEF VAR lcDSSBundleId         AS CHAR NO-UNDO. 
+DEF VAR lcDSSBundleId         AS CHAR NO-UNDO.
+DEF VAR lcDSSId               AS CHAR NO-UNDO. 
+DEF VAR llgMatrixAvailable    AS LOG  NO-UNDO. 
 DEF VAR lcBundleCLITypes      AS CHAR NO-UNDO.
 DEF VAR lcReplacedTxt         AS CHAR NO-UNDO.
 DEF VAR lcMandateId           AS CHAR NO-UNDO. 
@@ -945,10 +947,13 @@ IF NOT MobSub.PayType THEN DO:
    ASSIGN
       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
       lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
+      llgMatrixAvailable    = fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
+                                                                MobSub.CLIType,
+                                                                OUTPUT lcDSSBundleId).
 
    lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT Func.Common:mMakeTS()).
 
-   IF lcBundleId > "" OR
+   IF (lcBundleId > "" AND lcBundleId NE {&DSS4})                  OR
       CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                      MsRequest.Brand      EQ Syst.Var:gcBrand      AND
                      MsRequest.ReqType    EQ {&REQTYPE_DSS}        AND
@@ -965,10 +970,9 @@ IF NOT MobSub.PayType THEN DO:
                         lcBundleId,
                         MsRequest.MsRequest,
                         MsRequest.ReqSource).
-      ELSE IF llgExtraLine                                     AND 
-              (lcBundleId EQ {&DSS2} OR lcBundleId EQ {&DSS4}) AND 
-              fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
-                                                MobSub.CLIType) THEN DO:
+      ELSE IF llgExtraLine                                             AND 
+              ((lcBundleId EQ {&DSS2} AND lcDSSBundleId EQ {&DSS2}) OR  
+               (lcBundleId EQ {&DSS4}))                                THEN DO:
             fDSSAddRequest(Mobsub.MsSeq,
                            lcBundleId,
                            MsRequest.MsRequest,
@@ -1001,21 +1005,23 @@ IF NOT MobSub.PayType THEN DO:
    ELSE IF NOT fOngoingDSSAct(MobSub.CustNum) THEN DO:
 
       IF LOOKUP(MobSub.CLIType,lcAllowedDSS4SubsType) > 0  AND
+         lcDSSBundleId EQ {&DSS4}                          AND
          fIsDSSActivationAllowed(MobSub.CustNum,
                                  MobSub.MsSeq,
                                  MobSub.ActivationTS,
                                  {&DSS4},
                                  OUTPUT liDSSPriMsSeq,
                                  OUTPUT lcResult) THEN
-         lcDSSBundleId = {&DSS4}.
-      ELSE IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND 
+         lcDSSId = {&DSS4}.
+      ELSE IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
+         lcDSSBundleId EQ {&DSS2}                              AND
          fIsDSSActivationAllowed(MobSub.CustNum,
                                  MobSub.MsSeq,
                                  MobSub.ActivationTS,
                                  {&DSS2},
                                  OUTPUT liDSSPriMsSeq,
                                  OUTPUT lcResult) THEN
-         lcDSSBundleId = {&DSS2}.               
+         lcDSSId = {&DSS2}.               
       
       FIND FIRST lbMobSub WHERE
                  lbMobSub.MsSeq = liDSSPriMsSeq NO-LOCK NO-ERROR.

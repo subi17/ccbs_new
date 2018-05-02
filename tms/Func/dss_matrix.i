@@ -33,6 +33,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF VAR lcAllowedDSS4SubsType  AS CHAR  NO-UNDO.
    DEF VAR lcDSSRelatedSubsType   AS CHAR  NO-UNDO. 
    DEF VAR llDSSPrimaryAvail      AS LOG   NO-UNDO.
+   DEF VAR lcDSSBundleId          AS CHAR  NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMserviceLPool   FOR MserviceLPool.
@@ -71,11 +72,12 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       IF icBundleId = {&DSS4} AND
          LOOKUP(bMobSub.CLIType,lcAllowedDSS4SubsType) = 0 THEN NEXT.
 
-      IF icBundleId = "DSS2" AND
+      IF (icBundleId EQ {&DSS2} OR icBundleId EQ {&DSS4}) AND
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR 
-         fCLITypeIsMainLine(bMobSub.CLIType)) THEN 
+         fCLITypeIsMainLine(bMobSub.CLIType))             THEN 
          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.CLIType) THEN NEXT.
+                                                  bMobSub.CLIType,
+                                                  OUTPUT lcDSSBundleId) THEN NEXT.
       
       ASSIGN liMobSubCount = liMobSubCount + 1
              lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
@@ -270,6 +272,7 @@ FUNCTION fIsDSSActivationAllowed RETURNS LOG
    DEF VAR lcDSS4PrimarySubsType   AS CHAR NO-UNDO.
    DEF VAR llDSS4PrimaryAvail      AS LOG  NO-UNDO.
    DEF VAR lcDSSRelatedSubsType    AS CHAR NO-UNDO. 
+   DEF VAR lcDSSBundleId           AS CHAR NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
@@ -312,7 +315,8 @@ FUNCTION fIsDSSActivationAllowed RETURNS LOG
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR
          fCLITypeIsMainLine(bMobSub.CLIType))             THEN
          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.CLIType) THEN DO:
+                                                  bMobSub.CLIType,
+                                                  OUTPUT lcDSSBundleId) THEN DO:
             ocResult = "Primary manline or Extraline is not hard associated".
             RETURN FALSE.
          END. 
@@ -334,7 +338,8 @@ FUNCTION fIsDSSActivationAllowed RETURNS LOG
          (fCLITypeIsExtraLine(bMobSub.CLIType) OR
           fCLITypeIsMainLine(bMobSub.CLIType))            THEN
           IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                   bMobSub.CLIType) THEN NEXT. 
+                                                   bMobSub.CLIType,
+                                                   OUTPUT lcDSSBundleId) THEN NEXT. 
       
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
@@ -435,6 +440,7 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
    DEF VAR lcResult AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
    DEF VAR llDSSneeded             AS LOG  NO-UNDO.
+   DEF VAR lcDSSBundleId           AS CHAR NO-UNDO. 
 
    DEF BUFFER Mobsub FOR Mobsub.
    ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
@@ -458,7 +464,8 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
            (fCLITypeIsMainLine(Mobsub.CLIType) OR
             fCLITypeIsExtraLine(Mobsub.CLIType)) THEN
             IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
-                                                     Mobsub.CLIType) THEN
+                                                     Mobsub.CLIType,
+                                                     OUTPUT lcDSSBundleId) THEN
             llDSSNeeded = FALSE.
          ELSE IF NOT fIsDSSActivationAllowed(iiCustnum,
                                              0,

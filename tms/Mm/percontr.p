@@ -498,7 +498,8 @@ PROCEDURE pContractActivation:
 
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
-   
+   DEF VAR lcDSSBundleId AS CHAR NO-UNDO. 
+
    DEF BUFFER bOrigReq      FOR MsRequest.
    DEF BUFFER bQ25SingleFee FOR SingleFee.
    DEF BUFFER bMobSub       FOR Mobsub.
@@ -718,7 +719,8 @@ PROCEDURE pContractActivation:
             IF (fCLITypeIsMainLine(bMobSub.CLIType) OR
                 fCLITypeIsExtraLine(bMobSub.CLIType)) THEN DO:
                IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                    bMobSub.CLIType) 
+                                                    bMobSub.CLIType,
+                                                    OUTPUT lcDSSBundleId) 
                THEN DO:
                   fReqStatus(3,"Bundle Upsell can not be activated because " +
                              "DSS2 extra line analyse").

@@ -2230,6 +2230,7 @@ PROCEDURE pUpdateDSSAccount:
    DEF VAR lcAllowedDSS2SubsType     AS CHAR NO-UNDO.
    DEF VAR ldeDataBundleLimit        AS DEC  NO-UNDO.
    DEF VAR ldeLastDayEndStamp        AS DEC  NO-UNDO.
+   DEF VAR lcDSSBunldeId             AS CHAR NO-UNDO. 
 
    DEF BUFFER bMobSub  FOR MobSub.
    DEF BUFFER bTerMsRequest FOR MsRequest.
@@ -2320,7 +2321,8 @@ PROCEDURE pUpdateDSSAccount:
                IF (fCLITypeIsMainLine(CLIType.CLIType) OR
                    fCLITypeIsExtraLine(CLIType.CLIType)) THEN 
                   IF NOT fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
-                                                           MobSub.CLIType) THEN RETURN.  
+                                                           MobSub.CLIType,
+                                                           OUTPUT lcDSSBunldeId) THEN RETURN.  
 
                /* If new postpaid subs. type compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND
