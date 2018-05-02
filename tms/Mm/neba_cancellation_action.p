@@ -96,7 +96,7 @@ END FUNCTION.
 FIND FIRST Order NO-LOCK WHERE 
            Order.Brand eq Syst.Var:gcBrand AND
            Order.OrderID EQ iiOrderId NO-ERROR.
-IF NOT AVAILABLE OrderCustomer THEN DO:
+IF NOT AVAILABLE Order THEN DO:
    ocError = "Error:Order not available".
    RETURN.
 END.
