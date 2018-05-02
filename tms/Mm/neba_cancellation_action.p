@@ -23,7 +23,6 @@ DEF VAR liCashCust AS INT NO-UNDO.
 DEF VAR lcSelectedFee AS CHAR NO-UNDO.
 DEF VAR ldNebaAmt AS DECIMAL NO-UNDO.
 
-RUN pInitializeReturnValue.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
