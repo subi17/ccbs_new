@@ -590,7 +590,8 @@ PROCEDURE pInvoice2XML:
                              - ttInvoice.GBDiscValue)).  
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
-      
+     
+      /* Total fractura line removed 
       IF ttInvoice.InstallmentAmt > 0 OR
          ttInvoice.GBValue > 0 THEN DO:
          lhXML:START-ELEMENT("AdditionalDetail").
@@ -605,7 +606,7 @@ PROCEDURE pInvoice2XML:
                                 - ttInvoice.GBDiscValue)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
-      END.
+      END.*/
       
       IF ttInvoice.PenaltyAmt > 0 THEN DO:
          lhXML:START-ELEMENT("AdditionalDetail").
@@ -831,6 +832,25 @@ PROCEDURE pSubInvoice2XML:
          lhXML:END-ELEMENT("RowDetail").
       END.
 
+      /* Discounts row. YDR-2848 */
+      lhXML:WRITE-DATA-ELEMENT("Descuentos",fDispXMLDecimal(ttInvoice.InstallmentDiscAmt)).
+
+      /* The sum of amount due to bundles of data and data upsells. YDR-2848 */
+      lhXML:START-ELEMENT("BonosDeInternet").
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
+      lhXML:END-ELEMENT("BonosDeInternet").
+
+      /* The sum of the charges applied to the line. YDR-2848 */
+      lhXML:START-ELEMENT("Cargos").
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
+      lhXML:END-ELEMENT("Cargos").
+
+      /* The sum of outgoings that aren.t included in the tariff fee: SMS, MMS, 
+         international calls etc. YDR-2848 */
+      lhXML:START-ELEMENT("OtrosConsumos").
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
+      lhXML:END-ELEMENT("OtrosConsumos").
+
       /* total of subinvoice */
       lhXML:START-ELEMENT("RowDetail").
       lhXML:INSERT-ATTRIBUTE("Type","Total").
@@ -864,12 +884,40 @@ PROCEDURE pSubInvoice2XML:
       
       lhXML:START-ELEMENT("AdditionalDetail").
       lhXML:START-ELEMENT("AdditionalAmount").
+      /* Total Base Imponible */
       lhXML:INSERT-ATTRIBUTE("Header","AmountExclTaxAndInstallment").
       lhXML:WRITE-CHARACTERS(fDispXMLDecimal(SubInvoice.AmtExclVat - 
                                              ttSub.InstallmentAmt  -
                                              ttSub.PenaltyAmt      -
                                              ttSub.InstallmentDiscAmt -
                                              ttSub.GBValue)).
+
+      /* If needed, the amount charged for TV service (as it is a resell, 
+         taxes are not applicable). YDR-2848  */
+      lhXML:INSERT-ATTRIBUTE("Header","AgileTVPrestado").
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+
+      /* If needed, the amount charged for apps bought in Google Play (as it is a resell, 
+         taxes are not applicable). YDR-2848 */
+      lhXML:INSERT-ATTRIBUTE("Header","ComprasGooglePlay").
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+
+      /* If needed, the amount returned for apps bought in Google Play (as it is a resell, 
+         taxes are not applicable). YDR-2848 */
+      lhXML:INSERT-ATTRIBUTE("Header","DevolucionesGooglePlay").
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+
+      /* If needed, the fee for mobile phone installment payment financed (without taxes). YDR-2848 */
+      lhXML:INSERT-ATTRIBUTE("Header","PagoDelMovil").
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+
+      /* If needed, the amount charged for early exit fee. YDR-2848 */
+      lhXML:INSERT-ATTRIBUTE("Header","IncumplimientoPermanencia").
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+
+      /* If needed, any concept that must be included in the invoice without taxes. YDR-2848  */
+      lhXML:INSERT-ATTRIBUTE("Header","OtherConcepts").
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
 
       lhXML:END-ELEMENT("AdditionalAmount").
      
