@@ -88,6 +88,64 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
 
+FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
+   (INPUT iiMsSeq        AS INT,
+    INPUT icCLIType      AS CHAR,
+    INPUT iiMultiSimId   AS INT,
+    INPUT iiMsRequest    AS INT,
+    INPUT ideActStamp    AS DEC,
+    INPUT lcBundleId     AS CHAR):
+
+   DEFINE BUFFER lbMLMobSub FOR MobSub.
+   DEFINE BUFFER lbELMobSub FOR MobSub.
+
+   IF NOT fCheckExtraLineMatrixSubscription(iiMsSeq,
+                                            icCLIType) THEN
+   RETURN FALSE.
+
+   IF fCLITypeIsExtraLine(icCLIType) THEN DO:
+
+      FIND FIRST lbMLMobSub NO-LOCK WHERE
+                 lbMLMobSub.MsSeq      = iiMultiSimId        AND
+                (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
+                 lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
+      IF AVAIL lbMLMobSub THEN
+         RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
+                               INPUT lbMLMobsub.CLI,
+                               INPUT lbMLMobsub.CustNum,
+                               INPUT "REMOVE",
+                               INPUT "",        /* Optional param list */
+                               INPUT iiMsRequest,
+                               INPUT ideActStamp,
+                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                               INPUT lcBundleId).
+
+   END.
+   ELSE IF fCLITypeIsMainLine(icCLIType) THEN DO:
+
+      FOR EACH lbELMobSub NO-LOCK WHERE
+               lbELMobSub.Brand        EQ Syst.Var:gcBrand      AND
+               lbELMobSub.MultiSimId   EQ iiMsSeq               AND
+               lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
+
+         RUN pUpdateDSSNetwork(INPUT lbELMobsub.MsSeq,
+                               INPUT lbELMobsub.CLI,
+                               INPUT lbELMobsub.CustNum,
+                               INPUT "REMOVE",
+                               INPUT "",        /* Optional param list */
+                               INPUT iiMsRequest,
+                               INPUT ideActStamp,
+                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                               INPUT lcBundleId).
+
+      END.
+
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 ldCurrTS = Func.Common:mMakeTS().
 
 FIND FIRST MSRequest WHERE 
@@ -439,7 +497,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* If DSS is transferred then remove subs. from DSS group */
-         ELSE 
+         ELSE DO: 
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -449,6 +507,18 @@ PROCEDURE pTerminate:
                                   INPUT MsRequest.ActStamp,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
+            /* If it is Extraline associated subscription */
+            IF (lcBundleId EQ {&DSS2} OR lcBundleId EQ {&DSS4}) AND
+               (fCLITypeIsMainLine(MobSub.CLIType) OR
+                fCLITypeIsExtraLine(MobSub.CLIType))            THEN
+                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.CLIType,   
+                                              MobSub.MultiSimId,
+                                              MsRequest.MsRequest,
+                                              MsRequest.ActStamp,
+                                              lcBundleId).
+
+         END.
 
       END. /* IF MobSub.MsSeq = liDSSMsSeq THEN DO: */
       /* DSS is not linked directly */
@@ -469,7 +539,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* Otherwise just remove subs. from DSS group */
-         ELSE 
+         ELSE DO:
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -479,7 +549,17 @@ PROCEDURE pTerminate:
                                   INPUT MsRequest.ActStamp,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
-
+            /* If it is Extraline associated subscription */
+            IF (lcBundleID EQ {&DSS2} OR lcBundleID EQ {&DSS4}) AND 
+               (fCLITypeIsMainLine(MobSub.CLIType) OR
+                fCLITypeIsExtraLine(MobSub.CLIType))            THEN
+                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.CLIType,
+                                              MobSub.MultiSimId,
+                                              MsRequest.MsRequest,
+                                              MsRequest.ActStamp,
+                                              lcBundleId).
+         END.
       END. /* ELSE DO: */
    END. /* IF llDSSActive THEN DO: */
 
