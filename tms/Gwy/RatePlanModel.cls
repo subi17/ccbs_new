@@ -6,47 +6,48 @@ USING Gwy.ModelInterface.
 
 CLASS Gwy.RatePlanModel IMPLEMENTS Gwy.ModelInterface:
 
-DEF VAR lJson          AS LONGCHAR NO-UNDO.
-DEF VAR lModelid       AS CHAR NO-UNDO.
-DEF VAR lCorrelationID AS CHAR NO-UNDO.
-DEF VAR gcBrand        AS CHAR NO-UNDO.
-DEF VAR lcSource       AS CHAR NO-UNDO.
-DEF VAR loRequestMaker AS Gwy.RequestMaker NO-UNDO.
-DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
+    DEF VAR lJson           AS LONGCHAR          NO-UNDO.
+    DEF VAR lcModelid       AS CHAR              NO-UNDO.
+    DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
+    DEF VAR gcBrand         AS CHAR              NO-UNDO.
+    DEF VAR lcSource        AS CHAR              NO-UNDO.
+    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
+    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
     
-DEFINE TEMP-TABLE ttRatePlan NO-UNDO SERIALIZE-NAME "RatePlan"
-   FIELD external_id AS CHAR
-   FIELD name AS CHAR.
+    DEFINE TEMP-TABLE ttRatePlan NO-UNDO SERIALIZE-NAME "RatePlan"
+        FIELD external_id AS CHAR
+        FIELD name        AS CHAR.
     
-DEFINE TEMP-TABLE ttPListConf NO-UNDO SERIALIZE-NAME "pricelist"
-   FIELD parent_id AS RECID 
-   FIELD pricelist AS CHAR  
-   FIELD valid_from AS CHAR
-   FIELD valid_to AS CHAR
-   FIELD priority AS INT INIT ?
-   FIELD pl_rowid AS INT 
-   FIELD pl_validfrom AS DATE
-   FIELD pl_validto AS DATE.
+    DEFINE TEMP-TABLE ttPListConf NO-UNDO SERIALIZE-NAME "pricelist"
+        FIELD parent_id    AS RECID 
+        FIELD pricelist    AS CHAR  
+        FIELD valid_from   AS CHAR
+        FIELD valid_to     AS CHAR
+        FIELD priority     AS INT   INIT ?
+        FIELD pl_rowid     AS INT 
+        FIELD pl_validfrom AS DATE
+        FIELD pl_validto   AS DATE.
    
-DEFINE DATASET RatePlanDataSet FOR ttRatePlan, ttPListConf
-   PARENT-ID-RELATION idparent FOR ttRatePlan, ttPListConf
-      PARENT-ID-FIELD parent_id.
+    DEFINE DATASET RatePlanDataSet FOR ttRatePlan, ttPListConf
+        PARENT-ID-RELATION idparent FOR ttRatePlan, ttPListConf
+        PARENT-ID-FIELD parent_id.
  
 
 CONSTRUCTOR PUBLIC RatePlanModel ( iJson    AS LONGCHAR,
+                                  iBrand AS CHAR,
                                   iModelid AS CHAR, 
                                   iSource  AS CHAR,
                                   iCorrelationID AS CHAR,
                                   iReplyTo AS CHAR):
 
-   ASSIGN
-      gcBrand        = "1"
-      lJson          = iJson
-      lModelid       = iModelid
-      lCorrelationID = iCorrelationID
-      lcSource       = iSource
-      loRequestMaker = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
-      loEventLogMaker = NEW Gwy.EventLogMaker(iSource).
+    ASSIGN
+        gcBrand         = iBrand
+        lJson           = iJson
+        lcModelid       = iModelid
+        lcCorrelationID = iCorrelationID
+        lcSource        = iSource
+        loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
+        loEventLogMaker = NEW Gwy.EventLogMaker(iSource).
    
 END CONSTRUCTOR.
 
@@ -107,8 +108,8 @@ METHOD PUBLIC LOG create():
    loRequestMaker:create_log(
       SUBSTITUTE("RatePlan create: Id=&1 Ext.Request=&2", 
                  ttRatePlan.external_id,
-                 lCorrelationID), 
-      "DEBUG").
+                 lcCorrelationID), 
+                 "DEBUG").
  
 END METHOD.
 
@@ -121,14 +122,14 @@ METHOD PUBLIC LOG update():
    DEF VAR llOld   AS LOG   NO-UNDO.
    DEF VAR lrConf  AS RECID NO-UNDO.
    
-   IF lModelid = ? THEN 
+   IF lcModelid = ? THEN 
       RETURN loRequestMaker:logError('RatePlan ID not given').
 
    lJson = '~{"RatePlanDataSet":~{"RatePlan":' + lJson + '~}~}'.
    IF loRequestMaker:parser_error(DATASET RatePlanDataset BIND, lJson) THEN
        RETURN FALSE.
    
-   IF lModelID = "" THEN 
+   IF lcModelid = "" THEN 
       RETURN loRequestMaker:logError("Invalid RatePlan ID").
       
    FIND ttRatePlan NO-ERROR.
@@ -136,7 +137,7 @@ METHOD PUBLIC LOG update():
        RETURN loRequestMaker:logError("Empty RatePlan set").
 
    lcError = validate_pricelist(RECID(ttRatePlan),
-                                lModelId,
+                                lcModelid,
                                 FALSE).
    IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
 
@@ -146,7 +147,7 @@ METHOD PUBLIC LOG update():
       DO WHILE TRUE:
          FIND FIRST RatePlan WHERE 
                     RatePlan.Brand = gcBrand AND
-                    RatePlan.RatePlan = lModelID
+                    RatePlan.RatePlan = lcModelid
             EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
          IF LOCKED(RatePlan) THEN DO:
             liWait = liWait + 1.
@@ -173,7 +174,7 @@ METHOD PUBLIC LOG update():
       
       FIND FIRST PListConf WHERE 
                  PListConf.Brand = gcBrand AND
-                 PListConf.RatePlan = lModelID AND
+                 PListConf.RatePlan = lcModelid AND
                  PListConf.dFrom = ttPListConf.pl_validfrom AND
                  PListConf.PriceList = ttPListConf.pricelist
       NO-LOCK NO-ERROR.
@@ -208,7 +209,7 @@ METHOD PUBLIC LOG update():
          CREATE PListConf.
          ASSIGN 
             PListConf.Brand    = gcBrand
-            PListConf.RatePlan = lModelID
+            PListConf.RatePlan = lcModelid
             PListConf.dFrom    = ttPListConf.pl_validfrom
             PListConf.PriceList = ttPListConf.pricelist.
       END.
@@ -232,16 +233,16 @@ METHOD PUBLIC LOG update():
       the succesful one */
    IF llDone THEN 
       loRequestMaker:create_response("RatePlan",
-                                     lModelID,
+                                     lcModelid,
                                      "OK",
                                      ""). 
    ELSE RETURN loRequestMaker:logError("Nothing updated").
    
    loRequestMaker:create_log(
       SUBSTITUTE("RatePlan update: Id=&1 Ext.Request=&2", 
-                 lModelID,
-                 lCorrelationID), 
-      "DEBUG").
+                 lcModelid,
+                 lcCorrelationID), 
+                 "DEBUG").
        
 END METHOD.
 

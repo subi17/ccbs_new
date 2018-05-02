@@ -302,11 +302,11 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                                                     lcCorrelationID, lcReplyTo).
          END.
          WHEN "fee_model" THEN DO:
-            loLogicModule = NEW Gwy.FeeModelModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.FeeModelModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
          END.
          WHEN "invoice_section" THEN DO:
-            loLogicModule = NEW Gwy.InvSectModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.InvSectModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
          END.
          WHEN "package" THEN DO:
@@ -314,15 +314,15 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                                                      lcCorrelationID, lcReplyTo).
          END.
          WHEN "pricelist" THEN DO:
-            loLogicModule = NEW Gwy.PriceListModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.PriceListModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                    lcCorrelationID, lcReplyTo).
          END.
          WHEN "rateplan" THEN DO:
-            loLogicModule = NEW Gwy.RatePlanModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.RatePlanModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
          END.
          WHEN "subscription_type" THEN DO:
-            loLogicModule = NEW Gwy.CLITypeModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.CLITypeModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
          END.
          WHEN "rating_bucket" THEN DO:

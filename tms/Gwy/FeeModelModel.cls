@@ -9,419 +9,436 @@ USING Gwy.ModelInterface.
 
 CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
 
-DEF VAR lJson          AS LONGCHAR NO-UNDO.
-DEF VAR lModelid       AS CHAR NO-UNDO.
-DEF VAR lCorrelationID AS CHAR NO-UNDO.
-DEF VAR gcBrand        AS CHAR NO-UNDO.
-DEF VAR lcSource       AS CHAR NO-UNDO.
-DEF VAR loRequestMaker AS Gwy.RequestMaker NO-UNDO.
-DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
+    DEF VAR lJson           AS LONGCHAR          NO-UNDO.
+    DEF VAR lcModelid       AS CHAR              NO-UNDO.
+    DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
+    DEF VAR gcBrand         AS CHAR              NO-UNDO.
+    DEF VAR lcSource        AS CHAR              NO-UNDO.
+    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
+    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
+    DEF VAR loCommon        AS Func.Common       NO-UNDO.
     
-DEFINE TEMP-TABLE ttFeeModel NO-UNDO SERIALIZE-NAME "FeeModel"
-   FIELD external_id AS CHAR
-   FIELD name AS CHAR.
+    DEFINE TEMP-TABLE ttFeeModel NO-UNDO SERIALIZE-NAME "FeeModel"
+        FIELD external_id AS CHAR
+        FIELD name        AS CHAR.
     
-DEFINE TEMP-TABLE ttFMItem NO-UNDO SERIALIZE-NAME "item"
-   FIELD parent_id AS RECID 
-   FIELD pricelist AS CHAR  
-   FIELD valid_from AS CHAR
-   FIELD valid_to AS CHAR
-   FIELD billing_item AS CHAR
-   FIELD fee_type AS CHAR INIT ?
-   FIELD price AS DEC INIT ?
-   FIELD first_period_rule AS CHAR
-   FIELD last_period_rule AS CHAR 
-   FIELD billing_method AS CHAR INIT ?
-   FIELD interval AS INT INIT ?
-   FIELD recurrence_limit AS INT INIT ?
-   FIELD fi_validfrom AS DATE
-   FIELD fi_validto AS DATE
-   FIELD fi_firstperiodrule AS INT INIT ?
-   FIELD fi_lastperiodrule AS INT INIT ?.
+    DEFINE TEMP-TABLE ttFMItem NO-UNDO SERIALIZE-NAME "item"
+        FIELD parent_id          AS RECID 
+        FIELD pricelist          AS CHAR  
+        FIELD valid_from         AS CHAR
+        FIELD valid_to           AS CHAR
+        FIELD billing_item       AS CHAR
+        FIELD fee_type           AS CHAR  INIT ?
+        FIELD price              AS DEC   INIT ?
+        FIELD first_period_rule  AS CHAR
+        FIELD last_period_rule   AS CHAR 
+        FIELD billing_method     AS CHAR  INIT ?
+        FIELD interval           AS INT   INIT ?
+        FIELD recurrence_limit   AS INT   INIT ?
+        FIELD fi_validfrom       AS DATE
+        FIELD fi_validto         AS DATE
+        FIELD fi_firstperiodrule AS INT   INIT ?
+        FIELD fi_lastperiodrule  AS INT   INIT ?.
    
-DEFINE DATASET FeeModelDataSet FOR ttFeeModel, ttFMItem
-   PARENT-ID-RELATION idparent FOR ttFeeModel, ttFMItem
-      PARENT-ID-FIELD parent_id.
+    DEFINE DATASET FeeModelDataSet FOR ttFeeModel, ttFMItem
+        PARENT-ID-RELATION idparent FOR ttFeeModel, ttFMItem
+        PARENT-ID-FIELD parent_id.
  
 
-CONSTRUCTOR PUBLIC FeeModelModel ( iJson    AS LONGCHAR,
-                                  iModelid AS CHAR, 
-                                  iSource  AS CHAR,
-                                  iCorrelationID AS CHAR,
-                                  iReplyTo AS CHAR):
+    CONSTRUCTOR PUBLIC FeeModelModel ( iJson          AS LONGCHAR,
+                                       iBrand         AS CHAR,
+                                       iModelid       AS CHAR, 
+                                       iSource        AS CHAR,
+                                       iCorrelationID AS CHAR,
+                                       iReplyTo       AS CHAR):
 
-   ASSIGN
-      gcBrand        = "1"
-      lJson          = iJson
-      lModelid       = iModelid
-      lCorrelationID = iCorrelationID
-      lcSource       = iSource
-      loRequestMaker = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
-      loEventLogMaker = NEW Gwy.EventLogMaker(iSource).
-   
-END CONSTRUCTOR.
+        ASSIGN
+            gcBrand         = iBrand
+            lJson           = iJson
+            lcModelid       = iModelid
+            lcCorrelationID = iCorrelationID
+            lcSource        = iSource
+            loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
+            loEventLogMaker = NEW Gwy.EventLogMaker(iSource)
+            loCommon        = NEW Func.Common().
+               
+    END CONSTRUCTOR.
 
-METHOD PUBLIC LOG create():
+    METHOD PUBLIC LOG create():
 
-   DEF VAR lcError AS CHAR NO-UNDO.
+        DEF VAR lcError AS CHAR NO-UNDO.
  
-   lJson = '~{"FeeModelDataSet":~{"FeeModel":' + lJson + '~}~}'.
-   IF loRequestMaker:parser_error(DATASET FeeModelDataset BIND, lJson) THEN
-       RETURN FALSE.
+        lJson = '~{"FeeModelDataSet":~{"FeeModel":' + lJson + '~}~}'.
+        IF loRequestMaker:parser_error(DATASET FeeModelDataset BIND, lJson) THEN
+            RETURN FALSE.
    
-   FIND ttFeeModel NO-ERROR.
-   IF NOT AVAILABLE ttFeeModel THEN
-       RETURN loRequestMaker:logError("Empty FeeModel set").
+        FIND ttFeeModel NO-ERROR.
+        IF NOT AVAILABLE ttFeeModel THEN
+            RETURN loRequestMaker:logError("Empty FeeModel set").
 
-   IF ttFeeModel.external_id = "" THEN 
-      RETURN loRequestMaker:logError("Invalid FeeModel ID").
+        IF ttFeeModel.external_id = "" THEN 
+            RETURN loRequestMaker:logError("Invalid FeeModel ID").
 
-   IF LENGTH(ttFeeModel.external_id) > {&CONFIG_ID_MAX} THEN 
-      RETURN loRequestMaker:logError(
+        IF LENGTH(ttFeeModel.external_id) > {&CONFIG_ID_MAX} THEN 
+            RETURN loRequestMaker:logError(
                 "Max length for ID is {&CONFIG_ID_MAX} characters").
  
-   lcError = validate_items(RECID(ttFeeModel),
-                            ttFeeModel.external_id,
-                            TRUE).
-   IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
+        lcError = validate_items(RECID(ttFeeModel),
+                                 ttFeeModel.external_id,
+                                 TRUE).
+        IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
 
-   CREATE FeeModel.
-   ASSIGN 
-      FeeModel.Brand    = gcBrand
-      FeeModel.FeeModel = ttFeeModel.external_id
-      FeeModel.FeeName  = ttFeeModel.name.
+        CREATE FeeModel.
+        ASSIGN 
+            FeeModel.Brand    = gcBrand
+            FeeModel.FeeModel = ttFeeModel.external_id
+            FeeModel.FeeName  = ttFeeModel.name.
 
-   loEventLogMaker:make_eventlog("create",BUFFER FeeModel:HANDLE).
+        loEventLogMaker:make_eventlog("create",BUFFER FeeModel:HANDLE).
    
-   RELEASE FeeModel.
+        RELEASE FeeModel.
 
-   lcError = update_items(RECID(ttFeeModel),
-                          ttFeeModel.external_id).
-   IF lcError > "" AND lcError NE "Done" THEN 
-      RETURN loRequestMaker:logError(lcError).
+        lcError = update_items(RECID(ttFeeModel),
+                               ttFeeModel.external_id).
+        IF lcError > "" AND lcError NE "Done" THEN 
+            RETURN loRequestMaker:logError(lcError).
 
-   /* error cases get response via logError, make response for 
-      the succesful one */
-   loRequestMaker:create_response("FeeModel",
-                                  ttFeeModel.external_id,
-                                  "OK",
-                                  ""). 
+        /* error cases get response via logError, make response for 
+           the succesful one */
+        loRequestMaker:create_response("FeeModel",
+                                        ttFeeModel.external_id,
+                                        "OK",
+                                        ""). 
 
-   loRequestMaker:create_log(
-      SUBSTITUTE("FeeModel create: Id=&1 Ext.Request=&2", 
-                 ttFeeModel.external_id,
-                 lCorrelationID), 
-      "DEBUG").
- 
-END METHOD.
+        loRequestMaker:create_log(
+            SUBSTITUTE("FeeModel create: Id=&1 Ext.Request=&2", 
+                        ttFeeModel.external_id,
+                        lcCorrelationID), 
+                        "DEBUG").             
+                         
+    END METHOD.
 
-METHOD PUBLIC LOG update():
+    METHOD PUBLIC LOG update():
   
-   DEF VAR lcError  AS CHAR NO-UNDO.
-   DEF VAR lcResult AS CHAR NO-UNDO.
-   DEF VAR llDone   AS LOG  NO-UNDO.
-   DEF VAR liWait   AS INT  NO-UNDO.
+        DEF VAR lcError  AS CHAR NO-UNDO.
+        DEF VAR lcResult AS CHAR NO-UNDO.
+        DEF VAR llDone   AS LOG  NO-UNDO.
+        DEF VAR liWait   AS INT  NO-UNDO.
   
-   IF lModelid = ? THEN 
-      RETURN loRequestMaker:logError('FeeModel ID not given').
+        IF lcModelid = ? THEN 
+            RETURN loRequestMaker:logError('FeeModel ID not given').
 
-   lJson = '~{"FeeModelDataSet":~{"FeeModel":' + lJson + '~}~}'.
-   IF loRequestMaker:parser_error(DATASET FeeModelDataset BIND, lJson) THEN
-       RETURN FALSE.
+        lJson = '~{"FeeModelDataSet":~{"FeeModel":' + lJson + '~}~}'.
+        IF loRequestMaker:parser_error(DATASET FeeModelDataset BIND, lJson) THEN
+            RETURN FALSE.
    
-   IF lModelID = "" THEN 
-      RETURN loRequestMaker:logError("Invalid FeeModel ID").
+        IF lcModelid = "" THEN 
+            RETURN loRequestMaker:logError("Invalid FeeModel ID").
       
-   FIND ttFeeModel NO-ERROR.
-   IF NOT AVAILABLE ttFeeModel THEN
-       RETURN loRequestMaker:logError("Empty FeeModel set").
+        FIND ttFeeModel NO-ERROR.
+        IF NOT AVAILABLE ttFeeModel THEN
+            RETURN loRequestMaker:logError("Empty FeeModel set").
 
-   lcError = validate_items(RECID(ttFeeModel),
-                            lModelId,
-                            FALSE).
-   IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
+        lcError = validate_items(RECID(ttFeeModel),
+                                 lcModelid,
+                                 FALSE).
+        IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
 
-   llDone = FALSE.
+        llDone = FALSE.
 
-   IF ttFeeModel.name > "" THEN DO:
-      DO WHILE TRUE:
-         FIND FIRST FeeModel WHERE 
-                    FeeModel.Brand = gcBrand AND
-                    FeeModel.FeeModel = lModelID
-            EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-         IF LOCKED(FeeModel) THEN DO:
-            liWait = liWait + 1.
-            IF liWait > {&WAIT_CONFIG_LOCK} THEN 
-               RETURN loRequestMaker:logError("Fee model was not available for update").
-            PAUSE 1 NO-MESSAGE. 
-            NEXT. 
-         END.
-         LEAVE.
-      END.
+        IF ttFeeModel.name > "" THEN 
+        DO:
+            DO WHILE TRUE:
+                FIND FIRST FeeModel WHERE 
+                           FeeModel.Brand = gcBrand AND
+                           FeeModel.FeeModel = lcModelid
+                           EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                IF LOCKED(FeeModel) THEN 
+                DO:
+                    liWait = liWait + 1.
+                    IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+                        RETURN loRequestMaker:logError("Fee model was not available for update").
+                    PAUSE 1 NO-MESSAGE. 
+                    NEXT. 
+                END.
+                LEAVE.
+            END.
  
-      loEventLogMaker:make_eventlog("oldbuffer",BUFFER FeeModel:HANDLE).
-      ASSIGN 
-         FeeModel.FeeName = ttFeeModel.name
-         llDone = TRUE.
-      loEventLogMaker:make_eventlog("modify",BUFFER FeeModel:HANDLE).
-      RELEASE FeeModel.
-   END.
+            loEventLogMaker:make_eventlog("oldbuffer",BUFFER FeeModel:HANDLE).
+            ASSIGN 
+                FeeModel.FeeName = ttFeeModel.name
+                llDone           = TRUE.
+            loEventLogMaker:make_eventlog("modify",BUFFER FeeModel:HANDLE).
+            RELEASE FeeModel.
+        END.
 
-   lcResult = update_items(RECID(ttFeeModel),
-                          lModelId).
-   IF lcResult = "Done" THEN llDone = TRUE.
-   ELSE IF lcResult > "" THEN RETURN loRequestMaker:logError(lcResult).
+        lcResult = update_items(RECID(ttFeeModel),
+                                lcModelid).
+        IF lcResult = "Done" THEN llDone = TRUE.
+        ELSE IF lcResult > "" THEN RETURN loRequestMaker:logError(lcResult).
 
-   /* error cases get response via logError, make response for 
-      the succesful one */
-   IF llDone THEN 
-      loRequestMaker:create_response("FeeModel",
-                                     lModelID,
-                                     "OK",
-                                     ""). 
-   ELSE RETURN loRequestMaker:logError("Nothing updated").
+        /* error cases get response via logError, make response for 
+           the succesful one */
+        IF llDone THEN 
+            loRequestMaker:create_response("FeeModel",
+                                            lcModelid,
+                                            "OK",
+                                            ""). 
+        ELSE RETURN loRequestMaker:logError("Nothing updated").
    
-   loRequestMaker:create_log(
-      SUBSTITUTE("FeeModel update: Id=&1 Ext.Request=&2", 
-                 lModelID,
-                 lCorrelationID), 
-      "DEBUG").
+        loRequestMaker:create_log(
+            SUBSTITUTE("FeeModel update: Id=&1 Ext.Request=&2", 
+                        lcModelid,
+                        lcCorrelationID), 
+                        "DEBUG").
        
-END METHOD.
+    END METHOD.
 
-METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
-   CASE icAction:
-      WHEN "update_other" THEN process_other_update().
-      OTHERWISE 
-         RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
-   END CASE.
-END METHOD.
+    METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
+        CASE icAction:
+            WHEN "update_other" THEN process_other_update().
+            OTHERWISE 
+            RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
+        END CASE.
+    END METHOD.
 
-METHOD PUBLIC CHAR validate_items
-   (irParentID AS RECID,
-    icFeeModel  AS CHAR,
-    ilCreate AS LOG):
+    METHOD PUBLIC CHAR validate_items
+        (irParentID AS RECID,
+        icFeeModel  AS CHAR,
+        ilCreate AS LOG):
 
-   DEF VAR lcValue     AS CHAR NO-UNDO.
-   DEF VAR lcPriceList AS CHAR NO-UNDO.
-   DEF VAR lcBillCode  AS CHAR NO-UNDO.
-   DEF VAR llItemExist AS LOG  NO-UNDO.
+        DEF VAR lcValue     AS CHAR NO-UNDO.
+        DEF VAR lcPriceList AS CHAR NO-UNDO.
+        DEF VAR lcBillCode  AS CHAR NO-UNDO.
+        DEF VAR llItemExist AS LOG  NO-UNDO.
    
-   DEF BUFFER bttItem FOR ttFMItem.
-   DEF BUFFER bFMItem FOR FMItem.
+        DEF BUFFER bttItem FOR ttFMItem.
+        DEF BUFFER bFMItem FOR FMItem.
 
-   IF CAN-FIND(FIRST FeeModel WHERE 
-                     FeeModel.Brand = gcBrand AND
-                     FeeModel.FeeModel = icFeeModel) THEN DO:
-      IF ilCreate THEN RETURN "Fee model already exists".
-   END.   
-   ELSE IF NOT ilCreate THEN RETURN "Unknown fee model".
+        IF CAN-FIND(FIRST FeeModel WHERE 
+                          FeeModel.Brand = gcBrand AND
+                          FeeModel.FeeModel = icFeeModel) THEN 
+        DO:
+            IF ilCreate THEN RETURN "Fee model already exists".
+        END.   
+        ELSE IF NOT ilCreate THEN RETURN "Unknown fee model".
  
-   FOR EACH ttFMItem WHERE
-            ttFMItem.parent_id = irParentID:
+        FOR EACH ttFMItem WHERE
+                 ttFMItem.parent_id = irParentID:
 
-      /* a new item can be created also with update message for fee model */
+            /* a new item can be created also with update message for fee model */
       
-      ASSIGN 
-         ttFMItem.fi_validfrom = loRequestMaker:make_date(
-                                     loRequestMaker:make_timestamp(ttFMItem.valid_from))
-         ttFMItem.fi_validto  = loRequestMaker:make_date(
-                                    loRequestMaker:make_timestamp(ttFMItem.valid_to))
+            ASSIGN 
+                ttFMItem.fi_validfrom = loRequestMaker:make_date(
+                                            loRequestMaker:make_timestamp(ttFMItem.valid_from))
+                ttFMItem.fi_validto   = loRequestMaker:make_date(
+                                            loRequestMaker:make_timestamp(ttFMItem.valid_to))
          NO-ERROR.
  
-      IF ttFMItem.fi_validfrom = ? THEN 
-         RETURN "Invalid item rule period". 
+            IF ttFMItem.fi_validfrom = ? THEN 
+                RETURN "Invalid item rule period". 
 
-      IF ilCreate THEN DO: 
-         IF CAN-FIND(FIRST bttItem WHERE 
-                           bttItem.parent_id = irParentID AND
-                           bttItem.pricelist = ttFMItem.pricelist AND
-                           bttItem.billing_item = ttFMItem.billing_item AND
-                           /* do not check period */
-                           RECID(bttItem) NE RECID(ttFMItem)) THEN 
-         RETURN "Two items have the same key values".
-      END.
-
-      IF ttFMItem.pricelist = "" OR 
-         NOT CAN-FIND(FIRST PriceList WHERE 
-                            PriceList.Brand = gcBrand AND
-                            PriceList.PriceList = ttFMItem.pricelist) THEN 
-         RETURN "Invalid price list".
-
-      IF ttFMItem.billing_item = "" OR 
-         NOT CAN-FIND(FIRST BillItem WHERE
-                            BillItem.Brand = gcBrand AND
-                            BillItem.BillCode = ttFMItem.billing_item) THEN
-         RETURN "Invalid billing item".
- 
-      llItemExist = CAN-FIND(FIRST FMItem WHERE
-                                FMItem.Brand = gcBrand AND
-                                FMItem.FeeModel = icFeeModel AND
-                                FMItem.PriceList = ttFMItem.pricelist AND
-                                FMItem.FromDate = ttFMItem.fi_validfrom).
-
-      IF NOT llItemExist AND ttFMItem.fi_validto = ? THEN 
-         RETURN "Invalid item rule period".                          
-
-      IF ttFMItem.fi_validto NE ? THEN DO: 
-         IF CAN-FIND(FIRST FMItem WHERE
-                        FMItem.Brand = gcBrand AND
-                        FMItem.FeeModel = icFeeModel AND
-                        FMItem.PriceList = ttFMItem.pricelist AND
-                        FMItem.BillCode = ttFMItem.billing_item AND
-                        FMItem.ToDate >= ttFMItem.fi_validfrom AND
-                        FMItem.FromDate <= ttFMItem.fi_validto AND
-                        FMItem.FromDate NE ttFMItem.fi_validfrom) THEN
-            RETURN "Fee item with overlapping period exists".
-
-         IF CAN-FIND(FIRST FMItem WHERE
-                        FMItem.Brand = gcBrand AND
-                        FMItem.FeeModel = icFeeModel AND
-                        FMItem.PriceList = ttFMItem.pricelist AND
-                        FMItem.BillCode = ttFMItem.billing_item AND
-                        FMItem.ToDate = ttFMItem.fi_validto AND
-                        FMItem.FromDate NE ttFMItem.fi_validfrom) THEN
-            RETURN "Fee item period end date is already in use".
-      END.
-          
-      IF (NOT llItemExist OR ttFMItem.fee_type > "") AND
-         (LOOKUP(ttFMItem.fee_type,{&FEE_TYPE}) = 0 OR
-          LOOKUP(ttFMItem.fee_type,{&FEE_TYPE}) = ?) THEN
-            RETURN "Invalid fee type".
-         
-      IF (NOT llItemExist OR ttFMItem.billing_method > "") AND
-         (LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) = 0 OR
-          LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) = ?) THEN 
-            RETURN "Invalid billing method".
-      
-      IF ttFMItem.first_period_rule > "" THEN DO:
-         lcValue = loRequestMaker:get_tmscodes_bssapi_internalid(
-                                          "FMItem",
-                                          "BrokenRental",
-                                          ttFMItem.first_period_rule).
-         IF lcValue = "" THEN                                  
-            RETURN "Invalid first period rule".
-         ttFMItem.fi_firstperiodrule = INT(lcValue) NO-ERROR.
-      END.
-   
-      IF ttFMItem.last_period_rule > "" THEN DO:
-         lcValue = loRequestMaker:get_tmscodes_bssapi_internalid(
-                                          "FMItem",
-                                          "BrokenRental",
-                                          ttFMItem.last_period_rule).
-         IF lcValue = "" THEN                                  
-            RETURN "Invalid last period rule".
-         ttFMItem.fi_lastperiodrule = INT(lcValue) NO-ERROR.
-      END.
-            
-   END.
-   
-   RETURN "".
- 
-END METHOD.
-
-METHOD PUBLIC CHAR update_items
-   (irParentID AS RECID,
-    icFeeModel  AS CHAR):
-
-   DEF VAR liWait    AS INT  NO-UNDO.
-   DEF VAR lrItem    AS RECID NO-UNDO.
-   DEF VAR llNewItem AS LOG  NO-UNDO.
-   DEF VAR liUpdated AS INT  NO-UNDO.
-
-   FOR EACH ttFMItem WHERE
-            ttFMItem.parent_id = RECID(ttFeeModel):
-
-      FIND FIRST FMItem WHERE
-                 FMItem.Brand = gcBrand AND
-                 FMItem.FeeModel = icFeeModel AND
-                 FMItem.PriceList = ttFMItem.pricelist AND
-                 FMItem.BillCode = ttFMItem.billing_item AND
-                 FMItem.FromDate = ttFMItem.fi_validfrom NO-LOCK NO-ERROR.
-       
-      /* either existing item is updated or a new one is created */
-      IF AVAILABLE FMItem THEN DO: 
-         ASSIGN 
-            liWait = 0
-            lrItem = RECID(FMItem)
-            llNewItem = FALSE.
-            
-         DO WHILE TRUE:
-            FIND FIRST FMItem WHERE RECID(FMItem) = lrItem
-               EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-            IF LOCKED(FMItem) THEN DO:
-               liWait = liWait + 1.
-               /* fee model may be partially already updated, but the entire update 
-                  can be resent */
-               IF liWait > {&WAIT_CONFIG_LOCK} THEN 
-                  RETURN "Fee item was not available for update".
-               PAUSE 1 NO-MESSAGE. 
-               NEXT. 
+            IF ilCreate THEN 
+            DO: 
+                IF CAN-FIND(FIRST bttItem WHERE 
+                                  bttItem.parent_id = irParentID AND
+                                  bttItem.pricelist = ttFMItem.pricelist AND
+                                  bttItem.billing_item = ttFMItem.billing_item AND
+                                  /* do not check period */
+                                  RECID(bttItem) NE RECID(ttFMItem)) THEN 
+                    RETURN "Two items have the same key values".
             END.
-            LEAVE.
-         END.
+
+            IF ttFMItem.pricelist = "" OR 
+                NOT CAN-FIND(FIRST PriceList WHERE 
+                                   PriceList.Brand = gcBrand AND
+                                   PriceList.PriceList = ttFMItem.pricelist) THEN 
+                RETURN "Invalid price list".
+
+            IF ttFMItem.billing_item = "" OR 
+                NOT CAN-FIND(FIRST BillItem WHERE
+                                   BillItem.Brand = gcBrand AND
+                                   BillItem.BillCode = ttFMItem.billing_item) THEN
+                RETURN "Invalid billing item".
  
-         loEventLogMaker:make_eventlog("oldbuffer",BUFFER FMItem:HANDLE).
-      END.
-      ELSE DO:
-         CREATE FMItem.
-         ASSIGN 
-            FMItem.Brand     = gcBrand
-            FMItem.FeeModel  = icFeeModel
-            FMItem.PriceList = ttFMItem.pricelist
-            FMItem.BillCode  = ttFMItem.billing_item
-            FMItem.FromDate  = ttFMItem.fi_validfrom
-            llNewItem = TRUE.
-      END.
-      
-      ASSIGN 
-         FMItem.ToDate       = ttFMItem.fi_validto WHEN ttFMItem.fi_validto NE ?
-         FMItem.BillMethod   = (ttFMItem.fee_type = ENTRY(1,{&FEE_TYPE})) 
-                                  WHEN ttFMItem.fee_type NE ?
-         FMItem.Interval     = ttFMItem.interval WHEN ttFMItem.interval NE ?
-         FMItem.FFItemQty    = ttFMItem.recurrence_limit WHEN ttFMItem.recurrence_limit NE ?
-         FMItem.BillCycle    = LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) 
-                                  WHEN ttFMItem.billing_method NE ?
-         FMItem.FirstMonthBR = ttFMItem.fi_firstperiodrule 
-                                  WHEN ttFMItem.fi_firstperiodrule NE ?
-         FMItem.BrokenRental = ttFMItem.fi_lastperiodrule 
-                                  WHEN ttFMItem.fi_lastperiodrule NE ?
-         FMItem.Amount       = ttFMItem.price WHEN ttFMItem.price NE ?
-         FMItem.BillType     = IF FMItem.BillMethod 
-                               THEN "OTC"
-                               ELSE "RC".
+            llItemExist = CAN-FIND(FIRST FMItem WHERE
+                                         FMItem.Brand = gcBrand AND
+                                         FMItem.FeeModel = icFeeModel AND
+                                         FMItem.PriceList = ttFMItem.pricelist AND
+                                         FMItem.FromDate = ttFMItem.fi_validfrom).
 
-      IF FMItem.BillMethod THEN ASSIGN
-         FMItem.interval = 0
-         FMItem.FFItemQty = 0.
-      ELSE IF FMItem.interval = 0 THEN
-         FMItem.Interval = 1.
+            IF NOT llItemExist AND ttFMItem.fi_validto = ? THEN 
+                RETURN "Invalid item rule period".                          
 
-      IF llNewItem THEN DO: 
-         loEventLogMaker:make_eventlog("create",BUFFER FMItem:HANDLE).
-      END.
-      ELSE DO:
-         loEventLogMaker:make_eventlog("modify",BUFFER FMItem:HANDLE).
-      END.
-      
-      liUpdated = liUpdated + 1.
-      
-      RELEASE FMItem.
-   END.
+            IF ttFMItem.fi_validto NE ? THEN 
+            DO: 
+                IF CAN-FIND(FIRST FMItem WHERE
+                                  FMItem.Brand = gcBrand AND
+                                  FMItem.FeeModel = icFeeModel AND
+                                  FMItem.PriceList = ttFMItem.pricelist AND
+                                  FMItem.BillCode = ttFMItem.billing_item AND
+                                  FMItem.ToDate >= ttFMItem.fi_validfrom AND
+                                  FMItem.FromDate <= ttFMItem.fi_validto AND
+                                  FMItem.FromDate NE ttFMItem.fi_validfrom) THEN
+                    RETURN "Fee item with overlapping period exists".
 
-   IF liUpdated > 0 THEN RETURN "Done".
-   ELSE RETURN "".
+                IF CAN-FIND(FIRST FMItem WHERE
+                                  FMItem.Brand = gcBrand AND
+                                  FMItem.FeeModel = icFeeModel AND
+                                  FMItem.PriceList = ttFMItem.pricelist AND
+                                  FMItem.BillCode = ttFMItem.billing_item AND
+                                  FMItem.ToDate = ttFMItem.fi_validto AND
+                                  FMItem.FromDate NE ttFMItem.fi_validfrom) THEN
+                    RETURN "Fee item period end date is already in use".
+            END.
+          
+            IF (NOT llItemExist OR ttFMItem.fee_type > "") AND
+                (LOOKUP(ttFMItem.fee_type,{&FEE_TYPE}) = 0 OR
+                LOOKUP(ttFMItem.fee_type,{&FEE_TYPE}) = ?) THEN
+                RETURN "Invalid fee type".
+         
+            IF (NOT llItemExist OR ttFMItem.billing_method > "") AND
+                (LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) = 0 OR
+                LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) = ?) THEN 
+                RETURN "Invalid billing method".
+      
+            IF ttFMItem.first_period_rule > "" THEN 
+            DO:
+                lcValue = loCommon:mTMSCodeValue("FMItem",
+                                                 "FirstMonthBR",
+                                                 ttFMItem.first_period_rule).
+                IF lcValue = "" THEN                                  
+                    RETURN "Invalid first period rule".
+                ttFMItem.fi_firstperiodrule = INT(lcValue) NO-ERROR.
+            END.
+   
+            IF ttFMItem.last_period_rule > "" THEN 
+            DO:
+                lcValue = loCommon:mTMSCodeValue("FMItem",
+                                                 "BrokenRental",
+                                                 ttFMItem.last_period_rule).
+                IF lcValue = "" THEN                                  
+                    RETURN "Invalid last period rule".
+                ttFMItem.fi_lastperiodrule = INT(lcValue) NO-ERROR.
+            END.
+            
+        END.
+   
+        RETURN "".
  
-END METHOD.
+    END METHOD.
 
-METHOD PUBLIC LOG process_other_update():
+    METHOD PUBLIC CHAR update_items
+        (irParentID AS RECID,
+         icFeeModel  AS CHAR):
 
-END METHOD.
+        DEF VAR liWait    AS INT   NO-UNDO.
+        DEF VAR lrItem    AS RECID NO-UNDO.
+        DEF VAR llNewItem AS LOG   NO-UNDO.
+        DEF VAR liUpdated AS INT   NO-UNDO.
 
-DESTRUCTOR PUBLIC FeeModelModel ():
-   IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
-   IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.
-END DESTRUCTOR.
+        FOR EACH ttFMItem WHERE
+                 ttFMItem.parent_id = RECID(ttFeeModel):
+
+            FIND FIRST FMItem WHERE
+                       FMItem.Brand = gcBrand AND
+                       FMItem.FeeModel = icFeeModel AND
+                       FMItem.PriceList = ttFMItem.pricelist AND
+                       FMItem.BillCode = ttFMItem.billing_item AND
+                       FMItem.FromDate = ttFMItem.fi_validfrom NO-LOCK NO-ERROR.
+               
+            /* either existing item is updated or a new one is created */
+            IF AVAILABLE FMItem THEN 
+            DO: 
+                ASSIGN 
+                    liWait    = 0
+                    lrItem    = RECID(FMItem)
+                    llNewItem = FALSE.
+            
+                DO WHILE TRUE:
+                    FIND FIRST FMItem WHERE RECID(FMItem) = lrItem
+                        EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                    IF LOCKED(FMItem) THEN 
+                    DO:
+                        liWait = liWait + 1.
+                        /* fee model may be partially already updated, but the entire update 
+                           can be resent */
+                        IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+                            RETURN "Fee item was not available for update".
+                        PAUSE 1 NO-MESSAGE. 
+                        NEXT. 
+                    END.
+                    LEAVE.
+                END.
+ 
+                loEventLogMaker:make_eventlog("oldbuffer",BUFFER FMItem:HANDLE).
+            END.
+            ELSE 
+            DO:
+                CREATE FMItem.
+                ASSIGN 
+                    FMItem.Brand     = gcBrand
+                    FMItem.FeeModel  = icFeeModel
+                    FMItem.PriceList = ttFMItem.pricelist
+                    FMItem.BillCode  = ttFMItem.billing_item
+                    FMItem.FromDate  = ttFMItem.fi_validfrom
+                    llNewItem        = TRUE.
+            END.
+      
+            ASSIGN 
+                FMItem.ToDate       = ttFMItem.fi_validto 
+                                          WHEN ttFMItem.fi_validto NE ?
+                FMItem.BillMethod   = (ttFMItem.fee_type = ENTRY(1,{&FEE_TYPE})) 
+                                          WHEN ttFMItem.fee_type NE ?
+                FMItem.Interval     = ttFMItem.interval 
+                                          WHEN ttFMItem.interval NE ?
+                FMItem.FFItemQty    = ttFMItem.recurrence_limit 
+                                          WHEN ttFMItem.recurrence_limit NE ?
+                FMItem.BillCycle    = LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) 
+                                          WHEN ttFMItem.billing_method NE ?
+                FMItem.FirstMonthBR = ttFMItem.fi_firstperiodrule 
+                                          WHEN ttFMItem.fi_firstperiodrule NE ?
+                FMItem.BrokenRental = ttFMItem.fi_lastperiodrule 
+                                          WHEN ttFMItem.fi_lastperiodrule NE ?
+                FMItem.Amount       = ttFMItem.price 
+                                          WHEN ttFMItem.price NE ?
+                FMItem.BillType     = IF FMItem.BillMethod 
+                                          THEN "OTC"
+                                          ELSE "RC".
+
+            IF FMItem.BillMethod THEN ASSIGN
+                    FMItem.interval  = 0
+                    FMItem.FFItemQty = 0.
+            ELSE IF FMItem.interval = 0 THEN
+                    FMItem.Interval = 1.
+
+            IF llNewItem THEN 
+            DO: 
+                loEventLogMaker:make_eventlog("create",BUFFER FMItem:HANDLE).
+            END.
+            ELSE 
+            DO:
+                loEventLogMaker:make_eventlog("modify",BUFFER FMItem:HANDLE).
+            END.
+      
+            liUpdated = liUpdated + 1.
+      
+            RELEASE FMItem.
+        END.
+
+        IF liUpdated > 0 THEN RETURN "Done".
+        ELSE RETURN "".
+ 
+    END METHOD.
+
+    METHOD PUBLIC LOG process_other_update():
+
+    END METHOD.
+
+    DESTRUCTOR PUBLIC FeeModelModel ():
+        IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
+        IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.
+    END DESTRUCTOR.
 
 END CLASS.
 
