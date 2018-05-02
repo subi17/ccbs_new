@@ -1,1 +1,1 @@
-{triggers/hpdwrite_generic.i OrderAction ORDERACTION Ordercanal OrderId ItemType ItemKey}
+{triggers/hpdwrite_generic.i OrderProductParam ORDERPRODUCTPARAM Ordercanal OrderProductID ParamName}
