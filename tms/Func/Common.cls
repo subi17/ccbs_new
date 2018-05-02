@@ -755,6 +755,24 @@ CLASS Func.Common FINAL:
    
    END METHOD.   
    
+    /* get the TMS code value for code name etc. */
+    METHOD PUBLIC STATIC CHARACTER mTMSCodeValue
+        (iTableName AS CHARACTER,
+        iFieldName AS CHARACTER,
+        iCodeName AS CHARACTER).
+   
+        DEFINE BUFFER TMSCodes FOR TMSCodes.
+
+        FIND FIRST TMSCodes NO-LOCK WHERE
+            TMSCodes.TableName = iTableName AND
+            TMSCodes.FieldName = iFieldName AND
+            TMSCodes.CodeName  = iCodeName NO-ERROR.
+   
+        IF AVAILABLE TMSCodes THEN RETURN TMSCodes.CodeValue.
+        ELSE RETURN "".
+   
+    END METHOD.   
+   
    METHOD PUBLIC STATIC CHARACTER mHideBSub
      (INPUT str-in AS CHARACTER, 
       INPUT CustNo AS INTEGER,
