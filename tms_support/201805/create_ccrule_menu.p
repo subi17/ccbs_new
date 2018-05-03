@@ -29,7 +29,7 @@ ASSIGN
     MenuTree.MenuNum   = MenuText.MenuNum
     MenuTree.Level     = "1112"
     MenuTree.Position  = 7
-    MenuTree.MenuType  = "1"
+    MenuTree.MenuType  = 1
     MenuTree.Module    = "Mc/ccrule_run.p"
     MenuTree.MenuID    = "acc-rule"
     MenuTree.MenuTitle = "Accounting Rules"
