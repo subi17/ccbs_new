@@ -48,11 +48,11 @@ DEF TEMP-TABLE ttMobSubList NO-UNDO
 DEF STREAM sLogFile.
 
 ASSIGN 
-   llgSimulation   = FALSE                                      /* TRUE -> only log writing, FALSE -> make real updates */
-   lcActionId      = "FID3GB_6m"                               /* For execution lock                                   */
+   llgSimulation   = FALSE                                     /* TRUE -> only log writing, FALSE -> make real updates */
+   lcActionId      = "FID3GB_6m_RUPSELL"                       /* For execution lock                                   */
    lcTableName     = "FID3GB_6m-Promo"                         /* For execution lock                                   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
-   lcUpsell        = "FID3GB_6m"                               /* Upsells that will be added in the promo              */
+   lcUpsell        = "FID3GB_6m_RUPSELL"                       /* Upsells that will be added in the promo              */
    ldCampaignStart = fCParamDe("YCO-276-FID3GB_6m-FromDate")   /* Promotion start date                                 */
    ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_6m-ToDate").    /* Promotion end date                                   */
 

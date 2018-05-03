@@ -14,7 +14,7 @@ ASSIGN
 
 FORM
    SKIP "This program will create FROM and TO interval for upsells for YCO-276: 3Gb" SKIP(1)
-   "with codes FID3GB_3m, FID3GB_6m and FID3GB_12m" SKIP
+   "with codes FID3GB_3m_RUPSELL, FID3GB_6m_RUPSELL and FID3GB_12m_RUPSELL" SKIP
    "from a MONTHLY RENEW UPSELL control point of view" 
    SKIP(2)
    "Monthly Renew available from: " dfrom SKIP

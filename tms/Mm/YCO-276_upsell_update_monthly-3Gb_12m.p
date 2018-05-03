@@ -49,10 +49,10 @@ DEF STREAM sLogFile.
 
 ASSIGN 
    llgSimulation   = FALSE                                      /* TRUE -> only log writing, FALSE -> make real updates */
-   lcActionId      = "FID3GB_12m"                               /* For execution lock                                   */
+   lcActionId      = "FID3GB_12m_RUPSELL"                       /* For execution lock                                   */
    lcTableName     = "FID3GB_12m-Promo"                         /* For execution lock                                   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
-   lcUpsell        = "FID3GB_12m"                               /* Upsells that will be added in the promo              */
+   lcUpsell        = "FID3GB_12m_RUPSELL"                       /* Upsells that will be added in the promo              */
    ldCampaignStart = fCParamDe("YCO-276-FID3GB_12m-FromDate")   /* Promotion start date                                 */
    ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_12m-ToDate").    /* Promotion end date                                   */
 
@@ -154,7 +154,7 @@ FUNCTION fCountReq RETURNS INT
             MsRequest.MsSeq      EQ iiMsSeq                        AND
             MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
             MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
-            MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
+            MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND   
             MsRequest.ReqCparam3 EQ lcUpsell                       AND
             MsRequest.crestamp > ldCampaignStart
             USE-INDEX MsSeq:

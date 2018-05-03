@@ -17,7 +17,8 @@ DEF VAR cValidList AS CHAR INITIAL
    "CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000,CONTFH39_50,CONTFH49_300,CONTFH69_1000,CONTFH48_50,CONTFH58_300,CONTFH76_1000,CONTFH3G_50,CONTFH3G_300,CONTFH3G_1000,CONTFH7G_50,CONTFH7G_300,CONTFH7G_1000,CONTFH59_50,CONTFH69_300,CONTFH89_1000,CONTFH99_50,CONTFH109_300,CONTFH129_1000,CONT34,CONT15,CONT33,CONT25,CONTFH35_50,CONTFH45_300,CONTFH65_1000".
 
 /* List of upsells with description and feemodel id */
-DEF VAR cUpsell_Id      AS CHARACTER NO-UNDO INITIAL "FID3GB,FID3GB_3m,FID3GB_6m,FID3GB_12m".
+DEF VAR cUpsell_Id      AS CHARACTER NO-UNDO INITIAL 
+    "FID3GB_RUPSELL,FID3GB_3m_RUPSELL,FID3GB_6m_RUPSELL,FID3GB_12m_RUPSELL".
 DEF VAR cUpsell_Desc    AS CHARACTER NO-UNDO INITIAL "Bono de datos 3Gb adicionales 1 mes,Bono de datos 3Gb adicionales 3 meses,Bono de datos 3Gb adicionales 6 meses,Bono de datos 3Gb adicionales 12 meses".
 DEF VAR cUpsell_Fee     AS CHARACTER NO-UNDO INITIAL "FID3GBMFUPS,FID3GBMFUPS_3m,FID3GBMFUPS_6m,FID3GBMFUPS_12m".
 
@@ -50,15 +51,15 @@ ASSIGN
    dto   = DATE(12,31,2049).
 
 FORM
-   SKIP "This program will create upsells for YCO-276: 3Gb" SKIP(1)
-   "with codes FID3GB, FID3GB_3m, FID3GB_6m and FID3GB_12m" SKIP
-   "The below dates will be used as the valid from and to dates" skip
-   "for all records created as part of these upsells." 
-   SKIP(2)
-   "Upsell Valid from: " dfrom SKIP
-   "Upsell Valid to  : " dto
-   WITH OVERLAY CENTERED ROW 6 TITLE " Add Upsells for YCO-276 " NO-LABELS
-   FRAME f-yco276.
+  SKIP "This program will create upsells for YCO-276: 3G with codes" SKIP(1)
+  "FID3GB_RUPSELL, FID3GB_3m_RUPSELL, FID3GB_6m_RUPSELL and FID3GB_12m_RUPSELL" SKIP
+  "The below dates will be used as the valid from and to dates" skip
+  "for all records created as part of these upsells." 
+  SKIP(2)
+  "Upsell Valid from: " dfrom SKIP
+  "Upsell Valid to  : " dto
+  WITH OVERLAY CENTERED ROW 6 TITLE " Add Upsells for YCO-276 " NO-LABELS
+  FRAME f-yco276.
 
 UPDATE dfrom
        dto WITH FRAME f-yco276.
@@ -80,7 +81,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
 
   /* Check if the program has already being executed */
   FIND FIRST daycampaign WHERE daycampaign.Brand   = Syst.Var:gcBrand
-                           AND daycampaign.DCEVent = "FID3GB"
+                           AND daycampaign.DCEVent = "FID3GB_RUPSELL"
                          NO-LOCK NO-ERROR. 
   IF AVAILABLE daycampaign THEN
   DO:
@@ -92,7 +93,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
 
   DO liUpsells = 1 TO 4:
    
-     /* ********************************************** upsell 3GB: FID3GB ********************************************************** */                
+     /* **************************************** upsell 3GB: FID3GB_RUPSELL ****************************************************** */                
      CREATE daycampaign.
      ASSIGN 
         daycampaign.Brand           = Syst.Var:gcBrand                      /* Brand                           */
@@ -288,7 +289,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
             ServiceLimitTarget.Slseq          = ServiceLimit.SLSeq            /* Sequence for Service Limit: ServiceLimit.SLSeq */
             ServiceLimitTarget.ServiceLMember = "14100001"                    /* 14100001 for DATA */
             ServiceLimitTarget.ServiceLimitMt = 0
-            ServiceLimitTarget.InsideRate     = "GPRS_" + ServiceLimitGroup.groupcode /* Limit rate: GPRS_FID3GB, GPRS_FID3GB_3m, ... */
+            ServiceLimitTarget.InsideRate     = "GPRS_" + ServiceLimitGroup.groupcode /* Limit rate: GPRS_FID3GB_RUPSELL, GPRS_FID3GB_3m_RUPSELL, ... */
             ServiceLimitTarget.outsideRate    = "".
    
      /* Add B-Destination 

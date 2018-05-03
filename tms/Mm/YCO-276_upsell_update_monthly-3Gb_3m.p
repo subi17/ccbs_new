@@ -49,10 +49,10 @@ DEF STREAM sLogFile.
 
 ASSIGN 
    llgSimulation   = FALSE                                     /* TRUE -> only log writing, FALSE -> make real updates */
-   lcActionId      = "FID3GB_3m"                               /* For execution lock                                   */
+   lcActionId      = "FID3GB_3m_RUPSELL"                       /* For execution lock                                   */
    lcTableName     = "FID3GB_3m-Promo"                         /* For execution lock                                   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
-   lcUpsell        = "FID3GB_3m"                               /* Upsells that will be added in the promo              */
+   lcUpsell        = "FID3GB_3m_RUPSELL"                       /* Upsells that will be added in the promo              */
    ldCampaignStart = fCParamDe("YCO-276-FID3GB_3m-FromDate")   /* Promotion start date                                 */
    ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_3m-ToDate").    /* Promotion end date                                   */
 
@@ -92,7 +92,7 @@ FUNCTION fCollect RETURNS CHAR
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand      EQ Syst.Var:gcBrand               AND  
             MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-            MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
+            MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND             
             MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
             MsRequest.ReqCparam3 EQ lcUpsell                       AND
             MsRequest.crestamp > ldCampaignStart                   AND
@@ -180,7 +180,7 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
               MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               MsRequest.ReqCparam3 EQ lcUpsell                       AND 
               MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
-              MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS()) /* do not care times done in eariler months */
+              MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS())  /* do not care times done in eariler months */
               NO-ERROR.
 
    /* Do not allow more than 3 activations */
@@ -192,7 +192,7 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
    IF llgSimulation EQ FALSE THEN DO:
       fCreateUpsellBundle(iiMsSeq,
                           lcUpsell,
-                          {&REQUEST_SOURCE_NEWTON},
+                          {&REQUEST_SOURCE_NEWTON}, 
                           Func.Common:mMakeTS(),
                           OUTPUT liRequest,
                           OUTPUT lcError).
