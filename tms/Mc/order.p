@@ -401,41 +401,42 @@ form
     SKIP
 
     "CLIType ......:" Order.CLIType FORMAT "X(12)"                     
-    "Campaign :" AT 48 Order.Campaign FORMAT "X(15)"
+    "OrdererIP:" AT 48 Order.OrdererIP
     SKIP                     
     
     "Payment Method:" Order.PayType 
-    "FATime ..:" AT 48 Order.FATAmount FORMAT "->>>9.99"
-       lcFatGroup FORMAT "X(11)"
+    "Campaign :" AT 48 Order.Campaign FORMAT "X(15)"
     SKIP
      
     "SubscriptionID:" Order.MsSeq 
-    "Reseller :" AT 48 Order.Reseller
+    "FATime ..:" AT 48 Order.FATAmount FORMAT "->>>9.99"
+       lcFatGroup FORMAT "X(11)"
     SKIP
 
     "Create request:" liMSrequest FORMAT ">>>>>>>>>"
-    "RiskCode:" AT 48 Order.RiskCode
+    "Reseller :" AT 48 Order.Reseller
     SKIP
     
     "MNP ..........:" NPStatName                         
-    "Salesman.:" AT 48  Order.SalesMan FORMAT "x(20)"
+    "RiskCode:" AT 48 Order.RiskCode
     SKIP
  
     "Operator .....:" Order.CurrOper FORMAT "x(30)"                    
        HELP "Current Operator. Choose entry with F9"
-    "OrderCh..:" AT 48  Order.OrderChannel                
+    "Salesman.:" AT 48  Order.SalesMan FORMAT "x(20)"
     SKIP
      
     "Old ICC ......:" Order.OldICC FORMAT "X(30)" 
-    "Source ..:" AT 48  Order.Source  
+    "OrderCh..:" AT 48  Order.OrderChannel                
     SKIP
 
     "Old P.Method .:" Order.OldPayType
-    "O.Payment:" AT 48 lcOrdPayMeth FORMAT "X(20)"
+    "Source ..:" AT 48  Order.Source  
     SKIP
 
     "Referee ......:" Order.Referee 
-    "Order Timestamps" AT 48 SKIP
+    "O.Payment:" AT 48 lcOrdPayMeth FORMAT "X(20)"
+    SKIP
 
     "Curr LO Status:" lcLOStatus FORMAT "x(30)"
     "Created .:" AT 48 lcCrStamp FORMAT "x(16)" 
@@ -1833,6 +1834,7 @@ PROCEDURE local-disp-lis:
          lcAuthCustIdType
          lcAuthCustId
          Order.OrderType
+         Order.OrdererIP
          Order.CLIType
          Order.CLI 
          Order.CLI + " / " + OrderFusion.FixedNumber WHEN 
