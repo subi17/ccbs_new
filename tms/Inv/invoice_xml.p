@@ -892,6 +892,10 @@ PROCEDURE pSubInvoice2XML:
                                              ttSub.InstallmentDiscAmt -
                                              ttSub.GBValue)).
 
+      /* YDR-2848 note. 
+         Impuestos, The amount charged due taxes (IVA, IGIC, etc.)
+         in field TaxDetails.TaxAmount as before. */
+
       /* If needed, the amount charged for TV service (as it is a resell, 
          taxes are not applicable). YDR-2848  */
       lhXML:INSERT-ATTRIBUTE("Header","AgileTVPrestado").
@@ -900,12 +904,12 @@ PROCEDURE pSubInvoice2XML:
       /* If needed, the amount charged for apps bought in Google Play (as it is a resell, 
          taxes are not applicable). YDR-2848 */
       lhXML:INSERT-ATTRIBUTE("Header","ComprasGooglePlay").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBValue)).
 
       /* If needed, the amount returned for apps bought in Google Play (as it is a resell, 
          taxes are not applicable). YDR-2848 */
       lhXML:INSERT-ATTRIBUTE("Header","DevolucionesGooglePlay").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBDiscValue)).
 
       /* If needed, the fee for mobile phone installment payment financed (without taxes). YDR-2848 */
       lhXML:INSERT-ATTRIBUTE("Header","PagoDelMovil").
