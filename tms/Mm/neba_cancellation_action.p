@@ -70,12 +70,14 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       SingleFee.Amt         = idAmount         /* Payment          */
       SingleFee.Memo[1]     = ""
       SingleFee.Memo[2]     = ""
-      SingleFee.HostTable   = "Customer"
-      SingleFee.KeyValue    = STRING(iiCustnum)
+      SingleFee.HostTable   = "Order"
+      SingleFee.KeyValue    = STRING(iiOrderId)
       SingleFee.BillType    = "SF"
       SingleFee.Contract    = ""
       SingleFee.Active      = TRUE
       SingleFee.FeeModel    = icFeeModel
+      SingleFee.OrderID     = iiOrderID
+      Singlefee.Memo        = "Neba order tremination"
       /*SingleFee.VATIncl     = ilVatIncl*/
       . 
 
