@@ -107,10 +107,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoMandate AS CLASS bss.cls.OrderAction NO-UNDO
-      GET.
-      SET.
-
    DEFINE PUBLIC PROPERTY OutBankMarketing AS LOGICAL NO-UNDO
       GET.
       SET.
@@ -179,9 +175,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC OrderCustomer():
-     IF VALID-OBJECT(aoMandate)
-     THEN DELETE OBJECT aoMandate.
-     aoOrder = ?.
+      aoOrder = ?.
 	END DESTRUCTOR.
 
    METHOD PUBLIC VOID mCreateData
@@ -296,18 +290,9 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:AddressCodP        = ioJsonObject:GetCharacter("street_code")
          THIS-OBJECT:AddressCodM        = ioJsonObject:GetCharacter("municipality_code").
 
-      IF ioJsonObject:Has("mandate")
-      THEN DO:
-         aoMandate = NEW bss.cls.OrderAction(aoOrder).
-         aoMandate:mCreateData("Mandate", ioJsonObject:GetCharacter("mandate"), "").
-      END.
-
 	END METHOD.
 	
    METHOD PUBLIC VOID mStoreData():
-
-      IF VALID-OBJECT(aoMandate)
-      THEN aoMandate:mStoreData().
 
       CREATE OrderCustomer.
       ASSIGN

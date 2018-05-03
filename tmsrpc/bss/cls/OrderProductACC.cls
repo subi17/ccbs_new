@@ -36,6 +36,10 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       GET.
       SET.
 
+   DEFINE PUBLIC PROPERTY aoMandate AS CLASS bss.cls.OrderAction NO-UNDO
+      GET.
+      SET.
+
 	CONSTRUCTOR PUBLIC OrderProductACC
       ( ioOrder AS CLASS bss.cls.Order ):
       SUPER(ioOrder).
@@ -52,14 +56,21 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF VALID-OBJECT(aoOrderCustomer)
       THEN DELETE OBJECT aoOrderCustomer.
 
+      IF VALID-OBJECT(aoMandate)
+      THEN DELETE OBJECT aoMandate.
+
 	END DESTRUCTOR.
 
    METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
 
       DEFINE VARIABLE liRequestID AS INTEGER NO-UNDO.
 
+      IF VALID-OBJECT(aoMandate)
+      THEN aoMandate:mStoreData().
+
       IF VALID-OBJECT(aoMemo)
       THEN aoMemo:mStoreData().
+
       aoExecutionDate:mStoreData().
       aoOrderCustomer:mStoreData().
 
@@ -113,6 +124,12 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 
       IF lcReturnValue > ""
       THEN UNDO, THROW NEW InternalError(SUBSTRING(lcReturnValue,INDEX(lcReturnValue,"|") + 1)).
+
+      IF loAttributes:Has("mandate")
+      THEN DO:
+         aoMandate = NEW bss.cls.OrderAction(aoOrder).
+         aoMandate:mCreateData("Mandate", loAttributes:GetCharacter("mandate"), "").
+      END.
 
       IF loAttributes:Has("memo")
       THEN DO:
@@ -217,10 +234,17 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 
       IF (NOT llPrePaid) AND
          aoOrderCustomer:BankCode EQ "" OR
-         NOT VALID-OBJECT(aoOrderCustomer:aoMandate)
+         NOT VALID-OBJECT(aoMandate)
       THEN UNDO, THROW NEW ParamError
                      (SUBSTITUTE("Both bankaccount and mandate fields are " +
                                  "mandatory when subtype is in value '&1'",
+                                 icSubType)).
+
+      IF llPrePaid AND
+         VALID-OBJECT(aoMandate)
+      THEN UNDO, THROW NEW ParamError
+                     (SUBSTITUTE("mandate field is not allowed " +
+                                 "when subtype is in value '&1'",
                                  icSubType)).
 
       IF (NOT llPrePaid) AND (aoOrderCustomer:CustIdType     EQ "Passport" OR
