@@ -194,13 +194,15 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
          IF NOT AVAIL lbShaperConf THEN 
             RETURN FALSE.
 
-         ocResult = "DSS-ACCOUNT="    + STRING(iiCustnum)                  + "," +
-                    "TEMPLATE="       + lbShaperConf.Template              + "," +
-                    "TARIFF_TYPE="    + lbShaperConf.TariffType            + "," +
-                    "TARIFF="         + icBundleId                         + "," +
-                    "LIMIT_UNSHAPED=" + STRING(lbShaperConf.LimitUnshaped) + "," +
-                    "LIMIT_SHAPED="   + STRING(lbShaperConf.LimitShaped)   + "," +
-                    "MSISDNS="        + lcALLSubsList.
+         ASSIGN odeCurrMonthLimit  = lbShaperConf.LimitUnshaped
+                odeOtherMonthLimit = lbShaperConf.LimitUnshaped
+                ocResult           = "DSS-ACCOUNT="    + STRING(iiCustnum)                  + "," +
+                                     "TEMPLATE="       + lbShaperConf.Template              + "," +
+                                     "TARIFF_TYPE="    + lbShaperConf.TariffType            + "," +
+                                     "TARIFF="         + icBundleId                         + "," +
+                                     "LIMIT_UNSHAPED=" + STRING(lbShaperConf.LimitUnshaped) + "," +
+                                     "LIMIT_SHAPED="   + STRING(lbShaperConf.LimitShaped)   + "," +
+                                     "MSISDNS="        + lcALLSubsList.
       END.
       ELSE 
          ocResult = "DSS-ACCOUNT="    + STRING(iiCustnum)       + "," +

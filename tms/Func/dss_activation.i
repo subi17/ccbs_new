@@ -21,7 +21,13 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
     INPUT icErrorMsg       AS CHAR,
     OUTPUT ocResult        AS CHAR):  
 
-   DEF VAR liRequest AS INT NO-UNDO INITIAL 0.    
+   DEF VAR liRequest   AS INT  NO-UNDO INITIAL 0.    
+   DEF VAR lcBundleId  AS CHAR NO-UNDO INITIAL "". 
+   DEF VAR ioDSSMsSeq  AS INT  NO-UNDO INITIAL 0.
+   DEF VAR deoDSSLimit AS DEC  NO-UNDO INITIAL 0. 
+   DEF VAR coBundleId  AS CHAR NO-UNDO INITIAL "". 
+
+   DEFINE BUFFER lbMobSub FOR MobSub.
 
    liRequest = fDSSRequest(iiDSSMsSeq,
                            iiDSSCustNum,
@@ -42,7 +48,35 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
                              iiDSSCustNum,
                              (icDSSBundleId + " " + icErrorMsg),
                              ocResult). 
-                           
+   ELSE DO:
+
+      fGetDSSMsSeqLimit(iiDSSCustNum,
+                        Func.Common:mMakeTS(),
+                        OUTPUT ioDSSMsSeq,
+                        OUTPUT deoDSSLimit,
+                        OUTPUT coBundleId).
+      
+      IF icDSSBundleId EQ {&DSS4} AND 
+         coBundleId    EQ {&DSS2} THEN DO:
+          
+         FIND FIRST lbMobSub NO-LOCK WHERE 
+                    lbMobSub.MsSeq EQ ioDSSMsSeq NO-ERROR.
+
+         IF NOT AVAIL lbMobSub THEN LEAVE.           
+
+         RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
+                               INPUT lbMobsub.CLI,
+                               INPUT lbMobsub.CustNum,
+                               INPUT "DELETE",
+                               INPUT "",      /* Optional param list */
+                               INPUT iiDSSMainRequest,
+                               INPUT Func.Common:mSecOffSet(iiDSSActStamp,90),
+                               INPUT icDSSReqSource,
+                               INPUT coBundleId).         
+      END.
+
+   END.
+
    RETURN liRequest.
 
 END FUNCTION.            
