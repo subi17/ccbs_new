@@ -136,24 +136,6 @@ CLASS Func.ValidateACC FINAL:
 
    END METHOD.
 
-
-   METHOD PUBLIC STATIC LOGICAL mIsConvergenceTariff
-      (icCliType AS CHARACTER):
-
-      DEFINE BUFFER CLIType FOR CLIType.
-
-      FOR CLIType NO-LOCK WHERE
-          CLIType.Brand   = Syst.Var:gcBrand AND
-          CLIType.CliType = icCLIType:
-         IF CliType.FixedLineDownload NE ? AND 
-            CliType.FixedLineDownload NE ""
-         THEN RETURN TRUE.
-      END.
-
-      RETURN FALSE.
-
-   END METHOD.
-
    METHOD PUBLIC STATIC CHARACTER mCheckSubscriptionForACC
       ( iiMsSeq      AS INTEGER,
         iiCurrentReq AS INTEGER,
@@ -170,7 +152,6 @@ CLASS Func.ValidateACC FINAL:
 
       DEFINE VARIABLE lcSRCCategory  AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lcReturnValue  AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE lcPassMsSeq    AS CHARACTER NO-UNDO.
      
       FIND MobSub NO-LOCK WHERE MobSub.MsSeq = iiMsSeq NO-ERROR.
       
@@ -188,20 +169,6 @@ CLASS Func.ValidateACC FINAL:
          NOT CAN-FIND(Customer NO-LOCK WHERE Customer.CustNum = MobSub.CustNum)
       THEN RETURN "ERROR|Current user for subscription is invalid".
 
-      /* ACC is not allowed for convergent tariffs YPR-4772
-         but bypass check if MsSeg set to cparam */
-      DO ON ERROR UNDO, THROW:
-         lcPassMsSeq = Syst.Parameters:getc("PassConvergentACC", "MobSub").
-         CATCH loError AS Progress.Lang.AppError:
-            lcPassMsSeq = "".
-         END.
-      END.
-
-      IF LOOKUP(STRING(iiMsSeq), lcPassMsSeq) = 0 AND
-         mIsConvergenceTariff(MobSub.CLIType)
-      THEN RETURN "ERROR|Not allowed for fixed line tariffs".
-
-   
       IF TODAY - MobSub.ActivationDate < 30
       THEN RETURN "CHECK|Subscription has not been active long enough".
 

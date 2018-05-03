@@ -379,10 +379,18 @@ PROCEDURE pOwnerChange:
       END.
    END.
    
+   IF AVAIL bAccOrder AND
+      fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+      RUN Gwy/masmovil_acc.p(bAccOrder.OrderID).
+      IF RETURN-VALUE NE "OK" THEN DO:
+         fReqError("Fixed line ACC failed: &1").
+         RETURN.
+      END.
+   END.
+   
    ASSIGN liOldOwner   = MobSub.AgrCust
           liCreated    = 0
           lhRequest    = BUFFER MsRequest:HANDLE.
-
 
    /* a new customer will be created */
    DO liReqCnt = 1 TO 3:

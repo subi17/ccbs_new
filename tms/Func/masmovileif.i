@@ -603,36 +603,76 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
 
 END.
 
-FUNCTION fSetSpeed_Masmovil RETURNS CHAR
-   (iiMsRequest AS INT ,
-    icDownloadSpeed AS CHAR,
-    icUploadSpeed AS CHAR,
+FUNCTION fMasmovil_ACC RETURNS CHAR
+   (iiOrderId AS INT,
     OUTPUT ocResultCode AS CHAR,
-    OUTPUT ocResultDesc AS CHAR): /*Error message*/
+    OUTPUT ocResultDesc AS CHAR):
 
+   DEF VAR lcContactStruct AS CHAR NO-UNDO.
    DEF VAR lcOutputStruct AS CHAR NO-UNDO.
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
-   DEF VAR lcResultCode AS CHAR NO-UNDO.
-   DEF VAR lcResultDesc AS CHAR NO-UNDO.
+
+   DEF BUFFER Order FOR Order.
+   DEF BUFFER bOrder FOR Order.
+   DEF BUFFER OrderCustomer FOR OrderCustomer.
+   DEF BUFFER OrderFusion FOR OrderFusion.
+
+   FIND FIRST Order NO-LOCK where 
+              Order.Brand EQ Syst.Var:gcBrand AND
+              Order.OrderId EQ iiOrderid NO-ERROR.
+   IF NOT AVAIL Order THEN 
+      RETURN "ERROR: Order not found " + STRING(iiOrderID) .
+
+  /*Use delivery customer information if it is avbailable*/
+   FIND FIRST OrderCustomer NO-LOCK WHERE 
+              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
+              OrderCustomer.OrderId EQ iiOrderid AND 
+              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_ACC}
+              NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN
+      RETURN "ERROR: ACC customer data not found " + STRING(iiOrderID) .
+   
+   FOR EACH OrderFusion NO-LOCK WHERE
+            OrderFusion.FixedNumber = Mobsub.FixedNumber,
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand = Syst.Var:gcBrand AND
+            bOrder.OrderID = OrderFusion.OrderID AND
+            bOrder.MsSeq = Mobsub.MsSeq AND
+            bOrder.StatusCode = {&ORDER_STATUS_DELIVERED} BY Order.CrStamp DESC:
+       LEAVE.
+   END.
+
+   IF NOT AVAIL bOrder THEN RETURN "ERROR: Work order id not found".
 
    lcOutputStruct = add_struct(param_toplevel_id, "").
-
-   add_string(lcOutputStruct, "workOrderId", "Y" + STRING(iiMsRequest)).
-   add_string(lcOutputStruct, "download", icDownloadSpeed).  
-   add_string(lcOutputStruct, "upload",  icUploadSpeed).
+   /*Order struct*/
+   add_string(lcOutputStruct, "orderID", 
+                             "Y" + STRING(Order.Orderid)).
+   lcContactStruct = add_struct(lcOutputStruct, "Contact").
+   add_string(lcContactStruct, "documentNumber", OrderCustomer.CustID).
+   add_string(lcContactStruct, "documentType", OrderCustomer.CustIdType).
+   add_string(lcContactStruct, "firstName", OrderCustomer.FirstName).
+   add_string(lcContactStruct, "middleName", OrderCustomer.Surname1).
+   add_string(lcContactStruct, "lastName", (IF OrderCustomer.Surname2 NE ""
+                                            THEN OrderCustomer.Surname2
+                                            ELSE OrderCustomer.Surname1)).
+   add_string(lcContactStruct, "email", OrderCustomer.Email).
+   add_string(lcContactStruct, "phoneNumber",(IF OrderCustomer.MobileNumber > ""
+                                              THEN OrderCustomer.MobileNumber 
+                                              ELSE OrderCustomer.FixedNumber)).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
 
    xmlrpc_initialize(FALSE).
-   fMasXMLGenerate_test("CancelFixedLine").
-   RUN pRPCMethodCall("masmovil.cancelFixedLine", TRUE).
+   fMasXMLGenerate_test("acc").
+   RUN pRPCMethodCall("masmovil.agreementCustomerChange", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       ocResultCode = STRING(gi_xmlrpc_error).
       ocResultDesc = gc_xmlrpc_error.
-      RETURN SUBST("ERROR: &1", gc_xmlrpc_error).
+      RETURN "NW_ERROR".
    END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
@@ -648,5 +688,6 @@ FUNCTION fSetSpeed_Masmovil RETURNS CHAR
       RETURN SUBST("ERROR: Result code &1", ocResultCode).
 
    RETURN "OK".
+ 
+END. /*Function fCreate_FixedLine*/
 
-END FUNCTION.
