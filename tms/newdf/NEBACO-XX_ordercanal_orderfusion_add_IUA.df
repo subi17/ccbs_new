@@ -4,5 +4,5 @@ ADD FIELD "IUA" OF "OrderFusion" AS character
    LABEL "IUA"
    COLUMN-LABEL "IUA"
    HELP "Access ID"
-   ORDER 310
+   ORDER 320
 
