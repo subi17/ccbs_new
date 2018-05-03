@@ -34,6 +34,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF VAR lcDSSRelatedSubsType   AS CHAR  NO-UNDO. 
    DEF VAR llDSSPrimaryAvail      AS LOG   NO-UNDO.
    DEF VAR lcDSSBundleId          AS CHAR  NO-UNDO. 
+   DEF VAR lcDSS4CommLine         AS CHAR  NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMserviceLPool   FOR MserviceLPool.
@@ -180,30 +181,33 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
 
    ASSIGN liTotalDSSLimit = (odeOtherMonthLimit * 1024 * 1024).
 
+   IF icBundleId EQ {&DSS4} THEN DO:
+
+      FIND FIRST lbShaperConf NO-LOCK WHERE
+                 lbShaperConf.Brand        EQ Syst.Var:gcBrand AND
+                 lbShaperConf.ShaperConfID EQ {&DSS4SHAPERID}  NO-ERROR.
+
+      IF NOT AVAIL lbShaperConf THEN 
+         RETURN FALSE.
+
+      ASSIGN odeCurrMonthLimit  = lbShaperConf.LimitUnshaped
+             odeOtherMonthLimit = lbShaperConf.LimitUnshaped
+             lcDSS4CommLine     = "DSS-ACCOUNT="    + STRING(iiCustnum)                  + "," +
+                                  "TEMPLATE="       + lbShaperConf.Template              + "," +
+                                  "TARIFF_TYPE="    + lbShaperConf.TariffType            + "," +
+                                  "TARIFF="         + icBundleId                         + "," +
+                                  "LIMIT_UNSHAPED=" + STRING(lbShaperConf.LimitUnshaped) + "," +
+                                  "LIMIT_SHAPED="   + STRING(lbShaperConf.LimitShaped)   + "," +
+                                  "MSISDNS="        + lcALLSubsList.
+   END.
+
    /* If it blanks then return only create param list otherwise specific */
    IF icReturnParamType = "HSDPA_MSISDN" THEN
       ocResult = "MSISDNS=" + lcHSDPASubsList.
    ELSE DO:
       
-      IF icBundleId = {&DSS4} THEN DO:
-
-         FIND FIRST lbShaperConf NO-LOCK WHERE
-                    lbShaperConf.Brand        EQ Syst.Var:gcBrand AND
-                    lbShaperConf.ShaperConfID EQ {&DSS4SHAPERID}  NO-ERROR.
-
-         IF NOT AVAIL lbShaperConf THEN 
-            RETURN FALSE.
-
-         ASSIGN odeCurrMonthLimit  = lbShaperConf.LimitUnshaped
-                odeOtherMonthLimit = lbShaperConf.LimitUnshaped
-                ocResult           = "DSS-ACCOUNT="    + STRING(iiCustnum)                  + "," +
-                                     "TEMPLATE="       + lbShaperConf.Template              + "," +
-                                     "TARIFF_TYPE="    + lbShaperConf.TariffType            + "," +
-                                     "TARIFF="         + icBundleId                         + "," +
-                                     "LIMIT_UNSHAPED=" + STRING(lbShaperConf.LimitUnshaped) + "," +
-                                     "LIMIT_SHAPED="   + STRING(lbShaperConf.LimitShaped)   + "," +
-                                     "MSISDNS="        + lcALLSubsList.
-      END.
+      IF icBundleId = {&DSS4} THEN 
+         ocResult = lcDSS4CommLine.
       ELSE 
          ocResult = "DSS-ACCOUNT="    + STRING(iiCustnum)       + "," +
                     "TEMPLATE=DSS_MONTHLY"                      + "," +
