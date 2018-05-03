@@ -217,6 +217,18 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
     
     END METHOD.
     
+    METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
+        CASE icAction:
+            WHEN "update_other" THEN process_other_update().
+            OTHERWISE 
+            RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
+        END CASE.
+    END METHOD.
+
+    METHOD PUBLIC LOG process_other_update():
+
+    END METHOD.
+    
     DESTRUCTOR PUBLIC RatingBucketsModel ():
         IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
         IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.

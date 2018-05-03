@@ -6,68 +6,76 @@ USING Gwy.ModelInterface.
 
 CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
 
-DEF VAR lJson          AS LONGCHAR NO-UNDO.
-DEF VAR lModelid       AS CHAR NO-UNDO.
-DEF VAR lCorrelationID AS CHAR NO-UNDO.
-DEF VAR gcBrand        AS CHAR NO-UNDO.
-DEF VAR loRequestMaker  AS Gwy.RequestMaker NO-UNDO.
-DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
-DEF VAR loRepTextMaker  AS Gwy.RepTextMaker NO-UNDO.
-DEF VAR lcError         AS CHAR NO-UNDO. 
+    DEF VAR lJson           AS LONGCHAR          NO-UNDO.
+    DEF VAR lcModelid       AS CHAR              NO-UNDO.
+    DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
+    DEF VAR gcBrand         AS CHAR              NO-UNDO.
+    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
+    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
+    DEF VAR loRepTextMaker  AS Gwy.RepTextMaker  NO-UNDO.
+    DEF VAR lcError         AS CHAR              NO-UNDO.
+    DEF VAR loCommon        AS Func.Common       NO-UNDO.
+     
     
-DEF TEMP-TABLE ttDayCampaign NO-UNDO SERIALIZE-NAME "DayCampaign"
-   FIELD external_id AS CHAR 
-   FIELD name AS CHAR 
-   FIELD valid_from AS CHAR
-   FIELD valid_to AS CHAR 
-   FIELD target AS CHAR INIT ?
-   FIELD package_type AS CHAR INIT ?
-   FIELD instance_limit AS INT INIT ?
-   FIELD limit AS DEC INIT ?
-   FIELD limit_unit AS CHAR INIT ?
-   FIELD limit_rule_id AS CHAR INIT ? 
-   FIELD first_limit AS CHAR INIT ?
-   FIELD billing_item AS CHAR INIT ?
-   FIELD call_case AS INT INIT ?
-   FIELD calc_method AS CHAR INIT ?
-   FIELD effective AS CHAR INIT ?
-   FIELD weekday AS CHAR INIT ?
-   FIELD duration_type AS CHAR INIT ?
-   FIELD duration AS INT INIT ?
-   FIELD duration_unit AS CHAR INIT ?
-   FIELD fee_id AS CHAR INIT ?
-   FIELD dc_validfrom AS DATE
-   FIELD dc_validto AS DATE
-   FIELD dc_target AS CHAR INIT ?
-   FIELD dc_packagetype AS CHAR INIT ?
-   FIELD dc_limitunit AS INT INIT ?
-   FIELD dc_limitruleid AS INT INIT ? 
-   FIELD dc_firstlimit AS INT INIT ?
-   FIELD dc_calcmethod AS INT INIT ?
-   FIELD dc_effective AS INT INIT ?
-   FIELD dc_durationtype AS INT INIT ?
-   FIELD dc_durationunit AS INT INIT ?.
+    DEF TEMP-TABLE ttDayCampaign NO-UNDO SERIALIZE-NAME "DayCampaign"
+        FIELD external_id                AS CHAR 
+        FIELD name                       AS CHAR 
+        FIELD valid_from                 AS CHAR
+        FIELD valid_to                   AS CHAR 
+        FIELD target                     AS CHAR INIT ?
+        FIELD package_type               AS CHAR INIT ?
+        FIELD category                   AS CHAR 
+        FIELD pay_type                   AS CHAR
+        FIELD instance_limit             AS INT  INIT ?
+        FIELD limit                      AS DEC  INIT ?
+        FIELD limit_unit                 AS CHAR INIT ?
+        FIELD first_limit                AS CHAR INIT ?
+        FIELD billing_item               AS CHAR INIT ?
+        FIELD call_case                  AS INT  INIT ?
+        FIELD calc_method                AS CHAR INIT ?
+        FIELD effective                  AS CHAR INIT ?
+        FIELD weekday                    AS CHAR INIT ?
+        FIELD duration_type              AS CHAR INIT ?
+        FIELD duration                   AS INT  INIT ?
+        FIELD duration_unit              AS CHAR INIT ?
+        FIELD fee_id                     AS CHAR INIT ?
+        FIELD penalty_fee_calc_method    AS CHAR 
+        FIELD dc_validfrom               AS DATE
+        FIELD dc_validto                 AS DATE
+        FIELD dc_target                  AS CHAR INIT ?
+        FIELD dc_packagetype             AS CHAR INIT ?
+        FIELD dc_category                AS INT 
+        FIELD dc_paytype                 AS INT 
+        FIELD dc_limitunit               AS INT  INIT ?
+        FIELD dc_firstlimit              AS INT  INIT ?
+        FIELD dc_calcmethod              AS INT  INIT ?
+        FIELD dc_effective               AS INT  INIT ?
+        FIELD dc_durationtype            AS INT  INIT ?
+        FIELD dc_durationunit            AS INT  INIT ?
+        FIELD dc_penalty_fee_calc_method AS INT.
 
-{Gwy/RepText_definition.i}
+    {Gwy/RepText_definition.i}
 
-DEFINE DATASET DayCampaignDataSet FOR ttDayCampaign, ttRepText
-   PARENT-ID-RELATION idparent FOR ttDayCampaign, ttRepText
-      PARENT-ID-FIELD parent_id.
+    DEFINE DATASET DayCampaignDataSet FOR ttDayCampaign, ttRepText
+        PARENT-ID-RELATION idparent FOR ttDayCampaign, ttRepText
+        PARENT-ID-FIELD parent_id.
 
 
 CONSTRUCTOR PUBLIC DayCampaignModel ( iJson    AS LONGCHAR,
-                                  iModelid AS CHAR, 
-                                  iSource  AS CHAR,
-                                  iCorrelationID AS CHAR,
-                                  iReplyTo AS CHAR):
-   ASSIGN
-      gcBrand        = "1"
-      lJson          = iJson
-      lModelid       = iModelid
-      lCorrelationID = iCorrelationID
-      loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
-      loEventLogMaker = NEW Gwy.EventLogMaker(iSource)
-      loRepTextMaker  = NEW Gwy.RepTextMaker(iSource).
+                                      iBrand AS CHAR,
+                                      iModelid AS CHAR, 
+                                      iSource  AS CHAR,
+                                      iCorrelationID AS CHAR,
+                                      iReplyTo AS CHAR):
+    ASSIGN
+        gcBrand         = iBrand
+        lJson           = iJson
+        lcModelid       = iModelid
+        lcCorrelationID = iCorrelationID
+        loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
+        loEventLogMaker = NEW Gwy.EventLogMaker(iSource)
+        loRepTextMaker  = NEW Gwy.RepTextMaker(iSource)
+        loCommon        = NEW Func.Common().
    
 END CONSTRUCTOR.
 
@@ -121,8 +129,8 @@ METHOD PUBLIC LOG create():
    loRequestMaker:create_log(
       SUBSTITUTE("DayCampaign create: Id=&1 Ext.Request=&2", 
                  ttDayCampaign.external_id,
-                 lCorrelationID), 
-      "DEBUG").
+                 lcCorrelationID), 
+                 "DEBUG").
  
 END METHOD.
 
@@ -130,14 +138,14 @@ METHOD PUBLIC LOG update():
 
    DEF VAR liWait AS INT  NO-UNDO.
    
-   IF lModelid = ? THEN 
+   IF lcModelid = ? THEN 
       RETURN loRequestMaker:logError('Package ID not given').
 
    lJson = '~{"DayCampaignDataSet":~{"DayCampaign":' + lJson + '~}~}'.
    IF loRequestMaker:parser_error(DATASET DayCampaignDataset BIND, lJson) THEN
        RETURN FALSE.
    
-   IF lModelID = "" THEN 
+   IF lcModelid = "" THEN 
       RETURN loRequestMaker:logError("Invalid package ID").
       
    FIND ttDayCampaign NO-ERROR.
@@ -196,8 +204,8 @@ METHOD PUBLIC LOG update():
    loRequestMaker:create_log(
       SUBSTITUTE("DayCampaign update: Id=&1 Ext.Request=&2", 
                  lModelId,
-                 lCorrelationID), 
-      "DEBUG").
+                 lcCorrelationID), 
+                 "DEBUG").
        
 END METHOD.
 
@@ -217,8 +225,9 @@ METHOD PUBLIC CHAR validate_daycampaign
    (icDayCampaign AS CHAR,
     ilCreate AS LOG):
     
-   DEF VAR liValue AS INT  NO-UNDO. 
-   DEF VAR lcValue AS CHAR NO-UNDO. 
+    DEF VAR liValue   AS INT  NO-UNDO. 
+    DEF VAR lcValue   AS CHAR NO-UNDO.
+    DEF VAR lcDurUnit AS CHAR NO-UNDO. 
 
    IF LENGTH(icDayCampaign) > {&CONFIG_ID_MAX} THEN 
       RETURN "Max length for ID is {&CONFIG_ID_MAX} characters".
@@ -243,13 +252,26 @@ METHOD PUBLIC CHAR validate_daycampaign
    IF ilCreate AND (ttDayCampaign.dc_validfrom = ? OR ttDayCampaign.dc_validto = ?) THEN 
       RETURN "Invalid package period". 
 
-   IF (ilCreate OR ttDayCampaign.package_type > "") THEN DO:
-      ttDayCampaign.dc_packagetype = loRequestMaker:get_tmscodes_bssapi_internalid(
-                                          "DayCampaign",
-                                          "DCType",
-                                          ttDayCampaign.package_type).
+   IF (liCreate OR ttDayCampaign.package_type > "") THEN DO:
+      ttDayCampaign.dc_packagetype = loCommon:mTMSCodeValue("DayCampaign",
+                                                            "DCType",
+                                                            ttDayCampaign.package_type).
       IF ttDayCampaign.dc_packagetype = "" THEN RETURN "Invalid package type".
    END.
+   
+   IF (liCreate OR ttDayCampaign.category > "") THEN DO:
+       ttDayCampaign.dc_category = INT(loCommon:mTMSCodeValue("DayCampaign",
+                                                       "BundleTarget",
+                                                       ttDayCampaign.category)).
+      IF ttDayCampaign.dc_category = 0 THEN RETURN "Invalid category". 
+   END.                                                 
+   
+   IF (ilCreate OR ttDayCampaign.pay_type > "") THEN DO:
+       ttDayCampaign.dc_pay_type = INT(loCommon:mTMSCodeValue("DayCampaign",
+                                                              "PayType",
+                                                              ttDayCampaign.pay_type)) NO-ERROR.
+      IF ttDayCampaign.dc_pay_type = 0 THEN RETURN "Invalid Pay_Type".
+   END.     
    
    IF (ilCreate OR ttDayCampaign.instance_limit NE ?) THEN DO:
       IF ttDayCampaign.instance_limit = 0 OR 
@@ -257,14 +279,6 @@ METHOD PUBLIC CHAR validate_daycampaign
             RETURN "Invalid instance limit".
    END.
 
-   IF ttDayCampaign.limit_rule_id NE ? THEN DO:
-      ttDayCampaign.dc_limitruleid = INT(ttDayCampaign.limit_rule_id) NO-ERROR.
-      IF ttDayCampaign.dc_limitruleid = 0 OR 
-         NOT CAN-FIND(FIRST TMRule WHERE 
-                         TMRule.TMRuleSeq = ttDayCampaign.dc_limitruleid) THEN 
-            RETURN "Invalid limit rule id".
-   END.
-   
    IF (ilCreate OR ttDayCampaign.target > "") THEN DO:
       ttDayCampaign.dc_target = loRequestMaker:get_tmscodes_bssapi_internalid(
                                           "DayCampaign",
@@ -274,10 +288,9 @@ METHOD PUBLIC CHAR validate_daycampaign
    END.
    
    IF ttDayCampaign.limit_unit > "" THEN DO:
-      ttDayCampaign.dc_limitunit = INT(loRequestMaker:get_tmscodes_bssapi_internalid(
-                                          "DayCampaign",
-                                          "InclUnit",
-                                          ttDayCampaign.limit_unit)) NO-ERROR.
+      ttDayCampaign.dc_limitunit = INT(loCommon:mTMSCodeValue("DayCampaign",
+                                                              "InclUnit",
+                                                              ttDayCampaign.limit_unit)) NO-ERROR.
       IF ttDayCampaign.dc_limitunit = 0 THEN RETURN "Invalid limit unit".
    END.
 
@@ -301,10 +314,9 @@ METHOD PUBLIC CHAR validate_daycampaign
       RETURN "Invalid call case".
       
    IF ttDayCampaign.calc_method > "" THEN DO:
-      lcValue = loRequestMaker:get_tmscodes_bssapi_internalid(
-                                         "DayCampaign",
-                                         "CalcMethod",
-                                         ttDayCampaign.calc_method).
+      lcValue = loCommon:mTMSCodeValue("DayCampaign",
+                                       "CalcMethod",
+                                       ttDayCampaign.calc_method).
       IF lcValue = "" THEN RETURN "Invalid calculation method".
       ttDayCampaign.dc_calcmethod = INT(lcValue) NO-ERROR.
       IF ERROR-STATUS:ERROR OR 
@@ -312,10 +324,9 @@ METHOD PUBLIC CHAR validate_daycampaign
    END.
 
    IF ttDayCampaign.effective > "" THEN DO:
-      ttDayCampaign.dc_effective = INT(loRequestMaker:get_tmscodes_bssapi_internalid(
-                                          "DayCampaign",
-                                          "Effective",
-                                          ttDayCampaign.effective)) NO-ERROR.
+      ttDayCampaign.dc_effective = INT(loCommon:mTMSCodeValue("DayCampaign",
+                                                              "Effective",
+                                                              ttDayCampaign.effective)) NO-ERROR.
       IF ttDayCampaign.dc_effective = 0 THEN RETURN "Invalid effective definition".
    END.
 
@@ -329,23 +340,22 @@ METHOD PUBLIC CHAR validate_daycampaign
    END.         
 
    IF ttDayCampaign.duration_type > "" THEN DO:
-      ttDayCampaign.dc_durationtype = 
-         INT(loRequestMaker:get_tmscodes_bssapi_internalid(
-                                      "DayCampaign",
-                                      "DurType",
-                                      ttDayCampaign.duration_type)) NO-ERROR.
+      ttDayCampaign.dc_durationtype = INT(loCommon:mTMSCodeValue("DayCampaign",
+                                                                 "DurType",
+                                                                 ttDayCampaign.duration_type)) NO-ERROR.
       IF ttDayCampaign.dc_durationtype = 0 THEN 
          RETURN "Invalid duration type".
    END.
 
    IF ttDayCampaign.duration_unit > "" THEN DO:
-      ttDayCampaign.dc_durationunit = 
-         INT(loRequestMaker:get_tmscodes_bssapi_internalid(
-                                       "DayCampaign",
-                                       "DurUnit",
-                                       ttDayCampaign.duration_unit)) NO-ERROR.
-      IF ttDayCampaign.dc_durationunit = 0 THEN 
-         RETURN "Invalid duration unit".
+       lcDurUnit = loCommon:mTMSCodeValue("DayCampaign",
+                                           "DurUnit",
+                                           ttDayCampaign.duration_unit)
+                                           NO-ERROR.
+       IF lcDurUnit = "" THEN RETURN "Invalid Duration Unit".
+       ttDayCampaign.dc_durationunit = INT(lcDurUnit) NO-ERROR.
+    IF ERROR-STATUS:ERROR OR 
+        ttDayCampaign.dc_durationunit = ? THEN RETURN "Invalid Duration Unit".
    END.
 
    IF ttDayCampaign.fee_id > "" AND 
@@ -353,13 +363,26 @@ METHOD PUBLIC CHAR validate_daycampaign
                          FeeModel.Brand = gcBrand AND
                          FeeModel.FeeModel = ttDayCampaign.fee_id) THEN 
       RETURN "Invalid fee model".
+      
+   IF ttDayCampaign.penalty_fee_calc_method > "" THEN DO:
+       lcFeeCalMethod = loCommon:mTMSCodeValue("DayCampaign",
+                                               "TermFeeCalc",
+                                               ttDayCampaign.penalty_fee_calc_method)
+                                               NO-ERROR.
+       IF lcFeeCalMethod = "" THEN RETURN "Invalid Fee Calc Method".
+       ttDayCampaign.dc_penalty_fee_calc_method = INT(lcFeeCalMethod) NO-ERROR.
+       IF ERROR-STATUS:ERROR OR 
+          ttDayCampaign.dc_penalty_fee_calc_method = ? THEN 
+               RETURN "Invalid Fee Calc Method".
+   END.
                           
 END METHOD.
 
 METHOD PUBLIC CHAR update_daycampaign():
  
    ASSIGN 
-      DayCampaign.DCName         = ttDayCampaign.name WHEN ttDayCampaign.name > ""
+      DayCampaign.DCName         = ttDayCampaign.name 
+                                      WHEN ttDayCampaign.name > ""
       DayCampaign.ValidFrom      = ttDayCampaign.dc_validfrom 
                                       WHEN ttDayCampaign.dc_validfrom NE ?
       DayCampaign.ValidTo        = ttDayCampaign.dc_validto
@@ -368,25 +391,27 @@ METHOD PUBLIC CHAR update_daycampaign():
                                       WHEN ttDayCampaign.dc_target NE ?
       DayCampaign.DCType         = ttDayCampaign.dc_packagetype 
                                       WHEN ttDayCampaign.dc_packagetype NE ?
+      DayCampaign.BundleTarget   = ttDayCampaign.dc_category
+                                      WHEN ttDayCampaign.dc_calcmethod NE ?
+      DayCampaign.PayType        = ttDayCampaign.dc_paytype
+                                      WHEN ttDayCampaign.dc_pay_type NE ?
       DayCampaign.InstanceLimit  = ttDayCampaign.instance_limit
                                       WHEN ttDayCampaign.instance_limit NE ?
       DayCampaign.MaxChargeIncl  = ttDayCampaign.limit 
                                        WHEN ttDayCampaign.limit NE ?
       DayCampaign.InclUnit       = ttDayCampaign.dc_limitunit 
                                       WHEN ttDayCampaign.dc_limitunit NE ?
-      DayCampaign.TMRuleSeq      = ttDayCampaign.dc_limitruleid
-                                      WHEN ttDayCampaign.dc_limitruleid NE ?
       DayCampaign.FirstMonthCalc = ttDayCampaign.dc_firstlimit
                                       WHEN ttDayCampaign.dc_firstlimit NE ?
       DayCampaign.BillCode       = ttDayCampaign.billing_item
                                       WHEN ttDayCampaign.billing_item NE ?
       DayCampaign.CCN            = ttDayCampaign.call_case 
                                       WHEN ttDayCampaign.call_case NE ?
-      DayCampaign.CalcMethod     = ttDayCampaign.dc_calcmethod 
+      DayCampaign.CalcMethod     = ttDayCampaign.dc_calcmethod
                                       WHEN ttDayCampaign.dc_calcmethod NE ?
       DayCampaign.Effective      = ttDayCampaign.dc_effective 
                                       WHEN ttDayCampaign.dc_effective NE ?
-      DayCampaign.Weekday        = ttDayCampaign.weekday 
+      DayCampaign.Weekday        = ttDayCampaign.weekday
                                       WHEN ttDayCampaign.weekday NE ?
       DayCampaign.DurType        = ttDayCampaign.dc_durationtype
                                       WHEN ttDayCampaign.dc_durationtype NE ?
@@ -395,7 +420,10 @@ METHOD PUBLIC CHAR update_daycampaign():
       DayCampaign.DurUnit        = ttDayCampaign.dc_durationunit   
                                       WHEN ttDayCampaign.dc_durationunit NE ?
       DayCampaign.FeeModel       = ttDayCampaign.fee_id 
-                                      WHEN ttDayCampaign.fee_id NE ?.
+                                      WHEN ttDayCampaign.fee_id NE ?
+      DayCampaign.TermFeeCalc    = ttDayCampaign.dc_penalty_fee_calc_method
+                                      WHEN ttDayCampaign.dc_penalty_fee_calc_method NE ?.
+                                 
  
 END METHOD.
 
