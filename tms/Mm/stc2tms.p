@@ -998,8 +998,8 @@ PROCEDURE pUpdateSubscription:
                                          STRING(lELMobSub.MsSeq),
                                          0,
                                          "ExtraLine Discount is Closed",
-                                         "STC done from Extra line associated Main line to different mainline or independent clitype").
-
+                                         "STC done from Extra line associated Main line to different mainline or independent clitype"). 
+                                         
                   ASSIGN lELMobSub.MultiSimId   = 0
                          lELMobSub.MultiSimType = 0.
 
@@ -1129,12 +1129,12 @@ PROCEDURE pUpdateSubscription:
                fCloseExtraLineDiscount(lELMobSub.MsSeq,
                                        lbDiscountPlan.DPRuleID,
                                        TODAY).
-                                      
+                 
                Func.Common:mWriteMemo("MobSub",
                                       STRING(lELMobSub.MsSeq),
                                       0,
                                       "ExtraLine Discount is Closed",
-                                      "STC done from Extra line associated Main line to independent clitype"                                      ).   
+                                      "STC done from Extra line associated Main line to independent clitype").    
                
                ASSIGN lELMobSub.MultiSimId   = 0
                       lELMobSub.MultiSimType = 0.                     
@@ -1164,6 +1164,7 @@ PROCEDURE pUpdateSubscription:
                                bMobSub.CLIType,
                                IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN Func.Common:mLastDayOfMonth(TODAY)
                                ELSE ldtActDate - 1).
+         
       END.
    END.
    /* YPRO. If fixedline is terminated from convergent, also SVAs should be
@@ -1207,6 +1208,7 @@ PROCEDURE pUpdateSubscription:
                                bMobSub.MsSeq,
                                bMobSub.CLIType,
                                ldtCloseDate).               
+   
       END.
    END.
 
@@ -2228,6 +2230,7 @@ PROCEDURE pUpdateDSSAccount:
    DEF VAR lcAllowedDSS2SubsType     AS CHAR NO-UNDO.
    DEF VAR ldeDataBundleLimit        AS DEC  NO-UNDO.
    DEF VAR ldeLastDayEndStamp        AS DEC  NO-UNDO.
+   DEF VAR lcDSSBunldeId             AS CHAR NO-UNDO. 
 
    DEF BUFFER bMobSub  FOR MobSub.
    DEF BUFFER bTerMsRequest FOR MsRequest.
@@ -2252,8 +2255,12 @@ PROCEDURE pUpdateDSSAccount:
 
       IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
          NOT fOngoingDSSAct(MobSub.CustNum) AND
-         fIsDSS2Allowed(MobSub.CustNum,0,ideActStamp,
-                        OUTPUT liDSSMsSeq,OUTPUT lcError)
+         fIsDSSActivationAllowed(MobSub.CustNum,
+                                 0,
+                                 ideActStamp,
+                                 {&DSS2},
+                                 OUTPUT liDSSMsSeq,
+                                 OUTPUT lcError)
       THEN DO:
          FIND FIRST bMobSub WHERE
                     bMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.
@@ -2314,7 +2321,8 @@ PROCEDURE pUpdateDSSAccount:
                IF (fCLITypeIsMainLine(CLIType.CLIType) OR
                    fCLITypeIsExtraLine(CLIType.CLIType)) THEN 
                   IF NOT fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
-                                                           MobSub.CLIType) THEN RETURN.  
+                                                           MobSub.CLIType,
+                                                           OUTPUT lcDSSBunldeId) THEN RETURN.  
 
                /* If new postpaid subs. type compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND
