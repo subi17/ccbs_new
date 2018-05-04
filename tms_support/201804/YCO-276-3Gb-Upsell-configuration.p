@@ -12,16 +12,17 @@ ASSIGN
    dfrom = 20180501
    dto   = 20491231.
 
-FORM
-   SKIP "This program will create FROM and TO interval for upsells for YCO-276: 3Gb" SKIP(1)
-   "with codes FID3GB_3m_RUPSELL, FID3GB_6m_RUPSELL and FID3GB_12m_RUPSELL" SKIP
-   "from a MONTHLY RENEW UPSELL control point of view" 
-   SKIP(2)
-   "Monthly Renew available from: " dfrom SKIP
-   "Monthly Renew available to  : " dto skip(2)
-   "and the paths for the logs of each of them" SKIP
-   WITH OVERLAY CENTERED ROW 6 TITLE " Add parameters for YCO-276 " NO-LABELS
-   FRAME f-yco276.
+FORM 
+  SKIP
+  "This program will create FROM and TO interval for upsells for YCO-276: 3Gb" SKIP(1)
+  "with codes FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL and FID3GB_12m_R_UPSELL" SKIP
+  "from a MONTHLY RENEW UPSELL control point of view" 
+  SKIP(2)
+  "Monthly Renew available from: " dfrom SKIP
+  "Monthly Renew available to  : " dto skip(2)
+  "and the paths for the logs of each of them" SKIP
+  WITH OVERLAY CENTERED ROW 6 TITLE " Add parameters for YCO-276 " NO-LABELS
+  FRAME f-yco276.
 
 UPDATE dfrom
        dto WITH FRAME f-yco276.

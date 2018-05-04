@@ -11,6 +11,9 @@ DEF VAR liPrior       AS INTEGER NO-UNDO.
 DEF VAR lSuccess      AS LOGICAL NO-UNDO.
 DEF VAR dfrom         AS DATE FORMAT "99/99/99" NO-UNDO.
 DEF VAR dto           AS DATE FORMAT "99/99/99" NO-UNDO.
+DEF VAR iMx           AS INTEGER NO-UNDO.
+
+DEF BUFFER b_MXItem FOR MXItem.
 
 /* List of valid tariffs for this upsell */
 DEF VAR cValidList AS CHAR INITIAL
@@ -18,7 +21,7 @@ DEF VAR cValidList AS CHAR INITIAL
 
 /* List of upsells with description and feemodel id */
 DEF VAR cUpsell_Id      AS CHARACTER NO-UNDO INITIAL 
-    "FID3GB_RUPSELL,FID3GB_3m_RUPSELL,FID3GB_6m_RUPSELL,FID3GB_12m_RUPSELL".
+    "FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL,FID3GB_12m_R_UPSELL".
 DEF VAR cUpsell_Desc    AS CHARACTER NO-UNDO INITIAL "Bono de datos 3Gb adicionales 1 mes,Bono de datos 3Gb adicionales 3 meses,Bono de datos 3Gb adicionales 6 meses,Bono de datos 3Gb adicionales 12 meses".
 DEF VAR cUpsell_Fee     AS CHARACTER NO-UNDO INITIAL "FID3GBMFUPS,FID3GBMFUPS_3m,FID3GBMFUPS_6m,FID3GBMFUPS_12m".
 
@@ -52,7 +55,7 @@ ASSIGN
 
 FORM
   SKIP "This program will create upsells for YCO-276: 3G with codes" SKIP(1)
-  "FID3GB_RUPSELL, FID3GB_3m_RUPSELL, FID3GB_6m_RUPSELL and FID3GB_12m_RUPSELL" SKIP
+  "FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL and FID3GB_12m_R_UPSELL" SKIP
   "The below dates will be used as the valid from and to dates" skip
   "for all records created as part of these upsells." 
   SKIP(2)
@@ -81,7 +84,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
 
   /* Check if the program has already being executed */
   FIND FIRST daycampaign WHERE daycampaign.Brand   = Syst.Var:gcBrand
-                           AND daycampaign.DCEVent = "FID3GB_RUPSELL"
+                           AND daycampaign.DCEVent = "FID3GB_R_UPSELL"
                          NO-LOCK NO-ERROR. 
   IF AVAILABLE daycampaign THEN
   DO:
@@ -93,7 +96,6 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
 
   DO liUpsells = 1 TO 4:
    
-     /* **************************************** upsell 3GB: FID3GB_RUPSELL ****************************************************** */                
      CREATE daycampaign.
      ASSIGN 
         daycampaign.Brand           = Syst.Var:gcBrand                      /* Brand                           */
@@ -235,7 +237,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
      CREATE Matrix.
      ASSIGN 
         Matrix.Brand  = daycampaign.Brand
-        Matrix.MXName = "Per.contract usage"    /* Name of the Matrix                   */
+        Matrix.MXName = daycampaign.DCEvent + " Per.contract usage"    /* Name of the Matrix                   */
         Matrix.MXKey  = "PERCONTR"              /* Matrix Key                           */
         Matrix.MXSeq  = liMxSeq                 /* Matrix Sequence                      */
         Matrix.MXRes  = 1                       /* Matrix Response: 0 Denied, 1 Allowed */
@@ -246,6 +248,14 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
         MXItem.MXSeq   = Matrix.MXSeq           /* Matrix Sequence */
         MXItem.MXName  = "PerContract"          /* Name MXItem     */
         MXItem.MXValue = daycampaign.dcevent.   /* Matrix Value    */
+ 
+     DO iMx = 1 TO NUM-ENTRIES(cValidList):
+        CREATE b_MXItem.
+        ASSIGN 
+           b_MXItem.MXSeq   = MXItem.MXSeq            /* Matrix Sequence */
+           b_MXItem.MXName  = "SubsTypeTo"            /* Name MXItem     */
+           b_MXItem.MXValue = ENTRY(iMx,cValidList).  /* Matrix Value    */
+     END.
               
      /* Add Service Limit group (This record has to exists for daycampaign records with a DCType = 1 or 4 or 6 or 8)
         DAYCAMPAIGN -> SERVICELIMITGROUP 1:1 */
@@ -289,7 +299,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
             ServiceLimitTarget.Slseq          = ServiceLimit.SLSeq            /* Sequence for Service Limit: ServiceLimit.SLSeq */
             ServiceLimitTarget.ServiceLMember = "14100001"                    /* 14100001 for DATA */
             ServiceLimitTarget.ServiceLimitMt = 0
-            ServiceLimitTarget.InsideRate     = "GPRS_" + ServiceLimitGroup.groupcode /* Limit rate: GPRS_FID3GB_RUPSELL, GPRS_FID3GB_3m_RUPSELL, ... */
+            ServiceLimitTarget.InsideRate     = "GPRS_" + ServiceLimitGroup.groupcode /* Limit rate: GPRS_FID3GB_R_UPSELL, GPRS_FID3GB_3m_R_UPSELL, ... */
             ServiceLimitTarget.outsideRate    = "".
    
      /* Add B-Destination 
@@ -314,7 +324,6 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
 
   END.  /* DO liUpsells */
   
-
   /* Adding the new upsells to the periodical contracts */
   FOR EACH daycampaign
      WHERE daycampaign.brand = Syst.Var:gcBrand AND
@@ -324,6 +333,31 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
         daycampaign.bundleupsell = cUpsell_Id + "," + daycampaign.bundleupsell.
      ELSE
         daycampaign.bundleupsell = cUpsell_Id.
+  END.
+
+  /* Adding upsells to POSTPAID_DATA_UPSELLS */
+  FIND FIRST TMSParam WHERE
+             TMSParam.Brand      = Syst.Var:gcBrand AND
+             TMSParam.ParamGroup = "Bundles"        AND
+             TMSParam.ParamCode  = "POSTPAID_DATA_UPSELLS"
+       EXCLUSIVE-LOCK.
+  TMSParam.CharVal = TMSParam.CharVal + "," + cUpsell_Id.
+  RELEASE TMSParam.
+
+  /* Linking upsells to bonos (adding only to the ones that already have an upsell) */
+  FOR EACH daycampaign WHERE daycampaign.brand  = "1"
+                         AND daycampaign.dctype = "4" /* Progressive rating */
+                       EXCLUSIVE-LOCK:
+                       
+     IF daycampaign.dcevent BEGINS "TARJ" THEN NEXT.
+
+     /* Adding only to bonos that already have an upsell, for security */
+     IF INDEX(daycampaign.bundleupsell,"_UPSELL") = 0 THEN NEXT.
+
+     /* So the ones that already got the upsells, a few lines above, are skipped */
+     IF INDEX(daycampaign.bundleupsell,"FID3GB_R_UPSELL") > 0 THEN NEXT.  
+
+     daycampaign.bundleupsell = cUpsell_Id + "," + daycampaign.bundleupsell. 
   END.
 
   /* Process OK */

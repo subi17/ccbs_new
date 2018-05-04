@@ -18,7 +18,6 @@
    4. Free lock taken in step 1.
 */
 
-Syst.Var:gcBrand = "1".
 
 DEF VAR llgSimulation       AS LOG  NO-UNDO.
 DEF VAR lcActionId          AS CHAR NO-UNDO.
@@ -49,10 +48,10 @@ DEF STREAM sLogFile.
 
 ASSIGN 
    llgSimulation   = FALSE                                     /* TRUE -> only log writing, FALSE -> make real updates */
-   lcActionId      = "FID3GB_6m_RUPSELL"                       /* For execution lock                                   */
+   lcActionId      = "FID3GB_6m_R_UPSELL"                       /* For execution lock                                   */
    lcTableName     = "FID3GB_6m-Promo"                         /* For execution lock                                   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
-   lcUpsell        = "FID3GB_6m_RUPSELL"                       /* Upsells that will be added in the promo              */
+   lcUpsell        = "FID3GB_6m_R_UPSELL"                       /* Upsells that will be added in the promo              */
    ldCampaignStart = fCParamDe("YCO-276-FID3GB_6m-FromDate")   /* Promotion start date                                 */
    ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_6m-ToDate").    /* Promotion end date                                   */
 
