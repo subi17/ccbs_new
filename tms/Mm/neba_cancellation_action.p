@@ -32,19 +32,35 @@ IF llDoEvent THEN DO:
    lhSingleFee = BUFFER SingleFee:HANDLE.
 
 END.
-
-/*Function contails logig for selecting correct fee in NEBA case cancellation*/
 FUNCTION fSelectNebaFee RETURNS CHAR
    (INPUT iiOrderID  AS INT,
     OUTPUT odValue   AS DEC,
     OUTPUT ocFeeName AS CHAR):
-   /*TODO: select correct permanency - finding method unclear...offers?*/
 
-   odValue = 110.0.
-   ocFeeName = "NEBTERMPERIOD".
-   RETURN "". /*Error handling: add error message to ret valua.*/
+   odValue = 0.0.
+   ocFeeName = "".
 
-END.   
+   FIND FIRST OrderAction NO-LOCK WHERE
+            OrderAction.brand eq "1" and
+            OrderAction.orderid eq 70190910 and
+            OrderAction.itemkey begins "nebterm" NO-ERROR.
+   IF NOT AVAIL OrderAction then RETURN "No NEBA orderaction".
+   FIND FIRST DayCampaign NO-LOCK WHERE
+               DayCampaign.brand eq "1" and
+               DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL daycampaign THEN RETURN "No NEBA dayycampaign".
+   FIND FIRST FMItem NO-LOCK WHERE
+               FMItem.Brand  EQ DayCampaign.Brand AND
+               FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
+   IF AVAIL FMItem THEN DO:
+            disp fmitem.feemodel FORMAT "X(30)".
+            disp fmitem.amount.
+            odValue = FMItem.Amount.
+            ocFeeName = FMItem.FeeModel.
+            RETURN "".
+   END.
+   RETURN "No NEBA fmitem".
+END.
 
 FUNCTION fCreateSingleFee RETURNS LOGICAL
    (icBillCode  AS CHAR,
