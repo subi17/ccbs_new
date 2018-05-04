@@ -41,25 +41,24 @@ FUNCTION fSelectNebaFee RETURNS CHAR
    ocFeeName = "".
 
    FIND FIRST OrderAction NO-LOCK WHERE
-            OrderAction.brand eq "1" and
-            OrderAction.orderid eq 70190910 and
-            OrderAction.itemkey begins "nebterm" NO-ERROR.
-   IF NOT AVAIL OrderAction then RETURN "No NEBA orderaction".
+            OrderAction.Brand EQ Syst.Var:gcBrand AND
+            OrderAction.Orderid EQ iiOrderId AND
+            OrderAction.itemkey BEGINS "nebterm" NO-ERROR.
+   IF NOT AVAIL OrderAction THEN RETURN "No NEBA orderaction".
+
    FIND FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.brand eq "1" and
-               DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
+              DayCampaign.brand EQ Syst.Var:gcBrand AND
+              DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
    IF NOT AVAIL daycampaign THEN RETURN "No NEBA dayycampaign".
+
    FIND FIRST FMItem NO-LOCK WHERE
-               FMItem.Brand  EQ DayCampaign.Brand AND
-               FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
-   IF AVAIL FMItem THEN DO:
-            disp fmitem.feemodel FORMAT "X(30)".
-            disp fmitem.amount.
-            odValue = FMItem.Amount.
-            ocFeeName = FMItem.FeeModel.
-            RETURN "".
-   END.
-   RETURN "No NEBA fmitem".
+              FMItem.Brand  EQ DayCampaign.Brand AND
+              FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
+   IF NOT AVAIL FMItem THEN RETURN "No NEBA fmitem".
+
+   odValue = FMItem.Amount.
+   ocFeeName = FMItem.FeeModel.
+   RETURN "".
 END.
 
 FUNCTION fCreateSingleFee RETURNS LOGICAL
