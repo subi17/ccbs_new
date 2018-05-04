@@ -2144,7 +2144,7 @@ IF lcFixedLinePermanency > "" THEN DO:
                       lcFixedLinePermanency,
                       "").
    /* NEBA */
-   IF Order.CLIType BEGINS "CONTDSLNB" THEN DO:
+   IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
       IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
          lcAddFTERM = "FTERM12-110".
       ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
