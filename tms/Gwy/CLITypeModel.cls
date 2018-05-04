@@ -19,21 +19,28 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
     DEF VAR lcError         AS CHAR              NO-UNDO. 
     
     DEF TEMP-TABLE ttCLIType NO-UNDO SERIALIZE-NAME "CLIType"
-        FIELD external_id    AS CHAR 
-        FIELD name           AS CHAR 
-        FIELD payment_type   AS CHAR
-        FIELD rating_target  AS INT 
-        FIELD rateplan       AS CHAR
-        FIELD category       AS CHAR 
-        FIELD stc_status     AS CHAR 
-        FIELD web_status     AS CHAR 
-        FIELD service_class  AS CHAR 
-        FIELD download_speed AS CHAR 
-        FIELD upload_speed   AS CHAR 
-        FIELD tariff_type    AS CHAR 
-        FIELD line_type      AS CHAR 
-        FIELD fixed_line_type AS CHAR 
-        FIELD min_consumption_billing_item AS CHAR.
+        FIELD external_id                  AS CHAR 
+        FIELD name                         AS CHAR 
+        FIELD payment_type                 AS CHAR
+        FIELD rating_target                AS INT 
+        FIELD rateplan                     AS CHAR
+        FIELD category                     AS CHAR 
+        FIELD stc_status                   AS CHAR 
+        FIELD web_status                   AS CHAR 
+        FIELD service_class                AS CHAR 
+        FIELD download_speed               AS CHAR 
+        FIELD upload_speed                 AS CHAR 
+        FIELD tariff_type                  AS CHAR 
+        FIELD line_type                    AS CHAR 
+        FIELD fixed_line_type              AS CHAR 
+        FIELD min_consumption_billing_item AS CHAR
+        FIELD ct_payment_type              AS INT 
+        FIELD ct_category                  AS INT 
+        FIELD ct_stc_status                AS INT 
+        FIELD ct_web_status                AS INT 
+        FIELD ct_tariff_type               AS INT
+        FIELD ct_line_type                 AS INT 
+        FIELD ct_fixed_line_type           AS INT.
         
     DEF TEMP-TABLE ttMatrix NO-UNDO 
         FIELD parent_id AS RECID 
@@ -94,22 +101,22 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
             CLIType.Brand             = gcBrand
             CLIType.CLIType           = ttCLIType.external_id
             CLIType.CLIName           = ttCLIType.name
-            CLIType.PayType           = INT(ttCLIType.payment_type)
-            CLIType.BillTarget        = INT(ttCLIType.rating_target)
+            CLIType.PayType           = ttCLIType.ct_payment_type
+            CLIType.BillTarget        = ttCLIType.rating_target
             CLIType.PricePlan         = ttCLIType.rateplan
-            CLIType.UsageType         = INT(ttCLIType.category)            
-            CLIType.StatusCode        = INT(ttCLIType.stc_status)
-            CLIType.WebStatusCode     = INT(ttCLIType.web_status)
+            CLIType.UsageType         = ttCLIType.ct_category            
+            CLIType.StatusCode        = ttCLIType.ct_stc_status
+            CLIType.WebStatusCode     = ttCLIType.ct_web_status
             CLIType.ServiceClass      = ttCLIType.service_class
                                             WHEN ttCLIType.service_class > ""
             CLIType.FixedLineDownload = ttCLIType.download_speed
                                             WHEN ttCLIType.download_speed > ""
             CLIType.FixedLineUpload   = ttCLIType.upload_speed
                                             WHEN ttCLIType.upload_speed > ""
-            CLIType.TariffType        = INT(ttCLIType.tariff_type)
-            CLIType.LineType          = INT(ttCLIType.line_type)
-            CLIType.FixedLineType     = INT(ttCLIType.fixed_line_type)
-                                            WHEN ttCLIType.fixed_line_type > ""
+            CLIType.TariffType        = ttCLIType.ct_tariff_type
+            CLIType.LineType          = ttCLIType.ct_line_type
+            CLIType.FixedLineType     = ttCLIType.ct_fixed_line_type
+                                            WHEN ttCLIType.fixed_line_type GE 0
             CLIType.BillCode          = ttCLIType.min_consumption_billing_item
                                             WHEN ttCLIType.min_consumption_billing_item > "".
       
@@ -197,31 +204,22 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
 
         ASSIGN 
             CLIType.CLIName           = ttCLIType.name
-                                            WHEN ttCLIType.name > ""
-            CLIType.PayType           = INT(ttCLIType.payment_type)
-                                            WHEN ttCLIType.payment_type > ""
+            CLIType.PayType           = ttCLIType.ct_payment_type
             CLIType.BillTarget        = ttCLIType.rating_target
-                                            WHEN ttCLIType.rating_target > 0
             CLIType.PricePlan         = ttCLIType.rateplan
-                                            WHEN ttCLIType.rateplan > 0
-            CLIType.UsageType         = INT(ttCLIType.category) 
-                                            WHEN ttCLIType.category > ""           
-            CLIType.StatusCode        = INT(ttCLIType.stc_status)
-                                            WHEN ttCLIType.stc_status > ""
-            CLIType.WebStatusCode     = INT(ttCLIType.web_status)
-                                            WHEN ttCLIType.web_status > ""
+            CLIType.UsageType         = ttCLIType.ct_category            
+            CLIType.StatusCode        = ttCLIType.ct_stc_status
+            CLIType.WebStatusCode     = ttCLIType.ct_web_status
             CLIType.ServiceClass      = ttCLIType.service_class
                                             WHEN ttCLIType.service_class > ""
             CLIType.FixedLineDownload = ttCLIType.download_speed
                                             WHEN ttCLIType.download_speed > ""
             CLIType.FixedLineUpload   = ttCLIType.upload_speed
                                             WHEN ttCLIType.upload_speed > ""
-            CLIType.TariffType        = INT(ttCLIType.tariff_type)
-                                            WHEN ttCLIType.tariff_type > ""
-            CLIType.LineType          = INT(ttCLIType.line_type)
-                                            WHEN ttCLIType.line_type > ""
-            CLIType.FixedLineType     = INT(ttCLIType.fixed_line_type)
-                                            WHEN ttCLIType.fixed_line_type > ""
+            CLIType.TariffType        = ttCLIType.ct_tariff_type
+            CLIType.LineType          = ttCLIType.ct_line_type
+            CLIType.FixedLineType     = ttCLIType.ct_fixed_line_type
+                                            WHEN ttCLIType.fixed_line_type GE 0
             CLIType.BillCode          = ttCLIType.min_consumption_billing_item
                                             WHEN ttCLIType.min_consumption_billing_item > "".
    
@@ -274,7 +272,15 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
     METHOD PUBLIC CHAR validate_clitype
         (icCLIType AS CHAR,
         ilCreate AS LOG):
-
+            
+        DEF VAR lcPaymentType   AS CHAR NO-UNDO.
+        DEF VAR lcStatusCode    AS CHAR NO-UNDO.
+        DEF VAR lcCategory      AS CHAR NO-UNDO.
+        DEF VAR lcWebStatusCode AS CHAR NO-UNDO.
+        DEF VAR lcTariffType    AS CHAR NO-UNDO.
+        DEF VAR lcLineType      AS CHAR NO-UNDO.
+        DEF VAR lcFixLineType   AS CHAR NO-UNDO.
+        
         IF LENGTH(icCLIType) > {&CONFIG_ID_MAX} THEN 
             RETURN "Max length for ID is {&CONFIG_ID_MAX} characters".
  
@@ -290,11 +296,14 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
    
         IF (ilCreate OR ttCLIType.payment_type > "") THEN 
         DO:
-            ttCLIType.paymenttype = loCommon:mTMSCodeValue(
-                                            "CLIType",
-                                            "PayType",
-                                            ttCLIType.payment_type) NO-ERROR.
-            IF ttCLIType.paymenttype = 0 THEN RETURN "Invalid payment type".
+            lcPaymentType = loCommon:mTMSCodeValue("CLIType",
+                                                   "PayType",
+                                                   ttCLIType.payment_type) NO-ERROR.
+            IF lcPaymentType = "" THEN RETURN "Invalid Payment Type".
+            ttCLIType.ct_payment_type = INT(lcPaymentType) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR ttCLIType.ct_payment_type EQ ? THEN 
+                RETURN "Invalid Payment Type".
+            
         END.
 
         IF (ilCreate OR ttCLIType.rateplan > "") AND
@@ -305,44 +314,68 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
    
         IF (ilCreate OR ttCLIType.category > "") THEN
         DO:
-            ttCLIType.category = loCommon:mTMSCodeValue("CLIType",
-                                                        "UsageType",
-                                                        ttCLIType.category) NO-ERROR.
+            lcCategory = loCommon:mTMSCodeValue("CLIType",
+                                                "UsageType",
+                                                ttCLIType.category) NO-ERROR.
+            IF lcCategory = "" THEN RETURN "Invalid Category".
+            ttCLIType.ct_category = INT(lcCategory) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR ttCLIType.ct_category EQ ? THEN 
+                RETURN "Invalid Category".                                  
         END.
         
         IF (ilCreate OR ttCLIType.stc_status > "") THEN
         DO:
-            ttCLIType.stc_status = loCommon:mTMSCodeValue("CLIType",
-                                                          "StatusCode",
-                                                          ttCLIType.stc_status) NO-ERROR.
+            lcStatusCode = loCommon:mTMSCodeValue("CLIType",
+                                                  "StatusCode",
+                                                  ttCLIType.stc_status) NO-ERROR.
+            IF lcStatusCode = "" THEN RETURN "Invalid Status Code".
+            ttCLIType.ct_stc_status = INT(lcStatusCode) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR ttCLIType.ct_stc_status EQ ? THEN 
+                RETURN "Invalid Status Code".
         END.
         
         IF (ilCreate OR ttCLIType.web_status > "") THEN
         DO:
-            ttCLIType.web_status = loCommon:mTMSCodeValue("CLIType",
-                                                          "WebStatusCode",
-                                                          ttCLIType.web_status) NO-ERROR.
+            lcWebStatusCode = loCommon:mTMSCodeValue("CLIType",
+                                                     "WebStatusCode",
+                                                     ttCLIType.web_status) NO-ERROR.
+            IF lcWebStatusCode = "" THEN RETURN "Invalid WebStatusCode".
+            ttCLIType.ct_web_status = INT(lcWebStatusCode) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR ttCLIType.ct_web_status EQ ? then
+                RETURN "Invalid WebStatus Code".
         END.
         
         IF (ilCreate OR ttCLIType.tariff_type > "") THEN
         DO:
-            ttCLIType.tariff_type = loCommon:mTMSCodeValue("CLIType",
-                                                           "TariffType",
-                                                           ttCLIType.tariff_type) NO-ERROR.
+            lcTariffType = loCommon:mTMSCodeValue("CLIType",
+                                                  "TariffType",
+                                                  ttCLIType.tariff_type) NO-ERROR.
+            IF lcTariffType = "" THEN RETURN "Invalid Tariff Type".
+            ttCLIType.ct_tariff_type = INT(lcTariffType) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR ttCLIType.ct_tariff_type EQ ? THEN 
+                RETURN "Invalid Tariff Type".
         END.
         
         IF (ilCreate OR ttCLIType.line_type > "") THEN
         DO:
-            ttCLIType.line_type = loCommon:mTMSCodeValue("CLIType",
-                                                         "LineType",
-                                                         ttCLIType.line_type) NO-ERROR.
+            lcLineType = loCommon:mTMSCodeValue("CLIType",
+                                                "LineType",
+                                                ttCLIType.line_type) NO-ERROR.
+            IF lcLineType = "" THEN RETURN "Invalid LineType".
+            ttCLIType.ct_line_type = INT(lcLineType) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR ttCLIType.ct_line_type EQ ? THEN 
+                RETURN "Invalid LineType".
         END.
         
         IF (ilCreate OR ttCLIType.fixed_line_type > "") THEN
         DO:
-            ttCLIType.fixed_line_type = loCommon:mTMSCodeValue("CLIType",
-                                                               "FixedLineType",
-                                                               ttCLIType.fixed_line_type) NO-ERROR.
+            lcFixLineType = loCommon:mTMSCodeValue("CLIType",
+                                                   "FixedLineType",
+                                                   ttCLIType.fixed_line_type) NO-ERROR.
+            IF lcFixLineType = "" THEN RETURN "Invalid FixedLineType".
+            ttCLIType.ct_Fixed_line_type = INT(lcFixLineType) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR ttCLIType.ct_Fixed_line_type EQ ? THEN 
+                RETURN "Invalid FixedLineType".
         END.
         
         RETURN "".
