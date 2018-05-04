@@ -7,14 +7,16 @@ FUNCTION fPermanency RETURNS CHAR
     idAmt          AS DEC): /* 110.0 */
     
    DEF VAR lcDCName AS CHAR NO-UNDO.
+   DEF VAR lcFeeName AS CHAR NO-UNDO.
    DEF VAR liDurUnit AS INT NO-UNDO.
 
    liDurUnit = 2. /* DurUnit 2 for FTERM */
    lcDCName = icDCEvent +  " periodical contract".
-
+   lcFeeName = "Fixed line contract termination".
    IF icDCEvent BEGINS "NEBTERM" THEN DO:
       liDurUnit = 0.
       lcDCName = icDCEvent + " fixed line permanency".
+      lcFeeName = "Neba line contract termination".
    END.
 
    FIND FIRST DayCampaign NO-LOCK WHERE 
@@ -69,7 +71,7 @@ FUNCTION fPermanency RETURNS CHAR
       CREATE FeeModel.
       ASSIGN
          FeeModel.FeeModel = icTermFeeModel 
-         FeeModel.FeeName  = "Neba line contract termination"
+         FeeModel.FeeName  = lcFeeName
          FeeModel.Brand    = "1" 
          FeeModel.FMGroup  = 0.
    END.
