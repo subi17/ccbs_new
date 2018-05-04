@@ -62,7 +62,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
       SingleFee.CustNum     = iiCustnum
       SingleFee.BillTarget  = 1
-      SingleFee.CalcObj     = "NBTERM"
+      SingleFee.CalcObj     = "NEBTERM"
       SingleFee.BillCode    = icBillCode
       SingleFee.BillPeriod  = YEAR(TODAY) * 100 + MONTH(TODAY)
       SingleFee.Concerns[1] = (YEAR(TODAY) * 100 + MONTH(TODAY)) * 100 + 
