@@ -1,7 +1,7 @@
 "AGILESKYTV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service + SKY" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 2 0
 "AGILETV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 2 "" 0 1 2 0
 "ANGELTECH" 18/12/17 0 31/12/49 "ANGELTECHMF" 0 "" "" "Angel Tecnológico" 0 0 "1" "7" 1 4 0 0 "ANGELTECHMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
-"ASIST" 18/12/17 0 31/12/49 "ASISTMF" 0 "" "" "Asistencia Negocios" 0 0 "1" "7" 1 4 0 0 "ASISTMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
+"ASIST" 18/12/17 0 31/12/49 "ASISTMF" 0 "" "" "Soluciona Negocios" 0 0 "1" "7" 1 4 0 0 "ASISTMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
 "BONO_VOIP" 01/04/12 4 31/12/49 "BONO_VOIP" 0 "" "" "Bono VoIP" 93 0 "1" "4" 4 1 0 0 "BONO_VOIPMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
 "CENTRALITA" 04/07/17 1 31/12/49 "CentralitaPROMF" 0 "" "" "Centralita Pro" 0 0 "1" "7" 1 4 0 0 "CentralitaPROMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
 "CONT10" 01/02/17 4 31/12/49 "CONT10MF" 0 "" "" "Contrato 10" 93 0 "1" "4" 4 1 0 0 "CONT10MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0 0 1
@@ -12,7 +12,7 @@
 "CONT26" 01/02/17 1 31/12/49 "CONT26MF" 0 "" "" "La Sinfín 5 GB" 0 0 "1" "1" 1 1 0 0 "CONT26MF" "" "" 1 1 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002,DATA200_UPSELL" 0 0 0 1
 "CONT27" 18/04/17 1 31/12/49 "CONT27MF" 0 "" "" "LA INFINITA 2 GB DTO." 0 0 "1" "1" 1 1 0 0 "CONT27MF" "" "" 1 1 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002,DATA200_UPSELL,DATA6_UPSELL" 0 0 0 1
 "CONT28" 21/08/17 1 31/12/49 "CONT28MF" 0 "" "" "La Dúo" 0 0 "1" "1" 1 1 0 0 "CONT28MF" "" "" 1 1 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002,DATA200_UPSELL" 0 1 0 1
-"CONT29" 18/12/17 1 31/12/49 "CONT29MF" 0 "" "" "La Dúo extra" 0 0 "1" "1" 1 1 0 0 "CONT29MF" "" "" 1 0 0 yes 1 0 0 1 "" 0 1 0 1
+"CONT29" 18/12/17 1 31/12/49 "CONT29MF" 0 "" "" "La Dúo" 0 0 "1" "1" 1 1 0 0 "CONT29MF" "" "" 1 0 0 yes 1 0 0 1 "" 0 1 0 1
 "CONT30" 18/12/17 1 31/12/49 "CONT30MF" 0 "" "" "Contrato 30" 0 0 "1" "1" 1 1 0 0 "CONT30MF" "" "" 1 0 0 yes 1 0 0 1 "FLEX_UPSELL" 0 1 0 1
 "CONT31" 18/12/17 1 31/12/49 "CONT31MF" 0 "" "" "La Tarifa Tic Tac" 0 0 "1" "1" 1 1 0 0 "CONT31MF" "" "" 1 0 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002" 0 1 0 1
 "CONT32" 23/01/18 1 31/12/49 "CONT32MF" 0 "" "" "La Sinfín 3 GB" 0 0 "1" "1" 1 1 0 0 "CONT32MF" "" "" 1 0 0 yes 1 0 0 1 "DATA6_UPSELL,DATA200_UPSELL" 0 1 0 1

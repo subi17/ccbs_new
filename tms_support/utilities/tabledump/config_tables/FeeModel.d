@@ -2,7 +2,7 @@
 "ACC_PREPAID" "Agreement Customer Change Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "AGILETVMF" "Agile TV Service" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ANGELTECHMF" "Angel Tecnologico" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"ASISTMF" "Asistencia Negocios" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"ASISTMF" "Soluciona Negocios" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BALANCE_PREPAID" "Balance Query Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "BBMF" "BlackBerry Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BONO_VOIPMF" "Mobile data usage bundle VoIP" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

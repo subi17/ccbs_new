@@ -1,5 +1,5 @@
-"1" 75 "Contract Target" "List" "Percentage" 1 no "" "ANGELTECHDISC" 18/12/17 31/12/49 "ANGELTECHDISC" "Angel technology SVA discount" "" "List" 0 0 0 0 ""
-"1" 76 "Contract Target" "List" "Percentage" 1 no "" "ASISTDISC" 18/12/17 31/12/49 "ASISTDISC" "Asistencia Negocios SVA discount" "" "List" 0 0 0 0 ""
+"1" 75 "Contract Target" "List" "Percentage" 1 no "" "ANGELTECHDISC" 01/12/17 31/12/49 "ANGELTECHDISC" "Angel technology SVA discount" "" "LIST" 0 0 0 0 ""
+"1" 76 "Contract Target" "List" "Percentage" 1 no "" "ASISTDISC" 01/12/17 31/12/49 "ASISTDISC" "Soluciona Negocios SVA discount" "" "LIST" 0 0 0 0 ""
 "1" 20 "Contract Target" "List" "Fixed" 2 no "" "BONO6DISC" 15/10/14 31/12/49 "BONO6DISC" "Bono 1 GB discount" "" "All " 0 0 0 0 "BONO"
 "1" 31 "Contract Target" "List" "Fixed" 2 no "" "BONO6WEBDISC" 24/11/15 31/12/49 "BONO6WEBDISC" "Bono 1 GB discount web" "" "All " 0 0 0 6 "BONO"
 "1" 43 "Contract Target" "List" "Fixed" 1 no "" "BONO7DISC" 27/02/17 31/12/49 "BONO7DISC" "Bono 3 GB discount" "" "All" 0 0 0 6 "BONO"

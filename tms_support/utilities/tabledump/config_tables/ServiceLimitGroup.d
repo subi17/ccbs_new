@@ -8,7 +8,7 @@
 "1" "CONT26" "La Sinfín 5 GB" 01/02/17 31/12/49
 "1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
 "1" "CONT28" "La Dúo" 21/08/17 31/12/49
-"1" "CONT29" "La Dúo extra" 18/12/17 31/12/49
+"1" "CONT29" "La Dúo" 18/12/17 31/12/49
 "1" "CONT30" "Contrato 30" 18/12/17 31/12/49
 "1" "CONT31" "La Tarifa Tic Tac" 18/12/17 31/12/49
 "1" "CONT32" "La Sinfín 3 GB" 23/01/18 31/12/49
