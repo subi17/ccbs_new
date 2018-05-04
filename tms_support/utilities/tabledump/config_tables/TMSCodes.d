@@ -1382,6 +1382,7 @@
 "requem" "94,0,1,2,3,9" "SubsLMenu" "1" "Push invoice" "" "" 1
 "requem" "95,0,1,2,3,7,8,9" "SubsLMenu" "1" "Pro Migration" "" "" 1
 "requem" "96,0,1,2,3,4,9" "SubsLMenu" "1" "ESI Invoice" "" "" 1
+"requem" "97,0,1,2" "SubsLMenu" "1" "Customer Category change" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1

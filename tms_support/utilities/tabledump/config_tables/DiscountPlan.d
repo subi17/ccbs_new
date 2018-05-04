@@ -33,6 +33,8 @@
 "1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 31/12/49 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6 "Tactical"
 "1" 57 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC20_3" 05/07/17 31/12/49 "CONVDISC20_3" "Convergent New Adds Promotion" "" "List" 0 0 0 3 "Tactical"
 "1" 71 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS100_6" 19/10/17 31/12/49 "CONVDISC_CS100_6" "Cross Sell Promotion#1 - Fixed line discount" "" "List" 0 0 1 6 "Cross sell"
+"1" 88 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS10F12" 25/04/18 31/12/49 "CONVDISC_CS10F12" "Cross Sell 10% 12 months - Fixed Line Discount" "" "List" 0 0 1 12 "Cross sell"
+"1" 89 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS10M12" 25/04/18 31/12/49 "CONVDISC_CS10M12" "Cross Sell 10% 12 months - Mobile Line Discount" "" "List" 0 0 1 12 "Cross sell"
 "1" 72 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS20F12" 19/10/17 31/12/49 "CONVDISC_CS20F12" "Cross Sell Promotion#2 - Fixed line discount" "" "List" 0 0 1 12 "Cross sell"
 "1" 73 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS20M12" 19/10/17 31/12/49 "CONVDISC_CS20M12" "Cross Sell Promotion#2 - Mobile line discount" "" "List" 0 0 1 12 "Cross sell"
 "1" 79 "Contract Target" "List" "Percentage" 1 no "" "DISCAGILETV" 08/01/18 31/12/49 "DISCAGILETV" "TV Service + SKY" "" "All " 0 0 1 0 "TV"

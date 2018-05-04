@@ -1050,6 +1050,9 @@
 "" 220 "MobSub" "OldTariffBundle" "MSOwner.TariffBundle" 16 01/01/14 31/12/49
 "" 220 "MobSub" "TariffActTS" "TariffActTS" 17 01/01/14 31/12/49
 "" 220 "MobSub" "FixedNumber" "FixedNumber" 18 16/11/16 31/12/49
+"" 220 "MobSub" "TerritoryOwner" "TerritoryOwner" 19 25/04/18 31/12/49
+"" 220 "MobSub" "@ProfileText" "" 20 25/04/18 31/12/49
+"" 220 "MobSub" "MsStatus" "MsStatus" 21 25/04/18 31/12/49
 "" 221 "MsRequest" "MsRequest" "MsRequest" 1 01/01/14 31/12/49
 "" 221 "MsRequest" "@Version" "1" 2 01/01/14 31/12/49
 "" 221 "MsRequest" "MsRequest" "MsRequest" 3 01/01/14 31/12/49
