@@ -2,6 +2,15 @@
 {Func/fmakemsreq.i}
 {Func/dss_activation.i}
 
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+
+      {Func/lib/eventlog.i}
+
+   DEFINE VARIABLE lhMobSubStatusChange AS HANDLE NO-UNDO.
+
+END.
+
 FUNCTION fCheckMainlineAvailForCustomer RETURNS LOGICAL
    (INPUT liMLMsSeq      AS INT,
     INPUT icCustIdType   AS CHAR,
@@ -44,253 +53,209 @@ FUNCTION fCheckMainlineAvailForCustomer RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fReassigningExtralines RETURNS LOGICAL
-   (INPUT liAssignMLMsSeq AS INT,
-    INPUT liCurrMLMsSeq   AS INT,
-    INPUT liMsRequest     AS INT,
-    INPUT lcReqSource     AS CHAR,
-    INPUT llgDSSRequest   AS LOG):
+FUNCTION fResetExtralineSubscription RETURNS LOGICAL
+   (INPUT liMsSeq        AS INT,
+    INPUT icCLIType      AS CHAR,
+    INPUT liMultiSimId   AS INT,
+    INPUT liMultiSimType AS INT,    
+    INPUT llgDiscount    AS LOG):
 
-   DEFINE BUFFER lbMobSub       FOR MobSub.
-   DEFINE BUFFER lbOrder        FOR Order.
-   DEFINE BUFFER lbELMobSub     FOR MobSub.
-   DEFINE BUFFER lbMLMobSub     FOR MobSub. 
-   DEFINE BUFFER lbELOrder      FOR Order.
-   DEFINE BUFFER lELMobSub      FOR MobSub.
+   DEFINE BUFFER lbELMobSub     FOR MobSub. 
    DEFINE BUFFER lbDiscountPlan FOR DiscountPlan.
-   DEFINE BUFFER bTerMsRequest  FOR MsRequest.
 
-   DEF VAR lcMandatoryExtraLines   AS CHAR NO-UNDO. 
-   DEF VAR liManELCount            AS INT  NO-UNDO.  
-   DEF VAR liRequest               AS INT  NO-UNDO.
-   DEF VAR lcError                 AS CHAR NO-UNDO. 
-   DEF VAR liConfigExtraLineCount  AS INT  NO-UNDO. 
-   DEF VAR liAvailExtraLineCount   AS INT  NO-UNDO. 
-   DEF VAR lcExtralineCLITypes     AS CHAR NO-UNDO. 
-   DEF VAR liELCLITypeCount        AS INT  NO-UNDO.
-   DEF VAR llgConfigExtraLineCount AS LOG  NO-UNDO. 
-   DEF VAR llgDSSReqAllowed        AS LOG  NO-UNDO. 
-   DEF VAR lcDSSBundleId           AS CHAR NO-UNDO. 
-   DEF VAR lcMsSeqList             AS CHAR NO-UNDO. 
-   DEF VAR liMsSeqCount            AS INT  NO-UNDO. 
-   DEF VAR llgSTCRequest           AS LOG  NO-UNDO.  
-   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO. 
-   DEF VAR lcAllowedDSS4SubsType   AS CHAR NO-UNDO. 
-   DEF VAR liDSSPriMsSeq           AS INT  NO-UNDO. 
-   DEF VAR lcResult                AS CHAR NO-UNDO. 
+   FIND FIRST lbELMobSub EXCLUSIVE-LOCK WHERE 
+              lbELMobSub.MsSeq EQ liMsSeq NO-ERROR.
 
-   ASSIGN liDSSPriMsSeq = 0
-          lcDSSBundleId = ""
-          lcMsSeqList   = "".
+   IF NOT AVAIL lbELMobSub THEN 
+      RETURN FALSE.
+
+   IF llgDiscount THEN 
+      IF NOT CAN-FIND(FIRST lbDiscountPlan NO-LOCK WHERE
+                            lbDiscountPlan.Brand     EQ Syst.Var:gcBrand            AND
+                            lbDiscountPlan.DPRuleId  EQ lbELMobSub.CLIType + "DISC" AND
+                            lbDiscountPlan.ValidFrom <= TODAY                       AND
+                            lbDiscountPlan.ValidTo   >= TODAY)                      THEN 
+         RETURN FALSE.                      
+
+   IF llDoEvent THEN DO:
+      lhMobSubStatusChange = BUFFER lbELMobSub:HANDLE.
+      RUN StarEventInitialize(lhMobSubStatusChange).
+      RUN StarEventSetOldBuffer(lhMobSubStatusChange).
+   END.
+
+   ASSIGN lbELMobSub.MultiSimId   = liMultiSimId
+          lbELMobSub.MultiSimType = liMultiSimType.
+   
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent(lhMobSubStatusChange).
+      fCleanEventObjects().
+   END.
+
+   CASE llgDiscount:
+      WHEN TRUE THEN DO:
+         FIND FIRST lbDiscountPlan NO-LOCK WHERE
+                    lbDiscountPlan.Brand     EQ Syst.Var:gcBrand            AND
+                    lbDiscountPlan.DPRuleId  EQ lbELMobSub.CLIType + "DISC" AND
+                    lbDiscountPlan.ValidFrom <= TODAY                       AND
+                    lbDiscountPlan.ValidTo   >= TODAY                       NO-ERROR.
+            
+         IF AVAIL lbDiscountPlan THEN
+            fCreateExtraLineDiscount(lbELMobSub.MsSeq,
+                                     lbDiscountPlan.DPRuleID,
+                                     TODAY).   
+      END.
+      WHEN FALSE THEN
+         fCloseExtraLineDiscount(MobSub.MsSeq,
+                                 icCLIType + "DISC",
+                                 TODAY).
+   END CASE.
+
+   RETURN TRUE.
+
+END FUNCTION.    
+
+FUNCTION fReassigningExtralines RETURNS LOGICAL
+   (INPUT liMLMsSeq   AS INT,
+    INPUT lcReqSource AS CHAR,
+    INPUT liMsRequest AS INT):
+
+   DEFINE BUFFER lbCustomer FOR Customer.
+   DEFINE BUFFER lbMLMobSub FOR MobSub.
+   DEFINE BUFFER lbELMobSub FOR MobSub.
+   DEFINE BUFFER lELMobSub  FOR MobSub.
+
+   DEF VAR lcExtralineCLITypes   AS CHAR NO-UNDO.
+   DEF VAR liELCLITypeCount      AS INT  NO-UNDO.
+   DEF VAR llgMainLineAvail      AS LOG  NO-UNDO INITIAL FALSE.  
+   DEF VAR lcMLMsSeqList         AS CHAR NO-UNDO. 
+   DEF VAR lcMandatoryExtraLines AS CHAR NO-UNDO. 
+   DEF VAR liManELCount          AS INT  NO-UNDO. 
+   DEF VAR liRequest             AS INT  NO-UNDO. 
+   DEF VAR lcError               AS CHAR NO-UNDO. 
 
    FIND FIRST lbMLMobSub NO-LOCK WHERE 
-              lbMLMobSub.MsSeq EQ liAssignMLMsSeq NO-ERROR.
-
+              lbMLMobSub.MsSeq EQ liMLMsSeq NO-ERROR.
+   
    IF NOT AVAIL lbMLMobSub THEN 
       RETURN FALSE.
 
-   IF fExtraLineCountForMainLine(liCurrMLMsSeq,
-                                 lbMLMobSub.CustNum) EQ 0 THEN NEXT.
+   FIND lbCustomer OF lbMLMobsub NO-LOCK.
+
+   IF NOT AVAIL lbCustomer THEN 
+      RETURN FALSE.
+
+   lcExtralineCLITypes = fExtraLineCLITypes().
    
-   ASSIGN liAvailExtraLineCount = 0
-          lcExtralineCLITypes   = fExtraLineCLITypes().
+   fCheckMainlineAvailForCustomer(0,
+                                  lbCustomer.CustIdType,
+                                  lbCustomer.OrgID,
+                                  OUTPUT lcMLMsSeqList).
 
    DO liELCLITypeCount = 1 TO NUM-ENTRIES(lcExtralineCLITypes):
-
-      ASSIGN llgConfigExtraLineCount = fCLITypeAllowedForExtraLine(lbMLMobSub.CLIType,
-                                                                   ENTRY(liELCLITypeCount,lcExtralineCLITypes),
-                                                                   liConfigExtraLineCount)
-             lcMandatoryExtraLines   = fGetMandatoryExtraLineForMainLine(lbMLMobSub.CLIType).   
-
-      IF liConfigExtraLineCount EQ 0 THEN NEXT.         
-
-      /* STC to Mandatory Extralines */
-      IF lcMandatoryExtraLines NE "" THEN DO: 
-         
-         DO liManELCount = 1 TO NUM-ENTRIES(lcMandatoryExtraLines): 
-        
-            FIND FIRST lELMobSub EXCLUSIVE-LOCK WHERE
-                       lELMobSub.Brand        EQ Syst.Var:gcBrand                          AND
-                       lELMobSub.MultiSimId   EQ liCurrMLMsSeq                             AND
-                       lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}                 AND
-                       lELMobSub.CLIType      EQ ENTRY(liManELCount,lcMandatoryExtraLines) AND
-                      (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
-                       lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED})                       NO-ERROR.
-
-            IF AVAIL lELMobSub THEN 
-               ASSIGN liAvailExtraLineCount = liAvailExtraLineCount + 1
-                      lELMobSub.MultiSimId  = lbMLMobSub.MsSeq
-                      llgDSSReqAllowed      = TRUE.
-            ELSE DO: 
-
-               FOR EACH lELMobSub EXCLUSIVE-LOCK WHERE
-                        lELMobSub.Brand        EQ Syst.Var:gcBrand          AND
-                        lELMobSub.MultiSimId   EQ liCurrMLMsSeq             AND
-                        lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
-                       (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
-                        lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
-
-                  /* Exclude subs. if STC request is ongoing */
-                  IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                                     MsRequest.MsSeq      EQ lELMobSub.MsSeq                           AND
-                                     MsRequest.ReqType    EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}       AND
-                                     MsRequest.ReqStatus  EQ {&REQUEST_STATUS_NEW}                     AND
-                                     MsRequest.ReqCParam2 EQ ENTRY(liManELCount,lcMandatoryExtraLines) AND
-                       LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0)        THEN NEXT.
-
-                  liRequest = fCTChangeRequest(lELMobSub.MsSeq,                          /* The MSSeq of the subscription to where the STC is made */
-                                               ENTRY(liManELCount,lcMandatoryExtraLines),/* The CLIType of where to do the STC */
-                                               "",                                       /* lcBundleID */
-                                               "",                                       /* bank code validation is already done */
-                                               TRUNC(Func.Common:mMakeTS(),0),
-                                               0,                                        /* 0 = Credit check ok */
-                                               0,                                        /* extend contract */
-                                               ""                                        /* pcSalesman */,
-                                               FALSE,                                    /* charge */
-                                               TRUE,                                     /* send sms */
-                                               "",
-                                               0,
-                                               lcReqSource,
-                                               0,
-                                               liMsRequest,
-                                               "",                                       /* contract id */
-                                               OUTPUT lcError).
-
-                  IF liRequest = 0 THEN
-                     Func.Common:mWriteMemo("MobSub",
-                                            STRING(lELMobSub.MsSeq),
-                                            lELMobSub.Custnum,
-                                            "Extraline STC request creation failed",
-                                            lcError).
-                  ELSE 
-                     ASSIGN liAvailExtraLineCount = liAvailExtraLineCount + 1
-                            llgSTCRequest         = TRUE.
-                  
-               END. /* FOR EACH lELMobSub */
-
-            END. /* ELSE DO */
-
-         END. /* DO liManELCount = 1 TO NUM-ENTRIES(lcMandatoryExtraLines) */
-
-      END. /* IF lcMandatoryExtraLines NE "" */
-
-      /* If STC request is created then skip assigning other extralines to mainline 
-         until mandatory extraline STC request is processed sucessfully */
-      IF lcMandatoryExtraLines NE "" AND 
-         llgSTCRequest               THEN NEXT.
-
-      IF liAvailExtraLineCount >= liConfigExtraLineCount THEN NEXT.
-
-      FOR EACH lELMobSub EXCLUSIVE-LOCK WHERE
-               lELMobSub.Brand        EQ Syst.Var:gcBrand                            AND
-               lELMobSub.MultiSimId   EQ liCurrMLMsSeq                               AND
-               lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}                   AND
-               lELMobSub.CLIType      EQ ENTRY(liELCLITypeCount,lcExtralineCLITypes) AND 
-              (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
-               lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
-
-         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                           MsRequest.MsSeq      EQ lELMobSub.MsSeq AND
-                           MsRequest.ReqType    EQ 0               AND
-                           MsRequest.ReqStatus  EQ 0               AND
-                           MsRequest.ReqCParam1 EQ lELMobSub.CLIType AND
-                    LOOKUP(MsRequest.ReqCParam2,lcMandatoryExtraLines) GT 0) THEN NEXT.
-
-         IF LOOKUP(lELMobSub.CLIType,lcMandatoryExtraLines) > 0 THEN NEXT.
-
-         liAvailExtraLineCount = liAvailExtraLineCount + 1.
- 
-         IF liAvailExtraLineCount <= liConfigExtraLineCount THEN DO:
-            ASSIGN lcMsSeqList          = IF lcMsSeqList EQ "" THEN STRING(lELMobSub.MsSeq) 
-                                          ELSE lcMsSeqList + "," + STRING(lELMobSub.MsSeq)
-                   lELMobSub.MultiSimId = lbMLMobSub.MsSeq
-                   llgDSSReqAllowed     = TRUE.   
-            NEXT.
-         END.   
-         ELSE DO:
-            FIND FIRST lbDiscountPlan NO-LOCK WHERE
-                       lbDiscountPlan.Brand     EQ Syst.Var:gcBrand           AND
-                       lbDiscountPlan.DPRuleId  EQ lELMobSub.CLIType + "DISC" AND
-                       lbDiscountPlan.ValidFrom <= TODAY                      AND
-                       lbDiscountPlan.ValidTo   >= TODAY                      NO-ERROR.
-
-            IF AVAIL lbDiscountPlan THEN DO:
-
-               fCloseExtraLineDiscount(lELMobSub.MsSeq,
-                                       lbDiscountPlan.DPRuleID,
-                                       TODAY).
-
-               Func.Common:mWriteMemo("MobSub",
-                                      STRING(lELMobSub.MsSeq),
-                                      0,
-                                      "ExtraLine Discount is Closed",
-                                      "STC done from Extra line associated Main line to different mainline or independent clitype").
-
-               ASSIGN lELMobSub.MultiSimId   = 0
-                      lELMobSub.MultiSimType = 0.
-
-            END.
-
-         END.
-
-      END. /* FOR EACH lELMobSub */   
-
-   END. /* DO liELCLITypeCount = 1 TO NUM-ENTRIES(lcExtralineCLITypes) */
-
-   IF llgDSSRequest    AND 
-      llgDSSReqAllowed THEN DO:
-
-      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-             lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
-
-      IF LOOKUP(lbMLMobSub.CLIType,lcAllowedDSS4SubsType) > 0  AND
-         fIsDSSActivationAllowed(lbMLMobSub.CustNum,
-                                 lbMLMobSub.MsSeq,
-                                 lbMLMobSub.ActivationTS,
-                                 {&DSS4},
-                                 OUTPUT liDSSPriMsSeq,
-                                 OUTPUT lcResult) THEN
-         lcDSSBundleId = {&DSS4}.
-      ELSE IF LOOKUP(lbMLMobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
-         fIsDSSActivationAllowed(lbMLMobSub.CustNum,
-                                 lbMLMobSub.MsSeq,
-                                 lbMLMobSub.ActivationTS,
-                                 {&DSS2},
-                                 OUTPUT liDSSPriMsSeq,
-                                 OUTPUT lcResult) THEN
-         lcDSSBundleId = {&DSS2}.
-
-      FIND FIRST lbMobSub WHERE
-                 lbMobSub.MsSeq = liDSSPriMsSeq NO-LOCK NO-ERROR.
-
-      IF AVAIL lbMobSub THEN DO:
-         
-         FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                    bTerMsRequest.Brand      EQ Syst.Var:gcBrand AND
-                    bTerMsRequest.ReqType    EQ 83               AND
-                    bTerMsRequest.Custnum    EQ lbMobSub.Custnum AND
-                    bTerMsRequest.ReqCParam3 BEGINS "DSS"        AND
-                    bTerMsRequest.ReqCParam1 EQ "DELETE"         AND
-      LOOKUP(STRING(bTerMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") EQ 0 NO-ERROR.
       
-         IF NOT fOngoingDSSAct(lbMLMobSub.CustNum) THEN 
-            liRequest = fDSSCreateRequest(lbMobSub.MsSeq,
-                                          lbMobSub.CustNum,
-                                          lcDSSBundleId,
-                                          lcReqSource,
-                                          liMsRequest,
-                                          lbMobSub.ActivationTS,
-                                          "DSS activation failed", /* Error Msg */
-                                          OUTPUT lcError).     
-         ELSE DO liMsSeqCount = 1 TO NUM-ENTRIES(lcMsSeqList):
-            fDSSAddRequest(Mobsub.MsSeq,
-                           lcDSSBundleId,
-                           liMsRequest,
-                           lcReqSource).
-         END. 
+      FOR EACH lbELMobSub EXCLUSIVE-LOCK WHERE 
+               lbELMobSub.Brand        EQ Syst.Var:gcBrand                            AND 
+               lbELMobSub.MultiSimId   EQ lbMLMobSub.MsSeq                            AND 
+               lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}                   AND
+               lbELMobSub.CLIType      EQ ENTRY(liELCLITypeCount,lcExtralineCLITypes) AND
+              (lbELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
+               lbELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
 
+         /* We have two STC cases to Mainline                 */ 
+         /* Case 1: STC is done from Non Mainline to Mainline */
+         /* Case 2: STC is done from Mainline to Mainline     */
+
+         /* Here in both the cases, first reset the exsisting values of the extralines    */
+         /* Because when we check for availability of existing mainline, we can reassign  */
+         /* to current mainline, and if by any chance reseting the values due to          */
+         /* non-availability of mainline of a customer, we will recheck all the extraline */
+         /* subscriptions again about mainline availability and will reassign to it       */
+         /* We will handle this process via cron job process                              */
+         fResetExtralineSubscription(lbELMobSub.MsSeq,
+                                     lbELMobSub.CLIType,
+                                     0,
+                                     0,
+                                     FALSE).
+         
+         fCheckExistingMainLineAvailForExtraLine(INPUT lbELMobSub.CLIType,
+                                                 INPUT lbCustomer.CustIdType,
+                                                 INPUT lbCustomer.OrgID,
+                                                 OUTPUT liMLMsSeq).
+
+         IF liMLMsSeq > 0 THEN DO:
+            llgMainLineAvail = TRUE.
+            fResetExtralineSubscription(lbELMobSub.MsSeq,
+                                        "",
+                                        lbMLMobSub.MsSeq,
+                                        {&MULTISIMTYPE_EXTRALINE},
+                                        TRUE).
+            NEXT.
+         END.
+      
       END.  
 
-   END. 
+   END.
+
+   /* In case no extraline is assigned to any available mainline of a customer */
+   /* due to mandatory extraline business rule, STC one of the extraline to    */
+   /* mandatory extralines, and once this STC is processed sucessfully we can  */
+   /* reassign other orphan extralines of a customer to mainline               */
+   /* This is handled via cron job process                                     */
+   IF lcMLMsSeqList > ""   AND 
+      NOT llgMainLineAvail THEN DO: 
+
+      lcMandatoryExtraLines = fGetMandatoryExtraLineForMainLine(lbMLMobSub.CLIType).
+
+      DO liManELCount = 1 TO NUM-ENTRIES(lcMandatoryExtraLines): 
+     
+         FOR EACH lELMobSub EXCLUSIVE-LOCK WHERE
+                  lELMobSub.Brand        EQ Syst.Var:gcBrand      AND
+                  lELMobSub.MultiSimId   EQ 0                     AND
+                  lELMobSub.MultiSimType EQ 0                     AND
+                  lELMobSub.CustNum      EQ lbMLMobSub.CustNum    AND
+                 (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
+                  lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
+
+            /* Exclude subs. if STC request is ongoing */
+            IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
+                               MsRequest.MsSeq      EQ lELMobSub.MsSeq                           AND
+                               MsRequest.ReqType    EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}       AND
+                               MsRequest.ReqCParam2 EQ ENTRY(liManELCount,lcMandatoryExtraLines) AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0)        THEN NEXT.
+
+            liRequest = fCTChangeRequest(lELMobSub.MsSeq,                          /* The MSSeq of the subscription to where the STC is made */
+                                         ENTRY(liManELCount,lcMandatoryExtraLines),/* The CLIType of where to do the STC */
+                                         "",                                       /* lcBundleID */
+                                         "",                                       /* bank code validation is already done */
+                                         TRUNC(Func.Common:mMakeTS(),0),
+                                         0,                                        /* 0 = Credit check ok */
+                                         0,                                        /* extend contract */
+                                         ""                                        /* pcSalesman */,
+                                         FALSE,                                    /* charge */
+                                         TRUE,                                     /* send sms */
+                                         "",
+                                         0,
+                                         lcReqSource,
+                                         0,
+                                         liMsRequest,
+                                         "",                                       /* contract id */
+                                         OUTPUT lcError).
+
+            IF liRequest = 0 THEN
+               Func.Common:mWriteMemo("MobSub",
+                                      STRING(lELMobSub.MsSeq),
+                                      lELMobSub.Custnum,
+                                      "Extraline STC request creation failed",
+                                      lcError).
+            ELSE LEAVE.
+
+         END.
+      
+      END.
+
+   END.
+
+   RETURN TRUE.
 
 END FUNCTION.
+
