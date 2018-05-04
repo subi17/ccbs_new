@@ -2146,12 +2146,12 @@ IF lcFixedLinePermanency > "" THEN DO:
    /* NEBA */
    IF Order.CLIType BEGINS "CONTDSLNB" THEN DO:
       IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
-         lcAddFTERMF = "FTERM12-110".
+         lcAddFTERM = "FTERM12-110".
       ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
-         lcAddFTERMF = "FTERM12-187".
+         lcAddFTERM = "FTERM12-187".
       ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
-         lcAddFTERMF = "FTERM12-243".
-      ELSE lcAddFTERMF = "FTERM12-".
+         lcAddFTERM = "FTERM12-243".
+      ELSE lcAddFTERM = "".
 
       IF lcAddFTERMF NE "" THEN
          fCreateOrderAction(Order.Orderid,
