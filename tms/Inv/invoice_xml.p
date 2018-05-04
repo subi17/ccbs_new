@@ -833,7 +833,9 @@ PROCEDURE pSubInvoice2XML:
       END.
 
       /* Discounts row. YDR-2848 */
-      lhXML:WRITE-DATA-ELEMENT("Descuentos",fDispXMLDecimal(ttInvoice.InstallmentDiscAmt)).
+      lhXML:START-ELEMENT("Descuentos").
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttInvoice.InstallmentDiscAmt)).
+      lhXML:END-ELEMENT("Descuentos").
 
       /* The sum of amount due to bundles of data and data upsells. YDR-2848 */
       lhXML:START-ELEMENT("BonosDeInternet").
@@ -878,6 +880,35 @@ PROCEDURE pSubInvoice2XML:
 
       lhXML:START-ELEMENT("AmountDetail").
       lhXML:INSERT-ATTRIBUTE("Type","Sub").
+
+      /* YDR-2848 start */
+      /* YDR-2848 note.
+         Impuestos, The amount charged due taxes (IVA, IGIC, etc.)
+         in field TaxDetails.TaxAmount as before. */
+
+      /* If needed, the amount charged for TV service (as it is a resell,
+         taxes are not applicable). YDR-2848  */
+      lhXML:WRITE-DATA-ELEMENT("AgileTVPrestado",fDispXMLDecimal(0)).
+
+      /* If needed, the amount charged for apps bought in Google Play (as it is a resell, 
+         taxes are not applicable). YDR-2848 */
+      lhXML:WRITE-DATA-ELEMENT("ComprasGooglePlay", fDispXMLDecimal(ttInvoice.GBValue)).
+
+       /* If needed, the amount returned for apps bought in Google Play (as it is a resell,
+         taxes are not applicable). YDR-2848 */
+      lhXML:WRITE-DATA-ELEMENT("DevolucionesGooglePlay", fDispXMLDecimal(ttInvoice.GBDiscValue)).
+
+      /* If needed, the fee for mobile phone installment payment financed (without taxes). YDR-2848 */
+      lhXML:WRITE-DATA-ELEMENT("PagoDelMovil", fDispXMLDecimal(ttInvoice.InstallmentAmt /* +
+                                               ttInvoice.InstallmentDiscAmt*/ )).
+
+       /* If needed, the amount charged for early exit fee. YDR-2848 */
+      lhXML:WRITE-DATA-ELEMENT("IncumplimientoPermanencia", fDispXMLDecimal(ttInvoice.PenaltyAmt)).
+
+      /* If needed, any concept that must be included in the invoice without taxes. YDR-2848  */
+      lhXML:WRITE-DATA-ELEMENT("OtherConcepts", fDispXMLDecimal(0)).
+      /* YDR-2848 end */
+
       lhXML:WRITE-DATA-ELEMENT("AmountExclTax",
                                 fDispXMLDecimal(SubInvoice.AmtExclVat)).
       lhXML:WRITE-DATA-ELEMENT("TaxAmount",fDispXMLDecimal(SubInvoice.VatAmt)).
@@ -891,37 +922,6 @@ PROCEDURE pSubInvoice2XML:
                                              ttSub.PenaltyAmt      -
                                              ttSub.InstallmentDiscAmt -
                                              ttSub.GBValue)).
-
-      /* YDR-2848 note. 
-         Impuestos, The amount charged due taxes (IVA, IGIC, etc.)
-         in field TaxDetails.TaxAmount as before. */
-
-      /* If needed, the amount charged for TV service (as it is a resell, 
-         taxes are not applicable). YDR-2848  */
-      lhXML:INSERT-ATTRIBUTE("Header","AgileTVPrestado").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
-
-      /* If needed, the amount charged for apps bought in Google Play (as it is a resell, 
-         taxes are not applicable). YDR-2848 */
-      lhXML:INSERT-ATTRIBUTE("Header","ComprasGooglePlay").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBValue)).
-
-      /* If needed, the amount returned for apps bought in Google Play (as it is a resell, 
-         taxes are not applicable). YDR-2848 */
-      lhXML:INSERT-ATTRIBUTE("Header","DevolucionesGooglePlay").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBDiscValue)).
-
-      /* If needed, the fee for mobile phone installment payment financed (without taxes). YDR-2848 */
-      lhXML:INSERT-ATTRIBUTE("Header","PagoDelMovil").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
-
-      /* If needed, the amount charged for early exit fee. YDR-2848 */
-      lhXML:INSERT-ATTRIBUTE("Header","IncumplimientoPermanencia").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
-
-      /* If needed, any concept that must be included in the invoice without taxes. YDR-2848  */
-      lhXML:INSERT-ATTRIBUTE("Header","OtherConcepts").
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
 
       lhXML:END-ELEMENT("AdditionalAmount").
      
