@@ -947,13 +947,14 @@ IF NOT MobSub.PayType THEN DO:
    ASSIGN
       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
       lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
-      llgMatrixAvailable    = fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
-                                                                MobSub.CLIType,
-                                                                OUTPUT lcDSSBundleId).
+      llgMatrixAvailable    = fCheckActiveExtraLinePair(MobSub.MsSeq,
+                                                        MobSub.CLIType,
+                                                        OUTPUT lcDSSBundleId).
 
    lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT Func.Common:mMakeTS()).
 
-   IF (lcBundleId > "" AND lcBundleId NE {&DSS4})                  OR
+   IF (lcBundleId GT ""      AND lcDSSBundleId NE {&DSS4})              OR
+      (lcBundleId EQ {&DSS4} AND lcDSSBundleId EQ {&DSS4})              OR
       CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                      MsRequest.Brand      EQ Syst.Var:gcBrand      AND
                      MsRequest.ReqType    EQ {&REQTYPE_DSS}        AND
@@ -977,29 +978,6 @@ IF NOT MobSub.PayType THEN DO:
                            lcBundleId,
                            MsRequest.MsRequest,
                            MsRequest.ReqSource).
-      END.
-   END.
-   ELSE IF Order.MultiSimId   GT 0                         AND
-           Order.MultiSimType EQ {&MULTISIMTYPE_SECONDARY} THEN 
-   DO: 
-      FOR FIRST lbOrder NO-LOCK WHERE
-                lbOrder.Brand        EQ Syst.Var:gcBrand        AND
-                lbOrder.MultiSimID   EQ Order.MultiSimId        AND
-                lbOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND
-                lbOrder.StatusCode   EQ {&ORDER_STATUS_DELIVERED},
-          FIRST lbMobSub NO-LOCK WHERE
-                lbMobSub.MsSeq   EQ lbOrder.Msseq   AND
-                lbMobSub.Custnum EQ lbOrder.Custnum AND
-                lbMobSub.PayType EQ FALSE:
-         
-         liRequest = fDSSCreateRequest(lbMobSub.MsSeq,
-                                       lbMobSub.CustNum,
-                                       "DSS",
-                                       {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
-                                       0,
-                                       lbMobSub.ActivationTS,
-                                       "Multi SIM activation failed", /* Error Msg */ 
-                                       OUTPUT lcResult).
       END.
    END.
    ELSE IF NOT fOngoingDSSAct(MobSub.CustNum) THEN DO:

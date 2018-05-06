@@ -451,7 +451,7 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 
 END FUNCTION.
 
-FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
+FUNCTION fCheckActiveExtraLinePair RETURNS LOG
    (INPUT iiMsSeq        AS INT,
     INPUT icCLIType      AS CHAR,
     OUTPUT lcDSSBundleId AS CHAR):
