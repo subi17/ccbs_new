@@ -73,6 +73,7 @@
 "DSS2" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Data Sharing Service 2" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "DSS2_UPSELL,DSS200_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL" 0 1 0 0
 "DSS200_UPSELL" 01/06/15 4 31/12/49 "" 0 "" "" "200 MB upsell" 93 0 "1" "6" 1 2 1 0 "DSS200MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS2_UPSELL" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Internet compartido - Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DSS2MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0 1 0 0
+"DSS4" 07/05/18 4 31/12/49 "DSS4" 0 "" "" "Data Sharing Service 4" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
 "DSS_FLEX_500MB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "500MB Flex upsell" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS_FLEX_5GB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "DSS 5GB Flex Upsell" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS_FLEX_UPSELL" 01/11/17 4 31/12/49 "" 0 "" "" "DSS FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0

@@ -67,6 +67,7 @@
 "1" "DSS2" "Data Sharing Service 2" 01/09/13 31/12/49
 "1" "DSS200_UPSELL" "DSS200 Bundle Upsell" 01/06/15 31/12/49
 "1" "DSS2_UPSELL" "DSS 2 Bundle Upsell" 01/09/13 31/12/49
+"1" "DSS4" "Data Sharing Service 4" 07/05/18 31/12/49
 "1" "DSS_FLEX_500MB_UPSELL" "DSS 500MB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_5GB_UPSELL" "DSS 5GB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_UPSELL" "DSS Mobile Data Usage Flex Ups" 01/11/17 31/12/49

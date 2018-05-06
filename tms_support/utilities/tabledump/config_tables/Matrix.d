@@ -43,6 +43,7 @@
 "1" "3P to 2P STC (Fiber 50M)" "CONVFIXEDSTC" 147 1 1
 "1" "3P to 2P STC (Fiber 300M)" "CONVFIXEDSTC" 148 1 1
 "1" "3P to 2P STC (Fiber 1GB)" "CONVFIXEDSTC" 154 1 1
+"1" "3P to 2P STC (NEBA)" "CONVFIXEDSTC" 216 1 1
 "1" "denied modules" "DENIED" 18 0 1
 "1" "Cross-sell discount override" "DISCOUNT-OVERRIDE" 158 0 1
 "1" "CONT28" "EXTRALINE" 159 1 1
