@@ -32,19 +32,34 @@ IF llDoEvent THEN DO:
    lhSingleFee = BUFFER SingleFee:HANDLE.
 
 END.
-
-/*Function contails logig for selecting correct fee in NEBA case cancellation*/
 FUNCTION fSelectNebaFee RETURNS CHAR
    (INPUT iiOrderID  AS INT,
     OUTPUT odValue   AS DEC,
     OUTPUT ocFeeName AS CHAR):
-   /*TODO: select correct permanency - finding method unclear...offers?*/
 
-   odValue = 110.0.
-   ocFeeName = "NEBTERMPERIOD".
-   RETURN "". /*Error handling: add error message to ret valua.*/
+   odValue = 0.0.
+   ocFeeName = "".
 
-END.   
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand EQ Syst.Var:gcBrand AND
+              OrderAction.Orderid EQ iiOrderId AND
+              OrderAction.itemkey BEGINS "nebterm" NO-ERROR.
+   IF NOT AVAIL OrderAction THEN RETURN "No NEBA orderaction".
+
+   FIND FIRST DayCampaign NO-LOCK WHERE
+              DayCampaign.brand EQ Syst.Var:gcBrand AND
+              DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DayCampaign THEN RETURN "No NEBA dayycampaign".
+
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand  EQ DayCampaign.Brand AND
+              FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
+   IF NOT AVAIL FMItem THEN RETURN "No NEBA fmitem".
+
+   odValue = FMItem.Amount.
+   ocFeeName = FMItem.FeeModel.
+   RETURN "".
+END.
 
 FUNCTION fCreateSingleFee RETURNS LOGICAL
    (icBillCode  AS CHAR,
@@ -53,6 +68,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
     icFeeModel  AS CHAR,
     iiCustNum   AS INT,
     iiOrderId   AS INT):
+   DEF VAR liOrdreID AS INT NO-UNDO. 
 
    DO TRANS:
       CREATE SingleFee.
@@ -62,7 +78,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
       SingleFee.CustNum     = iiCustnum
       SingleFee.BillTarget  = 1
-      SingleFee.CalcObj     = "NBTERM"
+      SingleFee.CalcObj     = "NEBTERM"
       SingleFee.BillCode    = icBillCode
       SingleFee.BillPeriod  = YEAR(TODAY) * 100 + MONTH(TODAY)
       SingleFee.Concerns[1] = (YEAR(TODAY) * 100 + MONTH(TODAY)) * 100 + 
@@ -78,7 +94,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       SingleFee.FeeModel    = icFeeModel
       SingleFee.OrderID     = iiOrderID
       Singlefee.Memo        = "Neba order tremination"
-      /*SingleFee.VATIncl     = ilVatIncl*/
+      SingleFee.VATIncl     = ilVatIncl
       . 
 
       IF llDoEvent THEN
@@ -91,7 +107,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
 
 END FUNCTION.
 
-/*Actual logic*/
+/* MAIN starts */
 
 FIND FIRST Order NO-LOCK WHERE 
            Order.Brand eq Syst.Var:gcBrand AND
@@ -103,9 +119,9 @@ END.
 
 
 FIND FIRST OrderCustomer WHERE
-           OrderCustomer.Brand   = Syst.Var:gcBrand       AND
-           OrderCustomer.OrderID = Order.OrderID AND
-           OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+           OrderCustomer.Brand   EQ Syst.Var:gcBrand       AND
+           OrderCustomer.OrderID EQ Order.OrderID AND
+           OrderCustomer.RowType EQ 1 NO-LOCK NO-ERROR.
 IF NOT AVAILABLE OrderCustomer THEN DO:
    ocError = "Error:Customer data not available".
    RETURN.
@@ -132,14 +148,24 @@ END.
 
 /*Select NEBA permanency for the customer. */
 ocError =  fSelectNebaFee(iiOrderId,
-                                OUTPUT ldNebaAmt,
-                                OUTPUT lcSelectedFee).
-IF ocError NE "" THEN RETURN. 
+                          OUTPUT ldNebaAmt,
+                          OUTPUT lcSelectedFee).
+IF ocError NE "" THEN DO:
+   ocError = "Error:" + ocError.
+   RETURN.
+END.  
+
+FIND FIRST Customer WHERE Customer.CustNum EQ liCashCust NO-LOCK NO-ERROR.
+
+IF NOT AVAIL Customer THEN DO:
+   ocError = "Error:Customer creation failed".
+   RETURN.
+END.
 
 /*create fee.*/
 fCreateSingleFee(lcSelectedFee,
                  ldNebaAmt,
-                 FALSE,
+                 Customer.VATIncl,
                  "",
                  liCashCust,
                  iiOrderId).

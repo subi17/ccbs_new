@@ -7,8 +7,17 @@ FUNCTION fPermanency RETURNS CHAR
     idAmt          AS DEC): /* 110.0 */
     
    DEF VAR lcDCName AS CHAR NO-UNDO.
+   DEF VAR lcFeeName AS CHAR NO-UNDO.
+   DEF VAR liDurUnit AS INT NO-UNDO.
 
-   lcDCName = icDCEvent + " fixed line permanency".
+   liDurUnit = 2. /* DurUnit 2 for FTERM */
+   lcDCName = icDCEvent +  " periodical contract".
+   lcFeeName = "Fixed line contract termination".
+   IF icDCEvent BEGINS "NEBTERM" THEN DO:
+      liDurUnit = 0.
+      lcDCName = icDCEvent + " fixed line permanency".
+      lcFeeName = "Neba line contract termination".
+   END.
 
    FIND FIRST DayCampaign NO-LOCK WHERE 
               DayCampaign.Brand   EQ "1" AND
@@ -37,7 +46,7 @@ FUNCTION fPermanency RETURNS CHAR
          DayCampaign.FeeModel        = ""        
          DayCampaign.ModifyFeeModel  = ""    
          DayCampaign.TermFeeModel    = icTermFeeModel         
-         DayCampaign.DurUnit         = 0        
+         DayCampaign.DurUnit         = liDurUnit
          DayCampaign.Effective       = 1            
          DayCampaign.TermFeeCalc     = 2             
          DayCampaign.InclStartCharge = YES          
@@ -62,7 +71,7 @@ FUNCTION fPermanency RETURNS CHAR
       CREATE FeeModel.
       ASSIGN
          FeeModel.FeeModel = icTermFeeModel 
-         FeeModel.FeeName  = "Neba line contract termination"
+         FeeModel.FeeName  = lcFeeName
          FeeModel.Brand    = "1" 
          FeeModel.FMGroup  = 0.
    END.
@@ -117,4 +126,20 @@ fPermanency("NEBTERM12-293",    /* DayCampaign.DCEvent (Periodical contract)    
             "NEBTERMPERIOD",    /* BillItem (should be created apart if it doesn't exist) */       
             243.88).            /* Price */                        
             
-        
+fPermanency("FTERM12-110",    /* DayCampaign.DCEvent (Periodical contract)              */
+            "FTERMPERIOD110", /* FeeModel.FeeModel                                      */
+            "FTERMPERIOD",    /* BillItem (should be created apart if it doesn't exist) */
+            110.0).           /* Price */
+
+fPermanency("FTERM12-187",    /* DayCampaign.DCEvent (Periodical contract)              */
+            "FTERMPERIOD187", /* FeeModel.FeeModel                                      */
+            "FTERMPERIOD",    /* BillItem (should be created apart if it doesn't exist) */
+            187.36).          /* Price */
+
+fPermanency("FTERM12-243",    /* DayCampaign.DCEvent (Periodical contract)              */
+            "FTERMPERIOD243", /* FeeModel.FeeModel                                      */
+            "FTERMPERIOD",    /* BillItem (should be created apart if it doesn't exist) */
+            243.88).          /* Price */
+
+
+      
