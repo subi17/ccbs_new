@@ -107,9 +107,12 @@
 "FLEX_5GB_UPSELLMF" "5GB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_MFUPS" "Flex upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD110" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD140" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD177" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD187" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD233" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD243" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_PREPAID" "Change of ICC Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
@@ -140,6 +143,9 @@
 "MDUBTOMDUB9" "Bono 8 to Bono 9 Upgrade Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "MSISDN_POSTPAID" "Change MSISDN Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "MSISDN_PREPAID" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"NEBTERMPERIOD160" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"NEBTERMPERIOD237" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"NEBTERMPERIOD293" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "OFFICE365MF" "OFFICE 365 Essentials" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELSIM" "Payment on deliver cost - SIM only" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELTER" "Payment on deliver cost - Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

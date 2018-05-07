@@ -89,9 +89,12 @@
 "FLEX_UPSELL" 01/03/17 4 31/12/49 "" 0 "" "" "FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "FREE100MINUTES" 01/06/16 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 2 3 0 "" "" "" 3 1 0 yes 1 0 0 1 "" 0 1 0 0
 "FTERM12-100" 27/10/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-110" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-110 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD110" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-140" 25/04/18 0 31/12/49 "" 0 "" "" "FTERM12-140 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD140" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-177" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-177 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD177" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-187" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-187 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD187" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-233" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-233 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD233" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-243" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-243 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD243" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM8-100" 11/09/17 0 31/12/49 "" 0 "" "" "FTERM8 periodical contract" 0 0 "1" "3" 1 3 8 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "GPRS" 01/12/06 6 31/12/54 "14100001" 1.653 "1" "" "GPRS maximum charge per day" 93 1.653 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 0 0
 "HSPA_ROAM_EU" 10/10/12 4 31/12/49 "14104019" 0 "" "" "HSPA Roaming EU" 90 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 0 0 0
@@ -112,6 +115,9 @@
 "MDUBACT" 01/03/10 4 31/05/11 "MDUB" 0 "" "" "Mobile Data Usage Bundle 1st period" 93 0 "1" "4" 4 2 1 0 "" "" "TERMMDUB" 3 1 1 yes 1 0 0 0 "" 0 1 0 0
 "MDUBEND" 01/03/10 4 31/05/11 "MDUB" 0 "" "" "Mobile Data Usage Bundle 1st period" 93 0 "1" "4" 4 2 1 0 "" "" "" 3 1 0 yes 1 0 0 0 "" 0 1 0 0
 "MDUB_UPSELL" 01/11/10 4 31/12/49 "MDUB" 0 "" "" "Bono 8 Upsell" 93 0 "1" "6" 1 2 1 0 "MDUBMFUPS" "" "" 3 1 0 yes 100 0 0 2 "" 0 1 0 0
+"NEBTERM12-160" 07/05/18 0 31/12/49 "" 0 "" "" "NEBTERM12-160 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "NEBTERMPERIOD160" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
+"NEBTERM12-237" 07/05/18 0 31/12/49 "" 0 "" "" "NEBTERM12-237 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "NEBTERMPERIOD237" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
+"NEBTERM12-293" 07/05/18 0 31/12/49 "" 0 "" "" "NEBTERM12-293 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "NEBTERMPERIOD293" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
 "OFFICE365" 04/07/17 1 31/12/49 "OFFICE365MF" 0 "" "" "Office365 Essentials" 0 0 "1" "7" 1 4 0 0 "OFFICE365MF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
 "PAYTERM18_10" 01/03/10 0 31/12/49 "PAYTERM18" 0 "" "" "Installment" 0 0 "1" "5" 1 3 18 0 "PAYTERM10" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM18_15" 01/03/10 0 31/12/49 "PAYTERM18" 0 "" "" "Installment" 0 0 "1" "5" 1 3 18 0 "PAYTERM15" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
