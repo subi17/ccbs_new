@@ -486,7 +486,8 @@ DEFINE VARIABLE lcWebContractIds       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntry                AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcExtraDS              AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixedNumber           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNumber          AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcAddFTERM             AS CHARACTER NO-UNDO.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
@@ -2142,6 +2143,22 @@ IF lcFixedLinePermanency > "" THEN DO:
                       "FixedPermanency",
                       lcFixedLinePermanency,
                       "").
+   /* NEBA */
+   IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
+      IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
+         lcAddFTERM = "FTERM12-110".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
+         lcAddFTERM = "FTERM12-187".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
+         lcAddFTERM = "FTERM12-243".
+      ELSE lcAddFTERM = "".
+
+      IF lcAddFTERMF NE "" THEN
+         fCreateOrderAction(Order.Orderid,
+                            "FixedPermanency",
+                            lcAddFTERM,
+                            "").
+   END.
 END.
 
 /* Extra line discount */
