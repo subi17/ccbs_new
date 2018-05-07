@@ -113,7 +113,16 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
          TMSParam.ParamType  = "C"  
          TMSParam.CharVal     = "/store/riftp/upsells/outgoing/logs/". 
   RELEASE TMSParam.
-  
+ 
+  CREATE TMSParam. 
+  ASSIGN TMSParam.Brand      = Syst.Var:gcBrand
+         TMSParam.Paramgroup = "Bundles" 
+         TMSParam.ParamCode  = "RETENTION_UPSELLS"
+         TMSParam.ParamName  = "Retention upsells" 
+         TMSParam.ParamType  = "C"  
+         TMSParam.CharVal     = "FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL,FID3GB_12m_R_UPSELL". 
+  RELEASE TMSParam.
+ 
   /* Process OK */
   lSuccess = TRUE.
 END.
