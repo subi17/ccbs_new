@@ -212,7 +212,7 @@ PROCEDURE pAdd_3Gg_flex_upsell:
           NEXT.             
        
        IF INDEX(lcUpsell,lcResultArray) = 0 THEN
-           add_string(lcResultArray,"", lcUpsell + "|" + STRING(Mobsub.MsSeq)).
+          add_string(lcResultArray,"", lcUpsell + "|" + STRING(Mobsub.MsSeq)).
     
     END.    
 
