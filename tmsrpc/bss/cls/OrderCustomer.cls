@@ -247,11 +247,11 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
               THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("company_id")
               THIS-OBJECT:Company        = ioJsonObject:GetCharacter("company_name")
               THIS-OBJECT:FoundationDate = ioJsonObject:GetDate("company_foundation_date")
-              THIS-OBJECT:AuthCustIdType = ioJsonObject:GetCharacter("id-type")
-              THIS-OBJECT:AuthCustId     = ioJsonObject:GetCharacter("person-id").
+              THIS-OBJECT:AuthCustIdType = ioJsonObject:GetCharacter("id_type")
+              THIS-OBJECT:AuthCustId     = ioJsonObject:GetCharacter("person_id").
       ELSE ASSIGN
-              THIS-OBJECT:CustIdType     = ioJsonObject:GetCharacter("id-type")
-              THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("person-id").
+              THIS-OBJECT:CustIdType     = ioJsonObject:GetCharacter("id_type")
+              THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("person_id").
 
       ASSIGN
          THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname")
@@ -260,8 +260,8 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality")
          THIS-OBJECT:Language           = STRING(LOOKUP(ioJsonObject:GetCharacter("language"),
                                                  "es_ES,es_CA,es_EU,es_GA,en"))
-         THIS-OBJECT:CustIdType         = ioJsonObject:GetCharacter("id-type")
-         THIS-OBJECT:CustId             = ioJsonObject:GetCharacter("person-id")
+         THIS-OBJECT:CustIdType         = ioJsonObject:GetCharacter("id_type")
+         THIS-OBJECT:CustId             = ioJsonObject:GetCharacter("person_id")
          THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday")
          THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street")
          THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city")
@@ -272,14 +272,14 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number")
          THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number")
          THIS-OBJECT:BankCode           = ioJsonObject:GetCharacter("bankaccount")
-         THIS-OBJECT:OutBankMarketing   = ioJsonObject:GetLogical("mark-bank-3rd")
-         THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark-dont-share-personal-data")
-         THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark-email")
-         THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark-email-3rd")
-         THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark-post")
-         THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark-post-3rd")
-         THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark-sms")
-         THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark-sms-3rd")
+         THIS-OBJECT:OutBankMarketing   = ioJsonObject:GetLogical("mark_bank_3rd")
+         THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data")
+         THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email")
+         THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd")
+         THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark_post")
+         THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark_post_3rd")
+         THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark_sms")
+         THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark_sms_3rd")
          THIS-OBJECT:OperAllMarketing   = THIS-OBJECT:OperEMailMarketing OR
                                           THIS-OBJECT:OutEMailMarketing  OR
                                           THIS-OBJECT:OperPostMarketing  OR
