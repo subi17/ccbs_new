@@ -86,7 +86,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    ASSIGN	
       ttCall.BillCode = bsub-prod
       lcOrigBillCode  = bsub-prod
-      lcCliTypeList   = {&MOBILE_SUBTYPES}                             + "," +
+      lcCliTypeList   = {&MOBILE_SUBTYPES}                 + "," +
                         {&ADSL-CONVERGENT-SUBTYPES}        + "," +
                         {&FIBER-CONVERGENT-SUBTYPES-LIST1} + "," +
                         {&FIBER-CONVERGENT-SUBTYPES-LIST2} + "," +
