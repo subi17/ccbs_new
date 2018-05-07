@@ -156,12 +156,14 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    DEF VAR lcDSSBundleId           AS CHAR NO-UNDO.
    DEF VAR lcSMSText               AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
+   DEF VAR lcRetentionUPSELLS      AS CHAR NO-UNDO.  /* YCO-276 */
 
    DEF BUFFER lbMobSub             FOR MobSub. 
    DEF BUFFER bDSSMobSub           FOR MobSub.
    DEF BUFFER DayCampaign          FOR DayCampaign.
 
    lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
+   lcRetentionUPSELLS         = fCParamC("RETENTION_UPSELLS").  /* YCO<F4>276 */
 
    FIND FIRST lbMobSub WHERE 
               lbMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR. 
@@ -215,6 +217,10 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
           LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0) THEN
           ocError = icDCEvent + " is not allowed because DSS " +
                     "is active for this customer".
+      /* YCO-276 - Let activation using Vista for Retention upsells */
+      ELSE IF (LOOKUP(icDCEvent,lcRetentionUPSELLS) > 0 AND
+               icSource EQ {&REQUEST_SOURCE_NEWTON}) THEN
+         ocError = "".  /* So ok */
       /* allow upsell to any data contract by bob tool */
       ELSE IF (LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
                icSource NE {&REQUEST_SOURCE_YOIGO_TOOL}) THEN
