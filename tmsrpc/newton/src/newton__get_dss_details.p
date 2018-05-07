@@ -123,9 +123,9 @@ FOR EACH bMsOwner NO-LOCK WHERE
        LOOKUP(bMsOwner.CLIType,lcAllowedDSS2SubsType) > 0)   AND
       (fCLITypeIsMainLine(bMsOwner.CLIType)   OR
        fCLITypeIsExtraLine(bMsOwner.CLIType))                THEN
-      IF NOT fCheckExtraLineMatrixSubscription(bMsOwner.MsSeq,
-                                               bMsOwner.CLIType,
-                                               OUTPUT lcBundleId) THEN
+      IF NOT fCheckActiveExtraLinePair(bMsOwner.MsSeq,
+                                       bMsOwner.CLIType,
+                                       OUTPUT lcBundleId) THEN
          NEXT.
    
    dss_struct = add_struct(top_array, "").

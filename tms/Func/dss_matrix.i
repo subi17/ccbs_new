@@ -76,9 +76,9 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       IF (icBundleId EQ {&DSS2} OR icBundleId EQ {&DSS4}) AND
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR 
          fCLITypeIsMainLine(bMobSub.CLIType))             THEN 
-         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.CLIType,
-                                                  OUTPUT lcDSSBundleId) THEN NEXT.
+         IF NOT fCheckActiveExtraLinePair(bMobSub.MsSeq,
+                                          bMobSub.CLIType,
+                                          OUTPUT lcDSSBundleId) THEN NEXT.
       
       ASSIGN liMobSubCount = liMobSubCount + 1
              lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
@@ -190,8 +190,8 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       IF NOT AVAIL lbShaperConf THEN 
          RETURN FALSE.
 
-      ASSIGN odeCurrMonthLimit  = lbShaperConf.LimitUnshaped
-             odeOtherMonthLimit = lbShaperConf.LimitUnshaped
+      ASSIGN odeCurrMonthLimit  = (lbShaperConf.LimitUnshaped / 1024 / 1024)
+             odeOtherMonthLimit = (lbShaperConf.LimitUnshaped / 1024 / 1024)
              lcDSS4CommLine     = "DSS-ACCOUNT="    + STRING(iiCustnum)                  + "," +
                                   "TEMPLATE="       + lbShaperConf.Template              + "," +
                                   "TARIFF_TYPE="    + lbShaperConf.TariffType            + "," +
@@ -294,9 +294,9 @@ FUNCTION fIsDSSActivationAllowed RETURNS LOG
           lcDSSRelatedSubsType  = "".
 
    IF icBundleId EQ {&DSS4} THEN 
-      lcDSSRelatedSubsType = lcAllowedDSS4SubsType.
+      lcDSSRelatedSubsType = lcDSS4PrimarySubsType.
    ELSE IF icBundleId EQ {&DSS2} THEN 
-      lcDSSRelatedSubsType = lcAllowedDSS2SubsType.
+      lcDSSRelatedSubsType = lcDSS2PrimarySubsType.
 
    IF iiMsSeq > 0 THEN DO:
 
@@ -320,9 +320,9 @@ FUNCTION fIsDSSActivationAllowed RETURNS LOG
       IF LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType) > 0 AND 
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR
          fCLITypeIsMainLine(bMobSub.CLIType))             THEN
-         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.CLIType,
-                                                  OUTPUT lcDSSBundleId) THEN DO:
+         IF NOT fCheckActiveExtraLinePair(bMobSub.MsSeq,
+                                          bMobSub.CLIType,
+                                          OUTPUT lcDSSBundleId) THEN DO:
             ocResult = "Primary manline or Extraline is not hard associated".
             RETURN FALSE.
          END. 
@@ -343,9 +343,9 @@ FUNCTION fIsDSSActivationAllowed RETURNS LOG
       IF LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType) > 0 AND
          (fCLITypeIsExtraLine(bMobSub.CLIType) OR
           fCLITypeIsMainLine(bMobSub.CLIType))            THEN
-          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                   bMobSub.CLIType,
-                                                   OUTPUT lcDSSBundleId) THEN NEXT. 
+          IF NOT fCheckActiveExtraLinePair(bMobSub.MsSeq,
+                                           bMobSub.CLIType,
+                                           OUTPUT lcDSSBundleId) THEN NEXT. 
       
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
@@ -469,9 +469,9 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
          ELSE IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
            (fCLITypeIsMainLine(Mobsub.CLIType) OR
             fCLITypeIsExtraLine(Mobsub.CLIType)) THEN
-            IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
-                                                     Mobsub.CLIType,
-                                                     OUTPUT lcDSSBundleId) THEN
+            IF NOT fCheckActiveExtraLinePair(Mobsub.MsSeq,
+                                             Mobsub.CLIType,
+                                             OUTPUT lcDSSBundleId) THEN
             llDSSNeeded = FALSE.
          ELSE IF NOT fIsDSSActivationAllowed(iiCustnum,
                                              0,

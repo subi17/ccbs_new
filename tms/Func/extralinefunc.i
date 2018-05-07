@@ -357,7 +357,11 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
              liCount = liCount + 1.   
           END.
           
-          fGetOngoingExtralineCount(icExtraLineCLIType , icCustIDType , icCustID , Order.OrderId , OUTPUT liOngoingELCnt ).
+          fGetOngoingExtralineCount(icExtraLineCLIType, 
+                                    icCustIDType, 
+                                    icCustID, 
+                                    Order.OrderId, 
+                                    OUTPUT liOngoingELCnt ).
           
           liCount  =  liCount + liOngoingELCnt. 
                    
@@ -366,8 +370,14 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
                                                 Customer.CustNum,
                                                 MobSub.CLIType,
                                                 icExtraLineCLIType,
-                                                TRUE) THEN 
-                NEXT.  
+                                                TRUE) THEN DO: 
+                IF NOT fCheckForMandatoryExtraLine(Order.OrderId,
+                                                   Customer.CustNum,
+                                                   Order.CLIType,
+                                                   icExtraLineCLIType,
+                                                   FALSE) THEN
+                   NEXT.  
+             END.      
           END.      
 
           &IF DEFINED(STC) &THEN              
@@ -451,7 +461,7 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 
 END FUNCTION.
 
-FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
+FUNCTION fCheckActiveExtraLinePair RETURNS LOG
    (INPUT iiMsSeq        AS INT,
     INPUT icCLIType      AS CHAR,
     OUTPUT lcDSSBundleId AS CHAR):

@@ -759,9 +759,9 @@ PROCEDURE pGetDSSBillingInfo:
              LOOKUP(ttMsOwner.CLIType,lcAllowedDSS2SubsType) > 0)   AND 
             (fCLITypeIsMainLine(ttMsOwner.CLIType)               OR 
              fCLITypeIsExtraLine(ttMsOwner.CLIType))                THEN 
-            IF NOT fCheckExtraLineMatrixSubscription(ttMsOwner.MsSeq,
-                                                     ttMsOwner.CLIType,
-                                                     OUTPUT lcDSSBundleId) THEN 
+            IF NOT fCheckActiveExtraLinePair(ttMsOwner.MsSeq,
+                                             ttMsOwner.CLIType,
+                                             OUTPUT lcDSSBundleId) THEN 
                NEXT.
 
          CREATE ttDSSInfo.

@@ -62,17 +62,16 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
          FIND FIRST lbMobSub NO-LOCK WHERE 
                     lbMobSub.MsSeq EQ ioDSSMsSeq NO-ERROR.
 
-         IF NOT AVAIL lbMobSub THEN LEAVE.           
-
-         RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
-                               INPUT lbMobsub.CLI,
-                               INPUT lbMobsub.CustNum,
-                               INPUT "DELETE",
-                               INPUT "",      /* Optional param list */
-                               INPUT iiDSSMainRequest,
-                               INPUT Func.Common:mSecOffSet(iiDSSActStamp,90),
-                               INPUT icDSSReqSource,
-                               INPUT coBundleId).         
+         IF AVAIL lbMobSub THEN            
+            RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
+                                  INPUT lbMobsub.CLI,
+                                  INPUT lbMobsub.CustNum,
+                                  INPUT "DELETE",
+                                  INPUT "",      /* Optional param list */
+                                  INPUT iiDSSMainRequest,
+                                  INPUT Func.Common:mSecOffSet(iiDSSActStamp,90),
+                                  INPUT icDSSReqSource,
+                                  INPUT coBundleId).         
       END.
 
    END.

@@ -101,9 +101,9 @@ FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
    DEFINE BUFFER lbMLMobSub FOR MobSub.
    DEFINE BUFFER lbELMobSub FOR MobSub.
 
-   IF NOT fCheckExtraLineMatrixSubscription(iiMsSeq,
-                                            icCLIType,
-                                            OUTPUT lcDSSBundleId) THEN
+   IF NOT fCheckActiveExtraLinePair(iiMsSeq,
+                                    icCLIType,
+                                    OUTPUT lcDSSBundleId) THEN
       RETURN FALSE.
 
    IF fCLITypeIsExtraLine(icCLIType) THEN DO:
