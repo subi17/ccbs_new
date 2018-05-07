@@ -2153,7 +2153,7 @@ IF lcFixedLinePermanency > "" THEN DO:
          lcAddFTERM = "FTERM12-243".
       ELSE lcAddFTERM = "".
 
-      IF lcAddFTERMF NE "" THEN
+      IF lcAddFTERM NE "" THEN
          fCreateOrderAction(Order.Orderid,
                             "FixedPermanency",
                             lcAddFTERM,
