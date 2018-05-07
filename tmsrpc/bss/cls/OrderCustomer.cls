@@ -272,7 +272,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number")
          THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number")
          THIS-OBJECT:BankCode           = ioJsonObject:GetCharacter("bankaccount")
-         THIS-OBJECT:OutBankMarketing   = ioJsonObject:GetLogical("mark_bank_3rd")
+/*         THIS-OBJECT:OutBankMarketing   = ioJsonObject:GetLogical("mark_bank_3rd") */
          THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data")
          THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email")
          THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd")
