@@ -12,8 +12,7 @@
 {Syst/dumpfile_run.i}
 {Func/finvbal.i}
 {Syst/tmsconst.i}
-{Func/fixedlinefunc.i}
-{Func/extralinefunc.i}
+{Func/wayofpayment.i}
 {Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -524,32 +523,11 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             lcSalesman = Order.Salesman.
          END.
 
-         lcPayType = "20".
-         FOR FIRST MsOwner NO-LOCK USE-INDEX CLI_S WHERE
-                   MsOwner.CLI   = SubInvoice.CLI AND
-                   MsOwner.MsSeq = SubInvoice.MsSeq AND
-                   MsOwner.TSEnd >= ldFromPeriod AND
-                   MsOwner.TsBeg <= ldToPeriod AND
-                   MsOwner.PayType = FALSE:
-            IF INDEX(MsOwner.CLIType,"CONTRD") > 0 OR
-               MsOwner.CLIType EQ "CONTD" THEN 
-               lcPayType = "30".
-            /* YOT-5126 Convergent, Fixed and Additional line */
-            ELSE IF fIsFixedOnly(MsOwner.CLIType) THEN DO: /* FIXED DSL/TFH */
-               IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "62".
-               ELSE lcPayType = "63". /* CONTTFH */
-            END.
-            ELSE IF fIsConvergentORFixedOnly(MsOwner.CLIType) THEN DO:
-               IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "60".
-               ELSE lcPayType = "61".  /* Convergent CONTTFH */
-            END.
-            ELSE IF (fIsAddLineTariff(SubInvoice.CLI) OR fCLITypeIsExtraLine(MsOwner.CLIType)) AND
-                    NOT MsOwner.PayType THEN DO:            
-               /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
-               lcPayType = fGetPayType(MsOwner.CustNum).
-            END.
-
-         END.      
+         /*  Way of Payment value YDR-2883 */
+         lcPayType = fIfsWayOfPayment(SubInvoice.CLI,
+                                      SubInvoice.MsSeq,
+                                      ldFromPeriod,
+                                      ldToPeriod).
 
          CREATE ttSub.
          ASSIGN
