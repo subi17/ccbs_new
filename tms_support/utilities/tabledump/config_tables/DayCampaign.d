@@ -1,7 +1,7 @@
 "AGILESKYTV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service + SKY" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 2 0
 "AGILETV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 2 "" 0 1 2 0
 "ANGELTECH" 18/12/17 0 31/12/49 "ANGELTECHMF" 0 "" "" "Angel Tecnológico" 0 0 "1" "7" 1 4 0 0 "ANGELTECHMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
-"ASIST" 18/12/17 0 31/12/49 "ASISTMF" 0 "" "" "Asistencia Negocios" 0 0 "1" "7" 1 4 0 0 "ASISTMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
+"ASIST" 18/12/17 0 31/12/49 "ASISTMF" 0 "" "" "Soluciona Negocios" 0 0 "1" "7" 1 4 0 0 "ASISTMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
 "BONO_VOIP" 01/04/12 4 31/12/49 "BONO_VOIP" 0 "" "" "Bono VoIP" 93 0 "1" "4" 4 1 0 0 "BONO_VOIPMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
 "CENTRALITA" 04/07/17 1 31/12/49 "CentralitaPROMF" 0 "" "" "Centralita Pro" 0 0 "1" "7" 1 4 0 0 "CentralitaPROMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
 "CONT10" 01/02/17 4 31/12/49 "CONT10MF" 0 "" "" "Contrato 10" 93 0 "1" "4" 4 1 0 0 "CONT10MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0 0 1
@@ -12,7 +12,7 @@
 "CONT26" 01/02/17 1 31/12/49 "CONT26MF" 0 "" "" "La Sinfín 5 GB" 0 0 "1" "1" 1 1 0 0 "CONT26MF" "" "" 1 1 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002,DATA200_UPSELL" 0 0 0 1
 "CONT27" 18/04/17 1 31/12/49 "CONT27MF" 0 "" "" "LA INFINITA 2 GB DTO." 0 0 "1" "1" 1 1 0 0 "CONT27MF" "" "" 1 1 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002,DATA200_UPSELL,DATA6_UPSELL" 0 0 0 1
 "CONT28" 21/08/17 1 31/12/49 "CONT28MF" 0 "" "" "La Dúo" 0 0 "1" "1" 1 1 0 0 "CONT28MF" "" "" 1 1 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002,DATA200_UPSELL" 0 1 0 1
-"CONT29" 18/12/17 1 31/12/49 "CONT29MF" 0 "" "" "La Dúo extra" 0 0 "1" "1" 1 1 0 0 "CONT29MF" "" "" 1 0 0 yes 1 0 0 1 "" 0 1 0 1
+"CONT29" 18/12/17 1 31/12/49 "CONT29MF" 0 "" "" "La Dúo" 0 0 "1" "1" 1 1 0 0 "CONT29MF" "" "" 1 0 0 yes 1 0 0 1 "" 0 1 0 1
 "CONT30" 18/12/17 1 31/12/49 "CONT30MF" 0 "" "" "Contrato 30" 0 0 "1" "1" 1 1 0 0 "CONT30MF" "" "" 1 0 0 yes 1 0 0 1 "FLEX_UPSELL" 0 1 0 1
 "CONT31" 18/12/17 1 31/12/49 "CONT31MF" 0 "" "" "La Tarifa Tic Tac" 0 0 "1" "1" 1 1 0 0 "CONT31MF" "" "" 1 0 0 yes 1 0 0 1 "SAN1GB_001,SAN5GB_002" 0 1 0 1
 "CONT32" 23/01/18 1 31/12/49 "CONT32MF" 0 "" "" "La Sinfín 3 GB" 0 0 "1" "1" 1 1 0 0 "CONT32MF" "" "" 1 0 0 yes 1 0 0 1 "DATA6_UPSELL,DATA200_UPSELL" 0 1 0 1
@@ -73,6 +73,7 @@
 "DSS2" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Data Sharing Service 2" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "DSS2_UPSELL,DSS200_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL" 0 1 0 0
 "DSS200_UPSELL" 01/06/15 4 31/12/49 "" 0 "" "" "200 MB upsell" 93 0 "1" "6" 1 2 1 0 "DSS200MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS2_UPSELL" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Internet compartido - Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DSS2MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0 1 0 0
+"DSS4" 07/05/18 4 31/12/49 "DSS4" 0 "" "" "Data Sharing Service 4" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
 "DSS_FLEX_500MB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "500MB Flex upsell" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS_FLEX_5GB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "DSS 5GB Flex Upsell" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS_FLEX_UPSELL" 01/11/17 4 31/12/49 "" 0 "" "" "DSS FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
@@ -88,8 +89,12 @@
 "FLEX_UPSELL" 01/03/17 4 31/12/49 "" 0 "" "" "FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "FREE100MINUTES" 01/06/16 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 2 3 0 "" "" "" 3 1 0 yes 1 0 0 1 "" 0 1 0 0
 "FTERM12-100" 27/10/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-110" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-110 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD110" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-140" 25/04/18 0 31/12/49 "" 0 "" "" "FTERM12-140 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD140" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-177" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-177 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD177" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-187" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-187 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD187" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-233" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-233 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD233" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-243" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-243 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD243" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM8-100" 11/09/17 0 31/12/49 "" 0 "" "" "FTERM8 periodical contract" 0 0 "1" "3" 1 3 8 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "GPRS" 01/12/06 6 31/12/54 "14100001" 1.653 "1" "" "GPRS maximum charge per day" 93 1.653 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 0 0
 "HSPA_ROAM_EU" 10/10/12 4 31/12/49 "14104019" 0 "" "" "HSPA Roaming EU" 90 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 0 0 0
@@ -110,6 +115,9 @@
 "MDUBACT" 01/03/10 4 31/05/11 "MDUB" 0 "" "" "Mobile Data Usage Bundle 1st period" 93 0 "1" "4" 4 2 1 0 "" "" "TERMMDUB" 3 1 1 yes 1 0 0 0 "" 0 1 0 0
 "MDUBEND" 01/03/10 4 31/05/11 "MDUB" 0 "" "" "Mobile Data Usage Bundle 1st period" 93 0 "1" "4" 4 2 1 0 "" "" "" 3 1 0 yes 1 0 0 0 "" 0 1 0 0
 "MDUB_UPSELL" 01/11/10 4 31/12/49 "MDUB" 0 "" "" "Bono 8 Upsell" 93 0 "1" "6" 1 2 1 0 "MDUBMFUPS" "" "" 3 1 0 yes 100 0 0 2 "" 0 1 0 0
+"NEBTERM12-160" 07/05/18 0 31/12/49 "" 0 "" "" "NEBTERM12-160 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "NEBTERMPERIOD160" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
+"NEBTERM12-237" 07/05/18 0 31/12/49 "" 0 "" "" "NEBTERM12-237 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "NEBTERMPERIOD237" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
+"NEBTERM12-293" 07/05/18 0 31/12/49 "" 0 "" "" "NEBTERM12-293 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "NEBTERMPERIOD293" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
 "OFFICE365" 04/07/17 1 31/12/49 "OFFICE365MF" 0 "" "" "Office365 Essentials" 0 0 "1" "7" 1 4 0 0 "OFFICE365MF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
 "PAYTERM18_10" 01/03/10 0 31/12/49 "PAYTERM18" 0 "" "" "Installment" 0 0 "1" "5" 1 3 18 0 "PAYTERM10" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM18_15" 01/03/10 0 31/12/49 "PAYTERM18" 0 "" "" "Installment" 0 0 "1" "5" 1 3 18 0 "PAYTERM15" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
