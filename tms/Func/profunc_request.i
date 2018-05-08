@@ -249,7 +249,10 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEFINE BUFFER bClitype       FOR CLIType.
 
    DEFINE VARIABLE llHasMappingMissingForLegacyTariff AS LOGICAL NO-UNDO INIT TRUE.
-
+   DEFINE VARIABLE lcclitypeto AS CHARACTER NO-UNDO INITIAL "".
+   DEFINE VARIABLE liRequest   AS INTEGER   NO-UNDO INITIAL "".
+   DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO INITIAL "".
+  
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_PRO_MIGRATION},
                           "",
@@ -282,12 +285,14 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                       Clitype.brand   EQ Syst.Var:gcBrand AND
                       Clitype.clitype EQ bMobsub.clitype  NO-LOCK NO-ERROR.
            IF AVAIL Clitype                                            AND 
-              Clitype.webstatuscode <> {&CLITYPE_WEBSTATUSCODE_ACTIVE} AND 
+             /* Clitype.webstatuscode <> {&CLITYPE_WEBSTATUSCODE_ACTIVE} AND */
               fgetActiveReplacement(bMobsub.clitype) = ""              THEN 
            DO:
                ASSIGN llHasMappingMissingForLegacyTariff = FALSE.  
                LEAVE MOBSUB-CHK. 
            END.
+           IF AVAIL Clitype AND llHasMappingMissingForLegacyTariff THEN 
+               lcclitypeto =   fgetActiveReplacement(bMobsub.clitype).      /* YDR-2851 - create stc request while migrating category residential to pro */
        END.
 
        IF NOT llHasMappingMissingForLegacyTariff THEN DO:
@@ -326,7 +331,35 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
            RETURN 0. 
        END.
    END.
-
+   
+    IF lcclitypeto <> "" AND llHasMappingMissingForLegacyTariff THEN 
+    DO :
+        liRequest = fCTChangeRequest(iiMsseq,           /* The MSSeq of the subscription to where the STC is made */
+            lcclitypeto,                                /* The CLIType of where to do the STC */
+            "",                                         /* lcBundleID */
+            "",                                         /* bank code validation is already done */
+            Func.Common:mMakeTS(),
+            0,                                          /* 0 = Credit check ok */
+            0,                                          /* extend contract */
+            ""                                          /* pcSalesman */,
+            FALSE,                                      /* charge */
+            TRUE,                                       /* send sms */
+            "",
+            0, 
+            icSource,
+            0,
+            iiOrig,
+            "",                                         /* contract id */
+            OUTPUT lcError).
+        IF lcError = "" THEN
+            ASSIGN iiOrig = liRequest.
+        ELSE 
+        DO:
+            ocResult = lcError.
+            RETURN 0. 
+        END.
+    END.
+            
    /* set activation time */
    ldActStamp = Func.Common:mMakeTS().
 
