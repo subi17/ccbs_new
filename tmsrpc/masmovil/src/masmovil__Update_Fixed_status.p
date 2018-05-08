@@ -44,6 +44,8 @@ DEF VAR lcCanDS      AS CHAR NO-UNDO.
 DEF VAR lcPortStat   AS CHAR NO-UNDO.
 DEF VAR lcPortDate   AS CHAR NO-UNDO.
 DEF VAR lcRouterStat AS CHAR NO-UNDO.
+DEF VAR lcIUA        AS CHAR NO-UNDO.
+DEF VAR lcNebaErr    AS CHAR NO-UNDO.
 
 top_struct = get_struct(param_toplevel_id, "0").
 
@@ -86,7 +88,7 @@ IF gi_xmlrpc_error NE 0 THEN DO:
 END.
 
 IF NOT llOldStructure AND LOOKUP("additionalInfo", lcStatusFields) > 0 THEN DO:
-   lcAdditionalInfoFields = validate_struct(lcAdditionalInfo,"cita,canDS,portStat,portDate,routerStat").   
+   lcAdditionalInfoFields = validate_struct(lcAdditionalInfo,"cita,canDS,portStat,portDate,IUA,routerStat").   
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
    ASSIGN
@@ -98,6 +100,8 @@ IF NOT llOldStructure AND LOOKUP("additionalInfo", lcStatusFields) > 0 THEN DO:
         WHEN LOOKUP("portStat", lcAdditionalInfoFields) > 0 
      lcPortDate = get_string(lcAdditionalInfo, "portDate")
         WHEN LOOKUP("portDate", lcAdditionalInfoFields) > 0 
+     lcIUA =  get_string(lcAdditionalInfo, "IUA")
+        WHEN LOOKUP("IUA", lcAdditionalInfoFields) > 0
      lcRouterStat = get_string(lcAdditionalInfo, "routerStat")
         WHEN LOOKUP("routerStat", lcAdditionalInfoFields) > 0. 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -271,6 +275,13 @@ CASE FusionMessage.FixedStatus:
        ELSE
           ASSIGN OrderFusion.AppointmentDate = lcCita WHEN lcCita <> "".
    END.
+   
+   /*NEBA*/
+   WHEN "PENDIENTE_INSTALATION" THEN DO:
+      /*NEBA: no actions in this phase*/
+      
+   END.
+
    /* installation done */
    WHEN "CERRADA" THEN DO:
        
@@ -311,6 +322,36 @@ CASE FusionMessage.FixedStatus:
 
    /* installation cancelled */ 
    WHEN "CANCELADA" THEN DO:
+      /*NEBA TODO*/
+      /*If this is cancelled in NEBA PERMANENCY period,
+        the penalty must be handled.*/
+     IF Order.Clitype MATCHES ("*CONTFHNB*") THEN DO:
+        Func.Common:mWriteMemo("Order",
+                             STRING(Order.OrderID),
+                             Order.CustNum,
+                             "NEBA cancellation starts",
+                             "").
+ 
+        RUN Mm/neba_cancellation_action.p(OrderFusion.OrderID, 
+                                          OUTPUT lcNebaErr).
+        IF lcNebaErr NE "" THEN DO:
+           Func.Common:mWriteMemo("Order",
+                             STRING(Order.OrderID),
+                             Order.CustNum,
+                             "NEBA cancellation fee creation failed",
+                             lcNebaErr).
+           FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+        END.
+        ELSE DO:
+           Func.Common:mWriteMemo("Order",
+                             STRING(Order.OrderID),
+                             Order.CustNum,
+                             "NEBA cancellation done",
+                             "").
+        END.
+        
+     END.
+
       IF llOldStructure THEN
          ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
       ELSE
@@ -348,6 +389,7 @@ ELSE DO:
 END.
 
 ASSIGN
+   OrderFusion.IUA        = lcIUA        WHEN lcIUA        <> ""
    OrderFusion.portStat   = lcPortStat   WHEN lcPortStat   <> ""
    OrderFusion.portDate   = lcPortDate   WHEN lcPortDate   <> ""
    OrderFusion.routerStat = lcRouterStat WHEN lcRouterStat <> "".
