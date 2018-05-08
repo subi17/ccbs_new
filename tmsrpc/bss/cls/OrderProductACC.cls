@@ -183,6 +183,9 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF aoOrderCustomer:CustNum EQ aoOrder:aoCustomer:CustNum
       THEN UNDO, THROW NEW ParamError("New agreement customer is the same as current one").
 
+      IF aoOrderCustomer:Country NE "ES"
+      THEN UNDO, THROW NEW ParamError("Only Country 'ES' is valid").
+
       mSubTypeValidations(lcSubType).
 
 	END METHOD.

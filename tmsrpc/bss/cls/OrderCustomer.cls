@@ -28,7 +28,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY Title AS CHARACTER NO-UNDO
+   DEFINE PUBLIC PROPERTY CustTitle AS CHARACTER NO-UNDO
       GET.
       SET.
 
@@ -191,6 +191,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
       ASSIGN
          THIS-OBJECT:CustNum            = iiCustNum
+         THIS-OBJECT:CustTitle          = Customer.HonTitle
          THIS-OBJECT:FirstName          = Customer.FirstName
          THIS-OBJECT:SurName1           = Customer.CustName
          THIS-OBJECT:SurName2           = Customer.SurName2
@@ -245,6 +246,9 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       DEFINE VARIABLE lcSupportedLanguages AS CHARACTER INITIAL
          "es_ES,es_CA,es_EU,es_GA,en" NO-UNDO.
 
+      DEFINE VARIABLE lcSupportedTitles AS CHARACTER INITIAL
+         "Sr.,Mr.,Sr,Mr or Mrs.,Sra.,Mrs,Sra" NO-UNDO.
+
       IF ioJsonObject:Has("language")
       THEN DO:
          THIS-OBJECT:Language = STRING(LOOKUP(ioJsonObject:GetCharacter("language"),
@@ -256,6 +260,18 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
                                                     ioJsonObject:GetCharacter("language"),
                                                     lcSupportedLanguages)).
       END.
+
+      IF ioJsonObject:Has("title")
+      THEN DO:
+         IF LOOKUP(ioJsonObject:GetCharacter("title"), lcSupportedTitles) EQ 0
+         THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Invalid title '&1'. " +
+                                                    "The supported titles " +
+                                                    "are '&2'",
+                                                    ioJsonObject:GetCharacter("title"),
+                                                    lcSupportedTitles)).
+         THIS-OBJECT:CustTitle = ioJsonObject:GetCharacter("title").
+      END.
+
 
       DEFINE VARIABLE lcErrorPrefix AS CHARACTER NO-UNDO.
       IF THIS-OBJECT:CustNum > 0
@@ -293,7 +309,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city")
          THIS-OBJECT:Region             = ioJsonObject:GetCharacter("region")
          THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zip")
-         THIS-OBJECT:Country            = ioJsonObject:GetCharacter("country")
+         THIS-OBJECT:Country            = mGetCountry(ioJsonObject:GetCharacter("country"))
          THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email")
          THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number")
          THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number")
@@ -320,7 +336,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city") WHEN ioJsonObject:Has("city")
          THIS-OBJECT:Region             = ioJsonObject:GetCharacter("region") WHEN ioJsonObject:Has("region")
          THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zip") WHEN ioJsonObject:Has("zip")
-         THIS-OBJECT:Country            = ioJsonObject:GetCharacter("country") WHEN ioJsonObject:Has("country")
+         THIS-OBJECT:Country            = mGetCountry(ioJsonObject:GetCharacter("country")) WHEN ioJsonObject:Has("country")
          THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email") WHEN ioJsonObject:Has("email")
          THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number") WHEN ioJsonObject:Has("sms_number")
          THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number") WHEN ioJsonObject:Has("phone_number")
@@ -358,6 +374,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.OrderId            = aoOrder:OrderId
          OrderCustomer.RowType            = {&ORDERCUSTOMER_ROWTYPE_ACC}
          OrderCustomer.CustNum            = THIS-OBJECT:CustNum
+         OrderCustomer.CustTitle          = THIS-OBJECT:CustTitle
          OrderCustomer.FirstName          = THIS-OBJECT:FirstName
          OrderCustomer.SurName1           = THIS-OBJECT:SurName1
          OrderCustomer.SurName2           = THIS-OBJECT:SurName2
@@ -387,10 +404,23 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.OutPostMarketing   = THIS-OBJECT:OutPostMarketing
          OrderCustomer.OperSMSMarketing   = THIS-OBJECT:OperSMSMarketing
          OrderCustomer.OutSMSMarketing    = THIS-OBJECT:OutSMSMarketing
+         OrderCustomer.Address            = THIS-OBJECT:Street
          OrderCustomer.AddressCodC        = THIS-OBJECT:AddressCodC
          OrderCustomer.AddressCodP        = THIS-OBJECT:AddressCodP
          OrderCustomer.AddressCodM        = THIS-OBJECT:AddressCodM
          .
+
+   END METHOD.
+
+   METHOD PRIVATE CHARACTER mGetCountry
+      (icCountry AS CHARACTER):
+
+      FOR Country NO-LOCK WHERE
+          Country.Country = icCountry:
+         RETURN Country.Country.
+      END.
+
+      UNDO, THROW NEW ParamError(SUBSTITUTE("Unknown country '&1'", icCountry)).
 
    END METHOD.
 
