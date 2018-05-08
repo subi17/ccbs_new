@@ -324,15 +324,6 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
 
   END.  /* DO liUpsells */
   
-  /* Adding upsells to POSTPAID_DATA_UPSELLS */
-  FIND FIRST TMSParam WHERE
-             TMSParam.Brand      = Syst.Var:gcBrand AND
-             TMSParam.ParamGroup = "Bundles"        AND
-             TMSParam.ParamCode  = "POSTPAID_DATA_UPSELLS"
-       EXCLUSIVE-LOCK.
-  TMSParam.CharVal = TMSParam.CharVal + "," + cUpsell_Id.
-  RELEASE TMSParam.
-
   /* Process OK */
   lSuccess = TRUE.
 END.
