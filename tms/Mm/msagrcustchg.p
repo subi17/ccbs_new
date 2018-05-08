@@ -1810,11 +1810,12 @@ PROCEDURE pUpdateDSS2Account:
    
    IF fOngoingDSSAct(MobSub.Custnum) THEN RETURN.
 
-   IF NOT fIsDSS2Allowed(MobSub.Custnum,
-                         MobSub.MsSeq,
-                         ideActStamp,
-                         OUTPUT liDSSMsSeq,
-                         OUTPUT lcError) THEN RETURN.
+   IF NOT fIsDSSActivationAllowed(MobSub.Custnum,
+                                  MobSub.MsSeq,
+                                  ideActStamp,
+                                  {&DSS2},
+                                  OUTPUT liDSSMsSeq,
+                                  OUTPUT lcError) THEN RETURN.
 
    liRequest = fDSSRequest(liDSSMsSeq,
                            MobSub.CustNum,

@@ -404,8 +404,12 @@ DO TRANSACTION:
              IF bSubMsRequest.ReqStatus <> {&REQUEST_STATUS_NEW} THEN NEXT.
              IF NOT (llMultiSIMActive OR
                      (bSubMsRequest.ReqCParam3 = "DSS2" AND
-                      fIsDSS2Allowed(MobSub.CustNum,MobSub.MsSeq,ldCurrTS,
-                                     OUTPUT liDSSMsSeq,OUTPUT lcError)))
+                      fIsDSSActivationAllowed(MobSub.CustNum,
+                                              MobSub.MsSeq,
+                                              ldCurrTS,
+                                              {&DSS2},
+                                              OUTPUT liDSSMsSeq,
+                                              OUTPUT lcError)))
              THEN NEXT.
           END. /* IF bSubMsRequest.ReqCParam3 = {&DSS} THEN DO: */
           
@@ -529,8 +533,12 @@ DO TRANSACTION:
                          ttContract.DCEvent BEGINS {&DSS}) AND
       NOT fIsDSSActive(MobSub.CustNum,ldCurrTS) AND
       NOT fOngoingDSSAct(MobSub.CustNum) AND
-      fIsDSS2Allowed(MobSub.CustNum,MobSub.MsSeq,ldCurrTS,
-                     OUTPUT liDSSMsSeq,OUTPUT lcError) THEN DO:
+      fIsDSSActivationAllowed(MobSub.CustNum,
+                              MobSub.MsSeq,
+                              ldCurrTS,
+                              {&DSS2},
+                              OUTPUT liDSSMsSeq,
+                              OUTPUT lcError) THEN DO:
       FIND FIRST lbMobSub WHERE
                  lbMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.
       IF AVAIL lbMobSub THEN DO:
