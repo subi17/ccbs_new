@@ -502,6 +502,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
    IF AVAIL OrderFusion AND OrderFusion.FusionStatus > "" THEN DO:
    
       lcFusionStruct = add_struct(top_struct, "fusion_data").
+      add_string(lcFusionStruct, "iua_value",OrderFusion.IUA).
       add_string(lcFusionStruct, "fixed_number_type",OrderFusion.FixedNumberType).
       add_string(lcFusionStruct, "fixed_line_number",OrderFusion.FixedNumber).
       add_string(lcFusionStruct, "fixed_line_mnp_old_operator_name",OrderFusion.FixedCurrOper).
