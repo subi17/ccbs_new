@@ -98,6 +98,7 @@ CLASS bss.cls.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
          OrderProductParam.DecValue       = THIS-OBJECT:DecValue
          OrderProductParam.IntValue       = THIS-OBJECT:IntValue
          OrderProductParam.OrderProductID = aoOrderProduct:OrderProductID
+         OrderProductParam.OrderID        = aoOrderProduct:OrderID
          OrderProductParam.ParamName      = THIS-OBJECT:ParamName
          OrderProductParam.ValueType      = THIS-OBJECT:ValueType.
 

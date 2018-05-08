@@ -119,6 +119,14 @@ ADD FIELD "IntValue" OF "OrderProductParam" AS  integer
   COLUMN-LABEL "IntValue"
   ORDER 70
 
+ADD FIELD "OrderId" OF "OrderProductParam" AS integer
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 80
+
 ADD INDEX "OrderProductID" ON "OrderProductParam"
   AREA "Dyn_Index_1"
   PRIMARY

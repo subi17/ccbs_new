@@ -13,6 +13,7 @@ class AddTableOrderProductParam(Migration):
         t.column('DateValue', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="DateValue", column_label="DateValue", position=6, order=50)
         t.column('DecValue', 'decimal', format="->>>>>>>9.99<<", decimals=5, initial="0", max_width=19, label="DecValue", column_label="DecValue", position=7, order=60)
         t.column('IntValue', 'integer', format="->>>>>>>9", initial="0", max_width=4, label="IntValue", column_label="IntValue", position=8, order=70)
+        t.column('OrderId', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="OrderId", column_label="OrderId", position=9, order=80, description="Order sequence number")
         t.index('OrderProductID', [['OrderProductID'], ['ParamName']], area="Sta_Index_64", primary=True, unique=True)
 
     def down(self):

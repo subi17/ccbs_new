@@ -27,6 +27,10 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY OrderProductID AS INTEGER NO-UNDO
       GET.
       SET.
+   
+   DEFINE PUBLIC PROPERTY OrderID AS INTEGER NO-UNDO
+      GET.
+      SET.
 
    DEFINE PUBLIC PROPERTY ActionType AS CHARACTER NO-UNDO
       GET.
@@ -86,6 +90,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
          abOrderProduct.OrderProductId     = NEXT-VALUE(OrderProductID)
          abOrderProduct.OrderId            = aoOrder:OrderId
          THIS-OBJECT:OrderProductID        = abOrderProduct.OrderProductId
+         THIS-OBJECT:OrderID               = abOrderProduct.OrderId
          abOrderProduct.ActionType         = THIS-OBJECT:ActionType
          abOrderProduct.ProductID          = THIS-OBJECT:ProductID
          abOrderProduct.ProductOfferingID  = THIS-OBJECT:ProductOfferingID
