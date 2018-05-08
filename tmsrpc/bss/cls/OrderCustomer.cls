@@ -1,6 +1,6 @@
  
  /*------------------------------------------------------------------------
-    File        : Order
+    File        : OrderCustomer
     Purpose     : 
     Syntax      : 
     Description : 
@@ -242,6 +242,21 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
+      DEFINE VARIABLE lcSupportedLanguages AS CHARACTER INITIAL
+         "es_ES,es_CA,es_EU,es_GA,en" NO-UNDO.
+
+      IF ioJsonObject:Has("language")
+      THEN DO:
+         THIS-OBJECT:Language = STRING(LOOKUP(ioJsonObject:GetCharacter("language"),
+                                       lcSupportedLanguages)).
+         IF THIS-OBJECT:Language EQ "0"
+         THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Invalid language '&1'. " +
+                                                    "The supported languages " +
+                                                    "are '&2'",
+                                                    ioJsonObject:GetCharacter("language"),
+                                                    lcSupportedLanguages)).
+      END.
+
       DEFINE VARIABLE lcErrorPrefix AS CHARACTER NO-UNDO.
       IF THIS-OBJECT:CustNum > 0
       THEN lcErrorPrefix = SUBSTITUTE("The existing customer with ID &1 " +
@@ -273,8 +288,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname")
          THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2")
          THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality")
-         THIS-OBJECT:Language           = STRING(LOOKUP(ioJsonObject:GetCharacter("language"),
-                                                 "es_ES,es_CA,es_EU,es_GA,en"))
          THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday")
          THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street")
          THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city")
@@ -302,8 +315,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname") WHEN ioJsonObject:Has("lname")
          THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2") WHEN ioJsonObject:Has("lname2")
          THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality") WHEN ioJsonObject:Has("nationality")
-         THIS-OBJECT:Language           = STRING(LOOKUP(ioJsonObject:GetCharacter("language"),
-                                                 "es_ES,es_CA,es_EU,es_GA,en")) WHEN ioJsonObject:Has("language")
          THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday") WHEN ioJsonObject:Has("birthday")
          THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street") WHEN ioJsonObject:Has("street")
          THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city") WHEN ioJsonObject:Has("city")
@@ -336,7 +347,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
                                           THIS-OBJECT:OutPostMarketing   OR
                                           THIS-OBJECT:OperSMSMarketing   OR
                                           THIS-OBJECT:OutSMSMarketing.
-
 
 	END METHOD.
 	
