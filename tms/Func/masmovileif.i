@@ -672,7 +672,7 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
 
    xmlrpc_initialize(FALSE).
-   fMasXMLGenerate_test("acc").
+   fMasXMLGenerate_test("agreementCustomerChange").
    RUN pRPCMethodCall("masmovil.agreementCustomerChange", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
