@@ -818,19 +818,13 @@ PROCEDURE pSubInvoice2XML:
             ttRow.RowGroup EQ "46" THEN DO: /* Convergent uses CLI Type Name */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
             /* Sum of different categories per subscription. YDR-2848 */
-            lhXML:START-ELEMENT("TotalCategory").
+            ldTotal = ttRow.RowAmtExclVat.
+            /* lhXML:START-ELEMENT("TotalCategory").
                lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttRow.RowAmtExclVat)).
-            lhXML:END-ELEMENT("TotalCategory").
+            lhXML:END-ELEMENT("TotalCategory").*/
          END.
-         ELSE DO:
+         ELSE
             lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
-            ldTotal = ldTotal + ttRow.RowAmtExclVat. /* --> TOO BIG SUM */
-             /* Sum of different categories per subscription. YDR-2848 */
-            lhXML:START-ELEMENT("TotalCategory").
-               lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttRow.RowAmtExclVat)).
-            lhXML:END-ELEMENT("TotalCategory").
-         END.
-
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
          /* duration or data amount */
