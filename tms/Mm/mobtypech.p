@@ -181,7 +181,7 @@ form /* asks MSISDN number */
      HELP "Time format (hh.mm)"                                         SKIP
    
    " Change fee ....:"   llCreateFees SKIP
-   " Data Bundle....:" lcBundle FORMAT "x(12)" SKIP
+   " Data Bundle....:" lcBundle FORMAT "x(12)" 
    WITH  OVERLAY ROW 2 centered
    COLOR VALUE(Syst.Var:cfc)TITLE COLOR VALUE(Syst.Var:ctc) " Subscription type change " 
    NO-LABELS SIDE-LABEL FRAME main.
