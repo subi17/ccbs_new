@@ -383,7 +383,7 @@ PROCEDURE pOwnerChange:
       fIsConvergenceTariff(MobSub.CLIType) THEN DO:
       RUN Gwy/masmovil_acc.p(bAccOrder.OrderID).
       IF RETURN-VALUE NE "OK" THEN DO:
-         fReqError("Fixed line ACC failed: &1").
+         fReqError(SUBST("Fixed line ACC failed: &1", RETURN-VALUE)).
          RETURN.
       END.
    END.
