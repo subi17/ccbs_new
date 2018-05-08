@@ -8,7 +8,7 @@
 "1" "CONT26" "La Sinfín 5 GB" 01/02/17 31/12/49
 "1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
 "1" "CONT28" "La Dúo" 21/08/17 31/12/49
-"1" "CONT29" "La Dúo extra" 18/12/17 31/12/49
+"1" "CONT29" "La Dúo" 18/12/17 31/12/49
 "1" "CONT30" "Contrato 30" 18/12/17 31/12/49
 "1" "CONT31" "La Tarifa Tic Tac" 18/12/17 31/12/49
 "1" "CONT32" "La Sinfín 3 GB" 23/01/18 31/12/49
@@ -67,6 +67,7 @@
 "1" "DSS2" "Data Sharing Service 2" 01/09/13 31/12/49
 "1" "DSS200_UPSELL" "DSS200 Bundle Upsell" 01/06/15 31/12/49
 "1" "DSS2_UPSELL" "DSS 2 Bundle Upsell" 01/09/13 31/12/49
+"1" "DSS4" "Data Sharing Service 4" 07/05/18 31/12/49
 "1" "DSS_FLEX_500MB_UPSELL" "DSS 500MB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_5GB_UPSELL" "DSS 5GB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_UPSELL" "DSS Mobile Data Usage Flex Ups" 01/11/17 31/12/49
