@@ -145,6 +145,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD MessageType     AS CHAR
    FIELD GBValue         AS DEC
    FIELD PrintCLI        AS LOGICAL INITIAL FALSE
+   FIELD IUA             AS CHAR
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -886,7 +887,15 @@ PROCEDURE pGetSubInvoiceHeaderData:
       ASSIGN ttSub.CLI         = SubInvoice.CLI
              ttSub.FixedNumber = SubInvoice.FixedNumber
              ttSub.MsSeq       = SubInvoice.MsSeq. 
-
+      
+      /*NEBACO-7*/
+      /*Find IUA for the subscription*/
+      IF ttSub.FixedNumber NE "" AND ttSub.FixedNumber NE ? THEN DO:
+         FIND FIRST OrderFusion NO-LOCK WHERE 
+                    OrderFusion.FixedNumber EQ ttSub.Fixednumber NO-ERROR.
+         IF AVAIL OrderFusion AND OrderFusion.IUA NE "" THEN
+            ttSub.IUA = OrderFusion.IUA.
+      END.
       /* user name */
       IF SubInvoice.CustNum = Invoice.CustNum OR SubInvoice.CustNum = 0 THEN 
          ttSub.UserName = lcCustName.
