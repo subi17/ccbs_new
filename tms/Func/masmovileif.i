@@ -613,6 +613,7 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
 
+   DEF BUFFER Mobsub FOR Mobsub.
    DEF BUFFER Order FOR Order.
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
@@ -623,6 +624,11 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
               Order.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "ERROR: Order not found " + STRING(iiOrderID) .
+   
+   FIND MobSub NO-LOCK WHERE
+        MobSub.MsSeq = Order.MsSeq NO-ERROR.
+   IF NOT AVAIL MobSub THEN 
+      RETURN "ERROR: Active subscription not found".
 
   /*Use delivery customer information if it is avbailable*/
    FIND FIRST OrderCustomer NO-LOCK WHERE 
@@ -639,7 +645,7 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
             bOrder.Brand = Syst.Var:gcBrand AND
             bOrder.OrderID = OrderFusion.OrderID AND
             bOrder.MsSeq = Mobsub.MsSeq AND
-            bOrder.StatusCode = {&ORDER_STATUS_DELIVERED} BY Order.CrStamp DESC:
+            bOrder.StatusCode = {&ORDER_STATUS_DELIVERED} BY bOrder.CrStamp DESC:
        LEAVE.
    END.
 
@@ -648,7 +654,7 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
    lcOutputStruct = add_struct(param_toplevel_id, "").
    /*Order struct*/
    add_string(lcOutputStruct, "orderID", 
-                             "Y" + STRING(Order.Orderid)).
+                             "Y" + STRING(bOrder.Orderid)).
    lcContactStruct = add_struct(lcOutputStruct, "Contact").
    add_string(lcContactStruct, "documentNumber", OrderCustomer.CustID).
    add_string(lcContactStruct, "documentType", OrderCustomer.CustIdType).
@@ -676,9 +682,16 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
    END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
+   IF gi_xmlrpc_error NE 0 THEN
+      RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
+
    lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
+   IF gi_xmlrpc_error NE 0 THEN
+      RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
+
    ocResultCode = get_string(lcXMLSTruct, "resultCode").
-   IF LOOKUP('resultDescription', lcXMLSTruct) GT 0 THEN
+
+   IF LOOKUP('resultDescription', lcResponse) GT 0 THEN
       ocResultDesc = get_string(lcXMLStruct, "resultDescription").
 
    IF gi_xmlrpc_error NE 0 THEN
