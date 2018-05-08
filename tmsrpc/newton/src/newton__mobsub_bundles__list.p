@@ -148,6 +148,7 @@ PROCEDURE pAdd_DSS:
     DEF VAR lcPRODSSUpsellList    AS CHAR NO-UNDO.
     DEF VAR lcMatrixAnalyseResult AS CHAR NO-UNDO.
     DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+    DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO.
     DEF VAR llProSubscription     AS LOGI NO-UNDO.
     DEF VAR lcUpsell              AS CHAR NO-UNDO.
 
