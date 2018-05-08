@@ -166,6 +166,12 @@ REPEAT:
          NEXT.
       END.
       
+      IF LOOKUP(lcNCStatus,"NENV,NCON,NMIG") > 0 
+         THEN DO:
+         liSkipped = liSkipped + 1.
+         NEXT.
+      END.
+      
       ldeNCTime = ?.
       ldeNCTime = Func.Common:mHMS2TS(date(int(substring(lcNCTime,5,2)),
           int(substring(lcNCTime,7,2)),
