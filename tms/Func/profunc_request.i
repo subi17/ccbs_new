@@ -175,7 +175,13 @@ FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
    IF AVAIL bMobSub THEN 
        FIND FIRST bCliType WHERE bCliType.CliType = bMobSub.CliType NO-LOCK NO-ERROR.
        
-   FIND bOrder WHERE bOrder.MsSeq = bMobSub.MsSeq NO-LOCK NO-ERROR.
+   FOR EACH bOrder NO-LOCK WHERE 
+            bOrder.MsSeq = bMobSub.MsSeq BY bOrder.CrStamp DESC:
+       IF bOrder.OrderType NE {&ORDER_TYPE_NEW} AND
+          bOrder.OrderType NE {&ORDER_TYPE_MNP} AND
+          bOrder.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
+       LEAVE.
+   END.
       
    lcOutput = icKeyValueSrc.
 
