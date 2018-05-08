@@ -292,7 +292,7 @@ PROCEDURE pGetCustomerSubscriptions:
                 ttSub.BundleLimit     = ldeBundleAmt
                 ttSub.BundleLimitInMB = bMServiceLimit.InclAmt
                 ttSub.InclUnit        = bServiceLimit.InclUnit
-                ttSub.Priority        = bDayCampaign.DSSPriority.
+                .
 
       END. /* FOR EACH bMServiceLimit WHERE */
    END. /* FOR EACH ttMsOwner NO-LOCK WHERE */
@@ -300,9 +300,7 @@ PROCEDURE pGetCustomerSubscriptions:
 
    /* Calculate first month fee */
    FOR EACH ttSub WHERE
-            ttSub.CustNum = iiInvCust
-       BY ttSub.Priority:
-
+            ttSub.CustNum = iiInvCust:       
       ldFeeAmount = 0.
 
       FOR FIRST DayCampaign NO-LOCK WHERE

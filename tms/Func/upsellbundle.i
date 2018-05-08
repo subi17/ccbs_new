@@ -15,6 +15,7 @@
 {Func/fdss.i}
 {Func/fprepaidfee.i}
 {Func/upsellcount.i}
+{Func/bundleupsells.i}
 
 FUNCTION fGetUpSellBasicContract RETURNS CHAR
    (INPUT iiMsSeq       AS INT,
@@ -98,10 +99,8 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST DayCampaign NO-LOCK WHERE
                   DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
-                  DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
-                  DayCampaign.BundleUpsell NE "SAN1GB_001,SAN5GB_002,DATA200_UPSELL" AND
-                  DayCampaign.BundleUpsell NE "SAN1GB_001,SAN5GB_002" AND
-                  DayCampaign.BundleUpsell > "":
+                  fGetDayCampaignUpsells(DayCampaign.DCEvent) > "" AND 
+                  fIsDayCampaignBundleUpsellExists(DayCampaign.DCEvent) = FALSE :
             IF {Func/dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */
@@ -210,7 +209,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
 
    /* Should not allow to create other data upsell once DSS1/2 is active */
    /* Allow DSS_FLEX_UPSELL - 25 GB */
-   IF LOOKUP(icDCEvent, DayCampaign.BundleUpsell) EQ 0 THEN DO : 
+   IF LOOKUP(icDCEvent, fGetDayCampaignUpsells(DayCampaign.DCEvent)) EQ 0 THEN DO : 
       IF (LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 AND
           LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0) THEN
           ocError = icDCEvent + " is not allowed because DSS " +

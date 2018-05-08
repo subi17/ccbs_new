@@ -454,8 +454,7 @@ FUNCTION fValidateNewCliType RETURNS INT
          FIND DayCampaign NO-LOCK WHERE
               DayCampaign.Brand = Syst.Var:gcBrand AND
               DayCampaign.DcEvent = icDataBundleId NO-ERROR.
-         IF NOT AVAIL DayCampaign OR
-                      DayCampaign.StatusCode NE {&DAYCAMPAIGN_STATUSCODE_ACTIVE} THEN DO:
+         IF NOT AVAIL DayCampaign THEN DO:
             ocError = {&MSG_NOT_ALLOWED}.
             RETURN 6.
          END.

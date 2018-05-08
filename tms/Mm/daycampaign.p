@@ -60,8 +60,6 @@ DEF VAR lcModifyFee   AS CHAR NO-UNDO.
 DEF VAR lcTermFee     AS CHAR NO-UNDO.
 DEF VAR lcEffective   AS CHAR NO-UNDO.
 DEF VAR lcTermFeeCalc AS CHAR NO-UNDO.
-DEF VAR llFirstMonthCalc AS LOG  NO-UNDO.
-DEF VAR lcStatus      AS CHAR NO-UNDO.
 DEF VAR lcBundleType  AS CHAR NO-UNDO.
 
 DEF BUFFER xxDayCampaign FOR DayCampaign.
@@ -72,7 +70,6 @@ form
    DayCampaign.DCName        FORMAT "x(20)" COLUMN-LABEL "Name"
    DayCampaign.DCType        FORMAT "X"     COLUMN-LABEL "Type"
    lcTypeName                FORMAT "X(13)" COLUMN-LABEL "TypeName"
-   DayCampaign.DSSPriority                  COLUMN-LABEL "DSS"
    DayCampaign.VAlidFrom 
    DayCampaign.ValidTo   
 
@@ -90,9 +87,6 @@ form
    DayCampaign.ValidFrom     COLON 23 format 99-99-9999 LABEL "Valid" 
       "-"
       DayCampaign.ValidTo  format 99-99-9999 NO-LABEL SKIP
-   DayCampaign.StatusCode    COLON 23
-      HELP "0=Inactive,1=Active,2=Retired,3=Hidden"
-      lcStatus NO-LABEL FORMAT "X(15)" 
    DayCampaign.BundleType  
       HELP "0=undefined, 1=Tariff bundle, 2=Additional bundle (voice or data)" 
       lcBundleType NO-LABEL  FORMAT "X(15)" SKIP
@@ -121,9 +115,6 @@ form
       lcDurUnit NO-LABEL FORMAT "X(15)" SKIP
    DayCampaign.WeekDay       COLON 23 
       lcWeekday NO-LABEL  SKIP
-   DayCampaign.BundleUpsell  COLON 23 LABEL "Upsell"
-      FORMAT "x(256)" VIEW-AS FILL-IN SIZE 30 BY 1
-      HELP "Upsell corresponding to that Bundle" SKIP
 WITH OVERLAY ROW 1 centered
    COLOR value(Syst.Var:cfc)
    TITLE COLOR value(Syst.Var:ctc)
@@ -140,11 +131,6 @@ FORM
    DayCampaign.TermFeeCalc COLON 23 FORMAT "9" 
       lcTermFeeCalc NO-LABEL FORMAT "X(30)" 
    SKIP(1)   
-   llFirstMonthCalc COLON 23
-      FORMAT "Relative/Full"
-      LABEL "1. month service limit"
-      HELP "First month calculation method, (F)ull or (R)elative"
-   SKIP(1)
 WITH OVERLAY ROW 5 CENTERED   
    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH SIDE-LABELS FRAME fFees.
@@ -224,17 +210,6 @@ FUNCTION fFeeModel RETURNS CHAR
    ELSE RETURN "". 
    
 END FUNCTION.
-
-FUNCTION fStatusName RETURNS LOGIC
-   (iiStatusCode AS INT):
-
-   lcStatus = Func.Common:mTMSCodeName("CLIType",
-                               "WebStatusCode",
-                               STRING(iiStatusCode)).
-
-   DISP lcStatus WITH FRAME lis.
-END FUNCTION.
-
 
 FUNCTION fBundleTypeName RETURNS LOGIC
    (iiBundleType AS INT):
@@ -539,7 +514,7 @@ repeat WITH FRAME sel:
           DayCampaign.dcName
           DayCampaign.dctype
           lcTypeName
-          DayCampaign.DSSPriority.
+          .
 
        RUN LOCAL-FIND-NEXT.
        
@@ -570,7 +545,7 @@ repeat WITH FRAME sel:
           DayCampaign.dcName
           DayCampaign.DCType
           lcTypeName
-          DayCampaign.DSSPriority.
+          .
 
        IF ok THEN DO:
 
@@ -706,7 +681,6 @@ PROCEDURE LOCAL-DISP-ROW:
       DayCampaign.DCName
       DayCampaign.DCtype   
       lcTypeName
-      DayCampaign.DSSPriority
       DayCampaign.ValidFrom
       DayCampaign.ValidTo
    WITH FRAME sel.
@@ -793,7 +767,6 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          DayCampaign.DCEvent
          DayCampaign.PayType
          DayCampaign.DCName 
-         DayCampaign.StatusCode
          DayCampaign.BundleType
          DayCampaign.DCType
          DayCampaign.InstanceLimit
@@ -816,15 +789,13 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          lcCalcMethod 
          ccn.ccnname        WHEN AVAIL ccn
          bBillItem.BIName   WHEN AVAIL bBillItem
-         "" WHEN NOT AVAIL bBillItem @ bBillItem.BIName 
-         DayCampaign.BundleUpsell
+         "" WHEN NOT AVAIL bBillItem @ bBillItem.BIName         
       WITH FRAME lis.
       
       fDispUnit(DayCampaign.InclUnit).
       fDurUnit(DayCampaign.DurUnit).
       fDurType(DayCampaign.DurType).
       fEffective(DayCampaign.Effective).
-      fStatusName(DayCampaign.StatusCode).
       fBundleTypeName(DayCampaign.BundleType).
 
       IF ilNew THEN Syst.Var:toimi = 1.
@@ -881,7 +852,6 @@ PROCEDURE pUpdate:
          DayCampaign.DCName 
          DayCampaign.ValidFrom
          DayCampaign.ValidTo
-         DayCampaign.StatusCode
          DayCampaign.BundleType
          DayCampaign.DCType
          DayCampaign.InstanceLimit
@@ -897,7 +867,6 @@ PROCEDURE pUpdate:
          DayCampaign.DurMonth
          DayCampaign.DurUnit
          DayCampaign.WeekDay
-         DayCampaign.BundleUpsell
          WHEN LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0
       WITH FRAME lis EDITING: 
       
@@ -1101,16 +1070,7 @@ PROCEDURE pUpdate:
                   NEXT.
                END.
             END.
-
-            ELSE IF FRAME-FIELD = "StatusCode" THEN DO:
-               fStatusName(INPUT INPUT DayCampaign.StatusCode).
-               IF lcStatus = "" THEN DO:
-                  BELL.
-                  MESSAGE "Unknown status code"
-                  VIEW-AS ALERT-BOX ERROR.
-                  NEXT.
-               END.
-            END.
+            
             ELSE IF FRAME-FIELD = "BundleType" THEN DO:
                fBundleTypeName(INPUT INPUT DayCampaign.BundleType).
                IF lcBundleType = "" THEN DO:
@@ -1205,7 +1165,7 @@ PROCEDURE pFeeData:
          lcFee       = fFeeModel(DayCampaign.FeeModel)
          lcModifyFee = fFeeModel(DayCampaign.ModifyFeeModel)
          lcTermFee   = fFeeModel(DayCampaign.TermFeeModel)
-         llFirstMonthCalc = (DayCampaign.FirstMonthCalc = 1).
+         .
       
       PAUSE 0.
       DISP 
@@ -1215,8 +1175,7 @@ PROCEDURE pFeeData:
          lcFee 
          lcModifyfee
          lcTermFee
-         DayCampaign.TermFeeCalc
-         llFirstMonthCalc
+         DayCampaign.TermFeeCalc         
       WITH FRAME fFees.
       
       fTermFeeCalc(DayCampaign.TermFeeCalc).
@@ -1243,8 +1202,7 @@ PROCEDURE pFeeData:
             DayCampaign.FeeModel
             DayCampaign.ModifyFeeModel
             DayCampaign.TermFeeModel
-            DayCampaign.TermFeeCalc
-            llFirstMonthCalc
+            DayCampaign.TermFeeCalc            
          WITH FRAME fFees EDITING: 
       
             READKEY.
@@ -1329,7 +1287,6 @@ PROCEDURE pFeeData:
                     
          END. /* editing */
          
-         DayCampaign.FirstMonthCalc = INTEGER(llFirstMonthCalc).   
          LEAVE.
      END.
      

@@ -161,7 +161,7 @@ FUNCTION fcreateDayCampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    ttDaycampaign.feemodel = icMFFeeModel.
    ttDaycampaign.dcname = icDCName.
    ttDaycampaign.validFrom = idaValidFrom.
-   ttDaycampaign.statuscode = iiStatus. 
+   .
 
    DISPLAY ttDayCampaign with frame a.
    pause 0.

@@ -24,9 +24,8 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD BundleLimitinMB  AS DEC
    FIELD UsedDSSLimit     AS DEC
    FIELD InclUnit         AS INT
-   FIELD Priority         AS INT
    INDEX MsSeqBun MsSeq BundleId
-   INDEX CustNumPri CustNum Priority.
+   INDEX CustNumPri CustNum .
 
 PROCEDURE pGetDSSLinkedSubsFee:
 
@@ -202,12 +201,12 @@ PROCEDURE pGetDSSLinkedSubsFee:
                     ttSub.BundleLimit     = ldeBundleAmt
                     ttSub.BundleLimitInMB = bMServiceLimit.InclAmt
                     ttSub.InclUnit        = bServiceLimit.InclUnit
-                    ttSub.Priority        = bDayCampaign.DSSPriority.
+                    .
 
          END. /* FOR EACH bMServiceLimit WHERE */
    END. /* FOR EACH ttMsOwner NO-LOCK WHERE */
 
-   FOR EACH ttSub BY ttSub.Priority:
+   FOR EACH ttSub :
 
       ASSIGN liCount   = liCount + 1
              odeFeeAmt = 0.

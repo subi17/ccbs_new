@@ -723,7 +723,6 @@ PROCEDURE pStoreBundle:
       DayCampaign.PayType         = INTEGER(fTMSCValue("CLIType","PayType",fGetFieldValue({&PAYTYPE}))) 
       DayCampaign.ValidFrom       = TODAY
       DayCampaign.ValidTo         = DATE(12,31,2049)
-      DayCampaign.StatusCode      = 1           /* Default value Active */
       DayCampaign.DCType          = STRING(fCharToInt({&BTYPE}, lcBundleType))
       DayCampaign.CCN             = (IF lcBundleType = "PackageWithCounter" OR
                                         lcBundleType = "Upsell" OR
@@ -760,7 +759,6 @@ PROCEDURE pStoreBundle:
                                      THEN 0
                                      ELSE 1)
       DayCampaign.WeekDay         = ""
-      DayCampaign.BundleUpsell    = fGetFieldValue({&UPSELL})
       DayCampaign.FeeModel        = DayCampaign.BillCode
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          

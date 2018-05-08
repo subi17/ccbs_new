@@ -5,7 +5,6 @@
  * @output bundles;array of struct;bundle data
  * @bundles        id;string;bundle id
                    name;string;subscription type name
-                   status;int;status code (eg: 0=inactive,1=active,2=retired)
                    pay_type;int;payment type (eg: 0=both,1=postpaid,2=prepaid)
                    monthly_cost;double;monthly cost
                    data_amount;double;data amount (MB)
@@ -124,8 +123,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + fConvertTenantToBrand(pcTenant)).
    add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
    add_string(lcResultStruct,"name", DayCampaign.DCName).
-   add_int(lcResultStruct,"status", DayCampaign.StatusCode).
-
+   
    FIND FIRST CCN WHERE CCN.Brand = "1" AND CCN.CCN = DayCampaign.CCN NO-LOCK NO-ERROR.
    add_string(lcResultStruct,"category", (IF AVAIL CCN THEN (IF INDEX(CCN.CCNName,"Roaming") > 0 THEN "Roaming" 
                                                              ELSE IF INDEX(CCN.CCNName,"International") > 0 THEN "International" 
