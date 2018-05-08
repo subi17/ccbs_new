@@ -1,0 +1,8 @@
+ADD FIELD "IUA" OF "OrderFusion" AS character
+   FORMAT "X(14)"
+   INITIAL ""
+   LABEL "IUA"
+   COLUMN-LABEL "IUA"
+   HELP "Access ID"
+   ORDER 320
+
