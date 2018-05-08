@@ -5,6 +5,7 @@
 
 {Syst/tmsconst.i}
 {Mc/dpmember.i}
+{Func/cparam2.i}
 
 /* Returns comma delimited character list of extraline clitypes (tariffs) */ 
 FUNCTION fExtraLineCLITypes RETURNS CHARACTER:
@@ -356,7 +357,11 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
              liCount = liCount + 1.   
           END.
           
-          fGetOngoingExtralineCount(icExtraLineCLIType , icCustIDType , icCustID , Order.OrderId , OUTPUT liOngoingELCnt ).
+          fGetOngoingExtralineCount(icExtraLineCLIType, 
+                                    icCustIDType, 
+                                    icCustID, 
+                                    Order.OrderId, 
+                                    OUTPUT liOngoingELCnt ).
           
           liCount  =  liCount + liOngoingELCnt. 
                    
@@ -365,8 +370,14 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
                                                 Customer.CustNum,
                                                 MobSub.CLIType,
                                                 icExtraLineCLIType,
-                                                TRUE) THEN 
-                NEXT.  
+                                                TRUE) THEN DO: 
+                IF NOT fCheckForMandatoryExtraLine(Order.OrderId,
+                                                   Customer.CustNum,
+                                                   Order.CLIType,
+                                                   icExtraLineCLIType,
+                                                   FALSE) THEN
+                   NEXT.  
+             END.      
           END.      
 
           &IF DEFINED(STC) &THEN              
@@ -450,12 +461,21 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 
 END FUNCTION.
 
-FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
-   (INPUT iiMsSeq   AS INT,
-    INPUT icCLIType AS CHAR):
+FUNCTION fCheckActiveExtraLinePair RETURNS LOG
+   (INPUT iiMsSeq        AS INT,
+    INPUT icCLIType      AS CHAR,
+    OUTPUT lcDSSBundleId AS CHAR):
 
    DEFINE BUFFER lbMLMobSub FOR MobSub.
    DEFINE BUFFER lbELMobSub FOR MobSub.
+
+   DEF VAR llgMatrixAvailable    AS LOG  NO-UNDO. 
+   DEF VAR lcPrimaryCLIType      AS CHAR NO-UNDO. 
+   DEF VAR lcDSS2PrimarySubsType AS CHAR NO-UNDO. 
+   DEF VAR lcDSS4PrimarySubsType AS CHAR NO-UNDO. 
+
+   ASSIGN lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+          lcDSS4PrimarySubsType = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
 
    IF fCLITypeIsMainLine(icCLIType) THEN DO:
 
@@ -469,7 +489,8 @@ FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
                    lbELMobSub.Brand        = Syst.Var:gcBrand      AND
                    lbELMobSub.MultiSimId   = lbMLMobSub.MsSeq      AND
                    lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}:
-            RETURN TRUE.
+            ASSIGN llgMatrixAvailable = TRUE
+                   lcPrimaryCLIType   = lbMLMobSub.CLIType.
          END.
 
       END.
@@ -487,13 +508,22 @@ FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
                    (lbMLMobSub.MsStatus     = {&MSSTATUS_ACTIVE} OR
                     lbMLMobSub.MsStatus     = {&MSSTATUS_BARRED})   NO-ERROR.
          IF AVAIL lbMLMobSub THEN
-            RETURN TRUE.
+            ASSIGN llgMatrixAvailable = TRUE
+                   lcPrimaryCLIType   = lbMLMobSub.CLIType.
 
       END.
 
    END.
 
-   RETURN FALSE.
+   IF LOOKUP(lcPrimaryCLIType,lcDSS4PrimarySubsType) > 0 THEN 
+      lcDSSBundleId = {&DSS4}.
+   ELSE IF LOOKUP(lcPrimaryCLIType,lcDSS2PrimarySubsType) > 0 THEN 
+      lcDSSBundleId = {&DSS2}.
+
+   IF llgMatrixAvailable THEN 
+      RETURN TRUE.
+   ELSE    
+      RETURN FALSE.
 
 END FUNCTION.
 
