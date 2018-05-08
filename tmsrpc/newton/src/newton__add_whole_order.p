@@ -2153,7 +2153,6 @@ IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
                         "FixedPermanency",
                         lcAddFTERM,
                         "").
-   END.
    /* Entry for NEBTERM penalty */
    fCreateOrderAction(Order.Orderid,
                       "NebaPenalty",
