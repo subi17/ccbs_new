@@ -148,20 +148,23 @@ PROCEDURE pAdd_DSS:
     DEF VAR lcPRODSSUpsellList    AS CHAR NO-UNDO.
     DEF VAR lcMatrixAnalyseResult AS CHAR NO-UNDO.
     DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+    DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO. 
     DEF VAR llProSubscription     AS LOGI NO-UNDO.
     DEF VAR lcUpsell              AS CHAR NO-UNDO.
 
     ASSIGN 
         llProSubscription     = fIsProSubscription(piMsSeq)
         lcPRODSSUpsellList    = fCParamC("PRO_DSS_FLEX_UPSELL_LIST")
-        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+        lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
 
     IF NOT MobSub.PayType THEN
         lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT ldCurrentDateTime).
 
     /* Return DSS bundle and upsell if DSS is active */
-    IF lcDSSBundleId = {&DSS} OR 
-       (lcDSSBundleId = "DSS2" AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) THEN 
+    IF lcDSSBundleId EQ {&DSS}                                                         OR 
+      (lcDSSBundleId EQ {&DSS2} AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) OR 
+      (lcDSSBundleId EQ {&DSS4} AND LOOKUP(MobSub.CLIType, lcAllowedDSS4SubsType) > 0) THEN 
     DO:
         add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
         /*Find upsells and add all to reponse*/
