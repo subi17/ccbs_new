@@ -9,11 +9,7 @@
    the priority order defined in SLGAnalyse. 
 */
 
-&GLOBAL-DEFINE MOBILE_SUBTYPES                 "CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT6,CONT7,CONT8,CONT9,CONT10,CONT15,CONT23,CONT24,CONT25,CONT26,CONT27,CONT28,CONT29,CONT31,CONT33,CONT34"
-&GLOBAL-DEFINE ADSL-CONVERGENT-SUBTYPES        "CONTDSL35,CONTDSL39,CONTDSL40,CONTDSL45,CONTDSL48,CONTDSL52,CONTDSL58,CONTDSL59,CONTDSL99,CONTDSL3G,CONTDSL7G,CONTDSL2G"
-&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST1 "CONTFH35_50,CONTFH39_50,CONTFH40_50,CONTFH45_50,CONTFH48_50,CONTFH52_50,CONTFH58_50,CONTFH59_50,CONTFH99_50,CONTFH3G_50,CONTFH7G_50,CONTFH2G_50"
-&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST2 "CONTFH45_300,CONTFH49_300,CONTFH50_300,CONTFH55_300,CONTFH58_300,CONTFH62_300,CONTFH68_300,CONTFH69_300,CONTFH109_300,CONTFH3G_300,CONTFH7G_300,CONTFH2G_300"
-&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST3 "CONTFH65_1000,CONTFH69_1000,CONTFH76_1000,CONTFH82_1000,CONTFH89_1000,CONTFH129_1000,CONTFH3G_1000,CONTFH7G_1000,CONTFH2G_1000"
+&GLOBAL-DEFINE SUBTYPES_LIST_WITHOUT_DATA "CONT,CONT2,CONT4,CONT5,CONTM,CONTM2"
 
 &GLOBAL-DEFINE DSS2_SUBTYPES "CONTS,CONTM2,CONTM,CONTSF,CONT15,CONTDSL45,CONTDSL52,CONTFH45_50,CONTFH52_50,CONTFH55_300,CONTFH62_300,CONTDSL58,CONTDSL59,CONTFH58_50,CONTFH59_50,CONTFH68_300,CONTFH69_300,CONT28,CONTFH89_1000,CONTFH82_1000,CONT29,CONTDSL99,CONTFH99_50,CONTFH109_300,CONTFH129_1000,CONTDSL3G,CONTFH3G_50,CONTFH3G_300,CONTFH3G_1000,CONTDSL7G,CONTFH7G_50,CONTFH7G_300,CONTFH7G_1000,CONTDSL2G,CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000"
 
@@ -39,40 +35,30 @@ FUNCTION fIncludedUnit RETURNS DEC
     
 END FUNCTION.
 
-FUNCTION fIsDSSActiveForSubscription RETURNS LOGICAL
-   (iiCustNum        AS INTEGER,
-    ideCallTimeStamp AS DECIMAL,
-    icSLGroupList    AS CHAR):
-
-   FOR EACH ttServiceLimit NO-LOCK WHERE
-       {Func/dss_search.i "ttServiceLimit.GroupCode"},
-       FIRST MServiceLimit NO-LOCK WHERE
-             MServiceLimit.CustNum  = iiCustNum            AND
-             MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
-             MServiceLimit.FromTS  <= ideCallTimeStamp     AND
-             MServiceLimit.EndTS   >= ideCallTimeStamp:
-      /* TODO: Change this to DSS Compatible flag on CliType */       
-      IF ttServiceLimit.GroupCode = {&DSS} OR (ttServiceLimit.GroupCode = "DSS2" AND LOOKUP(MSOwner.CLIType,{&DSS2_SUBTYPES}) > 0) THEN 
-         RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END FUNCTION.
-
 FUNCTION fReprocessListWRTSubscription RETURNS LOGICAL
-   (INPUT  iiMsSeq          AS INTE,
-    INPUT  ideCallTimeStamp AS DECI,
-    INPUT  icSLGroupList    AS CHAR,
-    INPUT  icSLTypeList     AS CHAR,
-    OUTPUT ocSLGroupList    AS CHAR,
-    OUTPUT ocSLTypeList     AS CHAR):
+   (INPUT  iiMsSeq                AS INTE,
+    INPUT  ideCallTimeStamp       AS DECI,
+    INPUT  icSLGroupList          AS CHAR,
+    INPUT  icSLTypeList           AS CHAR,
+    INPUT  ilReArrangeDataBundles AS LOGI,
+    OUTPUT ocSLGroupList          AS CHAR,
+    OUTPUT ocSLTypeList           AS CHAR):
 
-   DEF VAR liCount       AS INT  NO-UNDO.
-   DEF VAR lcNewGrpList  AS CHAR NO-UNDO.
-   DEF VAR lcNewTypeList AS CHAR NO-UNDO.
-
+   DEF VAR liCount         AS INT  NO-UNDO.
+   DEF VAR llUpsell        AS LOGI NO-UNDO.
+   DEF VAR lcNewGrpList    AS CHAR NO-UNDO.
+   DEF VAR lcNewTypeList   AS CHAR NO-UNDO.
+   DEF VAR lcPreviousType  AS CHAR NO-UNDO.
+   DEF VAR lcPreviousGroup AS CHAR NO-UNDO.
+   
    DO liCount = 1 TO NUM-ENTRIES(icSLGroupList):
+
+      IF ilReArrangeDataBundles AND 
+         LOOKUP(ENTRY(liCount,icSLGroupList), {&DCTYPE_SERVICE_PACKAGE} + "," + 
+                                              {&DCTYPE_BUNDLE}          + "," + 
+                                              {&DCTYPE_POOL_RATING}) = 0 THEN 
+         NEXT.
+
       FOR EACH  ttServiceLimit NO-LOCK WHERE ttServiceLimit.GroupCode = ENTRY(liCount,icSLGroupList),
           FIRST MServiceLimit NO-LOCK WHERE
                 MServiceLimit.MsSeq    = iiMsSeq AND
@@ -83,8 +69,25 @@ FUNCTION fReprocessListWRTSubscription RETURNS LOGICAL
          ASSIGN 
             ocSLGroupList = ocSLGroupList + (IF ocSLGroupList > "" THEN "," ELSE "") + ttServiceLimit.GroupCode 
             ocSLTypeList  = ocSLTypeList  + (IF ocSLTypeList  > "" THEN "," ELSE "") + ENTRY(liCount,icSLTypeList).
+
+         IF ilReArrangeDataBundles THEN
+         DO:
+             /* if upsell gets full then last base/bono bundle is used again */
+             IF ENTRY(liCount,icSLTypeList) NE {&DCTYPE_POOL_RATING} THEN 
+                ASSIGN 
+                   llUpsell        = FALSE
+                   lcPreviousGroup = ttServiceLimit.GroupCode 
+                   lcPreviousType  = ENTRY(liCount,icSLTypeList).
+             ELSE 
+                ASSIGN llUpsell = TRUE.
+         END.
       END.
    END.
+
+   IF llUpsell THEN 
+      ASSIGN
+         ocSLGroupList = ocSLGroupList + (IF ocSLGroupList > "" THEN "," ELSE "") + lcPreviousGroup 
+         ocSLTypeList  = ocSLTypeList  + (IF ocSLTypeList  > "" THEN "," ELSE "") + lcPreviousType.
 
    RETURN TRUE.
 
@@ -130,18 +133,11 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
 
-   DEFINE BUFFER bf_Customer FOR Customer.
-   DEFINE BUFFER bf_CustCat  FOR CustCat.
-
    ASSIGN	
       llPackageUsed   = FALSE 
       ttCall.BillCode = bsub-prod
       lcOrigBillCode  = bsub-prod
-      lcCliTypeList   = {&MOBILE_SUBTYPES} 				   + "," +
-      				    {&ADSL-CONVERGENT-SUBTYPES} 	   + "," +
-      				    {&FIBER-CONVERGENT-SUBTYPES-LIST1} + "," +
-      				    {&FIBER-CONVERGENT-SUBTYPES-LIST2} + "," +
-      				    {&FIBER-CONVERGENT-SUBTYPES-LIST3}
+      lcCliTypeList   = {&SUBTYPES_LIST_WITHOUT_DATA}
       ldPackageAmt    = 0
       ldTotalPrice    = 0
       liUnitUsed      = ?
@@ -160,83 +156,50 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   INPUT  ttCall.Bdest,
                   INPUT  ttCall.Datest,
                   OUTPUT lcSLGroupList,
-                  OUTPUT lcSLGATypeList).
+                  OUTPUT lcSLGATypeList).  
 
-   IF INDEX(lcSLGroupList, "DSS") > 0 THEN 
-      ASSIGN llVoice_Data_subs_DSS = fIsDSSActiveForSubscription(MSOwner.CustNum, CallTimeStamp, lcSLGroupList).
+   IF INDEX(lcSLGroupList, "DSS") > 0 AND fIsDSSActive(MSOwner.CustNum, CallTimeStamp) THEN
+   DO: 
+      /*TODO: I see mock ups where data share bundle option is part of rating buckets, so can logic be developed w.r.t to rating buckets instead compatability check on subscription type.
+              Also need to analyse do we need this code still */
+      FIND FIRST ttCliType WHERE ttCliType.Brand = MsOwner.Brand AND ttCliType.CliType = MSOwner.CLIType NO-ERROR.
+      IF AVAIL ttCliType AND ttCliType.DSSType > 0 THEN
+          ASSIGN llVoice_Data_subs_DSS = TRUE.
+   END.
+   ELSE  
+       ASSIGN llVoice_Data_subs_DSS = FALSE.
 
-   fReprocessListWRTSubscription(MSOwner.MsSeq, 
-                                 CallTimeStamp, 
-                                 lcSLGroupList, 
-                                 lcSLGATypeList, 
-                                 OUTPUT lcNewGroupList, 
-                                 OUTPUT lcNewTypeList).
-   ASSIGN
-      lcSLGroupList  = lcNewGroupList
-      lcSLGATypeList = lcNewTypeList.
-      
    /* No DSS Actived for subscription */
-   IF NOT llVoice_Data_subs_DSS THEN    
+   IF NOT llVoice_Data_subs_DSS      AND
+      liDialType = {&DIAL_TYPE_GPRS} AND
+      NUM-ENTRIES(lcSLGroupList) > 1 THEN    
    DO:
       /* if more than one bundle possible then check what are active for 
       this subscription -> try to fill the bundle that has lower priority 
-      before starting to fill the next bundle */     
-      IF liDialType = {&DIAL_TYPE_GPRS} AND NUM-ENTRIES(lcSLGroupList) > 1 THEN 
-      DO:   
-         ASSIGN
-            lcNewGroupList = ""
-            lcNewTypeList  = ""
-            llUpsell = FALSE.
-
-         DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList): 
-
-            IF LOOKUP(ENTRY(liSLGPacket,lcSLGATypeList), {&DCTYPE_SERVICE_PACKAGE} + "," + 
-                                                         {&DCTYPE_BUNDLE}          + "," + 
-                                                         {&DCTYPE_POOL_RATING}) = 0 THEN 
-               NEXT.
-
-            FOR EACH  ttServiceLimit NO-LOCK WHERE
-                      ttServiceLimit.GroupCode = ENTRY(liSLGPacket,lcSLGroupList),
-                FIRST MServiceLimit NO-LOCK WHERE
-                      MServiceLimit.MsSeq    = MSOwner.MsSeq AND
-                      MServiceLimit.DialType = liDialType AND
-                      MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
-                      MServiceLimit.FromTS  <= CallTimeStamp AND
-                      MServiceLimit.EndTS   >= CallTimeStamp:
-          
-               ASSIGN 
-                  lcNewGroupList = lcNewGroupList + 
-                                   (IF lcNewGroupList > "" THEN "," ELSE "") + 
-                                   ttServiceLimit.GroupCode 
-                  lcNewTypeList  = lcNewTypeList + 
-                                   (IF lcNewTypeList > "" THEN "," ELSE "") + 
-                                   ENTRY(liSLGPacket,lcSLGATypeList).
-                                    
-               /* if upsell gets full then last base/bono bundle is used again */
-               IF ENTRY(liSLGPacket,lcSLGATypeList) NE "6" THEN 
-                  ASSIGN 
-                     lcPreviousGroup = ttServiceLimit.GroupCode 
-                     lcPreviousType  = ENTRY(liSLGPacket,lcSLGATypeList)
-                     llUpsell = FALSE.
-               ELSE 
-                  ASSIGN llUpsell = TRUE.
-            END.
-
-         END.
-
-         IF lcNewGroupList > "" THEN ASSIGN
-            lcNewGroupList = lcNewGroupList + "," +
-                             lcPreviousGroup WHEN llUpsell
-            lcNewTypeList  = lcNewTypeList  + "," +
-                             lcPreviousType WHEN llUpsell
-            lcSLGroupList  = lcNewGroupList
-            lcSLGATypeList = lcNewTypeList.
-      END.
+      before starting to fill the next bundle */       
+      fReprocessListWRTSubscription(MSOwner.MsSeq, 
+                                    CallTimeStamp, 
+                                    lcSLGroupList, 
+                                    lcSLGATypeList, 
+                                    TRUE,             /* Rearrange */
+                                    OUTPUT lcNewGroupList, 
+                                    OUTPUT lcNewTypeList).
+   END.
+   ELSE
+   DO:
+       /* Repopulate SLGAnalyse list w.r.t active bundle's on a subscription */
+       fReprocessListWRTSubscription(MSOwner.MsSeq, 
+                                     CallTimeStamp, 
+                                     lcSLGroupList, 
+                                     lcSLGATypeList, 
+                                     FALSE,
+                                     OUTPUT lcNewGroupList, 
+                                     OUTPUT lcNewTypeList).
    END.  
 
    ASSIGN
-      lcSLGroupList = TRIM(lcSLGroupList,",")
-      lcSLGATypeList = TRIM(lcSLGATypeList,",").
+      lcSLGroupList  = lcNewGroupList
+      lcSLGATypeList = lcNewTypeList.
 
    PACKET:
    REPEAT liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):
@@ -250,8 +213,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
       /* Servicelimit group */ 
       IF liSLGAType = 1 THEN DO:
 
-         /* If DSS is active and Dialtype is GPRS then
-            all data will go into DSS */
+         /* If DSS is active and Dialtype is GPRS then all data will go into DSS */
          IF liDialtype = {&DIAL_TYPE_GPRS} AND llActiveDSS THEN NEXT PACKET.
 
          /* call forwarding is handled like normal calls */
@@ -364,19 +326,32 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   liDialType = {&DIAL_TYPE_GPRS} THEN
                      c_dur = ldAmtUsed.
             END.
-
             ELSE DO:
             
                /* there are other packages available */
-               IF liSLGPacket < NUM-ENTRIES(lcSLGroupList)                                  AND
-                  (lcOutBDest = ""                                                          OR 
-                   (MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH") OR 
-                   LOOKUP("FIX_VOICE1000",lcSLGroupList) > 0)                               THEN 
+               IF liSLGPacket < NUM-ENTRIES(lcSLGroupList) THEN 
                DO:
-                  IF lcOutBDest = "" THEN 
-                      llPackageUsed = FALSE.
-                      
-                  NEXT PACKET.
+                  IF lcOutBDest = "" THEN
+                  DO:
+                     llPackageUsed = FALSE.
+                     NEXT PACKET.
+                  END. 
+                  /* TODO: This hard coding will be removed, after discussing with Antti & Vikas */
+                  ELSE IF MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH" THEN 
+                     NEXT PACKET.     
+                  ELSE 
+                  DO:
+                     IF NOT CAN-FIND(FIRST ttTariff WHERE ttTariff.Brand      = MsOwner.Brand  AND
+                                                          ttTariff.CCN        = ttCall.RateCCN AND
+                                                          ttTariff.PriceList  > ""             AND
+                                                          ttTariff.BDest      = lcOutBDest     AND
+                                                          ttTariff.ValidFrom <= ttCall.Datest  AND
+                                                          ttTariff.ValidTo   >= ttCall.Datest  NO-LOCK) THEN  
+                     DO:
+                        llPackageUsed = FALSE.
+                        NEXT PACKET.
+                     END.   
+                  END.
                END.
                
                ASSIGN
@@ -560,7 +535,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                ldePCCBalance = ldePCCBalance / 1024 / 1024 / 1024.
 
             IF NOT llActiveDSS AND
-               LOOKUP(MSOwner.CLIType,lcCliTypeList) > 0 AND 
+               LOOKUP(MSOwner.CLIType,lcCliTypeList) = 0 AND 
                ldePCCBalance >= MServiceLimit.InclAmt AND 
                liSLGPacket < NUM-ENTRIES(lcSLGroupList) THEN NEXT PACKET.
 
