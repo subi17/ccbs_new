@@ -159,18 +159,25 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
       IF AVAIL CLIType THEN DO:
          IF CLIType.FixedLineType EQ 1 THEN DO:
-            lcOrderType = "Alta xDSL + VOIP".
+            lcOrderType = "Alta xDSL".
             lcConnServiceId = "ADSL".
             lcConnServiceName = "ADSL connection".
             lcConnServiceType = "ADSL".
          END.
          ELSE IF CLIType.FixedLineType EQ 2 THEN DO:
-            lcOrderType = "Alta FTTH + VOIP".
+            lcOrderType = "Alta FTTH".
             lcConnServiceId = "FTTH".
             lcConnServiceName = "FTTH connection".
             lcConnServiceType = "FTTH".
          END.
          ELSE RETURN "Not allowed Fixed line type".
+
+         /* NEBACO-47 */
+         IF Clitype.Clitype MATCHES "CONTFHNB*" THEN
+            lcOrderType = lcOrderType + " NEBA".
+
+         lcOrderType = lcOrderType +  " + VOIP".
+
       END.
    END.
    ELSE
@@ -249,7 +256,14 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
-
+   
+   IF OrderFusion.IUA NE "" THEN DO:
+       fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "IUA",                   /*param name*/
+                         OrderFusion.IUA,         /*param value*/
+                         "").                     /*old value*/
+      
+   END.
 
    /*Mandatory in portability*/
    IF OrderFusion.FixedNumberType NE "new" THEN DO:
