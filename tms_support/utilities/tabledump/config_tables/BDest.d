@@ -1028,6 +1028,8 @@
 "GPRSDSS200_A" "GPRS data DSS200" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/15 1001 ""
 "GPRSDSS2_A" "GPRS data DSS2" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 921 ""
 "GPRSDSS2_B" "GPRS data DSS2" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 922 ""
+"GPRSDSS4_A" "GPRS data DSS4" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 07/05/18 1129 ""
+"GPRSDSS4_B" "GPRS data DSS4" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 07/05/18 1130 ""
 "GPRSDSS_A" "GPRS data DSS" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 618 ""
 "GPRSDSS_B" "GPRS data DSS" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 619 ""
 "GPRS_DATA200_UPSELL" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/15 1000 ""
