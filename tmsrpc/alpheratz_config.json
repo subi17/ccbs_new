@@ -80,8 +80,8 @@
 		"3003": {
 			"/bss": [ "bss", {
 				"check-local": "\"disable\"",
-				"min-procs": "1",
-				"max-procs": "1",
+				"min-procs": "2",
+				"max-procs": "2",
 				"kill-signal": "10"
 			}],
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
