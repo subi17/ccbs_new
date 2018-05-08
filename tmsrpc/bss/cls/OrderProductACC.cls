@@ -233,8 +233,8 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
                                  icSubType)).
 
       IF (NOT llPrePaid) AND
-         aoOrderCustomer:BankCode EQ "" OR
-         NOT VALID-OBJECT(aoMandate)
+         (aoOrderCustomer:BankCode EQ "" OR
+          NOT VALID-OBJECT(aoMandate))
       THEN UNDO, THROW NEW ParamError
                      (SUBSTITUTE("Both bankaccount and mandate fields are " +
                                  "mandatory when subtype is in value '&1'",
