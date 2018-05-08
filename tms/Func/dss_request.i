@@ -21,26 +21,30 @@ FUNCTION fDSSRequest RETURNS INTEGER
     INPUT ilMandatory    AS LOG,    /* is subrequest mandatory */
     OUTPUT ocResult      AS CHAR):
  
-   DEF VAR liReqCreated     AS INT  NO-UNDO.
-   DEF VAR lcCLI            AS CHAR NO-UNDO.
-   DEF VAR lcCLIType        AS CHAR NO-UNDO.
+   DEF VAR liReqCreated AS INT  NO-UNDO.
+   DEF VAR lcCLI        AS CHAR NO-UNDO.
+   DEF VAR lcCLIType    AS CHAR NO-UNDO.
 
-   DEF BUFFER bMobSub       FOR MobSub.
-   DEF BUFFER bTermMobSub   FOR TermMobSub.
+   DEF BUFFER bMobSub     FOR MobSub.
+   DEF BUFFER bTermMobSub FOR TermMobSub.
 
    FIND FIRST bMobSub WHERE
-              bMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+              bMobSub.MsSeq EQ iiMsSeq NO-LOCK NO-ERROR.
+
    IF NOT AVAIL bMobSub THEN DO:
-      FIND FIRST bTermMobSub WHERE
-                 bTermMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+      FIND FIRST bTermMobSub NO-LOCK WHERE
+                 bTermMobSub.MsSeq EQ iiMsSeq NO-ERROR.
+
       IF NOT AVAIL bTermMobSub THEN DO:
          ocResult = "MobSub not found".
          RETURN 0.
-      END. /* IF NOT AVAIL bTermMobSub THEN DO: */
-      ASSIGN lcCLI = bTermMobSub.CLI
+      END. 
+
+      ASSIGN lcCLI     = bTermMobSub.CLI
              lcCLIType = bTermMobSub.CLIType.
-   END. /* IF NOT AVAIL bMobSub THEN DO: */
-   ELSE ASSIGN lcCLI = bMobSub.CLI
+
+   END. 
+   ELSE ASSIGN lcCLI     = bMobSub.CLI
                lcCLIType = bMobSub.CLIType.
 
    ocResult = fChkRequest(iiCustNum,
@@ -53,10 +57,10 @@ FUNCTION fDSSRequest RETURNS INTEGER
    /* Pre-check only for CREATE, there is no ongoing ACC request */
    IF icAction = "CREATE" THEN DO:
       RUN Mm/requestaction_check.p(INPUT {&REQTYPE_DSS},
-                                INPUT lcCLIType,
-                                INPUT iiMsSeq,
-                                INPUT icSource,
-                                OUTPUT ocResult).
+                                   INPUT lcCLIType,
+                                   INPUT iiMsSeq,
+                                   INPUT icSource,
+                                   OUTPUT ocResult).
       IF ocResult > "" THEN RETURN 0.
    END. /* IF icAction = "CREATE" THEN DO: */
 
