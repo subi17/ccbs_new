@@ -351,6 +351,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.FirstName          = THIS-OBJECT:FirstName
          OrderCustomer.SurName1           = THIS-OBJECT:SurName1
          OrderCustomer.SurName2           = THIS-OBJECT:SurName2
+         OrderCustomer.Company            = THIS-OBJECT:Company
          OrderCustomer.Nationality        = THIS-OBJECT:Nationality
          OrderCustomer.Language           = THIS-OBJECT:Language
          OrderCustomer.CustIdType         = THIS-OBJECT:CustIdType
