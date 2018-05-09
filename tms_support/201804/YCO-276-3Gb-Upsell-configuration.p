@@ -113,7 +113,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
          TMSParam.ParamType  = "C"  
          TMSParam.CharVal     = "/store/riftp/upsells/outgoing/logs/". 
   RELEASE TMSParam.
-  
+ 
   /* Process OK */
   lSuccess = TRUE.
 END.
