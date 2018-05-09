@@ -132,7 +132,7 @@ ASSIGN
 CREATE CCRule.
 ASSIGN 
     CCRule.Brand       = BillItem.Brand
-    CCRule.CCRuleID    = STRING(NEXT-VALUE(CCRuleSeq))
+    CCRule.CCRuleID    = NEXT-VALUE(CCRuleSeq)
     CCRule.Category    = "*"
     CCRule.BillCode    = BillItem.BillCode
     CCRule.ValidFrom   = TODAY

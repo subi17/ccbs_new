@@ -1,12 +1,12 @@
-ADD FIELD "CCRuleID" OF "CCRule" AS character
+ADD FIELD "CCRuleID" OF "CCRule" AS integer
   DESCRIPTION "ID of the CCRULE Record"
-  FORMAT "x(8)"
+  FORMAT ">>>>>>>9"
   POSITION 7
-  INITIAL ""
+  INITIAL "0"
   LABEL "Rule ID"
   COLUMN-LABEL "Rule ID"
   ORDER 60
-  MAX-WIDTH 16
+  MAX-WIDTH 4
 
 ADD FIELD "BillCode" OF "CCRule" AS character
   DESCRIPTION "BillCode for the CCRule record."

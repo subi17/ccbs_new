@@ -191,8 +191,8 @@ PROCEDURE pCreateBillingItem:
          END.
       END.
 
-      $BillingItem:
-      DO TRANSACTION:
+      BILLIING-ITEM:
+      DO TRANSACTION ON ERROR UNDO,LEAVE:
       
           CREATE BillItem.
           ASSIGN BillItem.Brand       = Syst.Var:gcBrand
@@ -213,7 +213,7 @@ PROCEDURE pCreateBillingItem:
           CREATE CCRule.
           ASSIGN 
               CCRule.Brand       = BillItem.Brand
-              CCRule.CCRuleID    = STRING(NEXT-VALUE(CCRuleSeq))
+              CCRule.CCRuleID    = NEXT-VALUE(CCRuleSeq)
               CCRule.Category    = "*"
               CCRule.BillCode    = BillItem.BillCode
               CCRule.ValidFrom   = TODAY

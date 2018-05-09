@@ -222,7 +222,7 @@ REPEAT WITH FRAME sel:
            CREATE CCRule.
            ASSIGN
               CCRule.Brand    = Syst.Var:gcBrand
-              CCRule.CCRuleID = STRING(NEXT-VALUE(CCRuleSeq))
+              CCRule.CCRuleID = NEXT-VALUE(CCRuleSeq)
               CCRule.BillCode = INPUT FRAME lis CCRule.BillCode
               CCRule.Category = INPUT FRAME lis CCRule.Category
               CCRule.ValidFrom = TODAY.

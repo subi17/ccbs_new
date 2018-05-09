@@ -737,7 +737,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                   CCRule.Brand      =   BillItem.Brand      AND 
                   CCRule.Category   =   "*"                 AND 
                   CCRule.BillCode   =   BillItem.BillCode   AND
-                  CCRule.ValidTo    >=  TODAY USE-INDEX Category NO-ERROR.
+                  CCRule.CLIType    =   ""                  AND 
+                  CCRule.ValidTo    >=  TODAY NO-ERROR.
 
       IF llSalesInv THEN DO:
          IF LOOKUP(STRING(InvRow.SlsAcc),lcSkipSlsCode) > 0 THEN
@@ -746,8 +747,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          IF ttRow.ProductCode > "" THEN ttRow.Operator = "010".
       END.
       
-      ELSE DO:
-         
+      ELSE DO:         
          IF AVAILABLE CCRule AND CCRule.ReportingID > "" THEN DO:
             ASSIGN
                ttRow.Operator    = "010"
@@ -946,7 +946,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                           CCRule.Brand      =   BillItem.Brand      AND 
                           CCRule.Category   =   "*"                 AND  
                           CCRule.BillCode   =   BillItem.BillCode   AND
-                          CCRule.ValidTo    >=  TODAY USE-INDEX Category NO-ERROR.
+                          CCRule.CLIType    =   ""                  AND 
+                          CCRule.ValidTo    >=  TODAY NO-ERROR.
                 
                IF AVAILABLE CCRule       
                THEN ASSIGN ttRow.SlsAcc     = CCRule.AccNum /* Only used account number currently */

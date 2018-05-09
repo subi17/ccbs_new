@@ -12,7 +12,7 @@
   ----------------------------------------------------------------------*/
 
 
-MESSAGE "This Script will create the CCRULE records in the database." SKIP 
+MESSAGE "This Script will create the Accunt Rules records in the database." SKIP 
         "Do you want to continue?"
 VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO UPDATE lgChoice AS LOGICAL.
 
@@ -20,18 +20,33 @@ IF NOT lgChoice THEN RETURN.
 
 FOR EACH BillItem NO-LOCK:
     
+    FIND FIRST CostCentre WHERE CostCentre.Brand      =   BillItem.Brand 
+                            AND CostCentre.CostCentre =   BillItem.CostCentre NO-LOCK NO-ERROR.
+    
+    IF NOT AVAILABLE CostCentre 
+    THEN DO:
+        ASSIGN 
+            CostCentre.Brand      = BillItem.Brand
+            CostCentre.CostCentre = BillItem.CostCentre.
+    END.  
+    
     CREATE CCRule.
-    ASSIGN CCRule.CCruleId     =    STRING(NEXT-VALUE(CCRuleSeq))
+    ASSIGN CCRule.Brand        =    BillItem.Brand
+           CCRule.CCruleId     =    NEXT-VALUE(CCRuleSeq)
            CCRule.Category     =    "*"
+           CCRule.BillCode     =    BillItem.BillCode
            CCRule.ValidFrom    =    TODAY
            CCRule.ValidTo      =    12/31/49
            CCRule.ReportingID  =    BillItem.SAPRid
+           CCRule.CostCentre   =    BillItem.CostCentre
+           CCRule.AccNum       =    BillItem.AccNum
+           CCRule.EUAccNum     =    BillItem.EUAccNum
+           CCRule.EUConAccNum  =    BillItem.EUConAccNum
+           CCRule.FSAccNum     =    BillItem.FSAccNum
            .
            
-    BUFFER-COPY BillItem TO CCRule NO-ERROR.
-    
 END.
 
 MESSAGE "Script Execution Completed." SKIP
-        "CCRULE records got created."    
+        "Account Rules records got created."    
 VIEW-AS ALERT-BOX.

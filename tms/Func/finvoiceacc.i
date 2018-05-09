@@ -30,7 +30,8 @@ FUNCTION fInvRowAccount RETURNS INTEGER
               bCCRule.Brand      = BillItem.Brand    AND 
              (bCCRule.Category   = "*"      OR
               bCCRule.Category   = icCategory )      AND 
-              bCCRule.BillCode   = BillItem.BillCode AND              
+              bCCRule.BillCode   = BillItem.BillCode AND  
+              bCCRule.CLIType    = ""                AND             
               bCCRule.ValidTo    >= TODAY USE-INDEX Category NO-ERROR. 
          
    IF AVAILABLE bCCRule THEN 

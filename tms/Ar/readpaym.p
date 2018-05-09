@@ -460,7 +460,8 @@ FOR FIRST FatGroup NO-LOCK WHERE
           CCRule.Brand      =  BillItem.Brand    AND 
           CCRule.Category   =  "*"               AND
           CCRule.BillCode   =  BillItem.BillCode AND 
-          CCRule.ValidTo    >= TODAY USE-INDEX Category:
+          CCRule.CLIType    =  ""                AND 
+          CCRule.ValidTo    >= TODAY :
    liSaldoAcc = CCRule.AccNum.
 END.
 IF lcSubBalGift > "" THEN 
@@ -474,7 +475,8 @@ FOR FIRST FatGroup NO-LOCK WHERE
           CCRule.Brand      =   BillItem.Brand    AND 
           CCRule.Category   =   "*"               AND   
           CCRule.BillCode   =   BillItem.BillCode AND 
-          CCRule.ValidTo    >=  TODAY USE-INDEX Category:
+          CCRule.CLIType    =   ""                AND 
+          CCRule.ValidTo    >=  TODAY :
    liEGiftAcc = CCRule.AccNum.
 END.
 

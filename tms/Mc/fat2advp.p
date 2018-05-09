@@ -26,8 +26,9 @@ FOR FIRST FatGroup OF FATime NO-LOCK,
           BillItem.BillCode = FatGroup.BillCode,
     FIRST CCRule NO-LOCK WHERE 
           CCRule.Brand      = BillItem.Brand    AND 
+          CCRule.Category   = "*"               AND 
           CCRule.BillCode   = BillItem.BillCode AND 
-          CCRule.Category   = "*"        AND 
+          CCRule.CLIType    = ""                AND 
           CCRule.ValidTo    >= TODAY   , 
     FIRST Account NO-LOCK WHERE
           Account.Brand   = Syst.Var:gcBrand  AND

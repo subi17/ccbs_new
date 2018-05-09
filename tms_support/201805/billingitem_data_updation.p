@@ -19,12 +19,13 @@
 
 
 DEFINE VARIABLE lcBkpFile AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcErrFile AS CHARACTER NO-UNDO.
 
-ASSIGN lcBkpFile = "/apps/yoigo/tms_support/201805/billing_item_bkp.d".
-
+DEFINE STREAM err.
 DEFINE STREAM bkp.
 
-DEFINE BUFFER bfBillItem FOR BillItem.
+ASSIGN lcBkpFile = "/apps/yoigo/tms_support/201805/billingitem_bkp.d"
+       lcErrFile = "/apps/yoigo/tms_support/201805/billingitem_err.txt".
 
 MESSAGE "This script will update the Item Type for the BillItem." SKIP 
         "Do you want to continue?"
@@ -32,9 +33,10 @@ VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO UPDATE lgChoice AS LOGICAL.
 
 IF NOT lgChoice THEN RETURN.
 
-OUTPUT TO VALUE(lcBkpFile).
+OUTPUT STREAM bkp TO VALUE(lcBkpFile).
+OUTPUT STREAM err TO VALUE(lcErrFile).
 
-EXPORT DELIMITER "," "Brand" "BIGroup" "BillCode" "ItemType" "New ItemType".
+EXPORT STREAM bkp DELIMITER "," "Brand" "BIGroup" "BillCode" "ItemType" "New ItemType".
 
 FOR EACH BillItem NO-LOCK :
      
@@ -45,23 +47,32 @@ FOR EACH BillItem NO-LOCK :
     IF AVAILABLE BItemGroup 
     THEN DO:
         
-        FIND FIRST bfBillItem EXCLUSIVE-LOCK WHERE 
-            ROWID(bfBillItem)  = ROWID(BillItem) NO-WAIT NO-ERROR.
-             
-        IF NOT AVAILABLE bfBillItem OR LOCKED(bfBillItem) THEN NEXT.
+        FIND CURRENT BillItem EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
         
-        EXPORT DELIMITER "," BillItem.Brand BillItem.BIGroup BillItem.BillCode BillItem.ItemType BItemGroup.GroupType.
+        IF LOCKED(BillItem) THEN 
+        DO:
+            EXPORT STREAM err "BillItem record with the BillCode:" BillItem.Billcode " is locked. Update failed.".  
+            NEXT.
+        END. 
+        ELSE IF NOT AVAILABLE(BillItem) THEN 
+        DO:
+            EXPORT STREAM err "BillItem record with the BillCode:" BillItem.Billcode " is not available. Update failed.".  
+            NEXT.
+        END. 
+               
+        EXPORT STREAM bkp DELIMITER "," BillItem.Brand BillItem.BIGroup BillItem.BillCode BillItem.ItemType BItemGroup.GroupType.
         
         ASSIGN 
-            bfBillItem.ItemType = BItemGroup.GroupType NO-ERROR.
+            BillItem.ItemType = BItemGroup.GroupType NO-ERROR.
        
-    END. 
-   
+    END.    
 END.
 
-OUTPUT CLOSE.
+OUTPUT STREAM bkp CLOSE.
+OUTPUT STREAM err CLOSE.
 
-DISPLAY lcBkpFile LABEL "Backup file" FORMAT "X(70)" WITH 1 COL.
+DISPLAY lcBkpFile LABEL "Backup file" FORMAT "X(60)"
+        lcErrFile LABEL "Error File"  FORMAT "X(60)" WITH 1 COL.
 
-MESSAGE "Script Execution Completed." SKIP "BillItem records successfully updated."
+MESSAGE "Script Execution Completed."       
 VIEW-AS ALERT-BOX.

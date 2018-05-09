@@ -89,8 +89,9 @@ FUNCTION fCollAmt RETURNS LOGICAL
        FIND FIRST CCRule NO-LOCK WHERE 
                   CCRule.Brand      = BillItem.Brand    AND 
                   CCRule.Category   = "*"               AND 
-                  CCRule.BillCode   = BillItem.BillCode AND                   
-                  CCRule.ValidTo    >= TODAY USE-INDEX Category NO-ERROR. 
+                  CCRule.BillCode   = BillItem.BillCode AND   
+                  CCRule.CLIType    = ""                AND                 
+                  CCRule.ValidTo    >= TODAY  NO-ERROR. 
                   
    liAccount = IF AVAILABLE CCRule THEN CCRule.AccNum ELSE 0. 
 

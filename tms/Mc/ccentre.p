@@ -436,7 +436,7 @@ BROWSE:
        FOR FIRST CCRule NO-LOCK WHERE
                  CCRule.Brand      = Syst.Var:gcBrand AND
                  CCRule.CostCentre = CostCentre.CostCentre:
-           MESSAGE "Cost centre is used on Account Rule(s) with BillCode:" 
+           MESSAGE "Cost centre is used on BillCode:" 
                    CCRule.BillCode ". Delete not allowed."
                   VIEW-AS ALERT-BOX ERROR.
            NEXT LOOP.
