@@ -249,10 +249,10 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEFINE BUFFER bClitype       FOR CLIType.
 
    DEFINE VARIABLE llHasMappingMissingForLegacyTariff AS LOGICAL NO-UNDO INIT TRUE.
-   DEFINE VARIABLE lcclitypeto AS CHARACTER NO-UNDO INITIAL "".
-   DEFINE VARIABLE liRequest   AS INTEGER   NO-UNDO INITIAL "".
-   DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO INITIAL "".
-  
+   DEFINE VARIABLE lcclitypeto AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liRequest   AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO.
+   
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_PRO_MIGRATION},
                           "",
@@ -284,17 +284,40 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
            FIND FIRST Clitype WHERE 
                       Clitype.brand   EQ Syst.Var:gcBrand AND
                       Clitype.clitype EQ bMobsub.clitype  NO-LOCK NO-ERROR.
-           IF AVAIL Clitype                                            AND 
-             /* Clitype.webstatuscode <> {&CLITYPE_WEBSTATUSCODE_ACTIVE} AND */
-              fgetActiveReplacement(bMobsub.clitype) = ""              THEN 
+           IF AVAIL Clitype THEN
            DO:
-               ASSIGN llHasMappingMissingForLegacyTariff = FALSE.  
-               LEAVE MOBSUB-CHK. 
-           END.
-           IF AVAIL Clitype AND llHasMappingMissingForLegacyTariff THEN 
-               lcclitypeto =   fgetActiveReplacement(bMobsub.clitype).      /* YDR-2851 - create stc request while migrating category residential to pro */
+               CASE Clitype.webstatuscode:                   
+                   WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} THEN  
+                   DO:
+                       lcclitypeto = fgetActiveReplacement(bMobsub.clitype,"ProSTCMigrationMappings").
+                       IF lcclitypeto = "" THEN 
+                       DO:
+                           FIND FIRST FMItem WHERE
+                                      FMItem.Brand     = Syst.Var:gcBrand         AND
+                                      FMItem.FeeModel  > ""                       AND
+                                      FMItem.PriceList = "PRO_" + bMobsub.clitype AND
+                                      FMItem.FromDate <= TODAY                    AND
+                                      FMItem.ToDate   >= TODAY                    NO-LOCK NO-ERROR.
+                           IF NOT AVAILABLE FMItem THEN 
+                           DO:
+                              ASSIGN llHasMappingMissingForLegacyTariff = FALSE. 
+                              LEAVE MOBSUB-CHK. 
+                           END.                         
+                       END.                                              
+                   END.  
+                   OTHERWISE 
+                   DO:
+                      lcclitypeto = fgetActiveReplacement(bMobsub.clitype,"ProSubsMigrationMappings").
+                      IF lcclitypeto = "" THEN 
+                      DO:
+                         ASSIGN llHasMappingMissingForLegacyTariff = FALSE. 
+                         LEAVE MOBSUB-CHK.
+                      END.  
+                  END.                                      
+               END CASE.              
+           END.                                                
        END.
-
+       
        IF NOT llHasMappingMissingForLegacyTariff THEN DO:
             ocResult = "103".
             RETURN 0.
@@ -331,8 +354,9 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
            RETURN 0. 
        END.
    END.
-   
-    IF lcclitypeto <> "" AND llHasMappingMissingForLegacyTariff THEN 
+    
+    /* YDR-2851 - create stc request while migrating from residential to pro */
+    IF lcclitypeto <> "" THEN 
     DO :
         liRequest = fCTChangeRequest(iiMsseq,           /* The MSSeq of the subscription to where the STC is made */
             lcclitypeto,                                /* The CLIType of where to do the STC */
@@ -351,13 +375,13 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
             iiOrig,
             "",                                         /* contract id */
             OUTPUT lcError).
-        IF lcError = "" THEN
-            ASSIGN iiOrig = liRequest.
-        ELSE 
+        IF liRequest = 0 THEN 
         DO:
-            ocResult = lcError.
-            RETURN 0. 
+           ASSIGN ocResult = "Promigration not possible because STC request not created".
+           RETURN 0.
         END.
+        ELSE 
+            ASSIGN iiOrig = liRequest.
     END.
             
    /* set activation time */
@@ -408,10 +432,10 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
                                         OUTPUT lcResult).
       END.
       ELSE IF AVAIL Clitype AND
-              fgetActiveReplacement(bMobsub.clitype) GT "" THEN DO:
+              fgetActiveReplacement(bMobsub.clitype,"ProSubsMigrationMappings") GT "" THEN DO:
          /* Make iSTC according to mapping */
          liMsReq = fCTChangeRequest(bMobSub.msseq,
-                        fgetActiveReplacement(bMobsub.clitype),
+                        fgetActiveReplacement(bMobsub.clitype,"ProSubsMigrationMappings"),
                         "", /* lcBundleID */
                         "", /*bank code validation is already done */
                         Func.Common:mMakeTS(),
