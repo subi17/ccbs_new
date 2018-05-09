@@ -324,42 +324,6 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
 
   END.  /* DO liUpsells */
   
-  /* Adding the new upsells to the periodical contracts */
-  FOR EACH daycampaign
-     WHERE daycampaign.brand = Syst.Var:gcBrand AND
-           LOOKUP(daycampaign.dcevent,cValidList) > 0 
-     EXCLUSIVE-LOCK :
-     IF daycampaign.bundleupsell <> "" THEN
-        daycampaign.bundleupsell = cUpsell_Id + "," + daycampaign.bundleupsell.
-     ELSE
-        daycampaign.bundleupsell = cUpsell_Id.
-  END.
-
-  /* Adding upsells to POSTPAID_DATA_UPSELLS */
-  FIND FIRST TMSParam WHERE
-             TMSParam.Brand      = Syst.Var:gcBrand AND
-             TMSParam.ParamGroup = "Bundles"        AND
-             TMSParam.ParamCode  = "POSTPAID_DATA_UPSELLS"
-       EXCLUSIVE-LOCK.
-  TMSParam.CharVal = TMSParam.CharVal + "," + cUpsell_Id.
-  RELEASE TMSParam.
-
-  /* Linking upsells to bonos (adding only to the ones that already have an upsell) */
-  FOR EACH daycampaign WHERE daycampaign.brand  = "1"
-                         AND daycampaign.dctype = "4" /* Progressive rating */
-                       EXCLUSIVE-LOCK:
-                       
-     IF daycampaign.dcevent BEGINS "TARJ" THEN NEXT.
-
-     /* Adding only to bonos that already have an upsell, for security */
-     IF INDEX(daycampaign.bundleupsell,"_UPSELL") = 0 THEN NEXT.
-
-     /* So the ones that already got the upsells, a few lines above, are skipped */
-     IF INDEX(daycampaign.bundleupsell,"FID3GB_R_UPSELL") > 0 THEN NEXT.  
-
-     daycampaign.bundleupsell = cUpsell_Id + "," + daycampaign.bundleupsell. 
-  END.
-
   /* Process OK */
   lSuccess = TRUE.
 END.
