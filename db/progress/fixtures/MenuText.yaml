@@ -5642,3 +5642,6 @@ bulkload: MenuText
   MenuNum: 9854
   MenuText: "INSTALL ADDRESS"
 
+bulkload: MenuText
+  MenuNum: 9857
+  MenuText: "ACCOUNT.RULES"

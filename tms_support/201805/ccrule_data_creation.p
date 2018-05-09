@@ -37,7 +37,7 @@ FOR EACH BillItem NO-LOCK:
            CCRule.Category     =    "*"
            CCRule.BillCode     =    BillItem.BillCode
            CCRule.ValidFrom    =    TODAY
-           CCRule.ValidTo      =    12/31/49
+           CCRule.ValidTo      =    DATE(12,31,2049)
            CCRule.ReportingID  =    BillItem.SAPRid
            CCRule.CostCentre   =    BillItem.CostCentre
            CCRule.AccNum       =    BillItem.AccNum

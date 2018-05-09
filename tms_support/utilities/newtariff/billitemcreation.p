@@ -217,7 +217,7 @@ PROCEDURE pCreateBillingItem:
               CCRule.Category    = "*"
               CCRule.BillCode    = BillItem.BillCode
               CCRule.ValidFrom   = TODAY
-              CCRule.ValidTo     = 12/31/49   
+              CCRule.ValidTo     = DATE(12,31,2049) 
               CCRule.AccNum      = INTEGER(ttBillItem.AccNum)
               CCRule.EUAccNum    = INTEGER(ttBillItem.AccNum)
               CCRule.EUConAccNum = INTEGER(ttBillItem.AccNum)

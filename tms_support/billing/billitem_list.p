@@ -72,7 +72,7 @@ for each billitem no-lock where
         (IF AVAILABLE CCRule THEN CCRule.AccNum ELSE 0)   chr(9)
         billitem.invsect  chr(9)
         billitem.taxclass chr(9)
-        (IF AVAILABLE CCRule THEN CCRule.ReportingID ELSE "")
+        (IF AVAILABLE CCRule THEN CCRule.ReportingID ELSE "") chr(9)
         (IF AVAILABLE CCRule THEN CCRule.CostCentre  ELSE "")
        .
 
