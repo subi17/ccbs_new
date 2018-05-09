@@ -127,9 +127,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
    &THEN 
         copy_service_package(CLIType.CLIType,TODAY).
    &ENDIF
-        RUN pMatrix(ttCliType.CliType, 
-                    ttCliType.BaseBundle,
-                    "PERCONTR").
+        pMatrix(ttCliType.CliType,ttCliType.BaseBundle,"PERCONTR").
         lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
                                                 9,
                                                 CLIType.CLIType,
@@ -230,9 +228,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
    &THEN 
         copy_service_package(CLIType.CLIType,TODAY).
    &ENDIF
-        RUN pMatrix(ttCliType.CliType, 
-                    ttCliType.BaseBundle,
-                    "PERCONTR").
+        pMatrix(ttCliType.CliType,ttCliType.BaseBundle,"PERCONTR").
             
         lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
                                                 9,
@@ -466,7 +462,79 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
         END.
      
     END METHOD.
+    
+    METHOD PUBLIC CHAR pMatrix(icCLIType AS CHAR,
+                               icAllowedBundles AS CHAR,
+                               icType AS CHAR):
 
+        DEF INPUT PARAMETER icCLIType          AS CHAR NO-UNDO.    
+        DEF INPUT PARAMETER icAllowedBundles   AS CHAR NO-UNDO.
+        DEF INPUT PARAMETER icType             AS CHAR NO-UNDO. /*("PERCONTR"|"EXTRALINE") */
+        DEF VAR liPrior AS INT NO-UNDO.
+        DEF VAR liMXSeq AS INT NO-UNDO.
+        
+
+        DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
+        
+        DEFINE BUFFER bf_Matrix FOR Matrix.
+
+        FIND LAST bf_Matrix WHERE bf_Matrix.mxkey = icKey NO-LOCK NO-ERROR.
+        IF AVAILABLE bf_Matrix THEN 
+            liPrior = (bf_Matrix.Prior + 1).
+        ELSE 
+            liPrior = 1.
+            
+        FOR EACH bf_Matrix NO-LOCK BY bf_Matrix.MXSeq DESCENDING:
+            liMXSeq =  bf_Matrix.MXSeq + 1.
+        END.
+
+        FIND FIRST Matrix WHERE 
+                   Matrix.Brand = gcBrand AND 
+                   Matrix.MXKey = icType AND 
+                   Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
+        IF NOT AVAIL Matrix THEN 
+        DO:
+            CREATE Matrix.
+            ASSIGN
+                Matrix.Brand  = Syst.Var:gcBrand
+                Matrix.MXSeq  = liMXSeq
+                Matrix.mxkey  = icType
+                Matrix.mxname = icCLIType
+                Matrix.prior  = liPrior
+                Matrix.mxres  = 1.
+       
+            CREATE MXItem.
+            ASSIGN
+                MXItem.MxSeq   = Matrix.MXSeq
+                MXItem.MxValue = icCLIType
+                MXItem.MxName  = "SubsTypeTo".   
+        END.
+      
+        DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
+            ON ERROR UNDO, THROW:
+      
+            IF icType = "PERCONTR" AND LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
+                NEXT.
+      
+            FIND FIRST MxItem WHERE 
+                MxItem.MxSeq   = Matrix.MXSeq AND 
+                MxItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeFrom") AND 
+                MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
+            IF NOT AVAIL MxItem THEN 
+            DO:      
+                CREATE MXItem.
+                ASSIGN
+                    MXItem.MxSeq   = Matrix.MXSeq
+                    MXItem.MxValue = ENTRY(liCount,icAllowedBundles)
+                    MXItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeFrom").   
+            END.   
+
+        END.
+
+        RETURN "".
+
+    END METHOD.
+    
     DESTRUCTOR PUBLIC CLITypeModel ():
         IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
         IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.
