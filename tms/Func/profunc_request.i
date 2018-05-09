@@ -230,6 +230,44 @@ FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
    RETURN lcOutput.
 END FUNCTION.
 
+FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
+   (INPUT icCliType    AS CHAR,
+    OUTPUT ocCliTypeTo AS CHAR):
+
+   FIND FIRST CliType WHERE CliType.Brand   EQ Syst.Var:gcBrand AND
+                            CliType.clitype EQ icCliType        NO-LOCK NO-ERROR.
+   IF AVAIL CliType THEN
+   DO:
+       CASE Clitype.WebStatusCode:                   
+           WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} THEN  
+           DO:
+               ocCliTypeTo = fgetActiveReplacement(icCliType,"STCMappingForActiveTariffs").
+
+               IF ocCliTypeTo = "" THEN 
+               DO:
+                   FIND FIRST FMItem WHERE
+                              FMItem.Brand     = Syst.Var:gcBrand   AND
+                              FMItem.FeeModel  > ""                 AND
+                              FMItem.PriceList = "PRO_" + icCliType AND
+                              FMItem.FromDate <= TODAY              AND
+                              FMItem.ToDate   >= TODAY              NO-LOCK NO-ERROR.
+                   IF NOT AVAILABLE FMItem THEN 
+                      RETURN FALSE.                         
+               END.                                              
+           END.  
+           OTHERWISE 
+           DO:
+              ocCliTypeTo = fgetActiveReplacement(bMobsub.clitype,"ProSubsMigrationMappings").
+              IF ocCliTypeTo = "" THEN 
+                 RETURN FALSE.
+          END.                                      
+       END CASE.               
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.   
+
 FUNCTION fProMigrationRequest RETURNS INTEGER
    (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
     INPUT  icCreator      AS CHARACTER,  /* who made the request */
@@ -252,7 +290,8 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEFINE VARIABLE lcclitypeto AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liRequest   AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO.
-   
+   DEFINE VARIABLE llValidMaping AS LOGICAL NO-UNDO.
+
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_PRO_MIGRATION},
                           "",
@@ -281,41 +320,10 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
        FOR EACH bMobSub 
           WHERE bMobSub.Brand   = Syst.Var:gcBrand 
             AND bMobSub.AgrCust = bCustomer.CustNum NO-LOCK:
-           FIND FIRST Clitype WHERE 
-                      Clitype.brand   EQ Syst.Var:gcBrand AND
-                      Clitype.clitype EQ bMobsub.clitype  NO-LOCK NO-ERROR.
-           IF AVAIL Clitype THEN
-           DO:
-               CASE Clitype.webstatuscode:                   
-                   WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} THEN  
-                   DO:
-                       lcclitypeto = fgetActiveReplacement(bMobsub.clitype,"ProSTCMigrationMappings").
-                       IF lcclitypeto = "" THEN 
-                       DO:
-                           FIND FIRST FMItem WHERE
-                                      FMItem.Brand     = Syst.Var:gcBrand         AND
-                                      FMItem.FeeModel  > ""                       AND
-                                      FMItem.PriceList = "PRO_" + bMobsub.clitype AND
-                                      FMItem.FromDate <= TODAY                    AND
-                                      FMItem.ToDate   >= TODAY                    NO-LOCK NO-ERROR.
-                           IF NOT AVAILABLE FMItem THEN 
-                           DO:
-                              ASSIGN llHasMappingMissingForLegacyTariff = FALSE. 
-                              LEAVE MOBSUB-CHK. 
-                           END.                         
-                       END.                                              
-                   END.  
-                   OTHERWISE 
-                   DO:
-                      lcclitypeto = fgetActiveReplacement(bMobsub.clitype,"ProSubsMigrationMappings").
-                      IF lcclitypeto = "" THEN 
-                      DO:
-                         ASSIGN llHasMappingMissingForLegacyTariff = FALSE. 
-                         LEAVE MOBSUB-CHK.
-                      END.  
-                  END.                                      
-               END CASE.              
-           END.                                                
+           
+           llHasMappingMissingForLegacyTariff = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcclitypeto).
+           IF NOT llHasMappingMissingForLegacyTariff THEN 
+              LEAVE MOBSUB-CHK.
        END.
        
        IF NOT llHasMappingMissingForLegacyTariff THEN DO:
@@ -354,35 +362,6 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
            RETURN 0. 
        END.
    END.
-    
-    /* YDR-2851 - create stc request while migrating from residential to pro */
-    IF lcclitypeto <> "" THEN 
-    DO :
-        liRequest = fCTChangeRequest(iiMsseq,           /* The MSSeq of the subscription to where the STC is made */
-            lcclitypeto,                                /* The CLIType of where to do the STC */
-            "",                                         /* lcBundleID */
-            "",                                         /* bank code validation is already done */
-            Func.Common:mMakeTS(),
-            0,                                          /* 0 = Credit check ok */
-            0,                                          /* extend contract */
-            ""                                          /* pcSalesman */,
-            FALSE,                                      /* charge */
-            TRUE,                                       /* send sms */
-            "",
-            0, 
-            icSource,
-            0,
-            iiOrig,
-            "",                                         /* contract id */
-            OUTPUT lcError).
-        IF liRequest = 0 THEN 
-        DO:
-           ASSIGN ocResult = "Promigration not possible because STC request not created".
-           RETURN 0.
-        END.
-        ELSE 
-            ASSIGN iiOrig = liRequest.
-    END.
             
    /* set activation time */
    ldActStamp = Func.Common:mMakeTS().

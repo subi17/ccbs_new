@@ -123,6 +123,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF VAR llOnlyActiveFound AS LOG NO-UNDO.
    DEF VAR lcParamCode       AS CHAR NO-UNDO INITIAL "ProSubsMigrationMappings".
+   DEF VAR llAllowedProMig   AS LOGI NO-UNDO.
+   DEF VAR lcCliTypeTo       AS CHAR NO-UNDO.
 
    IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
        fSetError ("PRO migration not possible because of not company or selfemployed") .
@@ -179,34 +181,14 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    FOR EACH Mobsub NO-LOCK WHERE
                             Mobsub.Brand EQ Syst.Var:gcBrand AND
                             Mobsub.InvCust EQ Customer.CustNum:
-                      IF fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
-                      FIND FIRST Clitype WHERE
-                                 Clitype.brand EQ "1" AND
-                                 Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                      IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype,lcParamCode) > "") THEN DO:
-                         IF fHasTVService(Mobsub.msseq) THEN DO:
-                         /* TV service not allowed for PRO */
-                            ASSIGN
-                               llOrderAllowed = FALSE
-                               lcReason = "PRO migration not possible because of TV service"
-                               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
-                            LEAVE.
-                         END.
+                      
+                      llAllowedProMig = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcClitypeTo).
+                      IF NOT llAllowedProMig THEN 
+                      DO:
+                         fSetError ("PRO migration not possible because of TV service").
+                         LEAVE.        
                       END.
-                      ELSE DO:
-                         /* found subscription that rejects migration 
-                            commercially non active that does not have 
-                            migration mapping or tv service activated */
-                         llOnlyActiveFound = FALSE.
-                         LEAVE.
-                      END.                   
-                   END.
-                   IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
-                      ASSIGN
-                         llOrderAllowed = FALSE
-                         lcReason = "This migration is not allowed. Please change tariff to the commercially active ones."
-                         lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+                      
                    END.
 
                 END.
