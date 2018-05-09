@@ -467,12 +467,8 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
                                icAllowedBundles AS CHAR,
                                icType AS CHAR):
 
-        DEF INPUT PARAMETER icCLIType          AS CHAR NO-UNDO.    
-        DEF INPUT PARAMETER icAllowedBundles   AS CHAR NO-UNDO.
-        DEF INPUT PARAMETER icType             AS CHAR NO-UNDO. /*("PERCONTR"|"EXTRALINE") */
         DEF VAR liPrior AS INT NO-UNDO.
         DEF VAR liMXSeq AS INT NO-UNDO.
-        
 
         DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
         
