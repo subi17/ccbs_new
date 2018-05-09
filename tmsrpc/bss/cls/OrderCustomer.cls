@@ -243,23 +243,8 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
-      DEFINE VARIABLE lcSupportedLanguages AS CHARACTER INITIAL
-         "es_ES,es_CA,es_EU,es_GA,en" NO-UNDO.
-
       DEFINE VARIABLE lcSupportedTitles AS CHARACTER INITIAL
          "Sr.,Mr.,Sr,Mr or Mrs.,Sra.,Mrs,Sra" NO-UNDO.
-
-      IF ioJsonObject:Has("language")
-      THEN DO:
-         THIS-OBJECT:Language = STRING(LOOKUP(ioJsonObject:GetCharacter("language"),
-                                       lcSupportedLanguages)).
-         IF THIS-OBJECT:Language EQ "0"
-         THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Invalid language '&1'. " +
-                                                    "The supported languages " +
-                                                    "are '&2'",
-                                                    ioJsonObject:GetCharacter("language"),
-                                                    lcSupportedLanguages)).
-      END.
 
       IF ioJsonObject:Has("title")
       THEN DO:
@@ -303,6 +288,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname")
          THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname")
          THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2")
+         THIS-OBJECT:Language           = mGetLanguage(ioJsonObject:GetCharacter("language"))
          THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality")
          THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday")
          THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street")
@@ -330,6 +316,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname") WHEN ioJsonObject:Has("fname")
          THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname") WHEN ioJsonObject:Has("lname")
          THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2") WHEN ioJsonObject:Has("lname2")
+         THIS-OBJECT:Language           = mGetLanguage(ioJsonObject:GetCharacter("language")) WHEN ioJsonObject:Has("language")
          THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality") WHEN ioJsonObject:Has("nationality")
          THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday") WHEN ioJsonObject:Has("birthday")
          THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street") WHEN ioJsonObject:Has("street")
@@ -423,5 +410,18 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       UNDO, THROW NEW ParamError(SUBSTITUTE("Unknown country '&1'", icCountry)).
 
    END METHOD.
+
+   METHOD PRIVATE CHARACTER mGetLanguage
+      (icLanguage AS CHARACTER):
+
+      FOR FIRST Language NO-LOCK WHERE
+          Language.LanguageCode = icLanguage:
+         RETURN STRING(Language.Language).
+      END.
+
+      UNDO, THROW NEW ParamError(SUBSTITUTE("Unknown language '&1'", icLanguage)).
+
+   END METHOD.
+
 
 END CLASS.
