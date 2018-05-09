@@ -122,6 +122,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
    DEF BUFFER OrderCustomer FOR OrderCustomer.
 
    DEF VAR llOnlyActiveFound AS LOG NO-UNDO.
+   DEF VAR lcParamCode       AS CHAR NO-UNDO INITIAL "ProSubsMigrationMappings".
 
    IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
        fSetError ("PRO migration not possible because of not company or selfemployed") .
@@ -183,7 +184,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                  Clitype.brand EQ "1" AND
                                  Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
                       IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
+                         fgetActiveReplacement(Mobsub.clitype,lcParamCode) > "") THEN DO:
                          IF fHasTVService(Mobsub.msseq) THEN DO:
                          /* TV service not allowed for PRO */
                             ASSIGN
@@ -256,7 +257,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                  Clitype.brand EQ "1" AND
                                  Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
                       IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
+                         fgetActiveReplacement(Mobsub.clitype,lcParamCode) > "") THEN DO:
                          IF fHasTVService(Mobsub.msseq) THEN DO:
                          /* TV service not allowed for PRO */
                             ASSIGN
