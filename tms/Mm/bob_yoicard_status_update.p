@@ -108,6 +108,7 @@ DO TRANSACTION:
    END.
 END. /* ActionLog */
 
+RUN pReadDirectory.
 
 FINALLY:
     IF llUpdateAL THEN 
@@ -126,7 +127,6 @@ FINALLY:
     PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";yoicard_status_update_processing_finished" SKIP.
     PUT STREAM sCurrentLog UNFORMATTED "-------------------------------" SKIP.
     OUTPUT STREAM sCurrentLog CLOSE.
-    
 END FINALLY.
 
 PROCEDURE pReadDirectory:
@@ -214,8 +214,13 @@ PROCEDURE pCreateUpdateStatus :
                                     0,
                                     '',
                                     OUTPUT lcError).    
-        IF liRequest > 0 THEN 
-            bCreaReq.ReqIParam1 = liStatus.
+        IF liRequest > 0 THEN DO:
+            FIND bCreaReq WHERE bCreaReq.MsRequest = liRequest EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+            IF AVAILABLE bCreareq THEN DO:
+                bCreaReq.ReqIParam1 = liStatus.
+            END.
+            RELEASE bCreaReq. 
+        END.
         ELSE DO: END.
         /* TODO */
     END.
