@@ -178,35 +178,55 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       RETURN FALSE.
    END.
 
-   /* check if customer level basic contract exist */
-   lcBaseContract = fGetUpSellBasicContract(lbMobSub.MsSeq,
-                                            lbMobSub.CustNum,
-                                            lbMobSub.PayType,
-                                            "Customer",
-                                            icDCEvent,
-                                            icSource).
-
-   /* check if subscription level basic contract exist */
-   IF lcBaseContract = "" THEN
+   /* YCO-276 3Gb retention upsell. Upsell can be activated with no bono. */
+   IF LOOKUP(icDCEvent,"FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL,FID3GB_12m_R_UPSELL") =  0 THEN 
+   DO:
+      /* Doing usual code before YCO-276 */
+                  
+      /* check if customer level basic contract exist */
       lcBaseContract = fGetUpSellBasicContract(lbMobSub.MsSeq,
                                                lbMobSub.CustNum,
                                                lbMobSub.PayType,
-                                               "MobSub",
+                                               "Customer",
                                                icDCEvent,
                                                icSource).
 
-   IF lcBaseContract = "" THEN DO:
-      ocError = "Data contract does not exist". 
-      RETURN FALSE.
+      /* check if subscription level basic contract exist */
+      IF lcBaseContract = "" THEN
+         lcBaseContract = fGetUpSellBasicContract(lbMobSub.MsSeq,
+                                                  lbMobSub.CustNum,
+                                                  lbMobSub.PayType,
+                                                  "MobSub",
+                                                  icDCEvent,
+                                                  icSource).
+
+      IF lcBaseContract = "" THEN DO:
+         ocError = "Data contract does not exist". 
+         RETURN FALSE.
+      END.
+      
+      FIND FIRST DayCampaign WHERE
+                 DayCampaign.Brand    = Syst.Var:gcBrand AND
+                 DayCampaign.DCEvent  = lcBaseContract AND
+                 DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL DayCampaign THEN DO:
+         ocError = "Incorrect data contract".
+         RETURN FALSE.
+      END.
    END.
-   FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand    = Syst.Var:gcBrand AND
-              DayCampaign.DCEvent  = lcBaseContract AND
-              DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
-   IF NOT AVAIL DayCampaign THEN DO:
-      ocError = "Incorrect data contract".
-      RETURN FALSE.
+   ELSE
+   DO: /* New code for YCO-276: Upsell finding itself so we have a daycampaign record for below statements */
+      FIND FIRST DayCampaign WHERE
+                 DayCampaign.Brand    = Syst.Var:gcBrand AND
+                 DayCampaign.DCEvent  = icDCEvent AND
+                 DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL DayCampaign THEN DO:
+         ocError = "Incorrect Upsell".
+         RETURN FALSE.
+      END.
    END.
+   /* YCO-276 end */
+   
 
    /* Should not allow to create other data upsell once DSS1/2 is active */
    /* Allow DSS_FLEX_UPSELL - 25 GB */
