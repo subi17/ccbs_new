@@ -635,8 +635,7 @@ PROCEDURE pInvoice2XML:
       lhXML:WRITE-DATA-ELEMENT("ReturnsGooglePlay", fDispXMLDecimal(ttInvoice.GBDiscValue)).
 
       /* If needed, the fee for mobile phone installment payment financed (without taxes). YDR-2848 */
-      lhXML:WRITE-DATA-ELEMENT("MobileInstallmentPayment", fDispXMLDecimal(ttInvoice.InstallmentAmt /* +
-                                               ttInvoice.InstallmentDiscAmt*/ )).
+      lhXML:WRITE-DATA-ELEMENT("MobileInstallmentPayment", fDispXMLDecimal(ttInvoice.InstallmentAmt)).
 
        /* If needed, the amount charged for early exit fee. YDR-2848 */
       lhXML:WRITE-DATA-ELEMENT("ChargedEarlyExitFee", fDispXMLDecimal(ttInvoice.PenaltyAmt)).
@@ -943,7 +942,7 @@ PROCEDURE pSubInvoice2XML:
 
       /* The sum of amount due to bundles of data and data upsells. YDR-2848 */
       lhXML:START-ELEMENT("Bundles"). /* Bonos de Internet */
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttRow.RowAmtExclVat)).
       lhXML:END-ELEMENT("Bundles").
 
       /* The sum of the charges applied to the line. YDR-2848 */
