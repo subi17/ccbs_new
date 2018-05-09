@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
   MODULE .......: YCO-276_upsell_update_monthly_3gb_12m.p
-  TASK .........: Activating 3gb upsell for 12 months - FID3GB_12m
+  TASK .........: Activating 3gb upsell for 12 months - FID3GB_12m_R_Upsell
   APPLICATION ..: TMS
   AUTHOR .......: Diego Pastrana
   CREATED ......: 27/04/2018
