@@ -24,6 +24,7 @@ DEFINE TEMP-TABLE ttIPRange NO-UNDO LIKE IPRange.
 DEFINE TEMP-TABLE ttCliType NO-UNDO LIKE CliType.
 DEFINE TEMP-TABLE ttMatrix  NO-UNDO LIKE Matrix.
 DEFINE TEMP-TABLE ttMxItem  NO-UNDO LIKE MxItem.
+DEFINE TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 
 FUNCTION fFillTariff RETURNS LOGICAL:
 
@@ -185,6 +186,70 @@ FUNCTION fFillMxItem RETURNS LOGICAL:
    
 END FUNCTION.
 
+FUNCTION fFillSLGAnalyse RETURNS LOGICAL:
+   
+   DEFINE VARIABLE liKnt                         AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liCount                       AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcMxValue                     AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcCliType                     AS CHARACTER NO-UNDO INIT "CONT10".
+   DEFINE VARIABLE lcSubsTypePrefix              AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcAllowedBundles              AS CHARACTER NO-UNDO.
+
+   DEFINE BUFFER bf_ttMxItem FOR ttMxItem.
+
+   EMPTY TEMP-TABLE ttSLGAnalyse.
+
+   FOR EACH ttCliType:
+
+      lcSubsTypePrefix = (IF lcCliType BEGINS "CONTDSL" THEN 
+                              "CONTDSL*,CONT*" 
+                          ELSE IF lcCliType BEGINS "CONTFH" THEN 
+                              "CONT*"     
+                          ELSE IF lcCliType BEGINS "CONT" THEN 
+                              "CONT*" 
+                          ELSE IF lcCliType BEGINS "TARJ" THEN 
+                              "TARJ*" 
+                          ELSE "").
+
+      ASSIGN lcSubsTypePrefix = lcSubsTypePrefix + (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + ttCliType.CliType.
+
+      IF lcSubsTypePrefix > "" THEN
+      DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix):
+          FOR EACH ttMatrix WHERE ttMatrix.Brand = Syst.Var:gcBrand AND ttMatrix.MXKey = "PERCONTR" NO-LOCK By ttMatrix.Prior:
+              
+              IF ttMatrix.MXRes <> 1 THEN 
+                  NEXT.                                           
+              
+              ASSIGN lcMxValue = ENTRY(liCount,lcSubsTypePrefix).
+              
+              FOR EACH ttMxItem WHERE ttMxItem.MxSeq = ttMatrix.MxSeq AND ttMxItem.MxName = "SubsTypeTo" AND ttMxItem.MxValue = lcMxValue NO-LOCK:
+
+                  FOR EACH bf_ttMxItem WHERE bf_ttMxItem.MxSeq = ttMxItem.MxSeq AND bf_ttMxItem.MXName = "PerContract":
+                      IF LOOKUP(bf_ttMxItem.MxValue, lcAllowedBundles) = 0 THEN                 
+                         ASSIGN lcAllowedBundles = lcAllowedBundles + (IF lcAllowedBundles <> "" THEN "," ELSE "") + bf_ttMxItem.MxValue.
+                  END.
+
+              END.
+
+          END.
+      END.
+
+      DO liKnt = 1 TO NUM-ENTRIES(lcAllowedBundles):
+          FOR EACH  SLGAnalyse NO-LOCK WHERE 
+                    SLGAnalyse.Brand             = Syst.Var:gcBrand               AND 
+                    SLGAnalyse.ServiceLimitGroup = ENTRY(liKnt, lcAllowedBundles) AND 
+                    SLGAnalyse.CliType           = "*"                            AND
+                    SLGAnalyse.ValidTo          >= ?                              USE-INDEX ServiceLimitGroup:
+             CREATE ttSLGAnalyse.
+             BUFFER-COPY SLGAnalyse EXCEPT CliType TO ttSLGAnalyse
+                ASSIGN ttSLGAnalyse.CliType = ttCliType.CliType.        
+          END.          
+      END.
+
+   END.
+   
+END FUNCTION.
+
 /* TEMP-TABLES filled */
 FUNCTION fFillTT RETURNS LOGICAL:
 
@@ -201,6 +266,7 @@ FUNCTION fFillTT RETURNS LOGICAL:
    fFillCliType().
    fFillMatrix().
    fFillMxItem().
+   fFillSLGAnalyse().
 
 END.
 

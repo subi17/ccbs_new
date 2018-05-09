@@ -1,7 +1,6 @@
 {Syst/tmsconst.i}
 
-DEF BUFFER bPositive FOR SLGAnalyse.
-DEF BUFFER bNegative FOR SLGAnalyse.
+DEF BUFFER bf_ttSLGAnalyse FOR ttSLGAnalyse.
 /* input parameter ccn and bdest come later */ 
 
 FUNCTION fSLGAnalyse RETURN LOGICAL
@@ -13,30 +12,30 @@ FUNCTION fSLGAnalyse RETURN LOGICAL
    ocServiceLimitGroup = "".
    
    /* 1. Step - find first permitted servicelimitgroup */ 
-   FIND FIRST bPositive WHERE 
-              bPositive.Brand       = "1"          AND 
-              bPositive.BelongTo    = TRUE         AND 
-              bPositive.CliType     = icClitype    AND
-              bPositive.BillCode    = icBillItem   AND 
-              bPositive.ccn         = 0            AND
-              bPositive.Bdest       = ""           AND 
-              bPositive.ValidFrom  <= idtDate      AND 
-              bPositive.ValidTo    >= idtDate NO-LOCK NO-ERROR.
+   FIND FIRST ttSLGAnalyse WHERE 
+              ttSLGAnalyse.Brand       = "1"          AND 
+              ttSLGAnalyse.BelongTo    = TRUE         AND 
+              ttSLGAnalyse.CliType     = icClitype    AND
+              ttSLGAnalyse.BillCode    = icBillItem   AND 
+              ttSLGAnalyse.ccn         = 0            AND
+              ttSLGAnalyse.Bdest       = ""           AND 
+              ttSLGAnalyse.ValidFrom  <= idtDate      AND 
+              ttSLGAnalyse.ValidTo    >= idtDate NO-LOCK NO-ERROR.
 
-   IF AVAIL bPositive THEN DO:
+   IF AVAIL ttSLGAnalyse THEN DO:
 
-      FIND FIRST bNegative WHERE
-                 bNegative.Brand       = "1"          AND 
-                 bNegative.BelongTo    = FALSE        AND
-                 bNegative.CliType     = icClitype    AND
-                 bNegative.BillCode    = icBillItem   AND
-                 bNegative.ccn         = 0            AND
-                 bNegative.Bdest       = ""           AND
-                 bNegative.ValidFrom  <= idtDate      AND
-                 bNegative.ValidTo    >= idtDate NO-LOCK NO-ERROR.
+      FIND FIRST bf_ttSLGAnalyse WHERE
+                 bf_ttSLGAnalyse.Brand       = "1"          AND 
+                 bf_ttSLGAnalyse.BelongTo    = FALSE        AND
+                 bf_ttSLGAnalyse.CliType     = icClitype    AND
+                 bf_ttSLGAnalyse.BillCode    = icBillItem   AND
+                 bf_ttSLGAnalyse.ccn         = 0            AND
+                 bf_ttSLGAnalyse.Bdest       = ""           AND
+                 bf_ttSLGAnalyse.ValidFrom  <= idtDate      AND
+                 bf_ttSLGAnalyse.ValidTo    >= idtDate NO-LOCK NO-ERROR.
 
-      IF NOT Avail bNegative 
-      THEN ocServiceLimitGroup = bPositive.ServiceLimitGroup.
+      IF NOT Avail bf_ttSLGAnalyse 
+      THEN ocServiceLimitGroup = ttSLGAnalyse.ServiceLimitGroup.
    END.
 
 END FUNCTION. 
@@ -53,15 +52,15 @@ FUNCTION fPacketAnalyse RETURN LOGICAL
    ocServiceLimitGroupList = "".
    ocSLGATypeList = "".
    /* */ 
-   FOR EACH  bPositive NO-LOCK WHERE 
-             bPositive.Brand       = Syst.Var:gcBrand      AND 
-             bPositive.BelongTo    = TRUE         AND 
-             bPositive.CliType     = icClitype    AND
-             bPositive.BillCode    = icBillItem   AND 
-             bPositive.ccn         = iiCCN        AND
-            (bPositive.BDest = "*" OR bPositive.Bdest = icBDest) AND 
-             bPositive.ValidFrom  <= idtDate      AND 
-             bPositive.ValidTo    >= idtDate  USE-INDEX BelongTo :
+   FOR EACH  ttSLGAnalyse NO-LOCK WHERE 
+             ttSLGAnalyse.Brand       = Syst.Var:gcBrand      AND 
+             ttSLGAnalyse.BelongTo    = TRUE         AND 
+             ttSLGAnalyse.CliType     = icClitype    AND
+             ttSLGAnalyse.BillCode    = icBillItem   AND 
+             ttSLGAnalyse.ccn         = iiCCN        AND
+            (ttSLGAnalyse.BDest = "*" OR ttSLGAnalyse.Bdest = icBDest) AND 
+             ttSLGAnalyse.ValidFrom  <= idtDate      AND 
+             ttSLGAnalyse.ValidTo    >= idtDate  USE-INDEX BelongTo :
      
      /* exclude rules are currently not used, needs performance
         refactoring if used again */
@@ -78,8 +77,8 @@ FUNCTION fPacketAnalyse RETURN LOGICAL
       */
       ASSIGN
          ocServiceLimitGroupList = ocServiceLimitGroupList + "," + 
-                                   bPositive.ServiceLimitGroup 
-         ocSLGATypeList  = ocSLGATypeList + "," + STRING(bPositive.SLGAType).
+                                   ttSLGAnalyse.ServiceLimitGroup 
+         ocSLGATypeList  = ocSLGATypeList + "," + STRING(ttSLGAnalyse.SLGAType).
 
    END.
 
