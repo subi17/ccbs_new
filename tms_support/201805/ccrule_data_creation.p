@@ -25,6 +25,7 @@ FOR EACH BillItem NO-LOCK:
     
     IF NOT AVAILABLE CostCentre 
     THEN DO:
+        CREATE CostCentre.
         ASSIGN 
             CostCentre.Brand      = BillItem.Brand
             CostCentre.CostCentre = BillItem.CostCentre.
