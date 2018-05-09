@@ -47,6 +47,8 @@ RUN pAdd_DataBundle.
 
 RUN pAdd_VoiceBundle.
 
+RUN pAdd_3Gg_flex_upsell. /* YCO-276 */
+
 PROCEDURE pAdd_DataBundle:
     DEF VAR liCount                AS INT  NO-UNDO.
     DEF VAR lcError                AS CHAR NO-UNDO.
@@ -146,7 +148,7 @@ PROCEDURE pAdd_DSS:
     DEF VAR lcPRODSSUpsellList    AS CHAR NO-UNDO.
     DEF VAR lcMatrixAnalyseResult AS CHAR NO-UNDO.
     DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-    DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO. 
+    DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO.
     DEF VAR llProSubscription     AS LOGI NO-UNDO.
     DEF VAR lcUpsell              AS CHAR NO-UNDO.
 
@@ -191,6 +193,34 @@ PROCEDURE pAdd_DSS:
     END.    
 
 END PROCEDURE.
+
+/* YCO-276 Returning bundle list for 3Gb flex upsell compatible tariffs */
+PROCEDURE pAdd_3Gg_flex_upsell:      
+    DEF VAR liUpsellCount         AS INTE NO-UNDO.
+    DEF VAR lcUpsell              AS CHAR NO-UNDO.
+    DEF VAR lcResult              AS CHAR NO-UNDO.
+    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO INITIAL 
+       "FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL,FID3GB_12m_R_UPSELL".
+    
+    DO liUpsellCount = 1 TO NUM-ENTRIES(lcUpsell_Id):
+       
+       lcUpsell = ENTRY(liUpsellCount,lcUpsell_Id).
+             
+       IF fMatrixAnalyse(Syst.Var:gcBrand,
+                         "PERCONTR",
+                         "PerContract;SubsTypeTo",
+                         lcUpsell + ";" + Mobsub.CLIType,
+                         OUTPUT lcResult) NE 1 AND
+          ENTRY(1,lcResult,";") NE "?" THEN 
+          NEXT.             
+       
+       IF INDEX(lcUpsell,lcResultArray) = 0 THEN
+          add_string(lcResultArray,"", lcUpsell + "|" + STRING(Mobsub.MsSeq)).
+    
+    END.    
+
+END PROCEDURE.
+/* YCO-276 end */
 
 FINALLY:
    END.
