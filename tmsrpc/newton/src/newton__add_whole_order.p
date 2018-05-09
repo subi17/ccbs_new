@@ -2138,34 +2138,36 @@ IF AVAIL AddLineDiscountPlan THEN DO:
                       "").
 END.
 
-/* NEBA / Wish is that WEB would tell both exactly in future */
-IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
-   IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
-      lcAddFTERM = "FTERM12-110".
-   ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
-      lcAddFTERM = "FTERM12-187".
-   ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
-      lcAddFTERM = "FTERM12-243".
-   ELSE lcAddFTERM = "".
+IF lcFixedLinePermanency > "" THEN DO:
+   /* NEBA / Wish is that WEB would tell both exactly in future */
+   IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
+      IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
+         lcAddFTERM = "FTERM12-110".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
+         lcAddFTERM = "FTERM12-187".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
+         lcAddFTERM = "FTERM12-243".
+      ELSE lcAddFTERM = "".
 
-   IF lcAddFTERM NE "" THEN /* Create FTERM */
-     fCreateOrderAction(Order.Orderid,
-                        "FixedPermanency",
-                        lcAddFTERM,
-                        "").
-   /* Entry for NEBTERM penalty */
-   fCreateOrderAction(Order.Orderid,
-                      "NebaPenalty",
-                      lcFixedLinePermanency,
-                      "").
+      IF lcAddFTERM NE "" THEN /* Create FTERM */
+        fCreateOrderAction(Order.Orderid,
+                           "FixedPermanency",
+                           lcAddFTERM,
+                           "").
+      /* Entry for NEBTERM penalty */
+      fCreateOrderAction(Order.Orderid,
+                         "NebaPenalty",
+                         lcFixedLinePermanency,
+                         "").
 
-END.
-ELSE DO:
-   /* Normal Fixed Line Contract */
-   fCreateOrderAction(Order.Orderid,
-                      "FixedPermanency",
-                      lcFixedLinePermanency,
-                      "").
+   END.
+   ELSE DO:
+      /* Normal Fixed Line Contract */
+      fCreateOrderAction(Order.Orderid,
+                         "FixedPermanency",
+                         lcFixedLinePermanency,
+                         "").
+   END.
 END.
 
 /* Extra line discount */
