@@ -20,9 +20,7 @@ Syst.Var:gcBrand = "1".
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
-
    {Func/lib/eventlog.i}
-
 END.
 
 /* ***************************  Definitions  ************************** */
@@ -148,8 +146,10 @@ PROCEDURE pReadDirectory:
             /* logfile for each input file */
             lcOutLogFile    = lcLogsDirectory + "/" +  SUBSTRING(tt_file.base_filename,1, R-INDEX(tt_file.base_filename,".") - 1 ) +  "_" + lcToday  +  ".log".
             OUTPUT STREAM sOutgoingLog TO VALUE(lcOutLogFile) APPEND.
+            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update started."  SKIP.
+            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update started."  SKIP.
             
-            RUN pReadFile(tt_file.file_name).
+            RUN pReadFile(tt_file.file_name) NO-ERROR.
             
             PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update finished."  SKIP.
             PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update finished."  SKIP.
@@ -168,9 +168,13 @@ PROCEDURE pReadFile:
     DEFINE VARIABLE liOrderId AS INTEGER   NO-UNDO.
     INPUT STREAM inFile FROM VALUE(icFileName).
         REPEAT:
-            IMPORT STREAM inFile lcLine.
+            IMPORT STREAM inFile UNFORMATTED lcLine.
             liOrderId = INTEGER(SUBSTRING(lcLine,1,10)).
             liStatus  = INTEGER(SUBSTRING(lcLine,11,1)).
+
+            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + "Received Order=" + STRING(liOrderId) + ";Status=" + STRING(liStatus)  SKIP.
+            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(icFileName) + ";Received Order=" + STRING(liOrderId) + ";Status=" + STRING(liStatus)  SKIP.
+            
             RUN pCreateUpdateStatus(liOrderId,liStatus).
         END.
     INPUT STREAM inFile CLOSE.
@@ -187,18 +191,28 @@ PROCEDURE pCreateUpdateStatus :
     FIND Order WHERE
          Order.Brand = Syst.Var:gcBrand  AND 
          ORder.OrderId = liOrderId NO-LOCK NO-ERROR.
-    IF NOT AVAILABLE order THEN RETURN.
-    /* TODO: */
+    IF NOT AVAILABLE order THEN DO:
+        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Order Not found" SKIP.
+        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Order Not found" SKIP.
+        RETURN.
+    END.
     FIND FIRST Customer WHERE
            Customer.brand   EQ Syst.Var:gcBrand  AND 
            Customer.custnum EQ order.Custnum NO-LOCK NO-ERROR.
-    IF NOT AVAILABLE Customer THEN RETURN.
-    /* TODO: */
+    IF NOT AVAILABLE Customer THEN DO:
+        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Customer Not found" SKIP.
+        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Customer Not found" SKIP.
+        RETURN.
+    END.
     FIND FIRST DCCli WHERE 
                DCCLi.brand = Customer.Brand AND 
                DCCLi.msseq = Order.msseq   AND 
                DCCli.Dcevent = "YOICARD" EXCLUSIVE-LOCK NO-ERROR.
-    IF LOCKED DCCli THEN DO: END. 
+    IF LOCKED DCCli THEN DO:
+        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Contract record locked" SKIP.
+        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Contract record locked" SKIP.
+        RETURN.
+    END. 
     ELSE IF NOT AVAILABLE DCCLi THEN DO:
        liRequest = fPCActionRequest(Order.msseq,
                                     "YOICARD" ,
@@ -219,11 +233,19 @@ PROCEDURE pCreateUpdateStatus :
             IF AVAILABLE bCreareq THEN DO:
                 bCreaReq.ReqIParam1 = liStatus.
             END.
+            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Request created" SKIP.
+            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Request created" SKIP.
             RELEASE bCreaReq. 
         END.
-        ELSE DO: END.
-        /* TODO */
+        ELSE DO:
+            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Request creation Error;" + lcError SKIP.
+            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Request creation Error;" + lcError SKIP.
+            RETURN.
+        END.
     END.
-    ELSE 
+    ELSE DO: 
         DCCLi.ServiceStatus = liStatus.
+        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Status updated" SKIP.
+        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Status updated" SKIP.
+    END.
 END PROCEDURE.
