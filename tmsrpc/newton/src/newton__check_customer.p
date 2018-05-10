@@ -29,6 +29,7 @@ Syst.Var:gcBrand = "1".
 {Func/custfunc.i}
 {Func/profunc.i}
 {Func/barrfunc.i}
+{Func/profunc_request.i}
 
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.
@@ -182,7 +183,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                             Mobsub.Brand EQ Syst.Var:gcBrand AND
                             Mobsub.InvCust EQ Customer.CustNum:
                       
-                      llAllowedProMig = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcClitypeTo).
+                      llAllowedProMig = fCheckSubscriptionTypeAllowedForProMigration(MobSub.CliType, OUTPUT lcClitypeTo).
                       IF NOT llAllowedProMig THEN 
                       DO:
                          fSetError ("PRO migration not possible because of TV service").
