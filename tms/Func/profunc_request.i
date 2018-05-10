@@ -279,19 +279,20 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
     OUTPUT ocResult       AS CHARACTER):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
-   DEF VAR ldActStamp   AS DEC NO-UNDO.
 
    DEFINE BUFFER bCustomer      FOR Customer.
    DEFINE BUFFER bMobSub        FOR MobSub.
+   DEFINE BUFFER bf_MobSub      FOR MobSub.
    DEFINE BUFFER bCustCat       FOR Custcat.
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bClitype       FOR CLIType.
 
    DEFINE VARIABLE llHasMappingMissingForLegacyTariff AS LOGICAL NO-UNDO INIT TRUE.
-   DEFINE VARIABLE lcclitypeto AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE liRequest   AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcCliTypeFrom AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcclitypeto   AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liRequest     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcError       AS CHARACTER NO-UNDO.
    DEFINE VARIABLE llValidMaping AS LOGICAL NO-UNDO.
 
    ocResult = fChkRequest(iiMsSeq,
@@ -301,9 +302,11 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
 
    IF ocResult > "" THEN RETURN 0.
    
+   FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+   ASSIGN lcCliTypeFrom = bMobSub.CliType.
+
    IF ilValidate THEN 
-   DO:
-       FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+   DO:    
        FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
        FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
        /* Is category available */
@@ -319,11 +322,11 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
 
        /* Does customer have subscriptions with legacy tariffs not mapped to active tariffs */
        MOBSUB-CHK:
-       FOR EACH bMobSub 
-          WHERE bMobSub.Brand   = Syst.Var:gcBrand 
-            AND bMobSub.AgrCust = bCustomer.CustNum NO-LOCK:
+       FOR EACH bf_MobSub 
+          WHERE bf_MobSub.Brand   = Syst.Var:gcBrand 
+            AND bf_MobSub.AgrCust = bCustomer.CustNum NO-LOCK:
            
-           llHasMappingMissingForLegacyTariff = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcclitypeto).
+           llHasMappingMissingForLegacyTariff = fCheckSubscriptionTypeAllowedForProMigration(bf_MobSub.CliType, OUTPUT lcclitypeto).
            IF NOT llHasMappingMissingForLegacyTariff THEN 
               LEAVE MOBSUB-CHK.
        END.
@@ -364,12 +367,37 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
            RETURN 0. 
        END.
    END.
-            
-   /* set activation time */
-   ldActStamp = Func.Common:mMakeTS().
+
+   fCheckSubscriptionTypeAllowedForProMigration(lcCliTypeFrom, OUTPUT lcCliTypeTo).
+   
+   IF lcCliTypeTo <> "" THEN 
+   DO:
+        liRequest = fCTChangeRequest(iiMsseq,           /* The MSSeq of the subscription to where the STC is made */
+                                     lcCliTypeTo,                                /* The CLIType of where to do the STC */
+                                     "",                                         /* lcBundleID */
+                                     "",                                         /* bank code validation is already done */
+                                     Func.Common:mMakeTS(),
+                                     0,                                          /* 0 = Credit check ok */
+                                     0,                                          /* extend contract */
+                                     ""                                          /* pcSalesman */,
+                                     FALSE,                                      /* charge */
+                                     TRUE,                                       /* send sms */
+                                     "",
+                                     0, 
+                                     icSource,
+                                     0,
+                                     iiOrig,
+                                     "",                                         /* contract id */
+                                     OUTPUT lcError).
+        IF liRequest = 0 THEN 
+        DO:
+           ASSIGN ocResult = "Promigration not possible because STC request not created".
+           RETURN 0.
+        END.
+   END.
 
    fCreateRequest({&REQTYPE_PRO_MIGRATION},
-                  ldActStamp,
+                  Func.Common:mMakeTS(),
                   icCreator,
                   FALSE,    /* create fees */
                   FALSE).   /* sms */
