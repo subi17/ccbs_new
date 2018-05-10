@@ -435,6 +435,8 @@ BROWSE:
 
        FOR FIRST CCRule NO-LOCK WHERE
                  CCRule.Brand      = Syst.Var:gcBrand AND
+                 CCRule.BillCode   > ""               AND 
+                 CCRule.ValidTo    >= TODAY           AND 
                  CCRule.CostCentre = CostCentre.CostCentre:
            MESSAGE "Cost centre is used on BillCode:" 
                    CCRule.BillCode ". Delete not allowed."

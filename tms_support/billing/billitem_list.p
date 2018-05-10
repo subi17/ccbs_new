@@ -73,7 +73,7 @@ for each billitem no-lock where
         billitem.invsect  chr(9)
         billitem.taxclass chr(9)
         (IF AVAILABLE CCRule THEN CCRule.ReportingID ELSE "") chr(9)
-        (IF AVAILABLE CCRule THEN CCRule.CostCentre  ELSE "")
+        (IF AVAILABLE CCRule THEN CCRule.CostCentre  ELSE "") chr(9)
        .
 
     put stream sarda unformatted

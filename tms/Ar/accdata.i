@@ -56,6 +56,7 @@ FUNCTION GetAccKeys RETURNS LOGIC
                   (bfCCRule.Category   =   icCategory  OR
                    bfCCRule.Category   =   "*" )               AND 
                    bfCCRule.BillCode   =   BillItem.BillCode   AND
+                   bfCCRule.CLIType    =   ""                  AND
                    bfCCRule.ValidTo    >=  TODAY USE-INDEX Category  NO-ERROR.
                    
         IF AVAILABLE bfCCRule 
