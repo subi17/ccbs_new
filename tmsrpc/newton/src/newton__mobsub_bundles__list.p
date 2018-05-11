@@ -49,6 +49,8 @@ RUN pAdd_VoiceBundle.
 
 RUN pAdd_3Gg_flex_upsell. /* YCO-276 */
 
+RUN pAdd_5Gg_flex_upsell. /* YCO-275 */
+
 PROCEDURE pAdd_DataBundle:
     DEF VAR liCount                AS INT  NO-UNDO.
     DEF VAR lcError                AS CHAR NO-UNDO.
@@ -148,23 +150,20 @@ PROCEDURE pAdd_DSS:
     DEF VAR lcPRODSSUpsellList    AS CHAR NO-UNDO.
     DEF VAR lcMatrixAnalyseResult AS CHAR NO-UNDO.
     DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-    DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO.
     DEF VAR llProSubscription     AS LOGI NO-UNDO.
     DEF VAR lcUpsell              AS CHAR NO-UNDO.
 
     ASSIGN 
         llProSubscription     = fIsProSubscription(piMsSeq)
         lcPRODSSUpsellList    = fCParamC("PRO_DSS_FLEX_UPSELL_LIST")
-        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-        lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
+        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
 
     IF NOT MobSub.PayType THEN
         lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT ldCurrentDateTime).
 
     /* Return DSS bundle and upsell if DSS is active */
-    IF lcDSSBundleId EQ {&DSS}                                                         OR 
-      (lcDSSBundleId EQ {&DSS2} AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) OR 
-      (lcDSSBundleId EQ {&DSS4} AND LOOKUP(MobSub.CLIType, lcAllowedDSS4SubsType) > 0) THEN 
+    IF lcDSSBundleId = {&DSS} OR 
+       (lcDSSBundleId = "DSS2" AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) THEN 
     DO:
         add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
         /*Find upsells and add all to reponse*/
@@ -199,8 +198,9 @@ PROCEDURE pAdd_3Gg_flex_upsell:
     DEF VAR liUpsellCount         AS INTE NO-UNDO.
     DEF VAR lcUpsell              AS CHAR NO-UNDO.
     DEF VAR lcResult              AS CHAR NO-UNDO.
-    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO INITIAL 
-       "FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL,FID3GB_12m_R_UPSELL".
+    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO.
+    
+    lcUpsell_Id  = fCParamC("RETENTION_3GB_UPSELLS"). 
     
     DO liUpsellCount = 1 TO NUM-ENTRIES(lcUpsell_Id):
        
@@ -221,6 +221,35 @@ PROCEDURE pAdd_3Gg_flex_upsell:
 
 END PROCEDURE.
 /* YCO-276 end */
+
+/* YCO-275 Returning bundle list for 5Gb flex upsell compatible tariffs */
+PROCEDURE pAdd_5Gg_flex_upsell:      
+    DEF VAR liUpsellCount         AS INTE NO-UNDO.
+    DEF VAR lcUpsell              AS CHAR NO-UNDO.
+    DEF VAR lcResult              AS CHAR NO-UNDO.
+    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO.
+    
+    lcUpsell_Id  = fCParamC("RETENTION_5GB_UPSELLS"). 
+    
+    DO liUpsellCount = 1 TO NUM-ENTRIES(lcUpsell_Id):
+       
+       lcUpsell = ENTRY(liUpsellCount,lcUpsell_Id).
+             
+       IF fMatrixAnalyse(Syst.Var:gcBrand,
+                         "PERCONTR",
+                         "PerContract;SubsTypeTo",
+                         lcUpsell + ";" + Mobsub.CLIType,
+                         OUTPUT lcResult) NE 1 AND
+          ENTRY(1,lcResult,";") NE "?" THEN 
+          NEXT.             
+       
+       IF INDEX(lcUpsell,lcResultArray) = 0 THEN
+          add_string(lcResultArray,"", lcUpsell + "|" + STRING(Mobsub.MsSeq)).
+    
+    END.    
+
+END PROCEDURE.
+/* YCO-275 end */
 
 FINALLY:
    END.
