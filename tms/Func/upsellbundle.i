@@ -157,11 +157,20 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    DEF VAR lcSMSText               AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 
+   /* YCO-276 */
+   DEF VAR lcRetentionUpsells3GB   AS CHAR NO-UNDO.  
+   DEF VAR liUpsellLoop            AS INT  NO-UNDO.  
+   DEF VAR lcUpsellLoop            AS CHAR NO-UNDO.
+   DEF VAR lcResultLoop            AS CHAR NO-UNDO.
+   DEF VAR llcompatible            AS LOG  NO-UNDO.
+   DEF VAR lccompatibleMsg         AS CHAR NO-UNDO.
+
    DEF BUFFER lbMobSub             FOR MobSub. 
    DEF BUFFER bDSSMobSub           FOR MobSub.
    DEF BUFFER DayCampaign          FOR DayCampaign.
 
    lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
+   lcRetentionUpsells3GB      = fCParamC("RETENTION_3GB_UPSELLS").  /* YCO-276 */
 
    FIND FIRST lbMobSub WHERE 
               lbMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR. 
@@ -178,8 +187,43 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       RETURN FALSE.
    END.
 
-   /* YCO-276 3Gb retention upsell. Upsell can be activated with no bono. */
-   IF LOOKUP(icDCEvent,"FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL,FID3GB_12m_R_UPSELL") =  0 THEN 
+   /* YCO-276 3Gb retention upsell. Upsell can be activated with no limits to compatible tariffs. */
+   IF LOOKUP(icDCEvent,lcRetentionUpsells3GB) > 0 THEN 
+   DO:
+      /* New code for YCO-276: Checking compatible tariffs */
+      llcompatible = FALSE.
+      
+      IF LOOKUP(icDCEvent,lcRetentionUpsells3GB) > 0 then
+      DO:
+         /* Checking tariff vs upsell compatibility for 3GB */
+         lccompatibleMsg = "Tariff not compatible for 3Gb retention upsell".
+         
+         DO liUpsellLoop = 1 TO NUM-ENTRIES(lcRetentionUpsells3GB):
+        
+            lcUpsellLoop = ENTRY(liUpsellLoop,lcRetentionUpsells3GB).
+             
+            IF fMatrixAnalyse(Syst.Var:gcBrand,
+                              "PERCONTR",
+                              "PerContract;SubsTypeTo",
+                              lcUpsellLoop + ";" + Mobsub.CLIType,
+                              OUTPUT lcResultLoop) NE 1 AND
+               ENTRY(1,lcResultLoop,";") NE "?" THEN 
+               NEXT.             
+       
+               ASSIGN 
+                   llCompatible    = TRUE
+                   lccompatibleMsg = "".
+               LEAVE.
+          END.    
+      END.
+      
+      IF llcompatible = FALSE THEN
+      DO:
+         ocError = lccompatibleMsg. 
+         RETURN FALSE.
+      END.          
+   END.
+   ELSE 
    DO:
       /* Doing usual code before YCO-276 */
                   
@@ -213,62 +257,49 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
          ocError = "Incorrect data contract".
          RETURN FALSE.
       END.
-   END.
-   ELSE
-   DO: /* New code for YCO-276: Upsell finding itself so we have a daycampaign record for below statements */
-      FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand    = Syst.Var:gcBrand AND
-                 DayCampaign.DCEvent  = icDCEvent AND
-                 DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
-      IF NOT AVAIL DayCampaign THEN DO:
-         ocError = "Incorrect Upsell".
-         RETURN FALSE.
-      END.
-   END.
-   /* YCO-276 end */
-   
 
-   /* Should not allow to create other data upsell once DSS1/2 is active */
-   /* Allow DSS_FLEX_UPSELL - 25 GB */
-   IF LOOKUP(icDCEvent, DayCampaign.BundleUpsell) EQ 0 THEN DO : 
-      IF (LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 AND
-          LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0) THEN
-          ocError = icDCEvent + " is not allowed because DSS " +
-                    "is active for this customer".
-      /* allow upsell to any data contract by bob tool */
-      ELSE IF (LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
-               icSource NE {&REQUEST_SOURCE_YOIGO_TOOL}) THEN
-         ocError = "Incorrect upsell type - " + icDCEvent.
+      /* Should not allow to create other data upsell once DSS1/2 is active */
+      /* Allow DSS_FLEX_UPSELL - 25 GB */
+      IF LOOKUP(icDCEvent, DayCampaign.BundleUpsell) EQ 0 THEN DO : 
+         IF (LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 AND
+             LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0) THEN
+             ocError = icDCEvent + " is not allowed because DSS " +
+                       "is active for this customer".
+         /* allow upsell to any data contract by bob tool */
+         ELSE IF (LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
+                  icSource NE {&REQUEST_SOURCE_YOIGO_TOOL}) THEN
+            ocError = "Incorrect upsell type - " + icDCEvent.
       
-      IF ocError <> "" THEN
-         RETURN FALSE.
-   END. /* IF lcCustBaseContract = {&DSS} AND */
+         IF ocError <> "" THEN
+            RETURN FALSE.
+      END. /* IF lcCustBaseContract = {&DSS} AND */
   
-   /* check for ongoing bundle termination */
-   IF LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN DO:
-      IF fOngoingDSSTerm(lbMobSub.Custnum, ideActStamp) THEN DO:
-         ocError = "Data contract does not exist". 
-         RETURN FALSE.
-      END.
-      ELSE DO:
-         IF NOT fGetDSSMsSeqLimit(lbMobSub.Custnum,ideActStamp,
-                                  OUTPUT liDSSMsSeq,OUTPUT ldeDSSLimit,
-                                  OUTPUT lcDSSBundleId)
-         THEN DO:
-            ocError = "Data contract does not exist".
+      /* check for ongoing bundle termination */
+      IF LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN DO:
+         IF fOngoingDSSTerm(lbMobSub.Custnum, ideActStamp) THEN DO:
+            ocError = "Data contract does not exist". 
             RETURN FALSE.
          END.
          ELSE DO:
-            FIND FIRST bDSSMobSub WHERE
-                       bDSSMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.
-            IF NOT AVAIL bDSSMobSub THEN DO:
-               ocError = "DSS main subscription is already terminated".
+            IF NOT fGetDSSMsSeqLimit(lbMobSub.Custnum,ideActStamp,
+                                     OUTPUT liDSSMsSeq,OUTPUT ldeDSSLimit,
+                                     OUTPUT lcDSSBundleId)
+            THEN DO:
+               ocError = "Data contract does not exist".
                RETURN FALSE.
             END.
-         END.
-      END. /* ELSE DO: */
+            ELSE DO:
+               FIND FIRST bDSSMobSub WHERE
+                          bDSSMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.
+               IF NOT AVAIL bDSSMobSub THEN DO:
+                  ocError = "DSS main subscription is already terminated".
+                  RETURN FALSE.
+               END.
+            END.
+         END. /* ELSE DO: */
+      END.
    END.
-
+   
    /* get amount of UpSell bundles */
    liUpsellCount = fGetUpSellCount(INPUT icDCEvent,INPUT iiMsSeq,
                                    INPUT lbMobSub.Custnum,OUTPUT ocError).
