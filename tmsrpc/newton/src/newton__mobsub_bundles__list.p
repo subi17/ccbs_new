@@ -199,8 +199,9 @@ PROCEDURE pAdd_3Gg_flex_upsell:
     DEF VAR liUpsellCount         AS INTE NO-UNDO.
     DEF VAR lcUpsell              AS CHAR NO-UNDO.
     DEF VAR lcResult              AS CHAR NO-UNDO.
-    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO INITIAL 
-       "FID3GB_R_UPSELL,FID3GB_3m_R_UPSELL,FID3GB_6m_R_UPSELL,FID3GB_12m_R_UPSELL".
+    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO.
+ 
+    lcUpsell_Id  = fCParamC("RETENTION_3GB_UPSELLS").  
     
     DO liUpsellCount = 1 TO NUM-ENTRIES(lcUpsell_Id):
        
