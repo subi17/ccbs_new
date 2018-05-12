@@ -1023,7 +1023,7 @@ IF NOT MobSub.PayType THEN DO:
                                           lcDSSBundleId,
                                           {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
                                           0,
-                                          lbMobSub.ActivationTS,
+                                          MobSub.ActivationTS,
                                           "DSS activation failed in Mobsub creation", /* Error Msg */
                                           OUTPUT lcResult).
 
