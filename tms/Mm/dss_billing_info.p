@@ -528,6 +528,10 @@ PROCEDURE pGetDSSBillingInfo:
 
    FOR EACH ttMsOwner BREAK BY ttMsOwner.MsSeq:
 
+      /* This hack has to be removed until all DSS4 subscriptions are migrated */
+      IF lcBundleId EQ {&DSS2} THEN 
+         lcAllowedDSS2SubsType = lcAllowedDSS4SubsType.
+
       IF lcBundleId EQ {&DSS4} AND 
          LOOKUP(ttMsOwner.CLIType,lcAllowedDSS4SubsType) = 0 THEN NEXT.
       ELSE IF lcBundleId EQ {&DSS2} AND

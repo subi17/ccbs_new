@@ -103,6 +103,11 @@ IF lcDSSBundleId EQ {&DSS4} THEN
 ELSE IF lcDSSBundleId = {&DSS2} THEN
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
 
+/* This hack has to be removed once DSS4 subscriptions are migrated */
+IF lcDSSBundleId = {&DSS2} THEN 
+   lcAllowedDSS2SubsType = lcAllowedDSS4SubsType.
+
+
 FOR EACH bMsOwner NO-LOCK WHERE
          bMsOwner.InvCust  = Customer.CustNum AND
          bMsOwner.TsBegin <= ldPeriodTo       AND
