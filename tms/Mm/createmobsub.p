@@ -1020,7 +1020,7 @@ IF NOT MobSub.PayType THEN DO:
          IF NOT AVAIL bTerMsRequest THEN 
             liRequest = fDSSCreateRequest(lbMobSub.MsSeq,
                                           lbMobSub.CustNum,
-                                          lcDSSBundleId,
+                                          lcDSSId,
                                           {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
                                           0,
                                           MobSub.ActivationTS,
