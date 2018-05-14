@@ -580,7 +580,8 @@ PROCEDURE pDone.
                     LOOKUP(STRING(MsRequest.ReqStatus),
                            {&REQ_INACTIVE_STATUSES}) = 0 AND
                     MsRequest.ActStamp >= ldActStamp NO-LOCK NO-ERROR.
-         IF AVAIL MsRequest THEN DO:
+         IF AVAIL MsRequest AND
+            NOT fIsFixedOnly(MsRequest.ReqCParam2) THEN DO: /* Allow STC to 2P */
             fReqStatus(4,"Cancelled due to fraud barring").
             llCancelSTC = TRUE.
 
