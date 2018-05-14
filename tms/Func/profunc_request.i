@@ -418,7 +418,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                                       "",                                         /* contract id */
                                       OUTPUT ocResult).
       IF ocResult > "" THEN 
-         RETURN.   
+         RETURN 0.   
    END.
    ELSE 
    DO:
@@ -427,7 +427,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                              "",
                              icCreator).
       IF ocResult > "" THEN 
-          RETURN.
+          RETURN 0.
 
       fCreateRequest({&REQTYPE_PRO_MIGRATION},
                      Func.Common:mMakeTS(),

@@ -58,12 +58,12 @@ liRequest = fProMigrationRequest(INPUT piMsseq,
                                TRUE ,  /* Perform validation on request */
                                OUTPUT lcResult).
 IF liRequest > 0 THEN
-   ocResult = fProMigrateOtherSubs(Mobsub.AgrCust, 
+   lcResult = fProMigrateOtherSubs(Mobsub.AgrCust, 
                                    Mobsub.MsSeq, 
                                    liRequest, 
                                    Syst.Var:katun).
 
-IF ocResult = "" THEN
+IF lcResult = "" THEN
    add_boolean(response_toplevel_id, "", true).
 ELSE DO:
     CASE lcResult:
