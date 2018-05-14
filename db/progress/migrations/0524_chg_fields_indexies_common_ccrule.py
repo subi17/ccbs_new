@@ -20,12 +20,10 @@ class AddTableCCRule(Migration):
         t.index('CCRuleID', [['CCRuleID']], area="Sta_Index_2", unique=True)        
         t.index('CLIType', [['Brand'], ['CLIType'], ['Category'], ['ValidTo', 'DESC']], area="Sta_Index_2")
         t.alter_index('Category', [['Brand'], ['Category'], ['BillCode'], ['CLIType'], ['ValidTo', 'DESC']], area="Sta_Index_2", primary=True, unique=True)
-        t.drop_index('Pgcode')
-        t.drop_column('BIGroup')        
+        t.drop_index('Pgcode')             
         
     def down(self):
         t = self.alter_table('CCRule')
-        t.column('BIGroup', 'character', format="x(8)", initial="", max_width=16, label="Product group", column_label="Prod.grp", position=3, order=20, help="Product group")
         t.alter_index('Category', [['Brand'], ['Category'], ['BIGroup'], ['ValidFrom']], area="Sta_Index_2", primary=True, unique=True)
         t.index('Pgcode', [['Brand'], ['BIGroup'], ['Category'], ['ValidFrom']], area="Sta_Index_2")        
         t.drop_index('BillCode')

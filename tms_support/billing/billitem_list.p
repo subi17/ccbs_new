@@ -23,7 +23,6 @@ put stream slog unformatted
     "Tax Class" chr(9)
     "SAP Code"  chr(9)
     "Cost Centre" chr(9).
-.
     
 do i = 1 to 5:
    put stream slog unformatted
@@ -45,7 +44,6 @@ put stream sarda unformatted
     "Tax Class" lcsep
     "SAP Code"  lcsep
     "Cost Centre" lcsep.
-.
     
 do i = 1 to 5:
    put stream sarda unformatted
