@@ -10,6 +10,8 @@ USING Syst.Configuration.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 
+&GLOBAL-DEFINE fileParsing TRUE.
+
 CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
                      IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
    
@@ -38,7 +40,10 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    DEF VAR lcReplyTo AS CHAR NO-UNDO.
    DEF VAR lcCorrelationID AS CHAR NO-UNDO. 
    
-   DEF VAR lhTenantInfo AS HANDLE NO-UNDO.
+   DEF VAR lcHeader AS CHAR NO-UNDO.
+   DEF VAR lcBody AS CHAR NO-UNDO.  
+   
+   DEF VAR lhFileParsing AS HANDLE NO-UNDO.
    
    DEF EVENT leTooManyErrors SIGNATURE VOID (  ).
    
@@ -57,7 +62,13 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                  STRING( SUBSTITUTE("port=&1," ,lcPortNumber) )     +
                  STRING( SUBSTITUTE("queueName=&1" ,lcQueueName) ), "INIT").
                  
-      RUN TMSCodes.p PERSISTENT SET lhTenantInfo.
+         IF {&fileParsing} THEN 
+         DO:
+            RUN FileInputAPI.p PERSISTENT SET lhFileParsing(OUTPUT lcHeader, OUTPUT lcBody).
+            newJsonMessage(lcHeader,lcBody).
+         END.
+                 
+     // RUN TMSCodes.p PERSISTENT SET lhTenantInfo.
    END CONSTRUCTOR.
    
    METHOD PROTECTED VOID logMsg (icMsg AS CHAR, icMsgType AS CHAR):
