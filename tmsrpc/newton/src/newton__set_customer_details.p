@@ -44,6 +44,7 @@
             company_foundationdate;date;optional;
             new_subscription_grouping;int;optional;1=Use default invoice group,2=Use new invoice group
             payment_method;int;mandatory;
+            profession;string;optional;
  * @company_contact title;string;
                     fname;string;
                     lname;string;
@@ -135,7 +136,7 @@ DEF VAR lii AS INT NO-UNDO.
 DEF VAR llt AS LOGICAL NO-UNDO.
 DEF VAR llCustomerChanged AS LOGICAL INITIAL FALSE NO-UNDO.
 
-DEF VAR lcCustomerData AS CHAR EXTENT 23 NO-UNDO.
+DEF VAR lcCustomerData AS CHAR EXTENT 24 NO-UNDO.    /* APIBSS-174 Changing for 23 to 24 */
 DEF VAR llMarketingData AS LOGICAL EXTENT 8 NO-UNDO. /* APIBSS-86 */
 DEF VAR lcDataFields AS CHAR NO-UNDO.
 DEF VAR lcMarketingFields AS CHAR NO-UNDO.
@@ -182,6 +183,7 @@ ASSIGN
     lcCustomerData[20] = customer.custidtype
     lcCustomerData[21] = customer.OrgId
     lcCustomerData[22] = customer.CompanyName
+    lcCustomerData[24] = customer.Profession  /* APIBSS-174 */
     ldFoundationDate   = customer.FoundationDate
     liInvoiceTargetRule = customer.InvoiceTargetRule
     ldBirthDay         = customer.BirthDay
@@ -204,7 +206,8 @@ lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "language,nationality,bankaccount,country," +
                "email,sms_number,phone_number,person_id,city_code,street_code,"+
                "id_type,company_id,company_name," +
-               "birthday,company_foundationdate,new_subscription_grouping,payment_method".
+               "birthday,company_foundationdate,new_subscription_grouping,payment_method" +
+               "profession".   /* APIBSS-174 */
 
 DEF VAR lcAddressValidtionFields AS CHAR NO-UNDO. 
 lcAddressValidtionFields = "street_code,city_code,municipality_code".
@@ -515,7 +518,8 @@ IF llCustomerChanged THEN DO:
         customer.foundationDate = ldFoundationDate 
         customer.BirthDay = ldBirthDay
         customer.InvoiceTargetRule = liInvoiceTargetRule
-        customer.ChargeType = liChargeType.
+        customer.ChargeType = liChargeType 
+        customer.profession = lcCustomerData[LOOKUP("profession", lcDataFields)].  /* APIBSS-174 */
           
    IF llAddressChanged THEN DO:
        
