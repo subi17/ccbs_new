@@ -2,10 +2,17 @@
 &THEN
 &GLOBAL-DEFINE PROFUNC_REQUEST_I YES
 
+{Syst/eventval.i}
 {Func/profunc.i}
 {Func/orderfunc.i}
 {Func/femailinvoice.i}
 {Func/email.i}
+{Func/custfunc.i}
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
+END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR
    (iiMsRequest AS INT,
@@ -278,7 +285,8 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
     INPUT  ilValidate     AS LOGICAL  , 
     OUTPUT ocResult       AS CHARACTER):
 
-   DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR liReqCreated  AS INT  NO-UNDO.
+   DEF VAR lcNewCategory AS CHAR NO-UNDO.
 
    DEFINE BUFFER bCustomer      FOR Customer.
    DEFINE BUFFER bMobSub        FOR MobSub.
@@ -293,22 +301,17 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEFINE VARIABLE lcclitypeto   AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liRequest     AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcError       AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE llValidMaping AS LOGICAL NO-UNDO.
+   DEFINE VARIABLE llValidMaping AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE lhCustomer    AS HANDLE    NO-UNDO.
 
-   ocResult = fChkRequest(iiMsSeq,
-                          {&REQTYPE_PRO_MIGRATION},
-                          "",
-                          icCreator).
-
-   IF ocResult > "" THEN RETURN 0.
-   
    FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+   FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
+   FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
+
    ASSIGN lcCliTypeFrom = bMobSub.CliType.
 
    IF ilValidate THEN 
    DO:    
-       FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
-       FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
        /* Is category available */
        IF NOT AVAILABLE bCustCat THEN DO:
            ocResult = "101".
@@ -372,43 +375,78 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    
    IF lcCliTypeTo <> "" THEN 
    DO:
-        liRequest = fCTChangeRequest(iiMsseq,           /* The MSSeq of the subscription to where the STC is made */
-                                     lcCliTypeTo,                                /* The CLIType of where to do the STC */
-                                     "",                                         /* lcBundleID */
-                                     "",                                         /* bank code validation is already done */
-                                     Func.Common:mMakeTS(),
-                                     0,                                          /* 0 = Credit check ok */
-                                     0,                                          /* extend contract */
-                                     ""                                          /* pcSalesman */,
-                                     FALSE,                                      /* charge */
-                                     TRUE,                                       /* send sms */
-                                     "",
-                                     0, 
-                                     icSource,
-                                     0,
-                                     iiOrig,
-                                     "",                                         /* contract id */
-                                     OUTPUT lcError).
-        IF liRequest = 0 THEN 
-        DO:
-           ASSIGN ocResult = "Promigration not possible because STC request not created".
-           RETURN 0.
-        END.
+      fgetCustSegment(bCustomer.CustIdType,
+                      TRUE, /* Self Employed */
+                      TRUE, /* Pro */
+                      bCustomer.OrgId, 
+                      OUTPUT lcNewCategory).
+
+      IF lcNewCategory NE bCustomer.Category THEN 
+      DO TRANSACTION:
+         lhCustomer = BUFFER bCustomer:HANDLE.
+
+         IF llDoEvent THEN 
+         DO:
+            RUN StarEventInitialize(lhCustomer).
+            RUN StarEventSetOldBuffer(lhCustomer).
+         END.
+
+         FIND CURRENT bCustomer EXCLUSIVE-LOCK.
+         ASSIGN bCustomer.Category = lcNewCategory.
+         FIND CURRENT bCustomer NO-LOCK.
+
+         IF llDoEvent THEN 
+            RUN StarEventMakeModifyEvent(lhCustomer).
+      END.
+
+      liReqCreated = fCTChangeRequest(iiMsseq,                                    /* The MSSeq of the subscription to where the STC is made */
+                                      lcCliTypeTo,                                /* The CLIType of where to do the STC */
+                                      "",                                         /* lcBundleID */
+                                      "",                                         /* bank code validation is already done */
+                                      Func.Common:mMakeTS(),
+                                      0,                                          /* 0 = Credit check ok */
+                                      0,                                          /* extend contract */
+                                      ""                                          /* pcSalesman */,
+                                      FALSE,                                      /* charge */
+                                      TRUE,                                       /* send sms */
+                                      "",
+                                      0, 
+                                      {&REQUEST_SOURCE_MIGRATION},
+                                      0,
+                                      iiOrig,
+                                      "",                                         /* contract id */
+                                      OUTPUT ocResult).
+      IF liReqCreated > 0 THEN 
+         ocResult = fProMigrateOtherSubs(bMobsub.AgrCust, 
+                                         bMobsub.MsSeq, 
+                                         liReqCreated, 
+                                         Syst.Var:katun).
+      IF ocResult > "" THEN 
+         RETURN.   
    END.
+   ELSE 
+   DO:
+      ocResult = fChkRequest(iiMsSeq,
+                             {&REQTYPE_PRO_MIGRATION},
+                             "",
+                             icCreator).
+      IF ocResult > "" THEN 
+          RETURN.
 
-   fCreateRequest({&REQTYPE_PRO_MIGRATION},
-                  Func.Common:mMakeTS(),
-                  icCreator,
-                  FALSE,    /* create fees */
-                  FALSE).   /* sms */
+      fCreateRequest({&REQTYPE_PRO_MIGRATION},
+                     Func.Common:mMakeTS(),
+                     icCreator,
+                     FALSE,    /* create fees */
+                     FALSE).   /* sms */
 
-   ASSIGN
-      bCreaReq.ReqCParam1  = "MIGRATE"
-      bCreaReq.ReqSource   = icSource
-      bCreaReq.origrequest = iiOrig
-      liReqCreated         = bCreaReq.MsRequest.
+      ASSIGN
+          bCreaReq.ReqCParam1  = "MIGRATE"
+          bCreaReq.ReqSource   = icSource
+          bCreaReq.origrequest = iiOrig
+          liReqCreated         = bCreaReq.MsRequest.
 
-   RELEASE bCreaReq.
+      RELEASE bCreaReq.
+   END.
 
    RETURN liReqCreated.
 
