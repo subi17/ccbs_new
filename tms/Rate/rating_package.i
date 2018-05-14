@@ -11,6 +11,8 @@
 
 &GLOBAL-DEFINE SUBTYPES_LIST_WITHOUT_DATA "CONT,CONT2,CONT4,CONT5,CONTM,CONTM2"
 
+&GLOBAL-DEFINE DSS2_SUBTYPES "CONTS,CONTM2,CONTM,CONTSF,CONT15,CONTDSL45,CONTDSL52,CONTFH45_50,CONTFH52_50,CONTFH55_300,CONTFH62_300,CONTDSL58,CONTDSL59,CONTFH58_50,CONTFH59_50,CONTFH68_300,CONTFH69_300,CONT28,CONTFH89_1000,CONTFH82_1000,CONT29,CONTDSL99,CONTFH99_50,CONTFH109_300,CONTFH129_1000,CONTDSL3G,CONTFH3G_50,CONTFH3G_300,CONTFH3G_1000,CONTDSL7G,CONTFH7G_50,CONTFH7G_300,CONTFH7G_1000,CONTDSL2G,CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000,CONTFHNB109_300,CONTFHNB2G_300,CONTFHNB3G_300,CONTFHNB7G_300"
+
 FUNCTION fIncludedUnit RETURNS DEC
    (iiInclUnit AS INT):
  
@@ -158,11 +160,21 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
    IF INDEX(lcSLGroupList, "DSS") > 0 AND fIsDSSActive(MSOwner.CustNum, CallTimeStamp) THEN
    DO: 
-      /*TODO: I see mock ups where data share bundle option is part of rating buckets, so can logic be developed w.r.t to rating buckets instead compatability check on subscription type.
+      /*TODO: As, per new product catalog mock ups, data share bundle option is part of rating buckets, 
+              so can logic be developed w.r.t to rating buckets instead bellow compatability check on subscription types.
               Also need to analyse do we need this code still */
-      FIND FIRST ttCliType WHERE ttCliType.Brand = MsOwner.Brand AND ttCliType.CliType = MSOwner.CLIType NO-ERROR.
-      IF AVAIL ttCliType AND ttCliType.DSSType > 0 THEN
-          ASSIGN llVoice_Data_subs_DSS = TRUE.
+      FOR EACH ttServiceLimit NO-LOCK WHERE
+          {Func/dss_search.i "ttServiceLimit.GroupCode"},
+          FIRST MServiceLimit NO-LOCK WHERE
+                MServiceLimit.CustNum  = MSOwner.CustNum      AND
+                MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
+                MServiceLimit.FromTS  <= CallTimeStamp        AND
+                MServiceLimit.EndTS   >= CallTimeStamp:
+
+         IF ttServiceLimit.GroupCode = {&DSS} OR 
+            (ttServiceLimit.GroupCode = "DSS2" AND LOOKUP(MSOwner.CLIType,{&DSS2_SUBTYPES}) > 0) THEN
+            llVoice_Data_subs_DSS = TRUE.
+      END. /* FOR FIRST ttServiceLimit NO-LOCK WHERE */
    END.
    ELSE  
        ASSIGN llVoice_Data_subs_DSS = FALSE.
@@ -333,10 +345,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   DO:
                      llPackageUsed = FALSE.
                      NEXT PACKET.
-                  END. 
-                  /* TODO: This hard coding will be removed, after discussing with Antti & Vikas */
-                  ELSE IF MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH" THEN 
-                     NEXT PACKET.     
+                  END.      
                   ELSE 
                   DO:
                      IF NOT CAN-FIND(FIRST ttTariff WHERE ttTariff.Brand      = MsOwner.Brand  AND
