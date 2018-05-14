@@ -244,7 +244,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	  (ioJsonObject AS CLASS JsonObject):
 
       DEFINE VARIABLE lcSupportedTitles AS CHARACTER INITIAL
-         "Sr.,Mr.,Sr,Mr or Mrs.,Sra.,Mrs,Sra" NO-UNDO.
+         "Sr.,Mr.,Sr,Mr,Mrs.,Sra.,Mrs,Sra" NO-UNDO.
 
       IF ioJsonObject:Has("title")
       THEN DO:

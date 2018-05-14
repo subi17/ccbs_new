@@ -52,6 +52,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
+   DEFINE PUBLIC PROPERTY MobSubCustNum AS INTEGER NO-UNDO
+      GET.
+      SET.
+
    /* A value for this property is populated in OrderProduct class */
    DEFINE PUBLIC PROPERTY MsSeq AS INTEGER NO-UNDO
       GET.
@@ -59,11 +63,18 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          DEFINE BUFFER MobSub FOR MobSub.
          FIND MobSub NO-LOCK WHERE MobSub.MSSeq = iiMSSeq NO-ERROR.
          IF NOT AVAILABLE MobSub
-         THEN UNDO, THROW NEW InternalError
+         THEN DO:
+            IF CAN-FIND(TermMobSub NO-LOCK WHERE TermMobSub.MSSeq = iiMSSeq)
+            THEN UNDO, THROW NEW InternalError
+                  (SUBSTITUTE("MobSub having msseq '&1' is not active", iiMSSeq)).
+
+            UNDO, THROW NEW InternalError
                   (SUBSTITUTE("MobSub having msseq '&1' doesn't exists", iiMSSeq)).
+         END.
          ASSIGN
-            THIS-OBJECT:MsSeq = iiMSSeq
-            THIS-OBJECT:CLI   = MobSub.CLI.
+            THIS-OBJECT:MsSeq         = iiMSSeq
+            THIS-OBJECT:CLI           = MobSub.CLI
+            THIS-OBJECT:MobSubCustNum = MobSub.CustNum.
       END SET.
 
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO

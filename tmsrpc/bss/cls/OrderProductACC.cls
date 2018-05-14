@@ -183,6 +183,15 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF aoOrderCustomer:CustNum EQ aoOrder:aoCustomer:CustNum
       THEN UNDO, THROW NEW ParamError("New agreement customer is the same as current one").
 
+      IF aoOrder:MobSubCustNum EQ aoOrder:aoCustomer:CustNum
+      THEN UNDO, THROW NEW
+               ParamError(SUBSTITUTE("The subscription's (MsSeq = '&1') " +
+                                     "customer number '&2' doesn't match " +
+                                     "to the donor customer number '&3'",
+                                     aoOrder:MsSeq,
+                                     aoOrder:MobSubCustNum,
+                                     aoOrder:aoCustomer:CustNum)).
+
       IF aoOrderCustomer:Country NE "ES"
       THEN UNDO, THROW NEW ParamError("Only Country 'ES' is valid").
 

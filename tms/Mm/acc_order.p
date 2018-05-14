@@ -52,7 +52,7 @@ IF NOT AVAIL bOriginalCustomer THEN RETURN "ERROR:Old customer not found".
 IF OrderCustomer.Custnum > 0 THEN DO:
    FIND Customer NO-LOCK WHERE
         Customer.Custnum = OrderCustomer.Custnum NO-ERROR.
-   IF NOT AVAIL Customer THEN RETUrN "ERROR:New customer not found".
+   IF NOT AVAIL Customer THEN RETURN "ERROR:New customer not found".
 END.
 
 FIND OrderProduct NO-LOCK WHERE
@@ -66,7 +66,12 @@ IF NOT AVAIL MobSub THEN
    RETURN "ERROR:Subscription is not active".
 
 IF MobSub.Custnum NE Order.Custnum THEN
-   RETURN "ERROR:Old customer does not match with new customer".
+   RETURN SUBSTITUTE("ERROR:The subscription's (MsSeq = '&1') " +
+                     "customer number '&2' doesn't match " +
+                     "to the donor customer number '&3'",
+                     MobSub.MsSeq,
+                     MobSub.CustNum,
+                     Order.CustNum).
 
 lcOrigKatun = Syst.Var:katun.
 Syst.Var:katun = "VISTA_" + Order.Salesman.
