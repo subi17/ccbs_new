@@ -278,101 +278,6 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
 END FUNCTION.   
 
 
-FUNCTION fProMigrateOtherSubs RETURNS CHAR
-(INPUT iiagrcust AS INT,
- INPUT iimsseq AS INT,
- INPUT iimsrequest AS INT,
- INPUT icsalesman AS CHAR):
-
-   DEF BUFFER bMobSub FOR Mobsub.
-
-   DEF VAR lcResult    AS CHAR NO-UNDO.
-   DEF VAR liRequest   AS INT  NO-UNDO.
-   DEF VAR lcCliTypeTo AS CHAR NO-UNDO.
-
-   FOR EACH bMobsub WHERE
-            bMobsub.brand EQ Syst.Var:gcBrand AND
-            bMobsub.agrCust EQ iiagrCust AND
-            bMobsub.msseq NE iimsseq:
-      FIND FIRST Clitype WHERE
-                 Clitype.brand EQ Syst.Var:gcBrand AND
-                 Clitype.clitype EQ bMobsub.clitype NO-LOCK NO-ERROR.
-      IF AVAIL Clitype THEN 
-      DO:
-         CASE Clitype.WebStatusCode:
-            WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} THEN
-            DO:
-               ASSIGN lcCliTypeTo = fgetActiveReplacement(bMobsub.clitype,"STCMappingForActiveTariffs").
-
-               IF lcCliTypeTo > "" THEN 
-               DO:
-                  liRequest = fCTChangeRequest(bMobSub.msseq,
-                                             lcCliTypeTo,
-                                             "", /* lcBundleID */
-                                             "", /*bank code validation is already done */
-                                             Func.Common:mMakeTS(),
-                                             0,  /* 0 = Credit check ok */
-                                             0, /* extend contract */
-                                             "" /* pcSalesman */,
-                                             FALSE, /* charge */
-                                             TRUE, /* send sms */
-                                             "",
-                                             0,
-                                             {&REQUEST_SOURCE_MIGRATION},
-                                             0,
-                                             iimsrequest,
-                                             "", /*contract id*/
-                                             OUTPUT lcResult).
-                   IF liRequest = 0 THEN
-                      RETURN "ERROR: Migration STC request creation failed. " + lcResult.
-               END.
-               ELSE
-               DO:
-                  liRequest = fProMigrationRequest(INPUT bMobsub.Msseq,
-                                                 INPUT icsalesman,
-                                                 INPUT {&REQUEST_SOURCE_MIGRATION},
-                                                 INPUT iimsrequest,
-                                                 INPUT FALSE , /* Validations not required here */
-                                                 OUTPUT lcResult).
-               END.
-            END.
-            OTHERWISE
-            DO:
-                ASSIGN lcCliTypeTo = fgetActiveReplacement(bMobsub.clitype,"ProSubsMigrationMappings").
-
-                IF lcCliTypeTo > "" THEN 
-                DO:
-                   /* Make iSTC according to mapping */
-                   liRequest = fCTChangeRequest(bMobSub.msseq,
-                                              lcCliTypeTo,
-                                              "", /* lcBundleID */
-                                              "", /*bank code validation is already done */
-                                              Func.Common:mMakeTS(),
-                                              0,  /* 0 = Credit check ok */
-                                              0, /* extend contract */
-                                              "" /* pcSalesman */,
-                                              FALSE, /* charge */
-                                              TRUE, /* send sms */
-                                              "",
-                                              0,
-                                              {&REQUEST_SOURCE_MIGRATION},
-                                              0,
-                                              iimsrequest,
-                                              "", /*contract id*/
-                                              OUTPUT lcResult).
-
-                   IF liRequest = 0 THEN
-                      RETURN "ERROR: Migration STC request creation failed. " + lcResult.
-                END.
-            END.
-         END CASE.
-      END.
-      ELSE
-         RETURN "ERROR: Migration failed. " + lcResult.
-   END.
-END FUNCTION.
-
-
 FUNCTION fProMigrationRequest RETURNS INTEGER
    (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
     INPUT  icCreator      AS CHARACTER,  /* who made the request */
@@ -512,11 +417,6 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                                       iiOrig,
                                       "",                                         /* contract id */
                                       OUTPUT ocResult).
-      IF liReqCreated > 0 THEN 
-         ocResult = fProMigrateOtherSubs(bMobsub.AgrCust, 
-                                         bMobsub.MsSeq, 
-                                         liReqCreated, 
-                                         Syst.Var:katun).
       IF ocResult > "" THEN 
          RETURN.   
    END.
@@ -546,6 +446,101 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
 
    RETURN liReqCreated.
 
+END FUNCTION.
+
+
+FUNCTION fProMigrateOtherSubs RETURNS CHAR
+(INPUT iiagrcust AS INT,
+ INPUT iimsseq AS INT,
+ INPUT iimsrequest AS INT,
+ INPUT icsalesman AS CHAR):
+
+   DEF BUFFER bMobSub FOR Mobsub.
+
+   DEF VAR lcResult    AS CHAR NO-UNDO.
+   DEF VAR liRequest   AS INT  NO-UNDO.
+   DEF VAR lcCliTypeTo AS CHAR NO-UNDO.
+
+   FOR EACH bMobsub WHERE
+            bMobsub.brand EQ Syst.Var:gcBrand AND
+            bMobsub.agrCust EQ iiagrCust AND
+            bMobsub.msseq NE iimsseq:
+      FIND FIRST Clitype WHERE
+                 Clitype.brand EQ Syst.Var:gcBrand AND
+                 Clitype.clitype EQ bMobsub.clitype NO-LOCK NO-ERROR.
+      IF AVAIL Clitype THEN 
+      DO:
+         CASE Clitype.WebStatusCode:
+            WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} THEN
+            DO:
+               ASSIGN lcCliTypeTo = fgetActiveReplacement(bMobsub.clitype,"STCMappingForActiveTariffs").
+
+               IF lcCliTypeTo > "" THEN 
+               DO:
+                  liRequest = fCTChangeRequest(bMobSub.msseq,
+                                             lcCliTypeTo,
+                                             "", /* lcBundleID */
+                                             "", /*bank code validation is already done */
+                                             Func.Common:mMakeTS(),
+                                             0,  /* 0 = Credit check ok */
+                                             0, /* extend contract */
+                                             "" /* pcSalesman */,
+                                             FALSE, /* charge */
+                                             TRUE, /* send sms */
+                                             "",
+                                             0,
+                                             {&REQUEST_SOURCE_MIGRATION},
+                                             0,
+                                             iimsrequest,
+                                             "", /*contract id*/
+                                             OUTPUT lcResult).
+                   IF liRequest = 0 THEN
+                      RETURN "ERROR: Migration STC request creation failed. " + lcResult.
+               END.
+               ELSE
+               DO:
+                  liRequest = fProMigrationRequest(INPUT bMobsub.Msseq,
+                                                 INPUT icsalesman,
+                                                 INPUT {&REQUEST_SOURCE_MIGRATION},
+                                                 INPUT iimsrequest,
+                                                 INPUT FALSE , /* Validations not required here */
+                                                 OUTPUT lcResult).
+               END.
+            END.
+            OTHERWISE
+            DO:
+                ASSIGN lcCliTypeTo = fgetActiveReplacement(bMobsub.clitype,"ProSubsMigrationMappings").
+
+                IF lcCliTypeTo > "" THEN 
+                DO:
+                   /* Make iSTC according to mapping */
+                   liRequest = fCTChangeRequest(bMobSub.msseq,
+                                              lcCliTypeTo,
+                                              "", /* lcBundleID */
+                                              "", /*bank code validation is already done */
+                                              Func.Common:mMakeTS(),
+                                              0,  /* 0 = Credit check ok */
+                                              0, /* extend contract */
+                                              "" /* pcSalesman */,
+                                              FALSE, /* charge */
+                                              TRUE, /* send sms */
+                                              "",
+                                              0,
+                                              {&REQUEST_SOURCE_MIGRATION},
+                                              0,
+                                              iimsrequest,
+                                              "", /*contract id*/
+                                              OUTPUT lcResult).
+
+                   IF liRequest = 0 THEN
+                      RETURN "ERROR: Migration STC request creation failed. " + lcResult.
+                END.
+            END.
+         END CASE.
+      END.
+      ELSE
+         RETURN "ERROR: Migration failed. " + lcResult.
+   END.
 END FUNCTION.
 
 /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
