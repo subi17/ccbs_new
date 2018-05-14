@@ -3,6 +3,8 @@
  */
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
+&GLOBAL-DEFINE IMPORTDIR ../var/import/pc
+
 /* lang, stomp adpter, logic  libs*/ 
 USING Progress.Lang.*.
 USING Syst.Configuration.
@@ -10,10 +12,16 @@ USING Syst.Configuration.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 
-&GLOBAL-DEFINE fileParsing TRUE.
+&GLOBAL MQ_BASED YES            
 
 CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
                      IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
+                         
+    &IF "{&MQ_BASED}" = "NO"
+    &THEN 
+    DEFINE STREAM s-dir.
+    DEFINE STREAM s-in.
+    &ENDIF                       
    
    DEF VAR gcBrand                AS CHAR                     NO-UNDO INIT "1".
    /*stomp protocol  settings*/ 
@@ -62,13 +70,21 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                  STRING( SUBSTITUTE("port=&1," ,lcPortNumber) )     +
                  STRING( SUBSTITUTE("queueName=&1" ,lcQueueName) ), "INIT").
                  
-         IF {&fileParsing} THEN 
+      &IF "{&MQ_BASED}" = "NO"
+      &THEN    
+      openLogFiles().       
+      OS-CREATE-DIR VALUE("../var/import").
+      OS-CREATE-DIR VALUE("{&IMPORTDIR}").
+      OS-CREATE-DIR VALUE("{&IMPORTDIR}/input").
+      OS-CREATE-DIR VALUE("{&IMPORTDIR}/done").
+      &ENDIF           
+                 
+         /*IF {&fileParsing} THEN 
          DO:
             RUN FileInputAPI.p PERSISTENT SET lhFileParsing(OUTPUT lcHeader, OUTPUT lcBody).
             newJsonMessage(lcHeader,lcBody).
-         END.
+         END.*/
                  
-     // RUN TMSCodes.p PERSISTENT SET lhTenantInfo.
    END CONSTRUCTOR.
    
    METHOD PROTECTED VOID logMsg (icMsg AS CHAR, icMsgType AS CHAR):
@@ -95,7 +111,11 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    END METHOD.
    
    METHOD PUBLIC OVERRIDE LOG processOne ():
-        
+       
+      &IF "{&MQ_BASED}" = "NO"
+      &THEN  
+      processOneFileImport().
+      &ELSE    
       IF llStopCondition = TRUE
          THEN UNDO, THROW NEW Progress.Lang.AppError (lcStopReason, 550).
       
@@ -112,85 +132,232 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       /* IMPORTANT: This will allow events to be triggered, otherwise 
          READ-RESPONSE wont be triggered and no processing. */
       IF NOT VALID-HANDLE(hpWaitForProcedure) THEN 
-      RUN Gwy/waitfor.p PERSISTENT SET hpWaitForProcedure.
-      RUN runWaitForStatement IN hpWaitForProcedure.  
-      
-   END METHOD.
-   
-   METHOD PUBLIC VOID newStompMessage(INPUT ioStompMessage AS 
-                                            dotr.Stomp.StompMessage):
-         
-      DEF VAR lcHeader            AS CHAR NO-UNDO.
-      DEF VAR liCnt               AS INT  NO-UNDO.
-      
-      ASSIGN
-         lcSource = ""
-         lcCorrelationID = ""
-         lcReplyTo = "".
-      
-      IF ioStompMessage:Body BEGINS "SocketDisconnected" THEN 
-      DO :
-         APPLY "U1" TO hpWaitForProcedure.
-         RETURN .
-      END.
-      
-      lcHeader   = REPLACE(ioStompMessage:HEADER,"~n"," ").
-      
-      IF ENTRY(1,lcHeader," ") = "MESSAGE" THEN DO :
-
-         lcHeader = SUBSTRING(lcHeader,9). /* Remove text MESSAGE + space */
-       
-         /* make proper logic module*/       
-         newJsonMessage(lcHeader , ioStompMessage:Body).
+            RUN Gwy/waitfor.p PERSISTENT SET hpWaitForProcedure.
+        RUN runWaitForStatement IN hpWaitForProcedure.
           
-      END. 
-      ELSE DO:
-         /*header logging*/
-         logMsg(lcHeader, "INFO").
-      END.        
+      &ENDIF.
       
-      liConsecutiveErrors = 0.
-              
-      CATCH e AS Progress.Lang.Error:
-         DO liCnt = 1 TO e:NumMessages:
-            logMsg(e:GetMessage(liCnt), "ERROR").    
+    END METHOD.
+    
+   
+    &IF "{&MQ_BASED}" = "NO"
+    &THEN 
 
-            /* for RequestMaker:logError exceptions */
-            IF e:GetMessageNum(liCnt) EQ 80000 AND
-               lcCorrelationID > "" AND
-               lcCorrelationID NE "0" AND
-               lcReplyTo > "" THEN DO:
-               CREATE AckMessage.
-               ASSIGN 
-                  AckMessage.HostTable = "MsRequest"
-                  AckMessage.KeyValue  = ""
-                  AckMessage.AckTarget = lcCorrelationId
-                  AckMessage.QueueName = lcReplyTo
-                  AckMessage.Created   = NOW
-                  AckMessage.AckStatus = 0
-                  AckMessage.AckResult = "Error"
-                  AckMessage.ResultDescription = e:GetMessage(liCnt).
-               RELEASE AckMessage.
+    METHOD PUBLIC LOG processOneFileImport
+        () :        
+
+        &SCOPED-DEFINE SHUTDOWN_CHECK_TIME 30
+
+        DEFINE VARIABLE lFileCount AS INTEGER   NO-UNDO.
+        DEFINE VARIABLE lFile      AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lFilePath  AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lLiveTime  AS INTEGER   NO-UNDO.
+    
+        lLiveTime = TIME.
+    
+        LOOP:
+        REPEAT :
+            
+            lFileCount = 0.
+            
+            INPUT STREAM s-dir THROUGH ls -1tr "{&IMPORTDIR}/input" NO-ECHO.
+            
+            ERROR-STATUS:ERROR = FALSE.    
+            REPEAT ON ERROR UNDO, LEAVE :
+                
+                IMPORT STREAM s-dir lFile.
+            
+                FILE-INFO:FILE-NAME = "{&IMPORTDIR}/input/" + lFile.
+                IF INDEX(FILE-INFO:FILE-TYPE,"F") = 0 THEN NEXT.
+    
+                ASSIGN 
+                    lFileCount = lFileCount + 1.
+                
+                LOG-MANAGER:WRITE-MESSAGE(lFile,"FILE").  
+                
+                lFilePath = FILE-INFO:FULL-PATHNAME.  
+                
+                fileInput(lFilePath).
+                
+                OS-COMMAND SILENT 
+                    mv
+                    VALUE(lFilePath)
+                    VALUE
+                    (SUBSTITUTE
+                    ("{&IMPORTDIR}/done/&1&2&3&4_&5",
+                    YEAR(TODAY),
+                    STRING(MONTH(TODAY),"99"),
+                    STRING(DAY(TODAY),"99"),
+                    REPLACE(STRING(TIME,"HH:MM:SS"),":",""),
+                    lFile                  
+                    )
+                    ).
+                
+                IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN LEAVE LOOP. /* time to check shutdown */   
+                
+            END.
+            IF ERROR-STATUS:ERROR THEN 
+            DO :
+                LOG-MANAGER:WRITE-MESSAGE(ERROR-STATUS:GET-MESSAGE(1),"ERROR").
+            END. 
+            
+            IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN LEAVE LOOP. /* time to check shutdown */     
+            
+            IF lFileCount = 0 THEN 
+            DO :
+                LEAVE LOOP.
+            END. 
+            
+        END.    
+        
+    END METHOD.
+    
+    METHOD PRIVATE LOGICAL openLogFiles ():
+        
+        DEFINE VARIABLE lLogFileName AS CHARACTER NO-UNDO.
+        
+        OUTPUT STREAM s-ok CLOSE.
+        OUTPUT STREAM s-error CLOSE.
+        OUTPUT STREAM s-missing CLOSE.
+        
+        ASSIGN 
+            lLogFileName = STRING(YEAR(TODAY),"9999")
+                         + STRING(MONTH(TODAY),"99")
+                         + STRING(DAY(TODAY),"99")
+                         + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
+            .        
+        
+        OUTPUT STREAM s-ok      TO VALUE(lLogDir + "/ok_"      + lLogFileName + ".log") UNBUFFERED.
+        OUTPUT STREAM s-error   TO VALUE(lLogDir + "/error_"   + lLogFileName + ".log") UNBUFFERED.
+        OUTPUT STREAM s-missing TO VALUE(lLogDir + "/missing_" + lLogFileName + ".log") UNBUFFERED.
+        
+        lLogFileStartStamp = NOW.
+        
+    END METHOD.
+    
+    METHOD PUBLIC LOG fileInput (iFile AS CHARACTER) :
+        
+        DEFINE VARIABLE lModel     AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lSource    AS CHARACTER NO-UNDO. 
+        DEFINE VARIABLE lPK        AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lMessageId AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lModelId   AS CHARACTER NO-UNDO. 
+        DEFINE VARIABLE lAction    AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lFeeId     AS CHARACTER NO-UNDO. 
+        DEFINE VARIABLE lExtInvId  AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lJsonBody  AS CHARACTER NO-UNDO.
+        
+        DEFINE VARIABLE lRecord    AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lHeader    AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lFieldSet  AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lField     AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lValue     AS CHARACTER NO-UNDO.
+        
+        DEFINE VARIABLE lCount     AS INTEGER   NO-UNDO.
+        
+        
+        DEFINE VARIABLE lii        AS INTEGER   NO-UNDO.
+        
+        INPUT STREAM s-in FROM VALUE(iFile) NO-MAP NO-CONVERT.
+        
+        lMessageId = ENTRY(NUM-ENTRIES(iFile,"/"),iFile,"/").
+    
+        REPEAT :
+            
+            IMPORT STREAM s-in UNFORMATTED lRecord.
+            
+            ASSIGN 
+                lHeader   = ENTRY(1,lRecord,"^")
+                lHeader   = TRIM(lHeader,'~{')
+                lHeader   = TRIM(lHeader,'~}')
+                lJsonBody = TRIM(ENTRY(2,lRecord,"^")).
+                
+            newJsonMessage(lHeader,lJsonBody).    
+        END.     
+           
+    END METHOD.
+    
+    &ELSE 
+    
+    METHOD PUBLIC VOID newStompMessage(INPUT ioStompMessage AS 
+        dotr.Stomp.StompMessage):
+         
+        DEF VAR lcHeader AS CHAR NO-UNDO.
+        DEF VAR liCnt    AS INT  NO-UNDO.
+      
+        ASSIGN
+            lcSource        = ""
+            lcCorrelationID = ""
+            lcReplyTo       = "".
+      
+        IF ioStompMessage:Body BEGINS "SocketDisconnected" THEN 
+        DO :
+            APPLY "U1" TO hpWaitForProcedure.
+            RETURN .
+        END.
+      
+        lcHeader   = REPLACE(ioStompMessage:HEADER,"~n"," ").
+      
+        IF ENTRY(1,lcHeader," ") = "MESSAGE" THEN 
+        DO :
+
+            lcHeader = SUBSTRING(lcHeader,9). /* Remove text MESSAGE + space */
+       
+            /* make proper logic module*/       
+            newJsonMessage(lcHeader , ioStompMessage:Body).
+          
+        END. 
+        ELSE 
+        DO:
+            /*header logging*/
+            logMsg(lcHeader, "INFO").
+        END.        
+      
+        liConsecutiveErrors = 0.
+              
+        CATCH e AS Progress.Lang.Error:
+            DO liCnt = 1 TO e:NumMessages:
+                logMsg(e:GetMessage(liCnt), "ERROR").    
+
+                /* for RequestMaker:logError exceptions */
+                IF e:GetMessageNum(liCnt) EQ 80000 AND
+                    lcCorrelationID > "" AND
+                    lcCorrelationID NE "0" AND
+                    lcReplyTo > "" THEN 
+                DO:
+                    CREATE AckMessage.
+                    ASSIGN 
+                        AckMessage.HostTable         = "MsRequest"
+                        AckMessage.KeyValue          = ""
+                        AckMessage.AckTarget         = lcCorrelationId
+                        AckMessage.QueueName         = lcReplyTo
+                        AckMessage.Created           = NOW
+                        AckMessage.AckStatus         = 0
+                        AckMessage.AckResult         = "Error"
+                        AckMessage.ResultDescription = e:GetMessage(liCnt).
+                    RELEASE AckMessage.
+                END.
+
             END.
 
-         END.
+            IF e:getclass():TypeName NE "Progress.Lang.AppError" THEN
+                liConsecutiveErrors = liConsecutiveErrors + 1.
 
-         IF e:getclass():TypeName NE "Progress.Lang.AppError" THEN
-            liConsecutiveErrors = liConsecutiveErrors + 1.
-
-         IF liConsecutiveErrors > liMaxConsecutiveErrors THEN 
-            leTooManyErrors:publish().
-      END CATCH.
+            IF liConsecutiveErrors > liMaxConsecutiveErrors THEN 
+                leTooManyErrors:publish().
+        END CATCH.
       
-      /*is it neccesary*/
-      FINALLY:
-         /*ack only in case of properly dequeued message*/
-         THIS-OBJECT:loStompClient:ACK(ioStompMessage).
-         IF VALID-OBJECT(ioStompMessage) THEN DELETE OBJECT ioStompMessage.                        
-      END FINALLY.
+        /*is it neccesary*/
+        FINALLY:
+            /*ack only in case of properly dequeued message*/
+            THIS-OBJECT:loStompClient:ACK(ioStompMessage).
+            IF VALID-OBJECT(ioStompMessage) THEN DELETE OBJECT ioStompMessage.                        
+        END FINALLY.
          
-   END METHOD.
+    END METHOD.
     
+&ENDIF    
+   
    METHOD PUBLIC VOID newJsonMessage (icHeader      AS LONGCHAR, 
                                       icMessageBody AS LONGCHAR):
         
