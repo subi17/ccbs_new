@@ -623,7 +623,6 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
     OUTPUT ocResultDesc AS CHAR):
 
    DEF VAR lcContactStruct AS CHAR NO-UNDO.
-   DEF VAR lcOutputStruct AS CHAR NO-UNDO.
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
 
@@ -665,11 +664,10 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
 
    IF NOT AVAIL bOrder THEN RETURN "ERROR: Work order id not found".
 
-   lcOutputStruct = add_struct(param_toplevel_id, "").
+   lcContactStruct = add_struct(param_toplevel_id, "").
    /*Order struct*/
-   add_string(lcOutputStruct, "orderID", 
+   add_string(lcContactStruct, "orderID", 
                              "Y" + STRING(bOrder.Orderid)).
-   lcContactStruct = add_struct(lcOutputStruct, "Contact").
    add_string(lcContactStruct, "documentNumber", OrderCustomer.CustID).
    add_string(lcContactStruct, "documentType", OrderCustomer.CustIdType).
    add_string(lcContactStruct, "firstName", OrderCustomer.FirstName).
