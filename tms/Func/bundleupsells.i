@@ -59,7 +59,7 @@ FUNCTION fIsDayCampaignBundleUpsellExists RETURNS LOGICAL
     DO liCount = 1 TO EXTENT(lcNonMatchUpSells):
                 
         IF lcBundleUpsell = lcNonMatchUpSells[liCount]
-            THEN RETURN TRUE.
+        THEN RETURN TRUE.
                 
     END.    
     

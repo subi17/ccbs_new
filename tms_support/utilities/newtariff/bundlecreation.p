@@ -18,6 +18,7 @@ DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 DEFINE STREAM strexport.
 
 {utilities/newtariff/chartointmap.i}
+{Syst/tmsconst.i}
 
 &GLOBAL-DEFINE TYPE "Type"
 &GLOBAL-DEFINE BTYPE "BundleType"
@@ -52,6 +53,8 @@ DEFINE TEMP-TABLE ttBundle NO-UNDO
    FIELD ValueList  AS CHARACTER
    FIELD DataType   AS CHARACTER
    .
+
+DEFINE TEMP-TABLE ttTMSRelation NO-UNDO LIKE TMSRelation.
 
 FUNCTION fCreatettBundle RETURNS LOGICAL
    ( icFieldName AS CHARACTER,
@@ -706,6 +709,9 @@ PROCEDURE pStoreBundle:
    DEFINE VARIABLE lcProcessType    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liSlSeq          AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liTMSRelationID  AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liDCUpsells      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liCount          AS INTEGER   NO-UNDO.
       
    ASSIGN
       lcBundle     = fGetFieldValue({&BUNDLE})
@@ -723,6 +729,7 @@ PROCEDURE pStoreBundle:
       DayCampaign.PayType         = INTEGER(fTMSCValue("CLIType","PayType",fGetFieldValue({&PAYTYPE}))) 
       DayCampaign.ValidFrom       = TODAY
       DayCampaign.ValidTo         = DATE(12,31,2049)
+      DayCampaign.StatusCode      = 1           /* Default value Active */
       DayCampaign.DCType          = STRING(fCharToInt({&BTYPE}, lcBundleType))
       DayCampaign.CCN             = (IF lcBundleType = "PackageWithCounter" OR
                                         lcBundleType = "Upsell" OR
@@ -763,9 +770,39 @@ PROCEDURE pStoreBundle:
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          
       DayCampaign.TermFeeCalc     = 0.
-
-   fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).
       
+   fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).  
+      
+   FIND LAST TMSRelation USE-INDEX TMSRelationID NO-LOCK NO-ERROR.
+   IF AVAILABLE TMSRelation
+   THEN liTMSRelationID = TMSRelation.TMSRelationId + 1.
+   ELSE liTMSRelationID = 1.   
+    
+   RELEASE TMSRelation NO-ERROR.
+   
+   ASSIGN liDCUpsells = fGetFieldValue({&UPSELL}).
+   
+   DO liCount = 1 TO NUM-ENTRIES(liDCUpsells):
+       
+       CREATE TMSRelation.
+       ASSIGN 
+           TMSRelation.TMSRelationID = liTMSRelationID
+           TMSRelation.TableName     = {&DCTABLENAME}
+           TMSRelation.KeyType       = {&DCKEYTYPE}
+           TMSRelation.ParentValue   = DayCampaign.DCEvent
+           TMSRelation.ChildValue    = ENTRY(liCount,liDCUpsells)
+           TMSRelation.RelationType  = {&DCRELATIONTYPE}
+           TMSRelation.FromTime      = DATETIME-TZ(TODAY, 0)    
+           TMSRelation.ToTime        = DATETIME-TZ(12/31/49, 86399000).  
+           
+       ASSIGN liTMSRelationID = liTMSRelationID + 1.
+                  
+       CREATE ttTMSRelation.
+       BUFFER-COPY TMSRelation TO ttTMSRelation NO-ERROR.   
+   END. 
+   
+   fExport(icSpoolDir + "tmsrelation.d", HPD.HPDCommon:mDynExport(BUFFER ttTMSRelation:HANDLE, " ")).
+         
    IF ldeDataLimit > 0 THEN   
       RUN pDCServicePackage(lcBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).
 

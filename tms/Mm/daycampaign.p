@@ -60,6 +60,7 @@ DEF VAR lcModifyFee   AS CHAR NO-UNDO.
 DEF VAR lcTermFee     AS CHAR NO-UNDO.
 DEF VAR lcEffective   AS CHAR NO-UNDO.
 DEF VAR lcTermFeeCalc AS CHAR NO-UNDO.
+DEF VAR lcStatus      AS CHAR NO-UNDO.
 DEF VAR lcBundleType  AS CHAR NO-UNDO.
 
 DEF BUFFER xxDayCampaign FOR DayCampaign.
@@ -70,6 +71,7 @@ form
    DayCampaign.DCName        FORMAT "x(20)" COLUMN-LABEL "Name"
    DayCampaign.DCType        FORMAT "X"     COLUMN-LABEL "Type"
    lcTypeName                FORMAT "X(13)" COLUMN-LABEL "TypeName"
+   DayCampaign.DSSPriority                  COLUMN-LABEL "DSS"
    DayCampaign.VAlidFrom 
    DayCampaign.ValidTo   
 
@@ -87,6 +89,9 @@ form
    DayCampaign.ValidFrom     COLON 23 format 99-99-9999 LABEL "Valid" 
       "-"
       DayCampaign.ValidTo  format 99-99-9999 NO-LABEL SKIP
+   DayCampaign.StatusCode    COLON 23
+      HELP "0=Inactive,1=Active,2=Retired,3=Hidden"
+      lcStatus NO-LABEL FORMAT "X(15)"    
    DayCampaign.BundleType  
       HELP "0=undefined, 1=Tariff bundle, 2=Additional bundle (voice or data)" 
       lcBundleType NO-LABEL  FORMAT "X(15)" SKIP
@@ -210,6 +215,17 @@ FUNCTION fFeeModel RETURNS CHAR
    ELSE RETURN "". 
    
 END FUNCTION.
+
+FUNCTION fStatusName RETURNS LOGIC
+    (iiStatusCode AS INT):
+
+    lcStatus = Func.Common:mTMSCodeName("CLIType",
+                                        "WebStatusCode",
+                                        STRING(iiStatusCode)).
+
+    DISP lcStatus WITH FRAME lis.
+END FUNCTION.
+
 
 FUNCTION fBundleTypeName RETURNS LOGIC
    (iiBundleType AS INT):
@@ -514,7 +530,7 @@ repeat WITH FRAME sel:
           DayCampaign.dcName
           DayCampaign.dctype
           lcTypeName
-          .
+          DayCampaign.DSSPriority.
 
        RUN LOCAL-FIND-NEXT.
        
@@ -545,7 +561,7 @@ repeat WITH FRAME sel:
           DayCampaign.dcName
           DayCampaign.DCType
           lcTypeName
-          .
+          DayCampaign.DSSPriority.
 
        IF ok THEN DO:
 
@@ -681,6 +697,7 @@ PROCEDURE LOCAL-DISP-ROW:
       DayCampaign.DCName
       DayCampaign.DCtype   
       lcTypeName
+      DayCampaign.DSSPriority
       DayCampaign.ValidFrom
       DayCampaign.ValidTo
    WITH FRAME sel.
@@ -767,6 +784,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          DayCampaign.DCEvent
          DayCampaign.PayType
          DayCampaign.DCName 
+         DayCampaign.StatusCode
          DayCampaign.BundleType
          DayCampaign.DCType
          DayCampaign.InstanceLimit
@@ -796,6 +814,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       fDurUnit(DayCampaign.DurUnit).
       fDurType(DayCampaign.DurType).
       fEffective(DayCampaign.Effective).
+      fStatusName(DayCampaign.StatusCode).
       fBundleTypeName(DayCampaign.BundleType).
 
       IF ilNew THEN Syst.Var:toimi = 1.
@@ -852,6 +871,7 @@ PROCEDURE pUpdate:
          DayCampaign.DCName 
          DayCampaign.ValidFrom
          DayCampaign.ValidTo
+         DayCampaign.StatusCode
          DayCampaign.BundleType
          DayCampaign.DCType
          DayCampaign.InstanceLimit
@@ -1069,6 +1089,18 @@ PROCEDURE pUpdate:
                   VIEW-AS ALERT-BOX ERROR.
                   NEXT.
                END.
+            END.
+            
+            ELSE IF FRAME-FIELD = "StatusCode" THEN 
+            DO:
+                fStatusName(INPUT INPUT DayCampaign.StatusCode).
+                IF lcStatus = "" THEN 
+                DO:
+                    BELL.
+                    MESSAGE "Unknown status code"
+                            VIEW-AS ALERT-BOX ERROR.
+                    NEXT.
+                END.
             END.
             
             ELSE IF FRAME-FIELD = "BundleType" THEN DO:

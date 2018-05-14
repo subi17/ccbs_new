@@ -12,9 +12,11 @@
     Notes       :
   ----------------------------------------------------------------------*/
 
+{Syst/tmsconst.i}
+
 DEFINE VARIABLE liUpsellCount AS INTEGER  NO-UNDO.
 
-Syst.TMSRelation:mAddKeyType("DayCampaign","UPSELL").
+Syst.TMSRelation:mAddKeyType({&DCTABLENAME},{&DCKEYTYPE}).
 
 FOR EACH DayCampaign NO-LOCK WHERE 
     DayCampaign.Brand          =   Syst.Var:gcBrand AND 
@@ -24,13 +26,16 @@ FOR EACH DayCampaign NO-LOCK WHERE
     
     DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell) :
     
-        Syst.TMSRelation:mAddRelation("DayCampaign",
-                                      "UPSELL",
+        Syst.TMSRelation:mAddRelation({&DCTABLENAME},
+                                      {&DCKEYTYPE},
                                       DayCampaign.DCEvent,
                                       ENTRY(liUpsellCount,DayCampaign.BundleUpsell),
-                                      "Compatibility",
+                                      {&DCRELATIONTYPE},
                                       YES).
     
     END. /*  DO liUpsellCount */        
 END. /* FOR EACH DayCampaign */
 
+MESSAGE "Script Completed." SKIP 
+        "TMS Relation records got created in TMS."
+VIEW-AS ALERT-BOX.
