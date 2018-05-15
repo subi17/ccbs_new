@@ -61,23 +61,30 @@ PROCEDURE ipCCRuleDataCreation:
                 CostCentre.Brand      = BillItem.Brand
                 CostCentre.CostCentre = BillItem.CostCentre.
         END.  
-    
-        CREATE CCRule.
-        ASSIGN 
-            CCRule.Brand       = BillItem.Brand
-            CCRule.CCruleId    = NEXT-VALUE(CCRuleSeq)
-            CCRule.Category    = "*"
-            CCRule.BillCode    = BillItem.BillCode
-            CCRule.ValidFrom   = TODAY
-            CCRule.ValidTo     = DATE(12,31,2049)
-            CCRule.ReportingID = BillItem.SAPRid
-            CCRule.CostCentre  = BillItem.CostCentre
-            CCRule.AccNum      = BillItem.AccNum
-            CCRule.EUAccNum    = BillItem.EUAccNum
-            CCRule.EUConAccNum = BillItem.EUConAccNum
-            CCRule.FSAccNum    = BillItem.FSAccNum
-            .
-           
+        
+        IF NOT CAN-FIND(FIRST CCRule WHERE CCRule.Brand     = BillItem.Brand
+                                       AND CCRule.Category  = "*"
+                                       AND CCRule.BillCode  = BillItem.BillCode
+                                       AND CCRule.CLIType   = ""
+                                       AND CCRule.ValidTo  >= TODAY) 
+        THEN DO:
+            
+            CREATE CCRule.
+            ASSIGN 
+                CCRule.Brand       = BillItem.Brand
+                CCRule.CCruleId    = NEXT-VALUE(CCRuleSeq)
+                CCRule.Category    = "*"
+                CCRule.BillCode    = BillItem.BillCode
+                CCRule.ValidFrom   = TODAY
+                CCRule.ValidTo     = DATE(12,31,2049)
+                CCRule.ReportingID = BillItem.SAPRid
+                CCRule.CostCentre  = BillItem.CostCentre
+                CCRule.AccNum      = BillItem.AccNum
+                CCRule.EUAccNum    = BillItem.EUAccNum
+                CCRule.EUConAccNum = BillItem.EUConAccNum
+                CCRule.FSAccNum    = BillItem.FSAccNum
+                .
+        END.        
     END.
 
     MESSAGE "Account Rules records got created."    
