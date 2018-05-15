@@ -206,7 +206,7 @@ lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "language,nationality,bankaccount,country," +
                "email,sms_number,phone_number,person_id,city_code,street_code,"+
                "id_type,company_id,company_name," +
-               "birthday,company_foundationdate,new_subscription_grouping,payment_method" +
+               "birthday,company_foundationdate,new_subscription_grouping,payment_method," +
                "profession".   /* APIBSS-174 */
 
 DEF VAR lcAddressValidtionFields AS CHAR NO-UNDO. 
