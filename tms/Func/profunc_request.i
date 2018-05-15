@@ -248,7 +248,8 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
    IF AVAIL bf_CliType THEN
    DO:
        CASE bf_CliType.WebStatusCode:                   
-           WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} THEN  
+           WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} OR 
+           WHEN {&CLITYPE_WEBSTATUSCODE_RETIRED} THEN  
            DO:
                ocCliTypeTo = fgetActiveReplacement(icCliType,"STCMappingForActiveTariffs").
 
