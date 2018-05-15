@@ -819,7 +819,7 @@ PROCEDURE pSubInvoice2XML:
             lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
 
          /* Sum of different categories per subscription. YDR-2848 */
-         ldTotal = ttRow.RowAmtExclVat.
+         ldTotal = ldTotal + ttRow.RowAmtExclVat.
 
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
