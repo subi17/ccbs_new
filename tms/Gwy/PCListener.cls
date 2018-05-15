@@ -433,8 +433,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       &ENDIF
     END METHOD.
 
-    &IF {&MQ_BASED} = NO
-    &THEN 
+    &IF NOT {&MQ_BASED} &THEN 
     METHOD PUBLIC LOG processOneFileImport
         () :        
 

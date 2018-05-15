@@ -103,10 +103,11 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
         RELEASE BillItem.
 
         /* error cases get response via logError, make response for the succesful one */
-        loRequestMaker:create_response("BillItem",
-                                        ttBillItem.external_id,
-                                        "OK",
-                                        ""). 
+        IF lcCorrelationID > "" THEN
+            loRequestMaker:create_response("BillItem",
+                                            ttBillItem.external_id,
+                                            "OK",
+                                            ""). 
 
         loRequestMaker:create_log(SUBSTITUTE("BillItem create: Id=&1 Ext.Request=&2", 
                                   ttBillItem.external_id,
@@ -186,10 +187,11 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
         RELEASE BillItem.
 
         /* error cases get response via logError, make response for the succesful one */
-        loRequestMaker:create_response("BillItem",
-                                        lcModelid,
-                                        "OK",
-                                        ""). 
+        IF lcCorrelationID > "" THEN
+            loRequestMaker:create_response("BillItem",
+                                            lcModelid,
+                                            "OK",
+                                            ""). 
 
         loRequestMaker:create_log(SUBSTITUTE("BillItem update: Id=&1 Ext.Request=&2", 
                                   lcModelid,
@@ -227,9 +229,10 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
     
     METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
         CASE icAction:
-            WHEN "update_other" THEN process_other_update().
+            WHEN "update_other" THEN 
+                process_other_update().
             OTHERWISE 
-            RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
+                RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
         END CASE.
     END METHOD.
 

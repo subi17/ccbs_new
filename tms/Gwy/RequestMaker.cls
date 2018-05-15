@@ -3,7 +3,10 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 {Syst/tmsconst.i}
 {Syst/common_definitions.i}
 
-CLASS RequestMaker:
+&SCOPED-DEFINE ENVIRONMENT "MASMOVIL"
+&SCOPED-DEFINE JSON_ERROR  "READ-JSON encountered an error while parsing the JSON Document: FATAL ERROR: file 'MEMPTR',"
+
+CLASS Gwy.RequestMaker:
 
    DEF VAR gcBrand     AS CHAR NO-UNDO INITIAL "1".
    DEF VAR liRequestId AS INT  NO-UNDO INITIAL  0.
@@ -27,7 +30,8 @@ CLASS RequestMaker:
    METHOD PUBLIC CHAR get_reply_to():
       RETURN lcReplyTo.
    END METHOD.
-   
+
+   &IF "{&ENVIRONMENT}" <> "MASMOVIL" &THEN 
    METHOD PUBLIC CHAR get_external_id(iType AS CHAR, iInternalID AS CHAR):
 
       FIND FIRST ExternalID NO-LOCK
@@ -212,6 +216,49 @@ CLASS RequestMaker:
          MsRequestParam.ParamSet  = icParamSet.
    END METHOD.
 
+   METHOD PUBLIC LOG valid_servfee_code(iServiceID AS CHAR, iServiceType AS CHAR):
+      IF iServiceType = "" OR iServiceType = ? THEN RETURN TRUE.
+      IF CAN-FIND(FIRST ServFee NO-LOCK WHERE
+                        ServFee.Brand    EQ gcBrand AND
+                        ServFee.ServType EQ iServiceType AND
+                        ServFee.ServKey  EQ iServiceID) THEN RETURN TRUE.
+      ELSE RETURN FALSE.
+   END METHOD.
+
+
+   METHOD PUBLIC INT create_charge_request(iServiceID AS CHAR,
+                                             iServiceType AS CHAR,
+                                             iExternalId AS CHAR,
+                                             iReqParamId AS CHAR,
+                                             iMessage AS CHAR,
+                                             iActTimeStamp AS DEC,
+                                             iParentReqID AS INT):
+      
+      make_request({&REQTYPE_CHARGE_AND_COMPENSATION}, iActTimeStamp).
+      IF llIsReqSucc THEN 
+         ASSIGN
+            MSRequest.ReqCParam1 = iServiceID WHEN iServiceType = ""
+            MSRequest.ReqCParam2 = iServiceID WHEN iServiceType > ""
+            MSRequest.ReqCParam3 = iServiceType 
+            MSRequest.ReqIParam2 = iParentReqID.
+      make_requestparam(iReqParamId, iExternalId).
+      create_log(iMessage + " charge: MsRequest=" + STRING(MSRequest.MSRequest),
+                 "DEBUG").
+      RETURN liRequestId.
+   END METHOD.
+
+   METHOD PUBLIC VOID release_resources():
+
+      IF AVAILABLE MsRequest AND MsRequest.ReqStatus = ? THEN DO:
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+         MsRequest.ReqStatus = 0.
+      END.
+      
+      RELEASE MSRequest.
+      RELEASE MSRequestParam.
+   END METHOD.
+   &ENDIF
+
    METHOD PUBLIC DATE make_date(INPUT iTimeStamp AS DEC):
 
       DEF VAR lyear  AS INT  NO-UNDO.
@@ -291,8 +338,6 @@ CLASS RequestMaker:
    METHOD PUBLIC VOID create_log(iMessage AS CHAR, iLogType as CHAR):
       LOG-MANAGER:WRITE-MESSAGE(iMessage, iLogType).
    END METHOD.
-
-   &SCOPED-DEFINE JSON_ERROR "READ-JSON encountered an error while parsing the JSON Document: FATAL ERROR: file 'MEMPTR',"
  
    METHOD PUBLIC LOG parser_error
       (DATASET-HANDLE iParser BIND, iJson AS LONGCHAR):
@@ -316,48 +361,6 @@ CLASS RequestMaker:
       END.
       logError(TRIM(lError)).
       RETURN TRUE.
-   END METHOD.
-
-   METHOD PUBLIC LOG valid_servfee_code(iServiceID AS CHAR, iServiceType AS CHAR):
-      IF iServiceType = "" OR iServiceType = ? THEN RETURN TRUE.
-      IF CAN-FIND(FIRST ServFee NO-LOCK WHERE
-                        ServFee.Brand    EQ gcBrand AND
-                        ServFee.ServType EQ iServiceType AND
-                        ServFee.ServKey  EQ iServiceID) THEN RETURN TRUE.
-      ELSE RETURN FALSE.
-   END METHOD.
-
-
-   METHOD PUBLIC INT create_charge_request(iServiceID AS CHAR,
-                                             iServiceType AS CHAR,
-                                             iExternalId AS CHAR,
-                                             iReqParamId AS CHAR,
-                                             iMessage AS CHAR,
-                                             iActTimeStamp AS DEC,
-                                             iParentReqID AS INT):
-      
-      make_request({&REQTYPE_CHARGE_AND_COMPENSATION}, iActTimeStamp).
-      IF llIsReqSucc THEN 
-         ASSIGN
-            MSRequest.ReqCParam1 = iServiceID WHEN iServiceType = ""
-            MSRequest.ReqCParam2 = iServiceID WHEN iServiceType > ""
-            MSRequest.ReqCParam3 = iServiceType 
-            MSRequest.ReqIParam2 = iParentReqID.
-      make_requestparam(iReqParamId, iExternalId).
-      create_log(iMessage + " charge: MsRequest=" + STRING(MSRequest.MSRequest),
-                 "DEBUG").
-      RETURN liRequestId.
-   END METHOD.
-
-   METHOD PUBLIC VOID release_resources():
-
-      IF AVAILABLE MsRequest AND MsRequest.ReqStatus = ? THEN DO:
-         FIND CURRENT MsRequest EXCLUSIVE-LOCK.
-         MsRequest.ReqStatus = 0.
-      END.
-      
-      RELEASE MSRequest.
-      RELEASE MSRequestParam.
    END METHOD.
 
 END CLASS.

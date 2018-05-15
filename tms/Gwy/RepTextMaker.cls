@@ -12,8 +12,8 @@ DEF VAR lhText         AS HANDLE NO-UNDO.
     
 CONSTRUCTOR PUBLIC RepTextMaker (iSource AS CHAR):
    ASSIGN
-      gcBrand        = "1"
-      loRequestMaker = NEW Gwy.RequestMaker("", "", iSource)
+      gcBrand         = "1"
+      loRequestMaker  = NEW Gwy.RequestMaker("", "", iSource)
       loEventLogMaker = NEW Gwy.EventLogMaker(iSource).
    
 END CONSTRUCTOR.
