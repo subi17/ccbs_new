@@ -180,7 +180,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
             IF LOCKED(CLIType) THEN 
             DO:
                 liWait = liWait + 1.
-                IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+                IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
                     RETURN loRequestMaker:logError(
                         "Subscription type was not available for update").
                 PAUSE 1 NO-MESSAGE. 
@@ -277,7 +277,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
         DEF VAR lcLineType      AS CHAR NO-UNDO.
         DEF VAR lcFixLineType   AS CHAR NO-UNDO.
         
-        IF LENGTH(icCLIType) > {&CONFIG_ID_MAX} THEN 
+        IF LENGTH(icCLIType) > "{&CONFIG_ID_MAX}" THEN 
             RETURN "Max length for ID is {&CONFIG_ID_MAX} characters".
  
         IF CAN-FIND(FIRST CLIType WHERE 

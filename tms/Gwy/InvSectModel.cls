@@ -3,6 +3,8 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 USING Gwy.ModelInterface.
 
 {Syst/tmsconst.i}
+&GLOBAL-DEFINE CONFIG_ID_MAX 32.
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
 
 CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
 
@@ -56,9 +58,8 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
         IF ttInvSect.external_id = "" THEN 
             RETURN loRequestMaker:logError("Invalid InvSect ID").
 
-        IF LENGTH(ttInvSect.external_id) > {&CONFIG_ID_MAX} THEN 
-            RETURN loRequestMaker:logError(
-                "Max length for ID is {&CONFIG_ID_MAX} characters").
+        IF (LENGTH(ttInvSect.external_id) > {&CONFIG_ID_MAX}) THEN 
+            RETURN loRequestMaker:logError("Max length for ID is {&CONFIG_ID_MAX} characters").
          
         IF CAN-FIND(FIRST InvSect WHERE 
                           InvSect.Brand = gcBrand AND

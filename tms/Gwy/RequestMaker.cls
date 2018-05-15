@@ -3,7 +3,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 {Syst/tmsconst.i}
 {Syst/common_definitions.i}
 
-CLASS Gwy.RequestMaker:
+CLASS RequestMaker:
 
    DEF VAR gcBrand     AS CHAR NO-UNDO INITIAL "1".
    DEF VAR liRequestId AS INT  NO-UNDO INITIAL  0.

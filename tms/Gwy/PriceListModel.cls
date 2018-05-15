@@ -2,6 +2,9 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
+&GLOBAL-DEFINE CONFIG_ID_MAX 32.
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
+
 {Syst/tmsconst.i}
 
 CLASS Gwy.PriceListModel IMPLEMENTS Gwy.ModelInterface:

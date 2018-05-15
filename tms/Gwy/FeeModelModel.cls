@@ -5,6 +5,8 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
+&GLOBAL-DEFINE CONFIG_ID_MAX 32.
+
 {Syst/tmsconst.i}
 
 CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
@@ -79,7 +81,7 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
         IF ttFeeModel.external_id = "" THEN 
             RETURN loRequestMaker:logError("Invalid FeeModel ID").
 
-        IF LENGTH(ttFeeModel.external_id) > {&CONFIG_ID_MAX} THEN 
+        IF LENGTH(ttFeeModel.external_id) > "{&CONFIG_ID_MAX}" THEN 
             RETURN loRequestMaker:logError(
                 "Max length for ID is {&CONFIG_ID_MAX} characters").
  
@@ -156,7 +158,7 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
                 IF LOCKED(FeeModel) THEN 
                 DO:
                     liWait = liWait + 1.
-                    IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+                    IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
                         RETURN loRequestMaker:logError("Fee model was not available for update").
                     PAUSE 1 NO-MESSAGE. 
                     NEXT. 
@@ -293,13 +295,13 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
             END.
           
             IF (NOT llItemExist OR ttFMItem.fee_type > "") AND
-                (LOOKUP(ttFMItem.fee_type,{&FEE_TYPE}) = 0 OR
-                LOOKUP(ttFMItem.fee_type,{&FEE_TYPE}) = ?) THEN
+                (LOOKUP(ttFMItem.fee_type,"{&FEE_TYPE}") = 0 OR
+                LOOKUP(ttFMItem.fee_type,"{&FEE_TYPE}") = ?) THEN
                 RETURN "Invalid fee type".
          
             IF (NOT llItemExist OR ttFMItem.billing_method > "") AND
-                (LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) = 0 OR
-                LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) = ?) THEN 
+                (LOOKUP(ttFMItem.billing_method,"{&BILLING_METHOD}") = 0 OR
+                LOOKUP(ttFMItem.billing_method,"{&BILLING_METHOD}") = ?) THEN 
                 RETURN "Invalid billing method".
       
             IF ttFMItem.first_period_rule > "" THEN 
@@ -363,7 +365,7 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
                         liWait = liWait + 1.
                         /* fee model may be partially already updated, but the entire update 
                            can be resent */
-                        IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+                        IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
                             RETURN "Fee item was not available for update".
                         PAUSE 1 NO-MESSAGE. 
                         NEXT. 
@@ -394,7 +396,7 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
                                           WHEN ttFMItem.interval NE ?
                 FMItem.FFItemQty    = ttFMItem.recurrence_limit 
                                           WHEN ttFMItem.recurrence_limit NE ?
-                FMItem.BillCycle    = LOOKUP(ttFMItem.billing_method,{&BILLING_METHOD}) 
+                FMItem.BillCycle    = LOOKUP(ttFMItem.billing_method,"{&BILLING_METHOD}") 
                                           WHEN ttFMItem.billing_method NE ?
                 FMItem.FirstMonthBR = ttFMItem.fi_firstperiodrule 
                                           WHEN ttFMItem.fi_firstperiodrule NE ?

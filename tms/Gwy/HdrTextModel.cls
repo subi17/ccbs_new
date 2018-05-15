@@ -2,6 +2,8 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
+
 {Syst/tmsconst.i}
 
 CLASS Gwy.HdrTextModel IMPLEMENTS Gwy.ModelInterface:
@@ -142,7 +144,7 @@ METHOD PUBLIC LOG update():
             liWait = liWait + 1.
             /* some texts may have already been updated but the entire update
                can be resent */
-            IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+            IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
                RETURN loRequestMaker:logError("Text was not available for update").
             PAUSE 1 NO-MESSAGE. 
             NEXT. 

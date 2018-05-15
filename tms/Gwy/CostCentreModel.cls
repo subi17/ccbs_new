@@ -2,6 +2,8 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
+
 {Syst/tmsconst.i}
 
 CLASS Gwy.CostCentreModel IMPLEMENTS Gwy.ModelInterface:
@@ -102,7 +104,7 @@ METHOD PUBLIC LOG update():
                  CostCentre.CostCentre = lModelID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       IF LOCKED(CostCentre) THEN DO:
          liWait = liWait + 1.
-         IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+         IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
             RETURN loRequestMaker:logError("Cost center was not available for update").
          PAUSE 1 NO-MESSAGE. 
          NEXT. 

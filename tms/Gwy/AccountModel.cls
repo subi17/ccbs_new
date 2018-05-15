@@ -4,7 +4,9 @@ USING Progress.Lang.*.
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
-USING Gwy.AccountModel FROM PROPATH.
+//USING Gwy.AccountModel FROM PROPATH.
+
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
 
 {Syst/tmsconst.i}
 
@@ -23,6 +25,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
     
     DEF VAR liAccount       AS INT               NO-UNDO.
     DEF VAR lcAccType       AS CHAR              NO-UNDO.
+    DEF VAR gcBrand         AS CHAR              NO-UNDO.
     
     DEF TEMP-TABLE ttAccount NO-UNDO SERIALIZE-NAME "Account"
         FIELD external_id  AS INT
@@ -32,6 +35,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
     DEF DATASET AccountDataset FOR ttAccount.
     
     CONSTRUCTOR PUBLIC AccountModel ( iJson          AS LONGCHAR,
+                                      iBrand         AS CHAR,
                                       iModelid       AS CHAR, 
                                       iSource        AS CHAR,
                                       iCorrelationID AS CHAR,
@@ -39,6 +43,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
                                    
         ASSIGN
             lJson           = iJson
+            gcBrand         = iBrand
             lcModelId       = iModelid
             lcSource        = iSource
             lcCorrelationID = iCorrelationID
@@ -132,7 +137,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
             IF LOCKED(Account) THEN 
             DO:
                 liWait = liWait + 1.
-                IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+                IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
                     RETURN loRequestMaker:logError("Account was not available for update").
                 PAUSE 1 NO-MESSAGE. 
                 NEXT. 

@@ -17,7 +17,7 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
     DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
     
     DEFINE TEMP-TABLE ttCCRule NO-UNDO SERIALIZE-NAME "CCRule"
-        FIELD external_id      AS CHAR 
+        FIELD external_id      AS INT  
         FIELD category         AS CHAR 
         FIELD billing_item     AS CHAR
         FIELD valid_from       AS CHAR
@@ -62,8 +62,7 @@ METHOD PUBLIC LOG create():
     IF NOT AVAILABLE ttCCRule THEN
         RETURN loRequestMaker:logError("Empty CCRule set").
 
-    lcError = validate_rule(ttCCRule.external_id,
-                           TRUE).      
+    lcError = validate_rule(ttCCRule.external_id,TRUE).      
     IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
 
     CREATE CCRule.
@@ -95,7 +94,7 @@ METHOD PUBLIC LOG create():
                                   ""). 
 
    loRequestMaker:create_log(
-      SUBSTITUTE("CCRule create: Id=&1/&2 Ext.Request=&3", 
+      SUBSTITUTE("CCRule create: Id=&1,&2 Ext.Request=&3", 
                  lcCCRule,
                  ttCCRule.external_id,
                  lcCorrelationID), 
@@ -127,7 +126,7 @@ METHOD PUBLIC LOG update():
               CCRule.CCRuleID = lcCCRule EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       IF LOCKED(CCRule) THEN DO:
          liWait = liWait + 1.
-         IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+         IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
             RETURN loRequestMaker:logError("Rule was not available for update").
          PAUSE 1 NO-MESSAGE. 
          NEXT. 
@@ -165,7 +164,7 @@ METHOD PUBLIC LOG update():
                  lcCCRule,
                  lcModelid,
                  lcCorrelationID), 
-      "DEBUG").
+                 "DEBUG").
        
 END METHOD.
 
@@ -190,9 +189,9 @@ METHOD PUBLIC CHAR validate_rule (icExternalID AS CHAR,
       RETURN "Invalid rule ID". 
       
    lcCCRule = icExternalID.
-   IF lcCCRule > "" 
+   IF lcCCRule > "" THEN 
    IF CAN-FIND(FIRST CCRule WHERE 
-                     CCRule.Brand = gcBrand
+                     CCRule.Brand = gcBrand AND
                      CCRule.CCRuleId = icExternalID) THEN 
    DO:
       IF ilCreate THEN RETURN "Rule already exists".
