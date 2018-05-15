@@ -29,6 +29,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR liError      AS INT NO-UNDO.
    DEF BUFFER bMsRequest FOR MsRequest.
    DEF BUFFER bOrder FOR Order.   
 
@@ -79,9 +80,19 @@ FUNCTION fTerminationRequest RETURNS INTEGER
              (bOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
               bOrder.StatusCode = {&ORDER_STATUS_MNP} OR
               bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):          
-         
-         RUN Mc/closeorder.p(bOrder.OrderId, TRUE).
-         
+
+         /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */
+         /* liError = fSendFixedLineTermReqToMuleDB(bOrder.OrderId, OUTPUT ocResult). */
+         IF liError EQ 1 THEN DO:
+
+            Func.Common:mWriteMemo("MobSub",
+                        STRING(bOrder.MsSeq),
+                        bOrder.Custnum,
+                        "Fixed line termination failed",
+                        ocResult).
+         END.        
+         ELSE
+            RUN Mc/closeorder.p(bOrder.OrderId, TRUE).
       END.
                     
       /* Do not change the memo text (used by DWH) */

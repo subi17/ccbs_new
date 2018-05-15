@@ -146,7 +146,11 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    DEF VAR liCReqTime    AS INT  NO-UNDO.
    DEF VAR ldtCReqDate   AS DATE NO-UNDO.
    DEF VAR llProCustomer AS LOGI NO-UNDO.
+   DEF VAR liError       AS INT NO-UNDO.
+   DEF VAR licustnum     AS INT NO-UNDO.
 
+   DEF BUFFER bCLIType FOR CLIType.
+   
    ocResult = fChkRequest(iiMsSeq,
                           0,
                           "",
@@ -247,11 +251,34 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    /* initial actions */
    RUN Mm/requestaction_init.p (liReqCreated).
 
-   /* Send right away SMS related to the CLI Type change */
-   RUN Mm/requestaction_sms.p(INPUT liReqCreated,
-                           INPUT icNewType,
-                           INPUT icSource).
-  
+   IF fHasConvergenceTariff(iiMsSeq) THEN DO:
+      IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                  bCLIType.Brand      = Syst.Var:gcBrand AND
+                  bCLIType.CLIType    = icNewType        AND
+                  bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN   
+ 
+         /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */ 
+         /* liError = fSendFixedLineTermReqToMuleDB(iiOrderID, OUTPUT ocResult). */
+   END.
+   
+   IF liError EQ 1 THEN DO:
+      FIND FIRST Order WHERE Order.OrderId = iiOrderID
+           EXCLUSIVE-LOCK NO-ERROR.
+      IF AVAIL Order THEN
+         licustnum = Order.CustNum.
+      
+      Func.Common:mWriteMemo("MobSub",
+                             STRING(iiMsSeq),
+                             licustnum,
+                             "Fixed line termination failed",
+                             ocResult).
+   END.                             
+   ELSE
+      /* Send right away SMS related to the CLI Type change */
+      RUN Mm/requestaction_sms.p(INPUT liReqCreated,
+                                 INPUT icNewType,
+                                 INPUT icSource).
+
    RETURN liReqCreated.
              
 END FUNCTION.
