@@ -183,7 +183,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF aoOrderCustomer:CustNum EQ aoOrder:aoCustomer:CustNum
       THEN UNDO, THROW NEW ParamError("New agreement customer is the same as current one").
 
-      IF aoOrder:MobSubCustNum EQ aoOrder:aoCustomer:CustNum
+      IF aoOrder:MobSubCustNum NE aoOrder:aoCustomer:CustNum
       THEN UNDO, THROW NEW
                ParamError(SUBSTITUTE("The subscription's (MsSeq = '&1') " +
                                      "customer number '&2' doesn't match " +
