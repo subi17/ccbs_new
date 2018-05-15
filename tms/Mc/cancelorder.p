@@ -44,7 +44,7 @@ IF NOT AVAIL Order THEN RETURN "".
 IF LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 THEN RETURN "".
 
 IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES}) > 0 THEN 
-  fParseOrderIdToMasmovile(Order.OrderId).
+   fParseOrderIdToMasmovil(Order.OrderId).
 
 IF ilCheckLOStatus THEN DO:
 
