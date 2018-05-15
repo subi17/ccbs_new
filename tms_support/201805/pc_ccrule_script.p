@@ -27,12 +27,16 @@ RUN ipUpdateBillingItem.
 
 PROCEDURE ipCCRuleMenuCreate:
     
-    CREATE MenuText.
-    ASSIGN 
-        MenuText.MenuNum  = 9857
-        MenuText.MenuText = "ACCOUNT.RULES"
-        .
+    IF NOT CAN-FIND(FIRST MenuText WHERE MenuText.MenuNum = 9857) 
+    THEN DO:
         
+        CREATE MenuText.
+        ASSIGN 
+            MenuText.MenuNum  = 9857
+            MenuText.MenuText = "ACCOUNT.RULES"
+            .
+    END.  
+            
 END PROCEDURE.
 
 PROCEDURE ipCCRuleDataCreation:    
