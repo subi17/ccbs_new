@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/extralinefunc.i}
 
 DEF INPUT PARAMETER iiCustNum   AS INT NO-UNDO.
 
@@ -32,7 +31,6 @@ DEF TEMP-TABLE ttDSSInfo NO-UNDO
    FIELD BundleFeeCalc    AS LOG
    FIELD UsedDSSData      AS DEC
    FIELD InclUnit         AS INT
-   FIELD Priority         AS INT
    INDEX MsSeqBun MsSeq BundleId.
 
 FIND FIRST Customer WHERE
@@ -77,11 +75,10 @@ DEF VAR lcMobSubActTS    AS CHAR               NO-UNDO.
 DEF VAR lcBundleFromTS   AS CHAR               NO-UNDO.
 DEF VAR lcBundleENDTS    AS CHAR               NO-UNDO.
 
-DEF VAR lcIPLContracts                AS CHAR  NO-UNDO.
-DEF VAR lcBONOContracts               AS CHAR  NO-UNDO.
-DEF VAR lcAllowedDSS2SubsType         AS CHAR  NO-UNDO.
-DEF VAR lcAllowedDSS4SubsType         AS CHAR  NO-UNDO. 
-DEF VAR lcExcludeBundles              AS CHAR  NO-UNDO.
+DEF VAR lcIPLContracts          AS CHAR        NO-UNDO.
+DEF VAR lcBONOContracts         AS CHAR        NO-UNDO.
+DEF VAR lcAllowedDSS2SubsType   AS CHAR        NO-UNDO.
+DEF VAR lcExcludeBundles        AS CHAR        NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
 {Mm/dss_bundle_first_month_fee.i}
@@ -95,7 +92,6 @@ form
     ttDSSInfo.SubsUsage                       LABEL "Usage(MB)"
     ttDSSInfo.DataAllocated LABEL "Alloc.(MB)" 
     ttDSSInfo.BundleFee  FORMAT ">>9.99" LABEL "B.Fee"
-    ttDSSInfo.Priority      FORMAT ">>9"  LABEL "Pr."
     ttDSSInfo.BundleFeeCalc FORMAT "Yes/No" LABEL "PMF" 
 WITH ROW FrmRow width 78 centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.Var:cfc)   
@@ -114,7 +110,6 @@ form
     ttDSSInfo.BundleStatus  COLON 20 FORMAT "X(20)"   LABEL "Bundle Status"
     ttDSSInfo.BundleLimitinMB COLON 20                LABEL "Bundle Limit"
     ttDSSInfo.SubsUsage     COLON 20                  LABEL "Bundle Usage"
-    ttDSSInfo.Priority      COLON 20                  LABEL "DSS Data Priority"
     ttDSSInfo.DataAllocated COLON 20                  LABEL "DSS Data Allocated"
     ttDSSInfo.BundleFeeCalc COLON 20                  LABEL "First Month Fee"
     ttDSSInfo.BundleFee     COLON 20                  LABEL "Bundle Fee"
@@ -422,7 +417,6 @@ PROCEDURE local-disp-row:
          ttDSSInfo.BundleLimitinMB 
          ttDSSInfo.SubsUsage
       (ttDSSInfo.DataAllocated / 1024 / 1024) @ ttDSSInfo.DataAllocated 
-         ttDSSInfo.Priority
          ttDSSInfo.BundleFeeCalc 
          ttDSSInfo.BundleFee
     WITH FRAME sel.
@@ -460,7 +454,6 @@ PROCEDURE local-UPDATE-record:
           ttDSSInfo.BundleFee
           ttDSSInfo.BundleFeeCalc  
       (ttDSSInfo.DataAllocated / 1024 / 1024) @ ttDSSInfo.DataAllocated 
-         ttDSSInfo.Priority
      WITH FRAME lis.
 
      ASSIGN 
@@ -493,7 +486,6 @@ PROCEDURE pGetDSSBillingInfo:
    DEF VAR ldeDSSLimit              AS DEC  NO-UNDO. 
    DEF VAR ldeDataAllocated         AS DEC  NO-UNDO.
    DEF VAR lcBundleId               AS CHAR NO-UNDO.
-   DEF VAR lcDSSBundleId            AS CHAR NO-UNDO. 
 
    DEF BUFFER bMServiceLimit        FOR MServiceLimit.
    DEF BUFFER bServiceLimit         FOR ServiceLimit.
@@ -502,7 +494,7 @@ PROCEDURE pGetDSSBillingInfo:
 
    ASSIGN liPeriod     = YEAR(TODAY) * 100 + MONTH(TODAY)
           ldFromDate   = DATE(MONTH(today), 1, YEAR(today))
-          ldToDate     = TODAY 
+          ldToDate     = Func.Common:mLastDayOfMonth(TODAY)
           ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
           ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399).
 
@@ -517,28 +509,24 @@ PROCEDURE pGetDSSBillingInfo:
                               INPUT TODAY,
                               OUTPUT ldeDSSLimit).
 
-   ASSIGN lcIPLContracts                = fCParamC("IPL_CONTRACTS")
-          lcBONOContracts               = fCParamC("BONO_CONTRACTS")
-          lcExcludeBundles              = fCParamC("EXCLUDE_BUNDLES")
-          lcAllowedDSS2SubsType         = fCParamC("DSS2_SUBS_TYPE")
-          lcAllowedDSS4SubsType         = fCParamC("DSS4_SUBS_TYPE")
+   ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
+          lcBONOContracts  = fCParamC("BONO_CONTRACTS")
+          lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES")
+          lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
           lcFirstMonthUsageBasedBundles = fCParamC("FIRST_MONTH_USAGE_BASED_BUNDLES").
 
    fGetMsOwnerTempTable(Customer.CustNum,ldFromDate,ldToDate,FALSE,FALSE).
 
    FOR EACH ttMsOwner BREAK BY ttMsOwner.MsSeq:
 
-      IF lcBundleId EQ {&DSS4} AND 
-         LOOKUP(ttMsOwner.CLIType,lcAllowedDSS4SubsType) = 0 THEN NEXT.
-      ELSE IF lcBundleId EQ {&DSS2} AND
+      IF lcBundleId = "DSS2" AND
          LOOKUP(ttMsOwner.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
 
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq   = ttMsOwner.MsSeq    AND
                bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
                bMServiceLimit.FromTS <= ttMsOwner.PeriodTo AND
-              (bMServiceLimit.EndTS  >= ttMsOwner.PeriodFrom AND 
-               bMServiceLimit.EndTS  >= ttMsOwner.PeriodTo) NO-LOCK,
+               bMServiceLimit.EndTS  >= ttMsOwner.PeriodFrom NO-LOCK,
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
@@ -728,7 +716,7 @@ PROCEDURE pGetDSSBillingInfo:
          ASSIGN 
             ttDSSInfo.DataAllocated   = ldeDataAllocated 
             ttDSSInfo.BundleFeeCalc   = (NOT llFullMonth)
-            ttDSSInfo.Priority        = bDayCampaign.DSSPriority.
+            .
 
          IF llFullMonth THEN DO:
             /* for each used because there might exist  
@@ -754,16 +742,6 @@ PROCEDURE pGetDSSBillingInfo:
       /* Make entry for a subscription without any bundle */
       IF NOT CAN-FIND(FIRST ttDSSInfo WHERE
                             ttDSSInfo.MsSeq = ttMsOwner.MsSeq) THEN DO:
-         
-         IF (LOOKUP(ttMsOwner.CLIType,lcAllowedDSS4SubsType) > 0 OR 
-             LOOKUP(ttMsOwner.CLIType,lcAllowedDSS2SubsType) > 0)   AND 
-            (fCLITypeIsMainLine(ttMsOwner.CLIType)               OR 
-             fCLITypeIsExtraLine(ttMsOwner.CLIType))                THEN 
-            IF NOT fCheckActiveExtraLinePair(ttMsOwner.MsSeq,
-                                             ttMsOwner.CLIType,
-                                             OUTPUT lcDSSBundleId) THEN 
-               NEXT.
-
          CREATE ttDSSInfo.
          ASSIGN ttDSSInfo.MsSeq           = ttMsOwner.MsSeq
                 ttDSSInfo.CustNum         = ttMsOwner.CustNum
@@ -776,8 +754,7 @@ PROCEDURE pGetDSSBillingInfo:
 
    /* Calculate first month fee */
    FOR EACH ttDSSInfo WHERE
-            ttDSSInfo.BundleFeeCalc = TRUE
-            BY ttDSSInfo.Priority:
+            ttDSSInfo.BundleFeeCalc = TRUE:            
 
       ASSIGN ldeFeeAmt = 0
              ldeDataAllocated = 0.
