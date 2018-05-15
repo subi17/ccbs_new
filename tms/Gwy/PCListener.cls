@@ -7,18 +7,17 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 /* lang, stomp adpter, logic  libs*/ 
 USING Progress.Lang.*.
-USING Syst.Configuration.
-// USING Syst.ExternalMap.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
+USING Syst.Configuration.
 
 &GLOBAL MQ_BASED NO            
 &GLOBAL WAIT_CONFIG_LOCK 20.
 
-CLASS PCListener /*INHERITS gearbox.daemons.Daemon 
-                     IMPLEMENTS dotr.Stomp.Interface.IStompHandler*/:
+CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
+                     IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
                          
-    &IF "{&MQ_BASED}" = "NO"
+    &IF {&MQ_BASED} = NO
     &THEN 
     DEFINE STREAM s-dir.
     DEFINE STREAM s-in.
@@ -52,20 +51,19 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
    DEF VAR lcReplyTo AS CHAR NO-UNDO.
    DEF VAR lcCorrelationID AS CHAR NO-UNDO. 
    
-   DEF VAR lcHeader AS CHAR NO-UNDO.
-   DEF VAR lcBody AS CHAR NO-UNDO.  
-   
-   /* MQBased NO variables*/
-    DEF VAR lLogDir            AS CHAR INIT "../var/log/pc"   NO-UNDO.
+   DEF VAR lcHeader     AS CHAR NO-UNDO.
+   DEF VAR lcBody       AS CHAR NO-UNDO.  
+   DEF VAR lLogFileName AS CHAR NO-UNDO.
+
+   /* File based loader variables*/
+    DEF VAR lLogDir            AS CHAR        NO-UNDO INIT "../var/log/pc".
     DEF VAR lLogFileStartStamp AS DATETIME-TZ NO-UNDO.
    
    DEF VAR lhFileParsing AS HANDLE NO-UNDO.
-   DEF VAR lhTenantInfo AS HANDLE NO-UNDO.
+   DEF VAR lhTenantInfo  AS HANDLE NO-UNDO.
    
    DEF EVENT leTooManyErrors SIGNATURE VOID (  ).
    
-  /* FUNCTION fsetEffectiveTenantForAllDB RETURNS CHAR(INPUT AS CHAR) IN lhTenantInfo.
-   */
    CONSTRUCTOR PUBLIC PCListener ():
       ASSIGN
          lcUTF8_Scandics_List = Configuration:getc("UTF8_to_Scandics")
@@ -75,33 +73,25 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
          lcPortNumber         = STRING(Configuration:geti("PC.Queue.port"))
          lcQueueName          = Configuration:getc("PC.Queue.Name").
 
+      ASSIGN 
+         lLogFileName = STRING(YEAR(TODAY),"9999")
+                      + STRING(MONTH(TODAY),"99")
+                      + STRING(DAY(TODAY),"99")
+                      + REPLACE(STRING(TIME,"HH:MM:SS"),":","").           
+
+      &IF {&MQ_BASED} &THEN   
          logMsg( STRING( SUBSTITUTE("SETTINGS: hostname=&1," ,lcHostName) )   +
                  STRING( SUBSTITUTE("port=&1," ,lcPortNumber) )     +
                  STRING( SUBSTITUTE("queueName=&1" ,lcQueueName) ), "INIT").
-                 
-      &IF "{&MQ_BASED}" = "NO"
-      &THEN    
-      openLogFiles().       
+      &ELSE
       OS-CREATE-DIR VALUE("../var/import").
       OS-CREATE-DIR VALUE("{&IMPORTDIR}").
       OS-CREATE-DIR VALUE("{&IMPORTDIR}/input").
       OS-CREATE-DIR VALUE("{&IMPORTDIR}/done").
-      &ENDIF           
-                 
-         /*IF {&fileParsing} THEN 
-         DO:
-            RUN FileInputAPI.p PERSISTENT SET lhFileParsing(OUTPUT lcHeader, OUTPUT lcBody).
-            newJsonMessage(lcHeader,lcBody).
-         END.*/
-                 
+      &ENDIF
+
    END CONSTRUCTOR.
    
-   METHOD PROTECTED VOID logMsg (icMsg AS CHAR, icMsgType AS CHAR):
-   /*   LOG-MANAGER:WRITE-MESSAGE(icMsg, icMsgType).*/
-   END METHOD.
-   
-   &IF "{&MQ_BASED}" = "YES"
-   &THEN
    METHOD PRIVATE VOID connect ():
       loStompClient     = NEW dotr.Stomp.StompClient(loStompConfig).
       loReaderHandler   = THIS-OBJECT.
@@ -113,7 +103,6 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
       */
       leTooManyErrors:SUBSCRIBE(tooManyErrors).
    END METHOD.
-   &ENDIF.
    
    METHOD PRIVATE VOID config ():
       loStompConfig                     = dotr.Stomp.StompConfig:DEFAULT. 
@@ -124,7 +113,7 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
    
    METHOD PUBLIC LOG processOne ():
        
-      &IF "{&MQ_BASED}" = "NO"
+      &IF {&MQ_BASED} = NO
       &THEN  
       processOneFileImport().
       &ELSE    
@@ -140,157 +129,15 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
       DO:
          THIS-OBJECT:connect().
       END.
-      
       /* IMPORTANT: This will allow events to be triggered, otherwise 
          READ-RESPONSE wont be triggered and no processing. */
       IF NOT VALID-HANDLE(hpWaitForProcedure) THEN 
-            RUN Gwy/waitfor.p PERSISTENT SET hpWaitForProcedure.
-        RUN runWaitForStatement IN hpWaitForProcedure.
-          
-      &ENDIF.
+          RUN Gwy/waitfor.p PERSISTENT SET hpWaitForProcedure.
+      RUN runWaitForStatement IN hpWaitForProcedure.    
+      &ENDIF
       
     END METHOD.
-    
-   
-    &IF "{&MQ_BASED}" = "NO"
-    &THEN 
 
-    METHOD PUBLIC LOG processOneFileImport
-        () :        
-
-        &SCOPED-DEFINE SHUTDOWN_CHECK_TIME 30
-
-        DEFINE VARIABLE lFileCount AS INTEGER   NO-UNDO.
-        DEFINE VARIABLE lFile      AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lFilePath  AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lLiveTime  AS INTEGER   NO-UNDO.
-    
-        lLiveTime = TIME.
-    
-        LOOP:
-        REPEAT :
-            
-            lFileCount = 0.
-            
-            INPUT STREAM s-dir THROUGH ls -1tr "{&IMPORTDIR}/input" NO-ECHO.
-            
-            ERROR-STATUS:ERROR = FALSE.    
-            REPEAT ON ERROR UNDO, LEAVE :
-                
-                IMPORT STREAM s-dir lFile.
-            
-                FILE-INFO:FILE-NAME = "{&IMPORTDIR}/input/" + lFile.
-                IF INDEX(FILE-INFO:FILE-TYPE,"F") = 0 THEN NEXT.
-    
-                ASSIGN 
-                    lFileCount = lFileCount + 1.
-                
-                LOG-MANAGER:WRITE-MESSAGE(lFile,"FILE").  
-                
-                lFilePath = FILE-INFO:FULL-PATHNAME.  
-                
-                fileInput(lFilePath).
-                
-                OS-COMMAND SILENT 
-                    mv
-                    VALUE(lFilePath)
-                    VALUE
-                    (SUBSTITUTE
-                    ("{&IMPORTDIR}/done/&1&2&3&4_&5",
-                    YEAR(TODAY),
-                    STRING(MONTH(TODAY),"99"),
-                    STRING(DAY(TODAY),"99"),
-                    REPLACE(STRING(TIME,"HH:MM:SS"),":",""),
-                    lFile                  
-                    )
-                    ).
-                
-                IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN LEAVE LOOP. /* time to check shutdown */   
-                
-            END.
-            IF ERROR-STATUS:ERROR THEN 
-            DO :
-                LOG-MANAGER:WRITE-MESSAGE(ERROR-STATUS:GET-MESSAGE(1),"ERROR").
-            END. 
-            
-            IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN LEAVE LOOP. /* time to check shutdown */     
-            
-            IF lFileCount = 0 THEN 
-            DO :
-                LEAVE LOOP.
-            END. 
-            
-        END.    
-        
-    END METHOD.
-    
-    METHOD PRIVATE LOGICAL openLogFiles ():
-        
-        DEFINE VARIABLE lLogFileName AS CHARACTER NO-UNDO.
-        
-        OUTPUT STREAM s-ok CLOSE.
-        OUTPUT STREAM s-error CLOSE.
-        OUTPUT STREAM s-missing CLOSE.
-        
-        ASSIGN 
-            lLogFileName = STRING(YEAR(TODAY),"9999")
-                         + STRING(MONTH(TODAY),"99")
-                         + STRING(DAY(TODAY),"99")
-                         + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
-            .        
-        
-        OUTPUT STREAM s-ok      TO VALUE(lLogDir + "/ok_"      + lLogFileName + ".log") UNBUFFERED.
-        OUTPUT STREAM s-error   TO VALUE(lLogDir + "/error_"   + lLogFileName + ".log") UNBUFFERED.
-        OUTPUT STREAM s-missing TO VALUE(lLogDir + "/missing_" + lLogFileName + ".log") UNBUFFERED.
-        
-        lLogFileStartStamp = NOW.
-        
-    END METHOD.
-    
-    METHOD PUBLIC LOG fileInput (iFile AS CHARACTER) :
-        
-        DEFINE VARIABLE lModel     AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lSource    AS CHARACTER NO-UNDO. 
-        DEFINE VARIABLE lPK        AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lMessageId AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lModelId   AS CHARACTER NO-UNDO. 
-        DEFINE VARIABLE lAction    AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lFeeId     AS CHARACTER NO-UNDO. 
-        DEFINE VARIABLE lExtInvId  AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lJsonBody  AS CHARACTER NO-UNDO.
-        
-        DEFINE VARIABLE lRecord    AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lHeader    AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lFieldSet  AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lField     AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lValue     AS CHARACTER NO-UNDO.
-        
-        DEFINE VARIABLE lCount     AS INTEGER   NO-UNDO.
-        
-        
-        DEFINE VARIABLE lii        AS INTEGER   NO-UNDO.
-        
-        INPUT STREAM s-in FROM VALUE(iFile) NO-MAP NO-CONVERT.
-        
-        lMessageId = ENTRY(NUM-ENTRIES(iFile,"/"),iFile,"/").
-    
-        REPEAT :
-            
-            IMPORT STREAM s-in UNFORMATTED lRecord.
-            
-            ASSIGN 
-                lHeader   = ENTRY(1,lRecord,"^")
-                lHeader   = TRIM(lHeader,'~{')
-                lHeader   = TRIM(lHeader,'~}')
-                lJsonBody = TRIM(ENTRY(2,lRecord,"^")).
-                
-            newJsonMessage(lHeader,lJsonBody).    
-        END.     
-           
-    END METHOD.
-    
-    &ELSE 
-    
     METHOD PUBLIC VOID newStompMessage(INPUT ioStompMessage AS 
         dotr.Stomp.StompMessage):
          
@@ -303,21 +150,18 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
             lcReplyTo       = "".
       
         IF ioStompMessage:Body BEGINS "SocketDisconnected" THEN 
-        DO :
+        DO:
             APPLY "U1" TO hpWaitForProcedure.
             RETURN .
         END.
       
-        lcHeader   = REPLACE(ioStompMessage:HEADER,"~n"," ").
+        lcHeader = REPLACE(ioStompMessage:HEADER,"~n"," ").
       
         IF ENTRY(1,lcHeader," ") = "MESSAGE" THEN 
-        DO :
-
+        DO:
             lcHeader = SUBSTRING(lcHeader,9). /* Remove text MESSAGE + space */
-       
-            /* make proper logic module*/       
-            newJsonMessage(lcHeader , ioStompMessage:Body).
-          
+             
+            newJsonMessage(lcHeader , ioStompMessage:Body). /* make proper logic module */     
         END. 
         ELSE 
         DO:
@@ -368,10 +212,8 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
          
     END METHOD.
     
-&ENDIF    
-   
-   METHOD PUBLIC VOID newJsonMessage (icHeader      AS LONGCHAR, 
-                                      icMessageBody AS LONGCHAR):
+    METHOD PUBLIC VOID newJsonMessage (icHeader      AS LONGCHAR, 
+                                       icMessageBody AS LONGCHAR):
         
       /* dotr Header formt */
       /*Cm integration params*/ 
@@ -386,9 +228,10 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
       /*indexes*/
       DEF VAR lii             AS INT                      NO-UNDO.
       /*json handler*/
-      DEF VAR loLogicModule   AS CLASS Gwy.ModelInterface NO-UNDO.
-      DEF VAR lcInternalId AS CHAR NO-UNDO. 
-      
+      DEF VAR loLogicModule     AS CLASS Gwy.ModelInterface NO-UNDO.
+      DEF VAR lcInternalId      AS CHAR NO-UNDO. 
+
+      DEF VAR liReplacePosition AS INT NO-UNDO.
       ASSIGN
          lcSource = ""
          lcCorrelationID = ""
@@ -440,7 +283,6 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
         
       /*check lAllUTF8*/
       /*PROGRESS BUG:Replace latin-1 supplement chars if found in JSON*/
-      DEF VAR liReplacePosition AS INT NO-UNDO.
       REPEAT liReplacePosition = 1 TO NUM-ENTRIES(lcAllUTF8):
          icMessageBody = REPLACE(icMessageBody,
                                  ENTRY(liReplacePosition, lcAllUTF8), 
@@ -460,7 +302,12 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
       /* something to the eventlog */
       IF lcSource = "" THEN lcSource = "PC".
       
-    /*  fsetEffectiveTenantForAllDB(gcBrand).*/
+      IF lcBrand EQ "" THEN DO:
+          logMsg("Empty Brand","ERROR").
+          RETURN.
+      END.
+
+      fsetEffectiveTenantForAllDB(lcBrand).
            
       CASE lcModel:
          WHEN "account" THEN DO:
@@ -474,7 +321,7 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
          WHEN "billing_item" THEN DO:
             loLogicModule = NEW Gwy.BillItemModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
-         END. /*
+         END. 
          WHEN "billing_item_group" THEN DO:
             loLogicModule = NEW Gwy.BItemGroupModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                     lcCorrelationID, lcReplyTo).
@@ -518,33 +365,37 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
          WHEN "rating_bucket" THEN DO:
             loLogicModule = NEW Gwy.RatingBucketsModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
-         END.  */
+         END. 
          OTHERWISE DO:
             logMsg("Unknown Model " + lcModel,"ERROR").
             RETURN.
          END.
       END.
       
-      IF lcAction = "create" THEN loLogicModule:create().
-      ELSE IF lcAction = "update" THEN loLogicModule:update().
-      ELSE loLogicModule:MakeOtherAction(lcAction).
+      IF lcAction = "create" THEN 
+          loLogicModule:create().
+      ELSE IF lcAction = "update" THEN 
+          loLogicModule:update().
+      ELSE 
+          loLogicModule:MakeOtherAction(lcAction).
       
       logMsg("Message processed", "INFO").
    
       FINALLY:
-         IF VALID-OBJECT(loLogicModule) THEN DELETE OBJECT loLogicModule.
+         IF VALID-OBJECT(loLogicModule) THEN 
+             DELETE OBJECT loLogicModule.
       END FINALLY.     
         
    END METHOD. 
 
    METHOD PRIVATE VOID closeSession():
-         loStompClient:UnSubscribeFromQueue(lcQueueName) NO-ERROR.
-         IF VALID-OBJECT(loStompClient)                  THEN DELETE OBJECT 
-                         loStompClient.
-         IF VALID-OBJECT(loStompConfig)                  THEN DELETE OBJECT 
-                         loStompConfig.
-         IF VALID-OBJECT(dotr.Stomp.StompConfig:DEFAULT) THEN DELETE OBJECT 
-                         dotr.Stomp.StompConfig:DEFAULT.
+       loStompClient:UnSubscribeFromQueue(lcQueueName) NO-ERROR.
+       IF VALID-OBJECT(loStompClient) THEN 
+           DELETE OBJECT loStompClient.
+       IF VALID-OBJECT(loStompConfig) THEN 
+           DELETE OBJECT loStompConfig.
+       IF VALID-OBJECT(dotr.Stomp.StompConfig:DEFAULT) THEN 
+           DELETE OBJECT dotr.Stomp.StompConfig:DEFAULT.
    END METHOD.
 
    METHOD PUBLIC VOID tooManyErrors (  ):
@@ -553,11 +404,134 @@ CLASS PCListener /*INHERITS gearbox.daemons.Daemon
       APPLY "U1" TO hpWaitForProcedure.
    END METHOD.  
 
-   DESTRUCTOR PUBLIC PCListener():
-      
-      closeSession().
+   METHOD PROTECTED VOID logMsg (icMsg AS CHAR, icMsgType AS CHAR):
+      &IF {&MQ_BASED} &THEN
+      LOG-MANAGER:WRITE-MESSAGE(icMsg, icMsgType).
+      &ELSE
+      ASSIGN lLogFileStartStamp = NOW.
+      CASE icMsgType:
+          WHEN "INFO"  OR 
+          WHEN "DEBUG" THEN
+          DO:
+              OUTPUT STREAM s-ok TO VALUE(lLogDir + "/ok_" + lLogFileName + ".log") UNBUFFERED.
+              PUT STREAM s-ok UNFORMATTED lLogFileStartStamp + " " + icMsgType + ": " + icMsg SKIP.  
+              OUTPUT STREAM s-ok CLOSE.
+          END.
+          WHEN "ERROR" THEN
+          DO:
+              OUTPUT STREAM s-error TO VALUE(lLogDir + "/error_" + lLogFileName + ".log") UNBUFFERED.
+              PUT STREAM s-error UNFORMATTED lLogFileStartStamp + " " + icMsgType + ": " + icMsg SKIP.  
+              OUTPUT STREAM s-error CLOSE.
+          END.
+          WHEN "MISSING" THEN 
+          DO:
+            OUTPUT STREAM s-missing TO VALUE(lLogDir + "/missing_" + lLogFileName + ".log") UNBUFFERED.
+            PUT STREAM s-missing UNFORMATTED lLogFileStartStamp + " " + icMsgType + ": " + icMsg SKIP.  
+            OUTPUT STREAM s-missing CLOSE.
+          END.
+      END CASE.
+      &ENDIF
+    END METHOD.
+
+    &IF {&MQ_BASED} = NO
+    &THEN 
+    METHOD PUBLIC LOG processOneFileImport
+        () :        
+
+        &SCOPED-DEFINE SHUTDOWN_CHECK_TIME 30
+
+        DEFINE VARIABLE lFileCount AS INTEGER   NO-UNDO.
+        DEFINE VARIABLE lFile      AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lFilePath  AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lLiveTime  AS INTEGER   NO-UNDO.
+    
+        lLiveTime = TIME.
+    
+        LOOP:
+        REPEAT :
+            
+            lFileCount = 0.
+            
+            INPUT STREAM s-dir THROUGH ls -1tr "{&IMPORTDIR}/input" NO-ECHO.
+            
+            ERROR-STATUS:ERROR = FALSE. 
+
+            REPEAT ON ERROR UNDO, LEAVE :
+                
+                IMPORT STREAM s-dir lFile.
+            
+                FILE-INFO:FILE-NAME = "{&IMPORTDIR}/input/" + lFile.
+                IF INDEX(FILE-INFO:FILE-TYPE,"F") = 0 THEN NEXT.
+    
+                ASSIGN lFileCount = lFileCount + 1.
+                
+                logMsg(lFile, "INFO").
+                
+                lFilePath = FILE-INFO:FULL-PATHNAME.  
+                
+                fileInput(lFilePath).
+                
+                OS-COMMAND SILENT 
+                    mv
+                    VALUE(lFilePath)
+                    VALUE
+                    (SUBSTITUTE
+                    ("{&IMPORTDIR}/done/&1&2&3&4_&5",
+                    YEAR(TODAY),
+                    STRING(MONTH(TODAY),"99"),
+                    STRING(DAY(TODAY),"99"),
+                    REPLACE(STRING(TIME,"HH:MM:SS"),":",""),
+                    lFile                  
+                    )
+                    ).
+                
+                IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN 
+                    LEAVE LOOP. /* time to check shutdown */
+            END.
+
+            IF ERROR-STATUS:ERROR THEN 
+                logMsg(ERROR-STATUS:GET-MESSAGE(1), "ERROR").
+            
+            IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN 
+                LEAVE LOOP. /* time to check shutdown */     
+            
+            IF lFileCount = 0 THEN 
+            DO:
+                LEAVE LOOP.
+            END. 
+        END.    
         
-   END DESTRUCTOR.
+        INPUT STREAM s-dir CLOSE.
+        
+    END METHOD.
+    
+    METHOD PUBLIC LOG fileInput (iFile AS CHARACTER) :
+        DEFINE VARIABLE lRecord    AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lHeader    AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lJsonBody  AS CHARACTER NO-UNDO.
+        
+        INPUT STREAM s-in FROM VALUE(iFile) NO-MAP NO-CONVERT.
+        
+        REPEAT:
+            IMPORT STREAM s-in UNFORMATTED lRecord.
+            
+            ASSIGN 
+                lHeader   = ENTRY(1,lRecord,"^")
+                lHeader   = TRIM(lHeader,'~{')
+                lHeader   = TRIM(lHeader,'~}')
+                lJsonBody = TRIM(ENTRY(2,lRecord,"^")).
+                
+            newJsonMessage(lHeader,lJsonBody).    
+        END.     
+        
+        INPUT STREAM s-in CLOSE.
+
+    END METHOD.
+    &ENDIF 
+
+    DESTRUCTOR PUBLIC PCListener():
+        closeSession().
+    END DESTRUCTOR.
 
 END CLASS.
 
