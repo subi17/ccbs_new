@@ -1,0 +1,52 @@
+{
+    "HPD.HPDOnline":
+        { 
+            "hpd":
+                {
+                    "Common":     { "databases": "common ordercanal mobile",
+                                    "-logginglevel": "4" },
+                    "Mobile":     { "databases": "common mobile ordercanal",
+                                    "-logginglevel": "4" },
+                    "Ordercanal": { "databases": "common ordercanal mobile",
+                                    "-logginglevel": "4" }
+                }
+        },
+
+    "HPD.HPDAckDaemon":
+        {
+            "hpdack": 
+                {
+                    "Common":     { "databases": "common ordercanal",
+                                    "-logginglevel": "4" },
+                    "Mobile":     { "databases": "mobile ordercanal common",
+                                    "-logginglevel": "4" },
+                    "Ordercanal": { "databases": "ordercanal common",
+                                    "-logginglevel": "4" }
+                }
+        },
+
+    "Gwy.MasmovilSender":
+        {
+            "mms":
+                {
+                    "1": { "-logginglevel": "4" }
+                }
+        },
+
+    "Mm.MManDaemon":
+        {
+            "mman":
+                {
+                    "": { "databases": "ordercanal",
+                          "-logginglevel": "4" }
+                }
+        },
+
+    "Gwy.ThirdPartyServiceDaemon":
+        {
+            "tpservice":
+                {
+                    "": { "-logginglevel": "4" }
+                }
+        }        
+}
