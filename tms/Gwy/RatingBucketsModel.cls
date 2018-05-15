@@ -5,7 +5,8 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
-{Syst/tmsconst.i}
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
+&GLOBAL-DEFINE CONFIG_ID_MAX 30
 
 CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface: 
     
@@ -16,7 +17,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
     DEF VAR lcError         AS CHAR              NO-UNDO. 
     DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
     DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
-    DEF VAR locommon        AS Func.Common       NO-UNDO.
+    DEF VAR loCommon        AS Func.Common       NO-UNDO.
     
     DEF VAR liElemType AS CHAR NO-UNDO.
 
@@ -29,7 +30,10 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         FIELD usage_amount         AS INT
         FIELD priority             AS INT
         FIELD shared_data_usage    AS LOG
-        FIELD provisioning_profile AS CHAR.
+        FIELD provisioning_profile AS CHAR
+        FIELD first_month_limit    AS CHAR
+        FIELD last_month_limit     AS CHAR 
+        FIELD bdestination_limit   AS INT.
         
     DEF TEMP-TABLE ttoutside_call_case NO-UNDO SERIALIZE-NAME "outside_call_case"
         FIELD parent_id      AS RECID 
@@ -83,14 +87,17 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         
         CREATE SLTemplate.
         ASSIGN
-            SLTemplate.SLCode         = ttSLTemplate.external_id
-            SLTemplate.elementtype    = liElemType
-            SLTemplate.trafficType    = ttSLTemplate.traffic_type
-            SLTemplate.BCC            = INT(ttSLTemplate.inside_call_case)
-            SLTemplate.unlimitedUsage = ttSLTemplate.unlimited_usage
-            SLTemplate.InclAmt        = ttSLTemplate.usage_amount 
-                                            WHEN ttSLTemplate.usage_amount > 0
-            SLTemplate.Prior          = ttSLTemplate.priority.
+            SLTemplate.SLCode            = ttSLTemplate.external_id
+            SLTemplate.elementtype       = liElemType
+            SLTemplate.trafficType       = ttSLTemplate.traffic_type
+            SLTemplate.BCC               = INT(ttSLTemplate.inside_call_case)
+            SLTemplate.unlimitedUsage    = ttSLTemplate.unlimited_usage
+            SLTemplate.InclAmt           = ttSLTemplate.usage_amount 
+                                               WHEN ttSLTemplate.usage_amount > 0
+            SLTemplate.Prior             = ttSLTemplate.priority
+            SLTemplate.FirstMonthLimit   = ttSLTemplate.first_month_limit
+            SLTemplate.LastMonthLimit    = ttSLTemplate.last_month_limit
+            SLTemplateDataset.BDestLimit = ttSLTemplate.bdestination_limit.
             
         FOR EACH ttoutside_call_case WHERE 
                  ttoutside_call_case.parent_id = RECID(ttSLTemplate):
@@ -159,18 +166,25 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         loEventLogMaker:make_eventlog("oldbuffer",BUFFER SLTemplate:HANDLE).
     
         ASSIGN 
-            SLTemplate.elementtype    = liElemType
-                                            WHEN ttSLTemplate.usage_type > ""
-            SLTemplate.trafficType    = ttSLTemplate.traffic_type
-                                            WHEN ttSLTemplate.traffic_type > ""
-            SLTemplate.BCC            = ttSLTemplate.inside_call_case
-                                            WHEN ttSLTemplate.inside_call_case > ""
-            SLTemplate.unlimitedUsage = ttSLTemplate.unlimited_usage
-                                            WHEN ttSLTemplate.unlimited_usage > ""
-            SLTemplate.InclAmt        = ttSLTemplate.usage_amount
-                                            WHEN ttSLTemplate.usage_amount > 0
-            SLTemplate.Prior          = ttSLTemplate.priority 
-                                            WHEN ttSLTemplate.priority > 0.
+            SLTemplate.elementtype       = liElemType
+                                               WHEN ttSLTemplate.usage_type > ""
+            SLTemplate.trafficType       = ttSLTemplate.traffic_type
+                                               WHEN ttSLTemplate.traffic_type > ""
+            SLTemplate.BCC               = ttSLTemplate.inside_call_case
+                                               WHEN ttSLTemplate.inside_call_case > ""
+            SLTemplate.unlimitedUsage    = ttSLTemplate.unlimited_usage
+                                               WHEN ttSLTemplate.unlimited_usage > ""
+            SLTemplate.InclAmt           = ttSLTemplate.usage_amount
+                                               WHEN ttSLTemplate.usage_amount > 0
+            SLTemplate.Prior             = ttSLTemplate.priority 
+                                               WHEN ttSLTemplate.priority > 0
+            SLTemplate.FirstMonthLimit   = ttSLTemplate.first_month_limit
+                                               WHEN ttSLTemplate.first_month_limit > ""
+            SLTemplate.LastMonthLimit    = ttSLTemplate.last_month_limit
+                                               WHEN ttSLTemplate.last_month_limit > ""
+            SLTemplateDataset.BDestLimit = ttSLTemplate.bdestination_limit
+                                               WHEN ttSLTemplate.bdestination_limit > 0.                             
+        
         FOR EACH ttoutside_call_case WHERE 
                  ttoutside_call_case.parent_id = RECID(ttSLTemplate):
             ASSIGN 

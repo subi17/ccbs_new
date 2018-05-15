@@ -2,10 +2,10 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
-&GLOBAL-DEFINE CONFIG_ID_MAX 32.
-&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
-
-{Syst/tmsconst.i}
+&GLOBAL-DEFINE CONFIG_ID_MAX 32
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
+&GLOBAL-DEFINE BOOLEAN_TRUE true
+&GLOBAL-DEFINE BOOLEAN_FALSE false
 
 CLASS Gwy.PriceListModel IMPLEMENTS Gwy.ModelInterface:
 
@@ -57,10 +57,9 @@ METHOD PUBLIC LOG create():
    IF ttPriceList.external_id = "" THEN 
       RETURN loRequestMaker:logError("Invalid PriceList ID").
 
-   IF LENGTH(ttPriceList.external_id) > {&CONFIG_ID_MAX} THEN 
-      RETURN loRequestMaker:logError(
-                "Max length for ID is {&CONFIG_ID_MAX} characters").
-         
+   /*IF (LENGTH(ttPriceList.external_id)) > {&CONFIG_ID_MAX}  THEN 
+      RETURN loRequestMaker:logError("Max length for ID is {&CONFIG_ID_MAX} characters").
+     */    
    IF CAN-FIND(FIRST PriceList WHERE 
                      PriceList.Brand = gcBrand AND
                      PriceList.PriceList = ttPriceList.external_id) THEN 
