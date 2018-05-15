@@ -31,6 +31,7 @@ DEF TEMP-TABLE ttDSSInfo NO-UNDO
    FIELD BundleFeeCalc    AS LOG
    FIELD UsedDSSData      AS DEC
    FIELD InclUnit         AS INT
+   FIELD Priority         AS INT
    INDEX MsSeqBun MsSeq BundleId.
 
 FIND FIRST Customer WHERE
@@ -92,6 +93,7 @@ form
     ttDSSInfo.SubsUsage                       LABEL "Usage(MB)"
     ttDSSInfo.DataAllocated LABEL "Alloc.(MB)" 
     ttDSSInfo.BundleFee  FORMAT ">>9.99" LABEL "B.Fee"
+    ttDSSInfo.Priority      FORMAT ">>9"  LABEL "Pr."
     ttDSSInfo.BundleFeeCalc FORMAT "Yes/No" LABEL "PMF" 
 WITH ROW FrmRow width 78 centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.Var:cfc)   
@@ -110,6 +112,7 @@ form
     ttDSSInfo.BundleStatus  COLON 20 FORMAT "X(20)"   LABEL "Bundle Status"
     ttDSSInfo.BundleLimitinMB COLON 20                LABEL "Bundle Limit"
     ttDSSInfo.SubsUsage     COLON 20                  LABEL "Bundle Usage"
+    ttDSSInfo.Priority      COLON 20                  LABEL "DSS Data Priority"
     ttDSSInfo.DataAllocated COLON 20                  LABEL "DSS Data Allocated"
     ttDSSInfo.BundleFeeCalc COLON 20                  LABEL "First Month Fee"
     ttDSSInfo.BundleFee     COLON 20                  LABEL "Bundle Fee"
@@ -417,6 +420,7 @@ PROCEDURE local-disp-row:
          ttDSSInfo.BundleLimitinMB 
          ttDSSInfo.SubsUsage
       (ttDSSInfo.DataAllocated / 1024 / 1024) @ ttDSSInfo.DataAllocated 
+         ttDSSInfo.Priority
          ttDSSInfo.BundleFeeCalc 
          ttDSSInfo.BundleFee
     WITH FRAME sel.
@@ -453,7 +457,8 @@ PROCEDURE local-UPDATE-record:
           ttDSSInfo.SubsUsage
           ttDSSInfo.BundleFee
           ttDSSInfo.BundleFeeCalc  
-      (ttDSSInfo.DataAllocated / 1024 / 1024) @ ttDSSInfo.DataAllocated 
+      (ttDSSInfo.DataAllocated / 1024 / 1024) @ ttDSSInfo.DataAllocated
+          ttDSSInfo.Priority 
      WITH FRAME lis.
 
      ASSIGN 
@@ -716,7 +721,7 @@ PROCEDURE pGetDSSBillingInfo:
          ASSIGN 
             ttDSSInfo.DataAllocated   = ldeDataAllocated 
             ttDSSInfo.BundleFeeCalc   = (NOT llFullMonth)
-            .
+            ttDSSInfo.Priority        = bDayCampaign.DSSPriority.
 
          IF llFullMonth THEN DO:
             /* for each used because there might exist  
@@ -754,7 +759,8 @@ PROCEDURE pGetDSSBillingInfo:
 
    /* Calculate first month fee */
    FOR EACH ttDSSInfo WHERE
-            ttDSSInfo.BundleFeeCalc = TRUE:            
+            ttDSSInfo.BundleFeeCalc = TRUE
+            BY ttDSSInfo.Priority:            
 
       ASSIGN ldeFeeAmt = 0
              ldeDataAllocated = 0.
