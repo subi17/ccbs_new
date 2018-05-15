@@ -51,6 +51,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
     END CONSTRUCTOR.
 
     METHOD PUBLIC LOG create():
+        message "1" view-as alert-box. 
  
         lJson = '~{"BillItemDataSet":~{"BillItem":' + lJson + '~}~}'.
         IF loRequestMaker:parser_error(DATASET BillItemDataset BIND, lJson) THEN
@@ -63,7 +64,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
         IF ttBillItem.external_id = "" THEN 
             RETURN loRequestMaker:logError("Invalid BillItem ID").
 
-        IF LENGTH(ttBillItem.external_id) > {&CONFIG_ID_MAX} THEN 
+        IF LENGTH(ttBillItem.external_id) > "{&CONFIG_ID_MAX}" THEN 
             RETURN loRequestMaker:logError(
                 "Max length for ID is {&CONFIG_ID_MAX} characters").
          
@@ -140,7 +141,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
             IF LOCKED(BillItem) THEN 
             DO:
                 liWait = liWait + 1.
-                IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+                IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
                     RETURN loRequestMaker:logError("Billing item was not available for update").
                 PAUSE 1 NO-MESSAGE. 
                 NEXT. 
@@ -225,6 +226,18 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
       
         RETURN "".    
     
+    END METHOD.
+    
+    METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
+        CASE icAction:
+            WHEN "update_other" THEN process_other_update().
+            OTHERWISE 
+            RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
+        END CASE.
+    END METHOD.
+
+    METHOD PUBLIC LOG process_other_update():
+
     END METHOD.
 
    DESTRUCTOR PUBLIC BillItemModel ():

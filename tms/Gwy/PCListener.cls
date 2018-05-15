@@ -12,18 +12,22 @@ USING Syst.Configuration.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 
-&GLOBAL MQ_BASED YES            
+&GLOBAL MQ_BASED NO            
+&GLOBAL WAIT_CONFIG_LOCK 20.
 
-CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
-                     IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
+CLASS PCListener /*INHERITS gearbox.daemons.Daemon 
+                     IMPLEMENTS dotr.Stomp.Interface.IStompHandler*/:
                          
     &IF "{&MQ_BASED}" = "NO"
     &THEN 
     DEFINE STREAM s-dir.
     DEFINE STREAM s-in.
+    DEFINE STREAM s-ok.
+    DEFINE STREAM s-error.
+    DEFINE STREAM s-missing.
     &ENDIF                       
    
-   DEF VAR gcBrand                AS CHAR                     NO-UNDO INIT "1".
+   DEF VAR lcBrand                AS CHAR                     NO-UNDO INIT "1".
    /*stomp protocol  settings*/ 
    DEF VAR lcHostName             AS CHAR                     NO-UNDO.
    DEF VAR lcPortNumber           AS CHAR                     NO-UNDO.
@@ -31,7 +35,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    /*stomp protocol handler objects*/
    DEF VAR loStompConfig          AS dotr.Stomp.StompConfig   NO-UNDO.
    DEF VAR loStompClient          AS dotr.Stomp.StompClient   NO-UNDO.
-   DEF VAR loReaderHandler        AS Gwy.PCListener           NO-UNDO.
+   DEF VAR loReaderHandler        AS PCListener               NO-UNDO.
    /*waiting for */
    DEF VAR hpWaitForProcedure     AS HANDLE                   NO-UNDO.
    /*encodings settings*/  
@@ -51,12 +55,17 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    DEF VAR lcHeader AS CHAR NO-UNDO.
    DEF VAR lcBody AS CHAR NO-UNDO.  
    
+   /* MQBased NO variables*/
+    DEF VAR lLogDir            AS CHAR INIT "../var/log/pc"   NO-UNDO.
+    DEF VAR lLogFileStartStamp AS DATETIME-TZ NO-UNDO.
+   
    DEF VAR lhFileParsing AS HANDLE NO-UNDO.
+   DEF VAR lhTenantInfo AS HANDLE NO-UNDO.
    
    DEF EVENT leTooManyErrors SIGNATURE VOID (  ).
    
-   FUNCTION fsetEffectiveTenantForAllDB RETURNS CHAR() IN lhTenantInfo.
-   
+  /* FUNCTION fsetEffectiveTenantForAllDB RETURNS CHAR(INPUT AS CHAR) IN lhTenantInfo.
+   */
    CONSTRUCTOR PUBLIC PCListener ():
       ASSIGN
          lcUTF8_Scandics_List = Configuration:getc("UTF8_to_Scandics")
@@ -88,9 +97,11 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    END CONSTRUCTOR.
    
    METHOD PROTECTED VOID logMsg (icMsg AS CHAR, icMsgType AS CHAR):
-      LOG-MANAGER:WRITE-MESSAGE(icMsg, icMsgType).
+   /*   LOG-MANAGER:WRITE-MESSAGE(icMsg, icMsgType).*/
    END METHOD.
    
+   &IF "{&MQ_BASED}" = "YES"
+   &THEN
    METHOD PRIVATE VOID connect ():
       loStompClient     = NEW dotr.Stomp.StompClient(loStompConfig).
       loReaderHandler   = THIS-OBJECT.
@@ -102,6 +113,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       */
       leTooManyErrors:SUBSCRIBE(tooManyErrors).
    END METHOD.
+   &ENDIF.
    
    METHOD PRIVATE VOID config ():
       loStompConfig                     = dotr.Stomp.StompConfig:DEFAULT. 
@@ -110,7 +122,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       loStompConfig:LargeMessageSupport = NO.
    END METHOD.
    
-   METHOD PUBLIC OVERRIDE LOG processOne ():
+   METHOD PUBLIC LOG processOne ():
        
       &IF "{&MQ_BASED}" = "NO"
       &THEN  
@@ -448,7 +460,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       /* something to the eventlog */
       IF lcSource = "" THEN lcSource = "PC".
       
-      fsetEffectiveTenantForAllDB(lcBrand).
+    /*  fsetEffectiveTenantForAllDB(gcBrand).*/
            
       CASE lcModel:
          WHEN "account" THEN DO:
@@ -462,7 +474,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          WHEN "billing_item" THEN DO:
             loLogicModule = NEW Gwy.BillItemModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
-         END.
+         END. /*
          WHEN "billing_item_group" THEN DO:
             loLogicModule = NEW Gwy.BItemGroupModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                     lcCorrelationID, lcReplyTo).
@@ -506,7 +518,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          WHEN "rating_bucket" THEN DO:
             loLogicModule = NEW Gwy.RatingBucketsModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
-         END.
+         END.  */
          OTHERWISE DO:
             logMsg("Unknown Model " + lcModel,"ERROR").
             RETURN.
