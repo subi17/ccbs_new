@@ -1,11 +1,6 @@
-&GLOBAL-DEFINE FEE_TYPE "otc,rc"
-&GLOBAL-DEFINE BILLING_METHOD "before,during,after"
-
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
-
-&GLOBAL-DEFINE CONFIG_ID_MAX 32.
 
 {Syst/tmsconst.i}
 
@@ -387,26 +382,25 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
                     llNewItem        = TRUE.
             END.
       
-            ASSIGN 
-                FMItem.ToDate       = ttFMItem.fi_validto 
-                                          WHEN ttFMItem.fi_validto NE ?
-                FMItem.BillMethod   = (ttFMItem.fee_type = ENTRY(1,{&FEE_TYPE})) 
-                                          WHEN ttFMItem.fee_type NE ?
-                FMItem.Interval     = ttFMItem.interval 
-                                          WHEN ttFMItem.interval NE ?
-                FMItem.FFItemQty    = ttFMItem.recurrence_limit 
-                                          WHEN ttFMItem.recurrence_limit NE ?
-                FMItem.BillCycle    = LOOKUP(ttFMItem.billing_method,"{&BILLING_METHOD}") 
-                                          WHEN ttFMItem.billing_method NE ?
-                FMItem.FirstMonthBR = ttFMItem.fi_firstperiodrule 
-                                          WHEN ttFMItem.fi_firstperiodrule NE ?
-                FMItem.BrokenRental = ttFMItem.fi_lastperiodrule 
-                                          WHEN ttFMItem.fi_lastperiodrule NE ?
-                FMItem.Amount       = ttFMItem.price 
-                                          WHEN ttFMItem.price NE ?
-                FMItem.BillType     = IF FMItem.BillMethod 
-                                          THEN "OTC"
-                                          ELSE "RC".
+            IF ttFMItem.fi_validto NE ? THEN 
+                FMItem.ToDate       = ttFMItem.fi_validto.
+            IF ttFMItem.fee_type NE ? AND ttFMItem.fee_type = ENTRY(1,"{&FEE_TYPE}") THEN 
+                FMItem.BillMethod   = YES.
+            IF ttFMItem.interval NE ? THEN 
+                FMItem.Interval     = ttFMItem.interval.
+            IF ttFMItem.recurrence_limit NE ? THEN 
+                FMItem.FFItemQty    = ttFMItem.recurrence_limit.
+            IF ttFMItem.billing_method NE ? THEN 
+                FMItem.BillCycle    = LOOKUP(ttFMItem.billing_method,"{&BILLING_METHOD}").
+            IF ttFMItem.fi_firstperiodrule NE ? THEN 
+                FMItem.FirstMonthBR = ttFMItem.fi_firstperiodrule.
+            IF ttFMItem.fi_lastperiodrule NE ? THEN 
+                FMItem.BrokenRental = ttFMItem.fi_lastperiodrule.
+            IF ttFMItem.price NE ? THEN 
+                FMItem.Amount       = ttFMItem.price.
+            FMItem.BillType     = IF FMItem.BillMethod 
+                                  THEN "OTC"
+                                  ELSE "RC".      
 
             IF FMItem.BillMethod THEN ASSIGN
                     FMItem.interval  = 0

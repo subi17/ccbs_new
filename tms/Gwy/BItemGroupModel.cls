@@ -1,6 +1,6 @@
 
 USING Progress.Lang.*.
-&GLOBAL-DEFINE CONFIG_ID_MAX 32.
+
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface: 
@@ -164,10 +164,13 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
        
         loEventLogMaker:make_eventlog("oldbuffer",BUFFER BItemGroup:HANDLE).
 
-        BItemGroup.BIGName = ttBItemGroup.name
-                                 WHEN ttBItemGroup.name > "".
-        BItemGroup.InvoiceOrder = ttBItemGroup.display_order
-                                      WHEN ttBItemGroup.display_order > 0.
+        BItemGroup.BIGName = IF ttBItemGroup.name > "" THEN 
+                                 ttBItemGroup.name 
+                             ELSE BItemGroup.BIGName.
+        BItemGroup.InvoiceOrder = IF ttBItemGroup.display_order > 0 THEN 
+                                      ttBItemGroup.display_order 
+                                  ELSE BItemGroup.InvoiceOrder.
+                                      
         IF LOOKUP(ttBItemGroup.group_type,"mobile,fixedline,broadband") > 0 THEN 
             BItemGroup.GroupType = ttBItemGroup.group_type. 
 
@@ -195,18 +198,18 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
                                   "DEBUG").
        
     END METHOD.
-    /*
-        METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
-            CASE icAction:
-                WHEN "update_other" THEN process_other_update().
-                OTHERWISE 
-                RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
-            END CASE.
-        END METHOD.
     
-        METHOD PUBLIC LOG process_other_update():
+    METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
+        CASE icAction:
+            WHEN "update_other" THEN process_other_update().
+            OTHERWISE 
+            RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
+        END CASE.
+    END METHOD.
     
-        END METHOD.*/
+    METHOD PUBLIC LOG process_other_update():
+    
+    END METHOD.
 
     DESTRUCTOR PUBLIC BItemGroupModel ():
         IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
