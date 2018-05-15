@@ -7,6 +7,7 @@ hell MODULE .......: cancelorder.p
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
+{Func/progressjson.i}
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Func/fsubstermreq.i}
@@ -41,6 +42,9 @@ FIND Order NO-LOCK WHERE
 IF NOT AVAIL Order THEN RETURN "".
 
 IF LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 THEN RETURN "".
+
+IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES}) > 0 THEN 
+  fParseOrderIdToMasmovile(Order.OrderId).
 
 IF ilCheckLOStatus THEN DO:
 

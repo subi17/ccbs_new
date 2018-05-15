@@ -6,6 +6,7 @@ AUTHOR .......: anttis
 CREATED ......: 27.10.09
 Version ......: xfera
 ----------------------------------------------------------------------- */
+{Func/progressjson.i}
 
 DEFINE INPUT PARAMETER piMNPSeq AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER pcOperation AS CHAR NO-UNDO.

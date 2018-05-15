@@ -6,6 +6,7 @@
   CREATED ......: 25.03.13
 ---------------------------------------------------------------------- */
 
+{Func/progressjson.i}
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}

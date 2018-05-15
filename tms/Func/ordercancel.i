@@ -116,6 +116,44 @@ FUNCTION fReleaseSIM RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL 
+   (INPUT iiOrderId AS int):
+
+
+   DEF VAR lcHost        AS CHARACTER        NO-UNDO.
+   DEF VAR liPort        AS INTEGER          NO-UNDO.
+   DEF VAR lcUderId      AS CHARACTER        NO-UNDO.
+   DEF VAR lcPassword    AS CHARACTER        NO-UNDO.
+   DEF VAR lcUriPath     AS CHARACTER        NO-UNDO.
+   DEF VAR lcUriQuery    AS CHARACTER        NO-UNDO.
+   DEF VAR lcUriQueryVal AS CHARACTER        NO-UNDO.
+   DEF VAR liLogRequest  AS INTEGER          NO-UNDO.
+   DEF VAR loRequestjson AS JsonObject       NO-UNDO. 
+ 
+   ASSIGN 
+      lcHost        = fCParam("Masmovil","cancelHost")
+      liport        = fIparam("Masmovil","cancelPort")
+      lcUriPath     = fCParam("Masmovil","cancelUriPath")
+      lcUriQuery    = fCParam("Masmovil","cancelUriQuery")
+      lcUriQueryVal = fCParam("Masmovil","cancelUriQueryValue")
+      liLogRequest  = fIParam("Masmovil","cancelLogRequest").
+      
+   loRequestjson = NEW Progress.Json.ObjectModel.jsonObject().
+   loRequestJson:ADD("orderid" , "Y" + STRING(iiOrderID)).
+ 
+   RUN Gwy/http_rest_client.p("put" ,
+                             lcHost,
+                             liPort,
+                             "" ,
+                             "" ,
+                             lcUriPath,
+                             lcUriQuery,     
+                             lcUriQueryVal,
+                             loRequestJson).
+   RETURN TRUE.
+
+END FUNCTION.
+
 PROCEDURE pCreditInstallment:
 
    DEF INPUT PARAM iiFFNum AS INT NO-UNDO.

@@ -2,6 +2,7 @@
 
 */
 
+{Func/progressjson.i}
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/forderstamp.i}
@@ -121,6 +122,9 @@ IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
                       " order &1", Order.OrderId)).
    END.
 END.
+
+IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES}) > 0 THEN
+   fParseOrderIdToMasmovil(Order.OrderId).
 
 fSetOrderStatus(Order.OrderId,icOrderStatus).
 

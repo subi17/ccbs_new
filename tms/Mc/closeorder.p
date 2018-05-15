@@ -5,7 +5,8 @@
                     01.02.07 kl  allow close when invoice is credited
 
 */
-   
+
+{Func/progressjson.i}   
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/forderstamp.i}
@@ -211,6 +212,9 @@ IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
       RELEASE SIM.
    END.
 END.
+
+IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES} ) > 0 THEN
+   fParseOrderIdToMasmovil(Order.OrderId).
 
 fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 

@@ -9,6 +9,7 @@
   ---------------------------------------------------------------------- */
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
+{Func/progressjson.i}
 {Syst/commpaa.i}
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "MNP".
