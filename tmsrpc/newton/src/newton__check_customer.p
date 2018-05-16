@@ -65,6 +65,7 @@ DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
 DEF VAR lcReasons                     AS CHAR NO-UNDO. 
 DEF VAR lcCurrentSegment              AS CHAR NO-UNDO.
+DEF VAR liExtraLineStatus             AS INTE NO-UNDO.
 
 DEF BUFFER bCustomer  FOR Customer.
 DEF BUFFER bMobSub    FOR MobSub.
@@ -95,7 +96,7 @@ FUNCTION fCheckMigration RETURNS LOG
                       Mobsub.paytype) THEN
        fSetError ("PRO migration not possible because of prepaid subscription").
     /* Check any ongoing orders */
-    ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,0) THEN
+    ELSE IF fCheckOngoingOrders(Customer.OrgId, Customer.CustIdType, 0) THEN
        fSetError ("PRO migration not possible because of active ongoing orders").
     ELSE 
     DO:
