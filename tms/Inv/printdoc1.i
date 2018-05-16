@@ -95,7 +95,8 @@ DEF TEMP-TABLE ttRow NO-UNDO
    FIELD RowToDate     AS DATE
    FIELD VoiceLimit    AS INT
    FIELD DataLimit     AS INT
-   INDEX RowCode SubInvNum RowCode.
+   INDEX RowCode SubInvNum RowCode
+   INDEX RowName SubInvNum RowName RowGroup.
 
 DEF TEMP-TABLE ttGraph NO-UNDO
    FIELD GraphGroup AS CHAR
@@ -1328,7 +1329,24 @@ PROCEDURE pGetInvoiceRowData:
          FIND FIRST ttRow WHERE
                     ttRow.SubInvNum = InvRow.SubInvNum AND
                     ttRow.RowCode   = lcRowCode NO-ERROR.
-            
+
+         /* YDR-2848 - To group the fee of 3p tariff in only one concept.
+            Add all convergent tariff data under same BillingItem */
+         IF NOT AVAIL ttRow AND
+                     (ttBillItemAndGroup.BiGroup EQ "18" OR
+                      ttBillItemAndGroup.BiGroup EQ "46") THEN DO:
+            FIND FIRST ttRow WHERE
+                       ttRow.SubInvNum = InvRow.SubInvNum AND
+                      /* ttRow.RowName   = lcRowName AND */
+                      (ttRow.RowGroup EQ "18" OR
+                       ttRow.RowGroup EQ "46") NO-ERROR.
+            IF AVAIL ttRow AND ttRow.RowGroup EQ "18" THEN DO:
+               ASSIGN /* Use 46 as defaulf for convergent tariff */
+                  ttRow.RowCode  = STRING(ttBillItemAndGroup.BiGroup) + lcRowName
+                  ttRow.RowGroup = ttBillItemAndGroup.BIGroup.
+            END.
+         END.
+
          IF NOT AVAILABLE ttRow THEN DO:
       
             CREATE ttRow.
@@ -1351,7 +1369,7 @@ PROCEDURE pGetInvoiceRowData:
             ttRow.RowDur        = ttRow.RowDur + InvRow.Min
             ttRow.RowBillCode   = ttBillItemAndGroup.BillCode
             ttRow.RowName       = lcRowName
-            ttRow.RowToDate     = InvRow.ToDate.
+            ttRow.RowToDate     = InvRow.ToDate.  
       END.
 
       /* subtotals are wanted as headers, so calculate them here and make

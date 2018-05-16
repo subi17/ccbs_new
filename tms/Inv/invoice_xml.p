@@ -811,15 +811,14 @@ PROCEDURE pSubInvoice2XML:
          IF ttRow.RowType > "" AND
             ttRow.RowGroup EQ "46" THEN DO: /* Convergent uses CLI Type Name */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
-            /* lhXML:START-ELEMENT("TotalCategory").
-               lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttRow.RowAmtExclVat)).
-            lhXML:END-ELEMENT("TotalCategory").*/
          END.
          ELSE
             lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
 
          /* Sum of different categories per subscription. YDR-2848 */
-         ldTotal = ldTotal + ttRow.RowAmtExclVat.
+         IF ttRow.RowCode BEGINS "18" OR
+            ttRow.RowCode BEGINS "46" THEN
+            ldTotal = ldTotal + ttRow.RowAmtExclVat.
 
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
