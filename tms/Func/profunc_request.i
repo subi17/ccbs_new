@@ -407,7 +407,8 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
       IF AVAIL Clitype THEN 
       DO:
          CASE Clitype.WebStatusCode:
-            WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} THEN
+            WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE}  OR 
+            WHEN {&CLITYPE_WEBSTATUSCODE_RETIRED} THEN
             DO:
                ASSIGN lcCliTypeTo = fgetActiveReplacement(bMobsub.clitype,"STCMappingForActiveTariffs").
 
