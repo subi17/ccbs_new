@@ -40,7 +40,9 @@ CLASS Func.BankAccount FINAL:
          liSum = liSum + INTEGER(lcc) * INTEGER(ENTRY(lii,icWeight)).
       END.
 
-      IF icControl NE STRING(INTEGER((liSum MOD 11) EQ 1))
+      IF liSum MOD 11 < 2 AND icControl NE STRING(liSum MOD 11)
+      THEN RETURN FALSE.
+      ELSE IF liSum MOD 11 >= 2 AND icControl NE STRING(11 - (liSum MOD 11))
       THEN RETURN FALSE.
 
       RETURN TRUE.
