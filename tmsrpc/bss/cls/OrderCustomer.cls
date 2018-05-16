@@ -351,6 +351,11 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
                                           THIS-OBJECT:OperSMSMarketing   OR
                                           THIS-OBJECT:OutSMSMarketing.
 
+      IF THIS-OBJECT:BankCode > "" AND
+         NOT Func.BankAccount:mValid(THIS-OBJECT:BankCode)
+      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Bank account number '&1' " +
+                                                 "is not valid",
+                                                 THIS-OBJECT:BankCode)).
 	END METHOD.
 	
    METHOD PUBLIC VOID mStoreData():
