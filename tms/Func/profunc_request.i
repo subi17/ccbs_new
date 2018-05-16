@@ -283,8 +283,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
     INPUT  icCreator      AS CHARACTER,  /* who made the request */
     INPUT  icSource       AS CHARACTER,
-    INPUT  iiOrig         AS INTEGER  ,
-    INPUT  ilValidate     AS LOGICAL  , 
+    INPUT  iiOrig         AS INTEGER  , 
     OUTPUT ocResult       AS CHARACTER):
 
    DEF VAR liReqCreated  AS INT  NO-UNDO.
@@ -299,7 +298,6 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEFINE BUFFER bClitype       FOR CLIType.
 
    DEFINE VARIABLE llHasMappingMissingForLegacyTariff AS LOGICAL NO-UNDO INIT TRUE.
-   DEFINE VARIABLE lcCliTypeFrom AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcclitypeto   AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liRequest     AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcError       AS CHARACTER NO-UNDO.
@@ -310,70 +308,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
    FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
 
-   ASSIGN lcCliTypeFrom = bMobSub.CliType.
-
-   IF ilValidate THEN 
-   DO:    
-       /* Is category available */
-       IF NOT AVAILABLE bCustCat THEN DO:
-           ocResult = "101".
-           RETURN 0. 
-       END.
-       /* Is Customer among the required segment */
-       IF LOOKUP(bCustCat.Segment,"AUTONOMO,COMPANY,SOHO-AUTONOMO,SOHO-COMPANY") EQ 0  THEN DO:
-           ocResult = "102".
-           RETURN 0.
-       END.
-
-       /* Does customer have subscriptions with legacy tariffs not mapped to active tariffs */
-       MOBSUB-CHK:
-       FOR EACH bf_MobSub 
-          WHERE bf_MobSub.Brand   = Syst.Var:gcBrand 
-            AND bf_MobSub.AgrCust = bCustomer.CustNum NO-LOCK:
-           
-           llHasMappingMissingForLegacyTariff = fCheckSubscriptionTypeAllowedForProMigration(bf_MobSub.CliType, OUTPUT lcclitypeto).
-           IF NOT llHasMappingMissingForLegacyTariff THEN 
-              LEAVE MOBSUB-CHK.
-       END.
-       
-       IF NOT llHasMappingMissingForLegacyTariff THEN DO:
-            ocResult = "103".
-            RETURN 0.
-       END.
-
-       /* Convergent in ONGOING status */
-       FOR EACH bOrderCustomer NO-LOCK WHERE
-                bOrderCustomer.Brand      EQ Syst.Var:gcBrand     AND
-                bOrderCustomer.CustId     EQ bCustomer.OrgId      AND
-                bOrderCustomer.CustIdType EQ bCustomer.CustIdType AND
-                bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-           FIRST bOrder NO-LOCK WHERE
-                 bOrder.Brand              EQ Syst.Var:gcBrand       AND
-                 bOrder.Orderid            EQ bOrderCustomer.Orderid AND
-                 bOrder.OrderType          NE {&ORDER_TYPE_RENEWAL}  AND
-                 LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
-
-            FIND bClitype WHERE bClitype.Brand = Syst.Var:gcBrand AND bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
-            IF AVAILABLE bCliType AND 
-               (bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
-                bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  )  THEN DO:
-                ocResult = "104".
-                RETURN 0.
-            END.  
-       END. 
-
-       /* Customer having a active prepaid subscription */
-       IF CAN-FIND(FIRST bMobSub 
-                   WHERE bMobSub.Brand   = Syst.Var:gcBrand
-                     AND bMobSub.AgrCust = bCustomer.CustNum 
-                     AND bMobSub.paytype = TRUE NO-LOCK) THEN 
-       DO:
-           ocResult = "105".
-           RETURN 0. 
-       END.
-   END.
-
-   fCheckSubscriptionTypeAllowedForProMigration(lcCliTypeFrom, OUTPUT lcCliTypeTo).
+   fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
    
    IF lcCliTypeTo <> "" THEN 
    DO:
@@ -504,7 +439,6 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
                                                  INPUT icsalesman,
                                                  INPUT {&REQUEST_SOURCE_MIGRATION},
                                                  INPUT iimsrequest,
-                                                 INPUT FALSE , /* Validations not required here */
                                                  OUTPUT lcResult).
                END.
             END.

@@ -55,7 +55,6 @@ liRequest = fProMigrationRequest(INPUT piMsseq,
                                INPUT Syst.Var:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                0,
-                               TRUE ,  /* Perform validation on request */
                                OUTPUT lcResult).
 IF liRequest > 0 THEN
    lcResult = fProMigrateOtherSubs(Mobsub.AgrCust, 
