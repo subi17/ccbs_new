@@ -75,7 +75,7 @@ PROCEDURE ipCCRuleDataCreation:
                 CCRule.CCruleId    = NEXT-VALUE(CCRuleSeq)
                 CCRule.Category    = "*"
                 CCRule.BillCode    = BillItem.BillCode
-                CCRule.ValidFrom   = TODAY
+                CCRule.ValidFrom   = DATE(01,01,2018)
                 CCRule.ValidTo     = DATE(12,31,2049)
                 CCRule.ReportingID = BillItem.SAPRid
                 CCRule.CostCentre  = BillItem.CostCentre
