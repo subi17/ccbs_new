@@ -342,7 +342,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          so we need to check the value somewhere else.
          OutBankMarketing - lets populate only if available */
       ASSIGN
-         THIS-OBJECT:BankCode           = ioJsonObject:GetCharacter("bankaccount") WHEN ioJsonObject:Has("bankaccount")
+         THIS-OBJECT:BankCode           = REPLACE(ioJsonObject:GetCharacter("bankaccount")," ","") WHEN ioJsonObject:Has("bankaccount")
          THIS-OBJECT:OutBankMarketing   = ioJsonObject:GetLogical("mark_bank_3rd") WHEN ioJsonObject:Has("mark_bank_3rd")
          THIS-OBJECT:OperAllMarketing   = THIS-OBJECT:OperEMailMarketing OR
                                           THIS-OBJECT:OutEMailMarketing  OR
