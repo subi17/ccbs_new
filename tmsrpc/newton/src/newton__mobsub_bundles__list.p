@@ -163,6 +163,7 @@ PROCEDURE pAdd_DSS:
         llProSubscription     = fIsProSubscription(piMsSeq)
         lcPRODSSUpsellList    = fCParamC("PRO_DSS_FLEX_UPSELL_LIST")
         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+        lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
         lcBundleUpsells       = "".
 
     IF NOT MobSub.PayType THEN
