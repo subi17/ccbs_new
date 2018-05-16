@@ -120,10 +120,6 @@ PROCEDURE pRequestActions:
    BY ttAction.ActionType
    BY ttAction.ActionKey:
 
-      /* NEBA - Request action handling is not needed because this 
-         will not cause contract as FTERM. */
-      IF ttAction.ActionKey BEGINS "NEBTERM" THEN NEXT.
- 
       /* additional rules defined */
       RUN pDoRulesAllow(liMsSeq,
                         icCLIType,
