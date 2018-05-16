@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: bob_discount.p
+  MODULE .......: bob_yoicard_discount.p
   TASK .........:
   APPLICATION ..: TMS
-  AUTHOR .......: Saktibalan
-  CREATED ......: 08.05.18
+  AUTHOR .......: susanjee
+  CREATED ......: 16.05.18
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
@@ -19,7 +19,6 @@ Syst.Var:gcBrand EQ "1".
 {Func/coinv.i}
 {Func/fsendsms.i}
 {Mc/dpmember.i}
-
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep    AS CHARACTER NO-UNDO INITIAL ";".
@@ -38,22 +37,23 @@ DEFINE VARIABLE lcProcessFile   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldtConValue     AS DATE      NO-UNDO.
-DEFINE VARIABLE liLastDtValue   AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liKeyValue      AS INTEGER   NO-UNDO.
 
 /* field variables */
-DEFINE VARIABLE liOrderID    AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liActivFlag  AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcStoreID    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liLeadFlag   AS INTEGER   NO-UNDO.
-DEFINE VARIABLE ldaValidFrom AS DATE      NO-UNDO.
-DEFINE VARIABLE ldaValidTo   AS DATE      NO-UNDO.
+DEFINE VARIABLE liOrderID       AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liActivFlag     AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcStoreID       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liLeadFlag      AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcYOICardLogMsg AS CHAR      NO-UNDO. 
+DEFINE VARIABLE lcDiscLogMsg    AS CHAR      NO-UNDO. 
 
 /* streams */
 DEFINE STREAM sin.
 DEFINE STREAM sFile.
 DEFINE STREAM sLog.
+
+DEFINE BUFFER lbOrder      FOR Order.
+DEFINE BUFFER lbMobSub     FOR MobSub.
+DEFINE BUFFER lbTermMobSub FOR TermMobSub.
 
 /* ********************  Preprocessor Definitions  ******************** */
 
@@ -61,11 +61,11 @@ DEFINE STREAM sLog.
 /* ***************************  Main Block  *************************** */
 
 ASSIGN
-   lcIncDir     EQ fCParam("Charges","IncDir")
-   lcProcessDir EQ fCParam("Charges","IncProcessDir")
-   lcProcDir    EQ fCParam("Charges","IncProcDir")
-   lcSpoolDir   EQ fCParam("Charges","OutSpoolDir")
-   lcOutDir     EQ fCParam("Charges","OutDir").
+   lcIncDir     = fCParam("Charges","IncDir")
+   lcProcessDir = fCParam("Charges","IncProcessDir")
+   lcProcDir    = fCParam("Charges","IncProcDir")
+   lcSpoolDir   = fCParam("Charges","OutSpoolDir")
+   lcOutDir     = fCParam("Charges","OutDir").
 
 FUNCTION fLogLine RETURNS LOGIC
    (icMessage AS CHAR):
@@ -81,75 +81,104 @@ FUNCTION fError RETURNS LOGIC
 
    fLogLine("ERROR:" + icMessage).
 
-   liNumErr EQ liNumErr + 1.
+   liNumErr = liNumErr + 1.
 
 END FUNCTION.
 
-FUNCTION fUpdateCreditCardStatus RETURNS INTEGER
-   (INPUT icBrand  AS CHAR,
-    INPUT icEvent  AS CHAR,
-    INPUT iiMsSeq  AS INT,
-    INPUT idToDate AS DATE):
+FUNCTION fUpdateCreditCardStatus RETURNS LOGICAL
+   (INPUT  iiMsSeq   AS INT,
+    OUTPUT lcLogData AS CHAR):
    
-   DEFINE BUFFER lbDCCLi FOR DCCLi.
+   DEFINE BUFFER lbDCCLI FOR DCCLI.
+
+   DEF VAR liPrevYOICardStatus AS INT NO-UNDO.  
    
-   DEFINE VARIABLE liReturnValue AS INTEGER NO-UNDO.
-   
-   FIND FIRST lbDCCLi EXCLUSIVE-LOCK WHERE 
-              lbDCCLi.Brand   EQ icBrand  AND
-              lbDCCLi.DCEvent EQ icEvent  AND 
-              lbDCCLi.MsSeq   EQ iiMsSeq  AND 
-	          lbDCCLi.ValidTo EQ idToDate NO-ERROR.                    
-				                       
+   FIND FIRST lbDCCLI EXCLUSIVE-LOCK WHERE 
+              lbDCCLI.Brand   EQ Syst.Var:gcBrand   AND
+              lbDCCLI.DCEvent EQ {&YOICARD_DCEvent} AND 
+              lbDCCLI.MsSeq   EQ iiMsSeq            AND 
+              lbDCCLI.ValidTo >= TODAY              NO-ERROR.                    
+                     
    IF NOT AVAILABLE lbDCCli THEN DO:
       fError("Inactive Periodical Contract").
-      NEXT.
-   END.			   
-   lbDCCLi.ServiceStatus EQ {&YOICARD_STATUS_ACTIVADA}.
-   liReturnValue EQ lbDCCLi.ServiceStatus.
-   
-   RETURN liReturnValue.
+      RETURN FALSE.
+   END.
+
+   ASSIGN liPrevYOICardStatus   = 0
+          liPrevYOICardStatus   = lbDCCLi.ServiceStatus  
+          lbDCCLi.ServiceStatus = {&YOICARD_STATUS_ACTIVADA}.
+  
+   lcLogData = "YOICard status changed from" + " " + 
+               STRING(liPrevYOICardStatus)   + " " + 
+               STRING(lbDCCLi.ServiceStatus).
+
+   RETURN TRUE.
    
 END FUNCTION.
 
-FUNCTION fDiscPlanValidation RETURNS LOGIC
-         (INPUT icBrand      AS CHAR,
-          INPUT icDiscPlanID AS CHAR):
-          
-         FIND FIRST DiscountPlan NO-LOCK WHERE
-                    DiscountPlan.Brand    EQ icBrand      AND
-                    DiscountPlan.DPRuleID EQ icDiscPlanID NO-ERROR.
-         IF NOT AVAILABLE DiscountPlan THEN DO:
-            fError("Unknown discount plan").
-            NEXT.
-         END.
-         ASSIGN 
-            ldaValidFrom = /* DATE */
-            ldaValidTo = /* DATE */ NO-ERROR.
-            
-         IF ERROR-STATUS:ERROR OR ldaValidFrom = ? THEN DO:
-            fError("Invalid period").
-            NEXT.
-         END.
-         IF ldaValidTo = ? THEN ldaValidTo = 12/31/2049.
+FUNCTION fApplyYOICardDiscount RETURNS LOGICAL
+   (INPUT iiMsSeq       AS INT,
+    INPUT lcYOICardDisc AS CHAR,
+    INPUT idtFromDate   AS DATE,
+    INPUT iiOrderID     AS INT,
+    OUTPUT lcLogData    AS CHAR):
+   
+   DEF VAR lcResult AS CHAR NO-UNDO.
 
-         IF ldaValidTo < ldaValidFrom THEN DO:
-            fError("End date is earlier than begin date").
-            NEXT.
-         END.                  
-END FUNCTION.
+   DEFINE BUFFER lbDiscountPlan FOR DiscountPlan.
+   DEFINE BUFFER lbDPRate       FOR DPRate.
+
+   FOR FIRST lbDiscountPlan NO-LOCK WHERE
+             lbDiscountPlan.Brand    EQ Syst.Var:gcBrand AND
+             lbDiscountPlan.DPRuleID EQ lcYOICardDisc    AND
+             lbDiscountPlan.ValidTo  >= idtFromDate,
+       FIRST lbDPRate NO-LOCK WHERE
+             lbDPRate.DPId      EQ lbDiscountPlan.DPId AND
+             lbDPRate.ValidFrom <= idtFromDate         AND
+             lbDPRate.ValidTo   >= idtFromDate:
+
+      fCloseDiscount(lbDiscountPlan.DPRuleID,
+                     iiMsSeq,
+                     idtFromDate - 1,
+                     NO).
+
+      lcResult = fAddDiscountPlanMember(iiMsSeq,
+                                        lbDiscountPlan.DPRuleID,
+                                        lbDPRate.DiscValue,
+                                        idtFromDate,
+                                        ?,
+                                        lbDiscountPlan.ValidPeriods,
+                                        iiOrderID).
+
+      IF lcResult BEGINS "ERROR" THEN DO:
+         fError("ERROR:YOICard Discount not created; " + lcResult).
+         RETURN FALSE.
+      END.
+      ELSE 
+         lcLogData = "YOICard "    + " " + 
+                     lcYOICardDisc + " " + 
+                     "request is created".
+
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.    
+
+
+/********************** Execution starts here ***************************/
 
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
 REPEAT:
 
    IMPORT STREAM sFile UNFORMATTED lcFileName.
 
-   lcInputFile EQ lcIncDir + lcFileName.
+   lcInputFile = lcIncDir + lcFileName.
 
    IF SEARCH(lcInputFile) NE ? THEN DO:
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
 
-      lcProcessFile EQ fMove2TransDir(lcInputFile, "", lcProcessDir).
+      lcProcessFile = fMove2TransDir(lcInputFile, "", lcProcessDir).
 
       IF lcProcessFile EQ "" THEN NEXT.
 
@@ -161,12 +190,12 @@ REPEAT:
    ELSE NEXT.
 
    ASSIGN
-      liNumOk  EQ 0
-      liNumErr EQ 0.
+      liNumOk  = 0
+      liNumErr = 0.
 
    fBatchLog("START", lcProcessFile).
 
-   lcLogFile EQ lcSpoolDir + lcFileName + ".log".
+   lcLogFile = lcSpoolDir + lcFileName + ".log".
 
    OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
 
@@ -175,7 +204,7 @@ REPEAT:
               STRING(TODAY,"99.99.99") " "
               STRING(TIME,"hh:mm:ss") SKIP.
 
-   RUN pCreateDiscountForCreditCard.
+   RUN pUpdateYOICardStatusAndDiscount.
 
    PUT STREAM sLog UNFORMATTED
        "input: "   STRING(liNumOK + liNumErr) ", "
@@ -185,138 +214,114 @@ REPEAT:
    INPUT STREAM sin CLOSE.
    OUTPUT STREAM sLog CLOSE.
 
-   lcReportFileOut EQ fMove2TransDir(lcLogFile, "", lcOutDir).
-   lcProcessedFile EQ fMove2TransDir(lcProcessFile, "", lcProcDir).
+   ASSIGN lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir)
+          lcProcessedFile = fMove2TransDir(lcProcessFile, "", lcProcDir).
 
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
+
 END. /* REPEAT */
 
 INPUT STREAM sFile CLOSE.
 
-PROCEDURE pCreateDiscountForCreditCard:       
+PROCEDURE pUpdateYOICardStatusAndDiscount:       
       
    REPEAT TRANSACTION:
+
       IMPORT STREAM sin UNFORMATTED lcLine.
       IF lcLine EQ "" THEN NEXT.
-	  
-	  IF NUM-ENTRIES(lcLine,lcSep) < 4 THEN DO:
+ 
+      IF NUM-ENTRIES(lcLine,lcSep) < 4 THEN DO:
          fError("Invalid line format").
          NEXT.
       END.
 
-      /*[Order ID];[ActivationFlag];[Store ID];[Lead Flag]*/
-	  ASSIGN
-         liOrderID   EQ ENTRY(1,lcReadLine,lcSep)
-         liActivFlag EQ INT(ENTRY(2,lcReadLine,lcSep))
-         lcStoreID   EQ ENTRY(3,lcReadLine,lcSep)
-         liLeadFlag  EQ INT(ENTRY(4,lcReadLine,lcSep) NO-ERROR.
+       /*[Order ID];[ActivationFlag];[Store ID];[Lead Flag]*/
+      ASSIGN
+         lcYOICardLogMsg = "" 
+         lcDiscLogMsg    = ""  
+         liOrderID       = INT(ENTRY(1,lcLine,lcSep))
+         liActivFlag     = INT(ENTRY(2,lcLine,lcSep))
+         lcStoreID       = ENTRY(3,lcLine,lcSep)
+         liLeadFlag      = INT(ENTRY(4,lcLine,lcSep)) NO-ERROR.
 
-	  FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand   EQ Syst.Var:gcBrand AND  
-	             Order.OrderId EQ liOrderID        NO-ERROR.				 
-	  
-	  IF NOT AVAILABLE Order THEN DO:
+      FIND FIRST lbOrder NO-LOCK WHERE
+                 lbOrder.Brand   EQ Syst.Var:gcBrand AND  
+                 lbOrder.OrderId EQ liOrderID        NO-ERROR. 
+  
+      IF NOT AVAILABLE lbOrder THEN DO:
          fError("Invalid Order").
          NEXT.
       END.
-	  
-	  IF LOOKUP(Order.Statuscode, {&ORDER_INACTIVE_STATUSES}) EQ 0 THEN DO:
-	     fError("Ongoing Order").
+      ELSE IF LOOKUP(lbOrder.Statuscode, {&ORDER_INACTIVE_STATUSES}) EQ 0 THEN DO:
+         fError("Ongoing Order").
          NEXT.
-	  END.	  
-	  
-	  IF LOOKUP(Order.Statuscode, {&ORDER_INACTIVE_STATUSES}) > 0 THEN DO: 
-	     fError("Canceled Order").
+      END. 
+      ELSE  IF LOOKUP(lbOrder.Statuscode, {&ORDER_CLOSE_STATUSES}) > 0 THEN DO: 
+         fError("Closed / Canceled Order").
          NEXT.
-	  END.
-	  
-	  FIND FIRST MobSub NO-LOCK WHERE 
-	             MobSub.MsSeq EQ Order.MsSeq NO-ERROR.					
-	  IF NOT AVAILABLE MobSub THEN DO:	  
-	     FIND FIRST TermMobSub NO-LOCK WHERE
-                    TermMobSub.MsSeq EQ Order.MsSeq NO-ERROR.					   
-         IF AVAILABLE TermMobSub THEN DO:
-		    ferror("Inactive Subscription").
-		    NEXT.
-         END.
-         fError("Invalid Mobile Subscription").
-		 NEXT.
       END.
-	  
-	  CASE liActivFlag:
-		 WHEN 0 THEN
-		   
-	     END.
-			
-		 WHEN 1 THEN DO:     /* Only update credit card status to active */	            
-            fUpdateCreditCardStatus(Syst.Var:gcBrand,
-                                    "YOICARD",
-                                    MobSub.MsSeq,
-                                    /*ValidTo date */).	         			   
-	     END.
-	  
-	     WHEN 2 THEN DO: /* update credit card satus to active and apply use discount */
-		    fUpdateCreditCardStatus(Syst.Var:gcBrand,
-                                    "YOICARD",
-                                    MobSub.MsSeq,
-                                    /*ValidTo date */). 
-                                    
-            fDiscPlanValidation(Syst.Var:gcBrand,
-                                {&YOIGO_USE_DISCOUNT}).
-                                 
-            fAddDiscountPlanMember(MobSub.MsSeq,
-                                   DiscountPlan.DPRuleID,
-                                   5.00,
-                                   ldaValidFrom,
-                                   ldaValidTo,
-                                   ?,
-                                   liOrderID).        
-              			   
-            /* logic to capture change credit card status yet to code */			
-	     END.
-	  
-	     WHEN 3 THEN DO: /* only apply use discount */
-	        fDiscPlanValidation(Syst.Var:gcBrand,
-                                   {&YOIGO_USE_DISCOUNT}).
-                                   
-               fAddDiscountPlanMember(MobSub.MsSeq,
-                                      DiscountPlan.DPRuleID,
-                                      5.00,
-                                      ldaValidFrom,
-                                      ldaValidTo,
-                                      ?,
-                                      liOrderID).           
+  
+      FIND FIRST lbMobSub NO-LOCK WHERE 
+                 lbMobSub.MsSeq EQ lbOrder.MsSeq NO-ERROR.
+
+      IF NOT AVAILABLE lbMobSub THEN DO:  
+
+         FIND FIRST lbTermMobSub NO-LOCK WHERE
+                    lbTermMobSub.MsSeq EQ lbOrder.MsSeq NO-ERROR.
+
+         IF AVAILABLE lbTermMobSub THEN DO:
+            ferror("Inactive Subscription").
+            NEXT.
          END.
-	  
-	     WHEN 4 THEN DO: 
-			fUpdateCreditCardStatus(Syst.Var:gcBrand,
-                                    "YOICARD",
-                                     MobSub.MsSeq,
-                                     /*ValidTo date */).	
-									
-            fDiscPlanValidation(Syst.Var:gcBrand,
-                                   {&YOIGO_ACTIVATION_DISCOUNT}).
+
+         fError("Invalid Mobile Subscription").
+         NEXT.
+
+      END.
+  
+      CASE liActivFlag:
+         WHEN 1 THEN     
+            fUpdateCreditCardStatus(lbMobSub.MsSeq,
+                                    OUTPUT lcYOICardLogMsg).           
+         WHEN 2 THEN DO: 
+            fUpdateCreditCardStatus(lbMobSub.MsSeq,
+                                    OUTPUT lcYOICardLogMsg). 
                                    
-            fAddDiscountPlanMember(MobSub.MsSeq,
-                                   DiscountPlan.DPRuleID,
-                                   25.00,
-                                   ldaValidFrom,
-                                   ldaValidTo,
-                                   ?,
-                                   liOrderID).       
-               		
-			/* logic to capture change credit card status yet to code */
-	     END.  
-	      
+            fApplyYOICardDiscount(lbMobSub.MsSeq,
+                                  {&YOIGO_USE_DISCOUNT},
+                                  TODAY,  
+                                  lbOrder.OrderId, 
+                                  OUTPUT lcDiscLogMsg).  
+         END.
+         WHEN 3 THEN 
+            fApplyYOICardDiscount(lbMobSub.MsSeq,
+                                  {&YOIGO_USE_DISCOUNT},
+                                  TODAY,  
+                                  lbOrder.OrderId, 
+                                  OUTPUT lcDiscLogMsg).  
+         WHEN 4 THEN DO: 
+            fUpdateCreditCardStatus(lbMobSub.MsSeq,
+                                    OUTPUT lcYOICardLogMsg). 
+
+            fApplyYOICardDiscount(lbMobSub.MsSeq,
+                                  {&YOIGO_ACTIVATION_DISCOUNT},
+                                  TODAY,  
+                                  lbOrder.OrderId, 
+                                  OUTPUT lcDiscLogMsg).  
+         END.  
+         OTHERWISE .
+      END CASE.
+
+      fLogLine(lcYOICardLogMsg + lcSep + lcDiscLogMsg).
+  
+      RUN pSendSMS(lbMobSub.MsSeq,
+                   0,
+                   {&YOICARD_SMS_KEYVALUE},
+                   {&SMSTYPE_INFO},
+                   {&YOICARD_SMS_SENDER},
+                   "").   
+
    END. /* REPEAT TRANSACTION */ 
-     	 
+
 END PROCEDURE.
 
-/* to send SMS to MM
-   RUN pSendSMS(INPUT MsOwner.MsSeq, 
-                INPUT 0, 
-				INPUT lcSMSName,
-                INPUT 10, 
-				INPUT {&UPSELL_SMS_SENDER}, 
-				INPUT "").
-*/					  
