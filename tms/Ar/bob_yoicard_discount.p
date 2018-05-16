@@ -137,7 +137,7 @@ FUNCTION fApplyYOICardDiscount RETURNS LOGICAL
              lbDPRate.ValidFrom <= idtFromDate         AND
              lbDPRate.ValidTo   >= idtFromDate:
 
-       fCloseDiscount(lbDiscountPlan.DPRuleID,
+      fCloseDiscount(lbDiscountPlan.DPRuleID,
                      iiMsSeq,
                      idtFromDate - 1,
                      NO).
