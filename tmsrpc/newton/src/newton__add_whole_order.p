@@ -2139,11 +2139,7 @@ IF AVAIL AddLineDiscountPlan THEN DO:
 END.
 
 IF lcFixedLinePermanency > "" THEN DO:
-   fCreateOrderAction(Order.Orderid,
-                      "FixedPermanency",
-                      lcFixedLinePermanency,
-                      "").
-   /* NEBA */
+   /* NEBA / Wish is that WEB would tell both exactly in future */
    IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
       IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
          lcAddFTERM = "FTERM12-110".
@@ -2153,11 +2149,24 @@ IF lcFixedLinePermanency > "" THEN DO:
          lcAddFTERM = "FTERM12-243".
       ELSE lcAddFTERM = "".
 
-      IF lcAddFTERM NE "" THEN
-         fCreateOrderAction(Order.Orderid,
-                            "FixedPermanency",
-                            lcAddFTERM,
-                            "").
+      IF lcAddFTERM NE "" THEN /* Create FTERM */
+        fCreateOrderAction(Order.Orderid,
+                           "FixedPermanency",
+                           lcAddFTERM,
+                           "").
+      /* Entry for NEBTERM penalty */
+      fCreateOrderAction(Order.Orderid,
+                         "NebaPenalty",
+                         lcFixedLinePermanency,
+                         "").
+
+   END.
+   ELSE DO:
+      /* Normal Fixed Line Contract */
+      fCreateOrderAction(Order.Orderid,
+                         "FixedPermanency",
+                         lcFixedLinePermanency,
+                         "").
    END.
 END.
 
