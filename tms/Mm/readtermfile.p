@@ -8,6 +8,8 @@
 {Func/fsubstermreq.i}
 {Func/msisdn_prefix.i}
 {Func/add_lines_request.i}
+{Func/fmakemsreq.i}
+
 
 DEF INPUT  PARAMETER icFile      AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icLogFile   AS CHAR NO-UNDO.
@@ -27,6 +29,9 @@ DEF VAR liTermTime       AS INT  NO-UNDO.
 DEF VAR liMaxDates       AS INT  NO-UNDO.
 DEF VAR lcMemoTitle      AS CHAR NO-UNDO.
 DEF VAR lcMemoTxt        AS CHAR NO-UNDO.
+DEF VAR lcTerminationType AS CHAR NO-UNDO.
+DEF VAR lcTermType       AS CHAR NO-UNDO.
+DEF VAR lcNewCliType     AS CHAR NO-UNDO.
 DEF VAR lcSep            AS CHAR NO-UNDO INIT "|".
 DEF VAR ldCurrent        AS DEC  NO-UNDO.
 DEF VAR lcSource         AS CHAR NO-UNDO.
@@ -111,6 +116,8 @@ REPEAT:
       lcTermTime  = ENTRY(7,lcLine,lcSep)
       lcMemoTitle = ENTRY(8,lcLine,lcSep)
       lcMemoTxt   = ENTRY(9,lcLine,lcSep) 
+      lcTerminationType  = ENTRY(10,lcLine,lcSep)
+      lcNewCliType = ENTRY(11,lcLine,lcSep)
       NO-ERROR.
       
    IF ERROR-STATUS:ERROR THEN DO:
@@ -230,47 +237,101 @@ REPEAT:
 
    ASSIGN lcOutOper   = "".
 
-   liRequest = fTerminationRequest(MobSub.MSSeq,
-                                   ldKillStamp,
-                                   liMSISDNStat,
-                                   liSIMStat, 
-                                   liQuarantine,
-                                   INTEGER(llPenalty),
-                                   lcOutOper,
-                                   lcReason,   /* reason */
-                                   "5",        /* source */
-                                   "",         /* creator */
-                                   0,          /* father request */
-                                   {&TERMINATION_TYPE_FULL},
-                                   OUTPUT lcError).
-    
-   IF liRequest = 0 THEN DO:
-      fError("Creation of termination request failed; " + lcError).
-      NEXT.
-   END.
-         
-   fAdditionalLineSTC(liRequest,
-                      Func.Common:mMake2DT(ldtTermDate + 1, 0),
-                      "DELETE").
+   /* Check lcTermType IF FULL or Empty -> {&TERMINATION_TYPE_FULL} */
+   lcTermType = fCheckTerminationType(lcTerminationType).
 
-   /* Do not create memos for preactivated dummy customer */ 
-   IF lcMemoTxt > "" AND MobSub.Custnum NE 233718 THEN DO:
-      CREATE Memo.
-      ASSIGN 
-         Memo.Brand     = Syst.Var:gcBrand
-         Memo.HostTable = "Customer"
-         Memo.KeyValue  = STRING(MobSub.CustNum)
-         Memo.CustNum   = MobSub.CustNum
-         Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = Syst.Var:katun 
-         Memo.MemoTitle = lcMemoTitle
-         Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) + 
-                          ", MSISDN " + lcCLI + 
-                          ", request " + STRING(liRequest) + CHR(10) + 
-                          lcMemoTxt
-         Memo.CreStamp  = ldCurrent.
-   END.
+   IF lcTermType = {&TERMINATION_TYPE_FULL} THEN DO:
+    
+      liRequest = fTerminationRequest(MobSub.MSSeq,
+                                      ldKillStamp,
+                                      liMSISDNStat,
+                                      liSIMStat, 
+                                      liQuarantine,
+                                      INTEGER(llPenalty),
+                                      lcOutOper,
+                                      lcReason,   /* reason */
+                                      "5",        /* source */
+                                      "",         /* creator */
+                                      0,          /* father request */
+                                      {&TERMINATION_TYPE_FULL},
+                                      OUTPUT lcError).
+       
+      IF liRequest = 0 THEN DO:
+         fError("Creation of termination request failed; " + lcError).
+         NEXT.
+      END.
+            
+      fAdditionalLineSTC(liRequest,
+                         Func.Common:mMake2DT(ldtTermDate + 1, 0),
+                         "DELETE").
    
+      /* Do not create memos for preactivated dummy customer */ 
+      IF lcMemoTxt > "" AND MobSub.Custnum NE 233718 THEN DO:
+         CREATE Memo.
+         ASSIGN 
+            Memo.Brand     = Syst.Var:gcBrand
+            Memo.HostTable = "Customer"
+            Memo.KeyValue  = STRING(MobSub.CustNum)
+            Memo.CustNum   = MobSub.CustNum
+            Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+            Memo.CreUser   = Syst.Var:katun 
+            Memo.MemoTitle = lcMemoTitle
+            Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) + 
+                             ", MSISDN " + lcCLI + 
+                             ", request " + STRING(liRequest) + CHR(10) + 
+                             lcMemoTxt
+            Memo.CreStamp  = ldCurrent.
+      END.
+   END.
+
+   IF lcTermType = {&TERMINATION_TYPE_PARTIAL} THEN DO:   
+
+      IF fIsFixedOnly(lcCLIType) THEN DO:
+         fError("Invalid CLIType (FIXED) for partial termination, CLIType: " + lcCLIType).
+         NEXT.
+      END.
+
+      IF fIsMobileOnly(lcCLIType) THEN DO:
+         fError("Invalid CLIType (MOBILE) for partial termination, CLIType: " + lcCLIType).
+         NEXT.
+      END.
+
+      IF fIsConvergenceTariff(lcCLIType) THEN DO.
+         /* Jos convergent liittymä */
+         IF lcTerminationType EQ "MOBILE" THEN DO:
+            liRequest = fTerminationRequest(MobSub.MSSeq,
+                                            ldKillStamp,
+                                            liMSISDNStat,
+                                            liSIMStat, 
+                                            liQuarantine,
+                                            INTEGER(llPenalty),
+                                            lcOutOper,
+                                            lcReason,   /* reason */
+                                            "5",        /* source */
+                                            "",         /* creator */
+                                            0,          /* father request */
+                                            {&TERMINATION_TYPE_PARTIAL},
+                                            OUTPUT lcError).                                                  
+       
+            IF liRequest = 0 THEN DO:
+               fError("Creation of termination request failed; " + lcError).
+               NEXT.
+            END.
+         END.
+
+         liRequest = fConvFixedSTCReq(lcNewCliType,
+                                      MobSub.MsSeq,
+                                      ldKillStamp,
+                                      {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                                      liRequest).
+      
+         IF liRequest = 0 THEN DO:
+            fError("STC Request creation failed: " +  lcError).
+            NEXT.
+         END.
+      END.
+   END.
+
 END.
 
 
