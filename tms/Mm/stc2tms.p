@@ -2442,7 +2442,7 @@ PROCEDURE pMultiSimSTC:
           MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
           LOOKUP(STRING(MsRequest.ReqStatus),
                  {&REQ_INACTIVE_STATUSES}) = 0) AND
-      NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
+      NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
 
       fTermAdditionalSim(lbMobSub.Msseq,
                          lbMobSub.CLI,
