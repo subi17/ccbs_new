@@ -128,6 +128,15 @@ FUNCTION fApplyYOICardDiscount RETURNS LOGICAL
    DEFINE BUFFER lbDiscountPlan FOR DiscountPlan.
    DEFINE BUFFER lbDPRate       FOR DPRate.
 
+   IF NOT CAN-FIND(FIRST lbDiscountPlan NO-LOCK WHERE
+                         lbDiscountPlan.Brand    EQ Syst.Var:gcBrand AND
+                         lbDiscountPlan.DPRuleID EQ lcYOICardDisc    AND
+                         lbDiscountPlan.ValidTo  >= idtFromDate)     THEN
+   DO:
+      fError("ERROR:Discount config not available").
+      RETURN FALSE.
+   END.                      
+
    FOR FIRST lbDiscountPlan NO-LOCK WHERE
              lbDiscountPlan.Brand    EQ Syst.Var:gcBrand AND
              lbDiscountPlan.DPRuleID EQ lcYOICardDisc    AND
@@ -313,13 +322,14 @@ PROCEDURE pUpdateYOICardStatusAndDiscount:
       END CASE.
 
       fLogLine(lcYOICardLogMsg + lcSep + lcDiscLogMsg).
-  
-      RUN pSendSMS(lbMobSub.MsSeq,
-                   0,
-                   {&YOICARD_SMS_KEYVALUE},
-                   {&SMSTYPE_INFO},
-                   {&YOICARD_SMS_SENDER},
-                   "").   
+
+      IF lcDiscLogMsg > "" THEN 
+         RUN pSendSMS(lbMobSub.MsSeq,
+                      0,
+                      {&YOICARD_SMS_KEYVALUE},
+                      {&SMSTYPE_INFO},
+                      {&YOICARD_SMS_SENDER},
+                      "").   
 
    END. /* REPEAT TRANSACTION */ 
 
