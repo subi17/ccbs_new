@@ -22,7 +22,7 @@ CLASS Gwy.PriceListModel IMPLEMENTS Gwy.ModelInterface:
         FIELD name          AS CHAR
         FIELD currency      AS CHAR INIT ?
         FIELD currency_unit AS CHAR
-        FIELD tax_included  AS CHAR INIT ?
+        FIELD tax_included  AS LOG  INIT ?
         FIELD rounding      AS INT  INIT ?.
    
     DEFINE DATASET PriceListDataSet FOR ttPriceList.    
@@ -71,12 +71,12 @@ METHOD PUBLIC LOG create():
    CREATE PriceList.
     ASSIGN 
         PriceList.Brand     = gcBrand
-        PriceList.PriceList = ttPriceList.external_id
+        PriceList.PriceList = ttPriceList.external_id   
         PriceList.PLName    = ttPriceList.name
         PriceList.Currency  = ttPriceList.currency
         PriceList.CurrUnit  = (ttPriceList.currency_unit = "full") 
                                   WHEN ttPriceList.currency_unit > "" 
-        PriceList.InclVat   = (LOOKUP(ttPriceList.tax_included,{&BOOLEAN_TRUE}) > 0)
+        PriceList.InclVat   = ttPriceList.tax_included
         PriceList.Rounding  = ttPriceList.rounding.
 
    loEventLogMaker:make_eventlog("create",BUFFER PriceList:HANDLE).
@@ -144,9 +144,9 @@ METHOD PUBLIC LOG update():
                                  WHEN ttPriceList.name > ""
         PriceList.Currency = ttPriceList.currency 
                                  WHEN ttPriceList.currency NE ?
-        PriceList.CurrUnit = (ttPriceList.currency_unit = "full") 
-                                 WHEN ttPriceList.currency_unit > "" 
-        PriceList.InclVat  = (LOOKUP(ttPriceList.tax_included,{&BOOLEAN_TRUE}) > 0) 
+   /*     PriceList.CurrUnit = (ttPriceList.currency_unit = "full") 
+                                 WHEN ttPriceList.currency_unit > ""  */
+        PriceList.InclVat  = ttPriceList.tax_included 
                                  WHEN ttPriceList.tax_included NE ?
         PriceList.Rounding = ttPriceList.rounding 
                                  WHEN ttPriceList.rounding NE ?.
@@ -191,11 +191,6 @@ METHOD PUBLIC CHAR validate_pricelist(ilCreate AS LOG):
    IF LOOKUP(ttPriceList.currency_unit,",full,sub") = 0 THEN 
       RETURN "Invalid currency unit".
       
-   IF (ilCreate OR ttPriceList.tax_included > "") AND
-      LOOKUP(ttPriceList.tax_included,{&BOOLEAN_TRUE}) = 0 AND
-      LOOKUP(ttPriceList.tax_included,{&BOOLEAN_FALSE}) = 0 THEN 
-         RETURN "Invalid tax included value".
-         
    IF ttPriceList.rounding > 6 THEN 
       RETURN "Invalid rounding value".
  

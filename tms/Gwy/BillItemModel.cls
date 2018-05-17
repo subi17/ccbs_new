@@ -2,6 +2,9 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
+&GLOBAL-DEFINE CONFIG_ID_MAX 32
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
+
 {Syst/tmsconst.i}
 
 CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
@@ -22,9 +25,9 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
         FIELD invoice_section    AS CHAR
         FIELD display_order      AS INT
         FIELD billing_item_group AS CHAR
-        FIELD tax_class          AS CHAR
-        FIELD debt_type          AS CHAR
-        FIELD profit_type        AS CHAR.
+        FIELD tax_class          AS CHAR 
+        FIELD debt_type          AS CHAR  
+        FIELD profit_type        AS CHAR. 
 
     {Gwy/RepText_definition.i}
   
@@ -61,7 +64,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
         IF ttBillItem.external_id = "" THEN 
             RETURN loRequestMaker:logError("Invalid BillItem ID").
 
-        IF LENGTH(ttBillItem.external_id) > "{&CONFIG_ID_MAX}" THEN 
+        IF LENGTH(ttBillItem.external_id) > {&CONFIG_ID_MAX} THEN 
             RETURN loRequestMaker:logError("Max length for ID is {&CONFIG_ID_MAX} characters").
          
         IF CAN-FIND(FIRST BillItem WHERE 
@@ -87,9 +90,9 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
             BillItem.BIName   = ttBillItem.name
             BillItem.InvSect  = ttBillItem.invoice_section
             BillItem.BIGroup  = ttBillItem.billing_item_group
-            BillItem.TaxClass = ttBillItem.tax_class
-            BillItem.DebtType = ttBillItem.debt_type
-            BillItem.BillType = ttBillItem.profit_type.
+            BillItem.TaxClass = ttBillItem.tax_class.
+     //       BillItem.DebtType = ttBillItem.debt_type
+       //     BillItem.BillType = ttBillItem.profit_type.
 
         loEventLogMaker:make_eventlog("create",BUFFER BillItem:HANDLE).
 
@@ -103,11 +106,10 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
         RELEASE BillItem.
 
         /* error cases get response via logError, make response for the succesful one */
-        IF lcCorrelationID > "" THEN
-            loRequestMaker:create_response("BillItem",
-                                            ttBillItem.external_id,
-                                            "OK",
-                                            ""). 
+        loRequestMaker:create_response("BillItem",
+                                        ttBillItem.external_id,
+                                        "OK",
+                                        ""). 
 
         loRequestMaker:create_log(SUBSTITUTE("BillItem create: Id=&1 Ext.Request=&2", 
                                   ttBillItem.external_id,
@@ -138,7 +140,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
             IF LOCKED(BillItem) THEN 
             DO:
                 liWait = liWait + 1.
-                IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
+                IF liWait > {&WAIT_CONFIG_LOCK} THEN 
                     RETURN loRequestMaker:logError("Billing item was not available for update").
                 PAUSE 1 NO-MESSAGE. 
                 NEXT. 
@@ -170,10 +172,10 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
             BillItem.BIGroup = ttBillItem.billing_item_group.
         IF ttBillItem.tax_class > "" THEN    
             BillItem.TaxClass = ttBillItem.tax_class.
-        IF ttBillItem.debt_type > "" THEN    
+     /*   IF ttBillItem.debt_type > "" THEN    
             BillItem.DebtType = ttBillItem.debt_type.
         IF ttBillItem.profit_type > "" THEN 
-            BillItem.BillType = ttBillItem.profit_type.
+            BillItem.BillType = ttBillItem.profit_type.*/
    
         loEventLogMaker:make_eventlog("modify",BUFFER BillItem:HANDLE).
 
@@ -187,11 +189,10 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
         RELEASE BillItem.
 
         /* error cases get response via logError, make response for the succesful one */
-        IF lcCorrelationID > "" THEN
-            loRequestMaker:create_response("BillItem",
-                                            lcModelid,
-                                            "OK",
-                                            ""). 
+        loRequestMaker:create_response("BillItem",
+                                        lcModelid,
+                                        "OK",
+                                        ""). 
 
         loRequestMaker:create_log(SUBSTITUTE("BillItem update: Id=&1 Ext.Request=&2", 
                                   lcModelid,
@@ -215,13 +216,13 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
             NOT CAN-FIND(FIRST TaxClass WHERE 
                                TaxClass.TaxClass = ttBillItem.tax_class) THEN
             RETURN "Invalid tax class".
-        IF ttBillItem.debt_type > "" AND 
+      /*  IF ttBillItem.debt_type > "" AND 
             NOT CAN-FIND(FIRST TMSCodes WHERE
                                TMSCodes.TableName = "BillItem" AND
                                TMSCodes.FieldName = "DebtType" AND
                                TMSCodes.CodeValue = ttBillItem.debt_type AND
                                TMSCodes.InUse > 0) THEN 
-            RETURN "Invalid debt type". 
+            RETURN "Invalid debt type". */
       
         RETURN "".    
     
@@ -229,10 +230,9 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
     
     METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
         CASE icAction:
-            WHEN "update_other" THEN 
-                process_other_update().
+            WHEN "update_other" THEN process_other_update().
             OTHERWISE 
-                RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
+            RETURN loRequestMaker:logError(SUBST("Unknown action &1",icAction)).
         END CASE.
     END METHOD.
 

@@ -16,7 +16,7 @@ CLASS Gwy.RequestMaker:
    DEF VAR lcSource   AS CHAR NO-UNDO.
    
    CONSTRUCTOR PUBLIC RequestMaker ():
-   END CONSTRUCTOR.
+   END CONSTRUCTOR.    
 
    CONSTRUCTOR PUBLIC RequestMaker (iCorrelationID AS CHAR,
                                     iReplyTo AS CHAR,
@@ -31,7 +31,7 @@ CLASS Gwy.RequestMaker:
       RETURN lcReplyTo.
    END METHOD.
 
-   &IF "{&ENVIRONMENT}" <> "MASMOVIL" &THEN 
+   &IF {&ENVIRONMENT} <> "MASMOVIL" &THEN 
    METHOD PUBLIC CHAR get_external_id(iType AS CHAR, iInternalID AS CHAR):
 
       FIND FIRST ExternalID NO-LOCK
@@ -317,6 +317,8 @@ CLASS Gwy.RequestMaker:
       icResult    AS CHAR,
       icMessage   AS CHAR):
 
+      &IF {&MQ_BASED} 
+      &THEN 
       CREATE AckMessage.
       ASSIGN 
          AckMessage.HostTable = icTableName
@@ -328,10 +330,12 @@ CLASS Gwy.RequestMaker:
          AckMessage.AckResult = icResult
          AckMessage.ResultDescription = icMessage.
       RELEASE AckMessage.
+      &ENDIF
    
    END METHOD.
 
    METHOD PUBLIC LOG logError ( iError AS CHAR ):
+       MESSAGE iError VIEW-AS ALERT-BOX.
       UNDO, THROW NEW Progress.Lang.AppError(iError, 80000).
    END METHOD.
       
@@ -345,8 +349,9 @@ CLASS Gwy.RequestMaker:
       DEF VAR lcc AS CHAR NO-UNDO.
       DEF VAR lii AS INT NO-UNDO.
       DEF VAR lReturn AS LOG NO-UNDO.
-
+      
       lReturn = iParser:READ-JSON("LONGCHAR", iJson, "EMPTY") NO-ERROR.
+      
       IF lReturn THEN
          RETURN FALSE.
       DO lii = 1 TO ERROR-STATUS:NUM-MESSAGES:
@@ -360,6 +365,7 @@ CLASS Gwy.RequestMaker:
          lError = lError + lcc + "~n".
       END.
       logError(TRIM(lError)).
+      
       RETURN TRUE.
    END METHOD.
 

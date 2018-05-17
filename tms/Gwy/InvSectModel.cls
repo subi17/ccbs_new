@@ -2,7 +2,11 @@ USING Gwy.ModelInterface.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-{&Syst/tmsconst.i}
+&GLOBAL-DEFINE CONFIG_ID_MAX 32
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
+&GLOBAL-DEFINE BOOLEAN_TRUE true 
+
+//{Syst/tmsconst.i}
 
 CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
 
@@ -20,7 +24,7 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
         FIELD name        AS CHAR 
         FIELD is_printed  AS LOG.
 
-    {Gwy/RepText_definition.i} 
+    {Gwy/RepText_definition.i}    
 
     DEFINE DATASET InvSectDataSet FOR ttInvSect,ttRepText 
         PARENT-ID-RELATION idparent FOR ttInvSect,ttRepText
@@ -49,18 +53,12 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
     END CONSTRUCTOR.
 
     METHOD PUBLIC LOG create(): 
-        MESSAGE "invoice class create block start" VIEW-AS ALERT-BOX.
-    
-        lJson = '~{"InvSectDataSet":~{"InvSect":' + lJson + '~}~}'.
+        lJson = '~{"InvSectDataSet":~{"InvSect":~[' + lJson + '~]~}~}'.
         
-        MESSAGE "invoice class 1 "  VIEW-AS ALERT-BOX.
         IF loRequestMaker:parser_error(DATASET InvSectDataset BIND, lJson) THEN
             DO:
-            //RETURN FALSE.
-                MESSAGE "parser error has got"
-                VIEW-AS ALERT-BOX.
+                RETURN FALSE.
             END.
-        MESSAGE "invoice class 2 "  VIEW-AS ALERT-BOX.   
         FIND ttInvSect NO-ERROR.
         IF NOT AVAILABLE ttInvSect THEN
             RETURN loRequestMaker:logError("Empty InvSect set").
@@ -71,52 +69,26 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
         IF (LENGTH(ttInvSect.external_id) > {&CONFIG_ID_MAX}) THEN 
             RETURN loRequestMaker:logError("Max length for ID is {&CONFIG_ID_MAX} characters").
          
-      /*  IF CAN-FIND(FIRST InvSect WHERE 
+        IF CAN-FIND(FIRST InvSect WHERE 
                           InvSect.Brand = gcBrand AND
                           InvSect.InvSect = ttInvSect.external_id) THEN 
-            RETURN loRequestMaker:logError("InvSect already exists").*/
-        MESSAGE "invsec table checkings done"
-        VIEW-AS ALERT-BOX.
+            RETURN loRequestMaker:logError("InvSect already exists").
         lcError = loRepTextMaker:validate_reptext(TABLE ttRepText BIND,
                                                   8,
                                                   ttInvSect.external_id,
                                                   RECID(ttInvSect)).
                                             
-        MESSAGE lcError "after validate_reptext"
-        VIEW-AS ALERT-BOX.                                                  
         IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
         
-        message "is_printed" ttInvSect.is_printed view-as alert-box.  
-        /*
-        FOR EACH ttInvSect:
-            DISP ttInvSect.
-        END. 
-        FOR EACH ttRepText:
-            DISP ttReptext.
-        END.*/    
-    
         CREATE InvSect.
-        MESSAGE "create started for invsect"
-        VIEW-AS ALERT-BOX.
         ASSIGN 
-               InvSect.Brand     = gcBrand .
-               MESSAGE "brand stored"
-               VIEW-AS ALERT-BOX.
-               
-               InvSect.InvSect   = ttInvSect.external_id.
-               MESSAGE "external_id stored"
-               VIEW-AS ALERT-BOX. 
-               InvSect.ISName    = ttInvSect.name.
-               MESSAGE "name stored"
-               VIEW-AS ALERT-BOX. 
+               InvSect.Brand     = gcBrand 
+               InvSect.InvSect   = ttInvSect.external_id
+               InvSect.ISName    = ttInvSect.name
                InvSect.PrintHead = ttInvSect.is_printed.
-               MESSAGE "print stored"
-               VIEW-AS ALERT-BOX.
             
        loEventLogMaker:make_eventlog("create",BUFFER InvSect:HANDLE).
-        MESSAGE "created log"
-        VIEW-AS ALERT-BOX.
-        lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
+       lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
                                                 8,
                                                 InvSect.InvSect,
                                                 RECID(ttInvSect)). 
@@ -132,20 +104,10 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
                                         ttInvSect.external_id,
                                         "OK",
                                         "").
-MESSAGE "after create response" vIEW-AS ALERT-BOX.                                         
-MESSAGE "before create log"
-VIEW-AS ALERT-BOX.
-      /*  loRequestMaker:create_log(
-            SUBSTITUTE("InvSect create: Id=&1 Ext.Request=&2", 
-                        ttInvSect.external_id,
-                        lcCorrelationID), 
-                        "DEBUG").*/
- MESSAGE "after create log"
- VIEW-AS ALERT-BOX.
-        CATCH err AS Progress.Lang.Error :
-            MESSAGE "Error in create : " err:GetMessage(1) 
-            VIEW-AS ALERT-BOX.        		
-        END CATCH.
+        loRequestMaker:create_log(SUBSTITUTE("InvSect create: Id=&1 Ext.Request=&2", 
+                                              ttInvSect.external_id,
+                                              lcCorrelationID), 
+                                              "DEBUG").
     END METHOD.
 
     METHOD PUBLIC LOG update():
@@ -155,7 +117,7 @@ VIEW-AS ALERT-BOX.
         IF lcModelid = ? THEN 
             RETURN loRequestMaker:logError('InvSect ID not given').
 
-        lJson = '~{"InvSectDataSet":~{"InvSect":' + lJson + '~}~}'.
+        lJson = '~{"InvSectDataSet":~{"InvSect":[' + lJson + ']~}~}'.
         IF loRequestMaker:parser_error(DATASET InvSectDataset BIND, lJson) THEN
             RETURN FALSE.
    

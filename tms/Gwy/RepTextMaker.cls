@@ -1,6 +1,7 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-{Syst/tmsconst.i}
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
+&GLOBAL-DEFINE CONFIG_ID_MAX 32
 
 CLASS Gwy.RepTextMaker:
 
@@ -42,26 +43,35 @@ METHOD PUBLIC CHAR validate_reptext
    REPEAT:
       lhFind:GET-NEXT.
       IF lhFind:QUERY-OFF-END THEN LEAVE.
-
+      MESSAGE lhText::valid_from lhText::valid_to
+      VIEW-AS ALERT-BOX.
       ASSIGN 
          lhText::rt_validfrom = loRequestMaker:make_date(
                                    loRequestMaker:make_timestamp(lhText::valid_from))
          lhText::rt_validto  = loRequestMaker:make_date(
                                    loRequestMaker:make_timestamp(lhText::valid_to))
          NO-ERROR.
+       MESSAGE lhText::rt_validfrom lhText::rt_validto
+           VIEW-AS ALERT-BOX.
+  
       IF lhText::rt_validfrom = ? OR lhText::rt_validto = ? THEN DO:
          lcResult = "Invalid commercial name period". 
          LEAVE.
-      END.
-         
-      FIND FIRST Language WHERE 
-         Language.LanguageCode = lhText::language NO-LOCK NO-ERROR.
-      IF AVAILABLE Language THEN lhText::rt_language = Language.Language.
-      ELSE DO:
-         lcResult = "Invalid commercial name language". 
-         LEAVE.
-      END.
-
+      END. 
+      
+           
+        FIND FIRST Language WHERE 
+           Language.LanguageCode = lhText::language NO-LOCK NO-ERROR.
+        IF AVAILABLE Language THEN lhText::rt_language = Language.Language.
+        ELSE DO:
+           lcResult = "Invalid commercial name language". 
+           LEAVE.
+        END.
+  MESSAGE lhText::language
+  VIEW-AS ALERT-BOX.
+  MESSAGE lhText::rt_language
+  VIEW-AS ALERT-BOX.
+   //    lhText::rt_language = INT(lhText::language).
       IF CAN-FIND(FIRST RepText WHERE
                         RepText.Brand    = gcBrand AND
                         RepText.TextType = iiTextType AND
@@ -82,8 +92,8 @@ METHOD PUBLIC CHAR validate_reptext
                         RepText.ToDate   = lhText::rt_validto AND
                         RepText.FromDate NE lhText::rt_validfrom) THEN DO:
          lcResult = "Commercial name period end date is already in use".
-         LEAVE.
-      END.
+         LEAVE. 
+      END. 
    END.
 
    lhFind:QUERY-CLOSE.
@@ -166,7 +176,7 @@ METHOD PUBLIC CHAR update_reptext
             RepText.Brand    = gcBrand 
             RepText.TextType = iiTextType
             RepText.LinkCode = icLinkCode
-            RepText.Language = lhText::rt_language
+            RepText.Language = lhText::rt_language 
             RepText.FromDate = lhText::rt_validfrom
             RepText.ToDate   = lhText::rt_validto
             RepText.RepText  = lhText::comm_name.

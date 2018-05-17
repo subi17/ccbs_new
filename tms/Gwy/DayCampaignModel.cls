@@ -2,7 +2,8 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
-{Syst/tmsconst.i}
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
+&GLOBAL-DEFINE CONFIG_ID_MAX 32
 
 CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
 
@@ -261,8 +262,8 @@ METHOD PUBLIC CHAR validate_daycampaign
    
    IF (liCreate OR ttDayCampaign.category > "") THEN DO:
        ttDayCampaign.dc_category = INT(loCommon:mTMSCodeValue("DayCampaign",
-                                                       "BundleTarget",
-                                                       ttDayCampaign.category)).
+                                                              "BundleTarget",
+                                                              ttDayCampaign.category)). 
       IF ttDayCampaign.dc_category = 0 THEN RETURN "Invalid category". 
    END.                                                 
    
@@ -416,15 +417,14 @@ METHOD PUBLIC CHAR update_daycampaign():
       DayCampaign.DurType        = ttDayCampaign.dc_durationtype
                                       WHEN ttDayCampaign.dc_durationtype NE ?
       DayCampaign.DurMonths      = ttDayCampaign.duration 
-                                      WHEN ttDayCampaign.duration NE ?
-      DayCampaign.DurUnit        = ttDayCampaign.dc_durationunit   
-                                      WHEN ttDayCampaign.dc_durationunit NE ?
-      DayCampaign.FeeModel       = ttDayCampaign.fee_id 
-                                      WHEN ttDayCampaign.fee_id NE ?
-      DayCampaign.TermFeeCalc    = ttDayCampaign.dc_penalty_fee_calc_method
-                                      WHEN ttDayCampaign.dc_penalty_fee_calc_method NE ?.
-                                 
- 
+                                      WHEN ttDayCampaign.duration NE ?.
+      IF ttDayCampaign.dc_durationunit NE ? THEN 
+          DayCampaign.DurUnit        = ttDayCampaign.dc_durationunit.
+      IF ttDayCampaign.fee_id NE ? THEN 
+          DayCampaign.FeeModel       = ttDayCampaign.fee_id.
+      IF ttDayCampaign.dc_penalty_fee_calc_method NE ? THEN 
+          DayCampaign.TermFeeCalc    = ttDayCampaign.dc_penalty_fee_calc_method.
+       
 END METHOD.
 
 DESTRUCTOR PUBLIC DayCampaignModel ():
