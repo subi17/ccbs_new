@@ -61,11 +61,11 @@ DEFINE BUFFER lbTermMobSub FOR TermMobSub.
 /* ***************************  Main Block  *************************** */
 
 ASSIGN
-   lcIncDir     = fCParam("Charges","IncDir")
-   lcProcessDir = fCParam("Charges","IncProcessDir")
-   lcProcDir    = fCParam("Charges","IncProcDir")
-   lcSpoolDir   = fCParam("Charges","OutSpoolDir")
-   lcOutDir     = fCParam("Charges","OutDir").
+   lcIncDir     = fCParam("YOICard","IncDir")
+   lcProcessDir = fCParam("YOICard","IncProcessDir")
+   lcProcDir    = fCParam("YOICard","IncProcDir")
+   lcSpoolDir   = fCParam("YOICard","OutSpoolDir")
+   lcOutDir     = fCParam("YOICard","OutDir").
 
 FUNCTION fLogLine RETURNS LOGIC
    (icMessage AS CHAR):
