@@ -1,5 +1,17 @@
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/create_eventlog.i}  
 
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
+{Func/lib/eventlog.i}   
+
+DEFINE VARIABLE lhDayCampaign   AS HANDLE NO-UNDO.
+   
+lhDayCampaign  = BUFFER DayCampaign:HANDLE.
+
+RUN StarEventInitialize(lhDayCampaign).
 
 FIND FIRST DayCampaign NO-LOCK WHERE 
            DayCampaign.Brand   EQ "1" AND
@@ -40,5 +52,17 @@ IF NOT AVAILABLE DayCampaign THEN DO:
       DayCampaign.BundleUpsell    = ""         
       DayCampaign.DSSPriority     = 0           
       DayCampaign.PayType         = 0            
-      DayCampaign.BundleTarget    = 0. 
+      DayCampaign.BundleTarget    = 0.
+END.
        
+RUN StarEventMakeCreateEvent(lhDayCampaign).
+ 
+Syst.TMSRelation:mAddRelation("DCCLi",
+                              "SkipMatrix",
+                              "YOICARD",
+                              "YOICARD",
+                              "ChildValue",
+                               YES).
+ 
+ 
+ 

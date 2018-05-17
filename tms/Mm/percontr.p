@@ -566,15 +566,21 @@ PROCEDURE pContractActivation:
       IF bOrigRequest.ReqType = 0 THEN 
          lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
-
-   IF fMatrixAnalyse(Syst.Var:gcBrand,
-                     "PERCONTR",
-                     "PerContract;SubsTypeTo",
-                     lcDCEvent + ";" + lcUseCLIType,
-                     OUTPUT lcReqChar) NE 1 THEN DO:
-      fReqError("Contract is not allowed for this subscription type").
-      RETURN.
-   END.
+   
+   IF NOT CAN-FIND(FIRST TMSRelation WHERE 
+                     TMSRelation.TableName   = {&PERIODICAL_CONTRACT_TABLE} AND 
+                     TMSRelation.keyType     = {&KEY_SKIP_MATRIX}           AND 
+                     TMSRelation.ParentValue = lcDCEvent) 
+   THEN  
+       IF fMatrixAnalyse(Syst.Var:gcBrand,
+                         "PERCONTR",
+                         "PerContract;SubsTypeTo",
+                         lcDCEvent + ";" + lcUseCLIType,
+                         OUTPUT lcReqChar) NE 1
+       THEN DO: 
+           fReqError("Contract is not allowed for this subscription type").
+           RETURN.
+       END.
 
    RUN pIsBundleActivationAllowed(MsOwner.MsSeq,lcDCEvent) NO-ERROR.
    IF ERROR-STATUS:ERROR AND RETURN-VALUE <> "" THEN
@@ -1086,7 +1092,7 @@ PROCEDURE pContractActivation:
                        DPRate.ValidFrom <= TODAY AND
                        DPRate.ValidTo   >= TODAY NO-LOCK NO-ERROR.
             IF AVAILABLE DPrate THEN 
-               Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", STRING(DPRate.DiscValue) ).
+               Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", STRING(DPRate.DiscValue) + " %" ).
             ELSE 
                Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", '').
             FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
@@ -3591,15 +3597,20 @@ PROCEDURE pContractReactivation:
       RETURN.
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
-   IF fMatrixAnalyse(Syst.Var:gcBrand,
-                     "PERCONTR",
-                     "PerContract;SubsTypeTo",
-                     lcDCEvent + ";" + lcUseCLIType,
-                     OUTPUT lcReqChar) NE 1
-   THEN DO:
-      fReqError("Contract is not allowed for this subscription type").
-      RETURN.
-   END.
+   IF NOT CAN-FIND(FIRST TMSRelation WHERE 
+                     TMSRelation.TableName   = {&PERIODICAL_CONTRACT_TABLE} AND 
+                     TMSRelation.keyType     = {&KEY_SKIP_MATRIX}           AND 
+                     TMSRelation.ParentValue = lcDCEvent) 
+   THEN  
+       IF fMatrixAnalyse(Syst.Var:gcBrand,
+                         "PERCONTR",
+                         "PerContract;SubsTypeTo",
+                         lcDCEvent + ";" + lcUseCLIType,
+                         OUTPUT lcReqChar) NE 1
+       THEN DO: 
+           fReqError("Contract is not allowed for this subscription type").
+           RETURN.
+       END.
 
    /* predetermined length */  
    IF DayCampaign.DurType = 2 OR DayCampaign.DurType = 3 THEN DO:
