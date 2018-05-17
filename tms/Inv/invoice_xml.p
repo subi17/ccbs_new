@@ -623,7 +623,7 @@ PROCEDURE pInvoice2XML:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
          lhXML:INSERT-ATTRIBUTE("Header","AgileTV").
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(10)).
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
 
@@ -631,7 +631,7 @@ PROCEDURE pInvoice2XML:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
          lhXML:INSERT-ATTRIBUTE("Header","OtherConcepts").
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(20)).
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
        /* YDR-2848 end */
@@ -808,12 +808,12 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-         IF ttRow.RowType > "" AND
+         /* IF ttRow.RowType > "" AND
             ttRow.RowGroup EQ "46" THEN DO: /* Convergent uses CLI Type Name */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
          END.
-         ELSE
-            lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
+         ELSE */
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",ttSub.CTName /* ttRow.RowName */).
 
          /* Sum of different categories per subscription. YDR-2848 */
          IF ttRow.RowCode BEGINS "18" OR
@@ -937,7 +937,7 @@ PROCEDURE pSubInvoice2XML:
 
       /* The sum of amount due to bundles of data and data upsells. YDR-2848 */
       lhXML:START-ELEMENT("Bundles"). /* Bonos de Internet */
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttRow.RowAmtExclVat)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
       lhXML:END-ELEMENT("Bundles").
 
       /* The sum of the charges applied to the line. YDR-2848 */

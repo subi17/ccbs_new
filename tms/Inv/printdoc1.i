@@ -1290,6 +1290,10 @@ PROCEDURE pGetInvoiceRowData:
                   InvRow.BillCode BEGINS "RVTERM"
                THEN ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.               
             END.
+            /* YDR-2848 */
+            WHEN "35" THEN DO: /* Data bundle ??? */
+              /* TODO IF InvRow.xxx = yyy AND InvRow.Amt NE 0 THEN */
+            END.
          END CASE.
 
          IF InvRow.RowType EQ 9 AND
@@ -1340,7 +1344,7 @@ PROCEDURE pGetInvoiceRowData:
                       /* ttRow.RowName   = lcRowName AND */
                       (ttRow.RowGroup EQ "18" OR
                        ttRow.RowGroup EQ "46") NO-ERROR.
-            IF AVAIL ttRow AND ttRow.RowGroup EQ "18" THEN DO:
+            IF AVAIL ttRow AND ttRow.RowGroup EQ "46" THEN DO:
                ASSIGN /* Use 46 as defaulf for convergent tariff */
                   ttRow.RowCode  = STRING(ttBillItemAndGroup.BiGroup) + lcRowName
                   ttRow.RowGroup = ttBillItemAndGroup.BIGroup.
