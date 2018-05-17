@@ -6,7 +6,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 &GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
 &GLOBAL-DEFINE BOOLEAN_TRUE true 
 
-//{Syst/tmsconst.i}
+{Syst/tmsconst.i}
 
 CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
 
@@ -36,6 +36,7 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
                                       iSource  AS CHAR,
                                       iCorrelationID AS CHAR,
                                       iReplyTo AS CHAR):
+                                          
         ASSIGN
             gcBrand         = iBrand
             lJson           = iJson
@@ -56,9 +57,8 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
         lJson = '~{"InvSectDataSet":~{"InvSect":~[' + lJson + '~]~}~}'.
         
         IF loRequestMaker:parser_error(DATASET InvSectDataset BIND, lJson) THEN
-            DO:
-                RETURN FALSE.
-            END.
+            RETURN FALSE.
+
         FIND ttInvSect NO-ERROR.
         IF NOT AVAILABLE ttInvSect THEN
             RETURN loRequestMaker:logError("Empty InvSect set").
@@ -92,22 +92,27 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
                                                 8,
                                                 InvSect.InvSect,
                                                 RECID(ttInvSect)). 
-        IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
+       IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
      
-        RELEASE InvSect.
+       RELEASE InvSect.
 
-        /* error cases get response via logError, make response for 
-           the succesful one */
-           MESSAGE "before create  response"
-           VIEW-AS ALERT-BOX.
-        loRequestMaker:create_response("InvSect",
-                                        ttInvSect.external_id,
-                                        "OK",
-                                        "").
-        loRequestMaker:create_log(SUBSTITUTE("InvSect create: Id=&1 Ext.Request=&2", 
-                                              ttInvSect.external_id,
-                                              lcCorrelationID), 
-                                              "DEBUG").
+       /* error cases get response via logError, make response for 
+          the succesful one */
+       loRequestMaker:create_response("InvSect",
+                                      ttInvSect.external_id,
+                                      "OK",
+                                      "").
+       &IF {&MQ_BASED} 
+       &THEN                                
+       loRequestMaker:create_log(SUBSTITUTE("InvSect create: Id=&1 Ext.Request=&2", 
+                                            ttInvSect.external_id,
+                                            lcCorrelationID), 
+                                            "DEBUG").
+       &ENDIF
+       CATCH err AS Progress.Lang.Error :
+           MESSAGE "Error occured : " err:GetMessage(1) 
+               VIEW-AS ALERT-BOX.                  
+       END CATCH.
     END METHOD.
 
     METHOD PUBLIC LOG update():
@@ -117,7 +122,7 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
         IF lcModelid = ? THEN 
             RETURN loRequestMaker:logError('InvSect ID not given').
 
-        lJson = '~{"InvSectDataSet":~{"InvSect":[' + lJson + ']~}~}'.
+        lJson = '~{"InvSectDataSet":~{"InvSect":~[' + lJson + '~]~}~}'.
         IF loRequestMaker:parser_error(DATASET InvSectDataset BIND, lJson) THEN
             RETURN FALSE.
    
@@ -156,9 +161,7 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
         loEventLogMaker:make_eventlog("oldbuffer",BUFFER InvSect:HANDLE).
 
         IF ttInvSect.name > "" THEN InvSect.ISName = ttInvSect.name.
-     /*   IF ttInvSect.is_printed > "" THEN 
-            InvSect.PrintHead = (LOOKUP(ttInvSect.is_printed,{&BOOLEAN_TRUE}) ).
-   */
+   
         loEventLogMaker:make_eventlog("modify",BUFFER InvSect:HANDLE).
 
         lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
@@ -175,13 +178,14 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
                                         lcModelid,
                                         "OK",
                                         ""). 
-
+        &IF {&MQ_BASED} 
+        &THEN  
         loRequestMaker:create_log(
             SUBSTITUTE("InvSect update: Id=&1 Ext.Request=&2", 
                         lcModelid,
                         lcCorrelationID), 
                         "DEBUG").
-       
+       &ENDIF
     END METHOD.
 
     METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):

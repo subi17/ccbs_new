@@ -11,13 +11,13 @@ USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 USING Syst.Configuration.
 
-&GLOBAL MQ_BASED NO            
-&GLOBAL WAIT_CONFIG_LOCK 20.
+&GLOBAL-DEFINE MQ_BASED NO            
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
 
 CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
                      IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
                          
-    &IF {&MQ_BASED} = NO
+    &IF NOT {&MQ_BASED} 
     &THEN 
     DEFINE STREAM s-dir.
     DEFINE STREAM s-in.
@@ -34,7 +34,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    /*stomp protocol handler objects*/
    DEF VAR loStompConfig          AS dotr.Stomp.StompConfig   NO-UNDO.
    DEF VAR loStompClient          AS dotr.Stomp.StompClient   NO-UNDO.
-   DEF VAR loReaderHandler        AS PCListener               NO-UNDO.
+   DEF VAR loReaderHandler        AS Gwy.PCListener           NO-UNDO.
    /*waiting for */
    DEF VAR hpWaitForProcedure     AS HANDLE                   NO-UNDO.
    /*encodings settings*/  
@@ -59,7 +59,6 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
     DEF VAR lLogDir            AS CHAR        NO-UNDO INIT "../var/log/pc".
     DEF VAR lLogFileStartStamp AS DATETIME-TZ NO-UNDO.
    
-   DEF VAR lhFileParsing AS HANDLE NO-UNDO.
    DEF VAR lhTenantInfo  AS HANDLE NO-UNDO.
    
    DEF EVENT leTooManyErrors SIGNATURE VOID (  ).
@@ -89,19 +88,18 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       OS-CREATE-DIR VALUE("{&IMPORTDIR}/input").
       OS-CREATE-DIR VALUE("{&IMPORTDIR}/done").
       &ENDIF
-
+      
    END CONSTRUCTOR.
    
    METHOD PRIVATE VOID connect ():
       loStompClient     = NEW dotr.Stomp.StompClient(loStompConfig).
       loReaderHandler   = THIS-OBJECT.
-
       loStompClient:SUBSCRIBE(loReaderHandler).
       /*ATTENTION*/
       loStompClient:subscribeToQueueACK(lcQueueName,"client-individual").
       /*loStompClient:subscribeToQueueACK(lcQueueName).
       */
-      leTooManyErrors:SUBSCRIBE(tooManyErrors).
+      leTooManyErrors:SUBSCRIBE(tooManyErrors). 
    END METHOD.
    
    METHOD PRIVATE VOID config ():
@@ -111,11 +109,13 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       loStompConfig:LargeMessageSupport = NO.
    END METHOD.
    
-   METHOD PUBLIC LOG processOne ():
+   METHOD PUBLIC OVERRIDE LOG processOne ():
        
-      &IF {&MQ_BASED} = NO
+      &IF NOT {&MQ_BASED} 
       &THEN  
+      DO:
       processOneFileImport().
+      END.
       &ELSE    
       IF llStopCondition = TRUE
          THEN UNDO, THROW NEW Progress.Lang.AppError (lcStopReason, 550).
@@ -181,6 +181,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                     lcCorrelationID NE "0" AND
                     lcReplyTo > "" THEN 
                 DO:
+                    &IF {&MQ_BASED}
+                    &THEN
                     CREATE AckMessage.
                     ASSIGN 
                         AckMessage.HostTable         = "MsRequest"
@@ -192,7 +194,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                         AckMessage.AckResult         = "Error"
                         AckMessage.ResultDescription = e:GetMessage(liCnt).
                     RELEASE AckMessage.
-                END.
+                    &ENDIF
+                END. 
 
             END.
 
@@ -214,7 +217,6 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
     
     METHOD PUBLIC VOID newJsonMessage (icHeader      AS LONGCHAR, 
                                        icMessageBody AS LONGCHAR):
-        
       /* dotr Header formt */
       /*Cm integration params*/ 
       DEF VAR lcModel         AS CHAR                     NO-UNDO.
@@ -245,7 +247,6 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
           logMsg("Empty Body","WARNING").
           RETURN.
       END.
-      
       DO lii = 1 TO NUM-ENTRIES(icHeader," ") :
          lcFieldSet = ENTRY(lii,icHeader," ").
          IF INDEX(lcFieldSet, ":") = 0 THEN NEXT.
@@ -275,9 +276,9 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
             END.
             /*what do we need to do in case of crappy field name*/
             /*currently not logging it*/
-            /*OTHERWISE DO :
+            OTHERWISE DO :
                logMsg("Unknown lcField " + lcField,"WARNING").
-            END.*/
+            END.
          END CASE.
       END.
         
@@ -301,13 +302,10 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       
       /* something to the eventlog */
       IF lcSource = "" THEN lcSource = "PC".
-      
       IF lcBrand EQ "" THEN DO:
           logMsg("Empty Brand","ERROR").
           RETURN.
       END.
-
-      fsetEffectiveTenantForAllDB(lcBrand).
            
       CASE lcModel:
          WHEN "account" THEN DO:
@@ -329,11 +327,11 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          WHEN "billing_text" THEN DO:
             loLogicModule = NEW Gwy.HdrTextModel(icMessageBody, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
-         END.
+         END. /*
          WHEN "compensation" THEN DO:
             loLogicModule = NEW Gwy.CompensationModel(icMessageBody, lcModelId, lcSource,
                                                       lcCorrelationID, lcReplyTo).
-         END.
+         END.  */
          WHEN "cost_center" THEN DO:
             loLogicModule = NEW Gwy.CostCentreModel(icMessageBody, lcModelId, lcSource,
                                                     lcCorrelationID, lcReplyTo).
@@ -345,11 +343,11 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          WHEN "invoice_section" THEN DO:
             loLogicModule = NEW Gwy.InvSectModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
-         END.
+         END.  
          WHEN "package" THEN DO:
-            loLogicModule = NEW Gwy.DayCampaignModel(icMessageBody, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.DayCampaignModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                      lcCorrelationID, lcReplyTo).
-         END.
+         END.  
          WHEN "pricelist" THEN DO:
             loLogicModule = NEW Gwy.PriceListModel(icMessageBody, lcBrand, lcModelId, lcSource,
                                                    lcCorrelationID, lcReplyTo).
@@ -405,6 +403,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    END METHOD.  
 
    METHOD PROTECTED VOID logMsg (icMsg AS CHAR, icMsgType AS CHAR):
+      
       &IF {&MQ_BASED} &THEN
       LOG-MANAGER:WRITE-MESSAGE(icMsg, icMsgType).
       &ELSE
@@ -414,19 +413,19 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
           WHEN "DEBUG" THEN
           DO:
               OUTPUT STREAM s-ok TO VALUE(lLogDir + "/ok_" + lLogFileName + ".log") UNBUFFERED.
-              PUT STREAM s-ok UNFORMATTED lLogFileStartStamp + " " + icMsgType + ": " + icMsg SKIP.  
+              PUT STREAM s-ok UNFORMATTED STRING(lLogFileStartStamp) + " " + icMsgType + ": " + icMsg SKIP.  
               OUTPUT STREAM s-ok CLOSE.
           END.
           WHEN "ERROR" THEN
           DO:
               OUTPUT STREAM s-error TO VALUE(lLogDir + "/error_" + lLogFileName + ".log") UNBUFFERED.
-              PUT STREAM s-error UNFORMATTED lLogFileStartStamp + " " + icMsgType + ": " + icMsg SKIP.  
+              PUT STREAM s-error UNFORMATTED STRING(lLogFileStartStamp) + " " + icMsgType + ": " + icMsg SKIP.  
               OUTPUT STREAM s-error CLOSE.
           END.
           WHEN "MISSING" THEN 
           DO:
             OUTPUT STREAM s-missing TO VALUE(lLogDir + "/missing_" + lLogFileName + ".log") UNBUFFERED.
-            PUT STREAM s-missing UNFORMATTED lLogFileStartStamp + " " + icMsgType + ": " + icMsg SKIP.  
+            PUT STREAM s-missing UNFORMATTED STRING(lLogFileStartStamp) + " " + icMsgType + ": " + icMsg SKIP.  
             OUTPUT STREAM s-missing CLOSE.
           END.
       END CASE.
@@ -446,30 +445,24 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
     
         lLiveTime = TIME.
     
+        lFileCount = 0.
+            
+        INPUT STREAM s-dir THROUGH ls -1tr "{&IMPORTDIR}/input" NO-ECHO.
+        ERROR-STATUS:ERROR = FALSE. 
+            
         LOOP:
-        REPEAT :
+        REPEAT ON ERROR UNDO, LEAVE :
+            IMPORT STREAM s-dir lFile.
+            FILE-INFO:FILE-NAME = "{&IMPORTDIR}/input/" + lFile.
             
-            lFileCount = 0.
-            
-            INPUT STREAM s-dir THROUGH ls -1tr "{&IMPORTDIR}/input" NO-ECHO.
-            
-            ERROR-STATUS:ERROR = FALSE. 
+            IF INDEX(FILE-INFO:FILE-TYPE,"F") = 0 THEN NEXT.
+            ASSIGN lFileCount = lFileCount + 1.
 
-            REPEAT ON ERROR UNDO, LEAVE :
-                
-                IMPORT STREAM s-dir lFile.
+            logMsg(lFile, "INFO").
+            lFilePath = FILE-INFO:FULL-PATHNAME.  
+
+            fileInput(lFilePath). 
             
-                FILE-INFO:FILE-NAME = "{&IMPORTDIR}/input/" + lFile.
-                IF INDEX(FILE-INFO:FILE-TYPE,"F") = 0 THEN NEXT.
-    
-                ASSIGN lFileCount = lFileCount + 1.
-                
-                logMsg(lFile, "INFO").
-                
-                lFilePath = FILE-INFO:FULL-PATHNAME.  
-                
-                fileInput(lFilePath).
-                
                 OS-COMMAND SILENT 
                     mv
                     VALUE(lFilePath)
@@ -484,21 +477,13 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                     )
                     ).
                 
-                IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN 
-                    LEAVE LOOP. /* time to check shutdown */
-            END.
+            IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR 
+               TIME - lLiveTime < 0 THEN 
+               LEAVE LOOP. /* time to check shutdown */
+        END.
 
-            IF ERROR-STATUS:ERROR THEN 
-                logMsg(ERROR-STATUS:GET-MESSAGE(1), "ERROR").
-            
-            IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR TIME - lLiveTime < 0 THEN 
-                LEAVE LOOP. /* time to check shutdown */     
-            
-            IF lFileCount = 0 THEN 
-            DO:
-                LEAVE LOOP.
-            END. 
-        END.    
+        IF ERROR-STATUS:ERROR THEN 
+            logMsg(ERROR-STATUS:GET-MESSAGE(1), "ERROR").
         
         INPUT STREAM s-dir CLOSE.
         
@@ -507,7 +492,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
     METHOD PUBLIC LOG fileInput (iFile AS CHARACTER) :
         DEFINE VARIABLE lRecord    AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lHeader    AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lJsonBody  AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lJsonBody  AS CHAR NO-UNDO.
         
         INPUT STREAM s-in FROM VALUE(iFile) NO-MAP NO-CONVERT.
         
@@ -529,7 +514,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
     &ENDIF 
 
     DESTRUCTOR PUBLIC PCListener():
-        closeSession().
+    closeSession().
     END DESTRUCTOR.
 
 END CLASS.

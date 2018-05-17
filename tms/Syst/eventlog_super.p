@@ -11,6 +11,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 /* ********************  Preprocessor Definitions  ******************** */
 
 &GLOBAL-DEFINE STAR_EVENT_SUPER YES
+&GlOBAL-DEFINE STAR_EVENT_USER icuser
 
 {Func/lib/eventlog.i}
 

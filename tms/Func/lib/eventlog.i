@@ -172,13 +172,12 @@ PROCEDURE StarEventMakeCreateEvent :
   Parameters:  1. buffer handle
   Notes:       
 ------------------------------------------------------------------------------*/
-
     &IF "{&STAR_EVENT_SUPER}" = "YES"
     &THEN
     DEFINE INPUT  PARAMETER icUser AS CHARACTER NO-UNDO.
-    &SCOPED-DEFINE STAR_EVENT_USER icUser
+        &SCOPED-DEFINE STAR_EVENT_USER icUser
     &ENDIF
-    
+
     DEFINE INPUT  PARAMETER ihBuffer AS HANDLE NO-UNDO.
 
     RUN StarEventMakeCreateEventWithMemo(ihBuffer, {&STAR_EVENT_USER}, "").
@@ -239,7 +238,12 @@ PROCEDURE StarEventMakeDeleteEvent :
   Parameters:  1. buffer handle
   Notes:       
 ------------------------------------------------------------------------------*/
-
+    &IF "{&STAR_EVENT_SUPER}" = "YES"
+    &THEN
+    DEFINE INPUT  PARAMETER icUser AS CHARACTER NO-UNDO.
+    &SCOPED-DEFINE STAR_EVENT_USER icUser
+    &ENDIF
+    
     DEFINE INPUT  PARAMETER ihBuffer AS HANDLE NO-UNDO.
     
     RUN StarEventMakeDeleteEventWithMemo(ihBuffer, {&STAR_EVENT_USER}, "").
@@ -366,7 +370,12 @@ PROCEDURE StarEventMakeModifyEvent :
   Parameters:  1. Buffer handle
   Notes:       
 ------------------------------------------------------------------------------*/
-
+    &IF "{&STAR_EVENT_SUPER}" = "YES"
+    &THEN
+    DEFINE INPUT  PARAMETER icUser AS CHARACTER NO-UNDO.
+    &SCOPED-DEFINE STAR_EVENT_USER icUser
+    &ENDIF
+    
     DEFINE INPUT  PARAMETER ihBuffer AS HANDLE NO-UNDO.
              
     RUN StarEventMakeModifyEventWithMemo(ihBuffer, {&STAR_EVENT_USER}, "").

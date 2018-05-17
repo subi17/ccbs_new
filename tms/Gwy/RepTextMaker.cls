@@ -28,9 +28,7 @@ METHOD PUBLIC CHAR validate_reptext
     
    DEF VAR lcResult AS CHAR NO-UNDO.
    
-
    CREATE BUFFER lhText FOR TABLE ihTable.
-
    CREATE QUERY lhFind.
    lhFind:SET-BUFFERS(lhText).
    
@@ -43,35 +41,26 @@ METHOD PUBLIC CHAR validate_reptext
    REPEAT:
       lhFind:GET-NEXT.
       IF lhFind:QUERY-OFF-END THEN LEAVE.
-      MESSAGE lhText::valid_from lhText::valid_to
-      VIEW-AS ALERT-BOX.
       ASSIGN 
          lhText::rt_validfrom = loRequestMaker:make_date(
                                    loRequestMaker:make_timestamp(lhText::valid_from))
          lhText::rt_validto  = loRequestMaker:make_date(
                                    loRequestMaker:make_timestamp(lhText::valid_to))
          NO-ERROR.
-       MESSAGE lhText::rt_validfrom lhText::rt_validto
-           VIEW-AS ALERT-BOX.
   
       IF lhText::rt_validfrom = ? OR lhText::rt_validto = ? THEN DO:
          lcResult = "Invalid commercial name period". 
          LEAVE.
       END. 
-      
            
-        FIND FIRST Language WHERE 
-           Language.LanguageCode = lhText::language NO-LOCK NO-ERROR.
-        IF AVAILABLE Language THEN lhText::rt_language = Language.Language.
-        ELSE DO:
-           lcResult = "Invalid commercial name language". 
-           LEAVE.
-        END.
-  MESSAGE lhText::language
-  VIEW-AS ALERT-BOX.
-  MESSAGE lhText::rt_language
-  VIEW-AS ALERT-BOX.
-   //    lhText::rt_language = INT(lhText::language).
+      FIND FIRST Language WHERE 
+                 Language.LanguageCode = lhText::language NO-LOCK NO-ERROR.
+      IF AVAILABLE Language THEN lhText::rt_language = Language.Language.
+      ELSE DO:
+         lcResult = "Invalid commercial name language". 
+         LEAVE.
+      END.
+
       IF CAN-FIND(FIRST RepText WHERE
                         RepText.Brand    = gcBrand AND
                         RepText.TextType = iiTextType AND
@@ -113,7 +102,6 @@ METHOD PUBLIC CHAR update_reptext
 
    DEF VAR liWait AS INT   NO-UNDO.
    DEF VAR lrText AS RECID NO-UNDO.
-
 
    CREATE BUFFER lhText FOR TABLE ihTable.
 
