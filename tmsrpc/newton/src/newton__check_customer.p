@@ -399,9 +399,7 @@ FIND FIRST Customer NO-LOCK WHERE
            Customer.OrgID      = pcPersonId       AND
            Customer.CustIDType = pcIdType         AND
            Customer.Roles     NE "inactive"       NO-ERROR.
-IF NOT AVAIL Customer THEN
-   fSetError('No active Customer found').
-ELSE
+IF AVAIL Customer THEN
 DO:
    FIND FIRST CustCat WHERE Custcat.Brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
    IF NOT AVAIL CustCat THEN 
