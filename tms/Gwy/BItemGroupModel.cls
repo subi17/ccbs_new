@@ -1,6 +1,9 @@
 
 USING Progress.Lang.*.
 
+&GLOBAL-DEFINE CONFIG_ID_MAX 32
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
+
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface: 
@@ -12,7 +15,6 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
     DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
     DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
     DEF VAR loRepTextMaker  AS Gwy.RepTextMaker  NO-UNDO.
-    DEF VAR loCommon        AS Func.Common       NO-UNDO.
     DEF VAR lcError         AS CHAR              NO-UNDO. 
     DEF VAR lcBiGroup       AS CHAR              NO-UNDO.
     
@@ -20,7 +22,7 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
         FIELD external_id   AS CHAR 
         FIELD name          AS CHAR 
         FIELD display_order AS INT
-        FIELD group_type    AS INT.
+        FIELD group_type    AS CHAR.
 
     {Gwy/RepText_definition.i}
 
@@ -43,7 +45,6 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
             loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
             loEventLogMaker = NEW Gwy.EventLogMaker(iSource)
             loRepTextMaker  = NEW Gwy.RepTextMaker(iSource).
-            loCommon        = NEW Func.Common().
    
     END CONSTRUCTOR.
 
@@ -62,12 +63,12 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
         
         IF CAN-FIND(FIRST BItemGroup WHERE 
                           BItemGroup.Brand = gcBrand AND
-                          BItemGroup.BIGroup = loCommon:mTMSCodeValue("BItemGroup",
-                                                                      "BillGroup",
-                                                                      ttBItemGroup.external_id)) THEN 
+                          BItemGroup.BIGroup = Func.Common:mTMSCodeValue("BItemGroup",
+                                                                         "BillGroup",
+                                                                         ttBItemGroup.external_id)) THEN 
             RETURN loRequestMaker:logError("BItemGroup already exists").
 
-        IF LENGTH(ttBItemGroup.external_id) > "{&CONFIG_ID_MAX}" THEN 
+        IF LENGTH(ttBItemGroup.external_id) > {&CONFIG_ID_MAX} THEN 
             RETURN loRequestMaker:logError("Max length for ID is {&CONFIG_ID_MAX} characters").
       
         lcError = loRepTextMaker:validate_reptext(TABLE ttRepText BIND,
@@ -79,15 +80,11 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
         CREATE BItemGroup.
         ASSIGN 
             BItemGroup.Brand        = gcBrand
-            BItemGroup.BIGroup      = loCommon:mTMSCodeValue("BItemGroup",
-                                                             "BillGroup",
-                                                             ttBItemGroup.external_id)
+            BItemGroup.BIGroup      = ttBItemGroup.external_id
             BItemGroup.BIGName      = ttBItemGroup.name
             BItemGroup.InvoiceOrder = ttBItemGroup.display_order
-                                         WHEN ttBItemGroup.display_order > ""
-            BItemGroup.GroupType    = loCommon:mTMSCodeValue("BItemGroup",
-                                                             "BillGroup",
-                                                             ttBItemGroup.group_type).
+                                         WHEN ttBItemGroup.display_order GE 0
+            BItemGroup.GroupType    = LOOKUP(ttBItemGroup.group_type,"mobile,fixedline,broadband").
 
         loEventLogMaker:make_eventlog("create",BUFFER BItemGroup:HANDLE).
 
@@ -117,6 +114,7 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
     METHOD PUBLIC LOG update():
 
         DEF VAR liWait AS INT NO-UNDO.
+        DEF VAR liGroup_type AS CHAR NO-UNDO.
    
         IF lcModelid = ? THEN 
             RETURN loRequestMaker:logError('BItemGroup ID not given').
@@ -133,9 +131,9 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
             RETURN loRequestMaker:logError("Empty BItemGroup set").
             
         ASSIGN 
-            lcBiGroup = loCommon:mTMSCodeValue("BItemGroup",
-                                               "BillGroup",
-                                               ttBItemGroup.external_id).
+            lcBiGroup = Func.Common:mTMSCodeValue("BItemGroup",
+                                                  "BillGroup",
+                                                  ttBItemGroup.external_id).
 
         DO WHILE TRUE:
             FIND FIRST BItemGroup WHERE 
@@ -145,7 +143,7 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
             IF LOCKED(BItemGroup) THEN 
             DO:
                 liWait = liWait + 1.
-                IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
+                IF liWait > {&WAIT_CONFIG_LOCK} THEN 
                     RETURN loRequestMaker:logError("Billing item group was not available for update").
                 PAUSE 1 NO-MESSAGE. 
                 NEXT. 
@@ -167,12 +165,11 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
         BItemGroup.BIGName = IF ttBItemGroup.name > "" THEN 
                                  ttBItemGroup.name 
                              ELSE BItemGroup.BIGName.
-        BItemGroup.InvoiceOrder = IF ttBItemGroup.display_order > 0 THEN 
+        BItemGroup.InvoiceOrder = IF ttBItemGroup.display_order GE 0 THEN 
                                       ttBItemGroup.display_order 
                                   ELSE BItemGroup.InvoiceOrder.
                                       
-        IF LOOKUP(ttBItemGroup.group_type,"mobile,fixedline,broadband") > 0 THEN 
-            BItemGroup.GroupType = ttBItemGroup.group_type. 
+        BItemGroup.GroupType = LOOKUP(ttBItemGroup.group_type,"mobile,fixedline,broadband"). 
 
         loEventLogMaker:make_eventlog("modify",BUFFER BItemGroup:HANDLE).
    

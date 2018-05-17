@@ -173,6 +173,12 @@ PROCEDURE StarEventMakeCreateEvent :
   Notes:       
 ------------------------------------------------------------------------------*/
 
+    &IF "{&STAR_EVENT_SUPER}" = "YES"
+    &THEN
+    DEFINE INPUT  PARAMETER icUser AS CHARACTER NO-UNDO.
+    &SCOPED-DEFINE STAR_EVENT_USER icUser
+    &ENDIF
+    
     DEFINE INPUT  PARAMETER ihBuffer AS HANDLE NO-UNDO.
 
     RUN StarEventMakeCreateEventWithMemo(ihBuffer, {&STAR_EVENT_USER}, "").
@@ -663,5 +669,17 @@ FUNCTION fCleanEventObject RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
+
+PROCEDURE pCleanEventObjects:
+
+    DEF VAR liCleanCnt AS INT NO-UNDO.
+   
+    DO liCleanCnt = 1 TO {&NUM_BUFFERS}:
+   
+        IF VALID-HANDLE(ghEventSource[liCleanCnt]) 
+            THEN DELETE OBJECT ghEventSource[liCleanCnt].
+    END.
+   
+END PROCEDURE.
 
 &ENDIF
