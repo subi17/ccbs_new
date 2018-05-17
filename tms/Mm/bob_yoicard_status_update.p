@@ -44,7 +44,7 @@ DEFINE VARIABLE lcToday         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llUpdateAL      AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE ldCurrentTimeTS AS DECIMAL   NO-UNDO.
-
+DEFINE VARIABLE lhDCCLI         AS HANDLE    NO-UNDO.
 DEFINE VARIABLE lcOutLogFile    AS CHARACTER NO-UNDO.
 
 /* ***************************  Main Block  *************************** */
@@ -244,7 +244,10 @@ PROCEDURE pCreateUpdateStatus :
         END.
     END.
     ELSE DO: 
+        lhDCCLI = BUFFER DCCli:HANDLE.
+        RUN StarEventSetOldBuffer(lhDCCLI).
         DCCLi.ServiceStatus = liStatus.
+        RUN StarEventMakeModifyEvent(lhDCCLI).
         PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Status updated" SKIP.
         PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Status updated" SKIP.
     END.
