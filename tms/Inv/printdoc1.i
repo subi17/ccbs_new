@@ -147,6 +147,11 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD GBValue         AS DEC
    FIELD PrintCLI        AS LOGICAL INITIAL FALSE
    FIELD IUA             AS CHAR
+   FIELD Discounts       AS DEC
+   FIELD Bundles         AS DEC
+   FIELD Charges         AS DEC
+   FIELD Others          AS DEC
+   FIELD SubscriptionTotal AS DEC
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -1141,6 +1146,35 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ttRow.RowCode BEGINS "45" NO-LOCK:
          ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
       END.
+      /* YDR-2848 The sum of the charges applied to the line */
+      FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum AND
+               ttRow.RowCode BEGINS "31" NO-LOCK:
+         ttSub.Charges = ttSub.Charges + ttRow.RowAmt.
+      END.
+      /* YDR-2848 Sum of amount due to bundles of data and data upsells */
+      FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum AND
+               ttRow.RowCode BEGINS "35" OR
+               ttRow.RowCode BEGINS "37" OR
+               ttRow.RowCode BEGINS "39" OR
+               ttRow.RowCode BEGINS "40" OR
+               ttRow.RowCode BEGINS "42" NO-LOCK:
+         ttSub.Bundles = ttSub.Bundles + ttRow.RowAmt.
+      END.
+      /* YDR-2848 The sum of outgoings that aren.t included in the tariff fee: 
+         SMS, MMS, international calls etc. */
+      /* FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum AND
+               ttRow.RowCode BEGINS "35" /* What?? */ NO-LOCK:
+         ttSub.Others = ttSub.Others + ttRow.RowAmt.
+      END.*/
+
+      /* YDR-2848 Subscription level TOTAL sum */
+      FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum:
+         ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmt.
+      END.
 
       /* ttRows contains combined invrows => no need to check duplicates */
       FOR EACH ttRow WHERE
@@ -1290,10 +1324,14 @@ PROCEDURE pGetInvoiceRowData:
                   InvRow.BillCode BEGINS "RVTERM"
                THEN ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.               
             END.
-            /* YDR-2848 */
-            WHEN "35" THEN DO: /* Data bundle ??? */
-              /* TODO IF InvRow.xxx = yyy AND InvRow.Amt NE 0 THEN */
-            END.
+            /* YDR-2848 Amount charged for TV service (taxes are not applicable). */
+            WHEN "55" 
+            THEN
+               ttInvoice.AgileTV = ttInvoice.AgileTV + InvRow.Amt.
+            /* YDR-2848 Any concept that must be included in the invoice without taxes */
+            /* WHEN "xx" 
+            THEN
+               ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRowAmt.*/
          END CASE.
 
          IF InvRow.RowType EQ 9 AND

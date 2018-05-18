@@ -30,7 +30,7 @@ DEFINE INPUT  PARAMETER iiUpdInterval AS INT  NO-UNDO.
 /* how many were printed */         
 DEFINE OUTPUT PARAMETER oiInvCount    AS INT  NO-UNDO. 
 
-DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.4".
+DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.5".
 DEF VAR lcRowText     AS CHAR   NO-UNDO.
 DEF VAR lcTMSUser     AS CHAR   NO-UNDO.
 DEF VAR lcLocalFile   AS CHAR   NO-UNDO.
@@ -618,22 +618,26 @@ PROCEDURE pInvoice2XML:
       END.
 
        /* YDR-2848 start */
+      IF ttInvoice.AgileTV > 0 THEN DO:
       /* If needed, the amount charged for TV service (as it is a resell,
          taxes are not applicable). */
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
          lhXML:INSERT-ATTRIBUTE("Header","AgileTV").
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.AgileTV)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
+      END.
 
+      IF ttInvoice.OtherConcepts > 0 THEN DO:
        /* If needed, any concept that must be included in the invoice without taxes. */
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
          lhXML:INSERT-ATTRIBUTE("Header","OtherConcepts").
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(0)).
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.OtherConcepts)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
+      END.
        /* YDR-2848 end */
       
       lhXML:WRITE-DATA-ELEMENT("TotalAmount",fDispXMLDecimal(Invoice.InvAmt)).
@@ -808,17 +812,17 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-         /* IF ttRow.RowType > "" AND
-            ttRow.RowGroup EQ "46" THEN DO: /* Convergent uses CLI Type Name */
+          IF ttRow.RowType > "" AND
+            ttRow.RowGroup EQ "18" THEN DO: /* Convergent uses CLI Type Name */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
          END.
-         ELSE */
-            lhXML:WRITE-DATA-ELEMENT("BillingItem",ttSub.CTName /* ttRow.RowName */).
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
 
          /* Sum of different categories per subscription. YDR-2848 */
-         IF ttRow.RowCode BEGINS "18" OR
+         /* IF ttRow.RowCode BEGINS "18" OR
             ttRow.RowCode BEGINS "46" THEN
-            ldTotal = ldTotal + ttRow.RowAmtExclVat.
+            ldTotal = ldTotal + ttRow.RowAmtExclVat.*/
 
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
@@ -932,28 +936,28 @@ PROCEDURE pSubInvoice2XML:
 
       /* Discounts row. YDR-2848 */
       lhXML:START-ELEMENT("Discounts"). /* Descuentos */
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttInvoice.InstallmentDiscAmt)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.Discounts /* ttInvoice.InstallmentDiscAmt*/)).
       lhXML:END-ELEMENT("Discounts").
 
       /* The sum of amount due to bundles of data and data upsells. YDR-2848 */
       lhXML:START-ELEMENT("Bundles"). /* Bonos de Internet */
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.Bundles)).
       lhXML:END-ELEMENT("Bundles").
 
       /* The sum of the charges applied to the line. YDR-2848 */
       lhXML:START-ELEMENT("Charges"). /* Cargos */
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.Charges)).
       lhXML:END-ELEMENT("Charges").
 
       /* The sum of outgoings that aren.t included in the tariff fee: SMS, MMS, 
          international calls etc. YDR-2848 */
       lhXML:START-ELEMENT("Others"). /* Otros consumos */
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(0)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.Others)).
       lhXML:END-ELEMENT("Others").
 
       /* Sum of different categories per subscription. YDR-2848 */      
       lhXML:START-ELEMENT("TotalCategory").
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ldTotal)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.SubscriptionTotal)).
       lhXML:END-ELEMENT("TotalCategory").
 
       RUN pCollectCDR(SubInvoice.InvSeq,
