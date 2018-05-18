@@ -164,7 +164,7 @@ PROCEDURE pAdd_DSS:
         lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT ldCurrentDateTime).
 
     /* Return DSS bundle and upsell if DSS is active */
-    IF lcDSSBundleId = {&DSS} OR 
+    IF lcDSSBundleId EQ {&DSS} OR 
       (lcDSSBundleId EQ {&DSS2} AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) OR 
       (lcDSSBundleId EQ {&DSS4} AND LOOKUP(MobSub.CLIType, lcAllowedDSS4SubsType) > 0) THEN
     DO:
