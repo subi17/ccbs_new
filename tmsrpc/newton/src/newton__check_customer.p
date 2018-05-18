@@ -29,7 +29,7 @@ Syst.Var:gcBrand = "1".
 {Func/custfunc.i}
 {Func/profunc.i}
 {Func/barrfunc.i}
-
+{Func/profunc_request.i}
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR pcPersonId       AS CHAR NO-UNDO.
@@ -71,6 +71,7 @@ DEF VAR llAllowedELCliTypeOther       AS LOG  NO-UNDO.
 DEF VAR lcClitypeAux                  AS CHAR NO-UNDO.
 DEF VAR liExtraLineStatus             AS INT  NO-UNDO.
 DEF VAR llAllowedProMig               AS LOGI NO-UNDO.
+DEF VAR lcCliTypeTo                   AS CHAR NO-UNDO.
 
 DEF BUFFER bCustomer  FOR Customer.
 DEF BUFFER bMobSub    FOR MobSub.
