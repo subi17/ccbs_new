@@ -217,14 +217,8 @@ REPEAT:
       lcErr = "".
       IF lcAction EQ "on" THEN DO:
 
-         /* YBU-6046: ICC done recently should not be checked anymore.
-         /* No activate LP if ICC Changed */
-         IF fICCDoneRecently(mobsub.MsSeq) THEN DO:
-            PUT STREAM sCurrentLog UNFORMATTED
-            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ICC_DONE_RECENTLY" SKIP.
-            NEXT.
-         END.
-         */    
+         /* YBU-6046: Removed "Recently ICC Change" checking.  */
+         /* "Recently ICC Change" mustn't to be check anymore. */ 
          
          /* Begin YDR-2668 */
          IF LcLP EQ "InternetBarring" THEN DO:
