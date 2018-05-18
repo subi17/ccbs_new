@@ -9,13 +9,16 @@
                   creates one generic log file per day - Log dir
                   creates one log file for each input file - Outgoing dir  
   ----------------------------------------------------------------------*/
-
+  
 {Syst/commpaa.i}
-Syst.Var:gcBrand = "1".
+Syst.Var:katun   EQ "Cron".
+Syst.Var:gcBrand EQ "1".
+
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/ftransdir.i} 
 {Syst/eventval.i}
+{Syst/eventlog.i}
 
 
 IF llDoEvent THEN DO:
@@ -27,112 +30,76 @@ END.
 DEFINE TEMP-TABLE tt_file
     FIELD file_name     AS CHARACTER 
     FIELD base_filename AS CHARACTER .
-DEFINE VARIABLE lcLogsDirectory      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcIncomingDirectory  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcOutGoingDirectory  AS CHARACTER NO-UNDO.    
-DEFINE VARIABLE lcProcessedDirectory AS CHARACTER NO-UNDO.
 
+DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liNumOK  AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liNumErr AS INTEGER   NO-UNDO.
+
+/* files and dirs */
+DEFINE VARIABLE lcLogFile       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFileName      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcIncDir        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProcessDir    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcInputFile     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProcDir       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProcessFile   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcSpoolDir      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
+
+/* field variables */
+DEFINE VARIABLE liOrderID       AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lhDCCLI        AS HANDLE     NO-UNDO.
+
+/* streams */
+DEFINE STREAM sFile.
+DEFINE STREAM sLog.
 DEFINE STREAM sFilesInDir.  
 DEFINE STREAM sCurrentFile. 
-DEFINE STREAM sCurrentLog.  
-DEFINE STREAM sOutgoingLog.
 DEFINE STREAM inFile.
 
-DEFINE VARIABLE lcActionID      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTableName     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcToday         AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLogFile       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE llUpdateAL      AS LOGICAL   NO-UNDO.
-DEFINE VARIABLE ldCurrentTimeTS AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE lhDCCLI         AS HANDLE    NO-UNDO.
-DEFINE VARIABLE lcOutLogFile    AS CHARACTER NO-UNDO.
+
+/* ********************  Preprocessor Definitions  ******************** */
+
 
 /* ***************************  Main Block  *************************** */
 
-/* Getting directories from CParams */
 ASSIGN
-   lcIncomingDirectory  = fCParamC("yoicardIncomingDir")
-   lcProcessedDirectory = fCParamC("yoicardProcessedDir")
-   lcLogsDirectory      = fCParamC("yoicardLogsDir")  
-   lcOutGoingDirectory  = fCParamC("yoicardOutGoingDir") NO-ERROR.
-   
-FILE-INFO:FILE-NAME = lcIncomingDirectory . IF FILE-INFO:FULL-PATHNAME = ? THEN RETURN.
-FILE-INFO:FILE-NAME = lcProcessedDirectory. IF FILE-INFO:FULL-PATHNAME = ? THEN RETURN.
-FILE-INFO:FILE-NAME = lcLogsDirectory     . IF FILE-INFO:FULL-PATHNAME = ? THEN RETURN.
-FILE-INFO:FILE-NAME = lcOutGoingDirectory . IF FILE-INFO:FULL-PATHNAME = ? THEN RETURN.
+   lcIncDir     = fCParam("YOICard","IncDirCC")
+   lcProcessDir = fCParam("YOICard","IncProcessDir")
+   lcProcDir    = fCParam("YOICard","IncProcDir")
+   lcSpoolDir   = fCParam("YOICard","OutSpoolDir")
+   lcOutDir     = fCParam("YOICard","OutDir").
 
-ASSIGN 
-    llUpdateAL        = TRUE 
-    lcToday         = STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99")
-    lcLogFile       = lcLogsDirectory     + "/yoicard_status_log_" + lcToday  + ".log" 
-    lcTableName     = "yoicard_status"
-    lcActionID      = "yoicard_status_processor" 
-    ldCurrentTimeTS = Func.Common:mMakeTS().
+FUNCTION fLogLine RETURNS LOGIC
+   (icMessage AS CHAR):
 
-OUTPUT STREAM sCurrentLog  TO VALUE(lcLogFile) APPEND.
-PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";yoicard_status_update_processing_started" SKIP.
-    
-DO TRANSACTION:
-   FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  Syst.Var:gcBrand AND
-              ActionLog.ActionID  EQ  lcActionID       AND
-              ActionLog.TableName EQ  lcTableName      NO-ERROR.
+   PUT STREAM sLog UNFORMATTED
+      lcLine  "|"
+      icMessage SKIP.
 
-   IF AVAIL ActionLog AND
-      ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
-      llUpdateAL = FALSE.
-      PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";another_yoicard_status_update_processor_running" SKIP.
-      RETURN.
-   END.
+END FUNCTION.
 
-   IF NOT AVAIL ActionLog THEN DO:
-      /*First execution stamp*/
-      CREATE ActionLog.
-      ASSIGN
-         ActionLog.Brand        = Syst.Var:gcBrand
-         ActionLog.TableName    = lcTableName
-         ActionLog.ActionID     = lcActionID
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = Syst.Var:katun
-         ActionLog.ActionTS     = ldCurrentTimeTS.
-      PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";yoicard_status_update_processor_first_run" SKIP.
-   END.
-   ELSE DO:
-      ASSIGN
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = Syst.Var:katun
-         ActionLog.ActionTS     = ldCurrentTimeTS.
-      RELEASE Actionlog.
-   END.
-END. /* ActionLog */
+FUNCTION fError RETURNS LOGIC
+   (icMessage AS CHAR):
 
+   fLogLine("ERROR:" + icMessage).
+
+   liNumErr = liNumErr + 1.
+
+END FUNCTION.
+
+
+/********************** Execution starts here ***************************/
 RUN pReadDirectory.
-
-FINALLY:
-    IF llUpdateAL THEN 
-        DO TRANSACTION :
-           FIND FIRST ActionLog WHERE
-                      ActionLog.Brand        EQ  Syst.Var:gcBrand  AND
-                      ActionLog.ActionID     EQ  lcActionID        AND
-                      ActionLog.TableName    EQ  lcTableName       AND
-                      ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
-                      EXCLUSIVE-LOCK NO-ERROR.
-           IF AVAIL ActionLog THEN 
-              ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
-           RELEASE ActionLog.
-        END.
-
-    PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";yoicard_status_update_processing_finished" SKIP.
-    PUT STREAM sCurrentLog UNFORMATTED "-------------------------------" SKIP.
-    OUTPUT STREAM sCurrentLog CLOSE.
-END FINALLY.
 
 PROCEDURE pReadDirectory:
     DEFINE VARIABLE lcFile      AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcFileName  AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcFileFlags AS CHARACTER NO-UNDO.
     /* Collect files from incoming directory */
-    INPUT STREAM sFilesInDir FROM OS-DIR(lcInComingDirectory).
+    INPUT STREAM sFilesInDir FROM OS-DIR(lcIncDir).
     REPEAT:
         IMPORT STREAM sFilesInDir lcFile lcFileName lcFileFlags.
         IF NOT CAN-DO(lcFileFlags,"F") THEN NEXT.
@@ -144,37 +111,57 @@ PROCEDURE pReadDirectory:
     IF CAN-FIND(FIRST tt_file) THEN DO:
         FOR EACH tt_file:
             /* logfile for each input file */
-            lcOutLogFile    = lcLogsDirectory + "/" +  SUBSTRING(tt_file.base_filename,1, R-INDEX(tt_file.base_filename,".") - 1 ) +  "_" + lcToday  +  ".log".
-            OUTPUT STREAM sOutgoingLog TO VALUE(lcOutLogFile) APPEND.
-            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update started."  SKIP.
-            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update started."  SKIP.
+           ASSIGN
+              liNumOk  = 0
+              liNumErr = 0.            
+            lcProcessFile = fMove2TransDir(tt_file.file_name, "", lcProcessDir).
+            lcLogFile = lcSpoolDir + tt_file.base_filename  + ".log".
+
+            IF lcProcessFile EQ "" OR 
+               SEARCH(lcProcessFile) EQ ? THEN NEXT.
             
-            RUN pReadFile(tt_file.file_name) NO-ERROR.
+            fBatchLog("START", lcProcessFile).
             
-            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update finished."  SKIP.
-            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";yoicard_status_update finished."  SKIP.
-            OUTPUT STREAM sOutgoingLog CLOSE.
-            fMove2TransDir(lcOutLogFile      , "", lcOutGoingDirectory).
-            fMove2TransDir(tt_file.file_name , "", lcProcessedDirectory).            
+            OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
+            PUT STREAM sLog UNFORMATTED
+                       tt_file.base_filename    " "
+                       STRING(TODAY,"99.99.99") " "
+                       STRING(TIME ,"hh:mm:ss") SKIP.
+                       
+            RUN pReadFile(lcProcessFile) NO-ERROR.
+            
+            PUT STREAM sLog UNFORMATTED
+                  "input: " STRING(liNumOK + liNumErr) ", "
+              "processed: " STRING(liNumOK) ", "
+                 "errors: " STRING(liNumErr) SKIP.            
+                
+            OUTPUT STREAM sLog CLOSE.
+            ASSIGN 
+                lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir)
+                lcProcessedFile = fMove2TransDir(lcProcessFile, "", lcProcDir).
+    
+            IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
         END.
     END.
 END PROCEDURE.
-
 
 PROCEDURE pReadFile:
     DEFINE INPUT  PARAMETER icFileName AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcLine    AS CHARACTER NO-UNDO.
     DEFINE VARIABLE liStatus  AS INTEGER   NO-UNDO.
     DEFINE VARIABLE liOrderId AS INTEGER   NO-UNDO.
+    
     INPUT STREAM inFile FROM VALUE(icFileName).
         REPEAT:
             IMPORT STREAM inFile UNFORMATTED lcLine.
-            liOrderId = INTEGER(SUBSTRING(lcLine,1,10)).
-            liStatus  = INTEGER(SUBSTRING(lcLine,11,1)).
-
-            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + "Received Order=" + STRING(liOrderId) + ";Status=" + STRING(liStatus)  SKIP.
-            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(icFileName) + ";Received Order=" + STRING(liOrderId) + ";Status=" + STRING(liStatus)  SKIP.
-            
+            IF TRIM(lcLine) EQ "" THEN NEXT.
+            ASSIGN 
+                liOrderId = INTEGER(SUBSTRING(lcLine,1,10))
+                liStatus  = INTEGER(SUBSTRING(lcLine,11,1)) NO-ERROR.
+            IF ERROR-STATUS:ERROR THEN DO:
+                fError(lcLine + ";Invalid Data").
+                NEXT.
+            END.
             RUN pCreateUpdateStatus(liOrderId,liStatus).
         END.
     INPUT STREAM inFile CLOSE.
@@ -192,16 +179,14 @@ PROCEDURE pCreateUpdateStatus :
          Order.Brand = Syst.Var:gcBrand  AND 
          ORder.OrderId = liOrderId NO-LOCK NO-ERROR.
     IF NOT AVAILABLE order THEN DO:
-        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Order Not found" SKIP.
-        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Order Not found" SKIP.
+        fError("Order=" + STRING(liOrderId) + ";Order Not found").
         RETURN.
     END.
     FIND FIRST Customer WHERE
            Customer.brand   EQ Syst.Var:gcBrand  AND 
            Customer.custnum EQ order.Custnum NO-LOCK NO-ERROR.
     IF NOT AVAILABLE Customer THEN DO:
-        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Customer Not found" SKIP.
-        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Customer Not found" SKIP.
+        fError("Order=" + STRING(liOrderId) + ";Customer Not found").
         RETURN.
     END.
     FIND FIRST DCCli WHERE 
@@ -209,8 +194,7 @@ PROCEDURE pCreateUpdateStatus :
                DCCLi.msseq = Order.msseq   AND 
                DCCli.Dcevent = {&YOICARD_DCEvent} EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
     IF LOCKED DCCli THEN DO:
-        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Contract record locked" SKIP.
-        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Contract record locked" SKIP.
+        fError("Order=" + STRING(liOrderId) + ";Contract record locked").
         RETURN.
     END. 
     ELSE IF NOT AVAILABLE DCCLi THEN DO:
@@ -233,13 +217,11 @@ PROCEDURE pCreateUpdateStatus :
             IF AVAILABLE bCreareq THEN DO:
                 bCreaReq.ReqIParam1 = liStatus.
             END.
-            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Request created" SKIP.
-            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Request created" SKIP.
+            fLogLine("Order=" + STRING(liOrderId) + ";Request created").
             RELEASE bCreaReq. 
         END.
         ELSE DO:
-            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Request creation Error;" + lcError SKIP.
-            PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Request creation Error;" + lcError SKIP.
+            fError("Order=" + STRING(liOrderId) + ";Request creation Error;" + lcError ).
             RETURN.
         END.
     END.
@@ -248,7 +230,8 @@ PROCEDURE pCreateUpdateStatus :
         RUN StarEventSetOldBuffer(lhDCCLI).
         DCCLi.ServiceStatus = liStatus.
         RUN StarEventMakeModifyEvent(lhDCCLI).
-        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Status updated" SKIP.
-        PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Status updated" SKIP.
+        fLogLine("Order=" + STRING(liOrderId) + ";Status updated").
     END.
+    liNumOk = liNumOk + 1 .
 END PROCEDURE.
+  
