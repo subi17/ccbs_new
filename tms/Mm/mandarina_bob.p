@@ -261,11 +261,11 @@ REPEAT:
                                                       ELSE "REDIRECTION_OTFAILED2"),         
                                                INPUT mobsub.CustNum,                          /*Customer number for memo*/
                                                INPUT (IF LcLP EQ "Mandarina1"                  /*Memo title*/ 
-                                                      THEN "LP1 - Migración red - Activada"
-                                                      ELSE "LP2 - Migración red - Activada"),  
+                                                      THEN "LP GDPR Activada"
+                                                      ELSE "LP GDPR Activada"),  
                                                INPUT  (IF LcLP EQ "Mandarina1"                 /*Memo text*/ 
-                                                     THEN "Landing Page 1 - Activada"
-                                                      ELSE "Landing Page 2 - Activada"),       
+                                                      THEN "Activada la LP de GDPR"
+                                                      ELSE "Activada la LP de GDPR"),       
                                                INPUT "Sistema",                               /*Creator tag for memo*/
                                                INPUT "11",                                    /*Source, 11 -> Bob Tool*/ 
                                                INPUT-OUTPUT lcErr).                           /*Request creation info*/
@@ -322,11 +322,11 @@ REPEAT:
                                                INPUT "remove",         
                                                INPUT mobsub.CustNum,                              /*Customer number for memo*/
                                                INPUT (IF LcLP EQ "Mandarina1"                      /*Memo title*/ 
-                                                      THEN "LP1 - Migración red - Desactivada"
-                                                      ELSE "LP2 - Migración red - Desactivada"),  
+                                                      THEN "LP GDPR Desactivada"
+                                                      ELSE "LP GDPR Desactivada"),  
                                                INPUT  (IF LcLP EQ "Mandarina1"                     /*Memo text*/ 
-                                                      THEN "Landing Page 1 - Desactivada"
-                                                      ELSE "Landing Page 2 - Desactivada"),       
+                                                      THEN "Desactivada la LP de GDPR"
+                                                      ELSE "Desactivada la LP de GDPR"),       
                                                INPUT "Sistema",                                   /*Creator tag for memo*/
                                                INPUT "11",                                        /*Source, 11 -> Bob Tool*/ 
                                                INPUT-OUTPUT lcErr).                               /*Request creation info*/
