@@ -1313,16 +1313,18 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             STRING(MsRequest.ReqCparam2).  
          END.
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
-            lcCaseTypeId = lcACCCaseTypeId.
-            /*fenerate tariff:*/
+
+            ASSIGN
+               lcCaseTypeId = lcACCCaseTypeId
+               lcTariff = ""
+               lcFixedNumber = "".
+
+            /*generate tariff:*/
             FIND MobSub NO-LOCK WHERE
                  MobSub.MsSeq EQ MsRequest.MsSeq NO-ERROR.
             IF AVAIL MobSub THEN ASSIGN
                lcTariff = MobSub.CLIType
                lcFixedNumber = MobSub.FixedNumber WHEN MobSub.FixedNumber > "".
-            ELSE ASSIGN
-               lcTariff = ""
-               lcFixedNumber = "".
 
             lcCaseFileRow =
             lcCaseTypeId                                    + lcDelim +
