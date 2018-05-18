@@ -207,7 +207,7 @@ PROCEDURE pCreateUpdateStatus :
     FIND FIRST DCCli WHERE 
                DCCLi.brand = Customer.Brand AND 
                DCCLi.msseq = Order.msseq   AND 
-               DCCli.Dcevent = "YOICARD" EXCLUSIVE-LOCK NO-ERROR.
+               DCCli.Dcevent = {&YOICARD_DCEvent} EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
     IF LOCKED DCCli THEN DO:
         PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Contract record locked" SKIP.
         PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";"  + "Order=" + STRING(liOrderId) + ";Error=Contract record locked" SKIP.
@@ -215,7 +215,7 @@ PROCEDURE pCreateUpdateStatus :
     END. 
     ELSE IF NOT AVAILABLE DCCLi THEN DO:
        liRequest = fPCActionRequest(Order.msseq,
-                                    "YOICARD" ,
+                                    {&YOICARD_DCEvent} ,
                                     "act"     ,
                                     Func.Common:mMakeTS() ,
                                     FALSE     , /* fees */

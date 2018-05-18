@@ -51,8 +51,9 @@ IF NOT AVAILABLE DayCampaign THEN DO:
       DayCampaign.StatusCode      = 1            
       DayCampaign.BundleUpsell    = ""         
       DayCampaign.DSSPriority     = 0           
-      DayCampaign.PayType         = 0            
-      DayCampaign.BundleTarget    = 0.
+      DayCampaign.PayType         = 0 
+      DayCampaign.BundleType      = 0            
+      DayCampaign.BundleTarget    = 4.
 END.
        
 RUN StarEventMakeCreateEvent(lhDayCampaign).
