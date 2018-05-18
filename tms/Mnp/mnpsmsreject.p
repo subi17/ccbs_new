@@ -33,8 +33,6 @@ DEFINE VARIABLE ldaDate       AS DATE      NO-UNDO.
 DEFINE VARIABLE ldeFrom       AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeTo         AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE lcDelimiter   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcSMSConfirm  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldaSMSDeliStamp AS DATE  NO-UNDO.
 DEFINE VARIABLE lcStatusReason  AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC ENUME,RECH_BNUME,RECH_ICCID,RECH_IDENT".
 
 /* ***************************  Main Block  *************************** */
@@ -60,8 +58,10 @@ FOR EACH MNPProcess NO-LOCK
       AND MNPProcess.MNPType     =  {&MNP_TYPE_IN}    
       AND MNPProcess.UpdateTS    >= ldeFrom  
       AND MNPProcess.UpdateTS    <= ldeTo 
-      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}:
-    IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) > 0 THEN 
+      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}
+       OR MNPProcess.StatusCode  =  {&MNP_ST_ACON} :
+    IF (MNPProcess.StatusCode    =  {&MNP_ST_AREC} AND LOOKUP(MNPProcess.StatusReason,lcStatusReason) > 0) 
+        OR MNPProcess.StatusCode =  {&MNP_ST_ACON} THEN 
     DO:    
        FIND FIRST MNPSub NO-LOCK 
             WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
@@ -69,32 +69,16 @@ FOR EACH MNPProcess NO-LOCK
        
        FIND FIRST MNPDetails NO-LOCK 
             WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
-       IF NOT AVAILABLE MNPDetails THEN NEXT ERROR_LOOP.
-       
-       ASSIGN lcSMSConfirm     =  "NOK".
-                    
-       FIND FIRST CallAlarm NO-LOCK
-            WHERE CallAlarm.Brand      =  Syst.Var:gcBrand
-              AND CallAlarm.Cli        =  MNPSub.Cli 
-              AND CallAlarm.ActStamp   >= MNPProcess.UpdateTS NO-ERROR.
-       IF AVAILABLE CallAlarm THEN 
-       DO:
-          IF CallAlarm.DeliStat   =  {&SMS_DELISTATUS_RECEIVED} THEN
-            ASSIGN lcSMSConfirm     =  "OK".
-          ELSE
-            ASSIGN lcSMSConfirm     =  "NOK".
-       END.
+       IF NOT AVAILABLE MNPDetails THEN NEXT ERROR_LOOP.                          
                                                    
        PUT STREAM sdump UNFORMATTED 
            Func.Common:mTS2HMS(MNPProcess.CreatedTS) lcDelimiter
            MNPSub.Cli lcDelimiter
            MNPDetails.DonorCode lcDelimiter
-           MNPDetails.ReceptorCode lcDelimiter
+           MNPProcess.FormRequest lcDelimiter
            MNPProcess.StatusReason lcDelimiter
-           Func.Common:mTS2HMS(MNPProcess.MNPUpdateTS) lcDelimiter
-           IF AVAILABLE CallAlarm THEN Func.Common:mTS2HMS(CallAlarm.ActStamp) ELSE "" lcDelimiter
-           lcSMSConfirm SKIP.
-                
+           Func.Common:mTS2HMS(MNPProcess.MNPUpdateTS) SKIP.
+                          
        oiEvents = oiEvents + 1.
        IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
        DO:
