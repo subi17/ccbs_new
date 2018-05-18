@@ -198,6 +198,7 @@ PROCEDURE pUpdateFusionOrder:
    DEF VAR lcResult      AS CHARACTER NO-UNDO.
    DEF VAR liRequest     AS INT       NO-UNDO. 
    DEF VAR lcError       AS CHAR      NO-UNDO.
+   DEF VAR lcNewCliType  AS CHARACTER NO-UNDO.
 
    IF pcReleaseMobile > "" AND
       pcReleaseMobile NE "Y" THEN
@@ -356,6 +357,7 @@ PROCEDURE pUpdateFusionOrder:
                         "",
                         0,
                         {&TERMINATION_TYPE_PARTIAL},
+                        lcNewCliType,
                         OUTPUT lcResult). 
       END.
       ELSE DO:

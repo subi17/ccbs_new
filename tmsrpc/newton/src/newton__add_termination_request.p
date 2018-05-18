@@ -51,6 +51,7 @@ DEF VAR ldaTermDate      AS DATE      NO-UNDO.
 DEF VAR lcTenant         AS CHAR      NO-UNDO.
 DEF VAR llYoigoTenant    AS LOG       NO-UNDO INIT FALSE.
 DEF VAR llMasmovilTenant AS LOG       NO-UNDO INIT FALSE.
+DEF VAR lcNewCliType     AS CHAR      NO-UNDO.
 
 /* Output parameters */
 DEF VAR result AS LOGICAL.
@@ -203,6 +204,7 @@ liReq = fTerminationRequest(
    "",
    0,
    pcTermType,
+   lcNewCliType,   
    OUTPUT ocResult).
 
 IF liReq > 0 THEN DO:

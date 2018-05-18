@@ -1595,12 +1595,25 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
    DEF VAR liRequest AS INT  NO-UNDO.
    DEF VAR lcError   AS CHAR NO-UNDO.
    DEF VAR lcResult  AS CHAR NO-UNDO.
+   DEF VAR liResult  AS INT NO-UNDO.
 
-   IF fListMatrix(Syst.Var:gcBrand,
-                  "CONVFIXEDSTC",
-                  "SubsTypeFrom;SubsTypeTo",
-                  icCLIType,
-                  OUTPUT lcResult) = 1 THEN DO:
+   /* Check if customer has given new clitype for Bob tool, which is stored to ReqCParam5 */
+   FIND FIRST MsRequest WHERE
+              MsRequest.MsSeq = iiMsSeq AND 
+              MsRequest.MsRequest = iiMsRequest AND
+              MsRequest.ReqType   = 18 NO-LOCK NO-ERROR.
+
+   IF AVAIL MSRequest THEN
+      lcResult = MsRequest.ReqCParam5.
+
+   IF lcResult EQ "" THEN 
+      liResult = fListMatrix(Syst.Var:gcBrand,
+                             "CONVFIXEDSTC",
+                             "SubsTypeFrom;SubsTypeTo",
+                             icCLIType,
+                             OUTPUT lcResult).   
+
+   IF lcResult NE "" OR liResult = 1 THEN DO:
       liRequest = fCTChangeRequest(iiMsSeq,
                                    lcResult,
                                    "",    /* lcBundleID */

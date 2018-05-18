@@ -1583,7 +1583,7 @@ PROCEDURE pMultiSIMTermination:
    DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
    DEF VAR ldaSecSIMTermDate AS DATE NO-UNDO.
    DEF VAR ldeSecSIMTermStamp AS DEC NO-UNDO.
-
+   DEF VAR lcNewCliType AS CHAR NO-UNDO.
    DEF BUFFER Customer FOR Customer.
      
    IF NOT AVAIL Mobsub THEN RETURN.
@@ -1650,6 +1650,7 @@ PROCEDURE pMultiSIMTermination:
                           Syst.Var:katun,
                           piOrigRequest, /* orig. request */
                           {&TERMINATION_TYPE_FULL},
+                          lcNewCliType,
                           OUTPUT lcError). 
                
       IF lcError > "" THEN 

@@ -254,6 +254,7 @@ REPEAT:
                                       "",         /* creator */
                                       0,          /* father request */
                                       {&TERMINATION_TYPE_FULL},
+                                      lcNewCliType,
                                       OUTPUT lcError).
        
       IF liRequest = 0 THEN DO:
@@ -297,7 +298,6 @@ REPEAT:
       END.
 
       IF fIsConvergenceTariff(lcCLIType) THEN DO.
-         /* Jos convergent liittymä */
          IF lcTerminationType EQ "MOBILE" THEN DO:
             liRequest = fTerminationRequest(MobSub.MSSeq,
                                             ldKillStamp,
@@ -311,6 +311,7 @@ REPEAT:
                                             "",         /* creator */
                                             0,          /* father request */
                                             {&TERMINATION_TYPE_PARTIAL},
+                                            lcNewCliType,
                                             OUTPUT lcError).                                                  
        
             IF liRequest = 0 THEN DO:
@@ -319,16 +320,31 @@ REPEAT:
             END.
          END.
 
-         liRequest = fConvFixedSTCReq(lcNewCliType,
-                                      MobSub.MsSeq,
-                                      ldKillStamp,
-                                      {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                                      liRequest).
+         IF lcTerminationType EQ "FIXED" THEN DO:
+
+            liRequest = fCTChangeRequest(MobSub.msseq,
+                                         lcCLIType,
+                                         "",
+                                         "",      /* validation is already done in newton */
+                                         ldKillStamp,
+                                         0,  /* 0 = Credit check ok */
+                                         0,
+                                         "" /* pcSalesman */,
+                                         FALSE,
+                                         TRUE,
+                                         "",
+                                         0,
+                                         {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION}, 
+                                         0, /* order id */
+                                         liRequest,
+                                         "", /*dms: contract_id,channel ->ReqCParam6*/
+                                         OUTPUT lcError).                                         
       
-         IF liRequest = 0 THEN DO:
-            fError("STC Request creation failed: " +  lcError).
-            NEXT.
-         END.
+            IF liRequest = 0 THEN DO:
+               fError("STC Request creation failed: " +  lcError).
+               NEXT.
+            END.
+         END.      
       END.
    END.
 

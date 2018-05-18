@@ -124,6 +124,7 @@ PROCEDURE pTerminateSubscription:
   DEFINE VARIABLE liQuarTime    AS INTEGER NO-UNDO. 
   DEFINE VARIABLE llPenaltyFee  AS LOGICAL NO-UNDO. 
   DEFINE VARIABLE liTermReason  AS INT NO-UNDO. 
+  DEFINE VARIABLE lcNewCliType  AS CHAR NO-UNDO.
 
   /* terminate the subscription */
   ASSIGN liTermReason = {&SUBSCRIPTION_TERM_REASON_POS_ORDER_CANCELATION}
@@ -167,6 +168,7 @@ PROCEDURE pTerminateSubscription:
                "",
                0,
                {&TERMINATION_TYPE_FULL},
+               lcNewCliType,               
                OUTPUT ocResult).
 END PROCEDURE.
 

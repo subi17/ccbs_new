@@ -68,6 +68,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
    DEFINE VARIABLE lviSimStat          AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lviQuarTime         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lviRequest          AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcNewCliType        AS CHARACTER NO-UNDO.
 
    IF icSource EQ {&REQUEST_SOURCE_STC} OR 
       icSource EQ {&REQUEST_SOURCE_BTC} THEN DO:
@@ -113,6 +114,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
                        Syst.Var:katun,
                        iiOrigRequest, /* orig. request */
                        {&TERMINATION_TYPE_FULL},
+                       lcNewCliType,
                        OUTPUT lvcError).
    IF lviRequest EQ 0 THEN
       Func.Common:mWriteMemo("MobSub",

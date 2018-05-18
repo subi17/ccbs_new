@@ -25,7 +25,8 @@ FUNCTION fTerminationRequest RETURNS INTEGER
     INPUT  icSource       AS CHAR,   /* source of request */
     INPUT  icCreator      AS CHAR,   /* who made the request */
     INPUT  iiOrigReq      AS INT,    /* father request */
-    INPUT  icTermType     AS CHAR,    /* Termination type full, Partial */
+    INPUT  icTermType     AS CHAR,   /* Termination type full, Partial */
+    INPUT  icNewCliType   AS CHAR,   /* New CLIType, should be not empty only from Bob tool */
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
@@ -66,6 +67,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       bCreaReq.ReqIParam2  = iiSIMStatus
       bCreaReq.ReqIParam3  = iiQuarantine
       bCreaReq.ReqIParam4  = iiPenaltyFee
+      bCreaReq.ReqCParam5  = icNewCliType
       bCreaReq.ReqCParam6  = icTermType
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigReq     = iiOrigReq

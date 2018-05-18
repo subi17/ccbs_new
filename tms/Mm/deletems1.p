@@ -88,6 +88,7 @@ DEFINE VARIABLE lcTenant         AS CHAR NO-UNDO.
 DEFINE VARIABLE llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
 DEFINE VARIABLE llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
 DEFINE VARIABLE llAddLineTerm    AS LOG  NO-UNDO.
+DEFINE VARIABLE lcNewCliType     AS CHAR NO-UNDO.
 
 DEFINE BUFFER UsrCustomer FOR Customer.
 DEFINE BUFFER AgrCustomer FOR Customer.
@@ -752,6 +753,7 @@ REPEAT WITH FRAME main:
                                     lcUserCode,
                                     0,
                                     lcTermType,
+                                    lcNewCliType,
                                     OUTPUT ocResult).
                                     
       IF liMsReq = 0 THEN

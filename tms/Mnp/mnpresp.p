@@ -1048,8 +1048,10 @@ PROCEDURE pHandleFromASOL2ACON:
       DEFINE VARIABLE llPenalty AS LOGICAL NO-UNDO. 
       DEFINE VARIABLE ocResult AS CHARACTER NO-UNDO. 
       DEFINE VARIABLE lcTermType AS CHARACTER NO-UNDO.
+     
       DEF VAR ldaMNPDate AS DATE NO-UNDO. 
-
+      DEF VAR lcNewCliType AS CHAR NO-UNDO.
+      
       fInitialiseValues(2, 
                         fIsYoigoCLI(MNPSub.CLI),
                         fIsMasmovilCLI(MNPSub.CLI),
@@ -1084,6 +1086,7 @@ PROCEDURE pHandleFromASOL2ACON:
                           Syst.Var:katun,
                           0, /* orig. request */
                           lcTermType,
+                          lcNewCliType,                          
                           OUTPUT ocResult). 
 
       IF liTermReqId = 0 THEN
