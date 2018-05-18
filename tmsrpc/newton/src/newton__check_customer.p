@@ -70,6 +70,7 @@ DEF VAR llAllowedELCliTypeCurrent     AS LOG  NO-UNDO.
 DEF VAR llAllowedELCliTypeOther       AS LOG  NO-UNDO. 
 DEF VAR lcClitypeAux                  AS CHAR NO-UNDO.
 DEF VAR liExtraLineStatus             AS INT  NO-UNDO.
+DEF VAR llAllowedProMig               AS LOGI NO-UNDO.
 
 DEF BUFFER bCustomer  FOR Customer.
 DEF BUFFER bMobSub    FOR MobSub.
@@ -140,72 +141,33 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                     0) THEN DO:
                    fSetError ("PRO migration not possible because of active non pro orders").
              END.
-             ELSE DO:
-                llOnlyActiveFound = FALSE.             
-                /* Check that customer got at least one 3P convergent
-                   and all convergent subscriptions are commercially
-                   active webstatus */
+             ELSE 
+             DO:
                 FOR EACH Mobsub NO-LOCK WHERE 
-                         Mobsub.Brand EQ Syst.Var:gcBrand AND 
-                         Mobsub.InvCust EQ Customer.CustNum:
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
-                   FIND FIRST Clitype WHERE
-                              Clitype.brand EQ "1" AND
-                              Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                   IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1) THEN DO:
-                      IF fHasTVService(Mobsub.msseq) THEN DO:
-                         /* TV service not allowed for PRO */
-                         fSetError ("PRO migration not possible because of TV service").
-                         LEAVE.
-                      END.
-                      ELSE
-                         /* at least one found */
-                         IF llOnlyActiveFound EQ FALSE THEN
-                            llOnlyActiveFound = TRUE.
-                   END.
-                   ELSE DO:
-                      llOnlyActiveFound = FALSE.
+                         Mobsub.Brand   EQ Syst.Var:gcBrand AND 
+                         Mobsub.AgrCust EQ Customer.CustNum:
+
+                   IF fIsFixedOnly(Mobsub.Clitype) THEN
+                   DO:
+                      fSetError ("PRO migration not possible because of fixed only").
                       LEAVE.
-                   END.                  
-                END.
-                IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
-                       fSetError ("This migration is not allowed. Please change tariff to the commercially active ones.").
-                END.
-                ELSE DO:
-                   /* Check that mobile subscriptions are commercially active
-                      or possible to migrate to active according to defined
-                      mapping */
-                   FOR EACH Mobsub NO-LOCK WHERE
-                            Mobsub.Brand EQ Syst.Var:gcBrand AND
-                            Mobsub.InvCust EQ Customer.CustNum:
-                      IF fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
-                      FIND FIRST Clitype WHERE
-                                 Clitype.brand EQ "1" AND
-                                 Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                      IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
-                         IF fHasTVService(Mobsub.msseq) THEN DO:
-                         /* TV service not allowed for PRO */
-                            ASSIGN
-                               llOrderAllowed = FALSE
-                               lcReason = "PRO migration not possible because of TV service"
-                               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
-                            LEAVE.
-                         END.
-                      END.
-                      ELSE DO:
-                         /* found subscription that rejects migration 
-                            commercially non active that does not have 
-                            migration mapping or tv service activated */
-                         llOnlyActiveFound = FALSE.
-                         LEAVE.
-                      END.                   
+                   END.     
+
+                   /* Check all subscriptions of this customer are possible to migrate per defined mapping */ 
+                   llAllowedProMig = fCheckSubscriptionTypeAllowedForProMigration(MobSub.CliType, OUTPUT lcClitypeTo).
+                   IF NOT llAllowedProMig THEN 
+                   DO:
+                      fSetError ("PRO migration not possible, as mapping to change tariff to the commercially active pro tariff is missing.").
+                      LEAVE.        
                    END.
-                   IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
-                      ASSIGN
-                         llOrderAllowed = FALSE
-                         lcReason = "This migration is not allowed. Please change tariff to the commercially active ones."
-                         lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+
+                   /* TV service not allowed for PRO */    
+                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN 
+                      NEXT.
+                   IF fHasTVService(Mobsub.msseq) THEN 
+                   DO:   
+                      fSetError ("PRO migration not possible because of TV service").
+                      LEAVE.
                    END.
 
                 END.
@@ -229,60 +191,35 @@ FUNCTION fCheckMigration RETURNS LOG ():
                 lcReason = "PRO migration not possible because of active non pro orders"
                 lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
              END.
-             ELSE DO:
-                llOnlyActiveFound = FALSE.
-                FOR EACH Mobsub NO-LOCK WHERE
-                         Mobsub.Brand EQ Syst.Var:gcBrand AND
-                         Mobsub.InvCust EQ Customer.CustNum:
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN DO:
-                      NEXT.
+             ELSE 
+             DO:
+                FOR EACH Mobsub NO-LOCK WHERE 
+                         Mobsub.Brand   EQ Syst.Var:gcBrand AND 
+                         Mobsub.AgrCust EQ Customer.CustNum:
+
+                   IF fIsFixedOnly(Mobsub.Clitype) THEN
+                   DO:
+                      fSetError ("PRO migration not possible because of fixed only").
+                      LEAVE.
+                   END.     
+
+                   /* Check all subscriptions of this customer are possible to migrate per defined mapping */ 
+                   llAllowedProMig = fCheckSubscriptionTypeAllowedForProMigration(MobSub.CliType, OUTPUT lcClitypeTo).
+                   IF NOT llAllowedProMig THEN 
+                   DO:
+                      fSetError ("PRO migration not possible, as mapping to change tariff to the commercially active pro tariff is missing.").
+                      LEAVE.        
                    END.
-                   ELSE DO:
-                      llOnlyActiveFound = TRUE.
+
+                   /* TV service not allowed for PRO */    
+                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN 
+                      NEXT.
+                   IF fHasTVService(Mobsub.msseq) THEN 
+                   DO:   
+                      fSetError ("PRO migration not possible because of TV service").
                       LEAVE.
                    END.
-                END.
-                IF llOnlyActiveFound THEN DO:
-                   ASSIGN
-                      llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed because of active 3P convergent"
-                      lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
-                END.
-                ELSE DO:
-                   FOR EACH Mobsub NO-LOCK WHERE
-                            Mobsub.Brand EQ Syst.Var:gcBrand AND
-                            Mobsub.InvCust EQ Customer.CustNum:
-                      FIND FIRST Clitype WHERE
-                                 Clitype.brand EQ "1" AND
-                                 Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                      IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
-                         IF fHasTVService(Mobsub.msseq) THEN DO:
-                         /* TV service not allowed for PRO */
-                            ASSIGN
-                               llOrderAllowed = FALSE
-                               lcReason = "PRO migration not possible because of TV service"
-                               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
-                            LEAVE.
-                         END.
-                         ELSE
-                            IF llOnlyActiveFound EQ FALSE THEN
-                               llOnlyActiveFound = TRUE.
-                      END.
-                      ELSE DO:
-                         /* found subscription that rejects migration
-                            commercially non active that does not have
-                            migration mapping or tv service activated */
-                         llOnlyActiveFound = FALSE.
-                         LEAVE.
-                      END.
-                   END.
-                END. 
-                IF NOT llOnlyActiveFound  THEN DO:
-                   ASSIGN
-                      llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed. Please change tariff to the commercially active ones."
-                      lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+
                 END.                
              END.             
           END.          
