@@ -61,7 +61,7 @@ DEFINE BUFFER lbTermMobSub FOR TermMobSub.
 /* ***************************  Main Block  *************************** */
 
 ASSIGN
-   lcIncDir     = fCParam("YOICard","IncDir")
+   lcIncDir     = fCParam("YOICard","IncDirDisc")
    lcProcessDir = fCParam("YOICard","IncProcessDir")
    lcProcDir    = fCParam("YOICard","IncProcDir")
    lcSpoolDir   = fCParam("YOICard","OutSpoolDir")
