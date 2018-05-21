@@ -1,5 +1,7 @@
 
-se     : Onetime fix to create dumpfile record for mnp sms rejection report
+/*------------------------------------------------------------------------
+    File        : onetime_ydr-2812.p
+    Purpose     : Onetime fix to create dumpfile record for mnp sms rejection report
 
     Syntax      :
 
@@ -26,8 +28,8 @@ IF AVAILABLE DumpFile
       DumpFile.DumpName        = "SmsRejectedPortability"
       DumpFile.Description     = "Sms Rejected Portability Report Dump"
       DumpFile.FileName        = "#TENANT_Sms_Rejected_Portability_#DATE.dump"
-      DumpFile.SpoolDir        = "/store/riftp/mnp/report/spool"
-      DumpFile.TransDir        = "/store/riftp/mnp/report/outgoing"
+      DumpFile.SpoolDir        = "/store/riftp/dumpfiles/dwh/spool/"
+      DumpFile.TransDir        = "/store/riftp/dumpfiles/dwh/outgoing/"
       DumpFile.DumpDelimiter   = "|"
       DumpFile.DecimalPoint    = "."
       DumpFile.LogicModule     = "Mnp/mnpsmsreject.p"
