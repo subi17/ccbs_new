@@ -140,7 +140,7 @@ FUNCTION fParseAccOrderCustomer RETURNS LOGICAL
    FIND OrderCustomer NO-LOCK WHERE
         OrderCustomer.Brand = Syst.Var:gcBrand AND
         OrderCustomer.OrderID = Order.OrderID AND
-        OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_ACC}.
+        OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_ACC} NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
 
    CREATE ttCustomer.
