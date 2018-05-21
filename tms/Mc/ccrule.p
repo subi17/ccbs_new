@@ -196,16 +196,29 @@ REPEAT WITH FRAME sel:
                  ELSE IF FRAME-FIELD = "Category" THEN DO:
                  
                     IF INPUT CCRule.Category NE "" THEN DO:
+                        
+                       IF CAN-FIND(FIRST bfCCRule WHERE bfCCRule.Brand    = Syst.Var:gcBrand
+                                                    AND bfCCRule.Category = TRIM(INPUT CCRule.Category)
+                                                    AND bfCCRule.BillCode = icBillCode
+                                                    AND bfCCRule.CLIType  = ""
+                                                    AND bfCCRule.ValidTo  >= TODAY)
+                       THEN DO:
+                           BELL.
+                           MESSAGE "Account Rule already exist with same Category and ValidTo dates.".
+                           NEXT.                         
+                       END.
+                        
                        FIND FIRST CustCat WHERE 
                           CustCat.Brand = Syst.Var:gcBrand AND
                           CustCat.Category = INPUT CCRule.Category
                        NO-LOCK NO-ERROR.
-                       IF NOT AVAILABLE CustCat THEN DO:
+                       IF NOT AVAILABLE CustCat AND TRIM(INPUT CCRule.Category) <> "*" THEN DO:
                           BELL.
                           MESSAGE "Unknown category".
                           NEXT.
                        END.
-                       DISPLAY CustCat.CatName WITH FRAME lis.
+                       ELSE IF AVAILABLE CustCat THEN 
+                           DISPLAY CustCat.CatName WITH FRAME lis.
                     END.
                  END.
                      
