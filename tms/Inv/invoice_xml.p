@@ -812,10 +812,10 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-          IF ttRow.RowType > "" AND
-            ttRow.RowGroup EQ "18" THEN DO: /* Convergent uses CLI Type Name */
+         IF ttRow.RowType > "" AND
+            (ttRow.RowGroup EQ "18" OR /* Convergent uses CLI Type Name */
+             ttRow.RowGroup EQ "46") THEN /* YDR-2848 */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
-         END.
          ELSE
             lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
 

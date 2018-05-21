@@ -1135,77 +1135,68 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
-      /*Google billing*/
       FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "44" NO-LOCK:
-         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
-      END.
-      FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "45" NO-LOCK:
-         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
-      END.
-      /* YDR-2848 The sum of the charges applied to the line */
-      FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "31" NO-LOCK:
-         ttSub.Charges = ttSub.Charges + ttRow.RowAmt.
-      END.
-      /* YDR-2848 Sum of amount due to bundles of data and data upsells */
-      FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "35" OR
-               ttRow.RowCode BEGINS "37" OR
-               ttRow.RowCode BEGINS "39" OR
-               ttRow.RowCode BEGINS "40" OR
-               ttRow.RowCode BEGINS "42" NO-LOCK:
-         ttSub.Bundles = ttSub.Bundles + ttRow.RowAmt.
-      END.
-      /* YDR-2848 The sum of outgoings that aren.t included in the tariff fee: 
-         SMS, MMS, international calls etc. */
-      /* FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "35" /* What?? */ NO-LOCK:
-         ttSub.Others = ttSub.Others + ttRow.RowAmt.
-      END.*/
+               ttRow.SubInvNum = SubInvoice.SubInvNum NO-LOCK:
+         /*Google billing*/
+         IF ttRow.RowCode BEGINS "44" THEN
+            ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
+      
+         IF ttRow.RowCode BEGINS "45" THEN
+            ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
 
-      /* YDR-2848 Subscription level TOTAL sum */
-      FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum:
+         /* YDR-2848 The sum of the discounts applied to the line */
+         IF ttRow.RowCode BEGINS "13" THEN
+            ttSub.Discounts = ttSub.Discounts + ttRow.RowAmt.
+      
+         /* YDR-2848 The sum of the charges applied to the line */
+         IF ttRow.RowCode BEGINS "31" THEN
+            ttSub.Charges = ttSub.Charges + ttRow.RowAmt.
+      
+         /* YDR-2848 Sum of amount due to bundles of data and data upsells */
+         IF (ttRow.RowCode BEGINS "35" OR
+             ttRow.RowCode BEGINS "37" OR
+             ttRow.RowCode BEGINS "39" OR
+             ttRow.RowCode BEGINS "40" OR
+             ttRow.RowCode BEGINS "42") THEN
+            ttSub.Bundles = ttSub.Bundles + ttRow.RowAmt.
+      
+         /* YDR-2848 The sum of outgoings that aren.t included in the 
+            tariff fee: SMS, MMS, international calls, AgileTV etc. */
+         IF ttRow.RowCode BEGINS "55" THEN
+            ttSub.Others = ttSub.Others + ttRow.RowAmt.
+
+         /* YDR-2848 Subscription level TOTAL sum */
          ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmt.
-      END.
 
-      /* ttRows contains combined invrows => no need to check duplicates */
-      FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "33" AND
-               ttRow.RowType = "":
+         /* ttRows contains combined invrows => no need to check duplicates */
+         IF ttRow.RowCode BEGINS "33" AND
+               ttRow.RowType = "" THEN DO:
 
-         IF (ttRow.RowBillCode EQ "TERMPERIOD" OR
-             ttRow.RowBillCode EQ "FTERMPERIOD") AND
-             ttRow.RowVatAmt EQ 0 THEN
-             ttSub.PenaltyAmt = ttSub.PenaltyAmt + ttRow.RowAmt.
+            IF (ttRow.RowBillCode EQ "TERMPERIOD" OR
+                ttRow.RowBillCode EQ "FTERMPERIOD") AND
+                ttRow.RowVatAmt EQ 0 THEN
+                ttSub.PenaltyAmt = ttSub.PenaltyAmt + ttRow.RowAmt.
                   
-         IF NOT (ttRow.RowBillCode BEGINS "PAYTERM" OR
-                 ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
+            IF NOT (ttRow.RowBillCode BEGINS "PAYTERM" OR
+                    ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
             
-         ASSIGN
-            ttSub.InstallmentAmt = ttSub.InstallmentAmt + ttRow.RowAmt.
+            ASSIGN
+               ttSub.InstallmentAmt = ttSub.InstallmentAmt + ttRow.RowAmt.
 
-         IF (LOOKUP(ttRow.RowBillCode,{&TF_BANK_RVTERM_BILLCODES})           > 0) OR
-            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES})     > 0) OR 
-            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) OR
-            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_PAYTERM_BILLCODES}) > 0) OR
-            /* included due to Q25 picture check */
-            ttRow.RowBillCode EQ "PAYTERM" THEN 
-            llPTFinancedByBank = TRUE.
+            IF (LOOKUP(ttRow.RowBillCode,{&TF_BANK_RVTERM_BILLCODES})           > 0) OR
+               (LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES})     > 0) OR 
+               (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) OR
+               (LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_PAYTERM_BILLCODES}) > 0) OR
+               /* included due to Q25 picture check */
+               ttRow.RowBillCode EQ "PAYTERM" THEN 
+               llPTFinancedByBank = TRUE.
             
-         ELSE IF 
-            LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
-            LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 OR
-            LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0
-         THEN llRVFinancedByBank = TRUE.
+            ELSE IF 
+               LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
+               LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 OR
+               LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0
+            THEN llRVFinancedByBank = TRUE.
+         END.
       END.
 
       IF ttSub.InstallmentAmt > 0 THEN
