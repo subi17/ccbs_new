@@ -292,7 +292,7 @@ REPEAT:
          NEXT.
       END.
 
-      IF fIsMobileOnly(lcCLIType) THEN DO:
+      IF NOT fIsConvergentORFixedOnly(lcCLIType) THEN DO:
          fError("Invalid CLIType (MOBILE) for partial termination, CLIType: " + lcCLIType).
          NEXT.
       END.

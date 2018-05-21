@@ -777,22 +777,4 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
 END FUNCTION. 
 
 
-/* Function returns True if a tariff can be defined as mobileonly tariff.
-NOTE: False is returned in real false cases and also in error cases. */
-FUNCTION fIsMobileOnly RETURNS LOGICAL
-   (icCLIType AS CHARACTER):
-
-   DEFINE BUFFER bCLIType FOR CLIType.
-   
-   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                     bCLIType.Brand      = Syst.Var:gcBrand           AND
-                     bCLIType.CLIType    = icCLIType                         AND
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
-      RETURN TRUE.
-
-   RETURN FALSE.
-
-END FUNCTION.
-
-
 &ENDIF
