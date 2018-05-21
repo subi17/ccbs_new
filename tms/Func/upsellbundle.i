@@ -160,8 +160,6 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    /* YCO-275 and YCO-276 */
    DEF VAR lcRetentionUpsells3GB   AS CHAR NO-UNDO.  
    DEF VAR lcRetentionUpsells5GB   AS CHAR NO-UNDO.
-   DEF VAR liUpsellLoop            AS INT  NO-UNDO.  
-   DEF VAR lcUpsellLoop            AS CHAR NO-UNDO.
    DEF VAR lcResultLoop            AS CHAR NO-UNDO.
    DEF VAR llcompatible            AS LOG  NO-UNDO.
    DEF VAR lccompatibleMsg         AS CHAR NO-UNDO.
@@ -195,53 +193,37 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       LOOKUP(icDCEvent,lcRetentionUpsells5GB) > 0 THEN 
    DO:
       /* New code for YCO-276 and YCO-275: Checking compatible tariffs */
-      llcompatible = FALSE.
-      
       IF LOOKUP(icDCEvent,lcRetentionUpsells3GB) > 0 then
       DO:
          /* Checking tariff vs upsell compatibility for 3GB */
-         lccompatibleMsg = "Tariff not compatible for 3Gb retention upsell".
-         
-         DO liUpsellLoop = 1 TO NUM-ENTRIES(lcRetentionUpsells3GB):
-        
-            lcUpsellLoop = ENTRY(liUpsellLoop,lcRetentionUpsells3GB).
-             
-            IF fMatrixAnalyse(Syst.Var:gcBrand,
-                              "PERCONTR",
-                              "PerContract;SubsTypeTo",
-                              lcUpsellLoop + ";" + Mobsub.CLIType,
-                              OUTPUT lcResultLoop) NE 1 AND
-               ENTRY(1,lcResultLoop,";") NE "?" THEN 
-               NEXT.             
-       
-               ASSIGN 
-                   llCompatible    = TRUE
-                   lccompatibleMsg = "".
-               LEAVE.
-          END.    
+         IF fMatrixAnalyse(Syst.Var:gcBrand,
+                           "PERCONTR",
+                           "PerContract;SubsTypeTo",
+                           icDCEvent + ";" + Mobsub.CLIType,
+                           OUTPUT lcResultLoop) NE 1 AND
+            ENTRY(1,lcResultLoop,";") NE "?" THEN 
+            ASSIGN
+              lccompatibleMsg = "Tariff not compatible for 3Gb retention upsell"              llcompatible = FALSE.
+         ELSE       
+            ASSIGN 
+              llCompatible    = TRUE
+              lccompatibleMsg = "".    
       END.
       ELSE 
       DO:
          /* Checking tariff vs upsell compatibility for 5GB */
-         lccompatibleMsg = "Tariff not compatible for 5Gb retention upsell".
-         
-         DO liUpsellLoop = 1 TO NUM-ENTRIES(lcRetentionUpsells5GB):
-        
-            lcUpsellLoop = ENTRY(liUpsellLoop,lcRetentionUpsells5GB).
-             
-            IF fMatrixAnalyse(Syst.Var:gcBrand,
-                              "PERCONTR",
-                              "PerContract;SubsTypeTo",
-                              lcUpsellLoop + ";" + Mobsub.CLIType,
-                              OUTPUT lcResultLoop) NE 1 AND
-               ENTRY(1,lcResultLoop,";") NE "?" THEN 
-               NEXT.             
-       
-               ASSIGN 
-                   llCompatible    = TRUE
-                   lccompatibleMsg = "".
-               LEAVE.
-          END.    
+         IF fMatrixAnalyse(Syst.Var:gcBrand,
+                           "PERCONTR",
+                           "PerContract;SubsTypeTo",
+                           icDCEvent + ";" + Mobsub.CLIType,
+                           OUTPUT lcResultLoop) NE 1 AND
+            ENTRY(1,lcResultLoop,";") NE "?" THEN 
+            ASSIGN 
+              lccompatibleMsg = "Tariff not compatible for 5Gb retention upsell"              llcompatible = FALSE.
+         ELSE
+             ASSIGN 
+               llCompatible    = TRUE
+               lccompatibleMsg = "".
       END.
       
       IF llcompatible = FALSE THEN
