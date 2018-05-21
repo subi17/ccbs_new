@@ -30,9 +30,9 @@ FOR EACH MobSub NO-LOCK
    WHERE mobsub.brand = Customer.brand AND  
          MobSub.CustNum = liCustNum :
     FIND FIRST DCCli WHERE 
-           DCCLi.brand = MobSub.Brand AND 
-           DCCLi.msseq = mobsub.msseq AND 
-           Dccli.Dcevent = "YOICARD" NO-LOCK NO-ERROR.
+           DCCLi.brand = MobSub.Brand          AND 
+           Dccli.Dcevent = {&YOICARD_DCEvent}  AND 
+           DCCLi.msseq = mobsub.msseq          NO-LOCK NO-ERROR.
     IF NOT AVAILABLE DCCLi THEN NEXT.
     add_string(lcResultStruct,"status", ENTRY(DCCli.ServiceStatus + 1 , lcStats )).
     lAvailCard = TRUE.
