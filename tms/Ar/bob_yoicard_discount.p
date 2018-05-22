@@ -17,7 +17,7 @@ Syst.Var:gcBrand EQ "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/coinv.i}
-{Func/fsendsms.i}
+{Func/msisdn_prefix.i}
 {Mc/dpmember.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
@@ -323,13 +323,13 @@ PROCEDURE pUpdateYOICardStatusAndDiscount:
 
       fLogLine(lcYOICardLogMsg + lcSep + lcDiscLogMsg).
 
-      IF lcDiscLogMsg > "" THEN 
-         RUN pSendSMS(lbMobSub.MsSeq,
-                      0,
-                      {&YOICARD_SMS_KEYVALUE},
-                      {&SMSTYPE_INFO},
-                      {&YOICARD_SMS_SENDER},
-                      "").   
+      IF lcDiscLogMsg > ""           AND 
+         fIsMobileNumber(MobSub.CLI) THEN DO: 
+         IF Mm.MManMessage:mGetMessage("SMS", "YOICardUpdateBOB", 1) EQ TRUE THEN DO:
+            Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI, FALSE).
+            Mm.MManMessage:mClearData().
+         END.
+      END. 
 
    END. /* REPEAT TRANSACTION */ 
 
