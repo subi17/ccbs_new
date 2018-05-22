@@ -441,6 +441,8 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
                                                  INPUT {&REQUEST_SOURCE_MIGRATION},
                                                  INPUT iimsrequest,
                                                  OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                      RETURN "ERROR: Migration request creation failed. " + lcResult.
                END.
             END.
             OTHERWISE
@@ -477,6 +479,9 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
       ELSE
          RETURN "ERROR: Migration failed. " + lcResult.
    END.
+
+   RETURN "".
+
 END FUNCTION.
 
 /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
