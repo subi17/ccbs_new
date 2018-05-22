@@ -152,7 +152,9 @@ PROCEDURE pSolog:
    DEF BUFFER bufTermMobsub FOR TermMobsub.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
-   DEF VAR ldCurrBal AS DECIMAL NO-UNDO. 
+   DEF VAR ldCurrBal     AS DECIMAL NO-UNDO. 
+   DEF VAR liError       AS INT NO-UNDO.
+   DEF VAR lcResult      AS CHAR NO-UNDO.
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -202,6 +204,29 @@ PROCEDURE pSolog:
    
       IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
           MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN DO:
+
+         IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
+
+            IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
+               MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
+               FOR FIRST bufOrder NO-LOCK WHERE bufOrder.MsSeq = MSRequest.MSSeq AND
+                        (bufOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
+                         bufOrder.StatusCode = {&ORDER_STATUS_MNP} OR
+                         bufOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):
+
+                  /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */
+                  /* liError = fSendFixedLineTermReqToMuleDB(bOrder.OrderId, OUTPUT lcResult). */
+                  IF liError EQ 1 THEN DO:
+                     Func.Common:mWriteMemo("MobSub",
+                                 STRING(bufOrder.MsSeq),
+                                 bufOrder.Custnum,
+                                 "Fixed line termination failed",
+                                 lcResult).
+                     fReqError("Fixed line termination failed" + lcResult).                                 
+                  END.
+               END.        
+            END.
+         END.
 
          /* Cancel the active/suspended BB service before
             subscription termination or icc change provisioning */
