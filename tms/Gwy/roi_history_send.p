@@ -15,6 +15,7 @@
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
+{Func/dms.i}
 
 Syst.Var:gcBrand = "1".
 
@@ -59,6 +60,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    add_string(pcStruct, "cli", Order.CLI). 
    add_string(pcStruct, "subscription_type", Order.CLIType).
    add_string(pcStruct, "order_id", STRING(Order.OrderId)).
+   add_string(pcStruct, "dms_status", fGetOrderDMSStatus(Order.OrderId)).
    /* optionals  */
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = Syst.Var:gcBrand AND
@@ -307,6 +309,31 @@ FUNCTION fFillAccessoryStruct RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+FUNCTION fFillPOSStruct RETURNS LOGICAL
+   (INPUT pcStruct AS CHARACTER):
+
+   FIND FIRST OrderCustomer WHERE
+              OrderCustomer.Brand   = Syst.Var:gcBrand   AND
+              OrderCustomer.OrderId = Order.OrderId      AND 
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
+
+   add_string(pcStruct, "gescal"       ,  OrderCustomer.Gescal       ).
+   add_string(pcStruct, "street_type"  ,  OrderCustomer.StreetType   ).
+   add_string(pcStruct, "street_name"  ,  OrderCustomer.Street       ).
+   add_string(pcStruct, "street_number",  OrderCustomer.BuildingNum  ).
+   add_string(pcStruct, "floor"        ,  OrderCustomer.Floor        ).
+   add_string(pcStruct, "door"         ,  OrderCustomer.Door         ).
+   add_string(pcStruct, "block"        ,  OrderCustomer.Block        ).
+   add_string(pcStruct, "stair"        ,  OrderCustomer.Stair        ).
+   add_string(pcStruct, "bis"          ,  OrderCustomer.BisDuplicate ).
+   add_string(pcStruct, "town"         ,  OrderCustomer.PostOffice   ).
+   add_string(pcStruct, "zip_code"     ,  OrderCustomer.ZipCode      ).
+
+   RETURN TRUE.
+
+END.
+
 /* MAIN */
 
 clsNagios = NEW Class.nagios().
@@ -378,7 +405,8 @@ PROCEDURE pSendROIHistory:
    DEFINE VARIABLE lcAddressStruct AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcAccessoryStruct AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcContactStruct AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcPOSStruct         AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcResp AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcResult AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcDescription AS CHARACTER NO-UNDO. 
@@ -405,6 +433,9 @@ PROCEDURE pSendROIHistory:
 
    lcContactStruct = add_struct(param_toplevel_id,"").
    fFillCustomerStruct(lcContactStruct,5).
+
+   lcPOSStruct = add_struct(param_toplevel_id,"").
+   fFillPOSStruct(lcContactStruct).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLog( "ROI History, ERROR Creating message: " + gc_xmlrpc_error,"NW_ERR"). 
