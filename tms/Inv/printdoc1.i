@@ -1145,9 +1145,15 @@ PROCEDURE pGetSubInvoiceHeaderData:
             ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
 
          /* YDR-2848 The sum of the discounts applied to the line */
-         IF ttRow.RowCode BEGINS "13" THEN
+         IF ttRow.RowCode BEGINS "13" AND
+            ttRow.RowGroup  = "13" THEN DO:
             ttSub.Discounts = ttSub.Discounts + ttRow.RowAmt.
-      
+            /* Check phone discounts */
+            IF ttSub.InstallmentAmt > 0 THEN
+               IF LOOKUP(ttRow.RowBillCode,{&INSTALLMENT_DISCOUNT_BILLCODES}) > 0 THEN
+                  ttSub.InstallmentDiscAmt = ttSub.InstallmentDiscAmt + ttRow.RowAmt.
+         END.
+
          /* YDR-2848 The sum of the charges applied to the line */
          IF ttRow.RowCode BEGINS "31" THEN
             ttSub.Charges = ttSub.Charges + ttRow.RowAmt.
@@ -1198,7 +1204,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
             THEN llRVFinancedByBank = TRUE.
          END.
       END.
-
+      /*
       IF ttSub.InstallmentAmt > 0 THEN
          FOR EACH ttRow NO-LOCK WHERE 
                   ttRow.SubInvNum = SubInvoice.SubInvNum AND 
@@ -1207,7 +1213,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                   LOOKUP(ttRow.RowBillCode,{&INSTALLMENT_DISCOUNT_BILLCODES}) > 0:
             ttSub.InstallmentDiscAmt = ttSub.InstallmentDiscAmt + ttRow.RowAmt.
          END.              
-
+      */
       IF llPTFinancedByBank THEN 
          fTFBankFooterText("PAYTERM"). 
       IF llRVFinancedByBank THEN
