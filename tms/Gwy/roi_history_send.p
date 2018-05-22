@@ -33,8 +33,28 @@ DEFINE VARIABLE lcOrderTime AS CHARACTER NO-UNDO.
 DEFINE VARIABLE cConnURL AS CHARACTER NO-UNDO.
 DEFINE VARIABLE iTimeOut AS INTEGER NO-UNDO.
 DEFINE VARIABLE liNumMsgs AS INTEGER NO-UNDO.
+DEFINE VARIABLE liPrintXML AS INTEGER NO-UNDO.
 
 DEF BUFFER bOrder FOR Order.
+/*For testing*/
+liPrintXML = 1.
+DEF STREAM sOut.
+ 
+/*NOTE: This must be modified to match our functionality naming. */
+FUNCTION fwriexml_ROI_test RETURNS CHAR /* Ilkka: change good function name and output writinc values.*/
+   (icMethod AS CHAR):
+   IF liPrintXML NE 0 THEN DO:
+      xmlrpc_initialize(FALSE).
+      OUTPUT STREAM sOut TO VALUE("/tmp/ROI_xml_" +
+      REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") +
+      ".xml") APPEND.
+      PUT STREAM sOut UNFORMATTED
+         string(serialize_rpc_call( icMethod)) SKIP.
+      PUT STREAM sOut "" SKIP.
+      OUTPUT STREAM sOut CLOSE.
+      xmlrpc_initialize(FALSE).
+   END.
+END.
 
 FORM
    SKIP(1)
@@ -458,6 +478,8 @@ PROCEDURE pSendROIHistory:
       RETURN.
    END.
  
+   xmlrpc_initialize(FALSE).
+   fwriexml_ROI_test("ROIHistoryInterface.store_order"). 
    RUN pRPCMethodCall("ROIHistoryInterface.store_order", TRUE). 
 
    IF gi_xmlrpc_error NE 0 THEN DO:
