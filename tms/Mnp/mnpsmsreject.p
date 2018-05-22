@@ -42,8 +42,8 @@ IF AVAILABLE DumpFile THEN lcDelimiter = DumpFile.DumpDelimiter.
 
 ASSIGN
     ldaDate = TODAY - 1
-    ldeFrom = Func.Common:mHMS2TS(ldaDate, "00:00:00")
-    ldeTo   = Func.Common:mHMS2TS(ldaDate,"23:59:59").
+    ldeFrom = Func.Common:mMake2DT(ldaDate,0)
+    ldeTo   = Func.Common:mMake2DT(ldaDate,86399).
 
 FORM
     oiEvents    AT 2  LABEL "Picked " FORMAT ">>>>>>>9"
@@ -57,9 +57,7 @@ FOR EACH MNPProcess NO-LOCK
     WHERE MNPProcess.Brand       =  Syst.Var:gcBrand 
       AND MNPProcess.MNPType     =  {&MNP_TYPE_IN}    
       AND MNPProcess.UpdateTS    >= ldeFrom  
-      AND MNPProcess.UpdateTS    <= ldeTo 
-      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}
-       OR MNPProcess.StatusCode  =  {&MNP_ST_ACON} :
+      AND MNPProcess.UpdateTS    <= ldeTo: 
     IF (MNPProcess.StatusCode    =  {&MNP_ST_AREC} AND LOOKUP(MNPProcess.StatusReason,lcStatusReason) > 0) 
         OR MNPProcess.StatusCode =  {&MNP_ST_ACON} THEN 
     DO:    
