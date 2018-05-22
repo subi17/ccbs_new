@@ -2,9 +2,6 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Gwy.ModelInterface.
 
-&GLOBAL-DEFINE CONFIG_ID_MAX 32
-&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
-
 {Syst/tmsconst.i}
 
 CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
@@ -40,7 +37,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
                                     iCorrelationID AS CHAR,
                                     iReplyTo       AS CHAR):
       ASSIGN
-         lcJson           = iJson
+         lcJson          = iJson
          lcModelid       = iModelid
          lcCorrelationID = iCorrelationID
          loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
@@ -90,7 +87,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
          BillItem.InvSect  = ttBillItem.invoice_section
          BillItem.BIGroup  = ttBillItem.billing_item_group
          BillItem.TaxClass = ttBillItem.tax_class.
-     //    BillItem.DebtType = ttBillItem.debt_type
+         BillItem.DebtType = ttBillItem.debt_type
 
       loEventLogMaker:make_eventlog("create",BUFFER BillItem:HANDLE).
 
@@ -175,8 +172,8 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
           BillItem.BIGroup = ttBillItem.billing_item_group.
        IF ttBillItem.tax_class > "" THEN    
           BillItem.TaxClass = ttBillItem.tax_class.
-    /* IF ttBillItem.debt_type > "" THEN    
-          BillItem.DebtType = ttBillItem.debt_type. */
+       IF ttBillItem.debt_type > "" THEN    
+          BillItem.DebtType = ttBillItem.debt_type. 
    
        loEventLogMaker:make_eventlog("modify",BUFFER BillItem:HANDLE).
 
@@ -223,13 +220,13 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
                             TaxClass.TaxClass = ttBillItem.tax_class) THEN
          RETURN "Invalid tax class".
       
-  /*  IF ttBillItem.debt_type > "" AND NOT 
+      IF ttBillItem.debt_type > "" AND NOT 
          CAN-FIND(FIRST TMSCodes WHERE
                         TMSCodes.TableName = "BillItem" AND
                         TMSCodes.FieldName = "DebtType" AND
                         TMSCodes.CodeValue = ttBillItem.debt_type AND
                         TMSCodes.InUse > 0) THEN 
-         RETURN "Invalid debt type". */
+         RETURN "Invalid debt type". 
       
       RETURN "".    
     
