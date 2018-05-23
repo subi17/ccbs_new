@@ -824,6 +824,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          Syst.Var:ufk    = 0
          Syst.Var:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.Var:gcHelpParam = ""
          Syst.Var:ufk[2] = 295
+         Syst.Var:ufk[3] = 9858
          Syst.Var:ufk[4] = 253
          Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
@@ -835,6 +836,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       END.   
 
       ELSE IF Syst.Var:toimi = 2 THEN RUN pFeeData(FALSE).
+      
+      ELSE IF Syst.Var:toimi = 3 THEN RUN Mc/tmsrelation.p({&DCTABLENAME},{&DCKEYTYPE},DayCampaign.DCEvent).
 
       ELSE IF Syst.Var:toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
       

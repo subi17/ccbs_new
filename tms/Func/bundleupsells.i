@@ -19,6 +19,7 @@
 
 
 /* ***************************  Main Block  *************************** */
+{Syst/tmsconst.i}
 
 FUNCTION fGetDayCampaignUpsells RETURNS CHARACTER 
     (INPUT icDCEvent AS CHARACTER ):
