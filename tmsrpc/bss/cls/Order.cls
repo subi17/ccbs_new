@@ -1,12 +1,12 @@
  
  /*------------------------------------------------------------------------
     File        : Order
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : tlamminmaki
     Created     : Mon Apr 23 12:30:10 EEST 2018
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
@@ -18,7 +18,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -47,7 +47,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY CrStamp AS DECIMAL NO-UNDO
       GET.
       SET.
-   
+
    DEFINE PUBLIC PROPERTY CLI AS CHARACTER NO-UNDO
       GET.
       SET.
@@ -65,11 +65,11 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          IF NOT AVAILABLE MobSub
          THEN DO:
             IF CAN-FIND(TermMobSub NO-LOCK WHERE TermMobSub.MSSeq = iiMSSeq)
-            THEN UNDO, THROW NEW InternalError
-                  (SUBSTITUTE("MobSub having msseq '&1' is not active", iiMSSeq)).
+            THEN UNDO, THROW NEW ParamError
+                  (SUBSTITUTE("subscription_not_active|&1", iiMSSeq)).
 
-            UNDO, THROW NEW InternalError
-                  (SUBSTITUTE("MobSub having msseq '&1' doesn't exists", iiMSSeq)).
+            UNDO, THROW NEW ParamError
+                  (SUBSTITUTE("subscription_not_found|&1", iiMSSeq)).
          END.
          ASSIGN
             THIS-OBJECT:MsSeq         = iiMSSeq
@@ -91,9 +91,9 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 
       IF VALID-OBJECT(aoOrderProductFactory)
       THEN DELETE OBJECT aoOrderProductFactory.
-      
+
 	END DESTRUCTOR.
-	
+
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
@@ -103,7 +103,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       ASSIGN
          loAgrCust = ioJsonObject:GetJsonObject("agreement-customer")
          aoCustomer = NEW bss.cls.Customer().
-      
+
       IF loAgrCust:Has("custnum")
       THEN aoCustomer:mFindData(loAgrCust:GetInteger("custnum")).
       ELSE aoCustomer:mCreateData(loAgrCust).
@@ -123,7 +123,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
       END.
-      ELSE UNDO, THROW NEW ParamError("items array is mandatory").
+      ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
 
 	END METHOD.
 
@@ -131,7 +131,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 
       /* If there is a new customer data we need to create it first */
       aoCustomer:mStoreData().
-      
+
       CREATE Order.
       ASSIGN
          Order.Brand         = Syst.Var:gcBrand
