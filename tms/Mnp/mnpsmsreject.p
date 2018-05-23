@@ -29,9 +29,6 @@ DEFINE OUTPUT PARAMETER olInterrupted AS LOGICAL    NO-UNDO.
 /* ********************  Stream/Variable Definitions  ************************** */
 DEFINE STREAM sdump.
 
-DEFINE VARIABLE ldaDate       AS DATE      NO-UNDO. 
-DEFINE VARIABLE ldeFrom       AS DECIMAL   NO-UNDO. 
-DEFINE VARIABLE ldeTo         AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE lcDelimiter   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStatusReason  AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC ENUME,RECH_BNUME,RECH_ICCID,RECH_IDENT".
 
@@ -39,11 +36,6 @@ DEFINE VARIABLE lcStatusReason  AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC EN
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN lcDelimiter = DumpFile.DumpDelimiter.
-
-ASSIGN
-    ldaDate = TODAY - 1
-    ldeFrom = Func.Common:mMake2DT(ldaDate,0)
-    ldeTo   = Func.Common:mMake2DT(ldaDate,86399).
 
 FORM
     oiEvents    AT 2  LABEL "Picked " FORMAT ">>>>>>>9"
@@ -58,8 +50,8 @@ FOR EACH MNPProcess NO-LOCK
       AND MNPProcess.MNPType     =  {&MNP_TYPE_IN} 
       AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}   
       AND MNPProcess.UpdateTS    >  idLastDump:
-    IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) > 0 THEN 
-    DO:    
+    IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) = 0 THEN NEXT ERROR_LOOP.
+      
        FIND FIRST MNPSub NO-LOCK 
             WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
        IF NOT AVAILABLE MNPSub THEN NEXT ERROR_LOOP.
@@ -81,8 +73,7 @@ FOR EACH MNPProcess NO-LOCK
        DO:
            PAUSE 0.
            DISP oiEvents WITH FRAME fColl.
-       END.        
-    END.               
+       END.                     
 END.
 
 OUTPUT STREAM sdump close.
