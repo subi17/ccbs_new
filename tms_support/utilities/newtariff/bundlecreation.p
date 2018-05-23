@@ -54,8 +54,6 @@ DEFINE TEMP-TABLE ttBundle NO-UNDO
    FIELD DataType   AS CHARACTER
    .
 
-DEFINE TEMP-TABLE ttTMSRelation NO-UNDO LIKE TMSRelation.
-
 FUNCTION fCreatettBundle RETURNS LOGICAL
    ( icFieldName AS CHARACTER,
      icDataType  AS CHARACTER,
@@ -710,7 +708,7 @@ PROCEDURE pStoreBundle:
    DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liSlSeq          AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liTMSRelationID  AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE liDCUpsells      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcDCUpsells      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liCount          AS INTEGER   NO-UNDO.
       
    ASSIGN
@@ -780,9 +778,9 @@ PROCEDURE pStoreBundle:
     
    RELEASE TMSRelation NO-ERROR.
    
-   ASSIGN liDCUpsells = fGetFieldValue({&UPSELL}).
+   ASSIGN lcDCUpsells = fGetFieldValue({&UPSELL}).
    
-   DO liCount = 1 TO NUM-ENTRIES(liDCUpsells):
+   DO liCount = 1 TO NUM-ENTRIES(lcDCUpsells):
        
        CREATE TMSRelation.
        ASSIGN 
@@ -790,18 +788,17 @@ PROCEDURE pStoreBundle:
            TMSRelation.TableName     = {&DCTABLENAME}
            TMSRelation.KeyType       = {&DCKEYTYPE}
            TMSRelation.ParentValue   = DayCampaign.DCEvent
-           TMSRelation.ChildValue    = ENTRY(liCount,liDCUpsells)
+           TMSRelation.ChildValue    = ENTRY(liCount,lcDCUpsells)
            TMSRelation.RelationType  = {&DCRELATIONTYPE}
            TMSRelation.FromTime      = DATETIME-TZ(TODAY, 0)    
            TMSRelation.ToTime        = DATETIME-TZ(12/31/49, 86399000).  
            
-       ASSIGN liTMSRelationID = liTMSRelationID + 1.
-                  
-       CREATE ttTMSRelation.
-       BUFFER-COPY TMSRelation TO ttTMSRelation NO-ERROR.   
+       ASSIGN liTMSRelationID = liTMSRelationID + 1.       
+       fExport(icSpoolDir + "tmsrelation.d", HPD.HPDCommon:mDynExport(BUFFER TMSRelation:HANDLE, " ")).
+       
    END. 
    
-   fExport(icSpoolDir + "tmsrelation.d", HPD.HPDCommon:mDynExport(BUFFER ttTMSRelation:HANDLE, " ")).
+   
          
    IF ldeDataLimit > 0 THEN   
       RUN pDCServicePackage(lcBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).

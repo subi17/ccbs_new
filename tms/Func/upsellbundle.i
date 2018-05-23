@@ -98,9 +98,11 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST DayCampaign NO-LOCK WHERE
                   DayCampaign.Brand = Syst.Var:gcBrand AND
-                  DayCampaign.DCEvent = bServiceLimit.GroupCode AND
-                  fGetDayCampaignUpsells(DayCampaign.DCEvent) > "" AND 
-                  fIsDayCampaignBundleUpsellExists(DayCampaign.DCEvent) = FALSE :
+                  DayCampaign.DCEvent = bServiceLimit.GroupCode :
+                      
+             IF fIsDayCampaignBundleUpsellExists(DayCampaign.DCEvent) = TRUE  OR 
+                fGetDayCampaignUpsells(DayCampaign.DCEvent)           = ""  THEN NEXT. 
+                           
             IF {Func/dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */
