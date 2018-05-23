@@ -937,8 +937,8 @@ PROCEDURE pSubInvoice2XML:
       lhXML:END-ELEMENT("SubInvoiceAmount").
 
       /* Discounts row. YDR-2848 */
-      lhXML:START-ELEMENT("Discounts"). /* Descuentos */
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.Discounts /* ttInvoice.InstallmentDiscAmt*/)).
+      lhXML:START-ELEMENT("Discounts"). /* Descuentos, negative value */
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(-(ttSub.Discounts))).
       lhXML:END-ELEMENT("Discounts").
 
       /* The sum of amount due to bundles of data and data upsells. YDR-2848 */
