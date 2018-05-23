@@ -38,9 +38,12 @@ DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+DEF VAR liError                AS INT  NO-UNDO.
 
 DEF BUFFER lbMobSub     FOR MobSub.
 DEF BUFFER bMobSubCust  FOR MobSub.
+DEF BUFFER bCLIType     FOR CLIType.
+
 
 FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
 
@@ -89,7 +92,7 @@ FIND FIRST NewCliType WHERE
            NewCliType.CliType = MSRequest.ReqCParam2 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL NewCliType THEN DO:
-   fReqError ("ERROR: Unknown old clitype " + MSRequest.ReqCParam2).
+   fReqError ("ERROR: Unknown new clitype " + MSRequest.ReqCParam2).
    RETURN.
 END.
 
@@ -337,8 +340,33 @@ IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR
 IF fChkSubRequest(MSrequest.MSRequest) THEN  fReqStatus(8,"").          
 
 IF fIsConvergenceTariff(MobSub.CLIType) AND
-   NOT fIsConvergenceTariff(MSRequest.ReqCParam2) THEN
+   NOT fIsConvergenceTariff(MSRequest.ReqCParam2) THEN DO:
    MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+   
+   IF fHasConvergenceTariff(MSrequest.MsSeq) THEN DO:
+      IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                  bCLIType.Brand      = Syst.Var:gcBrand AND
+                  bCLIType.CLIType    = MSRequest.ReqCParam2 AND
+                  bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN   
+ 
+         /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */ 
+         /* liError = fSendFixedLineTermReqToMuleDB(iiOrderID, OUTPUT ocResult). */
+   END.
+
+   IF liError EQ 1 THEN DO:
+      FIND FIRST MobSub WHERE MobSub.brand EQ "1" AND
+                             MobSub.MsSeq = MSrequest.MsSeq NO-LOCK NO-ERROR.
+      IF AVAIL MobSub THEN    
+         Func.Common:mWriteMemo("MobSub",
+                                STRING(MSrequest.MsSeq),
+                                MobSub.CustNum,
+                                "Fixed line termination failed",
+                                ocResult).
+   END.
+   ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.      
+END.   
+  
+   
 
 /* YDR-1847 */
 fAdditionalLineSTC(iiReqId,
