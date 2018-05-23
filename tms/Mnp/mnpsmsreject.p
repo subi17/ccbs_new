@@ -55,10 +55,10 @@ OUTPUT STREAM sdump TO value (icFile).
 ERROR_LOOP:
 FOR EACH MNPProcess NO-LOCK 
     WHERE MNPProcess.Brand       =  Syst.Var:gcBrand 
-      AND MNPProcess.MNPType     =  {&MNP_TYPE_IN}    
+      AND MNPProcess.MNPType     =  {&MNP_TYPE_IN} 
+      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}   
       AND MNPProcess.UpdateTS    >  idLastDump:
-    IF (MNPProcess.StatusCode    =  {&MNP_ST_AREC} AND LOOKUP(MNPProcess.StatusReason,lcStatusReason) > 0) 
-        OR MNPProcess.StatusCode =  {&MNP_ST_ACON} THEN 
+    IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) > 0 THEN 
     DO:    
        FIND FIRST MNPSub NO-LOCK 
             WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
