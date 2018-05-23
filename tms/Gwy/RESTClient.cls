@@ -320,7 +320,17 @@ CLASS Gwy.RESTClient:
 
       Class.Logger:writeLog(2,
                             SUBSTITUTE("&1 REST call",
-                                       ioMethodEnum:ToString()),
+                                       STRING(ioMethodEnum)),
+                            "INFO").
+
+      Class.Logger:writeLog(3,
+                            SUBSTITUTE("Base URI: &1",
+                                       aoURI:BaseURI),
+                            "INFO").
+
+      Class.Logger:writeLog(2,
+                            SUBSTITUTE("Relative URI: &1",
+                                       aoURI:RelativeURI),
                             "INFO").
 
       IF VALID-OBJECT(ioObjectEntity)
