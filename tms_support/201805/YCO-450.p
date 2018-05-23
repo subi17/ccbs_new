@@ -1,7 +1,7 @@
 /*----------------------------------------- 
-YCO-450. Creating 3 new discounts.
+YCO-450. Creating 2 new discounts.
 /tms_support/201805/YCO-450.p 
-jotorres 22.05.2018
+jotorres 23.05.2018
 -----------------------------------------*/
 
 DEFINE VARIABLE lcDPSubjects AS CHARACTER NO-UNDO.
@@ -101,43 +101,21 @@ END.
 /* --- MAIN BLOCK --- */
 
 /* RETDISC_MOB */
-ASSIGN 
+ASSIGN
    lcDPSubjects = "CONT15,CONT25,CONT33,CONT34"
    lcDPTargets  = "CONT15MF,CONT25MF,CONT33MF,CONT34MF".
 RUN pCreateDiscount (INPUT "RETDISC_MOB",
                      INPUT "CVM discount - Mobile Line",
-                     INPUT "Percentage",                      
-                     INPUT 10,
-                     INPUT 24,
-                     INPUT lcDPSubjects,
-                     INPUT lcDPTargets, 
-                     INPUT "Retention",                      
-                     OUTPUT lcResult).
-lcInfo = lcInfo + lcResult + CHR(10).
-
-/* RETDISC_CONV_MOB */
-ASSIGN
-   lcDPSubjects = 
-      "CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000,CONTFH39_50,"   + 
-      "CONTFH49_300,CONTFH69_1000,CONTFH48_50,CONTFH58_300,"  + 
-      "CONTFH76_1000,CONTFH3G_50,CONTFH3G_300,CONTFH3G_1000," +
-      "CONTFH7G_50,CONTFH7G_300,CONTFH7G_1000,CONTFH59_50,"   +
-      "CONTFH69_300,CONTFH89_1000,CONTFH99_50,CONTFH109_300," +
-      "CONTFH129_1000"
-   lcDPTargets = 
-      "CONT10MF,CONT15MF,CONT25MF,CONT30MF,CONT32MF,CONT33MF,CONT34MF".                           
-RUN pCreateDiscount (INPUT "RETDISC_CONV_MOB",
-                     INPUT "CVM discount - Convergent Line (Mobile)",
-                     INPUT "Percentage",                     
+                     INPUT "Percentage",
                      INPUT 10,
                      INPUT 24,
                      INPUT lcDPSubjects,
                      INPUT lcDPTargets,
-                     INPUT "Retention",                     
+                     INPUT "Retention",
                      OUTPUT lcResult).
 lcInfo = lcInfo + lcResult + CHR(10).
 
-/* RETDISC_CONV_FIX */
+/* RETDISC_CONV */
 ASSIGN
    lcDPSubjects = 
       "CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000,CONTFH39_50,"   + 
@@ -147,14 +125,15 @@ ASSIGN
       "CONTFH69_300,CONTFH89_1000,CONTFH99_50,CONTFH109_300," +
       "CONTFH129_1000,CONTFH35_50,CONTFH45_300,CONTFH65_1000"
    lcDPTargets = 
+      "CONT10MF,CONT15MF,CONT25MF,CONT30MF,CONT32MF,CONT33MF,CONT34MF," +
       "CONTFH50MF,CONTFH300MF,CONTFH1000MF,"               +
       "CONTFH39_50PRO,CONTFH49_300PRO,CONTFH69_1000PRO,"   + 
       "CONTFH48_50PRO,CONTFH58_300PRO,CONTFH76_1000PRO,"   +
       "CONTFH59_50PRO,CONTFH69_300PRO,CONTFH89_1000PRO,"   + 
       "CONTFH99_50PRO,CONTFH109_300PRO,CONTFH129_1000PRO," +
       "CONTFH35_50PRO,CONTFH45_300PRO,CONTFH65_1000PRO".
-RUN pCreateDiscount (INPUT "RETDISC_CONV_FIX",
-                     INPUT "CVM discount  - Convergent Line (Fix)",
+RUN pCreateDiscount (INPUT "RETDISC_CONV",
+                     INPUT "CVM discount - Convergent Line",
                      INPUT "Percentage",                     
                      INPUT 10,
                      INPUT 24,
