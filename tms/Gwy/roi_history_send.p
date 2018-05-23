@@ -349,6 +349,7 @@ FUNCTION fFillPOSStruct RETURNS LOGICAL
    add_string(pcStruct, "bis"          ,  OrderCustomer.BisDuplicate ).
    add_string(pcStruct, "town"         ,  OrderCustomer.PostOffice   ).
    add_string(pcStruct, "zip_code"     ,  OrderCustomer.ZipCode      ).
+   add_string(pcStruct, "province"     ,  OrderCustomer.Region       ).
 
    RETURN TRUE.
 
