@@ -66,7 +66,7 @@ FOR EACH MNPProcess NO-LOCK
            MNPDetails.DonorCode lcDelimiter
            MNPProcess.FormRequest lcDelimiter
            MNPProcess.StatusReason lcDelimiter
-           Func.Common:mTS2HMS(MNPProcess.MNPUpdateTS) SKIP.
+           Func.Common:mTS2HMS(MNPProcess.UpdateTS) SKIP.
                           
        oiEvents = oiEvents + 1.
        IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
