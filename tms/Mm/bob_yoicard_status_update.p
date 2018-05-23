@@ -11,8 +11,8 @@
   ----------------------------------------------------------------------*/
   
 {Syst/commpaa.i}
-Syst.Var:katun   EQ "Cron".
-Syst.Var:gcBrand EQ "1".
+Syst.Var:katun   = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
