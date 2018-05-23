@@ -12,6 +12,10 @@ CLASS Class.Logger FINAL:
         ioObject AS CLASS Progress.Lang.Object,
         icType   AS CHARACTER ):
 
+      IF LOG-MANAGER:LOGGING-LEVEL < iiLevel OR
+         LOG-MANAGER:LOGFILE-NAME  = ?
+      THEN RETURN.
+
       IF NOT VALID-OBJECT(ioObject)
       THEN RETURN.
 
