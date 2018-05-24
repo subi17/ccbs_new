@@ -11,7 +11,7 @@
        
     Usage:
 
-    DO ON ERROR, UNDO THROW:
+    DO ON ERROR UNDO, THROW:
        objRESTClient = NEW RESTClient().
    
        /* optional */
@@ -21,7 +21,7 @@
                              "host",
                              12345). /* port */
    
-       objRESTClient:mSetURIPath = "uri/path".
+       objRESTClient:mSetURIPath("uri/path").
        
        /* optional
           Normally it is not needed to specify content type and

@@ -14,7 +14,7 @@
        
     Usage:
 
-    DO ON ERROR, UNDO THROW:
+    DO ON ERROR UNDO, THROW:
        objRESTClient = NEW ParamRESTClient("<tmsparamgroup>").
    
        objRESTClient:mSetURIPath = "uri/path".
