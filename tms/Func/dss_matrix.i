@@ -438,18 +438,15 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
       INPUT  icBundle       AS CHAR,
       INPUT  ideActStamp    AS DEC):
    /* DSS related variables */
-   DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
-   DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
-   DEF VAR ldeCurrMonthLimit AS DEC NO-UNDO.
-   DEF VAR ldeConsumedData AS DEC NO-UNDO.
-   DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO.
-   DEF VAR lcResult AS CHAR NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
-   DEF VAR llDSSneeded             AS LOG  NO-UNDO.
-   DEF VAR lcDSSBundleId           AS CHAR NO-UNDO. 
+   DEF VAR lcResult              AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+   DEF VAR llDSSneeded           AS LOG  NO-UNDO.
+   DEF VAR lcDSSBundleId         AS CHAR NO-UNDO. 
 
    DEF BUFFER Mobsub FOR Mobsub.
-   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
+
+   lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+
    IF icDSSId BEGINS "DSS" THEN
       llDSSNeeded = TRUE.
    IF icDSSId EQ "DSS" THEN DO: 
@@ -457,7 +454,9 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
          llDSSNeeded = FALSE.
    END.
    ELSE IF icDSSId EQ "DSS2" THEN DO:
+      
       FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
+      
       IF AVAIL MobSub THEN DO:
          IF fMatrixAnalyse(Syst.Var:gcBrand,
                            "PERCONTR",
@@ -472,13 +471,6 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
             IF NOT fCheckActiveExtraLinePair(Mobsub.MsSeq,
                                              Mobsub.CLIType,
                                              OUTPUT lcDSSBundleId) THEN
-            llDSSNeeded = FALSE.
-         ELSE IF NOT fIsDSSActivationAllowed(iiCustnum,
-                                             0,
-                                             ideActStamp,
-                                             icDSSId,
-                                             liDSSMsseq,
-                                             lcResult) THEN
             llDSSNeeded = FALSE.
       END.
       ELSE
