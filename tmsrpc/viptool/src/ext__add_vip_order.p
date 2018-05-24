@@ -293,6 +293,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
 
          /* set address data */
          OrderCustomer.Address = OrderCustomer.Street. 
+         /* Correct SPAIN to ES if incorrect code used */
+         IF OrderCustomer.Country EQ "SPAIN" THEN 
+            ASSIGN OrderCustomer.Country = "ES".
    END.
 
    IF piRowType = 1 THEN
