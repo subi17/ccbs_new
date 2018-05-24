@@ -30,7 +30,7 @@
 "1" 17 "Contract Target" "List" "Percentage" 2 no "" "CONTS26DISC" 01/06/14 31/12/49 "CONTS26DISC" "Discount La Infinita 2GB" "" "List" 0 0 0 4 "Tactical"
 "1" 7 "Contract Target" "List" "Percentage" 2 no "" "CONTS30DISC" 01/06/13 31/12/49 "CONTS30DISC" "Infinita 30 Discount" "" "List" 5 0 0 180 "Tactical"
 "1" 18 "Contract Target" "List" "Percentage" 2 no "" "CONTS32DISC" 01/06/14 31/12/49 "CONTS32DISC" "Discount La infinita 4 GB" "" "List" 0 0 0 4 "Tactical"
-"1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 31/12/49 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6 "Tactical"
+"1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 31/12/49 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 24 "Tactical"
 "1" 57 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC20_3" 05/07/17 31/12/49 "CONVDISC20_3" "Convergent New Adds Promotion" "" "List" 0 0 0 3 "Tactical"
 "1" 71 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS100_6" 19/10/17 31/12/49 "CONVDISC_CS100_6" "Cross Sell Promotion#1 - Fixed line discount" "" "List" 0 0 1 6 "Cross sell"
 "1" 88 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS10F12" 25/04/18 31/12/49 "CONVDISC_CS10F12" "Cross Sell 10% 12 months - Fixed Line Discount" "" "List" 0 0 1 12 "Cross sell"
