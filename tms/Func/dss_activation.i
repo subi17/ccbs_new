@@ -27,7 +27,8 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
    DEF VAR deoDSSLimit AS DEC  NO-UNDO INITIAL 0. 
    DEF VAR coBundleId  AS CHAR NO-UNDO INITIAL "". 
 
-   DEFINE BUFFER lbMobSub FOR MobSub.
+   DEFINE BUFFER lbMobSub      FOR MobSub.
+   DEFINE BUFFER bTerMsRequest FOR MsRequest.
 
    liRequest = fDSSRequest(iiDSSMsSeq,
                            iiDSSCustNum,
@@ -58,20 +59,33 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
       
       IF icDSSBundleId EQ {&DSS4} AND 
          coBundleId    EQ {&DSS2} THEN DO:
-          
-         FIND FIRST lbMobSub NO-LOCK WHERE 
-                    lbMobSub.MsSeq EQ ioDSSMsSeq NO-ERROR.
 
-         IF AVAIL lbMobSub THEN            
-            RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
-                                  INPUT lbMobsub.CLI,
-                                  INPUT lbMobsub.CustNum,
-                                  INPUT "DELETE",
-                                  INPUT "",      /* Optional param list */
-                                  INPUT iiDSSMainRequest,
-                                  INPUT Func.Common:mSecOffSet(iiDSSActStamp,90),
-                                  INPUT icDSSReqSource,
-                                  INPUT coBundleId).         
+         FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                    bTerMsRequest.Brand      EQ Syst.Var:gcBrand AND
+                    bTerMsRequest.ReqType    EQ 83               AND
+                    bTerMsRequest.Custnum    EQ iiDSSCustNum     AND
+                    bTerMsRequest.ReqCParam3 EQ coBundleId       AND
+                    bTerMsRequest.ReqCParam1 EQ "DELETE"         AND
+                    LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                          {&REQ_INACTIVE_STATUSES} + ",3") EQ 0  NO-ERROR.
+
+         IF NOT AVAIL bTerMsRequest THEN DO:
+          
+            FIND FIRST lbMobSub NO-LOCK WHERE 
+                       lbMobSub.MsSeq EQ ioDSSMsSeq NO-ERROR.
+
+            IF AVAIL lbMobSub THEN            
+               RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
+                                     INPUT lbMobsub.CLI,
+                                     INPUT lbMobsub.CustNum,
+                                     INPUT "DELETE",
+                                     INPUT "",      /* Optional param list */
+                                     INPUT iiDSSMainRequest,
+                                     INPUT Func.Common:mSecOffSet(iiDSSActStamp,90),
+                                     INPUT icDSSReqSource,
+                                     INPUT coBundleId).         
+         END.
+          
       END.
 
    END.
