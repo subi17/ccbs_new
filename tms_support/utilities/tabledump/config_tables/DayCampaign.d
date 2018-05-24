@@ -83,6 +83,10 @@
 "DUB2" 01/05/12 4 31/12/49 "DUB2" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT7MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 59 1 0 1
 "DUB3" 01/12/12 4 31/12/49 "DUB3" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT8MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 59 1 0 1
 "FAXTOEMAIL" 04/07/17 1 31/12/49 "FAXTOEMAILMF" 0 "" "" "Fax to email" 0 0 "1" "7" 1 4 0 0 "FAXTOEMAILMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 3 0
+"FID3GB_12m_R_UPSELL" 07/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 3Gb adicionales 12 meses" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
+"FID3GB_3m_R_UPSELL" 07/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 3Gb adicionales 3 meses" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
+"FID3GB_6m_R_UPSELL" 07/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 3Gb adicionales 6 meses" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
+"FID3GB_R_UPSELL" 07/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 3Gb adicionales 1 mes" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "FIX_VOICE1000" 05/07/17 0 31/12/49 "" 0 "" "" "Fixed national voice" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 1 0
 "FLEX_500MB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "Flex upsell national GPRS" 93 0 "1" "6" 1 2 1 0 "FLEX_500MB_UPSELLMF" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "FLEX_5GB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "Flex upsell national GPRS" 93 0 "1" "6" 1 2 1 0 "FLEX_5GB_UPSELLMF" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0

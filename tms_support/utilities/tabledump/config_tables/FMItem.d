@@ -17,7 +17,7 @@
 "BBMF" "TARJETA4" "BBMF" no 1 0 "MF" 2 0 ? 0 01/06/11 22/11/11 "" 0 "" "1" 1 0
 "BONO_VOIPMF" "COMMON" "BONO_VOIPMF" no 1 2.48 "TR" 2 0 ? 0 01/06/14 31/12/49 "" 0 "" "1" 1 1
 "BONO_VOIPMF" "COMMON" "BONO_VOIPMF" no 1 6 "TR" 2 0 ? 0 01/04/12 31/05/14 "" 0 "" "1" 1 1
-"CargoPost_05" "COMMON" "GENERALCARGO" yes 0 5 "CC" 1 0 ? 0 02/07/09 31/12/49 "" 0 "" "1" 0 0
+"CargoPost_05" "COMMON" "GENERALCARGO" yes 0 -5 "CC" 1 0 ? 0 02/07/09 15/05/18 "" 0 "" "1" 0 0
 "CargoPost_10" "COMMON" "GENERALCARGO" yes 0 10 "CC" 1 0 ? 0 02/07/09 31/12/49 "" 0 "" "1" 0 0
 "CargoPost_20" "COMMON" "GENERALCARGO" yes 0 20 "CC" 1 0 ? 0 02/07/09 31/12/49 "" 0 "" "1" 0 0
 "CargoPrep_05" "COMMON2" "GENERALCARGO" yes 0 5 "CC" 1 0 ? 0 02/07/09 31/12/49 "" 0 "" "1" 0 0

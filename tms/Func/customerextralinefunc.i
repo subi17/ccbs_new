@@ -132,6 +132,7 @@ FUNCTION fReassigningExtralines RETURNS LOGICAL
    DEF VAR liManELCount          AS INT  NO-UNDO. 
    DEF VAR liRequest             AS INT  NO-UNDO. 
    DEF VAR lcError               AS CHAR NO-UNDO. 
+   DEF VAR liMLSubId             AS INT  NO-UNDO.
 
    FIND FIRST lbMLMobSub NO-LOCK WHERE 
               lbMLMobSub.MsSeq EQ liMLMsSeq NO-ERROR.
@@ -180,9 +181,9 @@ FUNCTION fReassigningExtralines RETURNS LOGICAL
          fCheckExistingMainLineAvailForExtraLine(INPUT lbELMobSub.CLIType,
                                                  INPUT lbCustomer.CustIdType,
                                                  INPUT lbCustomer.OrgID,
-                                                 OUTPUT liMLMsSeq).
+                                                 OUTPUT liMLSubId).
 
-         IF liMLMsSeq > 0 THEN DO:
+         IF liMLSubId > 0 THEN DO:
             llgMainLineAvail = TRUE.
             fResetExtralineSubscription(lbELMobSub.MsSeq,
                                         "",
@@ -216,6 +217,14 @@ FUNCTION fReassigningExtralines RETURNS LOGICAL
                  (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
                   lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
 
+            IF NOT fCLITypeIsExtraLine(lELMobSub.CliType) THEN NEXT.
+
+            IF lELMobSub.CLIType EQ ENTRY(liManELCount,lcMandatoryExtraLines) THEN DO:
+               ASSIGN lELMobSub.MultiSimId   = lbMLMobSub.MsSeq
+                      lELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+               LEAVE.
+            END.
+
             /* Exclude subs. if STC request is ongoing */
             IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
                                MsRequest.MsSeq      EQ lELMobSub.MsSeq                           AND
@@ -227,7 +236,7 @@ FUNCTION fReassigningExtralines RETURNS LOGICAL
                                          ENTRY(liManELCount,lcMandatoryExtraLines),/* The CLIType of where to do the STC */
                                          "",                                       /* lcBundleID */
                                          "",                                       /* bank code validation is already done */
-                                         TRUNC(Func.Common:mMakeTS(),0),
+                                         TRUNC(Func.Common:mDate2TS(TODAY + 1),0),
                                          0,                                        /* 0 = Credit check ok */
                                          0,                                        /* extend contract */
                                          ""                                        /* pcSalesman */,
