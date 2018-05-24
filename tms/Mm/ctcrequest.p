@@ -334,7 +334,7 @@ IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR
    MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} OR
    MSRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} OR
    MSRequest.ReqSource = {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION} THEN
-   MSRequest.ActStamp =   MSREquest.ReqDParam1 .  
+   MSRequest.ActStamp =   MSREquest.ReqDParam1.
 
 /* Check sub-requests */      
 IF fChkSubRequest(MSrequest.MSRequest) THEN  fReqStatus(8,"").          

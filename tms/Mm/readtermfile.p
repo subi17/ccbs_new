@@ -141,13 +141,22 @@ REPEAT:
       NEXT.
    END.
 
-   FIND FIRST MobSub WHERE MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
-   
-   IF MobSub.CLI NE lcCLI THEN DO:
-      fError("Invalid MSISDN").
-      NEXT.
+   FIND FIRST MobSub WHERE MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR. 
+
+   IF fIsConvergentORFixedOnly(Mobsub.CliType) AND 
+      (lcCLI BEGINS "8" OR lcCLI BEGINS "9") THEN DO:
+      IF MobSub.FixedNumber NE lcCLI THEN DO:
+         fError("Invalid FixedNumber").
+         NEXT.
+      END.
+   END.   
+   ELSE DO:
+      IF MobSub.CLI NE lcCLI THEN DO:
+         fError("Invalid MSISDN").
+         NEXT.
+      END.   
    END.
-   
+
    IF MobSub.ICC NE lcICC THEN DO:
       fError("Invalid ICC").
       NEXT.
@@ -277,10 +286,14 @@ REPEAT:
             Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
             Memo.CreUser   = Syst.Var:katun 
             Memo.MemoTitle = lcMemoTitle
-            Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) + 
-                             ", MSISDN " + lcCLI + 
-                             ", request " + STRING(liRequest) + CHR(10) + 
-                             lcMemoTxt
+            Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) +            
+                             (IF (lcCLI BEGINS "8" OR lcCLI BEGINS "9")
+                                 THEN ", MSISDN " + lcCLI + 
+                                 ", request " + STRING(liRequest) + CHR(10) + 
+                                 lcMemoTxt
+                             ELSE ", FixedNumber " + lcCLI + 
+                                 ", request " + STRING(liRequest) + CHR(10) + 
+                                 lcMemoTxt)
             Memo.CreStamp  = ldCurrent.
       END.
    END.
