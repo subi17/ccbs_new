@@ -91,7 +91,7 @@ form
       DayCampaign.ValidTo  format 99-99-9999 NO-LABEL SKIP
    DayCampaign.StatusCode    COLON 23
       HELP "0=Inactive,1=Active,2=Retired,3=Hidden"
-      lcStatus NO-LABEL FORMAT "X(15)"    
+      lcStatus NO-LABEL FORMAT "X(15)" 
    DayCampaign.BundleType  
       HELP "0=undefined, 1=Tariff bundle, 2=Additional bundle (voice or data)" 
       lcBundleType NO-LABEL  FORMAT "X(15)" SKIP
@@ -119,7 +119,7 @@ form
       DayCampaign.DurUnit LABEL "Unit" 
       lcDurUnit NO-LABEL FORMAT "X(15)" SKIP
    DayCampaign.WeekDay       COLON 23 
-      lcWeekday NO-LABEL  SKIP
+      lcWeekday NO-LABEL  SKIP   
 WITH OVERLAY ROW 1 centered
    COLOR value(Syst.Var:cfc)
    TITLE COLOR value(Syst.Var:ctc)
@@ -217,13 +217,13 @@ FUNCTION fFeeModel RETURNS CHAR
 END FUNCTION.
 
 FUNCTION fStatusName RETURNS LOGIC
-    (iiStatusCode AS INT):
+   (iiStatusCode AS INT):
 
-    lcStatus = Func.Common:mTMSCodeName("CLIType",
-                                        "WebStatusCode",
-                                        STRING(iiStatusCode)).
+   lcStatus = Func.Common:mTMSCodeName("CLIType",
+                               "WebStatusCode",
+                               STRING(iiStatusCode)).
 
-    DISP lcStatus WITH FRAME lis.
+   DISP lcStatus WITH FRAME lis.
 END FUNCTION.
 
 
@@ -807,7 +807,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          lcCalcMethod 
          ccn.ccnname        WHEN AVAIL ccn
          bBillItem.BIName   WHEN AVAIL bBillItem
-         "" WHEN NOT AVAIL bBillItem @ bBillItem.BIName         
+         "" WHEN NOT AVAIL bBillItem @ bBillItem.BIName
       WITH FRAME lis.
       
       fDispUnit(DayCampaign.InclUnit).
@@ -836,7 +836,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       END.   
 
       ELSE IF Syst.Var:toimi = 2 THEN RUN pFeeData(FALSE).
-
+      
       ELSE IF Syst.Var:toimi = 3 THEN RUN Mc/tmsrelation.p({&DCTABLENAME},{&DCKEYTYPE},DayCampaign.DCEvent).
       
       ELSE IF Syst.Var:toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
@@ -1093,19 +1093,16 @@ PROCEDURE pUpdate:
                   NEXT.
                END.
             END.
-            
-            ELSE IF FRAME-FIELD = "StatusCode" THEN 
-            DO:
-                fStatusName(INPUT INPUT DayCampaign.StatusCode).
-                IF lcStatus = "" THEN 
-                DO:
-                    BELL.
-                    MESSAGE "Unknown status code"
-                            VIEW-AS ALERT-BOX ERROR.
-                    NEXT.
-                END.
+
+            ELSE IF FRAME-FIELD = "StatusCode" THEN DO:
+               fStatusName(INPUT INPUT DayCampaign.StatusCode).
+               IF lcStatus = "" THEN DO:
+                  BELL.
+                  MESSAGE "Unknown status code"
+                  VIEW-AS ALERT-BOX ERROR.
+                  NEXT.
+               END.
             END.
-            
             ELSE IF FRAME-FIELD = "BundleType" THEN DO:
                fBundleTypeName(INPUT INPUT DayCampaign.BundleType).
                IF lcBundleType = "" THEN DO:
@@ -1210,7 +1207,7 @@ PROCEDURE pFeeData:
          lcFee 
          lcModifyfee
          lcTermFee
-         DayCampaign.TermFeeCalc         
+         DayCampaign.TermFeeCalc
       WITH FRAME fFees.
       
       fTermFeeCalc(DayCampaign.TermFeeCalc).
@@ -1237,7 +1234,7 @@ PROCEDURE pFeeData:
             DayCampaign.FeeModel
             DayCampaign.ModifyFeeModel
             DayCampaign.TermFeeModel
-            DayCampaign.TermFeeCalc            
+            DayCampaign.TermFeeCalc
          WITH FRAME fFees EDITING: 
       
             READKEY.
@@ -1332,5 +1329,4 @@ PROCEDURE pFeeData:
   HIDE FRAME fFees NO-PAUSE.  
    
 END PROCEDURE.
-
 

@@ -459,8 +459,8 @@ PROCEDURE local-UPDATE-record:
           ttDSSInfo.SubsUsage
           ttDSSInfo.BundleFee
           ttDSSInfo.BundleFeeCalc  
-      (ttDSSInfo.DataAllocated / 1024 / 1024) @ ttDSSInfo.DataAllocated
-          ttDSSInfo.Priority 
+      (ttDSSInfo.DataAllocated / 1024 / 1024) @ ttDSSInfo.DataAllocated 
+         ttDSSInfo.Priority
      WITH FRAME lis.
 
      ASSIGN 
@@ -783,7 +783,7 @@ PROCEDURE pGetDSSBillingInfo:
    /* Calculate first month fee */
    FOR EACH ttDSSInfo WHERE
             ttDSSInfo.BundleFeeCalc = TRUE
-            BY ttDSSInfo.Priority:            
+            BY ttDSSInfo.Priority:
 
       ASSIGN ldeFeeAmt = 0
              ldeDataAllocated = 0.
