@@ -1,4 +1,7 @@
 USING Progress.Lang.*.
+USING Progress.Json.ObjectModel.JsonConstruct.
+USING OpenEdge.Core.WidgetHandle.
+USING OpenEdge.Core.String.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
