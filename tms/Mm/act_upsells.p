@@ -45,6 +45,7 @@ DEF VAR liRead           AS INT NO-UNDO.
 DEF VAR liErrors         AS INT NO-UNDO. 
 DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcMemoText       AS CHAR NO-UNDO.
+DEF VAR lcResult         AS CHAR NO-UNDO.  /* YCO-441 */
 
 /* YCO-1 List of compatible tariffs */ 
 DEF VAR cValidList AS CHAR INITIAL
@@ -174,23 +175,33 @@ PROCEDURE pBobCheckUpsell:
    DEF VAR lcUpSellList          AS CHAR NO-UNDO. 
    DEF VAR lcMemoTitle           AS CHAR NO-UNDO. 
 
-   IF NUM-ENTRIES(pcLine,lcSep) <> 3 THEN /* YCO-3 - Now we have 3 parameters (previously it was 2) */
+   /* YCO-3 - Santarder upsells are based on a 3 items per line format */
+   IF NUM-ENTRIES(pcLine,lcSep) < 2 OR 
+      NUM-ENTRIES(pcLine,lcSep) > 3 THEN 
       RETURN "ERROR:Wrong file format".
 
    /* YCO-3 - Adding 1gb and 5gb upsells to the list */
+   /* YCO-441 - Adding 3Gb rentention upsell to the list */
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
-      lcSMS          = TRIM(ENTRY(3,pcLine,lcSep))
-      lcUpSellList   = "SAN1GB_001,SAN5GB_002,DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
+      lcUpSellList   = "FID3GB_R_UPSELL,SAN1GB_001,SAN5GB_002,DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
       RETURN "ERROR: invalid or missing upsell".
 
-   llSMS = LOGICAL(lcSMS) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN 
-      RETURN "ERROR: invalid SMS value".
+   IF NUM-ENTRIES(pcLine,lcSep) = 3 THEN 
+   DO:
+      ASSIGN 
+         lcSMS = TRIM(ENTRY(3,pcLine,lcSep))
+         llSMS = LOGICAL(lcSMS) NO-ERROR.
+         IF ERROR-STATUS:ERROR THEN 
+            RETURN "ERROR: invalid SMS value".
+            
+   END.   
+   ELSE 
+      llSMS = FALSE.
 
    lcUpsell = UPPER(lcUpsell).
 
@@ -251,9 +262,22 @@ PROCEDURE pBobCheckUpsell:
 
    /* YCO-1 "1Gb and 5Gb upsell are not compatible with 1.5Gb tariff CONT10."
       In fact, the upsell is not available to all tariffs. 
-      As part of Phase I this is the list of avaialble Tariffs. */
-   IF LOOKUP(MobSub.clitype,cValidList) = 0 THEN
+      As part of Phase I this is the list of available Tariffs. */
+   IF (lcUpsell = "SAN1GB_001" OR lcUpsell = "SAN5GB_002") AND  
+      LOOKUP(MobSub.clitype,cValidList) = 0 THEN
+         RETURN "ERROR:Upsell is not compatible with " + MobSub.clitype + " tariff".
+
+   /* YCO-441 Checking Tariff is compatible with 3Gb retention upsell */
+   IF lcUpsell = "FID3GB_R_UPSELL" THEN 
+   DO:
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
+                        "PERCONTR",
+                        "PerContract;SubsTypeTo",
+                        lcUpsell + ";" + Mobsub.CLIType,
+                        OUTPUT lcResult) NE 1 AND
+         ENTRY(1,lcResult,";") NE "?" THEN 
        RETURN "ERROR:Upsell is not compatible with " + MobSub.clitype + " tariff".
+   END.
 
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
@@ -291,6 +315,9 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "FLEX 500MB upsell".
       WHEN "FLEX_5GB_UPSELL" THEN
          lcMemoTitle = "FLEX 5GB upsell".    
+      /* YCO-276 Adding memos */   
+      WHEN "FID3GB_R_UPSELL" THEN   
+         lcMemoTitle = "3Gb retention upsell 1 mes".
    END CASE.
       
    /* YCO-4 - Send SMS for SAN1GB_001 and SAN5G_002 activation */
