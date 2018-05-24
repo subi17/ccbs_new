@@ -45,7 +45,7 @@ FUNCTION fCheckACCCompability RETURNS CHARACTER
       ELSE IF (CAN-FIND(FIRST MobSub WHERE MobSub.Brand   = Syst.Var:gcBrand              AND 
                                            MobSub.AgrCust = bCustomerDST.CustNum AND 
                                            MobSub.Cli     > ""                   NO-LOCK)) OR 
-              fCheckOngoingOrders(bCustomerDST.CustIdType, bCustomerDST.OrgId, 0) THEN 
+              fCheckOngoingOrders(bCustomerDST.OrgId, bCustomerDST.CustIdType, 0) THEN 
          RETURN "ACC is not allowed between PRO-NON PRO customers".
    END.   
    
