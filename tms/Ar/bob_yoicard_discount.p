@@ -324,9 +324,9 @@ PROCEDURE pUpdateYOICardStatusAndDiscount:
       fLogLine(lcYOICardLogMsg + lcSep + lcDiscLogMsg).
 
       IF lcDiscLogMsg > ""           AND 
-         fIsMobileNumber(MobSub.CLI) THEN DO: 
+         fIsMobileNumber(lbMobSub.CLI) THEN DO: 
          IF Mm.MManMessage:mGetMessage("SMS", "YOICardUpdateBOB", 1) EQ TRUE THEN DO:
-            Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI, FALSE).
+            Mm.MManMessage:mCreateMMLogSMS(lbMobSub.CLI, FALSE).
             Mm.MManMessage:mClearData().
          END.
       END. 
