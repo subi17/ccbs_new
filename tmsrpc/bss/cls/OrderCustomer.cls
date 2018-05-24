@@ -1,12 +1,12 @@
  
  /*------------------------------------------------------------------------
     File        : OrderCustomer
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : tlamminmaki
     Created     : Mon Apr 23 12:30:10 EEST 2018
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
@@ -18,7 +18,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -135,7 +135,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY OutPostMarketing AS LOGICAL NO-UNDO
       GET.
       SET.
-      
+
    DEFINE PUBLIC PROPERTY OperSMSMarketing AS LOGICAL NO-UNDO
       GET.
       SET.
@@ -172,7 +172,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
    CONSTRUCTOR PUBLIC OrderCustomer
      ( ioOrder AS CLASS bss.cls.Order ):
-      aoOrder = ioOrder.   
+      aoOrder = ioOrder.
    END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC OrderCustomer():
@@ -186,8 +186,8 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
       FIND Customer NO-LOCK WHERE Customer.CustNum = iiCustNum NO-ERROR.
       IF NOT AVAILABLE Customer
-      THEN UNDO, THROW NEW InternalError
-               (SUBSTITUTE("CustNum '&1' doesn't exists", iiCustNum)).
+      THEN UNDO, THROW NEW ParamError
+               (SUBSTITUTE("customer_not_found|&1", iiCustNum)).
 
       ASSIGN
          THIS-OBJECT:CustNum            = iiCustNum
@@ -231,7 +231,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
       FIND CustomerReport NO-LOCK WHERE
            CustomerReport.Custnum = Customer.Custnum NO-ERROR.
-           
+
       IF AVAILABLE CustomerReport
       THEN ASSIGN
               AddressCodC = CustomerReport.StreetCode
@@ -239,7 +239,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
               AddressCodM = CustomerReport.TownCode.
 
    END METHOD.
-	
+
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
@@ -249,20 +249,15 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       IF ioJsonObject:Has("title")
       THEN DO:
          IF LOOKUP(ioJsonObject:GetCharacter("title"), lcSupportedTitles) EQ 0
-         THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Invalid title '&1'. " +
-                                                    "The supported titles " +
-                                                    "are '&2'",
-                                                    ioJsonObject:GetCharacter("title"),
-                                                    lcSupportedTitles)).
+         THEN UNDO, THROW NEW ParamError(SUBSTITUTE("unsupported_person_title|&1",
+                                                    ioJsonObject:GetCharacter("title"))).
          THIS-OBJECT:CustTitle = ioJsonObject:GetCharacter("title").
       END.
 
 
       DEFINE VARIABLE lcErrorPrefix AS CHARACTER NO-UNDO.
       IF THIS-OBJECT:CustNum > 0
-      THEN lcErrorPrefix = SUBSTITUTE("The existing customer with ID &1 " +
-                                      "is having invalid data. ",
-                                      THIS-OBJECT:CustNum).
+      THEN lcErrorPrefix = "target_customer".
 
       IF ioJsonObject:Has("company_id")
       THEN ASSIGN
@@ -277,10 +272,14 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
               THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("person_id") WHEN ioJsonObject:Has("person_id").
 
       IF NOT THIS-OBJECT:CustId > ""
-      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("&1Either company_id or person_id is mandatory", lcErrorPrefix)).
+      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("&1_company_or_person_id_required|&2",
+                                                 lcErrorPrefix,
+                                                 THIS-OBJECT:CustNum)).
 
       IF NOT THIS-OBJECT:CustIdType > ""
-      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("&1id_type is mandatory", lcErrorPrefix)).
+      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("&1_id_type_required|&2",
+                                                 lcErrorPrefix,
+                                                 THIS-OBJECT:CustNum)).
 
       /* New customer, throw error if any of the following is missing */
       IF THIS-OBJECT:CustNum EQ 0
@@ -353,11 +352,10 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
       IF THIS-OBJECT:BankCode > "" AND
          NOT Func.BankAccount:mValid(THIS-OBJECT:BankCode)
-      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Bank account number '&1' " +
-                                                 "is not valid",
+      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("bank_account_invalid|&1",
                                                  THIS-OBJECT:BankCode)).
 	END METHOD.
-	
+
    METHOD PUBLIC VOID mStoreData():
 
       CREATE OrderCustomer.
@@ -412,7 +410,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          RETURN Country.Country.
       END.
 
-      UNDO, THROW NEW ParamError(SUBSTITUTE("Unknown country '&1'", icCountry)).
+      UNDO, THROW NEW ParamError(SUBSTITUTE("country_unknown|&1", icCountry)).
 
    END METHOD.
 
@@ -424,7 +422,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          RETURN STRING(Language.Language).
       END.
 
-      UNDO, THROW NEW ParamError(SUBSTITUTE("Unknown language '&1'", icLanguage)).
+      UNDO, THROW NEW ParamError(SUBSTITUTE("language_unknown|&1", icLanguage)).
 
    END METHOD.
 

@@ -1,21 +1,22 @@
  
  /*------------------------------------------------------------------------
     File        : Customer
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : tlamminmaki
     Created     : Mon Apr 23 12:30:10 EEST 2018
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
 USING profcgi.RPC.JSON.InternalError.
+USING profcgi.RPC.JSON.ParamError.
 USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -24,7 +25,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY CustNum AS INTEGER NO-UNDO
       GET.
       SET.
-   
+
    DEFINE PUBLIC PROPERTY Category AS CHARACTER NO-UNDO
       GET.
       SET.
@@ -34,7 +35,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
 	DESTRUCTOR PUBLIC Customer():
 	END DESTRUCTOR.
-	
+
 	METHOD PUBLIC VOID mFindData
 	  (iiCustNum AS INTEGER):
 
@@ -43,12 +44,12 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
       FIND Customer NO-LOCK WHERE Customer.CustNum = iiCustNum NO-ERROR.
 
       IF NOT AVAILABLE Customer
-      THEN UNDO, THROW NEW InternalError
-               (SUBSTITUTE("CustNum '&1' doesn't exists", iiCustNum)).
+      THEN UNDO, THROW NEW ParamError
+               (SUBSTITUTE("customer_not_found|&1", iiCustNum)).
 
       ASSIGN
          THIS-OBJECT:CustNum  = Customer.CustNum
-         THIS-OBJECT:Category = Customer.Category.      
+         THIS-OBJECT:Category = Customer.Category.
 
 	END METHOD.
 
@@ -61,7 +62,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
    METHOD PUBLIC VOID mStoreData():
 
-      IF THIS-OBJECT:CustNum > 0 
+      IF THIS-OBJECT:CustNum > 0
       THEN RETURN.
 
       UNDO, THROW NEW InternalError("mStoreData is not implemented").

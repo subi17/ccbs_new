@@ -1,9 +1,9 @@
  
  /*------------------------------------------------------------------------
     File        : OrderProductACC
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : tlamminmaki
     Created     : Mon Apr 23 12:30:10 EEST 2018
     Notes       : QUESTION: Do we need to check charge limits???
@@ -18,7 +18,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct: 
+CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -88,7 +88,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 	  ( ioItemObject AS CLASS JsonObject ):
 
       IF aoOrder:aoCustomer:CustNum EQ 0
-      THEN UNDO, THROW NEW ParamError("ACC source customer cannot be a new customer").
+      THEN UNDO, THROW NEW ParamError("donor_customer_has_to_exist").
 
 
       DEFINE VARIABLE lcSubType     AS CHARACTER        NO-UNDO.
@@ -102,13 +102,11 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 
       IF lcSubType BEGINS "existing" AND NOT loAttributes:Has("custnum")
       THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("An existing customer id is mandatory when " +
-                             "subtype is '&1'", lcSubType)).
+                  (SUBSTITUTE("existing_customer_id_required|&1", lcSubType)).
 
       IF lcSubType BEGINS "new" AND NOT loAttributes:Has("customer")
       THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("A customer object data is mandatory when " +
-                              "subtype is '&1'", lcSubType)).
+                  (SUBSTITUTE("customer_data_required|&1", lcSubType)).
 
       ASSIGN
          aoOrder:MsSeq = loAttributes:GetInteger("subscription-id")
@@ -136,7 +134,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          aoMemo = NEW bss.cls.Memo(THIS-OBJECT).
          aoMemo:mCreateData(loAttributes:GetJsonObject("memo")).
       END.
-      
+
       aoExecutionDate = NEW bss.cls.OrderProductParam(THIS-OBJECT).
       aoExecutionDate:mCreateData(loAttributes,
                                   "execution-date",
@@ -145,7 +143,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 
       IF (NOT loAttributes:Has("custnum")) AND
          (NOT loAttributes:Has("customer"))
-      THEN UNDO, THROW NEW ParamError("Either custnum or customer property is mandatory").
+      THEN UNDO, THROW NEW ParamError("customer_id_or_data_required").
 
       aoOrderCustomer = NEW bss.cls.OrderCustomer(aoOrder).
 
@@ -181,19 +179,15 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       END.
 
       IF aoOrderCustomer:CustNum EQ aoOrder:aoCustomer:CustNum
-      THEN UNDO, THROW NEW ParamError("New agreement customer is the same as current one").
+      THEN UNDO, THROW NEW ParamError("new_and_donor_customer_same").
 
       IF aoOrder:MobSubCustNum NE aoOrder:aoCustomer:CustNum
       THEN UNDO, THROW NEW
-               ParamError(SUBSTITUTE("The subscription's (MsSeq = '&1') " +
-                                     "customer number '&2' doesn't match " +
-                                     "to the donor customer number '&3'",
-                                     aoOrder:MsSeq,
-                                     aoOrder:MobSubCustNum,
+               ParamError(SUBSTITUTE("subscription_customer_and_donor_customer_mismatch|&1",
                                      aoOrder:aoCustomer:CustNum)).
 
       IF aoOrderCustomer:Country NE "ES"
-      THEN UNDO, THROW NEW ParamError("Only Country 'ES' is valid").
+      THEN UNDO, THROW NEW ParamError("country_only_es_valid").
 
       mSubTypeValidations(lcSubType).
 
@@ -226,42 +220,36 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          WHEN "existing-customer"
          THEN RETURN.
          OTHERWISE UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("Invalid subtype '&1'",icSubType)).
+                     (SUBSTITUTE("invalid_type|&1",icSubType)).
       END CASE.
 
       IF llCompany AND aoOrderCustomer:CustIdType NE "CIF"
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("Company id is mandatory when " +
-                                 "subtype is in value '&1'",icSubType)).
+                     (SUBSTITUTE("company_id_required|&1",icSubType)).
 
       IF NOT CAN-FIND(FIRST Mobsub NO-LOCK WHERE
                             MobSub.MsSeq   EQ aoOrder:MsSeq AND
                             MobSub.PayType EQ llPrePaid)
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("Subscription which MsSeq '&1' is &2 subscription " +
-                                 "which contradicts the subtype '&3'",
-                                 aoOrder:MsSeq,
-                                 STRING(llPrepaid,"prepaid/postpaid"),
+                     (SUBSTITUTE("subscription_type_mismatch|&1",
                                  icSubType)).
 
       IF (NOT llPrePaid) AND
          (aoOrderCustomer:BankCode EQ "" OR
           NOT VALID-OBJECT(aoMandate))
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("Both bankaccount and mandate fields are " +
-                                 "mandatory when subtype is in value '&1'",
+                     (SUBSTITUTE("bank_account_and_mandate_required|&1",
                                  icSubType)).
 
       IF llPrePaid AND
          VALID-OBJECT(aoMandate)
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("mandate field is not allowed " +
-                                 "when subtype is in value '&1'",
+                     (SUBSTITUTE("mandate_not_allowed|&1",
                                  icSubType)).
 
       IF (NOT llPrePaid) AND (aoOrderCustomer:CustIdType     EQ "Passport" OR
                               aoOrderCustomer:AuthCustIdType EQ "Passport")
-      THEN UNDO, THROW NEW ParamError("Passport is not accepted for postpaid subscription").
+      THEN UNDO, THROW NEW ParamError("passport_in_postpaid_not_allowed").
 
 
    END METHOD.
