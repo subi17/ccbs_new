@@ -225,12 +225,6 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
                llCompatible    = TRUE
                lccompatibleMsg = "".
       END.
-      
-      IF llcompatible = FALSE THEN
-      DO:
-         ocError = lccompatibleMsg. 
-         RETURN FALSE.
-      END.          
    END.
    ELSE 
    DO:
@@ -308,7 +302,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
          END. /* ELSE DO: */
       END.
    END.
-
+   
    /* get amount of UpSell bundles */
    liUpsellCount = fGetUpSellCount(INPUT icDCEvent,INPUT iiMsSeq,
                                    INPUT lbMobSub.Custnum,OUTPUT ocError).
