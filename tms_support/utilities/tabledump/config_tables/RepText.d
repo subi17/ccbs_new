@@ -8735,16 +8735,16 @@
 1 "" 3 "Honor 10 Negro" 0 "P044H10NC" "1" 24/04/18 31/12/49
 1 "" 4 "Honor 10 Negro" 0 "P044H10NC" "1" 24/04/18 31/12/49
 1 "" 5 "Honor 10 Black" 0 "P044H10NC" "1" 24/04/18 31/12/49
-1 "" 1 "Honor 10 Azul con auriculares" 0 "P044H1PAC" "1" 24/04/18 31/12/49
+1 "" 1 "Honor 10 Azul con auriculares Monster" 0 "P044H1PAC" "1" 24/04/18 31/12/49
 1 "" 2 "Honor 10 Azul con auriculares" 0 "P044H1PAC" "1" 24/04/18 31/12/49
 1 "" 3 "Honor 10 Azul con auriculares" 0 "P044H1PAC" "1" 24/04/18 31/12/49
 1 "" 4 "Honor 10 Azul con auriculares" 0 "P044H1PAC" "1" 24/04/18 31/12/49
-1 "" 5 "Honor 10 Blue with headphones" 0 "P044H1PAC" "1" 24/04/18 31/12/49
-1 "" 1 "Honor 10 Negro con auriculares" 0 "P044H1PNC" "1" 24/04/18 31/12/49
+1 "" 5 "Honor 10 Blue with Monster headphones" 0 "P044H1PAC" "1" 24/04/18 31/12/49
+1 "" 1 "Honor 10 Negro con auriculares Monster" 0 "P044H1PNC" "1" 24/04/18 31/12/49
 1 "" 2 "Honor 10 Negro con auriculares" 0 "P044H1PNC" "1" 24/04/18 31/12/49
 1 "" 3 "Honor 10 Negro con auriculares" 0 "P044H1PNC" "1" 24/04/18 31/12/49
 1 "" 4 "Honor 10 Negro con auriculares" 0 "P044H1PNC" "1" 24/04/18 31/12/49
-1 "" 5 "Honor 10 Black with headphones" 0 "P044H1PNC" "1" 24/04/18 31/12/49
+1 "" 5 "Honor 10 Black with Monster headphones" 0 "P044H1PNC" "1" 24/04/18 31/12/49
 1 "" 1 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
 1 "" 2 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
 1 "" 3 "Honor 6X Gris" 0 "P044H6XG2" "1" 24/05/17 31/12/49
@@ -10486,6 +10486,11 @@
 1 "" 3 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
 1 "" 4 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
 1 "" 5 "iPhone 7 256 GB Black" 0 "P097725N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB Negro" 0 "P097725NC" "1" 17/05/18 31/12/49
+1 "" 2 "iPhone 7 256 GB Negro" 0 "P097725NC" "1" 17/05/18 31/12/49
+1 "" 3 "iPhone 7 256 GB Negro" 0 "P097725NC" "1" 17/05/18 31/12/49
+1 "" 4 "iPhone 7 256 GB Negro" 0 "P097725NC" "1" 17/05/18 31/12/49
+1 "" 5 "iPhone 7 256 GB Black" 0 "P097725NC" "1" 17/05/18 31/12/49
 1 "" 1 "iPhone 7 256 GB Oro rosa" 0 "P097725R2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 256 GB Oro rosa" 0 "P097725R2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 256 GB Oro rosa" 0 "P097725R2" "1" 13/09/16 31/12/49
@@ -10696,6 +10701,11 @@
 1 "" 3 "iPhone 8 256GB  Negro" 0 "P097825NC" "1" 27/09/17 31/12/49
 1 "" 4 "iPhone 8 256GB  Negro" 0 "P097825NC" "1" 27/09/17 31/12/49
 1 "" 5 "iPhone 8 256GB Black" 0 "P097825NC" "1" 27/09/17 31/12/49
+1 "" 1 "iPhone 8 256 GB Rojo" 0 "P097825RC" "1" 08/05/18 31/12/49
+1 "" 2 "iPhone 8 256 GB Rojo" 0 "P097825RC" "1" 08/05/18 31/12/49
+1 "" 3 "iPhone 8 256 GB Rojo" 0 "P097825RC" "1" 08/05/18 31/12/49
+1 "" 4 "iPhone 8 256 GB Rojo" 0 "P097825RC" "1" 08/05/18 31/12/49
+1 "" 5 "iPhone 8 256 GB Red" 0 "P097825RC" "1" 08/05/18 31/12/49
 1 "" 1 "iPhone 8 256 GB Plata" 0 "P097825SC" "1" 20/09/17 31/12/49
 1 "" 2 "iPhone 8 256 GB Plata" 0 "P097825SC" "1" 20/09/17 31/12/49
 1 "" 3 "iPhone 8 256 GB Plata" 0 "P097825SC" "1" 20/09/17 31/12/49
@@ -10766,11 +10776,11 @@
 1 "" 3 "iPhone 8 Plus 64 GB Negro" 0 "P0978P6NC" "1" 29/09/17 31/12/49
 1 "" 4 "iPhone 8 Plus 64 GB Negro" 0 "P0978P6NC" "1" 29/09/17 31/12/49
 1 "" 5 "iPhone 8 Plus 64 GB Black" 0 "P0978P6NC" "1" 29/09/17 31/12/49
-1 "" 1 "iPhone 8  Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
+1 "" 1 "iPhone 8&nbsp;Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 2 "iPhone 8  Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 3 "iPhone 8  Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 4 "iPhone 8  Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
-1 "" 5 "iPhone 8  Plus 64 GB Red" 0 "P0978P6RC" "1" 23/04/18 31/12/49
+1 "" 5 "iPhone 8&nbsp;Plus 64 GB&nbsp;Red" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 1 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
 1 "" 2 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
 1 "" 3 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
@@ -15050,6 +15060,7 @@
 32 "" 5 "Yoigo Info: your porting out could not be cancelled and we cancelled your renuevo order. If any doubt call for free #SMSSENDER " 0 "343" "1" 04/06/12 31/12/49
 32 "" 5 "Yoigo info: Your portability has been rejected because your current operator is incorrect. We will request the portability again to the correct operator. Thanks" 0 "345" "1" 11/09/17 31/12/49
 32 "" 5 "Yoigo info: Your operator rejects the portability of #CLI because datas are incorrect. We need talk with you, call free 800 622 111 from 9 - 18h Mon to Fri" 0 "346" "1" 11/09/17 31/12/49
+32 "" 5 "Yoigo info: we have received your portability request. To make sure you don't have any commitments to stay with us, call us free at #SENDER" 0 "350" "1" 21/05/18 31/12/49
 32 "" 5 "Yoigo adver: Activate now your Bono Spotify Premium, the first three months free. To activate or more info visit https://spotify.yoigo.com. Not+adver 622" 0 "351" "1" 03/07/12 20/11/12
 32 "" 5 "Yoigo adver: Do not let it happen, activate now Spotify Premium with Yoigo, the first three months free. Visit https://spotify.yoigo.com. Not+adver 622" 0 "353" "1" 03/07/12 20/11/12
 32 "" 5 "Yoigo adver: Not to be heavy, it is a very good promo: Activate Spotify Premium with Yoigo, the first three months free. https://spotify.yoigo.com Not+adver 622" 0 "355" "1" 03/07/12 20/11/12
@@ -15097,7 +15108,7 @@
 32 "" 5 "Hello, is already installed the fixed part of your Fusion Fibra Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "470" "1" 05/02/14 31/12/49
 32 "" 5 "Hello, is already installed the fixed part of your Fusion Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "471" "1" 05/02/14 31/12/49
 32 "" 5 "We have cancelled the tariff change as you asked. You have all the information about our rates in www.yoigo.com" 0 "472" "1" 05/02/14 31/12/49
-32 "" 5 "The change of rate you asked for has been made - you now have #CLITYPE. Find full info about your rate at www.yoigo.com" 0 "473" "1" 05/02/14 31/12/49
+32 "" 5 "Tariff change is done. On your next invoice you will see part of month with your old tariff and the rest with the new one. + info of your new tariff yoigo.com" 0 "473" "1" 05/02/14 31/12/49
 32 "" 5 "Your change to #CLITYPE will be executed the #DATE. If you did not request it, call 622. +info www.yoigo.com" 0 "474" "1" 05/02/14 31/12/49
 32 "" 1 "You have requested the cancellation of Bono 1 GB. From 1st of the next month will not be active." 0 "476" "1" 01/05/14 31/12/49
 32 "" 5 "You have spent more than 40 euros in Premium serv. To continue using these services replies this message with SI. If you do not want, reply NO." 0 "477" "1" 01/09/14 31/12/49
