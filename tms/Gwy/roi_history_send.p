@@ -456,7 +456,7 @@ PROCEDURE pSendROIHistory:
    fFillCustomerStruct(lcContactStruct,5).
 
    lcPOSStruct = add_struct(param_toplevel_id,"").
-   fFillPOSStruct(lcContactStruct).
+   fFillPOSStruct(lcPOSStruct).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLog( "ROI History, ERROR Creating message: " + gc_xmlrpc_error,"NW_ERR"). 
