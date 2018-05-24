@@ -239,14 +239,15 @@ FUNCTION fGetProFeemodel RETURNS CHAR
    RETURN "".
 END.
 
-FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
+FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR,
+                                             INPUT icParam   AS CHAR):
    DEF VAR lcSubsMappings AS CHAR NO-UNDO.
    DEF VAR lcMappedSubs AS CHAR NO-UNDO.
    DEF VAR lcSubsFrom AS CHAR NO-UNDO.
    DEF VAR lcSubsTo AS CHAR NO-UNDO.
    DEF VAR liLoop AS INT NO-UNDO.
 
-   lcSubsMappings = fCParamC("ProSubsMigrationMappings").
+   lcSubsMappings = fCParamC(icParam).
 
    DO liloop = 1 TO NUM-ENTRIES(lcSubsMappings,"|"):
       ASSIGN
