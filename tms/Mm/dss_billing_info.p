@@ -533,6 +533,12 @@ PROCEDURE pGetDSSBillingInfo:
       ELSE IF lcBundleId EQ {&DSS2} AND
          LOOKUP(ttMsOwner.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
 
+      IF fCLITypeIsMainLine(ttMsOwner.CLIType) AND
+         NOT fCheckActiveExtraLinePair(ttMsOwner.MsSeq,
+                                       ttMsOwner.CLIType,
+                                       OUTPUT lcDSSBundleId) THEN
+         NEXT.      
+
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq   = ttMsOwner.MsSeq    AND
                bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
