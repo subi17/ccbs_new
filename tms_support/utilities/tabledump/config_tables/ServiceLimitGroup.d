@@ -77,6 +77,10 @@
 "1" "DUB2" "Data Usage Bundle 1 GB" 01/05/12 31/12/49
 "1" "DUB3" "Data Usage Bundle 1 GB" 01/12/12 31/12/49
 "1" "FAXTOEMAIL" "FAX TO EMAIL" 04/07/17 31/12/49
+"1" "FID3GB_12m_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
+"1" "FID3GB_3m_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
+"1" "FID3GB_6m_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
+"1" "FID3GB_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
 "1" "FIX_VOICE1000" "National fixed voice 1000" 05/07/17 31/12/49
 "1" "FLEX_500MB_UPSELL" "Flex 500MB Upsell" 05/07/17 31/12/49
 "1" "FLEX_5GB_UPSELL" "Flex 5GB Upsell" 05/07/17 31/12/49
