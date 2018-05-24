@@ -1020,10 +1020,10 @@ IF NOT MobSub.PayType THEN DO:
          IF NOT AVAIL bTerMsRequest THEN 
             liRequest = fDSSCreateRequest(lbMobSub.MsSeq,
                                           lbMobSub.CustNum,
-                                          lcDSSBundleId,
+                                          lcDSSId,
                                           {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
                                           0,
-                                          lbMobSub.ActivationTS,
+                                          MobSub.ActivationTS,
                                           "DSS activation failed in Mobsub creation", /* Error Msg */
                                           OUTPUT lcResult).
 
