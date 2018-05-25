@@ -190,7 +190,7 @@ CLASS Func.ValidateACC FINAL:
          RETURN "ERROR/SMS/310|Subscription has a pending request.".
       END.
    
-      IF LOOKUP(STRING(MobSub.MsStat),"4,8") = 0
+      IF LOOKUP(STRING(MobSub.MsStat),"4,8,17") = 0
       THEN RETURN "ERROR|Subscription status is not valid for owner change".
 
       IF Func.BarrMethod:mSubsHaveActiveBarring(MobSub.MsSeq,
