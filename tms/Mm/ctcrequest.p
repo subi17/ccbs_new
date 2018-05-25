@@ -7,6 +7,11 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
+USING Progress.Json.ObjectModel.*.
+
+{Syst/tmsconst.i}
+{Func/log.i}
+{Func/cparam2.i}
 
 {Syst/commali.i}
 {Func/msreqfunc.i}
@@ -43,6 +48,40 @@ DEF VAR liError                AS INT  NO-UNDO.
 DEF BUFFER lbMobSub     FOR MobSub.
 DEF BUFFER bMobSubCust  FOR MobSub.
 DEF BUFFER bCLIType     FOR CLIType.
+DEF BUFFER bufOrder     FOR Order.
+
+
+FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
+   (INPUT  iiOrderId      AS INT): 
+
+DEF VAR lcUriPath      AS CHAR       NO-UNDO.
+DEF VAR loRequestJson  AS JsonObject NO-UNDO.
+DEF VAR objRESTClient  AS CLASS Gwy.ParamRESTClient.
+
+DO ON ERROR UNDO, THROW:
+ 
+    objRESTClient = NEW Gwy.ParamRESTClient("<tmsparamgroup>").
+    objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
+      
+    objRESTClient:mPOST(loRequestJson).
+    
+    CATCH loError AS Progress.Lang.Error:
+       /* Error handling will be here... */
+       
+       RETURN loError:GetMessage(1).
+       /* NOTE: The errors automatically are logged to the client log */
+    END CATCH.
+  
+    FINALLY:
+       IF VALID-OBJECT(objRESTClient)
+       THEN DELETE OBJECT objRESTClient.
+    END FINALLY.
+ 
+END.
+
+RETURN "".
+
+END FUNCTION.
 
 
 FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
@@ -347,13 +386,16 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
       IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                   bCLIType.Brand      = Syst.Var:gcBrand AND
                   bCLIType.CLIType    = MSRequest.ReqCParam2 AND
-                  bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN   
+                  bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:   
  
-         /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */ 
-         /* liError = fSendFixedLineTermReqToMuleDB(iiOrderID, OUTPUT ocResult). */
+         FOR FIRST bufOrder NO-LOCK WHERE bufOrder.MsSeq = MSRequest.MSSeq:
+            /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */ 
+            ocResult = fSendFixedLineTermReqToMuleDB(bufOrder.OrderId).
+         END.   
+      END.   
    END.
 
-   IF liError EQ 1 THEN DO:
+   IF ocResult > "" THEN DO:
       FIND FIRST MobSub WHERE MobSub.brand EQ "1" AND
                              MobSub.MsSeq = MSrequest.MsSeq NO-LOCK NO-ERROR.
       IF AVAIL MobSub THEN    

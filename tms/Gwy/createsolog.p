@@ -1,3 +1,9 @@
+USING Progress.Json.ObjectModel.*.
+
+{Syst/tmsconst.i}
+{Func/log.i}
+{Func/cparam2.i}
+
 {Syst/commali.i}
 {Gwy/provision.i}
 {Func/fmakemsreq.i}
@@ -19,6 +25,39 @@ DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO. 
 
 DEF BUFFER bbMsRequest FOR MSRequest.
+
+FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
+   (INPUT  iiOrderId      AS INT): 
+
+DEF VAR lcUriPath      AS CHAR       NO-UNDO.
+DEF VAR loRequestJson  AS JsonObject NO-UNDO.
+DEF VAR objRESTClient  AS CLASS Gwy.ParamRESTClient.
+
+DO ON ERROR UNDO, THROW:
+ 
+    objRESTClient = NEW Gwy.ParamRESTClient("<tmsparamgroup>").
+    objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
+      
+    objRESTClient:mPOST(loRequestJson).
+    
+    CATCH loError AS Progress.Lang.Error:
+       /* Error handling will be here... */
+       
+       RETURN loError:GetMessage(1).
+       /* NOTE: The errors automatically are logged to the client log */
+    END CATCH.
+  
+    FINALLY:
+       IF VALID-OBJECT(objRESTClient)
+       THEN DELETE OBJECT objRESTClient.
+    END FINALLY.
+ 
+END.
+
+RETURN "".
+
+END FUNCTION.
+
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -215,8 +254,8 @@ PROCEDURE pSolog:
                          bufOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):
 
                   /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */
-                  /* liError = fSendFixedLineTermReqToMuleDB(bOrder.OrderId, OUTPUT lcResult). */
-                  IF liError EQ 1 THEN DO:
+                  lcResult = fSendFixedLineTermReqToMuleDB(bufOrder.OrderId).
+                  IF lcResult > "" THEN DO:
                      Func.Common:mWriteMemo("MobSub",
                                  STRING(bufOrder.MsSeq),
                                  bufOrder.Custnum,
