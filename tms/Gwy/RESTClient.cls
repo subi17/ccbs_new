@@ -12,8 +12,36 @@
     Usage:
 
     DO ON ERROR UNDO, THROW:
+
        objRESTClient = NEW RESTClient().
    
+       /* optional */
+       objRESTClient:mSetRequestTimeout(5.0).
+
+       /* optional */
+       objRESTClient:mSetRetryPause(2.0).
+
+       /* optional */
+       objRESTClient:mSetNumRetries(3).
+
+       /* optional */
+       objRESTClient:mSetNameVersion("Fancy-client", "0.33").
+
+       /* optional */
+       objRESTClient:mSetLibrary(<IHttpClientLibrary>).
+
+       /* optional */
+       objRESTClient:mSetProxy(<URI>).
+
+       /* optional */
+       objRESTClient:mSetProxy("http://some.proxy").
+
+       /* optional */
+       objRESTClient:mSetCookie(<ICookieJar>).
+
+       /* optional */
+       objRESTClient:mSetCookie().
+
        /* optional */
        objRESTClient:mSetCredentials("domain", "username", "password").
    
@@ -67,17 +95,10 @@
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
-USING OpenEdge.Net.HTTP.Credentials.
-USING OpenEdge.Net.HTTP.IHttpRequest.
-USING OpenEdge.Net.HTTP.IHttpResponse.
-USING OpenEdge.Net.HTTP.RequestBuilder.
-USING OpenEdge.Net.HTTP.StatusCodeEnum.
-USING OpenEdge.Net.HTTP.DefaultRequestBuilder.
-USING OpenEdge.Net.HTTP.MethodEnum.
+USING OpenEdge.Net.HTTP.*.
 USING OpenEdge.Net.URI.
 USING OpenEdge.Net.UriSchemeEnum.
 USING Progress.Json.ObjectModel.JsonConstruct.
-USING Gwy.RESTHTTPClient.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -86,10 +107,6 @@ CLASS Gwy.RESTClient:
 	 Purpose:
 	 Notes:
 	------------------------------------------------------------------------------*/
-
-   DEFINE PUBLIC PROPERTY aoRESTHTTPClient    AS CLASS RESTHTTPClient NO-UNDO
-      GET.
-      PRIVATE SET.
 
    DEFINE PRIVATE VARIABLE aoURI               AS CLASS URI            NO-UNDO.
    DEFINE PRIVATE VARIABLE aoRequest           AS CLASS IHttpRequest   NO-UNDO.
@@ -108,14 +125,29 @@ CLASS Gwy.RESTClient:
 
    DEFINE PRIVATE VARIABLE acAcceptContentType AS CHARACTER            NO-UNDO.
 
+   /* HTTP client */
+   DEFINE PRIVATE VARIABLE aoHTTPClient    AS CLASS IHttpClient        NO-UNDO.
+
+   /* HTTP client related variables */
+   DEFINE PRIVATE VARIABLE alClientChanged AS LOGICAL   INITIAL TRUE   NO-UNDO.
+   DEFINE PRIVATE VARIABLE adeTimeOut      AS DECIMAL   INITIAL ?      NO-UNDO.
+   DEFINE PRIVATE VARIABLE adeRetryPause   AS DECIMAL   INITIAL ?      NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiNumRetries    AS INTEGER   INITIAL ?      NO-UNDO.
+   DEFINE PRIVATE VARIABLE acClientName    AS CHARACTER INITIAL ?      NO-UNDO.
+   DEFINE PRIVATE VARIABLE acClientVersion AS CHARACTER INITIAL ?      NO-UNDO.
+   DEFINE PRIVATE VARIABLE aoLibrary       AS CLASS IHttpClientLibrary NO-UNDO.
+   DEFINE PRIVATE VARIABLE aoCookie        AS CLASS ICookieJar         NO-UNDO.
+   DEFINE PRIVATE VARIABLE alEnableoCookie AS LOGICAL   INITIAL FALSE  NO-UNDO.
+   DEFINE PRIVATE VARIABLE aoProxy         AS CLASS URI                NO-UNDO.
+   /* Seems that this is not available in Progress 11.6 */
+   /*DEFINE PRIVATE VARIABLE aoLogger      AS CLASS ILogWriter         NO-UNDO.*/
+
+
    DEFINE PUBLIC PROPERTY aoResultObject AS CLASS Progress.Lang.Object   NO-UNDO
       GET.
       PRIVATE SET.
 
    CONSTRUCTOR PUBLIC RESTClient():
-
-      aoRESTHTTPClient = NEW RESTHTTPClient().
-   
    END CONSTRUCTOR.
 
    DESTRUCTOR PUBLIC RESTClient ( ):
@@ -129,10 +161,185 @@ CLASS Gwy.RESTClient:
       IF VALID-OBJECT(aoCredentials)
       THEN DELETE OBJECT aoCredentials.
 
-      IF VALID-OBJECT(aoRESTHTTPClient)
-      THEN DELETE OBJECT aoRESTHTTPClient.
+      IF VALID-OBJECT(aoHTTPClient)
+      THEN DELETE OBJECT aoHTTPClient.
 
    END DESTRUCTOR.
+
+
+   METHOD PUBLIC VOID mSetRequestTimeout
+      ( ideValue AS DECIMAL ): /* A zero or positive value */
+
+      IF adeTimeOut EQ ideValue
+      THEN RETURN.
+
+      ASSIGN
+         adeTimeOut      = ideValue
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mSetRetryPause
+      ( ideValue AS DECIMAL ): /* A zero or positive value */
+
+      IF adeRetryPause EQ ideValue
+      THEN RETURN.
+
+      ASSIGN
+         adeRetryPause   = ideValue
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mSetNumRetries
+      ( iiValue AS INTEGER ): /* A zero or positive value */
+
+      IF aiNumRetries EQ iiValue
+      THEN RETURN.
+
+      ASSIGN
+         aiNumRetries    = iiValue
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+   /* Sets the rest client name and version
+      Default name: 'OpenEdge-HttpClient'
+      Default version: '0.4.0'
+   */
+   METHOD PUBLIC VOID mSetNameVersion
+      ( icName AS CHARACTER,
+        icVersion AS CHARACTER ):
+
+      IF acClientName EQ icName AND
+         acClientVersion EQ icVersion
+      THEN RETURN.
+
+      ASSIGN
+         acClientName    = icName
+         acClientVersion = icVersion
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+   /* It is probably not a good idea to call this.
+      The default library should work ok (will be created using a method
+      BuildLibrary in a class OpenEdge.Net.HTTP.ClientBuilder) */
+   METHOD PUBLIC VOID mSetLibrary
+      ( ioLibrary AS CLASS IHttpClientLibrary ):
+
+      IF aoLibrary EQ ioLibrary
+      THEN RETURN.
+
+      ASSIGN
+         aoLibrary       = ioLibrary
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+/*
+   METHOD PUBLIC VOID mSetLogger
+      ( ioLogger AS CLASS ILogWriter ):
+
+      IF aoLogger EQ ioLogger
+      THEN RETURN.
+
+      ASSIGN
+         aoLogger         = ioLogger
+         alClientChanged  = TRUE.
+
+   END METHOD.
+*/
+
+   METHOD PUBLIC VOID mSetProxy
+      ( ioProxyURI AS CLASS URI ):
+
+      IF aoProxy EQ ioProxyURI
+      THEN RETURN.
+
+      ASSIGN
+         aoProxy         = ioProxyURI
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mSetProxy
+      ( icProxyURI AS CHARACTER ):
+      mSetProxy(URI:Parse(icProxyURI)).
+   END METHOD.
+
+   METHOD PUBLIC VOID mSetCookie
+      ( ioCookieJar AS CLASS ICookieJar ):
+
+      IF aoCookie EQ ioCookieJar
+      THEN RETURN.
+
+      ASSIGN
+         aoCookie        = ioCookieJar
+         alEnableoCookie = TRUE
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mSetCookie():
+
+      ASSIGN
+         aoCookie        = ?
+         alEnableoCookie = TRUE
+         alClientChanged = TRUE.
+
+   END METHOD.
+
+   METHOD PRIVATE VOID mInitHTTPClient():
+
+      /* Delete the old one if it exists */
+      IF VALID-OBJECT(aoHTTPClient)
+      THEN DELETE OBJECT aoHTTPClient.
+
+      DEFINE VARIABLE loClientBuilder AS CLASS DefaultHttpClientBuilder NO-UNDO.
+
+      loClientBuilder = CAST(ClientBuilder:Build(), DefaultHttpClientBuilder).
+
+      IF adeTimeOut NE ?
+      THEN loClientBuilder:SetRequestTimeout(adeTimeOut).
+
+      IF adeRetryPause NE ?
+      THEN loClientBuilder:SetRetryPause(adeRetryPause).
+
+      IF aiNumRetries NE ?
+      THEN loClientBuilder:SetNumRetries(aiNumRetries).
+
+      IF acClientName NE ? OR acClientVersion NE ?
+      THEN loClientBuilder:Named(IF acClientName EQ ?
+                                 THEN 'OpenEdge-HttpClient' ELSE acClientName,
+                                 IF acClientVersion EQ ?
+                                 THEN '0.4.0' ELSE acClientVersion).
+
+      IF VALID-OBJECT(aoLibrary)
+      THEN loClientBuilder:UsingLibrary(aoLibrary).
+
+      IF VALID-OBJECT(aoCookie)
+      THEN loClientBuilder:KeepCookies(aoCookie).
+      ELSE IF alEnableoCookie
+      THEN loClientBuilder:KeepCookies().
+
+      IF VALID-OBJECT(aoProxy)
+      THEN loClientBuilder:ViaProxy(aoProxy).
+
+      /*
+      IF VALID-OBJECT(aoLogger)
+      THEN loClientBuilder:UsingLogger(aoLogger).
+      */
+
+      aoHTTPClient = loClientBuilder:Client.
+
+      FINALLY:
+         IF VALID-OBJECT(loClientBuilder)
+         THEN DELETE OBJECT loClientBuilder.
+         alClientChanged = FALSE.
+      END FINALLY.
+
+   END METHOD.
 
    /* By default if the content type was application/json also
       then accepted content type is application/json.
@@ -284,7 +491,7 @@ CLASS Gwy.RESTClient:
 
       DEFINE VARIABLE loResponse AS CLASS IHttpResponse NO-UNDO.
       ASSIGN
-         loResponse     = aoRESTHTTPClient:mExecute(ioRequest)
+         loResponse     = aoHTTPClient:Execute(ioRequest)
          aoResultObject = loResponse:Entity.
 
       Class.Logger:writeLog(2,
@@ -317,6 +524,9 @@ CLASS Gwy.RESTClient:
    METHOD PRIVATE VOID mRESTRequest
       ( ioMethodEnum   AS CLASS MethodEnum,
         ioObjectEntity AS CLASS Progress.Lang.Object ):
+
+      IF alClientChanged
+      THEN mInitHTTPClient().
 
       Class.Logger:writeLog(2,
                             SUBSTITUTE("&1 REST call",

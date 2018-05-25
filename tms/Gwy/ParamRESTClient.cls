@@ -97,10 +97,9 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
          END CATCH.
       END.
       IF lcc NE ?
-      THEN aoRESTHTTPClient
-              :mSetNameVersion(lcc,
-                               Syst.Parameters:getc(icTMSParamGroup,
-                                                    "ClientVersion")).
+      THEN mSetNameVersion(lcc,
+                           Syst.Parameters:getc(icTMSParamGroup,
+                                                "ClientVersion")).
 
       DO ON ERROR UNDO, THROW:
          lde = Syst.Parameters:getde(icTMSParamGroup, "ReqTimeOut").
@@ -108,7 +107,7 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
             lde = ?.
          END CATCH.
       END.
-      IF lde >= 0 THEN aoRESTHTTPClient:mSetRequestTimeout(lde).
+      IF lde >= 0 THEN mSetRequestTimeout(lde).
 
       DO ON ERROR UNDO, THROW:
          lde = Syst.Parameters:getde(icTMSParamGroup, "RetryPause").
@@ -116,7 +115,7 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
             lde = ?.
          END CATCH.
       END.
-      IF lde >= 0 THEN aoRESTHTTPClient:mSetRetryPause(lde).
+      IF lde >= 0 THEN mSetRetryPause(lde).
 
       DO ON ERROR UNDO, THROW:
          lii = Syst.Parameters:geti(icTMSParamGroup, "NumRetries").
@@ -124,7 +123,7 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
             lii = ?.
          END CATCH.
       END.
-      IF lii >= 0 THEN aoRESTHTTPClient:mSetNumRetries(lii).
+      IF lii >= 0 THEN mSetNumRetries(lii).
       
    END METHOD.
 
