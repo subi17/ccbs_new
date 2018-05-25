@@ -16,13 +16,15 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-{Syst/tmsconst.i}
-
 CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
 	------------------------------------------------------------------------------*/
+
+   DEFINE PUBLIC PROPERTY RowType AS INTEGER NO-UNDO
+      GET.
+      SET.
 
    DEFINE PUBLIC PROPERTY CustNum AS INTEGER NO-UNDO
       GET.
@@ -362,7 +364,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       ASSIGN
          OrderCustomer.Brand              = Syst.Var:gcBrand
          OrderCustomer.OrderId            = aoOrder:OrderId
-         OrderCustomer.RowType            = {&ORDERCUSTOMER_ROWTYPE_ACC}
+         OrderCustomer.RowType            = THIS-OBJECT:RowType
          OrderCustomer.CustNum            = THIS-OBJECT:CustNum
          OrderCustomer.CustTitle          = THIS-OBJECT:CustTitle
          OrderCustomer.FirstName          = THIS-OBJECT:FirstName

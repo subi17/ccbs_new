@@ -145,7 +145,9 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          (NOT loAttributes:Has("customer"))
       THEN UNDO, THROW NEW ParamError("customer_id_or_data_required").
 
-      aoOrderCustomer = NEW bss.cls.OrderCustomer(aoOrder).
+      ASSIGN
+         aoOrderCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
+         aoOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_ACC}.
 
       IF loAttributes:Has("custnum")
       THEN DO:
