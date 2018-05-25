@@ -55,7 +55,7 @@ PROCEDURE ipUpdateBundleTarget:
     OUTPUT STREAM bkp TO VALUE(lcBkpFile).
     OUTPUT STREAM err TO VALUE(lcErrFile).
 
-    EXPORT DELIMITER "," "DCEvent" "BundleType" "OldBundleTarget" "NewBundleTarget".
+    EXPORT STREAM bkp DELIMITER "," "DCEvent" "BundleType" "OldBundleTarget" "NewBundleTarget".
 
     FOR EACH DayCampaign NO-LOCK:
     
