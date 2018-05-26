@@ -124,7 +124,7 @@ IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    ASSIGN
       ordercanal.TMSParam.Brand      = "1"                               
       ordercanal.TMSParam.ParamGroup = "PerContractBob"                       
-      ordercanal.TMSParam.ParamCode  = "PerContractLogsDir"                 
+      ordercanal.TMSParam.ParamCode  = "PerContractBobLogsDir"                 
       ordercanal.TMSParam.ParamName  = "Logs directory for Periodical Contract Bob Tool"              
       ordercanal.TMSParam.ParamType  = "C"                               
       ordercanal.TMSParam.OnLine     = NO.
