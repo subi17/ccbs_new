@@ -8,6 +8,8 @@
   CREATED ......: 19.11.15
   CHANGED ......:
   ------------------------------------------------------------------------*/
+
+
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
@@ -775,6 +777,39 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
     RETURN ldeFee.
 
 END FUNCTION. 
+
+
+FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
+   (INPUT  iiOrderId      AS INT): 
+
+DEF VAR lcUriPath      AS CHAR       NO-UNDO.
+DEF VAR loRequestJson  AS Progress.Json.ObjectModel.JsonObject NO-UNDO.
+DEF VAR objRESTClient  AS CLASS Gwy.ParamRESTClient.
+
+DO ON ERROR UNDO, THROW:
+ 
+    objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
+    objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
+      
+    objRESTClient:mPOST(loRequestJson).
+    
+    CATCH loError AS Progress.Lang.Error:
+       /* Error handling will be here... */
+       
+       RETURN loError:GetMessage(1).
+       /* NOTE: The errors automatically are logged to the client log */
+    END CATCH.
+  
+    FINALLY:
+       IF VALID-OBJECT(objRESTClient)
+       THEN DELETE OBJECT objRESTClient.
+    END FINALLY.
+ 
+END.
+
+RETURN "".
+
+END FUNCTION.
 
 
 &ENDIF
