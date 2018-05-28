@@ -69,7 +69,7 @@
 "MI" "MARKTEL INBOUND" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
 "MK" "MARKTEL CROSS-SELLING" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
 "ML" "MARKTEL Retencion" "" 0 "" "" "" "MariaDolores.Barreiro@asesormasmovil.es" "1" 99 yes "" ""
-"MM" "MEDIAMARKT" "" 0 "" "" "" "Mar.Giraldez@masmovil.com" "1" 99 yes "" ""
+"MM" "MEDIAMARKT" "" 0 "" "" "" "Mar.Giraldez@masmovil.com" "1" 18 yes "" ""
 "MO" "MARKTEL ONLINE" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
 "MR" "MARKTEL INBOUND OF" "" 0 "" "" "" "cristina.munoz@masmovil.com" "1" 99 yes "" ""
 "MT" "MARKTEL OUTBOUND" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""

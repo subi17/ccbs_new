@@ -1379,3 +1379,5 @@
 223 "SubsTypeTo" "CONT33"
 223 "SubsTypeTo" "CONT25"
 223 "SubsTypeTo" "CONTFH35_50"
+224 "SubsTypeTo" "CONTFH48_50"
+225 "SubsTypeTo" "CONTFH58_300"
