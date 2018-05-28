@@ -143,6 +143,11 @@ REPEAT:
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR. 
 
+   IF NOT AVAILABLE MobSub THEN DO:
+      fError("Subscription not found").
+      NEXT.
+   END.
+
    IF fIsConvergentORFixedOnly(Mobsub.CliType) AND 
       (lcCLI BEGINS "8" OR lcCLI BEGINS "9") THEN DO:
       IF MobSub.FixedNumber NE lcCLI THEN DO:

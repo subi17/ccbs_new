@@ -60,7 +60,7 @@ DEF VAR objRESTClient  AS CLASS Gwy.ParamRESTClient.
 
 DO ON ERROR UNDO, THROW:
  
-    objRESTClient = NEW Gwy.ParamRESTClient("<tmsparamgroup>").
+    objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
     objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
       
     objRESTClient:mPOST(loRequestJson).

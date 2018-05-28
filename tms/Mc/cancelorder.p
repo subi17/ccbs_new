@@ -32,7 +32,6 @@ DEF VAR liCount        AS INTEGER   NO-UNDO.
 DEF VAR ldtLOTS        AS DATETIME  NO-UNDO.
 DEF VAR liError        AS INT       NO-UNDO. 
 DEF VAR lcTermType     AS CHARACTER NO-UNDO. 
-DEF VAR lcNewCliType   AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
@@ -251,7 +250,7 @@ ELSE DO:
                         "",
                         0,
                         lcTermType,
-                        lcNewCliType,
+                        "",
                         OUTPUT lcResult).
    
          IF liReq > 0 THEN
