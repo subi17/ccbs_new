@@ -335,7 +335,7 @@ FUNCTION fFillPOSStruct RETURNS LOGICAL
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand   = Syst.Var:gcBrand   AND
               OrderCustomer.OrderId = Order.OrderId      AND 
-              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} NO-LOCK NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
 
    add_string(pcStruct, "gescal"       ,  OrderCustomer.Gescal       ).
