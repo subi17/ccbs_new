@@ -144,5 +144,8 @@
 "1" "FID3GB_3m_R_UPSELL Per.contract usage" "PERCONTR" 218 1 99
 "1" "FID3GB_6m_R_UPSELL Per.contract usage" "PERCONTR" 219 1 100
 "1" "FID3GB_12m_R_UPSELL Per.contract usage" "PERCONTR" 220 1 101
+"1" "RET5GB_3m_R_UPSELL Per.contract usage" "PERCONTR" 221 1 102
+"1" "RET5GB_6m_R_UPSELL Per.contract usage" "PERCONTR" 222 1 103
+"1" "RET5GB_12m_R_UPSELL Per.contract usage" "PERCONTR" 223 1 104
 "1" "ST CHANGE" "STC-IDType" 1 0 1
 "1" "ST CHANGE" "STC-IDType" 3 0 2
