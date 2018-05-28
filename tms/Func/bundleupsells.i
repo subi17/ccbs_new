@@ -45,6 +45,8 @@ END.
 
 FUNCTION fIsDayCampaignBundleUpsellExists RETURNS LOGICAL 
     (INPUT icDCEvent AS CHARACTER):
+   
+    /* TODO-PC : We need to confirm whether this UPSELL Hardcoding is required in future.*/   
         
     DEFINE VARIABLE lcNonMatchUpSells AS CHARACTER EXTENT 3 NO-UNDO.
     DEFINE VARIABLE lcBundleUpsell    AS CHARACTER NO-UNDO.

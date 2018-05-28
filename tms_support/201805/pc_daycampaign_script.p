@@ -204,7 +204,7 @@ PROCEDURE ipCreateUpsellMenu:
     CREATE MenuText.
     ASSIGN 
         MenuText.MenuNum  = 9858
-        MenuText.MenuText = "ALLOWED UPSELL'S".
+        MenuText.MenuText = "RELATED BUNDLES".
            
     MESSAGE "New menu for UPSELL got created." SKIP 
             "Script Completed." VIEW-AS ALERT-BOX.
