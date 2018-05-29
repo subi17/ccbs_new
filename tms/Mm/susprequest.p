@@ -395,13 +395,13 @@ PROCEDURE pDone.
    THEN DO: 
       IF NOT (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
               MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN
-         ASSIGN MobSub.MsStatus = 4.
+         ASSIGN MobSub.MsStatus = {&MSSTATUS_ACTIVE}.
       ASSIGN  MobSub.BarrCode = "".
    END.
    ELSE DO:
       IF NOT (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
               MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN
-         ASSIGN MobSub.MsStatus = 8.
+         ASSIGN MobSub.MsStatus = {&MSSTATUS_BARRED}.
       ASSIGN MobSub.BarrCode = MsRequest.ReqCParam5.
    END.
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
