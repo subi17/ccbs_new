@@ -522,7 +522,6 @@ FUNCTION fMakeProActRequest RETURNS INT(
        lcParams = lcParams + FILL("|", (4 - NUM-ENTRIES(lcParams)))
        lcParams = lcParams + lcOffer.
 
-   DO TRANS:
    IF icAction BEGINS "cancel" THEN DO:
       IF icAction EQ "cancel activation" THEN 
          liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
@@ -533,7 +532,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
          RETURN 0.
       END.
          
-      FIND FIRST MsRequest WHERE
+      FIND FIRST MsRequest NO-LOCK WHERE
                  MsRequest.Brand EQ Syst.Var:gcBrand AND
                  MsRequest.ReqType EQ liReqType AND
                  MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
@@ -554,6 +553,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
    ELSE IF icAction EQ "off" THEN 
       icAction = "term".
 
+   DO TRANS:
    liRequest = fPCActionRequest(iiMsSeq,
                                 icContr,
                                 icAction,

@@ -778,7 +778,7 @@ PROCEDURE pTerminate:
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
       MSRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}:
 
-      IF LOOKUP(MSRequest.ReqStatus,
+      IF LOOKUP(STRING(MSRequest.ReqStatus),
                 SUBSTITUTE("&1,&2,&3",
                            {&REQUEST_STATUS_NEW},
                            {&REQUEST_STATUS_SUB_REQUEST_DONE},
