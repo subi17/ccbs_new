@@ -106,7 +106,7 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
             lde = ?.
          END CATCH.
       END.
-      IF lde >= 0 THEN mSetRequestTimeout(lde).
+      IF lde >= 0 THEN mSetTimeout(lde).
 
       DO ON ERROR UNDO, THROW:
          lde = Syst.Parameters:getde("RetryPause", icTMSParamGroup).

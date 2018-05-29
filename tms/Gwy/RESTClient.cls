@@ -16,7 +16,7 @@
        objRESTClient = NEW RESTClient().
    
        /* optional */
-       objRESTClient:mSetRequestTimeout(5.0).
+       objRESTClient:mSetTimeout(5.0).
 
        /* optional */
        objRESTClient:mSetRetryPause(2.0).
@@ -169,7 +169,7 @@ CLASS Gwy.RESTClient:
    END DESTRUCTOR.
 
 
-   METHOD PUBLIC VOID mSetRequestTimeout
+   METHOD PUBLIC VOID mSetTimeout
       ( ideValue AS DECIMAL ): /* A zero or positive value */
 
       IF adeTimeOut EQ ideValue
