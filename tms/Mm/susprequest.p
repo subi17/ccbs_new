@@ -589,7 +589,9 @@ PROCEDURE pDone.
                            {&REQ_INACTIVE_STATUSES}) = 0 AND
                     MsRequest.ActStamp >= ldActStamp NO-LOCK NO-ERROR.
          IF AVAIL MsRequest AND
-            NOT fIsFixedOnly(MsRequest.ReqCParam2) THEN DO: /* Allow STC to 2P */
+            NOT ((MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+                  MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
+                  fIsFixedOnly(MsRequest.ReqCParam2)) THEN DO: /* Allow STC to 2P */
             fReqStatus(4,"Cancelled due to fraud barring").
             llCancelSTC = TRUE.
 
