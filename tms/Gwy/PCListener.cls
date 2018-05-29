@@ -4,21 +4,23 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 &GLOBAL-DEFINE IMPORTDIR ../var/import/pc
+&GLOBAL-DEFINE MQ_BASED NO
+&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
+
 
 /* lang, stomp adpter, logic  libs*/ 
 USING Progress.Lang.*.
+
+&IF {&MQ_BASED} &THEN
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 USING Syst.Configuration.
+&ENDIF
 
-&GLOBAL-DEFINE MQ_BASED NO                
-&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20.
-MESSAGE "before pc lis class"
-VIEW-AS ALERT-BOX.
-CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
-                     IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
+CLASS Gwy.PCListener /* INHERITS gearbox.daemons.Daemon 
+                         IMPLEMENTS dotr.Stomp.Interface.IStompHandler*/:
                          
-    &IF NOT {&MQ_BASED}
+    &IF NOT {&MQ_BASED} 
     &THEN 
     DEFINE STREAM s-dir.
     DEFINE STREAM s-in.
@@ -65,6 +67,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    DEF EVENT leTooManyErrors SIGNATURE VOID (  ).
    
    CONSTRUCTOR PUBLIC PCListener ():
+      &IF {&MQ_BASED} &THEN
       ASSIGN
          lcUTF8_Scandics_List = Configuration:getc("UTF8_to_Scandics")
          lcAllUTF8            = ENTRY(1, lcUTF8_Scandics_List, "|")
@@ -72,12 +75,13 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          lcHostName           = Configuration:getc("PC.Queue.ip")
          lcPortNumber         = STRING(Configuration:geti("PC.Queue.port"))
          lcQueueName          = Configuration:getc("PC.Queue.Name").
-
+      &ELSE
       ASSIGN 
          lLogFileName = STRING(YEAR(TODAY),"9999")
                       + STRING(MONTH(TODAY),"99")
                       + STRING(DAY(TODAY),"99")
                       + REPLACE(STRING(TIME,"HH:MM:SS"),":","").           
+      &ENDIF
 
       &IF {&MQ_BASED} &THEN   
       logMsg( STRING( SUBSTITUTE("SETTINGS: hostname=&1," ,lcHostName) )   +
@@ -92,6 +96,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       
    END CONSTRUCTOR.
    
+   &IF {&MQ_BASED}
+   &THEN
    METHOD PRIVATE VOID connect ():
       loStompClient     = NEW dotr.Stomp.StompClient(loStompConfig).
       loReaderHandler   = THIS-OBJECT.
@@ -109,14 +115,13 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       loStompConfig:StompPort           = lcPortNumber.
       loStompConfig:LargeMessageSupport = NO.
    END METHOD.
-   
-   METHOD PUBLIC OVERRIDE LOG processOne ():
+   &ENDIF.
+ 
+   METHOD PUBLIC LOG processOne ():
        
       &IF NOT {&MQ_BASED} 
       &THEN  
-      DO:
       processOneFileImport().
-      END.
       &ELSE    
       IF llStopCondition = TRUE
          THEN UNDO, THROW NEW Progress.Lang.AppError (lcStopReason, 550).
@@ -138,9 +143,10 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       &ENDIF
       
     END METHOD.
-
+    
+    &IF {&MQ_BASED} &THEN
     METHOD PUBLIC VOID newStompMessage(INPUT ioStompMessage AS 
-        dotr.Stomp.StompMessage):
+                                       dotr.Stomp.StompMessage):
          
         DEF VAR lcHeader AS CHAR NO-UNDO.
         DEF VAR liCnt    AS INT  NO-UNDO.
@@ -215,7 +221,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
         END FINALLY.
          
     END METHOD.
-    
+    &ENDIF
+
     METHOD PUBLIC VOID newJsonMessage (icHeader      AS LONGCHAR, 
                                        icMessageBody AS LONGCHAR):
       /* dotr Header formt */
@@ -310,59 +317,59 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
            
       CASE lcModel:
          WHEN "account" THEN DO:
-            loLogicModule = NEW Gwy.AccountModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.AccountModel(icMessageBody, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
-         END.
+         END.   /*
          WHEN "account_rule" THEN DO:
-            loLogicModule = NEW Gwy.AccountRulesModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.AccountRulesModel(icMessageBody, lcModelId, lcSource,
                                                 lcCorrelationID, lcReplyTo).
-         END.
+         END.   */
          WHEN "billing_item" THEN DO:
-            loLogicModule = NEW Gwy.BillItemModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.BillItemModel(icMessageBody, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
          END. 
          WHEN "billing_item_group" THEN DO:
-            loLogicModule = NEW Gwy.BItemGroupModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.BItemGroupModel(icMessageBody, lcModelId, lcSource,
                                                     lcCorrelationID, lcReplyTo).
-         END.
+         END.  /*
          WHEN "billing_text" THEN DO:
             loLogicModule = NEW Gwy.HdrTextModel(icMessageBody, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
-         END. /*
+         END. 
          WHEN "compensation" THEN DO:
             loLogicModule = NEW Gwy.CompensationModel(icMessageBody, lcModelId, lcSource,
                                                       lcCorrelationID, lcReplyTo).
-         END.  */
+         END.  
          WHEN "cost_center" THEN DO:
             loLogicModule = NEW Gwy.CostCentreModel(icMessageBody, lcModelId, lcSource,
                                                     lcCorrelationID, lcReplyTo).
-         END.
+         END.  */
          WHEN "fee_model" THEN DO:
-            loLogicModule = NEW Gwy.FeeModelModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.FeeModelModel(icMessageBody, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
          END.
          WHEN "invoice_section" THEN DO:
-            loLogicModule = NEW Gwy.InvSectModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.InvSectModel(icMessageBody, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
          END.  
          WHEN "package" THEN DO:
-            loLogicModule = NEW Gwy.DayCampaignModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.DayCampaignModel(icMessageBody, lcModelId, lcSource,
                                                      lcCorrelationID, lcReplyTo).
          END.  
          WHEN "pricelist" THEN DO:
-            loLogicModule = NEW Gwy.PriceListModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.PriceListModel(icMessageBody, lcModelId, lcSource,
                                                    lcCorrelationID, lcReplyTo).
          END.
          WHEN "rateplan" THEN DO:
-            loLogicModule = NEW Gwy.RatePlanModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.RatePlanModel(icMessageBody, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).
          END.
          WHEN "subscription_type" THEN DO:
-            loLogicModule = NEW Gwy.CLITypeModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.CLITypeModel(icMessageBody, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
          END.
          WHEN "rating_bucket" THEN DO:
-            loLogicModule = NEW Gwy.RatingBucketsModel(icMessageBody, lcBrand, lcModelId, lcSource,
+            loLogicModule = NEW Gwy.RatingBucketsModel(icMessageBody, lcModelId, lcSource,
                                                  lcCorrelationID, lcReplyTo).
          END. 
          OTHERWISE DO:
@@ -463,7 +470,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
             lFilePath = FILE-INFO:FULL-PATHNAME.  
 
             fileInput(lFilePath). 
-            
+/*            
                 OS-COMMAND SILENT 
                     mv
                     VALUE(lFilePath)
@@ -477,7 +484,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                     lFile                  
                     )
                     ).
-                
+  */              
             IF TIME - lLiveTime > {&SHUTDOWN_CHECK_TIME} OR 
                TIME - lLiveTime < 0 THEN 
                LEAVE LOOP. /* time to check shutdown */

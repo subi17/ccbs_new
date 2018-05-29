@@ -23,7 +23,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
    
    DEF TEMP-TABLE ttAccount NO-UNDO SERIALIZE-NAME "Account"
-      FIELD external_id  AS INT
+      FIELD external_id  AS CHAR 
       FIELD name         AS CHAR
       FIELD account_type AS CHAR.
        
@@ -61,12 +61,12 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
          RETURN loRequestMaker:logError("Invalid account ID").
       
       IF CAN-FIND(FIRST Account WHERE
-                        Acccount.Brand = gcBrand AND 
+                        Account.Brand = gcBrand AND 
                         Account.AccNum = liAccount) THEN
          RETURN loRequestMaker:logError("Account was already exists").
             
       IF ttAccount.account_type > "" THEN 
-         ASSIGN liAcctype = Func.Common:mTMSCodeValue("Account",
+         ASSIGN lcAcctype = Func.Common:mTMSCodeValue("Account",
                                                       "AccType",
                                                       ttAccount.account_type).               
       CREATE Account.
@@ -74,7 +74,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
          Account.AccNum  = liAccount
          Account.AccName = ttAccount.name
                               WHEN ttAccount.name > ""
-         Account.AccType = liAccType.       
+         Account.AccType = INT(lcAccType).       
           
       loEventLogMaker:make_eventlog("create",BUFFER Account:HANDLE).
     
@@ -122,18 +122,18 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
          RETURN loRequestMaker:logError("Empty Account set").
        
       IF ttAccount.account_type > "" THEN 
-         ASSIGN liAcctype = Func.Common:mTMSCodeValue("Account",
+         ASSIGN lcAcctype = Func.Common:mTMSCodeValue("Account",
                                                       "AccType",
                                                       ttAccount.account_type).
                                                                        
       DO WHILE TRUE:
          FIND FIRST Account EXCLUSIVE-LOCK WHERE
-                    Acccount.Brand = gcBrand AND
-                    Account.AccNum = lcModelId  
+                    Account.Brand = gcBrand AND
+                    Account.AccNum = INT(lcModelId)  
                     NO-ERROR NO-WAIT.
          IF LOCKED(Account) THEN DO:
             liWait = liWait + 1.
-            IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
+            IF liWait > {&WAIT_CONFIG_LOCK} THEN 
                RETURN loRequestMaker:logError("Account was not available for update").
             PAUSE 1 NO-MESSAGE. 
             NEXT. 
@@ -149,7 +149,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       ASSIGN 
          Account.AccName = ttAccount.name 
                               WHEN ttAccount.name > ""
-         Account.AccType = liAccType.       
+         Account.AccType = INT(lcAccType).       
         
       loEventLogMaker:make_eventlog("modify",BUFFER Account:HANDLE).
    

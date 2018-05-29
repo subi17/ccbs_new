@@ -57,7 +57,6 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
       PARENT-ID-FIELD parent_id.
 
    CONSTRUCTOR PUBLIC DayCampaignModel(iJson AS LONGCHAR,
-                                       iBrand AS CHAR,
                                        iModelid AS CHAR, 
                                        iSource AS CHAR,
                                        iCorrelationID AS CHAR,

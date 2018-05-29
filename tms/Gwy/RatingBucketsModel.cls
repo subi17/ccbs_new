@@ -17,7 +17,6 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
     DEF VAR lcError         AS CHAR              NO-UNDO. 
     DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
     DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
-    DEF VAR loCommon        AS Func.Common       NO-UNDO.
     
     DEF VAR liElemType AS CHAR NO-UNDO.
 
@@ -45,7 +44,6 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         PARENT-ID-FIELD parent_id.
 
     CONSTRUCTOR PUBLIC RatingBucketsModel ( iJson          AS LONGCHAR,
-                                            iBrand         AS CHAR,
                                             iModelid       AS CHAR, 
                                             iSource        AS CHAR,
                                             iCorrelationID AS CHAR,
