@@ -218,7 +218,7 @@ IF pcPerContract <> "" THEN DO:
               DayCampaign.DCEvent EQ pcPerContract
               USE-INDEX DCEvent NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
-      RETURN appl_err("Unknown Periodical Contract"). 
+      RETURN appl_err("Unknown Periodical Contract " + pcPerContract). 
 END.
 
 /* ALFMO-14 Additional Line with mobile only ALFMO-5 */
@@ -298,21 +298,21 @@ THEN RETURN appl_err(lcError).
 /* YCO-468. Assign permanency when pcPerContract <> "" */
 IF pcPerContract <> "" THEN DO:
    liResult = fPCActionRequest(
-                        Mobsub.MsSeq,             /* subscription                              */
-                        pcPerContract,            /* DayCampaign.DCEvent                       */
-                        "act",                    /* act,term,canc,iterm,cont                  */
+                        Mobsub.MsSeq,             /* subscription */
+                        pcPerContract,            /* DayCampaign.DCEvent */
+                        "act",                    /* act,term,canc,iterm,cont */
                         0,                        /* when request should be handled, 0 --> Now */
-                        TRUE,                     /* fees                                      */
-                        {&REQUEST_SOURCE_NEWTON}, /* where created                             */
-                        pcUserName,               /* creator                                   */
-                        0,                        /* main request                              */
-                        FALSE,                    /* main request waits for this               */
-                        "",                       /* sms                                       */
-                        0,                        /* payterm residual fee                      */
-                        0,                        /* Periodical Contract-ID                    */ 
-                        "",                       /* Parameters to be stored for SVA vase      */
+                        TRUE,                     /* fees */
+                        {&REQUEST_SOURCE_NEWTON}, /* where created */
+                        pcUserName,               /* creator  */
+                        0,                        /* main request  */
+                        FALSE,                    /* main request waits for this */
+                        "",                       /* sms                  */
+                        0,                        /* payterm residual fee */
+                        0,                        /* Periodical Contract-ID  */ 
+                        "",                       /* Parameters to be stored for SVA       */
                         OUTPUT lcResult).
-   IF liResult = 0 THEN 
+   IF liResult EQ 0 THEN 
       RETURN appl_err(lcResult).   
 END.    
 
