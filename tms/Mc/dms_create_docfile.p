@@ -3,7 +3,6 @@
   TASK .........: Create DMS file for requested case types.
                   Data is fetched by ordertimestamp and msrequest 
                   timestamps. 
-                  Data is stored to given file.
   APPLICATION ..: tms
   AUTHOR .......: ilkkasav
   CREATED ......: 01.09.15
