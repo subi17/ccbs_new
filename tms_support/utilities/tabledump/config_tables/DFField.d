@@ -901,7 +901,6 @@
 "" 207 "DayCampaign" "InstanceLimit" "InstanceLimit" 11 01/01/14 31/12/49
 "" 207 "DayCampaign" "BundleUpsell" "BundleUpsell" 12 01/01/14 31/12/49
 "" 207 "DayCampaign" "DSSPriority" "DSSPriority" 13 01/01/14 31/12/49
-"" 207 "DayCampaign" "#DSS2Compatible" "DSS2Compatible" 14 01/01/14 31/12/49
 "" 208 "DCCLI" "PerContractID" "PerContractID" 1 01/01/14 31/12/49
 "" 208 "DCCLI" "@Version" "1" 2 01/01/14 31/12/49
 "" 208 "DCCLI" "MsSeq" "MsSeq" 3 01/01/14 31/12/49
@@ -1508,6 +1507,7 @@
 "" 504 "CLIType" "FixedLineDownload" "FixedLineDownload" 4 16/11/16 31/12/49
 "" 504 "CLIType" "FixedLineType" "FixedLineType" 5 16/11/16 31/12/49
 "" 504 "CLIType" "FixedLineUpload" "FixedLineUpload" 6 16/11/16 31/12/49
+"" 504 "CLIType" "#DSS2Compatible" "DSS2Compatible" 7 15/05/18 31/12/49
 "" 506 "TPService" "MsSeq" "MsSeq" 1 28/11/17 31/12/49
 "" 506 "TPService" "ServSeq" "ServSeq" 2 28/11/17 31/12/49
 "" 506 "TPService" "ServType" "ServType" 3 28/11/17 31/12/49
