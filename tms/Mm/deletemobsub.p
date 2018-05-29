@@ -778,10 +778,14 @@ PROCEDURE pTerminate:
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
       MSRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}:
 
-      CASE MSRequest.ReqStatus:
-      WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
-      WHEN 8 THEN fReqStatus(4,"Cancelled by subs. termination").
-      WHEN 19 THEN fReqStatus(4,"Cancelled by subs. termination").
+      IF LOOKUP(MSRequest.ReqStatus,
+                SUBSTITUTE("&1,&2,&3",
+                           {&REQUEST_STATUS_NEW},
+                           {&REQUEST_STATUS_SUB_REQUEST_DONE},
+                           {&REQUEST_STATUS_CONFIRMATION_PENDING})) > 0
+      THEN DO:
+         fReqStatus(4,"Cancelled by subs. termination").
+         fChangeOrderStatus(MsRequest.ReqIParam4, {&ORDER_STATUS_CLOSED}).
       END.
    END.
 
