@@ -167,10 +167,6 @@ IF lcNewOrderStatus > "" THEN DO:
 
       IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW} THEN DO:
 
-         IF OrderFusion.FixedNumber EQ "" THEN
-            fCreateFusionReserveNumberMessage(Order.OrderID,
-                                              OUTPUT lcError).
-         ELSE
             fCreateFusionCreateOrderMessage(Order.OrderId,
                                             OUTPUT lcError).
       
