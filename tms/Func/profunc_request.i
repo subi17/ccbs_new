@@ -8,6 +8,7 @@
 {Func/femailinvoice.i}
 {Func/email.i}
 {Func/custfunc.i}
+{Func/extralinefunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -242,7 +243,8 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
     OUTPUT ocCliTypeTo AS CHAR):
 
    DEFINE BUFFER bf_CliType FOR CliType.
-
+   DEFINE VARIABLE llValidExtraLine AS LOGICAL NO-UNDO.
+     
    FIND FIRST bf_CliType WHERE bf_CliType.Brand   EQ Syst.Var:gcBrand AND
                                bf_CliType.clitype EQ icCliType        NO-LOCK NO-ERROR.
    IF AVAIL bf_CliType THEN
@@ -251,6 +253,9 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
            WHEN {&CLITYPE_WEBSTATUSCODE_ACTIVE} OR 
            WHEN {&CLITYPE_WEBSTATUSCODE_RETIRED} THEN  
            DO:
+               llValidExtraLine =  fCLITypeIsExtraLine(bf_CliType.CliType).
+               IF llValidExtraLine THEN RETURN TRUE.
+               
                ocCliTypeTo = fgetActiveReplacement(icCliType,"STCMappingForActiveTariffs").
 
                IF ocCliTypeTo = "" THEN 
@@ -273,7 +278,7 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
           END.                                      
        END CASE.               
    END.
-
+   
    RETURN TRUE.
 
 END FUNCTION.   
@@ -303,14 +308,15 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEFINE VARIABLE lcError       AS CHARACTER NO-UNDO.
    DEFINE VARIABLE llValidMaping AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE lhCustomer    AS HANDLE    NO-UNDO.
+   DEFINE VARIABLE llIsExtraLineOrProMigrationAllowed AS LOGICAL NO-UNDO.
 
    FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
    FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
    FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
 
-   fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
+   llIsExtraLineOrProMigrationAllowed = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
    
-   IF lcCliTypeTo <> "" THEN 
+   IF lcCliTypeTo <> "" OR llIsExtraLineOrProMigrationAllowed THEN 
    DO:
       fgetCustSegment(bCustomer.CustIdType,
                       TRUE, /* Self Employed */
@@ -335,8 +341,10 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
          IF llDoEvent THEN 
             RUN StarEventMakeModifyEvent(lhCustomer).
       END.
-
-      liReqCreated = fCTChangeRequest(iiMsseq,                                    /* The MSSeq of the subscription to where the STC is made */
+      
+      IF lcCliTypeTo <> "" THEN
+      DO:
+         liReqCreated = fCTChangeRequest(iiMsseq,                                    /* The MSSeq of the subscription to where the STC is made */
                                       lcCliTypeTo,                                /* The CLIType of where to do the STC */
                                       "",                                         /* lcBundleID */
                                       "",                                         /* bank code validation is already done */
@@ -353,8 +361,9 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                                       iiOrig,
                                       "",                                         /* contract id */
                                       OUTPUT ocResult).
-      IF ocResult > "" THEN 
-         RETURN 0.   
+         IF ocResult > "" THEN 
+            RETURN 0.  
+      END. 
    END.
    ELSE 
    DO:
