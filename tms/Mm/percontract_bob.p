@@ -13,6 +13,7 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
+{Func/fmakemsreq.i}
 
 /* Directories */
 DEF VAR lcSpoolDirectory     AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/PeriodicalContract/spool/". 
@@ -41,6 +42,8 @@ DEF VAR lcCurrentFile       AS CHAR NO-UNDO. /* Current processing file */
 DEF VAR lcCurrentLog        AS CHAR NO-UNDO. /* log for current processing file */
 DEF VAR lcLine              AS CHAR NO-UNDO. /* Read line of the current file. */
 DEF VAR lcPerContractBobLog AS CHAR NO-UNDO. /* Log file for Periodical Contract Bob Tool executions */
+DEF VAR liRequestStatus     AS INT  NO-UNDO. /* Returned code from action request. */                    
+DEF VAR lcResult            AS CHAR NO-UNDO. /* Info about requested action result. */
 
 /* Getting directories from CParams */
 ASSIGN
@@ -129,11 +132,21 @@ REPEAT:
          NEXT.
       IF NUM-ENTRIES(lcLine, ";") <> 2 THEN DO:
          PUT STREAM sCurrentLog UNFORMATTED
-            lcLine + ";ERROR:incorrect_number_of_parameters" SKIP.            
+            lcLine + ";ERROR:incorrect_number_of_parameters" SKIP. 
+         NEXT.              
       END.
       ASSIGN  
          lcMSISDN      = TRIM(ENTRY(1, lcLine, ";"))
          lcPerContract = TRIM(ENTRY(2, lcLine, ";")).
+         
+      /* Initially, only available for the Periodical */
+      /* Contracts indicated in YCO-469.              */
+      IF (lcPerContract <> "DTERM12-120" AND 
+          lcPerContract <> "DTERM24-240") THEN DO:
+         PUT STREAM sCurrentLog UNFORMATTED
+            lcLine + ";ERROR:incorrect_periodical_contract" SKIP.
+         NEXT.              
+      END.  
          
       /* Removing prefix (if needed) */
       IF LENGTH(lcMSISDN) EQ 11 THEN
@@ -160,11 +173,27 @@ REPEAT:
             lcLine + ";ERROR:periodical_contract_not_found" SKIP.
          NEXT.         
       END.          
-      
-      
-      /*---------------------*/
-      /* CREATING PERMANENCY */
-      /*---------------------*/
+          
+      liRequestStatus = fPCActionRequest(
+                           Mobsub.MsSeq,             /* subscription                              */
+                           DayCampaign.DCEvent,      /* periodical contract                       */
+                           "act",                    /* act,term,canc,iterm,cont                  */
+                           0,                        /* when request should be handled, 0 --> Now */
+                           TRUE,                     /* fees                                      */
+                           {&REQUEST_SOURCE_SCRIPT}, /* where created                             */
+                           "",                       /* creator                                   */
+                           0,                        /* main request                              */
+                           FALSE,                    /* main request waits for this               */
+                           "",                       /* sms                                       */
+                           0,                        /* payterm residual fee                      */
+                           0,                        /* Periodical Contract-ID                    */ 
+                           "",                       /* Parameters to be stored for SVA vase      */
+                           OUTPUT lcResult).
+      IF liRequestStatus = 0 THEN DO:
+         PUT STREAM sCurrentLog UNFORMATTED
+            lcLine + ";ERROR:" + STRING(liRequestStatus) + " - "  lcResult SKIP. 
+         NEXT.   
+      END.                    
                            
       PUT STREAM sCurrentLog UNFORMATTED
          lcLine + ";OK" SKIP.
