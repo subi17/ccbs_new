@@ -252,10 +252,9 @@ FUNCTION fGetTotalDSSUsage RETURNS LOG (INPUT iiCustNum    AS INT,
          odeDSSUsage = bServiceLCounter.Amt.
 
       FOR EACH bServiceLimit NO-LOCK WHERE
-               bServiceLimit.GroupCode BEGINS "DSS" AND
-              (bServiceLimit.GroupCode = "DSS200_UPSELL" OR
-               bServiceLimit.GroupCode MATCHES "DSS*FLEX*UPSELL" OR 
-               bServiceLimit.GroupCode = ServiceLimit.Groupcode + "_UPSELL"),
+                bServiceLimit.GroupCode = "DSS200_UPSELL" OR
+                bServiceLimit.GroupCode MATCHES "DSS*FLEX*UPSELL" OR 
+                bServiceLimit.GroupCode = ServiceLimit.Groupcode + "_UPSELL",
           FIRST bMServiceLimit NO-LOCK WHERE
                 bMServiceLimit.CustNum  = iiCustNum          AND
                 bMServiceLimit.DialType = bServiceLimit.DialType AND

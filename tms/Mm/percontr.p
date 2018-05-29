@@ -566,21 +566,15 @@ PROCEDURE pContractActivation:
       IF bOrigRequest.ReqType = 0 THEN 
          lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
-   
-   IF NOT CAN-FIND(FIRST TMSRelation WHERE 
-                     TMSRelation.TableName   = {&PERIODICAL_CONTRACT_TABLE} AND 
-                     TMSRelation.keyType     = {&KEY_SKIP_MATRIX}           AND 
-                     TMSRelation.ParentValue = lcDCEvent) 
-   THEN  
-       IF fMatrixAnalyse(Syst.Var:gcBrand,
-                         "PERCONTR",
-                         "PerContract;SubsTypeTo",
-                         lcDCEvent + ";" + lcUseCLIType,
-                         OUTPUT lcReqChar) NE 1
-       THEN DO: 
-           fReqError("Contract is not allowed for this subscription type").
-           RETURN.
-       END.
+
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
+                     "PERCONTR",
+                     "PerContract;SubsTypeTo",
+                     lcDCEvent + ";" + lcUseCLIType,
+                     OUTPUT lcReqChar) NE 1 THEN DO:
+      fReqError("Contract is not allowed for this subscription type").
+      RETURN.
+   END.
 
    RUN pIsBundleActivationAllowed(MsOwner.MsSeq,lcDCEvent) NO-ERROR.
    IF ERROR-STATUS:ERROR AND RETURN-VALUE <> "" THEN
@@ -1079,9 +1073,6 @@ PROCEDURE pContractActivation:
              DCCLI.ValidTo       = ldtEndDate
              DCCLI.CreateFees    = LOOKUP(DayCampaign.DCType,"3,5") > 0.
       
-      IF DayCampaign.DCEvent = "YOICARD" THEN 
-          DCCli.ServiceStatus = MSRequest.ReqIParam1.
-          
       IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN DO:
           DCCLi.WebContractID = fExtractWebContractId(MsRequest.Memo). 
           IF Mm.MManMessage:mGetMessage("EMAIL", "SVA_ActEmail", 1) EQ TRUE THEN DO:
@@ -3597,20 +3588,15 @@ PROCEDURE pContractReactivation:
       RETURN.
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
-   IF NOT CAN-FIND(FIRST TMSRelation WHERE 
-                     TMSRelation.TableName   = {&PERIODICAL_CONTRACT_TABLE} AND 
-                     TMSRelation.keyType     = {&KEY_SKIP_MATRIX}           AND 
-                     TMSRelation.ParentValue = lcDCEvent) 
-   THEN  
-       IF fMatrixAnalyse(Syst.Var:gcBrand,
-                         "PERCONTR",
-                         "PerContract;SubsTypeTo",
-                         lcDCEvent + ";" + lcUseCLIType,
-                         OUTPUT lcReqChar) NE 1
-       THEN DO: 
-           fReqError("Contract is not allowed for this subscription type").
-           RETURN.
-       END.
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
+                     "PERCONTR",
+                     "PerContract;SubsTypeTo",
+                     lcDCEvent + ";" + lcUseCLIType,
+                     OUTPUT lcReqChar) NE 1
+   THEN DO:
+      fReqError("Contract is not allowed for this subscription type").
+      RETURN.
+   END.
 
    /* predetermined length */  
    IF DayCampaign.DurType = 2 OR DayCampaign.DurType = 3 THEN DO:
