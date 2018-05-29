@@ -304,7 +304,7 @@ IF pcPerContract <> "" THEN DO:
                         0,                        /* when request should be handled, 0 --> Now */
                         TRUE,                     /* fees                                      */
                         {&REQUEST_SOURCE_NEWTON}, /* where created                             */
-                        "",                       /* creator                                   */
+                        pcUserName,               /* creator                                   */
                         0,                        /* main request                              */
                         FALSE,                    /* main request waits for this               */
                         "",                       /* sms                                       */
