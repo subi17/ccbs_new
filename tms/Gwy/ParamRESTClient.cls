@@ -2,8 +2,8 @@
  /*------------------------------------------------------------------------
     File        : ParamRESTClient
     Purpose     : Can take following parameters from TMSParam table:
-                  Scheme, Host, Port, Username, Password, Domain,
-                  RequestTimeout, RetryPause, NumRetries, ClientName and
+                  Scheme, Host, Port, UserName, PassWord, Domain,
+                  ReqTimeOut, RetryPause, NumRetries, ClientName and
                   ClientVersion
     Syntax      : 
     Description : 
@@ -91,18 +91,17 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
       DEFINE VARIABLE lii AS INTEGER   NO-UNDO.
 
       DO ON ERROR UNDO, THROW:
-         lcc = Syst.Parameters:getc(icTMSParamGroup, "ClientName").
+         lcc = Syst.Parameters:getc("ClientName", icTMSParamGroup).
          CATCH loAppError AS Progress.Lang.AppError:
             lcc = ?.
          END CATCH.
       END.
       IF lcc NE ?
       THEN mSetNameVersion(lcc,
-                           Syst.Parameters:getc(icTMSParamGroup,
-                                                "ClientVersion")).
+                           Syst.Parameters:getc("ClientVersion",icTMSParamGroup)).
 
       DO ON ERROR UNDO, THROW:
-         lde = Syst.Parameters:getde(icTMSParamGroup, "ReqTimeOut").
+         lde = Syst.Parameters:getde("ReqTimeOut", icTMSParamGroup).
          CATCH loAppError AS Progress.Lang.AppError:
             lde = ?.
          END CATCH.
@@ -110,7 +109,7 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
       IF lde >= 0 THEN mSetRequestTimeout(lde).
 
       DO ON ERROR UNDO, THROW:
-         lde = Syst.Parameters:getde(icTMSParamGroup, "RetryPause").
+         lde = Syst.Parameters:getde("RetryPause", icTMSParamGroup).
          CATCH loAppError AS Progress.Lang.AppError:
             lde = ?.
          END CATCH.
@@ -118,7 +117,7 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
       IF lde >= 0 THEN mSetRetryPause(lde).
 
       DO ON ERROR UNDO, THROW:
-         lii = Syst.Parameters:geti(icTMSParamGroup, "NumRetries").
+         lii = Syst.Parameters:geti("NumRetries", icTMSParamGroup).
          CATCH loAppError AS Progress.Lang.AppError:
             lii = ?.
          END CATCH.
@@ -134,14 +133,14 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
       DEFINE VARIABLE lcPassWord AS CHARACTER NO-UNDO.
       
       DO ON ERROR UNDO, THROW:
-         lcUserName = Syst.Parameters:getc(icTMSParamGroup, "UserName").
+         lcUserName = Syst.Parameters:getc("UserName", icTMSParamGroup).
          CATCH loAppError AS Progress.Lang.AppError :
             lcUserName = "".
          END CATCH.
       END.
 
       DO ON ERROR UNDO, THROW:
-         lcPassWord = Syst.Parameters:getc(icTMSParamGroup, "PassWord").
+         lcPassWord = Syst.Parameters:getc("PassWord",icTMSParamGroup).
          CATCH loAppError AS Progress.Lang.AppError :
             lcPassWord = "".
          END CATCH.
@@ -149,15 +148,15 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
 
       /* An error will be thrown if domain is not defined */
       IF lcUserName > ""
-      THEN mSetCredentials(Syst.Parameters:getc(icTMSParamGroup, "Domain"),
+      THEN mSetCredentials(Syst.Parameters:getc("Domain",icTMSParamGroup),
                            lcUserName,
                            lcPassWord).
 
       /* An error will be thrown if any of the parameter
          is not available or it is incorrect type */
-      mSetURI(Syst.Parameters:getc(icTMSParamGroup, "Scheme"),
-              Syst.Parameters:getc(icTMSParamGroup, "Host"),
-              Syst.Parameters:geti(icTMSParamGroup, "Port")).
+      mSetURI(Syst.Parameters:getc("Scheme", icTMSParamGroup),
+              Syst.Parameters:getc("Host", icTMSParamGroup),
+              Syst.Parameters:geti("Port", icTMSParamGroup)).
 
    END METHOD.
 
