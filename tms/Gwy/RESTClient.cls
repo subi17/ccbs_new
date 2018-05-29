@@ -100,6 +100,8 @@ USING OpenEdge.Net.URI.
 USING OpenEdge.Net.UriSchemeEnum.
 USING Progress.Json.ObjectModel.JsonConstruct.
 
+&GLOBAL-DEFINE PROGRESS_VERSION 11.6
+
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.RESTClient: 
@@ -137,7 +139,7 @@ CLASS Gwy.RESTClient:
    DEFINE PRIVATE VARIABLE acClientVersion AS CHARACTER INITIAL ?      NO-UNDO.
    DEFINE PRIVATE VARIABLE aoLibrary       AS CLASS IHttpClientLibrary NO-UNDO.
    DEFINE PRIVATE VARIABLE aoCookie        AS CLASS ICookieJar         NO-UNDO.
-   DEFINE PRIVATE VARIABLE alEnableoCookie AS LOGICAL   INITIAL FALSE  NO-UNDO.
+   DEFINE PRIVATE VARIABLE alEnableCookie  AS LOGICAL   INITIAL FALSE  NO-UNDO.
    DEFINE PRIVATE VARIABLE aoProxy         AS CLASS URI                NO-UNDO.
    /* Seems that this is not available in Progress 11.6 */
    /*DEFINE PRIVATE VARIABLE aoLogger      AS CLASS ILogWriter         NO-UNDO.*/
@@ -276,7 +278,7 @@ CLASS Gwy.RESTClient:
 
       ASSIGN
          aoCookie        = ioCookieJar
-         alEnableoCookie = TRUE
+         alEnableCookie = TRUE
          alClientChanged = TRUE.
 
    END METHOD.
@@ -285,7 +287,7 @@ CLASS Gwy.RESTClient:
 
       ASSIGN
          aoCookie        = ?
-         alEnableoCookie = TRUE
+         alEnableCookie = TRUE
          alClientChanged = TRUE.
 
    END METHOD.
@@ -320,8 +322,10 @@ CLASS Gwy.RESTClient:
 
       IF VALID-OBJECT(aoCookie)
       THEN loClientBuilder:KeepCookies(aoCookie).
-      ELSE IF alEnableoCookie
+      &IF {&PROGRESS_VERSION} > 11.5 &THEN
+      ELSE IF alEnableCookie
       THEN loClientBuilder:KeepCookies().
+      &ENDIF
 
       IF VALID-OBJECT(aoProxy)
       THEN loClientBuilder:ViaProxy(aoProxy).
@@ -373,6 +377,7 @@ CLASS Gwy.RESTClient:
       IF VALID-OBJECT(aoURI)
       THEN DELETE OBJECT aoURI.
 
+      &IF {&PROGRESS_VERSION} > 11.5 &THEN
       DEFINE VARIABLE loUriSchemeEnum AS CLASS UriSchemeEnum NO-UNDO.
       
       /* This throws an error if the scheme is not valid */
@@ -384,6 +389,15 @@ CLASS Gwy.RESTClient:
          acURIHost     = icHost
          aiURIPort     = iiPort
          alURIHasQuery = FALSE.
+
+      &ELSE
+      ASSIGN
+         aoURI         = NEW URI(icScheme, icHost, iiPort)
+         acURIScheme   = icScheme
+         acURIHost     = icHost
+         aiURIPort     = iiPort
+         alURIHasQuery = FALSE.
+      &ENDIF
 
    END METHOD.
 
