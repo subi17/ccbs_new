@@ -335,29 +335,32 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
          IF llDoEvent THEN 
             RUN StarEventMakeModifyEvent(lhCustomer).
       END.
+      
+      DO TRANSACTION:
+         liReqCreated = fCTChangeRequest(iiMsseq,                                    /* The MSSeq of the subscription to where the STC is made */
+                                         lcCliTypeTo,                                /* The CLIType of where to do the STC */
+                                         "",                                         /* lcBundleID */
+                                         "",                                         /* bank code validation is already done */
+                                         Func.Common:mMakeTS(),
+                                         0,                                          /* 0 = Credit check ok */
+                                         0,                                          /* extend contract */
+                                         ""                                          /* pcSalesman */,
+                                         FALSE,                                      /* charge */
+                                         TRUE,                                       /* send sms */
+                                         "",
+                                         0, 
+                                         {&REQUEST_SOURCE_MIGRATION},
+                                         0,
+                                         iiOrig,
+                                         "",                                         /* contract id */
+                                         OUTPUT ocResult).
+         IF ocResult > "" THEN 
+            RETURN 0.   
+      END.
 
-      liReqCreated = fCTChangeRequest(iiMsseq,                                    /* The MSSeq of the subscription to where the STC is made */
-                                      lcCliTypeTo,                                /* The CLIType of where to do the STC */
-                                      "",                                         /* lcBundleID */
-                                      "",                                         /* bank code validation is already done */
-                                      Func.Common:mMakeTS(),
-                                      0,                                          /* 0 = Credit check ok */
-                                      0,                                          /* extend contract */
-                                      ""                                          /* pcSalesman */,
-                                      FALSE,                                      /* charge */
-                                      TRUE,                                       /* send sms */
-                                      "",
-                                      0, 
-                                      {&REQUEST_SOURCE_MIGRATION},
-                                      0,
-                                      iiOrig,
-                                      "",                                         /* contract id */
-                                      OUTPUT ocResult).
-      IF ocResult > "" THEN 
-         RETURN 0.   
    END.
    ELSE 
-   DO:
+   DO TRANSACTION:
       ocResult = fChkRequest(iiMsSeq,
                              {&REQTYPE_PRO_MIGRATION},
                              "",
