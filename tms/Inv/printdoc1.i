@@ -51,6 +51,9 @@ DEF VAR lcFusionCLITypes AS CHAR NO-UNDO.
 DEF VAR gcCallQueryBegin AS CHAR NO-UNDO.
 DEF VAR gcCallQueryEnd AS CHAR NO-UNDO.
 
+DEF STREAM sTestLog.
+DEF VAR liWrites AS INT NO-UNDO INIT 0.
+
 DEFINE VARIABLE objDBConn AS CLASS Syst.CDRConnect NO-UNDO.
 
 DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
@@ -95,6 +98,7 @@ DEF TEMP-TABLE ttRow NO-UNDO
    FIELD RowToDate     AS DATE
    FIELD VoiceLimit    AS INT
    FIELD DataLimit     AS INT
+   FIELD SubTotal      AS DEC /* YDR-2848 */
    INDEX RowCode SubInvNum RowCode
    INDEX RowName SubInvNum RowName RowGroup.
 
@@ -200,6 +204,20 @@ DEFINE TEMP-TABLE ttMSOwner NO-UNDO
    INDEX Type Type InvCust TSBegin DESCENDING TSEnd DESCENDING.
 
 DEF BUFFER bttRow FOR ttRow.
+
+
+FUNCTION fTestLog RETURN LOG(
+   icLogText AS CHAR):
+          
+   IF liWrites EQ 0 THEN 
+      OUTPUT STREAM sTestLog TO VALUE("/home/kahannul/ydr_2848_testlog.txt") APPEND.
+                         
+   liWrites = liWrites + 1.
+
+   PUT STREAM sTestLog UNFORMATTED
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) ":" icLogText skip.
+END.
+
 
 FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
@@ -894,6 +912,10 @@ PROCEDURE pGetSubInvoiceHeaderData:
              ttSub.FixedNumber = SubInvoice.FixedNumber
              ttSub.MsSeq       = SubInvoice.MsSeq. 
       
+      fTestLog(
+         "FOR EACH Begin..." +
+         " ttSub.CLI:" + STRING(ttSub.CLI) +
+         " ttSub.FixedNum:" + ttSub.FixedNumber).
       /*NEBACO-7*/
       /*Find IUA for the subscription*/
       IF ttSub.FixedNumber NE "" AND ttSub.FixedNumber NE ? THEN DO:
@@ -1135,8 +1157,29 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
+      fTestLog(
+         "ttSub..." +
+         " ttSub.CLI:" + STRING(ttSub.CLI) +
+         " ttSub.CliType:" + STRING(ttSub.CliType) +
+         " ttSub.CTName:" + STRING(ttSub.CTName) +
+         " ttSub.OldCliType:" + STRING(ttSub.OldCliType) +
+         " ttSub.OldCTName:" + STRING(ttSub.OldCTName)).
+
       FOR EACH ttRow WHERE
                ttRow.SubInvNum = SubInvoice.SubInvNum NO-LOCK:
+
+         fTestLog(
+         "ttRow.SubInvNum:" + STRING(ttRow.SubInvNum) +
+         " RowType:" + ttRow.RowType +
+         " RowCode:" + ttRow.RowCode +
+         " RowBillCode:" + ttRow.RowBillCode +
+         " RowName:" + ttRow.RowName +
+         " RowAmtEclVat:" + STRING(ttRow.RowAmtExclVat) +
+         " RowVatAmt:" + STRING(ttRow.RowVatAmt) +
+         " RowAmt:" + STRING(ttRow.RowAmt) +
+         " SubTotal:" + STRING(ttRow.SubTotal)).
+         
+
          /*Google billing*/
          IF ttRow.RowCode BEGINS "44" THEN
             ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
@@ -1172,7 +1215,11 @@ PROCEDURE pGetSubInvoiceHeaderData:
             ttSub.Others = ttSub.Others + ttRow.RowAmt.
 
          /* YDR-2848 Subscription level TOTAL sum */
+         ttRow.SubTotal = ttRow.SubTotal + ttRow.RowAmt.
          ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmt.
+         fTestLog(
+         " ttRow.SubTotal 2:" + STRING(ttRow.SubTotal) +
+         " ttSub.SubsTotal:" + STRING(ttSub.SubscriptionTotal)).
 
          /* ttRows contains combined invrows => no need to check duplicates */
          IF ttRow.RowCode BEGINS "33" AND
@@ -1204,6 +1251,21 @@ PROCEDURE pGetSubInvoiceHeaderData:
             THEN llRVFinancedByBank = TRUE.
          END.
       END.
+
+      fTestLog("ttSub.CLI:" + ttSub.CLI + 
+      " FixedNumber:" + ttSub.FixedNumber +
+      " CliTYpe:" + ttSub.CliType +
+      " CTName " + ttSub.CTName +
+      " MsSeq:" + STRING(ttSub.MsSeq) +
+      " InstallmentAmt:" + STRING(ttSub.InstallmentAmt) +
+      " PenaltyAmt: " + STRING(ttSub.PenaltyAmt) +
+      " RowAmt:" + STRING(ttRow.RowAmt) +
+      " InstallmentDiscAmt:" + STRING(ttSub.InstallmentDiscAmt) +
+      " OldCLIType: " + ttSub.OldCLIType +
+      " OldCTName: " + ttSub.OldCTName +
+      " SubscriptionTotal: " + STRING(ttSub.SubscriptionTotal)).
+
+
       /*
       IF ttSub.InstallmentAmt > 0 THEN
          FOR EACH ttRow NO-LOCK WHERE 
@@ -1379,10 +1441,20 @@ PROCEDURE pGetInvoiceRowData:
                       /* ttRow.RowName   = lcRowName AND */
                       (ttRow.RowGroup EQ "18" OR
                        ttRow.RowGroup EQ "46") NO-ERROR.
-            IF AVAIL ttRow AND ttRow.RowGroup EQ "46" THEN DO:
+
+      fTestLog(
+       "HERE WE GO:" +
+       "ttRow.RowGroup:" + ttRow.RowGroup + 
+       " ttRow.RowCode" + ttRow.RowCode).
+
+            IF AVAIL ttRow AND ttRow.RowGroup EQ "18" THEN DO: /* 28.5. "46"--> 18 */
                ASSIGN /* Use 46 as defaulf for convergent tariff */
                   ttRow.RowCode  = STRING(ttBillItemAndGroup.BiGroup) + lcRowName
                   ttRow.RowGroup = ttBillItemAndGroup.BIGroup.
+                 fTestLog(
+                     "HERE WE GO_2:" +
+                     "ttRow.RowGroup:" + ttRow.RowGroup + 
+                     " ttRow.RowCode" + ttRow.RowCode).
             END.
          END.
 

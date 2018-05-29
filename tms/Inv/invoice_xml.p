@@ -815,9 +815,9 @@ PROCEDURE pSubInvoice2XML:
          IF ttRow.RowType > "" AND
             ttRow.RowGroup EQ "46" THEN /* Convergent uses CLI Type Name */
             lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
-         ELSE IF ttRow.RowType = "" AND /* empty --> not a header */
+         /* ELSE IF ttRow.RowType = "" AND /* empty --> not a header */
                  ttRow.RowGroup EQ "18" THEN
-                 lhXML:WRITE-DATA-ELEMENT("BillingItem",ttSub.CTName). /* Tariff name */
+                 lhXML:WRITE-DATA-ELEMENT("BillingItem",ttSub.CTName).*/ /* Tariff name */
          ELSE
             lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
 
@@ -959,6 +959,7 @@ PROCEDURE pSubInvoice2XML:
 
       /* Sum of different categories per subscription. YDR-2848 */      
       lhXML:START-ELEMENT("TotalCategory").
+         /* lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttRow.SubTotal)).*/
          lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.SubscriptionTotal)).
       lhXML:END-ELEMENT("TotalCategory").
 
