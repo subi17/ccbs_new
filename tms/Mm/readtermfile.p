@@ -162,9 +162,11 @@ REPEAT:
       END.   
    END.
 
-   IF MobSub.ICC NE lcICC THEN DO:
-      fError("Invalid ICC").
-      NEXT.
+   IF NOT fIsFixedOnly(lcCLIType) THEN DO:
+      IF MobSub.ICC NE lcICC THEN DO:
+         fError("Invalid ICC").
+         NEXT.
+      END.
    END.
    
    IF MobSub.CLIType NE lcCLIType THEN DO:
