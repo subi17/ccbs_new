@@ -128,7 +128,7 @@ FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL
    DEF VAR lcUriQuery    AS CHARACTER        NO-UNDO.
    DEF VAR lcUriQueryVal AS CHARACTER        NO-UNDO.
    DEF VAR liLogRequest  AS INTEGER          NO-UNDO.
-   DEF VAR loRequestjson AS JsonObject       NO-UNDO. 
+   DEF VAR loRequestjson AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
  
    ASSIGN 
       lcHost        = fCParam("Masmovil","cancelHost")
@@ -138,7 +138,7 @@ FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL
       lcUriQueryVal = fCParam("Masmovil","cancelUriQueryValue")
       liLogRequest  = fIParam("Masmovil","cancelLogRequest").
       
-   loRequestjson = NEW Progress.Json.ObjectModel.jsonObject().
+   loRequestjson = NEW Progress.Json.ObjectModel.JsonObject().
    loRequestJson:ADD("orderid" , "Y" + STRING(iiOrderID)).
  
    RUN Gwy/http_rest_client.p("put" ,
@@ -152,6 +152,10 @@ FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL
                              loRequestJson).
    RETURN TRUE.
 
+   FINALLY:
+      IF VALID-OBJECT(loRequestjson)
+      THEN DELETE OBJECT loRequestjson.
+   END FINALLY.
 END FUNCTION.
 
 PROCEDURE pCreditInstallment:
