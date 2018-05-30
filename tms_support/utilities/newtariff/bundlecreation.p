@@ -707,7 +707,6 @@ PROCEDURE pStoreBundle:
    DEFINE VARIABLE lcProcessType    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liSlSeq          AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE liTMSRelationID  AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcDCUpsells      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liCount          AS INTEGER   NO-UNDO.
       
@@ -770,35 +769,30 @@ PROCEDURE pStoreBundle:
       DayCampaign.TermFeeCalc     = 0.
       
    fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).  
-      
-   FIND LAST TMSRelation USE-INDEX TMSRelationID NO-LOCK NO-ERROR.
-   IF AVAILABLE TMSRelation
-   THEN liTMSRelationID = TMSRelation.TMSRelationId + 1.
-   ELSE liTMSRelationID = 1.   
     
-   RELEASE TMSRelation NO-ERROR.
-   
    ASSIGN lcDCUpsells = fGetFieldValue({&UPSELL}).
    
    DO liCount = 1 TO NUM-ENTRIES(lcDCUpsells):
        
-       CREATE TMSRelation.
-       ASSIGN 
-           TMSRelation.TMSRelationID = liTMSRelationID
-           TMSRelation.TableName     = {&DCTABLENAME}
-           TMSRelation.KeyType       = {&DCKEYTYPE}
-           TMSRelation.ParentValue   = DayCampaign.DCEvent
-           TMSRelation.ChildValue    = ENTRY(liCount,lcDCUpsells)
-           TMSRelation.RelationType  = {&DCRELATIONTYPE}
-           TMSRelation.FromTime      = DATETIME-TZ(TODAY, 0)    
-           TMSRelation.ToTime        = DATETIME-TZ(12/31/49, 86399000).  
-           
-       ASSIGN liTMSRelationID = liTMSRelationID + 1.       
+       Syst.TMSRelation:mAddRelation({&DCTABLENAME},
+                                     {&DCKEYTYPE},
+                                     DayCampaign.DCEvent,
+                                     ENTRY(liCount,lcDCUpsells),
+                                     {&DCRELATIONTYPE},
+                                     YES).
+       
+       
+   END.
+   
+   FOR EACH TMSRelation NO-LOCK WHERE 
+            TMSRelation.TableName    =  {&DCTABLENAME}      AND 
+            TMSRelation.KeyType      =  {&DCKEYTYPE}        AND
+            TMSRelation.ChildValue   >  ""                  AND  
+            TMSRelation.ParentValue  =  DayCampaign.DCEvent USE-INDEX ChildValue:
+   
        fExport(icSpoolDir + "tmsrelation.d", HPD.HPDCommon:mDynExport(BUFFER TMSRelation:HANDLE, " ")).
        
-   END. 
-   
-   
+   END.
          
    IF ldeDataLimit > 0 THEN   
       RUN pDCServicePackage(lcBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).
