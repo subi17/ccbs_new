@@ -5,7 +5,6 @@ USING Progress.Lang.*.
 {Syst/tmsconst.i}
 
 USING Gwy.ModelInterface.
-//USING Gwy.AccountModel FROM PROPATH.
 
 CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface: 
     
@@ -17,7 +16,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
    DEF VAR lcCodeName      AS CHAR              NO-UNDO.
    DEF VAR liCodeValue     AS INT               NO-UNDO.
    DEF VAR liAccount       AS INT               NO-UNDO.
-   DEF VAR lcAccType       AS CHAR              NO-UNDO.
+   DEF VAR liAccType       AS CHAR              NO-UNDO.
    DEF VAR gcBrand         AS CHAR INIT "1"     NO-UNDO.
    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
@@ -46,7 +45,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
    END CONSTRUCTOR.
     
    METHOD PUBLIC LOG create():
- 
+      
       lcJson = '~{"AccountDataset":~{"Account":~[' + lcJson + '~]~}~}'.
       IF loRequestMaker:parser_error(DATASET AccountDataset BIND, lcJson) THEN
          RETURN FALSE.
@@ -66,15 +65,16 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
          RETURN loRequestMaker:logError("Account was already exists").
             
       IF ttAccount.account_type > "" THEN 
-         ASSIGN lcAcctype = Func.Common:mTMSCodeValue("Account",
+         ASSIGN liAccType = Func.Common:mTMSCodeValue("Account",
                                                       "AccType",
                                                       ttAccount.account_type).               
       CREATE Account.
       ASSIGN 
+         Account.Brand = gcBrand
          Account.AccNum  = liAccount
          Account.AccName = ttAccount.name
                               WHEN ttAccount.name > ""
-         Account.AccType = INT(lcAccType).       
+         Account.AccType = INT(liAccType).       
           
       loEventLogMaker:make_eventlog("create",BUFFER Account:HANDLE).
     
@@ -99,7 +99,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
    END METHOD.
     
    METHOD PUBLIC LOG update():
-
+       
       DEF VAR liWait AS INT NO-UNDO.
     
       IF lcModelId = ? THEN 
@@ -120,12 +120,6 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       FIND ttAccount NO-ERROR.
       IF NOT AVAILABLE ttAccount THEN
          RETURN loRequestMaker:logError("Empty Account set").
-       
-      IF ttAccount.account_type > "" THEN 
-         ASSIGN lcAcctype = Func.Common:mTMSCodeValue("Account",
-                                                      "AccType",
-                                                      ttAccount.account_type).
-                                                                       
       DO WHILE TRUE:
          FIND FIRST Account EXCLUSIVE-LOCK WHERE
                     Account.Brand = gcBrand AND
@@ -149,7 +143,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       ASSIGN 
          Account.AccName = ttAccount.name 
                               WHEN ttAccount.name > ""
-         Account.AccType = INT(lcAccType).       
+         Account.AccType = INT(liAccType).       
         
       loEventLogMaker:make_eventlog("modify",BUFFER Account:HANDLE).
    

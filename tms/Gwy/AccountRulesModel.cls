@@ -6,12 +6,12 @@ USING Gwy.ModelInterface.
 
 CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
 
-   DEF VAR lJson           AS LONGCHAR          NO-UNDO.
-   DEF VAR lcModelid       AS CHAR              NO-UNDO.
+   DEF VAR lcJson          AS LONGCHAR          NO-UNDO.
+   DEF VAR liModelid       AS INT               NO-UNDO.
    DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
    DEF VAR lcSource        AS CHAR              NO-UNDO.
-   DEF VAR gcBrand         AS CHAR              NO-UNDO.
-   DEF VAR lcCCRule        AS CHAR              NO-UNDO.
+   DEF VAR gcBrand         AS CHAR INIT "1"     NO-UNDO.
+   DEF VAR liCCRule        AS INT               NO-UNDO.
    DEF VAR lcError         AS CHAR              NO-UNDO.
    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
@@ -39,10 +39,9 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
                                         iSource  AS CHAR,
                                         iCorrelationID AS CHAR,
                                         iReplyTo AS CHAR):
-    
       ASSIGN
          lcJson          = iJson
-         lcModelid       = iModelid
+         liModelId       = int(iModelid)
          lcCorrelationID = iCorrelationID
          lcSource        = iSource
          loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
@@ -51,11 +50,11 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
    END CONSTRUCTOR.
 
    METHOD PUBLIC LOG create():
-     
+      
       lcJson = '~{"CCRuleDataSet":~{"CCRule":~[' + lcJson + '~]~}~}'.
       IF loRequestMaker:parser_error(DATASET CCRuleDataset BIND, lcJson) THEN
          RETURN FALSE.
-       
+         
       FIND ttCCRule NO-ERROR.
       IF NOT AVAILABLE ttCCRule THEN
          RETURN loRequestMaker:logError("Empty CCRule set").
@@ -65,20 +64,20 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
     
       CREATE CCRule.
       ASSIGN 
-         CCRule.Brand        = gcBrand
-         CCRule.CCRuleID     = STRING(NEXT-VALUE(CCRuleID))
-         CCRule.BillCode     = ttCCRule.billing_item
-         CCRule.Category     = ttCCRule.category
-         CCRule.ValidFrom    = ttCCRule.cc_validfrom
-         CCRule.ValidTo      = ttCCRule.cc_validto
-         CCRule.AccNum       = ttCCRule.domestic_account
-         CCRule.EUAccNum     = ttCCRule.eu_comp_account
-         CCRule.EUConAccNum  = ttCCRule.eu_cons_account
-         CCRule.FSAccNum     = ttCCRule.foreign_account
-         CCRule.CostCentre   = ttCCRule.cost_center 
-                                  WHEN ttCCRule.cost_center NE ?
-         CCRule.ReportingID  = ttCCRule.reporting_id 
-                                  WHEN ttCCRule.reporting_id NE ?.
+         CCRule.Brand       = gcBrand
+         CCRule.CCRuleID    = NEXT-VALUE(CCRuleSeq)
+         CCRule.BillCode    = ttCCRule.billing_item
+         CCRule.Category    = ttCCRule.category
+         CCRule.ValidFrom   = ttCCRule.cc_validfrom
+         CCRule.ValidTo     = ttCCRule.cc_validto
+         CCRule.AccNum      = ttCCRule.domestic_account
+         CCRule.EUAccNum    = ttCCRule.eu_comp_account
+         CCRule.EUConAccNum = ttCCRule.eu_cons_account
+         CCRule.FSAccNum    = ttCCRule.foreign_account
+         CCRule.CostCentre  = ttCCRule.cost_center 
+                                 WHEN ttCCRule.cost_center NE ?
+         CCRule.ReportingID = ttCCRule.reporting_id 
+                                 WHEN ttCCRule.reporting_id NE ?.
           
       loEventLogMaker:make_eventlog("create",BUFFER CCRule:HANDLE).
           
@@ -88,14 +87,14 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
          the succesful one */
       IF lcCorrelationID > "" THEN
       loRequestMaker:create_response("CCRule",
-                                     lcCCRule,
+                                     string(liCCRule),
                                      "OK",
                                      ""). 
       &IF {&MQ_BASED} 
       &THEN
       loRequestMaker:create_log(
          SUBSTITUTE("CCRule create: Id=&1,&2 Ext.Request=&3", 
-         lcCCRule,
+         liCCRule,
          ttCCRule.external_id,
          lcCorrelationID), 
          "DEBUG").
@@ -104,30 +103,29 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
    END METHOD.
 
    METHOD PUBLIC LOG update():
-      
+       
       DEF VAR liWait AS INT  NO-UNDO.
        
-      IF lcModelid = ? THEN 
+      IF liModelId = ? THEN 
          RETURN loRequestMaker:logError('CCRule ID not given').
     
       lcJson = '~{"CCRuleDataSet":~{"CCRule":~[' + lcJson + '~]~}~}'.
-      IF loRequestMaker:parser_error(DATASET CCRuleDataset BIND, lJson) THEN
+      IF loRequestMaker:parser_error(DATASET CCRuleDataset BIND, lcJson) THEN
          RETURN FALSE.
-    
       FIND ttCCRule NO-ERROR.
       IF NOT AVAILABLE ttCCRule THEN
          RETURN loRequestMaker:logError("Empty CCRule set").
      
-      lcError = validate_rule(lcModelid,
+      lcError = validate_rule(liModelId,
                               FALSE).      
       IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
     
       DO WHILE TRUE:
          FIND FIRST CCRule WHERE 
-                    CCRule.CCRuleID = lcCCRule EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                    CCRule.CCRuleID = liCCRule EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
          IF LOCKED(CCRule) THEN DO:
             liWait = liWait + 1.
-            IF liWait > "{&WAIT_CONFIG_LOCK}" THEN 
+            IF liWait > {&WAIT_CONFIG_LOCK} THEN 
                RETURN loRequestMaker:logError("Rule was not available for update").
             PAUSE 1 NO-MESSAGE. 
             NEXT. 
@@ -157,15 +155,15 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
          the succesful one */
       IF lcCorrelationID > "" THEN
       loRequestMaker:create_response("CCRule",
-                                      lcCCRule,
+                                      string(liCCRule),
                                       "OK",
                                       ""). 
       &IF {&MQ_BASED} 
       &THEN 
       loRequestMaker:create_log(
          SUBSTITUTE("CCRule update: Id=&1/&2 Ext.Request=&3", 
-         lcCCRule,
-         lcModelid,
+         liCCRule,
+         liModelId,
          lcCorrelationID), 
          "DEBUG").
       &ENDIF   
@@ -185,20 +183,18 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
 
    END METHOD.
 
-   METHOD PUBLIC CHAR validate_rule(icExternalID AS CHAR,
-                                     ilCreate AS LOG):
+   METHOD PUBLIC CHAR validate_rule(icExternalID AS INT,
+                                    ilCreate AS LOG):
     
       DEF BUFFER bRule FOR CCRule.
     
-      IF icExternalID = "" THEN 
+      IF icExternalID EQ 0 THEN 
          RETURN "Invalid rule ID". 
           
-      lcCCRule = icExternalID.
-      IF lcCCRule > "" THEN 
-      
+      liCCRule = icExternalID.
+      IF liCCRule > 0 THEN       
       IF CAN-FIND(FIRST CCRule WHERE 
-                        CCRule.Brand = gcBrand
-                        CCRule.CCRuleId = icExternalID) THEN DO:
+                        CCRule.CCRuleId = liCCRule) THEN DO:
          IF ilCreate THEN RETURN "Rule already exists".
       END.
       ELSE IF NOT ilCreate THEN RETURN "Unknown rule".
@@ -238,20 +234,18 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
       IF ttCCRule.cc_validto NE ? THEN DO:
          IF ilCreate AND 
             CAN-FIND(FIRST bRule WHERE
-                           bRule.Brand = gcBrand AND
                            bRule.Category = ttCCRule.category AND
                            bRule.BillCode = ttCCRule.billing_item AND
                            bRule.ValidTo = ttCCRule.cc_validto) THEN 
             RETURN "Rule with given key values already exists".
          ELSE IF NOT ilCreate THEN DO: 
-            FIND FIRST CCRule WHERE CCRule.CCRuleID = lcCCRule NO-LOCK NO-ERROR.
+            FIND FIRST CCRule WHERE CCRule.CCRuleID = liCCRule NO-LOCK NO-ERROR.
             IF AVAILABLE CCRule AND 
                CAN-FIND(FIRST bRule USE-INDEX Category WHERE
-                              bRule.Brand = gcBrand AND
                               bRule.Category = CCRule.Category AND
                               bRule.BillCode = CCRule.BillCode AND
                               bRule.ValidTo = ttCCRule.cc_validto AND
-                              bRule.CCRuleID NE lcCCRule) THEN 
+                              bRule.CCRuleID NE liCCRule) THEN 
                RETURN "Rule with given end date already exists".
          END.     
       END.
@@ -296,4 +290,3 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
    END DESTRUCTOR.
 
 END CLASS.
-
