@@ -26,7 +26,6 @@ Syst.Var:gcBrand = "1".
 DEFINE VARIABLE piMsSeq          AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcUserName       AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcStruct         AS CHARACTER NO-UNDO.
-DEFINE VARIABLE pcPerContract    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStruct         AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStructType     AS CHARACTER NO-UNDO.
 
@@ -42,6 +41,7 @@ DEFINE VARIABLE ldeMonthlyLimit  AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcPerContract    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liResult         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcResult         AS CHARACTER NO-UNDO.
@@ -144,13 +144,15 @@ lcStruct = validate_struct(pcStruct, "id!,disc_value!,valid_from!," +
                                      "valid_periods!,discount_monthly_limit!," +
                                      "permanency").
 
+
 lcDPRuleID     = get_string(pcStruct, "id").
 ldeAmount      = get_double(pcStruct, "disc_value").
 ldaValidFrom   = get_date(pcStruct, "valid_from").
 liValidPeriods = get_int(pcStruct, "valid_periods").
 ldeMonthlyLimit = get_double(pcStruct, "discount_monthly_limit").
-pcPerContract = get_string(pcStruct,"permanency") WHEN  
-   LOOKUP("permanency", lcStruct) > 0 .
+
+ASSIGN lcPerContract = get_string(pcStruct, "permanency") WHEN
+         LOOKUP ("permanency", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -214,13 +216,13 @@ ELSE
    ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
 
 /* YCO-468. Periodical contract for Permanency. Validation. */
-IF pcPerContract <> "" THEN DO:
+IF lcPerContract <> "" THEN DO:
    FIND FIRST DayCampaign NO-LOCK WHERE 
               DayCampaign.Brand   EQ Syst.Var:gcBrand AND 
-              DayCampaign.DCEvent EQ pcPerContract
+              DayCampaign.DCEvent EQ lcPerContract
               USE-INDEX DCEvent NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
-      RETURN appl_err("Unknown Periodical Contract " + pcPerContract). 
+      RETURN appl_err("Unknown Periodical Contract " + lcPerContract). 
 END.
 
 /* ALFMO-14 Additional Line with mobile only ALFMO-5 */
@@ -297,11 +299,11 @@ lcError = fAddDiscountPlanMember(MobSub.MsSeq,
 IF lcError BEGINS "ERROR"
 THEN RETURN appl_err(lcError).
 
-/* YCO-468. Assign permanency when pcPerContract <> "" */
-IF pcPerContract <> "" THEN DO:
+/* YCO-468. Assign permanency when lcPerContract <> "" */
+IF lcPerContract <> "" THEN DO:
    liResult = fPCActionRequest(
                         Mobsub.MsSeq,             /* subscription */
-                        pcPerContract,            /* DayCampaign.DCEvent */
+                        lcPerContract,            /* DayCampaign.DCEvent */
                         "act",                    /* act,term,canc,iterm,cont */
                         0,                        /* when request should be handled, 0 --> Now */
                         TRUE,                     /* fees */
