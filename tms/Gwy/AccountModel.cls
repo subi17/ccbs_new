@@ -16,7 +16,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
    DEF VAR lcCodeName      AS CHAR              NO-UNDO.
    DEF VAR liCodeValue     AS INT               NO-UNDO.
    DEF VAR liAccount       AS INT               NO-UNDO.
-   DEF VAR liAccType       AS CHAR              NO-UNDO.
+   DEF VAR lcAccType       AS CHAR              NO-UNDO.
    DEF VAR gcBrand         AS CHAR INIT "1"     NO-UNDO.
    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
@@ -65,7 +65,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
          RETURN loRequestMaker:logError("Account was already exists").
             
       IF ttAccount.account_type > "" THEN 
-         ASSIGN liAccType = Func.Common:mTMSCodeValue("Account",
+         ASSIGN lcAccType = Func.Common:mTMSCodeValue("Account",
                                                       "AccType",
                                                       ttAccount.account_type).               
       CREATE Account.
@@ -74,7 +74,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
          Account.AccNum  = liAccount
          Account.AccName = ttAccount.name
                               WHEN ttAccount.name > ""
-         Account.AccType = INT(liAccType).       
+         Account.AccType = INT(lcAccType).       
           
       loEventLogMaker:make_eventlog("create",BUFFER Account:HANDLE).
     
@@ -143,7 +143,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       ASSIGN 
          Account.AccName = ttAccount.name 
                               WHEN ttAccount.name > ""
-         Account.AccType = INT(liAccType).       
+         Account.AccType = INT(lcAccType).       
         
       loEventLogMaker:make_eventlog("modify",BUFFER Account:HANDLE).
    
