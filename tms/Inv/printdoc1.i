@@ -1443,17 +1443,17 @@ PROCEDURE pGetInvoiceRowData:
                        ttRow.RowGroup EQ "46") NO-ERROR.
 
       fTestLog(
-       "HERE WE GO:" +
-       "ttRow.RowGroup:" + ttRow.RowGroup + 
+       " HERE WE GO:" +
+       " ttRow.RowGroup:" + ttRow.RowGroup + 
        " ttRow.RowCode" + ttRow.RowCode).
 
-            IF AVAIL ttRow AND ttRow.RowGroup EQ "18" THEN DO: /* 28.5. "46"--> 18 */
+            IF AVAIL ttRow AND ttRow.RowGroup EQ "46" THEN DO: /* 30.5. returned back "18"--> 46 */
                ASSIGN /* Use 46 as defaulf for convergent tariff */
                   ttRow.RowCode  = STRING(ttBillItemAndGroup.BiGroup) + lcRowName
                   ttRow.RowGroup = ttBillItemAndGroup.BIGroup.
                  fTestLog(
-                     "HERE WE GO_2:" +
-                     "ttRow.RowGroup:" + ttRow.RowGroup + 
+                     " HERE WE GO_2:" +
+                     " ttRow.RowGroup:" + ttRow.RowGroup + 
                      " ttRow.RowCode" + ttRow.RowCode).
             END.
          END.
@@ -1522,6 +1522,15 @@ PROCEDURE pGetInvoiceRowData:
                bttRow.RowAmt    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmt).
          END.
       END.
+      fTestLog(
+       "EACH SubInvoice end" +
+       "SubInvoice.InvNum: " + STRING(SubInvoice.InvNum) +
+       "SubInvoice.SubInvNum: " + STRING(SubInvoice.SubInvNum) +
+       "SubInvoice.AmtExclVat: " + STRING(SubInvoice.AmtExclVat) +
+       "SubInvoice.InvAmt: " + STRING(SubInvoice.InvAmt) +
+       "SubInvoice.CLI : " + SubInvoice.CLI +
+       "SubInvoice.FixedNumber : " + SubInvoice.FixedNumber).
+
 
    END.
 
