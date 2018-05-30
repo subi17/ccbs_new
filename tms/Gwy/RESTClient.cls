@@ -439,7 +439,7 @@ CLASS Gwy.RESTClient:
    METHOD PUBLIC VOID mSetURIFragment
       ( icURIFragment AS CHARACTER ):
 
-      mURICheck("mSetURIPath").
+      mURICheck("mSetURIFragment").
       
       ASSIGN
          acURIFragment   = icURIFragment
