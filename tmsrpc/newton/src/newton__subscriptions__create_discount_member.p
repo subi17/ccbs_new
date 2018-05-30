@@ -4,13 +4,13 @@
  *
  * @input msseq;int;mandatory;id of subscription
  *        username;string;mandatory; who create the Discount
-          discount;structure;mandatory; discount details
-          permanency_percontract;char;Periodical contract          
+          discount;structure;mandatory; discount details          
  * @discount id;string;mandatory; Discount Plan Rule ID
              disc_value;decimal;mandatory; Amount of discount
              valid_from;date;mandatory; Discount start date
              valid_periods;int;mandatory; Discount duration
              discount_monthly_limit;double;mandatory;Discount amount monthly limit
+             permanency;string;optional;Periodical contract
   * @output ret;boolean; Return value
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -141,7 +141,7 @@ pcUserName = "VISTA_" + get_string(param_toplevel_id, "1").
 pcStruct = get_struct(param_toplevel_id,"2").
 
 lcStruct = validate_struct(pcStruct, "id!,disc_value!,valid_from!," +
-                                     "valid_periods!,discount_monthly_limit!" +
+                                     "valid_periods!,discount_monthly_limit!," +
                                      "permanency").
 
 lcDPRuleID     = get_string(pcStruct, "id").
