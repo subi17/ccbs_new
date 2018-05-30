@@ -139,16 +139,18 @@ END PROCEDURE.
 piMsSeq = get_int(param_toplevel_id, "0").
 pcUserName = "VISTA_" + get_string(param_toplevel_id, "1").
 pcStruct = get_struct(param_toplevel_id,"2").
-pcPerContract = get_string(param_toplevel_id, "3").
 
 lcStruct = validate_struct(pcStruct, "id!,disc_value!,valid_from!," +
-                                     "valid_periods!,discount_monthly_limit!").
+                                     "valid_periods!,discount_monthly_limit!" +
+                                     "permanency").
 
 lcDPRuleID     = get_string(pcStruct, "id").
 ldeAmount      = get_double(pcStruct, "disc_value").
 ldaValidFrom   = get_date(pcStruct, "valid_from").
 liValidPeriods = get_int(pcStruct, "valid_periods").
 ldeMonthlyLimit = get_double(pcStruct, "discount_monthly_limit").
+pcPerContract = get_string(pcStruct,"permanency") WHEN  
+   LOOKUP("permanency", lcStruct) > 0 .
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
