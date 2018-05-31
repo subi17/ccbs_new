@@ -4232,6 +4232,26 @@
 1 "" 3 "Sony XZ Premium + PS4" 0 "G0000396" "1" 26/04/18 31/12/49
 1 "" 4 "Sony XZ Premium + PS4" 0 "G0000396" "1" 26/04/18 31/12/49
 1 "" 5 "Sony XZ Premium + PS4" 0 "G0000396" "1" 26/04/18 31/12/49
+1 "" 1 "LG K9" 0 "G0000397" "1" 25/05/18 31/12/49
+1 "" 2 "LG K9" 0 "G0000397" "1" 25/05/18 31/12/49
+1 "" 3 "LG K9" 0 "G0000397" "1" 25/05/18 31/12/49
+1 "" 4 "LG K9" 0 "G0000397" "1" 25/05/18 31/12/49
+1 "" 5 "LG K9" 0 "G0000397" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6 Play" 0 "G0000398" "1" 25/05/18 31/12/49
+1 "" 2 "Motorola G6 Play" 0 "G0000398" "1" 25/05/18 31/12/49
+1 "" 3 "Motorola G6 Play" 0 "G0000398" "1" 25/05/18 31/12/49
+1 "" 4 "Motorola G6 Play" 0 "G0000398" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Play" 0 "G0000398" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6" 0 "G0000399" "1" 25/05/18 31/12/49
+1 "" 2 "Motorola G6" 0 "G0000399" "1" 25/05/18 31/12/49
+1 "" 3 "Motorola G6" 0 "G0000399" "1" 25/05/18 31/12/49
+1 "" 4 "Motorola G6" 0 "G0000399" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6" 0 "G0000399" "1" 25/05/18 31/12/49
+1 "" 1 "Sony Xperia XZ1" 0 "G0000400" "1" 25/05/18 31/12/49
+1 "" 2 "Sony Xperia XZ1" 0 "G0000400" "1" 25/05/18 31/12/49
+1 "" 3 "Sony Xperia XZ1" 0 "G0000400" "1" 25/05/18 31/12/49
+1 "" 4 "Sony Xperia XZ1" 0 "G0000400" "1" 25/05/18 31/12/49
+1 "" 5 "Sony Xperia XZ1" 0 "G0000400" "1" 25/05/18 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4989,6 +5009,16 @@
 1 "" 3 "Motorola FlipOutÖ" 0 "P021FLIV2" "1" 28/03/11 31/12/49
 1 "" 4 "Motorola FlipOutÖ" 0 "P021FLIV2" "1" 28/03/11 31/12/49
 1 "" 5 "Motorola FlipOutÖ" 0 "P021FLIV2" "1" 28/03/11 31/12/49
+1 "" 1 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
+1 "" 2 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
+1 "" 3 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
+1 "" 4 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Play Blue" 0 "P021G6PAC" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
+1 "" 2 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
+1 "" 3 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
+1 "" 4 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Play Gold" 0 "P021G6PDC" "1" 25/05/18 31/12/49
 1 "" 1 "Motorola Gleam + Blanco" 0 "P021GLEB2" "1" 22/03/12 31/12/49
 1 "" 2 "Motorola Gleam + Blanco" 0 "P021GLEB2" "1" 22/03/12 31/12/49
 1 "" 3 "Motorola Gleam + Blanco" 0 "P021GLEB2" "1" 22/03/12 31/12/49
@@ -5059,6 +5089,16 @@
 1 "" 3 "Motorola Moto G 5a Generación Gris" 0 "P021MG5GC" "1" 03/08/17 31/12/49
 1 "" 4 "Motorola Moto G 5a Generación Gris" 0 "P021MG5GC" "1" 03/08/17 31/12/49
 1 "" 5 "Motorola Moto G 5a Generación Grey" 0 "P021MG5GC" "1" 03/08/17 31/12/49
+1 "" 1 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
+1 "" 2 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
+1 "" 3 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
+1 "" 4 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Blue" 0 "P021MG6AC" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
+1 "" 2 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
+1 "" 3 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
+1 "" 4 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Silver" 0 "P021MG6SC" "1" 25/05/18 31/12/49
 1 "" 1 "Moto E Negro" 0 "P021MOEN2" "1" 27/05/14 31/12/49
 1 "" 2 "Moto E Negro" 0 "P021MOEN2" "1" 27/05/14 31/12/49
 1 "" 3 "Moto E Negro" 0 "P021MOEN2" "1" 27/05/14 31/12/49
@@ -5920,6 +5960,11 @@
 1 "" 3 "LG K8 4G Blanco con batería portátil de regalo" 0 "P030LK8WP" "1" 30/05/16 31/12/49
 1 "" 4 "LG K8 4G Blanco con batería portátil de regalo" 0 "P030LK8WP" "1" 30/05/16 31/12/49
 1 "" 5 "LG K8 4G White with rechargable battery gift" 0 "P030LK8WP" "1" 30/05/16 31/12/49
+1 "" 1 "LG K9 Azul" 0 "P030LK9AC" "1" 25/05/18 31/12/49
+1 "" 2 "LG K9 Azul" 0 "P030LK9AC" "1" 25/05/18 31/12/49
+1 "" 3 "LG K9 Azul" 0 "P030LK9AC" "1" 25/05/18 31/12/49
+1 "" 4 "LG K9 Azul" 0 "P030LK9AC" "1" 25/05/18 31/12/49
+1 "" 5 "LG K9 Blue" 0 "P030LK9AC" "1" 25/05/18 31/12/49
 1 "" 1 "LG Q6 Negro" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
 1 "" 2 "LG Q6 Negro" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
 1 "" 3 "LG Q6 Negro" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
@@ -7670,6 +7715,11 @@
 1 "" 3 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 4 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 5 "Sony Xperia L Black" 0 "P037XYLN1" "1" 28/03/14 31/12/49
+1 "" 1 "Sony Xperia XZ1 Negro" 0 "P037XZ1NC" "1" 25/05/18 31/12/49
+1 "" 2 "Sony Xperia XZ1 Negro" 0 "P037XZ1NC" "1" 25/05/18 31/12/49
+1 "" 3 "Sony Xperia XZ1 Negro" 0 "P037XZ1NC" "1" 25/05/18 31/12/49
+1 "" 4 "Sony Xperia XZ1 Negro" 0 "P037XZ1NC" "1" 25/05/18 31/12/49
+1 "" 5 "Sony Xperia XZ1 Black" 0 "P037XZ1NC" "1" 25/05/18 31/12/49
 1 "" 1 "Sony Xperia Z2 Negro" 0 "P037XZ2N2" "1" 27/03/14 31/12/49
 1 "" 2 "Sony Xperia Z2 Negro" 0 "P037XZ2N2" "1" 27/03/14 31/12/49
 1 "" 3 "Sony Xperia Z2 Negro" 0 "P037XZ2N2" "1" 27/03/14 31/12/49
@@ -10776,11 +10826,11 @@
 1 "" 3 "iPhone 8 Plus 64 GB Negro" 0 "P0978P6NC" "1" 29/09/17 31/12/49
 1 "" 4 "iPhone 8 Plus 64 GB Negro" 0 "P0978P6NC" "1" 29/09/17 31/12/49
 1 "" 5 "iPhone 8 Plus 64 GB Black" 0 "P0978P6NC" "1" 29/09/17 31/12/49
-1 "" 1 "iPhone 8&nbsp;Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
+1 "" 1 "iPhone 8 Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 2 "iPhone 8  Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 3 "iPhone 8  Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 4 "iPhone 8  Plus 64 GB Rojo" 0 "P0978P6RC" "1" 23/04/18 31/12/49
-1 "" 5 "iPhone 8&nbsp;Plus 64 GB&nbsp;Red" 0 "P0978P6RC" "1" 23/04/18 31/12/49
+1 "" 5 "iPhone 8  Plus 64 GB Red" 0 "P0978P6RC" "1" 23/04/18 31/12/49
 1 "" 1 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
 1 "" 2 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
 1 "" 3 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
@@ -11575,6 +11625,14 @@
 1 "" 2 "Descompte regal" 0 "RETDISC" "1" 01/10/12 31/12/49
 1 "" 3 "Deskontua oparitan" 0 "RETDISC" "1" 01/10/12 31/12/49
 1 "" 5 "Gift discount" 0 "RETDISC" "1" 01/10/12 31/12/49
+1 "" 1 "Descuento" 0 "RETDISC_CONV" "1" 23/05/18 31/12/49
+1 "" 2 "Descompte" 0 "RETDISC_CONV" "1" 23/05/18 31/12/49
+1 "" 3 "Deskontua" 0 "RETDISC_CONV" "1" 23/05/18 31/12/49
+1 "" 5 "Discount" 0 "RETDISC_CONV" "1" 23/05/18 31/12/49
+1 "" 1 "Descuento" 0 "RETDISC_MOB" "1" 23/05/18 31/12/49
+1 "" 2 "Descompte" 0 "RETDISC_MOB" "1" 23/05/18 31/12/49
+1 "" 3 "Deskontua" 0 "RETDISC_MOB" "1" 23/05/18 31/12/49
+1 "" 5 "Discount" 0 "RETDISC_MOB" "1" 23/05/18 31/12/49
 1 "" 1 "Descuento promo" 0 "RETFAT" "1" 01/04/12 31/12/49
 1 "" 1 "Descuento regalo" 0 "RETFAT" "1" 01/06/11 31/03/12
 1 "" 2 "Descompte promo" 0 "RETFAT" "1" 01/04/12 31/12/49
@@ -11997,6 +12055,14 @@
 1 "" 2 "Bono Il limitat" 0 "VOICE5000CF" "1" 04/07/17 31/12/49
 1 "" 3 "Mugagabea bonus" 0 "VOICE5000CF" "1" 04/07/17 31/12/49
 1 "" 5 "Unlimited Bonus" 0 "VOICE5000CF" "1" 04/07/17 31/12/49
+1 "" 1 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD25FAT" "1" 24/05/18 31/12/49
+1 "" 2 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD25FAT" "1" 24/05/18 31/12/49
+1 "" 3 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD25FAT" "1" 24/05/18 31/12/49
+1 "" 5 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD25FAT" "1" 24/05/18 31/12/49
+1 "" 1 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD5FAT" "1" 24/05/18 31/12/49
+1 "" 2 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD5FAT" "1" 24/05/18 31/12/49
+1 "" 3 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD5FAT" "1" 24/05/18 31/12/49
+1 "" 5 "Descuento promoción Tarjeta Yoicard" 0 "YOICARD5FAT" "1" 24/05/18 31/12/49
 1 "" 1 "Yoigo" 0 "YOIGOYOIGO" "1" 01/01/06 31/12/49
 1 "" 2 "Yoigo" 0 "YOIGOYOIGO" "1" 01/01/06 31/12/49
 1 "" 3 "Yoigo" 0 "YOIGOYOIGO" "1" 01/01/06 31/12/49
