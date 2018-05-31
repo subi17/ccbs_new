@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------
-  MODULE .......: YCO-275_upsell_update_monthly_5gb_12m_no_penalty.p
-  TASK .........: Activating 5gb upsell for 12 months - RET5GB_12m_R_UPSELL
+  MODULE .......: YCO-275_upsell_update_monthly_5gb_3m_no_penalty.p
+  TASK .........: Activating 5gb upsell for 3 months - RET5GB_3m_R_UPSELL
   APPLICATION ..: TMS
   AUTHOR .......: Diego Pastrana
   CREATED ......: 09/05/2018
@@ -47,13 +47,13 @@ DEF TEMP-TABLE ttMobSubList NO-UNDO
 DEF STREAM sLogFile.
 
 ASSIGN 
-   llgSimulation   = FALSE                                      /* TRUE -> only log writing, FALSE -> make real updates */
-   lcActionId      = "RET5GB_12m_R_UPSELL"                      /* For execution lock                                   */
-   lcTableName     = "RET5GB_12m-no-penalty-Promo"              /* For execution lock                                   */
+   llgSimulation   = FALSE                                     /* TRUE -> only log writing, FALSE -> make real updates */
+   lcActionId      = "RET5GB_3m_R_UPSELL"                      /* For execution lock                                   */
+   lcTableName     = "RET5GB_3m-no-penalty-Promo"              /* For execution lock                                   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
-   lcUpsell        = "RET5GB_12m_R_UPSELL"                      /* Upsells that will be added in the promo              */
-   ldCampaignStart = fCParamDe("YCO-275-RET5GB_12m-FromDate")   /* Promotion start date                                 */
-   ldCampaignEnd   = fCParamDe("YCO-275-RET5GB_12m-ToDate").    /* Promotion end date                                   */
+   lcUpsell        = "RET5GB_3m_R_UPSELL"                      /* Upsells that will be added in the promo              */
+   ldCampaignStart = fCParamDe("YCO-275-RET5GB_3m-FromDate")   /* Promotion start date                                 */
+   ldCampaignEnd   = fCParamDe("YCO-275-RET5GB_3m-ToDate").    /* Promotion end date                                   */
 
 ASSIGN 
    ldaReadDate  = TODAY
@@ -61,7 +61,7 @@ ASSIGN
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
 ASSIGN 
-   lcLogFile    = lcLogDir + "RET5GB_12m_upsell_5Gb_update_" +
+   lcLogFile    = lcLogDir + "RET5GB_3m_upsell_5Gb_update_" +
                              STRING(YEAR(ldaReadDate)) +
                              STRING(MONTH(ldaReadDate),"99") +
                              STRING(DAY(ldaReadDate),"99") +
@@ -91,11 +91,12 @@ FUNCTION fCollect RETURNS CHAR
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand      EQ Syst.Var:gcBrand               AND  
             MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-            MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
+            MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND             
             MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
             MsRequest.ReqCparam3 EQ lcUpsell                       AND
-            MsRequest.crestamp > ldCampaignStart                   AND
-            MsRequest.crestamp < ldCampaignEnd:
+            MsRequest.actstamp > ldCampaignStart                   AND
+            MsRequest.actstamp < ldCampaignEnd
+            USE-INDEX reqtype:
    
       lcErr = "".
 
@@ -153,7 +154,7 @@ FUNCTION fCountReq RETURNS INT
             MsRequest.MsSeq      EQ iiMsSeq                        AND
             MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
             MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
-            MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND   
+            MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
             MsRequest.ReqCparam3 EQ lcUpsell                       AND
             MsRequest.crestamp > ldCampaignStart
             USE-INDEX MsSeq:
@@ -179,19 +180,20 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
               MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               MsRequest.ReqCparam3 EQ lcUpsell                       AND 
               MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
-              MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS()) /* do not care times done in eariler months */
+              MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS())  /* do not care times done in eariler months */
+              USE-INDEX MsSeq
               NO-ERROR.
 
-   /* Do not allow more than 12 activations */
+   /* Do not allow more than 3 activations */
    liDoneActivations = fCountReq(iiMsSeq).
-   IF liDoneActivations >= 12 THEN RETURN "Activation month count full".
+   IF liDoneActivations >= 3 THEN RETURN "Activation month count full".
 
    IF AVAIL MsRequest THEN RETURN "Upsell already activated".
    
    IF llgSimulation EQ FALSE THEN DO:
       fCreateUpsellBundle(iiMsSeq,
                           lcUpsell,
-                          {&REQUEST_SOURCE_NEWTON},
+                          {&REQUEST_SOURCE_NEWTON}, 
                           Func.Common:mMakeTS(),
                           OUTPUT liRequest,
                           OUTPUT lcError).
@@ -204,7 +206,7 @@ END.
 /* **************************** MAIN BLOCK *************************** */
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
-PUT STREAM sLogFile UNFORMATTED "RET5GB_12m no penalty 5Gb Activation starts " +
+PUT STREAM sLogFile UNFORMATTED "RET5GB_3m no penalty 5Gb Activation starts " +
                                  Func.Common:mTS2HMS(ldCurrentTimeTS) SKIP.
 IF llgSimulation EQ TRUE THEN
    PUT STREAM sLogFile UNFORMATTED "Simulation mode" SKIP.
@@ -264,7 +266,10 @@ FOR EACH ttMobSubList:
                  STRING(ttMobSubList.MsSeq)   + "|" +
                  lcResult.
                  
-   PUT STREAM sLogFile UNFORMATTED lcoutRow SKIP.
+   IF llgSimulation = FALSE then              
+       PUT STREAM sLogFile UNFORMATTED lcoutRow SKIP.
+   ELSE 
+       PUT STREAM sLogFile UNFORMATTED lcoutRow + " - Simulation" SKIP.
 END.
 
 /*Release execution lock*/
@@ -284,7 +289,7 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
-PUT STREAM sLogFile UNFORMATTED "RET5GB_12m no penalty 5Gb Activation done " +
+PUT STREAM sLogFile UNFORMATTED "RET5GB_3m no penalty 5Gb Activation done " +
                                  Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLogFile CLOSE.
 
