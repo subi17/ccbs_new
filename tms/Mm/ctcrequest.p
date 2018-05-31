@@ -87,6 +87,12 @@ IF NOT AVAIL OldCliType THEN DO:
    RETURN.
 END.
 
+/* QWTER-2 Is this the place where to find out suitable new mobile tariff if not received */
+IF MSRequest.ReqCParam2 = "" THEN DO:
+   IF fIsConvergenceTariff(OldCliType.CLIType) THEN 
+      MSRequest.ReqCParam2 = OldCliType.BaseBundle.
+END.
+
 FIND FIRST NewCliType WHERE
            NewCliType.Brand   = Syst.Var:gcBrand AND
            NewCliType.CliType = MSRequest.ReqCParam2 NO-LOCK NO-ERROR.

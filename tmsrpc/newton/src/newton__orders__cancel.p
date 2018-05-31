@@ -166,8 +166,7 @@ PROCEDURE pTerminateSubscription:
                "6",
                "",
                0,
-               {&TERMINATION_TYPE_FULL},
-               "",               
+               {&TERMINATION_TYPE_FULL},             
                OUTPUT ocResult).
 END PROCEDURE.
 

@@ -356,7 +356,6 @@ PROCEDURE pUpdateFusionOrder:
                         "",
                         0,
                         {&TERMINATION_TYPE_PARTIAL},
-                        "",
                         OUTPUT lcResult). 
       END.
       ELSE DO:

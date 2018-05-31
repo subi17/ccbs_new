@@ -1649,7 +1649,6 @@ PROCEDURE pMultiSIMTermination:
                           Syst.Var:katun,
                           piOrigRequest, /* orig. request */
                           {&TERMINATION_TYPE_FULL},
-                          "",
                           OUTPUT lcError). 
                
       IF lcError > "" THEN 

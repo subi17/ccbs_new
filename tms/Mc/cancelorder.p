@@ -250,7 +250,6 @@ ELSE DO:
                         "",
                         0,
                         lcTermType,
-                        "",
                         OUTPUT lcResult).
    
          IF liReq > 0 THEN

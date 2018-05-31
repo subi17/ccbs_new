@@ -752,7 +752,6 @@ REPEAT WITH FRAME main:
                                     lcUserCode,
                                     0,
                                     lcTermType,
-                                    "",
                                     OUTPUT ocResult).
                                     
       IF liMsReq = 0 THEN

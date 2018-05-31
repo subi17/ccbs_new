@@ -113,7 +113,6 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
                        Syst.Var:katun,
                        iiOrigRequest, /* orig. request */
                        {&TERMINATION_TYPE_FULL},
-                       "",
                        OUTPUT lvcError).
    IF lviRequest EQ 0 THEN
       Func.Common:mWriteMemo("MobSub",

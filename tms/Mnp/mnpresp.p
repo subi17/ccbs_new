@@ -1085,8 +1085,7 @@ PROCEDURE pHandleFromASOL2ACON:
                           Syst.Var:katun,
                           0, /* orig. request */
                           lcTermType,
-                          "",                          
-                          OUTPUT ocResult). 
+                          OUTPUT ocResult).
 
       IF liTermReqId = 0 THEN
          fErrorHandle(ocResult). 

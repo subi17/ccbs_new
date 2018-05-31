@@ -270,7 +270,6 @@ REPEAT:
                                       "",         /* creator */
                                       0,          /* father request */
                                       {&TERMINATION_TYPE_FULL},
-                                      lcNewCliType,
                                       OUTPUT lcError).
        
       IF liRequest = 0 THEN DO:
@@ -331,7 +330,6 @@ REPEAT:
                                             "",         /* creator */
                                             0,          /* father request */
                                             {&TERMINATION_TYPE_PARTIAL},
-                                            lcNewCliType,
                                             OUTPUT lcError).                                                  
        
             IF liRequest = 0 THEN DO:
@@ -343,7 +341,7 @@ REPEAT:
          IF lcTerminationType EQ "FIXED" THEN DO:
 
             liRequest = fCTChangeRequest(MobSub.msseq,
-                                         lcCLIType,
+                                         lcNewCliType,
                                          "",
                                          "",      /* validation is already done in newton */
                                          ldKillStamp,
