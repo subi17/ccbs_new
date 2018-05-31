@@ -126,9 +126,9 @@ form /* ADD */
    "CCN ........:" Tariff.CCN FORMAT ">>>9"
       help "Call case number"
       CCN.CCNName  format "x(30)" AT 32 SKIP
-   "BDestination:" Tariff.BDest FORMAT "x(20)"
+   "BDestination:" Tariff.BDest FORMAT "x(28)"
       help "B-Destination"
-      BDest.BDName format "x(25)" AT 35 SKIP
+      BDest.BDName format "x(26)" AT 43 SKIP
    "Pricelist ..:" Tariff.PriceList FORMAT "X(16)" 
       help "Pricelist code"
       PriceList.PLName   format "x(22)" AT 32 SKIP
