@@ -77,7 +77,10 @@ FUNCTION fAnalBsub RETURNS LOGICAL
             IF ttCall.BillDur <= 20 THEN 
                        b_callType = 23.
             ELSE       b_callType = 24.
-         END.   
+            /* Temporary until network starts to cut CDRs / YTS-12982 */
+            IF ttCall.BillDur > 620 AND 
+               ttCall.GsmBnr BEGINS "118" THEN ttCall.BillDur = 620.
+         END.
          ELSE DO: /* temporary, old functionality */
             b_CallType =  1.
             IF ttCall.BillDur <= 11 THEN b_callType = 23.
@@ -114,6 +117,9 @@ FUNCTION fAnalBsub RETURNS LOGICAL
             IF ttCall.BillDur <= 20 THEN 
                         b_callType =  20.
             ELSE        b_callType =  21.
+            /* Temporary until network starts to cut CDRs / YTS-12982 */
+            IF ttCall.BillDur > 620 AND
+               ttCall.GsmBnr BEGINS "118" THEN ttCall.BillDur = 620.
          END.   
          ELSE DO: /* temporary, old functionality */
              IF       ttCall.BillDur <= 11     THEN b_callType = 20.
