@@ -787,6 +787,7 @@
 160 "PerContract" "FAXTOEMAIL"
 160 "PerContract" "CENTRALITA"
 160 "PerContract" "IPFIJA"
+160 "PerContract" "DSS_FLEX_5GB_UPSELL"
 160 "PerContract" "FLEX_UPSELL"
 160 "PerContract" "DSS_FLEX_UPSELL"
 160 "PerContract" "DSS4"
