@@ -47,13 +47,13 @@ DEF TEMP-TABLE ttMobSubList NO-UNDO
 DEF STREAM sLogFile.
 
 ASSIGN 
-   llgSimulation   = FALSE                                     /* TRUE -> only log writing, FALSE -> make real updates */
+   llgSimulation   = FALSE                                      /* TRUE -> only log writing, FALSE -> make real updates */
    lcActionId      = "FID3GB_3m_R_UPSELL"                       /* For execution lock                                   */
-   lcTableName     = "FID3GB_3m-Promo"                         /* For execution lock                                   */
+   lcTableName     = "FID3GB_3m-Promo"                          /* For execution lock                                   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
    lcUpsell        = "FID3GB_3m_R_UPSELL"                       /* Upsells that will be added in the promo              */
-   ldCampaignStart = fCParamDe("YCO-276-FID3GB_3m-FromDate")   /* Promotion start date                                 */
-   ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_3m-ToDate").    /* Promotion end date                                   */
+   ldCampaignStart = fCParamDe("YCO-276-FID3GB_3m-FromDate")    /* Promotion start date                                 */
+   ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_3m-ToDate").     /* Promotion end date                                   */
 
 ASSIGN 
    ldaReadDate  = TODAY
@@ -94,8 +94,9 @@ FUNCTION fCollect RETURNS CHAR
             MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND             
             MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
             MsRequest.ReqCparam3 EQ lcUpsell                       AND
-            MsRequest.crestamp > ldCampaignStart                   AND
-            MsRequest.crestamp < ldCampaignEnd:
+            MsRequest.actstamp > ldCampaignStart                   AND
+            MsRequest.actstamp < ldCampaignEnd
+            USE-INDEX reqtype:
    
       lcErr = "".
 
@@ -180,6 +181,7 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
               MsRequest.ReqCparam3 EQ lcUpsell                       AND 
               MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
               MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS())  /* do not care times done in eariler months */
+              USE-INDEX MsSeq
               NO-ERROR.
 
    /* Do not allow more than 3 activations */
@@ -195,7 +197,7 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
                           Func.Common:mMakeTS(),
                           OUTPUT liRequest,
                           OUTPUT lcError).
-      IF lcError NE "" THEN RETURN lcError.                    
+      IF lcError NE "" THEN RETURN lcError.          
    END.
    
    RETURN "OK".
@@ -263,8 +265,11 @@ FOR EACH ttMobSubList:
       lcOutRow = STRING(ttMobSubList.cli) + "|" +
                  STRING(ttMobSubList.MsSeq)   + "|" +
                  lcResult.
-                 
-   PUT STREAM sLogFile UNFORMATTED lcoutRow SKIP.
+   
+   IF llgSimulation = FALSE then              
+       PUT STREAM sLogFile UNFORMATTED lcoutRow SKIP.
+   ELSE 
+       PUT STREAM sLogFile UNFORMATTED lcoutRow + " - Simulation" SKIP.
 END.
 
 /*Release execution lock*/
