@@ -787,8 +787,7 @@ PROCEDURE pStoreBundle:
    FOR EACH TMSRelation NO-LOCK WHERE 
             TMSRelation.TableName    =  {&DCTABLENAME}      AND 
             TMSRelation.KeyType      =  {&DCKEYTYPE}        AND
-            TMSRelation.ChildValue   >  ""                  AND  
-            TMSRelation.ParentValue  =  DayCampaign.DCEvent USE-INDEX ChildValue:
+            TMSRelation.ParentValue  =  DayCampaign.DCEvent :
    
        fExport(icSpoolDir + "tmsrelation.d", HPD.HPDCommon:mDynExport(BUFFER TMSRelation:HANDLE, " ")).
        
