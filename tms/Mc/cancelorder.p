@@ -7,7 +7,6 @@ hell MODULE .......: cancelorder.p
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{Func/progressjson.i}
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Func/fsubstermreq.i}

@@ -119,7 +119,6 @@ END FUNCTION.
 FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL 
    (INPUT iiOrderId AS int):
 
-
    DEF VAR lcHost        AS CHARACTER        NO-UNDO.
    DEF VAR liPort        AS INTEGER          NO-UNDO.
    DEF VAR lcUderId      AS CHARACTER        NO-UNDO.
@@ -128,8 +127,9 @@ FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL
    DEF VAR lcUriQuery    AS CHARACTER        NO-UNDO.
    DEF VAR lcUriQueryVal AS CHARACTER        NO-UNDO.
    DEF VAR liLogRequest  AS INTEGER          NO-UNDO.
-   DEF VAR loRequestjson AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
- 
+   DEF VAR loRequestjson  AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
+   DEF VAR loResponsejson AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
+   
    ASSIGN 
       lcHost        = fCParam("Masmovil","cancelHost")
       liport        = fIparam("Masmovil","cancelPort")
@@ -139,7 +139,8 @@ FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL
       liLogRequest  = fIParam("Masmovil","cancelLogRequest").
       
    loRequestjson = NEW Progress.Json.ObjectModel.JsonObject().
-   loRequestJson:ADD("orderid" , "Y" + STRING(iiOrderID)).
+   loRequestJson:ADD("status" , "CANCEL").
+   loRequestJson:ADD("externalId" , "Y" + STRING(iiOrderID)).
  
    RUN Gwy/http_rest_client.p("put" ,
                              lcHost,
@@ -149,7 +150,9 @@ FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL
                              lcUriPath,
                              lcUriQuery,     
                              lcUriQueryVal,
-                             loRequestJson).
+                             loRequestJson,
+                             OUTPUT loResponsejson).
+
    RETURN TRUE.
 
    FINALLY:

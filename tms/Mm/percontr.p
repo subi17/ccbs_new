@@ -21,7 +21,6 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{Func/progressjson.i}
 {Syst/commali.i}
 {Rate/daycampaign.i}
 {Func/penaltyfee.i}

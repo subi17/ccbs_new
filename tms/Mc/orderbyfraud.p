@@ -2,7 +2,6 @@
 
 */
 
-{Func/progressjson.i}
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/forderstamp.i}
