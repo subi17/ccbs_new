@@ -94,8 +94,9 @@ FUNCTION fCollect RETURNS CHAR
             MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
             MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
             MsRequest.ReqCparam3 EQ lcUpsell                       AND
-            MsRequest.crestamp > ldCampaignStart                   AND
-            MsRequest.crestamp < ldCampaignEnd:
+            MsRequest.actstamp > ldCampaignStart                   AND
+            MsRequest.actstamp < ldCampaignEnd
+            USE-INDEX reqtype:
    
       lcErr = "".
 
@@ -180,6 +181,7 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
               MsRequest.ReqCparam3 EQ lcUpsell                       AND 
               MsRequest.ReqSource  EQ {&REQUEST_SOURCE_NEWTON}       AND
               MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS()) /* do not care times done in eariler months */
+              USE-INDEX MsSeq
               NO-ERROR.
 
    /* Do not allow more than 6 activations */
@@ -264,7 +266,10 @@ FOR EACH ttMobSubList:
                  STRING(ttMobSubList.MsSeq)   + "|" +
                  lcResult.
                  
-   PUT STREAM sLogFile UNFORMATTED lcoutRow SKIP.
+   IF llgSimulation = FALSE then              
+       PUT STREAM sLogFile UNFORMATTED lcoutRow SKIP.
+   ELSE 
+       PUT STREAM sLogFile UNFORMATTED lcoutRow + " - Simulation" SKIP.
 END.
 
 /*Release execution lock*/
