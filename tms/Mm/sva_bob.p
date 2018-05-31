@@ -168,7 +168,7 @@ PROCEDURE pReadFileData:
       liReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
       FIND FIRST MsRequest WHERE
-                 MsRequest.Brand      EQ Syst.Var:gcBrand AND
+                 MsRequest.MsSeq      EQ MobSub.MsSeq     AND
                  MsRequest.ReqType    EQ liReqType        AND
                  MsRequest.ReqStatus  EQ liReqStatus      AND
                  MsRequest.ReqCParam3 EQ lcServiceCode    NO-LOCK NO-ERROR.
@@ -195,7 +195,7 @@ PROCEDURE pReadFileData:
          IF lcSetStatus EQ "Inactive" THEN 
          DO:
            FIND FIRST MsRequest WHERE
-                      MsRequest.Brand      EQ Syst.Var:gcBrand               AND
+                      MsRequest.MsSeq      EQ MobSub.MsSeq                   AND
                       MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
                       MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
                       MsRequest.ReqCParam3 EQ lcServiceCode                  NO-LOCK NO-ERROR.
