@@ -912,6 +912,7 @@
 "" 208 "DCCLI" "RenewalDate" "RenewalDate" 9 01/01/14 31/12/49
 "" 208 "DCCLI" "Amount" "Amount" 10 01/01/14 31/12/49
 "" 208 "DCCLI" "TermDate" "TermDate" 11 01/01/14 31/12/49
+"" 208 "DCCLI" "ServiceStatus" "ServiceStatus" 12 24/05/18 31/12/49
 "" 209 "DiscountPlan" "DPId" "DPId" 1 01/01/14 31/12/49
 "" 209 "DiscountPlan" "@Version" "1" 2 01/01/14 31/12/49
 "" 209 "DiscountPlan" "DPId" "DPId" 3 01/01/14 31/12/49
