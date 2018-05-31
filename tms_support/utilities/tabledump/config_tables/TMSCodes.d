@@ -1454,6 +1454,7 @@
 "Salesman" "SmPrefix" "IFS" "EB" "EMERGIA BACKOFFICE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EM" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EO" "CELLCOM EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "ES" "EOS CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EU" "Emision Unisono" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "FR" "FACTORIA INBOUND OF" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "FW" "FACTORIA INBOUND ON" "" "15" 1
