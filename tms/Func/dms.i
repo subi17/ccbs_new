@@ -128,8 +128,8 @@ FUNCTION fUpdateDMS RETURNS CHAR
    END.
    ELSE IF icOrderStatus NE "" THEN DMS.OrderStatus = icOrderstatus.
 
-   IF NEW DMS OR
-    (LOOKUP(DMS.OrderStatus, {&ORDER_SENDTOROI_STATUSES}) > 0 AND DMS.StatusCode <> lcPrevStatusCode) 
+   IF LOOKUP(DMS.OrderStatus, {&ORDER_SENDTOROI_STATUSES}) > 0 AND 
+      (NEW DMS OR DMS.StatusCode <> lcPrevStatusCode) 
    THEN
       fSetSendToROI(DMS.HostId).
 
