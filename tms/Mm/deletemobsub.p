@@ -1583,6 +1583,7 @@ PROCEDURE pMultiSIMTermination:
    DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
    DEF VAR ldaSecSIMTermDate AS DATE NO-UNDO.
    DEF VAR ldeSecSIMTermStamp AS DEC NO-UNDO.
+
    DEF BUFFER Customer FOR Customer.
      
    IF NOT AVAIL Mobsub THEN RETURN.

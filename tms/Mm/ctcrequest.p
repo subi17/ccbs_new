@@ -7,6 +7,7 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
+
 {Syst/commali.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
@@ -374,7 +375,6 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
    END.
    ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.      
 END.   
-  
    
 
 /* YDR-1847 */

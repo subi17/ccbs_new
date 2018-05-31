@@ -8,8 +8,6 @@
   CREATED ......: 19.11.15
   CHANGED ......:
   ------------------------------------------------------------------------*/
-
-
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES

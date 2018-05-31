@@ -81,6 +81,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
               bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):          
 
          RUN Mc/closeorder.p(bOrder.OrderId, TRUE).
+
       END.
                     
       /* Do not change the memo text (used by DWH) */

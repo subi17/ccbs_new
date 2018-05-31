@@ -202,7 +202,7 @@ liReq = fTerminationRequest(
    ({&REQUEST_SOURCE_NEWTON}),
    "",
    0,
-   pcTermType,   
+   pcTermType,
    OUTPUT ocResult).
 
 IF liReq > 0 THEN DO:

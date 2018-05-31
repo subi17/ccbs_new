@@ -20,7 +20,6 @@ DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 
-
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
 IF NOT AVAILABLE MsRequest THEN RETURN "ERROR".
@@ -106,7 +105,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
                         INPUT  MsRequest.MsSeq,
                         INPUT  (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
                                 MsRequest.ActStamp ELSE Func.Common:mMakeTS()),
-                        INPUt  MsRequest.ReqCparam3,
+                        INPUT  MsRequest.ReqCparam3,
                         INPUT  "",
                         OUTPUT ldeCurrMonthLimit,
                         OUTPUT ldeConsumedData,
@@ -153,7 +152,7 @@ PROCEDURE pSolog:
    DEF BUFFER bufTermMobsub FOR TermMobsub.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
-   DEF VAR ldCurrBal     AS DECIMAL NO-UNDO. 
+   DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
    DEF VAR liError       AS INT NO-UNDO.
    DEF VAR lcResult      AS CHAR NO-UNDO.
 

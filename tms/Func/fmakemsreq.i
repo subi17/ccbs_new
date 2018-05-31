@@ -1574,7 +1574,7 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
                   "CONVFIXEDSTC",
                   "SubsTypeFrom;SubsTypeTo",
                   icCLIType,
-                  OUTPUT lcResult) = 1 THEN DO:   
+                  OUTPUT lcResult) = 1 THEN DO:
 
       liRequest = fCTChangeRequest(iiMsSeq,
                                    lcResult,

@@ -10,7 +10,6 @@
 {Func/add_lines_request.i}
 {Func/fmakemsreq.i}
 
-
 DEF INPUT  PARAMETER icFile      AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icLogFile   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead      AS INT  NO-UNDO.
@@ -271,16 +270,16 @@ REPEAT:
                                       0,          /* father request */
                                       {&TERMINATION_TYPE_FULL},
                                       OUTPUT lcError).
-       
+
       IF liRequest = 0 THEN DO:
          fError("Creation of termination request failed; " + lcError).
          NEXT.
       END.
-            
+
       fAdditionalLineSTC(liRequest,
                          Func.Common:mMake2DT(ldtTermDate + 1, 0),
                          "DELETE").
-   
+
       /* Do not create memos for preactivated dummy customer */ 
       IF lcMemoTxt > "" AND MobSub.Custnum NE 233718 THEN DO:
          CREATE Memo.
@@ -292,7 +291,7 @@ REPEAT:
             Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
             Memo.CreUser   = Syst.Var:katun 
             Memo.MemoTitle = lcMemoTitle
-            Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) +            
+            Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) +
                              (IF (lcCLI BEGINS "8" OR lcCLI BEGINS "9")
                                  THEN ", MSISDN " + lcCLI + 
                                  ", request " + STRING(liRequest) + CHR(10) + 
@@ -304,7 +303,7 @@ REPEAT:
       END.
    END.
 
-   IF lcTermType = {&TERMINATION_TYPE_PARTIAL} THEN DO:   
+   IF lcTermType = {&TERMINATION_TYPE_PARTIAL} THEN DO:
 
       IF fIsFixedOnly(lcCLIType) THEN DO:
          fError("Invalid CLIType (FIXED) for partial termination, CLIType: " + lcCLIType).
@@ -330,7 +329,7 @@ REPEAT:
                                             "",         /* creator */
                                             0,          /* father request */
                                             {&TERMINATION_TYPE_PARTIAL},
-                                            OUTPUT lcError).                                                  
+                                            OUTPUT lcError).
        
             IF liRequest = 0 THEN DO:
                fError("Creation of termination request failed; " + lcError).
@@ -356,13 +355,13 @@ REPEAT:
                                          0, /* order id */
                                          liRequest,
                                          "", /*dms: contract_id,channel ->ReqCParam6*/
-                                         OUTPUT lcError).                                         
-      
+                                         OUTPUT lcError).
+
             IF liRequest = 0 THEN DO:
                fError("STC Request creation failed: " +  lcError).
                NEXT.
             END.
-         END.      
+         END.
       END.
    END.
 
