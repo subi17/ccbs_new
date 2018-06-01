@@ -783,7 +783,7 @@ FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
 DEF VAR lcUriPath      AS CHAR       NO-UNDO.
 DEF VAR loRequestJson  AS Progress.Json.ObjectModel.JsonObject NO-UNDO.
 DEF VAR objRESTClient  AS CLASS Gwy.ParamRESTClient.
-
+/*
 DO ON ERROR UNDO, THROW:
  
     objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
@@ -805,7 +805,7 @@ DO ON ERROR UNDO, THROW:
     END FINALLY.
  
 END.
-
+*/
 RETURN "".
 
 END FUNCTION.
