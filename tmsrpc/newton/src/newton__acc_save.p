@@ -259,6 +259,12 @@ ELSE DO:
    THEN RETURN appl_err(lcError).
 END.
 
+/*YPR-4772*/
+/*acc is not allowed for convergent tariffs.*/
+IF fIsConvergenceTariff(MobSub.CLIType) AND
+   LOOKUP(STRING(MobSub.MsSeq), fCParamC("PassConvergentACC")) = 0 THEN
+   RETURN appl_err("Not allowed for fixed line tariffs").
+
 lcCode = fCreateAccDataParam(
           (BUFFER ttCustomer:HANDLE),
           pcSalesMan,
