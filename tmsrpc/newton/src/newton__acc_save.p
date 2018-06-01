@@ -53,6 +53,7 @@
 {Func/fcharge_comp_loaded.i}
 {Func/orderchk.i}
 {Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.

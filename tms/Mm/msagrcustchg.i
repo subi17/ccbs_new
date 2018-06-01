@@ -4,14 +4,9 @@
 &THEN
 &GLOBAL-DEFINE MSAGRCUSTCHG_I YES
 
-{Syst/commali.i}
-{Func/barrfunc.i}
-{Func/orderchk.i}
-{Func/fixedlinefunc.i}
-{Func/profunc.i}
+{Syst/tmsconst.i}
 {Func/fcustdata.i}
 
-&SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
 DEF TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
    FIELD cBirthDay AS CHAR
    FIELD CityCode LIKE CustomerReport.CityCode

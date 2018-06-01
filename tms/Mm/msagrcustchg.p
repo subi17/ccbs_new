@@ -33,6 +33,7 @@
 {Func/orderfunc.i}
 {Func/custfunc.i}
 {Func/addline_discount.i}
+{Func/profunc.i}
    
 DEF TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
 
