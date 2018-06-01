@@ -255,17 +255,10 @@ DO:
    END.
 END.
 
-FOR EACH bDiscountPlan NO-LOCK WHERE
-         bDiscountPlan.Brand = Syst.Var:gcBrand AND
-  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0,
-  FIRST DPMember NO-LOCK WHERE
-        DPMember.DPId       = bDiscountPlan.DPId   AND
-        DPMember.HostTable  = "MobSub"             AND
-        DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-        DPMember.ValidTo   >= ldaValidFrom         AND
-        DPMember.ValidFrom <= ldaValidTo:
-   RETURN appl_err("Discount Plan already exists").
-END.
+/* YCO-458. Validation about existing additional lines */
+/* discounts removed, as far as now we are checking    */
+/* "incompatible discount matrix" (TMSRelation table)  */
+/* in fAddDiscountPlanMember (dpmember.i)              */ 
 
 IF DiscountPlan.DPUnit = "Percentage" THEN
    ldeMaxAmount = DiscountPlan.MaxAmount.
