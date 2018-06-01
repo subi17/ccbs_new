@@ -570,6 +570,28 @@ PROCEDURE pOwnerChange:
                fReqError("Wrong format in new customer data").
                RETURN.
             END.
+            
+            /* Category according to id type */ 
+            FOR EACH CustCat NO-LOCK WHERE 
+                     CustCat.Brand = Syst.Var:gcBrand: 
+               IF LOOKUP(bNewCust.CustIDType,CustCat.CustIDType) > 0 THEN DO: 
+                  bNewCust.Category = CustCat.Category.
+                  bNewCust.PaymTerm = CustCat.PaymTerm.
+                  LEAVE.
+               END.
+            END.
+
+            /* Preserve Pro customer category 
+               in case the old customer was pro  */
+            IF AVAIL bOldCustCat AND bOldCustCat.Pro EQ TRUE THEN DO:
+               fgetCustSegment(bNewCust.CustIDType, 
+                               (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
+                                ELSE bOldCustCat.SelfEmployed),
+                               bOldCustCat.pro,
+                               bNewCust.OrgId,   /* YDR-2621 */
+                               OUTPUT lcCategory).
+               IF lcCategory > "" THEN bNewCust.Category = lcCategory.
+            END.
 
             FIND FIRST CustomerReport WHERE
                        CustomerReport.Custnum = bNewCust.Custnum
@@ -669,27 +691,6 @@ PROCEDURE pOwnerChange:
             bNewCust.RateCust   = bNewCust.CustNum 
             bNewCust.ContrBeg   = TODAY.
 
-            /* Category according to id type */ 
-            FOR EACH CustCat NO-LOCK WHERE 
-                     CustCat.Brand = Syst.Var:gcBrand: 
-               IF LOOKUP(bNewCust.CustIDType,CustCat.CustIDType) > 0 THEN DO: 
-                  bNewCust.Category = CustCat.Category.
-                  bNewCust.PaymTerm = CustCat.PaymTerm.
-                  LEAVE.
-               END.
-            END.
-            
-            /* Preserve Pro customer category in case the old customer was pro  */
-            IF AVAIL bOldCustCat AND bOldCustCat.Pro EQ TRUE THEN DO:
-               fgetCustSegment(bNewCust.CustIDType, 
-                               (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
-                                ELSE bOldCustCat.SelfEmployed),
-                               bOldCustCat.pro,
-                               bNewCust.OrgId,   /* YDR-2621 */
-                               OUTPUT lcCategory).
-               IF lcCategory > "" THEN bNewCust.Category = lcCategory.
-            END.
-            
             /* default counter limits; for all, also prepaids */
             fTMRLimit2Customer(bNewCust.CustNum).
          END.  
