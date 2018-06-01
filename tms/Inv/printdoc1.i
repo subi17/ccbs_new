@@ -1198,27 +1198,39 @@ PROCEDURE pGetSubInvoiceHeaderData:
          END.
 
          /* YDR-2848 The sum of the charges applied to the line */
-         IF ttRow.RowCode BEGINS "31" THEN
+         IF ttRow.RowCode BEGINS "31" THEN DO:
             ttSub.Charges = ttSub.Charges + ttRow.RowAmt.
+            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
+         END.
       
          /* YDR-2848 Sum of amount due to bundles of data and data upsells */
          IF (ttRow.RowCode BEGINS "35" OR
              ttRow.RowCode BEGINS "37" OR
              ttRow.RowCode BEGINS "39" OR
              ttRow.RowCode BEGINS "40" OR
-             ttRow.RowCode BEGINS "42") THEN
+             ttRow.RowCode BEGINS "42") THEN DO:
             ttSub.Bundles = ttSub.Bundles + ttRow.RowAmt.
+            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
+         END.
       
          /* YDR-2848 The sum of outgoings that aren.t included in the 
             tariff fee: SMS, MMS, international calls, AgileTV etc. */
-         IF ttRow.RowCode BEGINS "55" THEN
+         IF ttRow.RowCode BEGINS "55" THEN DO:
             ttSub.Others = ttSub.Others + ttRow.RowAmt.
+            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
+         END.
 
          /* YDR-2848 Subscription level TOTAL sum */
          ttRow.SubTotal = ttRow.SubTotal + ttRow.RowAmt.
-         ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmt.
+         IF ttRow.RowCode BEGINS "18" OR
+            ttRow.RowCode BEGINS "46" THEN
+            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
+            
+         /* ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.*/
+         
          fTestLog(
          " ttRow.SubTotal 2:" + STRING(ttRow.SubTotal) +
+         " ttRow.RowCode:" + STRING(ttRow.RowCode) +
          " ttSub.SubsTotal:" + STRING(ttSub.SubscriptionTotal)).
 
          /* ttRows contains combined invrows => no need to check duplicates */
@@ -1255,7 +1267,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
       fTestLog("ttSub.CLI:" + ttSub.CLI + 
       " FixedNumber:" + ttSub.FixedNumber +
       " CliTYpe:" + ttSub.CliType +
-      " CTName " + ttSub.CTName +
+      " CTName: " + ttSub.CTName +
       " MsSeq:" + STRING(ttSub.MsSeq) +
       " InstallmentAmt:" + STRING(ttSub.InstallmentAmt) +
       " PenaltyAmt: " + STRING(ttSub.PenaltyAmt) +
@@ -1264,7 +1276,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
       " OldCLIType: " + ttSub.OldCLIType +
       " OldCTName: " + ttSub.OldCTName +
       " SubscriptionTotal: " + STRING(ttSub.SubscriptionTotal)).
-
 
       /*
       IF ttSub.InstallmentAmt > 0 THEN
