@@ -16,7 +16,7 @@
        objRESTClient = NEW RESTClient().
    
        /* optional */
-       objRESTClient:mSetRequestTimeout(5.0).
+       objRESTClient:mSetTimeout(5.0).
 
        /* optional */
        objRESTClient:mSetRetryPause(2.0).
@@ -169,7 +169,7 @@ CLASS Gwy.RESTClient:
    END DESTRUCTOR.
 
 
-   METHOD PUBLIC VOID mSetRequestTimeout
+   METHOD PUBLIC VOID mSetTimeout
       ( ideValue AS DECIMAL ): /* A zero or positive value */
 
       IF adeTimeOut EQ ideValue
@@ -439,7 +439,7 @@ CLASS Gwy.RESTClient:
    METHOD PUBLIC VOID mSetURIFragment
       ( icURIFragment AS CHARACTER ):
 
-      mURICheck("mSetURIPath").
+      mURICheck("mSetURIFragment").
       
       ASSIGN
          acURIFragment   = icURIFragment
@@ -503,15 +503,23 @@ CLASS Gwy.RESTClient:
    METHOD PRIVATE VOID mRESTResponse
       ( ioRequest AS CLASS IHttpRequest ):
 
+      DEFINE VARIABLE lcStatusReason AS CHARACTER NO-UNDO.
+
       DEFINE VARIABLE loResponse AS CLASS IHttpResponse NO-UNDO.
       ASSIGN
          loResponse     = aoHTTPClient:Execute(ioRequest)
-         aoResultObject = loResponse:Entity.
+         aoResultObject = loResponse:Entity
+         lcStatusReason = loResponse:StatusReason.
+
+      &IF {&PROGRESS_VERSION} > 11.5 &THEN
+      IF NOT lcStatusReason > ""
+      THEN lcStatusReason = STRING(StatusCodeEnum:GetEnum(loResponse:StatusCode)).
+      &ENDIF
 
       Class.Logger:writeLog(2,
                             SUBSTITUTE("&1 - &2",
                                        loResponse:StatusCode,
-                                       loResponse:StatusReason),
+                                       lcStatusReason),
                             "INFO").
 
       IF VALID-OBJECT(aoResultObject)
@@ -521,12 +529,34 @@ CLASS Gwy.RESTClient:
       END.
 
       CASE loResponse:StatusCode:
-         WHEN INTEGER(StatusCodeEnum:OK) THEN.
-         OTHERWISE UNDO, THROW NEW Progress.Lang.AppError
+         WHEN INTEGER(StatusCodeEnum:OK)
+         THEN RETURN.
+         WHEN INTEGER(StatusCodeEnum:InternalServerError)
+         THEN DO:
+            IF VALID-OBJECT(aoResultObject) AND LOG-MANAGER:LOGGING-LEVEL < 4
+            THEN Class.Logger:writeLog(1,
+                                       aoResultObject,
+                                       "INFO").
+            UNDO, THROW NEW Progress.Lang.AppError
+                        (SUBSTITUTE("Received status code &1 - &2'",
+                                    loResponse:StatusCode,
+                                    lcStatusReason)).
+         END.
+         OTHERWISE
+            UNDO, THROW NEW Progress.Lang.AppError
                         (SUBSTITUTE("'&1 - &2' is not supported",
                                     loResponse:StatusCode,
-                                    loResponse:StatusReason)).
+                                    lcStatusReason)).
       END CASE.
+
+
+
+      CATCH loHTTPError AS HttpRequestError:
+         Class.Logger:writeLog(1,
+                               loHTTPError:GetErrorMessage(),
+                               "ERROR").
+         UNDO, THROW loHTTPError.
+      END CATCH.
 
       FINALLY:
          IF VALID-OBJECT(loResponse)
@@ -543,18 +573,8 @@ CLASS Gwy.RESTClient:
       THEN mInitHTTPClient().
 
       Class.Logger:writeLog(2,
-                            SUBSTITUTE("&1 REST call",
-                                       STRING(ioMethodEnum)),
-                            "INFO").
-
-      Class.Logger:writeLog(3,
-                            SUBSTITUTE("Base URI: &1",
-                                       aoURI:BaseURI),
-                            "INFO").
-
-      Class.Logger:writeLog(2,
-                            SUBSTITUTE("Relative URI: &1",
-                                       aoURI:RelativeURI),
+                            SUBSTITUTE("&1 REST call at URI &2",
+                                       STRING(ioMethodEnum), aoURI:ToString()),
                             "INFO").
 
       IF VALID-OBJECT(ioObjectEntity)
