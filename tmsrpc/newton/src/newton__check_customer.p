@@ -22,10 +22,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-{Syst/commpaa.i}
-Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/orderchk.i}
 {Func/custfunc.i}
 {Func/profunc.i}
 {Func/barrfunc.i}
@@ -416,15 +413,22 @@ ELSE DO:
              lcReason = "PRO migration not possible because of not company or selfemployed"
              lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
       ELSE DO:
-         FOR EACH OrderCustomer WHERE
+         FOR EACH OrderCustomer NO-LOCK WHERE
                   OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
                   OrderCustomer.CustIdType EQ pcIdType   AND
-                  OrderCustomer.CustId     EQ pcPersonId NO-LOCK:
+                  OrderCustomer.CustId     EQ pcPersonId AND
+                  OrderCustomer.Rowtype    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+            FIRST Order NO-LOCK WHERE
+                  Order.Brand EQ Syst.Var:gcBrand AND
+                  Order.OrderID = OrderCustomer.OrderID:
+
+             IF Order.OrderType NE {&ORDER_TYPE_NEW} OR
+                Order.OrderType NE {&ORDER_TYPE_MNP} OR
+                Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
              IF OrderCustomer.PRO EQ FALSE THEN 
              DO:    
-                FIND FIRST Order WHERE Order.Brand EQ Syst.Var:gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
-                IF AVAIL Order AND LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
+                IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
                 DO:
                     llOrderAllowed = FALSE.
                     lcReason = "Ongoing non PRO order".
