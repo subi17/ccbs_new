@@ -152,6 +152,9 @@
 "POSTRENOVEII" 09/09/09 0 26/05/10 "TERMPERIOD" 0 "" "" "Terminal contract for current Postpaid" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD2" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PRERENOVE" 01/09/08 0 26/01/11 "" 0 "" "" "Terminal contract for current Prepaid" 0 0 "1" "3" 1 3 18 0 "" "" "" 2 1 0 yes 1 0 0 1 "" 0 2 0 0
 "PRETERM" 01/12/06 0 26/01/11 "" 0 "" "" "Terminal discount(Prepaid)" 0 0 "1" "3" 1 3 18 0 "" "" "" 2 1 0 yes 1 0 0 1 "" 0 2 0 0
+"RET5GB_12m_R_UPSELL" 24/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 12 meses sin penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
+"RET5GB_3m_R_UPSELL" 24/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 3 meses sin penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
+"RET5GB_6m_R_UPSELL" 24/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 6 meses sin penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "RVTERM12" 25/11/15 0 31/12/49 "RVTERM" 0 "" "" "RVTERM12 periodical contract" 0 0 "1" "5" 1 3 12 0 "RVTERM12" "" "TERMRVTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "SAN1GB_001" 21/02/18 4 31/12/49 "" 0 "" "" "Santander 1Gb for free" 93 0 "1" "6" 1 2 1 0 "SAN1GBMFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "SAN5GB_002" 21/02/18 4 31/12/49 "" 0 "" "" "Santander 5Gb for free" 93 0 "1" "6" 1 2 1 0 "SAN5GBMFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
@@ -200,4 +203,5 @@
 "VOICE200B" 22/08/17 0 31/12/49 "" 0 "" "" "Bono 200 minutos" 0 0 "1" "1" 1 1 0 0 "VOICE200BMF" "" "" 0 1 0 yes 1 1 0 1 "" 0 1 0 0
 "VOICE3000" 01/12/12 0 31/12/49 "" 0 "" "" "Contrato service package" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 0 1 0 0
 "VOICE5000" 05/07/17 0 31/12/49 "" 0 "" "" "National Voice 5000 min." 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
+"YOICARD" 24/05/18 0 31/12/49 "" 0 "" "" "Credit Card" 0 0 "1" "7" 0 3 1 0 "" "" "" 0 1 0 no 1 0 0 1 "" 0 0 4 0
 "YOIGOYOIGO" 01/02/08 2 31/12/54 "YOIGOYOIGO" 3600 "1" "" "Yoigo-Yoigo national calls daily limit" 80 3600 "1" "2" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
