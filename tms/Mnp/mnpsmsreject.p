@@ -60,10 +60,10 @@ FOR EACH MNPProcess NO-LOCK
             WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq:
                                                                         
             PUT STREAM sdump UNFORMATTED 
-                Func.Common:mTS2HMS(MNPProcess.CreatedTS) lcDelimiter
+                Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
                 MNPSub.Cli lcDelimiter
                 MNPDetails.DonorCode lcDelimiter
-                MNPProcess.FormRequest lcDelimiter
+                MNPProcess.PortRequest lcDelimiter
                 MNPProcess.StatusReason lcDelimiter
                 Func.Common:mTS2HMS(MNPProcess.UpdateTS) SKIP.
                                 
