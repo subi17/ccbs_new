@@ -1,6 +1,7 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Progress.Json.ObjectModel.*.
+USING OpenEdge.Net.HTTP.MethodEnum.
 
 {Syst/tmsconst.i}
 {Func/log.i}
@@ -100,9 +101,11 @@ loRequestJson = fGetRequestJson(piOrderId, pcDownloadSpeed, pcUploadSpeed).
 
 fLogRequest(piOrderId, loRequestJson).
 
-RUN Gwy/http_rest_client.p("put"     ,
+RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
                            lcHost    ,
                            liPort    ,     
+                           ""        , /* authorization type */
+                           ""        , /* realm or domain */
                            ""        ,
                            ""        ,
                            lcUriPath ,

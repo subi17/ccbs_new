@@ -14,6 +14,8 @@ using Progress.Json.ObjectModel.JsonObject.
 define input  parameter icAction      as character  no-undo.
 define input  parameter icHost        as character  no-undo.
 define input  parameter iiport        as integer    no-undo.
+define input  parameter icAuthType    as character  no-undo.
+define input  parameter icRealm       as character  no-undo.
 define input  parameter icUserId      as character  no-undo.
 define input  parameter icpassword    as character  no-undo.
 define input  parameter icUriPath     as character  no-undo.
@@ -32,8 +34,12 @@ define variable lcUserId as character no-undo.
 
 oClient = ClientBuilder:Build():Client.
 
-if icUserId <> "" then 
-    oCreds = new Credentials('', icUserId, icpassword).
+if icUserId <> "" then do: 
+    IF icRealm <> "" THEN
+        oCreds = new Credentials(icRealm, icUserId, icpassword).
+    ELSE
+        oCreds = new Credentials('', icUserId, icpassword).
+end.
 
 oUri = new URI('http', icHost, iiport).
 oUri:Path = icUriPath. 
@@ -41,9 +47,15 @@ if icUriQuery <> "" then
     oUri:AddQuery(icUriQuery, icUriQueryVal).
 
 case icAction:
-    when 'get' then 
+    when STRING(MethodEnum:GET) then 
     do:
-        if lcUserId <> "" then 
+        IF icAuthType = STRING(AuthenticationMethodEnum:Basic) AND 
+           VALID-OBJECT(oCreds) THEN
+            oReq = RequestBuilder:Get(oUri)
+                    :UsingBasicAuthentication(oCreds)
+                    :Request.
+        else if icAuthType = "" and
+                VALID-OBJECT(oCreds) then 
             oReq = RequestBuilder:Get(oUri)
                     :UsingCredentials(oCreds)
                     :Request.    
@@ -62,10 +74,50 @@ case icAction:
             otherwise
                 undo, throw new Progress.Lang.AppError(oResp:StatusReason, 1).
         end case.
-    end.
-    when 'put' then 
+    end. /*  MethodEnum:GET */
+    WHEN STRING(MethodEnum:PATCH) THEN 
     do:
-        if lcUserId <> "" then 
+        IF icAuthType = STRING(AuthenticationMethodEnum:Basic) AND 
+           VALID-OBJECT(oCreds) THEN
+            oReq = RequestBuilder:Patch(oUri, ioRequestJson)
+                    :UsingBasicAuthentication(oCreds)
+                    :ContentType('application/json')
+                    :AcceptJson()
+                    :Request.
+        ELSE IF icAuthType = "" AND
+                VALID-OBJECT(oCreds) THEN
+            oReq = RequestBuilder:Patch(oUri, ioRequestJson)
+                    :UsingCredentials(oCreds)
+                    :ContentType('application/json')
+                    :AcceptJson()
+                    :Request.    
+        ELSE 
+            oReq = RequestBuilder:Patch(oUri, ioRequestJson)
+                        :ContentType('application/json')
+                        :AcceptJson()
+                        :Request.    
+
+        oResp = oClient:Execute(oReq).
+
+        IF VALID-OBJECT(oResp) THEN 
+        DO:
+            IF TYPE-OF(oResp:Entity, JsonObject) THEN
+                ASSIGN ioJson = CAST(oResp:Entity, JsonObject).
+        END.
+        ELSE 
+            UNDO, THROW NEW Progress.Lang.AppError("API Call Status Code '" + STRING(oResp:StatusCode) + "'", 1).
+    end. /* MethodEnum:PATCH */
+    when STRING(MethodEnum:PUT) then 
+    do:
+        IF icAuthType = STRING(AuthenticationMethodEnum:Basic) AND 
+           VALID-OBJECT(oCreds) THEN
+            oReq = RequestBuilder:Put(oUri, ioRequestJson)
+                    :UsingBasicAuthentication(oCreds)
+                    :ContentType('application/json;charset=UTF-8')
+                    :AcceptJson()
+                    :Request.
+        ELSE IF icAuthType = "" AND
+                VALID-OBJECT(oCreds) THEN
             oReq = RequestBuilder:Put(oUri, ioRequestJson)
                     :UsingCredentials(oCreds)
                     :ContentType('application/json;charset=UTF-8')
@@ -86,10 +138,18 @@ case icAction:
         END.
         ELSE 
             undo, throw new Progress.Lang.AppError("API Call Status Code '" + STRING(oResp:StatusCode) + "'", 1).
-    end.
-    when 'post' then 
+    end. /* MethodEnum:PUT */
+    when STRING(MethodEnum:POST) then 
     do:
-        if lcUserId <> "" then 
+        IF icAuthType = STRING(AuthenticationMethodEnum:Basic) AND 
+           VALID-OBJECT(oCreds) THEN
+            oReq = RequestBuilder:Post(oUri, ioRequestJson)
+                    :UsingBasicAuthentication(oCreds)
+                    :ContentType('application/json')
+                    :AcceptJson()
+                    :Request.
+        ELSE IF icAuthType = "" AND
+                VALID-OBJECT(oCreds) THEN
             oReq = RequestBuilder:Post(oUri, ioRequestJson)
                     :UsingCredentials(oCreds)
                     :ContentType('application/json')
@@ -110,7 +170,7 @@ case icAction:
         END.
         ELSE 
             undo, throw new Progress.Lang.AppError("API Call Status Code '" + STRING(oResp:StatusCode) + "'", 1).
-    end.
+    end. /* MethodEnum:POST */
     otherwise
         undo, throw new Progress.Lang.AppError('Action not supported', 1).
 end case.
@@ -118,3 +178,11 @@ end case.
 catch oError as Progress.Lang.Error :
     undo, throw oError.
 end catch.
+
+FINALLY:
+    IF VALID-OBJECT(oClient) THEN DELETE OBJECT oClient.
+    IF VALID-OBJECT(oUri) THEN DELETE OBJECT oUri.
+    IF VALID-OBJECT(oCreds) THEN DELETE OBJECT oCreds.
+    IF VALID-OBJECT(oReq) THEN DELETE OBJECT oReq.
+    IF VALID-OBJECT(oResp) THEN DELETE OBJECT oResp.
+END FINALLY.

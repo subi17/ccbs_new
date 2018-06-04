@@ -116,48 +116,62 @@ FUNCTION fReleaseSIM RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fParseOrderIdToMasmovil RETURN LOGICAL 
+FUNCTION fOrderCancellationToAPI RETURN LOGICAL 
    (INPUT iiOrderId AS int):
 
    DEF VAR lcHost        AS CHARACTER        NO-UNDO.
    DEF VAR liPort        AS INTEGER          NO-UNDO.
-   DEF VAR lcUderId      AS CHARACTER        NO-UNDO.
+   DEF VAR lcAuthType    AS CHARACTER        NO-UNDO.
+   DEF VAR lcRealm       AS CHARACTER        NO-UNDO.
+   DEF VAR lcUserId      AS CHARACTER        NO-UNDO.
    DEF VAR lcPassword    AS CHARACTER        NO-UNDO.
    DEF VAR lcUriPath     AS CHARACTER        NO-UNDO.
    DEF VAR lcUriQuery    AS CHARACTER        NO-UNDO.
    DEF VAR lcUriQueryVal AS CHARACTER        NO-UNDO.
    DEF VAR liLogRequest  AS INTEGER          NO-UNDO.
-   DEF VAR loRequestjson  AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
-   DEF VAR loResponsejson AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
+   DEF VAR loRequestJson  AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
+   DEF VAR loResponseJson AS Progress.Json.ObjectModel.JsonObject NO-UNDO. 
    
    ASSIGN 
       lcHost        = fCParam("Masmovil","cancelHost")
       liport        = fIparam("Masmovil","cancelPort")
+      lcAuthType    = fCParam("Masmovil","cancelAuthType")
+      lcRealm       = fCParam("Masmovil","cancelRealm")
+      lcUserId      = fCParam("Masmovil","cancelUserId")
+      lcPassword    = fCParam("Masmovil","cancelPass")
       lcUriPath     = fCParam("Masmovil","cancelUriPath")
       lcUriQuery    = fCParam("Masmovil","cancelUriQuery")
       lcUriQueryVal = fCParam("Masmovil","cancelUriQueryValue")
       liLogRequest  = fIParam("Masmovil","cancelLogRequest").
       
-   loRequestjson = NEW Progress.Json.ObjectModel.JsonObject().
+   loRequestJson = NEW Progress.Json.ObjectModel.JsonObject().
    loRequestJson:ADD("status" , "CANCEL").
-   loRequestJson:ADD("externalId" , "Y" + STRING(iiOrderID)).
+   loRequestJson:ADD("externalId" , SUBST("Y&1", iiOrderID)).
  
-   RUN Gwy/http_rest_client.p("put" ,
-                             lcHost,
-                             liPort,
-                             "" ,
-                             "" ,
-                             lcUriPath,
-                             lcUriQuery,     
-                             lcUriQueryVal,
-                             loRequestJson,
-                             OUTPUT loResponsejson).
+   RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
+                              lcHost,
+                              liPort,
+                              lcAuthType,
+                              lcRealm,
+                              lcUserId,
+                              lcPassword,
+                              lcUriPath,
+                              lcUriQuery,     
+                              lcUriQueryVal,
+                              loRequestJson,
+                              OUTPUT loResponseJson).
+   
+   /* TODO: catch error and handle them */
 
    RETURN TRUE.
 
    FINALLY:
       IF VALID-OBJECT(loRequestjson)
       THEN DELETE OBJECT loRequestjson.
+
+      /* loResponseJson is not used */
+      IF VALID-OBJECT(loResponseJson)
+      THEN DELETE OBJECT loResponseJson.
    END FINALLY.
 END FUNCTION.
 

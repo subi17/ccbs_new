@@ -123,7 +123,7 @@ IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
 END.
 
 IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES}) > 0 THEN
-   fParseOrderIdToMasmovil(Order.OrderId).
+   fOrderCancellationToAPI(Order.OrderId).
 
 fSetOrderStatus(Order.OrderId,icOrderStatus).
 

@@ -213,7 +213,7 @@ IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
 END.
 
 IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES} ) > 0 THEN
-   fParseOrderIdToMasmovil(Order.OrderId).
+   fOrderCancellationToAPI(Order.OrderId).
 
 fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 
