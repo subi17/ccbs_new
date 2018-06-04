@@ -125,7 +125,7 @@ REPEAT:
       NEXT.
 
    PUT STREAM sPercontrLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";start_processing_file" SKIP.
-   REPEAT:
+   REPEAT TRANSACTION:
       IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
       lcLine = TRIM(lcLine).
       IF lcLine = "" THEN
