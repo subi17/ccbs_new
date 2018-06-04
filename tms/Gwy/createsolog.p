@@ -17,6 +17,7 @@ DEF VAR lcDSSResult                AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidBundles       AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO. 
+DEF VAR liOrderId                  AS INT  NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 
@@ -208,23 +209,20 @@ PROCEDURE pSolog:
          IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
 
             IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
-               MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
-               FOR FIRST bufOrder NO-LOCK WHERE bufOrder.MsSeq = MSRequest.MSSeq AND
-                        (bufOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
-                         bufOrder.StatusCode = {&ORDER_STATUS_MNP} OR
-                         bufOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):
+                  MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
 
-                  /* This call makes synchronous termination request to MuleDB */
-                  lcResult = fSendFixedLineTermReqToMuleDB(bufOrder.OrderId).
-                  IF lcResult > "" THEN DO:
-                     Func.Common:mWriteMemo("MobSub",
-                                 STRING(bufOrder.MsSeq),
-                                 bufOrder.Custnum,
-                                 "Fixed line termination failed",
-                                 lcResult).
-                     fReqError("Fixed line termination failed" + lcResult).                                 
-                  END.
-               END.        
+               liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
+
+               /* This call makes synchronous termination request to MuleDB */
+               lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+               IF lcResult > "" THEN DO:
+                  Func.Common:mWriteMemo("MobSub",
+                              STRING(BufMobsub.MsSeq),
+                              BufMobsub.Custnum,
+                              "Fixed line termination failed",
+                              lcResult).
+                  fReqError("Fixed line termination failed" + lcResult).                                 
+               END.       
             END.
          END.
 

@@ -39,12 +39,11 @@ DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
 DEF VAR liError                AS INT  NO-UNDO.
+DEF VAR liOrderId              AS INT  NO-UNDO.
 
 DEF BUFFER lbMobSub     FOR MobSub.
 DEF BUFFER bMobSubCust  FOR MobSub.
 DEF BUFFER bCLIType     FOR CLIType.
-DEF BUFFER bufOrder     FOR Order.
-
 
 FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
 
@@ -349,11 +348,11 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
                   bCLIType.Brand      = Syst.Var:gcBrand AND
                   bCLIType.CLIType    = MSRequest.ReqCParam2 AND
                   bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:   
- 
-         FOR FIRST bufOrder NO-LOCK WHERE bufOrder.MsSeq = MSRequest.MSSeq:
-            /* This call makes synchronous termination request to MuleDB */ 
-            ocResult = fSendFixedLineTermReqToMuleDB(bufOrder.OrderId).
-         END.   
+
+         liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
+         /* This call makes synchronous termination request to MuleDB */ 
+         ocResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+           
       END.   
    END.
 

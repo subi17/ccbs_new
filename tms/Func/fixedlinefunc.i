@@ -811,4 +811,31 @@ RETURN "".
 END FUNCTION.
 
 
+FUNCTION fFindFixedLineOrder RETURNS INTEGER
+   ( iiMsSeq AS INTEGER ):
+
+   DEFINE BUFFER Order FOR Order.
+
+   FOR
+      EACH Order NO-LOCK WHERE
+           Order.MsSeq = iiMSSeq 
+      BY Order.CrStamp DESC:
+
+      IF Order.StatusCode <> {&ORDER_STATUS_DELIVERED}
+      THEN NEXT.
+
+      IF NOT CAN-FIND(FIRST FusionMessage NO-LOCK WHERE 
+                            FusionMessage.OrderId        = Order.OrderId                      AND 
+                            FusionMessage.MessageType    = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
+                            FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_HANDLED})
+      THEN NEXT.
+
+      RETURN Order.OrderId.
+
+   END.
+
+   RETURN 0.
+
+END FUNCTION.
+
 &ENDIF
