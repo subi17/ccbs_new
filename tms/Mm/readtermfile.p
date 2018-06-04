@@ -56,6 +56,7 @@ DEF VAR liError          AS INT  NO-UNDO.
 DEF STREAM sRead.
 DEF STREAM sLog.
 
+DEF BUFFER OldCliType FOR CliType.
 
 FUNCTION fError RETURNS LOGIC
    (icMessage AS CHAR):
@@ -147,18 +148,10 @@ REPEAT:
       NEXT.
    END.
 
-   IF fIsConvergentORFixedOnly(Mobsub.CliType) AND 
-      (lcCLI BEGINS "8" OR lcCLI BEGINS "9") THEN DO:
-      IF MobSub.FixedNumber NE lcCLI THEN DO:
-         fError("Invalid FixedNumber").
-         NEXT.
-      END.
-   END.   
-   ELSE DO:
-      IF MobSub.CLI NE lcCLI THEN DO:
-         fError("Invalid MSISDN").
-         NEXT.
-      END.   
+       
+   IF NOT (MobSub.CLI EQ lcCLI OR MobSub.FixedNumber EQ lcCLI) THEN DO:         
+      fError(lcCLI + " not found from subscription").
+      NEXT.  
    END.
 
    IF NOT fIsFixedOnly(lcCLIType) THEN DO:
@@ -253,10 +246,9 @@ REPEAT:
    ASSIGN lcOutOper   = "".
 
    /* Check lcTermType IF FULL or Empty -> {&TERMINATION_TYPE_FULL} */
-   lcTermType = fCheckTerminationType(lcTerminationType).
+   IF lcTerminationType EQ "FULL" OR 
+      lcTerminationType = "" THEN DO:  
 
-   IF lcTermType = {&TERMINATION_TYPE_FULL} THEN DO:
-    
       liRequest = fTerminationRequest(MobSub.MSSeq,
                                       ldKillStamp,
                                       liMSISDNStat,
@@ -302,16 +294,14 @@ REPEAT:
             Memo.CreStamp  = ldCurrent.
       END.
    END.
-
-   IF lcTermType = {&TERMINATION_TYPE_PARTIAL} THEN DO:
-
+   ELSE DO:
       IF fIsFixedOnly(lcCLIType) THEN DO:
-         fError("Invalid CLIType (FIXED) for partial termination, CLIType: " + lcCLIType).
+         fError("Partial termination not allowed for fixed only CLIType: " + lcCLIType + " use FULL termination").
          NEXT.
       END.
 
       IF NOT fIsConvergentORFixedOnly(lcCLIType) THEN DO:
-         fError("Invalid CLIType (MOBILE) for partial termination, CLIType: " + lcCLIType).
+         fError("Partial termination not allowed for mobile only CLIType: " + lcCLIType + " use FULL termination").
          NEXT.
       END.
 
@@ -339,6 +329,14 @@ REPEAT:
 
          IF lcTerminationType EQ "FIXED" THEN DO:
 
+
+            FIND FIRST OldCliType WHERE
+               OldCliType.Brand   = Syst.Var:gcBrand AND
+               OldCliType.CliType = lcCLIType NO-LOCK NO-ERROR.
+
+            IF lcNewCliType = "" THEN
+               lcNewCliType = OldCliType.BaseBundle.
+   
             liRequest = fCTChangeRequest(MobSub.msseq,
                                          lcNewCliType,
                                          "",
@@ -363,8 +361,7 @@ REPEAT:
             END.
          END.
       END.
-   END.
-
+   END. /* else do */
 END.
 
 

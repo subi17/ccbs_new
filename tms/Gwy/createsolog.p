@@ -214,7 +214,7 @@ PROCEDURE pSolog:
                          bufOrder.StatusCode = {&ORDER_STATUS_MNP} OR
                          bufOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):
 
-                  /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */
+                  /* This call makes synchronous termination request to MuleDB */
                   lcResult = fSendFixedLineTermReqToMuleDB(bufOrder.OrderId).
                   IF lcResult > "" THEN DO:
                      Func.Common:mWriteMemo("MobSub",

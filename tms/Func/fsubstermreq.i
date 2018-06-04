@@ -383,26 +383,4 @@ END.
 
 
 
-
-FUNCTION fCheckTerminationType RETURNS CHAR
-(icTerminationType AS CHAR):
-   /*
-    FULL|BLANK (Full termination of Convergent or Fixed or Mobile only subscriptions).
-    FIXED (Fixed part termination of Convergent subscriptions).
-    MOBILE (Mobile part termination of Convergent subscriptions).
-   */
-   IF icTerminationType EQ "FULL" OR 
-      icTerminationType = "" THEN  
-      RETURN {&TERMINATION_TYPE_FULL}.      
-   ELSE IF icTerminationType EQ "FIXED" OR
-      icTerminationType = "MOBILE" THEN
-      RETURN {&TERMINATION_TYPE_PARTIAL}.
-   ELSE
-      RETURN "Incorrect type of termination".
-END.
-
-
-
-
-
 &ENDIF

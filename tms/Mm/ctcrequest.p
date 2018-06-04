@@ -88,12 +88,6 @@ IF NOT AVAIL OldCliType THEN DO:
    RETURN.
 END.
 
-/* QWTER-2 Is this the place where to find out suitable new mobile tariff if not received */
-IF MSRequest.ReqCParam2 = "" THEN DO:
-   IF fIsConvergenceTariff(OldCliType.CLIType) THEN 
-      MSRequest.ReqCParam2 = OldCliType.BaseBundle.
-END.
-
 FIND FIRST NewCliType WHERE
            NewCliType.Brand   = Syst.Var:gcBrand AND
            NewCliType.CliType = MSRequest.ReqCParam2 NO-LOCK NO-ERROR.
@@ -357,7 +351,7 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
                   bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:   
  
          FOR FIRST bufOrder NO-LOCK WHERE bufOrder.MsSeq = MSRequest.MSSeq:
-            /* This call will be replaced with correct function which makes synchronous termination request to MuleDB */ 
+            /* This call makes synchronous termination request to MuleDB */ 
             ocResult = fSendFixedLineTermReqToMuleDB(bufOrder.OrderId).
          END.   
       END.   
