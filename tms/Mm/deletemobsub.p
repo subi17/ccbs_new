@@ -23,7 +23,6 @@
 {Func/dss_matrix.i}
 {Func/msisdn_prefix.i}
 {Func/fsubstermreq.i}
-{Mnp/mnpoutchk.i}
 {Func/ordercancel.i}
 {Func/dextra.i}
 {Func/add_lines_request.i}
@@ -779,10 +778,14 @@ PROCEDURE pTerminate:
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
       MSRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}:
 
-      CASE MSRequest.ReqStatus:
-      WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
-      WHEN 8 THEN fReqStatus(4,"Cancelled by subs. termination").
-      WHEN 19 THEN fReqStatus(4,"Cancelled by subs. termination").
+      IF LOOKUP(STRING(MSRequest.ReqStatus),
+                SUBSTITUTE("&1,&2,&3",
+                           {&REQUEST_STATUS_NEW},
+                           {&REQUEST_STATUS_SUB_REQUEST_DONE},
+                           {&REQUEST_STATUS_CONFIRMATION_PENDING})) > 0
+      THEN DO:
+         fReqStatus(4,"Cancelled by subs. termination").
+         fChangeOrderStatus(MsRequest.ReqIParam4, {&ORDER_STATUS_CLOSED}).
       END.
    END.
 
@@ -1623,7 +1626,7 @@ PROCEDURE pMultiSIMTermination:
           MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
           LOOKUP(STRING(MsRequest.ReqStatus),
           {&REQ_INACTIVE_STATUSES}) = 0) AND
-      NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
+      NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
 
       ASSIGN ldaSecSIMTermDate  = ADD-INTERVAL(TODAY, 1,"months")
              ldaSecSIMTermDate  = Func.Common:mLastDayOfMonth(ldaSecSIMTermDate)
