@@ -191,7 +191,7 @@ def compile(match, *a):
 
     if parameters:
         for rpc in parameters:
-            if rpc not in rpcs.keys():
+            if rpc not in rpcs:
                 raise PikeException('Invalid rpc name')
 
     systemrpc_compiledir = ''
@@ -201,10 +201,10 @@ def compile(match, *a):
         systemrpc_compiledir = tempfile.mkdtemp()
         _compile(match, work_dir + '/tools/fcgi_agent/systemrpc', systemrpc_compiledir, [''])
 
-    _compile(match, rpclist=list(set(parameters or rpcs.keys())))
+    _compile(match, rpclist=list(set(parameters or rpcs)))
 
     if systemrpc_compiledir:
-        for rpc in parameters or rpcs.keys():
+        for rpc in parameters or rpcs:
             recursive_overwrite(systemrpc_compiledir, '{0}/tmsrpc/{1}/rpcmethods'.format(work_dir, rpc))
         shutil.rmtree(systemrpc_compiledir)
 
@@ -439,7 +439,7 @@ def build(*a):
 
 
     currentdir = os.getcwd()
-    for rpc in rpcs.keys():
+    for rpc in rpcs:
         os.chdir(rpc)
         rpcbuilddir = os.path.join(build_dir, rpc)
         mkdir_p(rpcbuilddir)
@@ -503,7 +503,7 @@ def connect_confluence(host):
 def documentation(*a):
     if parameters:
         for rpc in parameters:
-            if rpc not in rpcs.keys():
+            if rpc not in rpcs:
                 raise PikeException('Invalid rpc name')
 
     confluencefile = 'confluence.json'
@@ -515,7 +515,7 @@ def documentation(*a):
     print('      have updated the documentation files using')
     print('      the "pike compile" command in this directory!\n')
 
-    rpclist = list(set(parameters or rpcs.keys()))
+    rpclist = list(set(parameters or rpcs))
 
     with open(confluencefile, 'r') as jsonfile:
         jsondata = json.load(jsonfile)
