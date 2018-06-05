@@ -814,30 +814,28 @@ END FUNCTION.
 FUNCTION fFindFixedLineOrder RETURNS INTEGER
    ( iiMsSeq AS INTEGER ):
 
-   DEF BUFFER bMobsub      FOR MobSub.
-   DEF BUFFER bOrder       FOR Order.
-   DEF BUFFER bOrderFusion FOR OrderFusion. 
+   DEFINE BUFFER Order  FOR Order.
+   DEFINE BUFFER MobSub FOR MobSub.
 
-   FIND FIRST bMobsub NO-LOCK WHERE
-              bMobsub.Brand EQ "1" AND         
-              bMobsub.MsSeq = iiMsSeq AND         
-              bMobsub.FixedNumber > "" AND
-              bMobsub.FixedNumber NE ? NO-ERROR.
+   FIND FIRST Mobsub NO-LOCK USE-INDEX MsSeq WHERE
+              Mobsub.MsSeq       EQ iiMsSeq AND
+              Mobsub.FixedNumber  > ""
+   NO-ERROR.
 
-   IF NOT AVAIL bMobsub THEN RETURN 0.
+   IF NOT AVAILABLE MobSub
+   THEN RETURN 0.
 
-   FOR EACH bOrder NO-LOCK WHERE bOrder.MsSeq = iiMSSeq
-       BY bOrder.CrStamp DESC:
+   FOR EACH Order NO-LOCK WHERE Order.MsSeq EQ iiMSSeq
+       BY Order.CrStamp DESC:
 
-      FIND FIRST bOrderFusion NO-LOCK WHERE
-                 bOrderFusion.Brand EQ "1" AND
-                 bOrderFusion.OrderId EQ bOrder.OrderId AND
-                 bOrderFusion.FixedNumber EQ bMobsub.FixedNumber AND
-                 bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}
-                  NO-ERROR.
-      IF NOT AVAIL bOrderFusion THEN NEXT.
+      IF NOT CAN-FIND(FIRST OrderFusion NO-LOCK USE-INDEX OrderId WHERE
+                            OrderFusion.Brand        EQ "1"                AND
+                            OrderFusion.OrderId      EQ Order.OrderId      AND
+                            OrderFusion.FixedNumber  EQ Mobsub.FixedNumber AND
+                            OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED})
+      THEN NEXT.
 
-      RETURN bOrder.OrderId.
+      RETURN Order.OrderId.
 
    END.
 
