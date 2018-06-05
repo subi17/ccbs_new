@@ -349,10 +349,11 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
                   bCLIType.CLIType    = MSRequest.ReqCParam2 AND
                   bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:   
 
-         liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
+         liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
+         IF liOrderId EQ 0 THEN fReqError("OrderID not found").
+         
          /* This call makes synchronous termination request to MuleDB */ 
-         ocResult = fSendFixedLineTermReqToMuleDB(liOrderId).
-           
+         ocResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
       END.   
    END.
 

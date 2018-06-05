@@ -212,7 +212,8 @@ PROCEDURE pSolog:
                   MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
 
                liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
-
+               IF liOrderId EQ 0 THEN fReqError("OrderID not found").
+               
                /* This call makes synchronous termination request to MuleDB */
                lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
                IF lcResult > "" THEN DO:
