@@ -128,6 +128,40 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.UpdateTS = FusionMessage.CreatedTS.
 END.
 
+FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL
+ (iiOrderID AS INT,
+  OUTPUT ocError AS CHAR):
+
+   DEF BUFFER OrderFusion FOR OrderFusion.
+
+   FIND OrderFusion NO-LOCK WHERE
+        OrderFusion.Brand = Syst.Var:gcBrand AND
+        OrderFusion.OrderID = iiOrderId NO-ERROR.
+   IF NOT AVAIL OrderFusion THEN DO:
+      ocError = "ERROR:Order data not found".
+      RETURN FALSE.
+   END.
+
+   IF OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_NEW} THEN DO:
+      ocError = SUBST("ERROR:Incorrect fusion status &1", 
+                OrderFusion.FusionStatus).
+      RETURN FALSE.
+   END.
+
+   IF CAN-FIND(FIRST FusionMessage NO-LOCK WHERE
+         FusionMessage.OrderID = OrderFusion.OrderID AND
+         FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_RESERVE_NUMBER} AND
+         FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN DO:
+      ocError = "ERROR:Ongoing message".
+      RETURN FALSE.
+   END.
+
+   _fCreateFusionMessage(OrderFusion.OrderId,
+                         {&FUSIONMESSAGE_TYPE_RESERVE_NUMBER}).
+
+   RETURN TRUE.
+END.
+
 FUNCTION fCreateFusionCreateOrderMessage RETURNS LOGICAL
  (iiOrderID AS INT,
   OUTPUT ocError AS CHAR):
@@ -206,6 +240,31 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
                          {&FUSIONMESSAGE_TYPE_CANCEL_ORDER}).
 
    RETURN TRUE.
+END.
+
+FUNCTION fIsFixedNumberInUse RETURNS LOGICAL
+ (icFixedNumber AS CHAR,
+  iiOrderID AS INT):
+
+  DEF BUFFER OrderFusion FOR OrderFusion.
+  DEF BUFFER Order FOR Order.
+
+  IF icFixedNumber EQ ? OR icFixedNumber EQ "" THEN RETURN FALSE.
+
+  FOR EACH OrderFusion NO-LOCK WHERE
+           OrderFusion.FixedNumber = icFixedNumber AND
+           OrderFusion.OrderID NE iiOrderID,
+      FIRST Order NO-LOCK WHERE
+            Order.Brand = OrderFusion.Brand AND
+            Order.OrderID = OrderFusion.OrderID AND
+     LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+
+     RETURN TRUE.
+  END.
+   
+  RETURN CAN-FIND(FIRST MobSub NO-LOCK WHERE
+                        MobSub.Brand = Syst.Var:gcBrand AND
+                        MobSub.FixedNumber = icFixedNumber).
 END.
 
 &ENDIF

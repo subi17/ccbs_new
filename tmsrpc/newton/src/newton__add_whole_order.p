@@ -2792,6 +2792,10 @@ END.
 
 IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 
+   IF OrderFusion.FixedNumber EQ "" THEN
+      fCreateFusionReserveNumberMessage(Order.OrderID,
+                                        OUTPUT lcError).
+   ELSE
       fCreateFusionCreateOrderMessage(Order.OrderId,
                                       OUTPUT lcError).
 END.

@@ -10,7 +10,7 @@
       14/4/18  - DIAMANTEE PHASE 3 - Added the ability to atttach current extra lines to other main line 
                                       for same customer if the main line got terminated
 */
-
+   
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/fctserval.i}

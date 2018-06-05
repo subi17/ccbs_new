@@ -197,7 +197,10 @@ IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
    IF AVAIL OrderFusion AND
             OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW} THEN DO:
 
-            fCreateFusionCreateOrderMessage(Order.OrderID,
+      IF OrderFusion.FixedNumber EQ "" THEN
+         fCreateFusionReserveNumberMessage(Order.OrderID,
+                                           OUTPUT lcError).
+      ELSE fCreateFusionCreateOrderMessage(Order.OrderID,
                                            OUTPUT lcError).
 
       IF lcError NE "" THEN 
