@@ -9,21 +9,15 @@ CLASS Class.Logger FINAL:
 
    CONSTRUCTOR PRIVATE Logger():
    END CONSTRUCTOR.
-   
-   METHOD PUBLIC STATIC VOID writeLog
-      ( iiLevel  AS INTEGER,
-        ioObject AS CLASS Progress.Lang.Object,
-        icType   AS CHARACTER ):
 
-      IF LOG-MANAGER:LOGGING-LEVEL < iiLevel OR
-         LOG-MANAGER:LOGFILE-NAME  = ?
-      THEN RETURN.
-
-      IF NOT VALID-OBJECT(ioObject)
-      THEN RETURN.
+   METHOD PUBLIC STATIC LONGCHAR objToLongChar
+      ( ioObject AS CLASS Progress.Lang.Object ):
 
       DEFINE VARIABLE lcLongChar AS LONGCHAR NO-UNDO.
       DEFINE VARIABLE lhXmlDoc   AS HANDLE   NO-UNDO. 
+
+      IF NOT VALID-OBJECT(ioObject)
+      THEN RETURN "".
 
       IF TYPE-OF(ioObject, JsonConstruct)
       THEN CAST(ioObject, JsonConstruct):Write(INPUT-OUTPUT lcLongChar).
@@ -41,8 +35,20 @@ CLASS Class.Logger FINAL:
              lcLongChar = ioObject:ToString().
       END.
 
-      IF lcLongChar > ""
-      THEN writeLog(iiLevel, lcLongChar, icType).
+      RETURN lcLongChar.
+
+   END METHOD.
+
+   METHOD PUBLIC STATIC VOID writeLog
+      ( iiLevel  AS INTEGER,
+        ioObject AS CLASS Progress.Lang.Object,
+        icType   AS CHARACTER ):
+
+      IF LOG-MANAGER:LOGGING-LEVEL < iiLevel OR
+         LOG-MANAGER:LOGFILE-NAME  = ?
+      THEN RETURN.
+
+      writeLog(iiLevel, objToLongChar(ioObject), icType).
 
    END METHOD.
 
@@ -53,6 +59,9 @@ CLASS Class.Logger FINAL:
 
       IF LOG-MANAGER:LOGGING-LEVEL < iiLevel OR
          LOG-MANAGER:LOGFILE-NAME  = ?
+      THEN RETURN.
+
+      IF NOT iclMsg > ""
       THEN RETURN.
 
       IF LENGTH(iclMsg) > 30000
@@ -75,6 +84,9 @@ CLASS Class.Logger FINAL:
 
       IF LOG-MANAGER:LOGGING-LEVEL < iiLevel OR
          LOG-MANAGER:LOGFILE-NAME  = ?
+      THEN RETURN.
+
+      IF NOT icMsg > ""
       THEN RETURN.
 
       LOG-MANAGER:WRITE-MESSAGE(icMsg, icType).

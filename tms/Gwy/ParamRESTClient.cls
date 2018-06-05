@@ -49,7 +49,7 @@
    
        /* objRESTClient:aoResultObject will contain the result data, if any */
     
-       CATCH loError AS Progress.Lang.Error:
+       CATCH loRESTError AS Gwy.RESTError:
           /* Error handling will be here... */
           /* NOTE: The errors automatically are logged to the client log */
        END CATCH.
@@ -89,6 +89,7 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
       DEFINE VARIABLE lcc AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lde AS DECIMAL   NO-UNDO.
       DEFINE VARIABLE lii AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE loRESTError AS CLASS Gwy.RESTError NO-UNDO.
 
       DO ON ERROR UNDO, THROW:
          lcc = Syst.Parameters:getc("ClientName", icTMSParamGroup).
@@ -124,6 +125,14 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
       END.
       IF lii >= 0 THEN mSetNumRetries(lii).
       
+      CATCH loAppError AS Progress.Lang.AppError :
+         loRESTError = NEW Gwy.RESTError(loAppError:ReturnValue).
+         DO lii = 1 TO loAppError:NumMessages:
+            loRESTError:AddMessage(loAppError:GetMessage(lii), loAppError:GetMessageNum(lii)).
+         END.
+         UNDO, THROW loRESTError.
+      END CATCH.
+
    END METHOD.
 
    METHOD PRIVATE VOID mProcessHTTPRequestParams
@@ -131,6 +140,8 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
 
       DEFINE VARIABLE lcUserName AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lcPassWord AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lii        AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE loRESTError AS CLASS Gwy.RESTError NO-UNDO.
       
       DO ON ERROR UNDO, THROW:
          lcUserName = Syst.Parameters:getc("UserName", icTMSParamGroup).
@@ -157,6 +168,14 @@ CLASS Gwy.ParamRESTClient INHERITS Gwy.RESTClient:
       mSetURI(Syst.Parameters:getc("Scheme", icTMSParamGroup),
               Syst.Parameters:getc("Host", icTMSParamGroup),
               Syst.Parameters:geti("Port", icTMSParamGroup)).
+
+      CATCH loAppError AS Progress.Lang.AppError :
+         loRESTError = NEW Gwy.RESTError(loAppError:ReturnValue).
+         DO lii = 1 TO loAppError:NumMessages:
+            loRESTError:AddMessage(loAppError:GetMessage(lii), loAppError:GetMessageNum(lii)).
+         END.
+         UNDO, THROW loRESTError.
+      END CATCH.
 
    END METHOD.
 
