@@ -81,7 +81,7 @@
    
        /* objRESTClient:aoResultObject will contain the result data, if any */
     
-       CATCH loError AS Progress.Lang.Error:
+       CATCH loRESTError AS Gwy.RESTError:
           /* Error handling will be here... */
           /* NOTE: The errors automatically are logged to the client log */
        END CATCH.
@@ -99,6 +99,7 @@ USING OpenEdge.Net.HTTP.*.
 USING OpenEdge.Net.URI.
 USING OpenEdge.Net.UriSchemeEnum.
 USING Progress.Json.ObjectModel.JsonConstruct.
+USING Gwy.RESTError.
 
 &GLOBAL-DEFINE PROGRESS_VERSION 11.6
 
@@ -451,10 +452,10 @@ CLASS Gwy.RESTClient:
       (icMethodName AS CHARACTER):
 
       IF NOT VALID-OBJECT(aoURI)
-      THEN UNDO, THROW NEW Progress.Lang.AppError
-               (SUBSTITUTE("Called &1 but the URI is not initialized " +
-                "(mSetURI method does that)", icMethodName)).      
-      
+      THEN UNDO, THROW NEW RESTError(SUBSTITUTE("mSetURI must be called " +
+                                                "before calling method &1",
+                                                icMethodName)).
+
    END METHOD.
 
    /* Note that there can't be multiple items having the same name */
@@ -489,11 +490,12 @@ CLASS Gwy.RESTClient:
    END METHOD.
 
    METHOD PRIVATE DefaultRequestBuilder mDoRequestBuilder
-      (ioMethodEnum AS CLASS MethodEnum):
+      ( ioMethodEnum AS CLASS MethodEnum ):
    
       IF NOT VALID-OBJECT(aoURI)
-      THEN UNDO, THROW NEW Progress.Lang.AppError
-               ("Attempting to do a request but the URI is not defined").
+      THEN UNDO, THROW NEW RESTError
+               (SUBSTITUTE("mSetURI must be called before HTTP &1",
+                           STRING(ioMethodEnum))).
       
       RETURN CAST(RequestBuilder:Build(STRING(ioMethodEnum), aoURI),
                   DefaultRequestBuilder).
@@ -504,6 +506,7 @@ CLASS Gwy.RESTClient:
       ( ioRequest AS CLASS IHttpRequest ):
 
       DEFINE VARIABLE lcStatusReason AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcResult       AS LONGCHAR  NO-UNDO.
 
       DEFINE VARIABLE loResponse AS CLASS IHttpResponse NO-UNDO.
       ASSIGN
@@ -516,11 +519,25 @@ CLASS Gwy.RESTClient:
       THEN lcStatusReason = STRING(StatusCodeEnum:GetEnum(loResponse:StatusCode)).
       &ENDIF
 
+      IF loResponse:StatusCode >= 400
+      THEN UNDO, THROW NEW RESTError(loResponse:StatusCode, lcStatusReason, aoResultObject).
+
       Class.Logger:writeLog(2,
-                            SUBSTITUTE("&1 - &2",
+                            SUBSTITUTE("&1 &2",
                                        loResponse:StatusCode,
                                        lcStatusReason),
                             "INFO").
+
+      CASE loResponse:StatusCode:
+         WHEN INTEGER(StatusCodeEnum:OK)
+         THEN.
+         OTHERWISE
+            Class.Logger:writeLog(1,
+                                  SUBSTITUTE("There is no special logic for " +
+                                             "the HTTP status code &1",
+                                             loResponse:StatusCode),
+                                  "WARNING").
+      END.
 
       IF VALID-OBJECT(aoResultObject)
       THEN DO:
@@ -528,34 +545,8 @@ CLASS Gwy.RESTClient:
          Class.Logger:writeLog(4, aoResultObject, "DEBUG").
       END.
 
-      CASE loResponse:StatusCode:
-         WHEN INTEGER(StatusCodeEnum:OK)
-         THEN RETURN.
-         WHEN INTEGER(StatusCodeEnum:InternalServerError)
-         THEN DO:
-            IF VALID-OBJECT(aoResultObject) AND LOG-MANAGER:LOGGING-LEVEL < 4
-            THEN Class.Logger:writeLog(1,
-                                       aoResultObject,
-                                       "INFO").
-            UNDO, THROW NEW Progress.Lang.AppError
-                        (SUBSTITUTE("Received status code &1 - &2'",
-                                    loResponse:StatusCode,
-                                    lcStatusReason)).
-         END.
-         OTHERWISE
-            UNDO, THROW NEW Progress.Lang.AppError
-                        (SUBSTITUTE("'&1 - &2' is not supported",
-                                    loResponse:StatusCode,
-                                    lcStatusReason)).
-      END CASE.
-
-
-
       CATCH loHTTPError AS HttpRequestError:
-         Class.Logger:writeLog(1,
-                               loHTTPError:GetErrorMessage(),
-                               "ERROR").
-         UNDO, THROW loHTTPError.
+         UNDO, THROW NEW RESTError(loHTTPError).
       END CATCH.
 
       FINALLY:
@@ -588,6 +579,8 @@ CLASS Gwy.RESTClient:
       DEFINE VARIABLE lcContentType           AS CHARACTER                   NO-UNDO.
       DEFINE VARIABLE lcAcceptContentType     AS CHARACTER                   NO-UNDO.
       DEFINE VARIABLE lii                     AS INTEGER                     NO-UNDO.
+      DEFINE VARIABLE lcReturnValue           AS CHARACTER                   NO-UNDO.
+      DEFINE VARIABLE loRESTError             AS CLASS Gwy.RESTError         NO-UNDO.
 
       IF VALID-OBJECT(aoResultObject)
       THEN DELETE OBJECT aoResultObject.
@@ -629,24 +622,23 @@ CLASS Gwy.RESTClient:
 
       mRESTResponse(loRequest).
 
-      CATCH loAppError AS Progress.Lang.AppError:
+      CATCH loError AS Progress.Lang.Error:
 
-         IF loAppError:ReturnValue > ""
-         THEN Class.Logger:writeLog(1, loAppError:ReturnValue, "ERROR").
+         IF TYPE-OF(loError, RESTError)
+         THEN UNDO, THROW CAST(loError, RESTError).
 
-         UNDO, THROW loAppError.
-         
-      END CATCH.
+         IF TYPE-OF(loError, Progress.Lang.AppError)
+         THEN lcReturnValue = CAST(loError, Progress.Lang.AppError):ReturnValue.
 
-      CATCH loProError AS Progress.Lang.ProError:
+         loRESTError = NEW RESTError(lcReturnValue).
 
-         DO lii = 1 TO loProError:NumMessages:
-            Class.Logger:writeLog(1, loProError:GetMessage(lii), "ERROR").
+         DO lii = 1 TO loError:NumMessages:
+            loRESTError:AddMessage(loError:GetMessage(lii), loError:GetMessageNum(lii)).
          END.
-      
-         UNDO, THROW loProError.
-      
-      END CATCH.              
+
+         UNDO, THROW loRESTError.
+
+      END CATCH.
 
       FINALLY:
          IF VALID-OBJECT(loRequest)
