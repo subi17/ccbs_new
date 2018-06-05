@@ -87,12 +87,6 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       /* Do not change the memo text (used by DWH) */
       IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
          bCreaReq.Memo = "Fixed line need to be terminated by Yoigo BO".
-      ELSE IF NOT 
-         CAN-FIND(FIRST Order NO-LOCK WHERE
-                        Order.MsSeq = iiMsSeq AND
-                        Order.OrderType = {&ORDER_TYPE_STC} AND
-                        Order.StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE})
-         THEN bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
    END.
 
    RELEASE bCreaReq.
