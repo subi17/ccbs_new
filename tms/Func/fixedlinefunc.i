@@ -814,23 +814,30 @@ END FUNCTION.
 FUNCTION fFindFixedLineOrder RETURNS INTEGER
    ( iiMsSeq AS INTEGER ):
 
-   DEFINE BUFFER Order FOR Order.
+   DEF BUFFER bMobsub      FOR MobSub.
+   DEF BUFFER bOrder       FOR Order.
+   DEF BUFFER bOrderFusion FOR OrderFusion. 
 
-   FOR
-      EACH Order NO-LOCK WHERE
-           Order.MsSeq = iiMSSeq 
-      BY Order.CrStamp DESC:
+   FIND FIRST bMobsub NO-LOCK WHERE
+              bMobsub.Brand EQ "1" AND         
+              bMobsub.MsSeq = iiMsSeq AND         
+              bMobsub.FixedNumber > "" AND
+              bMobsub.FixedNumber NE ? NO-ERROR.
 
-      IF Order.StatusCode <> {&ORDER_STATUS_DELIVERED}
-      THEN NEXT.
+   IF NOT AVAIL bMobsub THEN RETURN 0.
 
-      IF NOT CAN-FIND(FIRST FusionMessage NO-LOCK WHERE 
-                            FusionMessage.OrderId        = Order.OrderId                      AND 
-                            FusionMessage.MessageType    = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
-                            FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_HANDLED})
-      THEN NEXT.
+   FOR EACH bOrder NO-LOCK WHERE bOrder.MsSeq = iiMSSeq
+       BY bOrder.CrStamp DESC:
 
-      RETURN Order.OrderId.
+      FIND FIRST bOrderFusion NO-LOCK WHERE
+                 bOrderFusion.Brand EQ "1" AND
+                 bOrderFusion.OrderId EQ bOrder.OrderId AND
+                 bOrderFusion.FixedNumber EQ bMobsub.FixedNumber AND
+                 bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}
+                  NO-ERROR.
+      IF NOT AVAIL bOrderFusion THEN NEXT.
+
+      RETURN bOrder.OrderId.
 
    END.
 
