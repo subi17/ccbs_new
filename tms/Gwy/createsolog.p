@@ -219,9 +219,9 @@ PROCEDURE pSolog:
                   Func.Common:mWriteMemo("MobSub",
                               STRING(BufMobsub.MsSeq),
                               BufMobsub.Custnum,
-                              "Fixed line termination failed",
+                              "Fixed number termination failed",
                               lcResult).
-                  fReqError("Fixed line termination failed" + lcResult).                                 
+                  fReqError("Fixed number termination failed" + lcResult).                                 
                END.       
             END.
          END.

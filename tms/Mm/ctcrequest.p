@@ -363,10 +363,11 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
          Func.Common:mWriteMemo("MobSub",
                                 STRING(MSrequest.MsSeq),
                                 MobSub.CustNum,
-                                "Fixed line termination failed",
+                                "Fixed number termination failed",
                                 ocResult).
+         fReqError("Fixed number termination failed: " +  ocResult).                                
    END.
-   ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.      
+   ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.     
 END.   
    
 
