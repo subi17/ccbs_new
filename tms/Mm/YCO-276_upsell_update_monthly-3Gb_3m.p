@@ -34,7 +34,7 @@ DEF VAR lcOutRow            AS CHAR NO-UNDO.
 DEF VAR ldCampaignStart     AS DEC  NO-UNDO.
 DEF VAR ldCampaignEnd       AS DEC  NO-UNDO.
 DEF VAR lcclitype           AS CHAR NO-UNDO. /* YCO-457 */
-
+DEF VAR lcBundleCLITypes    AS CHAR NO-UNDO. /* YCO-457 */
 
 /* List of valid tariffs for this upsell */
 DEF VAR cValidList AS CHAR INITIAL
@@ -58,7 +58,8 @@ ASSIGN
    ldCurrentTimeTS = Func.Common:mMakeTS()
    lcUpsell        = "FID3GB_3m_R_UPSELL"                       /* Upsells that will be added in the promo              */
    ldCampaignStart = fCParamDe("YCO-276-FID3GB_3m-FromDate")    /* Promotion start date                                 */
-   ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_3m-ToDate").     /* Promotion end date                                   */
+   ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_3m-ToDate")      /* Promotion end date                                   */
+   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").        /* YCO-457 */
 
 ASSIGN 
    ldaReadDate  = TODAY
@@ -113,12 +114,12 @@ FUNCTION fCollect RETURNS CHAR
          NEXT.
       END.
 
-      /* YCO-457 
+      /* YCO-457
          - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
-         - adjusting the validation */
-      IF Mobsub.CliType = "CONTS" OR 
-         Mobsub.CliType = "CONTF" OR
-         Mobsub.CliType = "CONTRD" THEN 
+         - The compatibility matrix have the specific tariffs rather than the "families" 
+           because not all members of a "family" are compatible. So I have to pass the
+           tariffbundle that contains the specific tariff to the function in charge of the validation */ 
+      IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN
           lcclitype = Mobsub.tariffbundle.
       ELSE 
           lcclitype = Mobsub.CliType.      

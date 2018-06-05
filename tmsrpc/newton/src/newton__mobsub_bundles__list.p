@@ -203,15 +203,17 @@ PROCEDURE pAdd_3Gg_flex_upsell:
     DEF VAR lcResult              AS CHAR NO-UNDO.
     DEF VAR lcUpsell_Id           AS CHAR NO-UNDO.
     DEF VAR lcclitype             AS CHAR NO-UNDO. /* YCO-457 */
-    
+    DEF VAR lcBundleCLITypes      AS CHAR NO-UNDO. /* YCO-457 */
+ 
     lcUpsell_Id  = fCParamC("RETENTION_3GB_UPSELLS").  
+    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES"). /* YCO-457 */
 
-    /* YCO-457 
+    /* YCO-457
        - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
-       - adjusting the validation */
-    IF Mobsub.CliType = "CONTS" OR 
-       Mobsub.CliType = "CONTF" OR
-       Mobsub.CliType = "CONTRD" THEN 
+       - The compatibility matrix have the specific tariffs rather than the "families" 
+         because not all members of a "family" are compatible. So I have to pass the
+         tariffbundle that contains the specific tariff to the function in charge of the validation */         
+    IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN
         lcclitype = Mobsub.tariffbundle.
     ELSE 
         lcclitype = Mobsub.CliType.      
@@ -244,15 +246,17 @@ PROCEDURE pAdd_5Gg_flex_upsell:
     DEF VAR lcResult              AS CHAR NO-UNDO.
     DEF VAR lcUpsell_Id           AS CHAR NO-UNDO.
     DEF VAR lcclitype             AS CHAR NO-UNDO. /* YCO-457 */
-    
+    DEF VAR lcBundleCLITypes      AS CHAR NO-UNDO. /* YCO-457 */
+ 
     lcUpsell_Id  = fCParamC("RETENTION_5GB_UPSELLS"). 
-        
-    /* YCO-457 
+    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES"). /* YCO-457 */
+
+    /* YCO-457
        - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
-       - adjusting the validation */
-    IF Mobsub.CliType = "CONTS" OR 
-       Mobsub.CliType = "CONTF" OR
-       Mobsub.CliType = "CONTRD" THEN 
+       - The compatibility matrix have the specific tariffs rather than the "families"
+         because not all members of a "family" are compatible. So I have to pass the
+         tariffbundle that contains the specific tariff to the function in charge of the validation */
+    IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN
         lcclitype = Mobsub.tariffbundle.
     ELSE 
         lcclitype = Mobsub.CliType.      

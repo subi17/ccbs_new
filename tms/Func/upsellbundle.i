@@ -166,7 +166,8 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    
    /* YCO-457 */
    DEF VAR lcclitype               AS CHAR NO-UNDO.
-   
+   DEF VAR lcBundleCLITypes        AS CHAR NO-UNDO.  
+ 
    DEF BUFFER lbMobSub             FOR MobSub. 
    DEF BUFFER bDSSMobSub           FOR MobSub.
    DEF BUFFER DayCampaign          FOR DayCampaign.
@@ -174,6 +175,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
    lcRetentionUpsells3GB      = fCParamC("RETENTION_3GB_UPSELLS").  /* YCO-276 */
    lcRetentionUpsells5GB      = fCParamC("RETENTION_5GB_UPSELLS").  /* YCO-275 */
+   lcBundleCLITypes           = fCParamC("BUNDLE_BASED_CLITYPES").  /* YCO-457 */
 
    FIND FIRST lbMobSub WHERE 
               lbMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR. 
@@ -195,12 +197,12 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    IF LOOKUP(icDCEvent,lcRetentionUpsells3GB) > 0 OR
       LOOKUP(icDCEvent,lcRetentionUpsells5GB) > 0 THEN 
    DO:
-      /* YCO-457 
+      /* YCO-457
          - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
-         - adjusting the validation */
-      IF lbMobsub.CliType = "CONTS" OR 
-         lbMobsub.CliType = "CONTF" OR
-         lbMobsub.CliType = "CONTRD" THEN 
+         - The compatibility matrix have the specific tariffs rather than the "families" 
+           because not all members of a "family" are compatible. So I have to pass the
+           tariffbundle that contains the specific tariff to the function in charge of the validation */
+      IF LOOKUP(lbMobsub.CliType,lcBundleCLITypes) > 0 THEN
           lcclitype = lbMobsub.tariffbundle.
       ELSE 
           lcclitype = lbMobsub.CliType.

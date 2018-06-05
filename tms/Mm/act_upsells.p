@@ -46,6 +46,7 @@ DEF VAR liErrors         AS INT NO-UNDO.
 DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcMemoText       AS CHAR NO-UNDO.
 DEF VAR lcResult         AS CHAR NO-UNDO.  /* YCO-441 */
+DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.  /* YCO-457 */
 
 /* YCO-1 List of compatible tariffs */ 
 DEF VAR cValidList AS CHAR INITIAL
@@ -65,7 +66,8 @@ ASSIGN
                  STRING(MONTH(TODAY),"99")  +
                  STRING(DAY(TODAY),"99")
    lcTime      = REPLACE(STRING(TIME,"hh:mm:ss"),":","")
-   lcBONOContracts = fCParamC("BONO_CONTRACTS").
+   lcBONOContracts = fCParamC("BONO_CONTRACTS")
+   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES"). /* YCO-457 */
 
 
 FUNCTION fLogLine RETURNS LOG(icMessage AS CHAR):
@@ -219,12 +221,13 @@ PROCEDURE pBobCheckUpsell:
               Upsell does not have to be shared in DSS */
    IF lcUpsell = "FID3GB_R_UPSELL" THEN 
    DO:
-      /* YCO-457 
+      /* YCO-457
          - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
-         - adjusting the validation */
-      IF Mobsub.CliType = "CONTS" OR 
-         Mobsub.CliType = "CONTF" OR
-         Mobsub.CliType = "CONTRD" THEN 
+         - The compatibility matrix have the specific tariffs rather than the "families" 
+           because not all members of a "family" are compatible. So I have to pass the
+           tariffbundle that contains the specific tariff to the function in charge of the validation */         
+
+      IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN 
           lcclitype = Mobsub.tariffbundle.
       ELSE 
           lcclitype = Mobsub.CliType.       
