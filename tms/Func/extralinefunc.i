@@ -527,6 +527,25 @@ FUNCTION fCheckActiveExtraLinePair RETURNS LOG
 
 END FUNCTION.
 
+FUNCTION fCheckMainLineOrderStatus RETURNS LOGICAL
+   (INPUT liMainLineOrderId  AS INT):
+
+   DEFINE BUFFER Order FOR Order.
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand     EQ Syst.Var:gcBrand      AND
+              Order.OrderId   EQ liMainLineOrderId     AND
+              Order.OrderType NE {&ORDER_TYPE_RENEWAL} NO-ERROR.
+
+   IF AVAIL Order                                             AND
+     LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) GT 0 THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* this function has to be removed while refactoring extralines */
 FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
    (INPUT liMainLineOrderId  AS INT):
 

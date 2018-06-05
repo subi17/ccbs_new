@@ -17,8 +17,12 @@ DEF VAR lcDSSResult                AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidBundles       AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO. 
+DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO. 
+DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcDSSId AS CHARACTER NO-UNDO. 
 
 DEF BUFFER bbMsRequest FOR MSRequest.
+DEF BUFFER bDSSMobSub  FOR MobSub.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -124,6 +128,36 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE MsRequest THEN
          MsRequest.ReqCParam2 = lcDSSResult.
+   END.
+END.
+
+/* This is a hack this has to be removed after root cause fix */
+DO TRANSACTION:
+   IF MsRequest.ReqType    EQ {&REQTYPE_DSS} AND 
+      MsRequest.ReqCParam3 EQ ""             THEN DO:
+      
+      FIND FIRST bDSSMobSub NO-LOCK WHERE 
+                 bDSSMobSub.MsSeq EQ MsRequest.MsSeq NO-ERROR.
+
+      IF NOT AVAIL bDSSMobSub THEN 
+         RETURN "DSS subscription not available".
+
+      ASSIGN lcDSS2PrimarySubTypes = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+             lcDSS4PrimarySubTypes = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
+
+      IF LOOKUP(bDSSMobSub.CLIType,lcDSS4PrimarySubTypes) > 0 THEN 
+         lcDSSId = {&DSS4}.
+      ELSE IF LOOKUP(bDSSMobSub.CLIType,lcDSS2PrimarySubTypes) > 0 THEN  
+         lcDSSId = {&DSS2}.
+
+      IF lcDSSId > "" THEN DO:
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
+
+         IF AVAIL MsRequest THEN 
+            MsRequest.ReqCParam3 = lcDSSId.
+
+      END.
+
    END.
 END.
 
