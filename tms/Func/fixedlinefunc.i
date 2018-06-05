@@ -780,30 +780,45 @@ END FUNCTION.
 FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
    (INPUT  iiOrderId      AS INT): 
 
-DEF VAR lcUriPath      AS CHAR       NO-UNDO.
-DEF VAR loRequestJson  AS Progress.Json.ObjectModel.JsonObject NO-UNDO.
-DEF VAR objRESTClient  AS CLASS Gwy.ParamRESTClient.
+DEF VAR lcUriPath       AS CHAR       NO-UNDO.
+DEF VAR objRESTClient   AS CLASS Gwy.ParamRESTClient.
+DEFINE VARIABLE lii     AS INTEGER NO-UNDO.
+DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
+
 /*
 DO ON ERROR UNDO, THROW:
  
     objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
     objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
      
-    objRESTClient:mSetTimeout(1.0).
-    objRESTClient:mPOST(loRequestJson).
+    objRESTClient:mPOST().
     
-    CATCH loError AS Progress.Lang.Error:
-       /* Error handling will be here... */
-       
-       RETURN loError:GetMessage(1).
-       /* NOTE: The errors automatically are logged to the client log */
-    END CATCH.
+    CATCH loRESTError AS Gwy.RESTError:
+
+      /* NOTE: The errors automatically are logged to the client log */
+
+      IF loRESTError:ErrorMessage > ""
+      THEN RETURN STRING(SUBSTRING(loRESTError:ErrorMessage, 1, 30000)).
+
+      IF loRESTError:ReturnValue > ""
+      THEN RETURN loRESTError:ReturnValue.
+
+      DO lii = 1 TO loRESTError:NumMessages:
+         lcError = lcError + "," + loError:GetMessage(lii).
+      END.
+
+      IF lcError > ""
+      THEN RETURN LEFT-TRIM(lcError,",").
+
+      RETURN "Error was thrown but no error message available".
+
+   END CATCH.
   
-    FINALLY:
-       IF VALID-OBJECT(objRESTClient)
-       THEN DELETE OBJECT objRESTClient.
-    END FINALLY.
- 
+   FINALLY:
+      IF VALID-OBJECT(objRESTClient)
+      THEN DELETE OBJECT objRESTClient.
+   END FINALLY.
+
 END.
 */
 RETURN "".
