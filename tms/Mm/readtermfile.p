@@ -295,13 +295,9 @@ REPEAT:
       END.
    END.
    ELSE DO:
-      IF fIsFixedOnly(lcCLIType) THEN DO:
+      IF fIsFixedOnly(lcCLIType) OR
+         ( NOT fIsConvergentORFixedOnly(lcCLIType) ) THEN DO:
          fError("Partial termination not allowed for fixed only CLIType: " + lcCLIType + " use FULL termination").
-         NEXT.
-      END.
-
-      IF NOT fIsConvergentORFixedOnly(lcCLIType) THEN DO:
-         fError("Partial termination not allowed for mobile only CLIType: " + lcCLIType + " use FULL termination").
          NEXT.
       END.
 
@@ -327,7 +323,7 @@ REPEAT:
             END.
          END.
 
-         IF lcTerminationType EQ "FIXED" THEN DO:
+         ELSE IF lcTerminationType EQ "FIXED" THEN DO:
 
 
             FIND FIRST OldCliType WHERE
