@@ -26,6 +26,7 @@
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/multitenantfunc.i}
+{Func/extralinefunc.i}
 
 DEF VAR lcCLITypeTransName     AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.
