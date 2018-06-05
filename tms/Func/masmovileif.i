@@ -577,6 +577,46 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
 END. /*fMasCancel_FixedLineOrder*/
 
 
+FUNCTION fMasGet_FixedNbr RETURNS CHAR
+   (icPostalCode AS CHAR ,
+    OUTPUT ocNum AS CHAR,
+    OUTPUT ocResultCode AS CHAR,
+    OUTPUT ocResultDesc AS CHAR): /*Error message*/
+
+   DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
+   DEF VAR lcResponse AS CHAR NO-UNDO.
+
+   add_string(param_toplevel_id, "", icPostalCOde).
+
+   IF gi_xmlrpc_error NE 0 THEN
+         RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
+   xmlrpc_initialize(FALSE).
+   fMasXMLGenerate_test("getnewResource").
+   RUN pRPCMethodCall("masmovil.getNewResource", TRUE).
+
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocResultCode = STRING(gi_xmlrpc_error).
+      ocResultDesc = gc_xmlrpc_error.
+      RETURN "NW_ERROR".
+   END.
+
+   lcXMLStruct = get_struct(response_toplevel_id,"0").
+   lcResponse = validate_struct(lcXMLStruct,"idNumero,fechaAsignacionCmt,fechaUltimoCambio,numero!,_links").
+   IF gi_xmlrpc_error NE 0 THEN
+      RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
+
+   ocNum = get_string(lcXMLStruct,"numero").
+   
+   IF gi_xmlrpc_error NE 0 THEN
+      RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
+
+   IF NOT ocNum > "" THEN
+      RETURN "ERROR: Number not returned. Area: " + icPostalCode.
+
+   RETURN "OK".
+
+END.
+
 FUNCTION fSetSpeed_Masmovil RETURNS CHAR
    (iiMsRequest AS INT ,
     icDownloadSpeed AS CHAR,
