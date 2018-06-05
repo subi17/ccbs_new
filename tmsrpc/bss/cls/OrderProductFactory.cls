@@ -70,6 +70,12 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
          CASE loItemObject:GetCharacter("type"):
             WHEN "acc"
             THEN loOrderProduct = NEW bss.cls.OrderProductACC(ioOrder).
+            WHEN "main"
+            THEN loOrderProduct = NEW bss.cls.OrderProductPC(ioOrder).
+            WHEN "mobile-subscription"
+            THEN loOrderProduct = NEW bss.cls.OrderProductSubscription(ioOrder).
+            WHEN "sim"
+            THEN loOrderProduct = NEW bss.cls.OrderProductSIM(ioOrder).
             OTHERWISE
             UNDO, THROW
               NEW ParamError(SUBSTITUTE("Invalid items type '&1'",

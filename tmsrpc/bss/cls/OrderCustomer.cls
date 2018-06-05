@@ -169,14 +169,22 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY FoundationDate AS DATE NO-UNDO
       GET.
       SET.
-
+      
+   /*DEFINE PUBLIC PROPERTY BillingAcct AS CLASS bss.cls.OrderBillingAcct NO-UNDO 
+      GET.
+      SET.*/
+      
+   DEFINE PUBLIC PROPERTY isShipCustomer AS LOGICAL NO-UNDO
+      GET.
+      SET.
    DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
 
    CONSTRUCTOR PUBLIC OrderCustomer
      ( ioOrder AS CLASS bss.cls.Order ):
       aoOrder = ioOrder.
    END CONSTRUCTOR.
-
+   
+   
 	DESTRUCTOR PUBLIC OrderCustomer():
       aoOrder = ?.
 	END DESTRUCTOR.
@@ -244,6 +252,10 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
+	      
+      DEFINE VARIABLE loAddrValidObject AS CLASS JsonObject NO-UNDO.
+      
+      ASSIGN loAddrValidObject = ioJsonObject:GetJsonObject("address-validation-data") WHEN ioJsonObject:Has("address-validation-data").
 
       DEFINE VARIABLE lcSupportedTitles AS CHARACTER INITIAL
          "Sr.,Mr.,Sr,Mr,Mrs.,Sra.,Mrs,Sra" NO-UNDO.
@@ -285,59 +297,94 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
       /* New customer, throw error if any of the following is missing */
       IF THIS-OBJECT:CustNum EQ 0
-      THEN ASSIGN
-         THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname")
-         THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname")
-         THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2")
-         THIS-OBJECT:Language           = mGetLanguage(ioJsonObject:GetCharacter("language"))
-         THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality")
-         THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday")
-         THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street")
-         THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city")
-         THIS-OBJECT:Region             = ioJsonObject:GetCharacter("region")
-         THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zip")
-         THIS-OBJECT:Country            = mGetCountry(ioJsonObject:GetCharacter("country"))
-         THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email")
-         THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number")
-         THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number")
-         THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data")
-         THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email")
-         THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd")
-         THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark_post")
-         THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark_post_3rd")
-         THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark_sms")
-         THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark_sms_3rd")
-         THIS-OBJECT:AddressCodC        = ioJsonObject:GetCharacter("city_code")
-         THIS-OBJECT:AddressCodP        = ioJsonObject:GetCharacter("street_code")
-         THIS-OBJECT:AddressCodM        = ioJsonObject:GetCharacter("municipality_code").
-
+      THEN DO:      
+      
+          ASSIGN
+              THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname")
+              THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname")
+              THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2")
+              THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality")
+              THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street")
+              THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city")
+              THIS-OBJECT:Region             = ioJsonObject:GetCharacter("region")
+              THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zip")
+              THIS-OBJECT:Country            = mGetCountry(ioJsonObject:GetCharacter("country"))
+              THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email")
+              THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number")
+              THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number")
+              .
+              
+          IF THIS-OBJECT:isShipCustomer = FALSE
+          THEN DO:
+              
+              ASSIGN 
+                  THIS-OBJECT:Language           = mGetLanguage(ioJsonObject:GetCharacter("language"))
+                  THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data")
+                  THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email")
+                  THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd")
+                  THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark_post")
+                  THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark_post_3rd")
+                  THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark_sms")
+                  THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark_sms_3rd")
+                  THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday").
+              
+          END.
+             
+          IF VALID-OBJECT (loAddrValidObject) = NO 
+          THEN ASSIGN
+                  THIS-OBJECT:AddressCodC        = ioJsonObject:GetCharacter("city_code")
+                  THIS-OBJECT:AddressCodP        = ioJsonObject:GetCharacter("street_code")
+                  THIS-OBJECT:AddressCodM        = ioJsonObject:GetCharacter("municipality_code").
+          ELSE ASSIGN 
+                  THIS-OBJECT:AddressCodC        = loAddrValidObject:GetCharacter("city_code")
+                  THIS-OBJECT:AddressCodP        = loAddrValidObject:GetCharacter("street_code")
+                  THIS-OBJECT:AddressCodM        = loAddrValidObject:GetCharacter("municipality_code").
+                 
+      END.
       /* Existing customer, just update the information */
-      ELSE
-      ASSIGN
-         THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname") WHEN ioJsonObject:Has("fname")
-         THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname") WHEN ioJsonObject:Has("lname")
-         THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2") WHEN ioJsonObject:Has("lname2")
-         THIS-OBJECT:Language           = mGetLanguage(ioJsonObject:GetCharacter("language")) WHEN ioJsonObject:Has("language")
-         THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality") WHEN ioJsonObject:Has("nationality")
-         THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday") WHEN ioJsonObject:Has("birthday")
-         THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street") WHEN ioJsonObject:Has("street")
-         THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city") WHEN ioJsonObject:Has("city")
-         THIS-OBJECT:Region             = ioJsonObject:GetCharacter("region") WHEN ioJsonObject:Has("region")
-         THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zip") WHEN ioJsonObject:Has("zip")
-         THIS-OBJECT:Country            = mGetCountry(ioJsonObject:GetCharacter("country")) WHEN ioJsonObject:Has("country")
-         THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email") WHEN ioJsonObject:Has("email")
-         THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number") WHEN ioJsonObject:Has("sms_number")
-         THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number") WHEN ioJsonObject:Has("phone_number")
-         THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data") WHEN ioJsonObject:Has("mark_dont_share_personal_data")
-         THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email") WHEN ioJsonObject:Has("mark_email")
-         THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd") WHEN ioJsonObject:Has("mark_email_3rd")
-         THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark_post") WHEN ioJsonObject:Has("mark_post")
-         THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark_post_3rd") WHEN ioJsonObject:Has("mark_post_3rd")
-         THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark_sms") WHEN ioJsonObject:Has("mark_sms")
-         THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark_sms_3rd") WHEN ioJsonObject:Has("mark_sms_3rd")
-         THIS-OBJECT:AddressCodC        = ioJsonObject:GetCharacter("city_code") WHEN ioJsonObject:Has("city_code")
-         THIS-OBJECT:AddressCodP        = ioJsonObject:GetCharacter("street_code") WHEN ioJsonObject:Has("street_code")
-         THIS-OBJECT:AddressCodM        = ioJsonObject:GetCharacter("municipality_code") WHEN ioJsonObject:Has("municipality_code").
+      ELSE DO:
+      
+          ASSIGN
+             THIS-OBJECT:FirstName          = ioJsonObject:GetCharacter("fname") WHEN ioJsonObject:Has("fname")
+             THIS-OBJECT:SurName1           = ioJsonObject:GetCharacter("lname") WHEN ioJsonObject:Has("lname")
+             THIS-OBJECT:SurName2           = ioJsonObject:GetCharacter("lname2") WHEN ioJsonObject:Has("lname2")
+             THIS-OBJECT:Language           = mGetLanguage(ioJsonObject:GetCharacter("language")) WHEN ioJsonObject:Has("language")
+             THIS-OBJECT:Nationality        = ioJsonObject:GetCharacter("nationality") WHEN ioJsonObject:Has("nationality")
+             THIS-OBJECT:BirthDay           = ioJsonObject:GetDate("birthday") WHEN ioJsonObject:Has("birthday")
+             THIS-OBJECT:Street             = ioJsonObject:GetCharacter("street") WHEN ioJsonObject:Has("street")
+             THIS-OBJECT:PostOffice         = ioJsonObject:GetCharacter("city") WHEN ioJsonObject:Has("city")
+             THIS-OBJECT:Region             = ioJsonObject:GetCharacter("region") WHEN ioJsonObject:Has("region")
+             THIS-OBJECT:ZipCode            = ioJsonObject:GetCharacter("zip") WHEN ioJsonObject:Has("zip")
+             THIS-OBJECT:Country            = mGetCountry(ioJsonObject:GetCharacter("country")) WHEN ioJsonObject:Has("country")
+             THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email") WHEN ioJsonObject:Has("email")
+             THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number") WHEN ioJsonObject:Has("sms_number")
+             THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number") WHEN ioJsonObject:Has("phone_number")
+             THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data") WHEN ioJsonObject:Has("mark_dont_share_personal_data")
+             THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email") WHEN ioJsonObject:Has("mark_email")
+             THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd") WHEN ioJsonObject:Has("mark_email_3rd")
+             THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark_post") WHEN ioJsonObject:Has("mark_post")
+             THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark_post_3rd") WHEN ioJsonObject:Has("mark_post_3rd")
+             THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark_sms") WHEN ioJsonObject:Has("mark_sms")
+             THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark_sms_3rd") WHEN ioJsonObject:Has("mark_sms_3rd")
+             .
+             IF VALID-OBJECT(loAddrValidObject)
+             THEN ASSIGN
+                      THIS-OBJECT:AddressCodC = loAddrValidObject:GetCharacter("city_code") WHEN loAddrValidObject:Has("city_code")
+                      THIS-OBJECT:AddressCodP = loAddrValidObject:GetCharacter("street_code") WHEN loAddrValidObject:Has("street_code")
+                      THIS-OBJECT:AddressCodM = loAddrValidObject:GetCharacter("municipality_code") WHEN loAddrValidObject:Has("municipality_code").
+             ELSE ASSIGN 
+                      THIS-OBJECT:AddressCodC = ioJsonObject:GetCharacter("city_code") WHEN ioJsonObject:Has("city_code")
+                      THIS-OBJECT:AddressCodP = ioJsonObject:GetCharacter("street_code") WHEN ioJsonObject:Has("street_code")
+                      THIS-OBJECT:AddressCodM = ioJsonObject:GetCharacter("municipality_code") WHEN ioJsonObject:Has("municipality_code").
+                              
+      END.   
+      IF ioJsonObject:Has("billing-accounts")
+      THEN DO:
+             
+             /*Need to check with kiran and Pass the aoOrder to Constructor */
+             
+             
+      END.
 
       /* BankCode is not mandatory when the customer is prepaid customer
          so we need to check the value somewhere else.
