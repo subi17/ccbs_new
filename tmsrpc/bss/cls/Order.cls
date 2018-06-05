@@ -31,8 +31,20 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY aoCustomer AS CLASS bss.cls.Customer NO-UNDO
       GET.
       SET.
+      
+   DEFINE PUBLIC PROPERTY OrderPaymentData AS CLASS JsonObject NO-UNDO
+       GET.
+       SET.    
+    
+   DEFINE PUBLIC PROPERTY OrderInspectionData AS CLASS JsonObject NO-UNDO
+       GET.
+       SET.
 
    DEFINE PUBLIC PROPERTY ContractId AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY loCustAcct AS CLASS JsonObject NO-UNDO
       GET.
       SET.
 
@@ -55,6 +67,18 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY MobSubCustNum AS INTEGER NO-UNDO
       GET.
       SET.
+      
+   DEFINE PUBLIC PROPERTY isACCOrder AS LOGICAL NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY lcCLI AS CHARACTER NO-UNDO
+      GET.
+      SET(icCLI AS CHARACTER):
+          
+          ASSIGN THIS-OBJECT:lcCLI = icCLI.
+          
+      END SET.
 
    /* A value for this property is populated in OrderProduct class */
    DEFINE PUBLIC PROPERTY MsSeq AS INTEGER NO-UNDO
@@ -91,6 +115,11 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 
       IF VALID-OBJECT(aoOrderProductFactory)
       THEN DELETE OBJECT aoOrderProductFactory.
+      
+      ASSIGN OrderPaymentData      =  ?
+             OrderInspectionData   =  ?
+             loCustAcct            =  ?
+             .
 
 	END DESTRUCTOR.
 
@@ -99,18 +128,31 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 
       DEFINE VARIABLE loAgrCust     AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE ldaCreateDate AS DATE             NO-UNDO.
+      
+      ASSIGN
+         loAgrCust            =   ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
+         loCustAcct           =   ioJsonObject:GetJsonObject("customer-account")   WHEN ioJsonObject:Has("customer-account")
+         OrderPaymentData     =   ioJsonObject:GetJsonObject("payment")            WHEN ioJsonObject:Has("payment")
+         OrderInspectionData  =   ioJsonObject:GetJsonObject("order-inspection")   WHEN ioJsonObject:Has("order-inspection")
+         aoCustomer           =   NEW bss.cls.Customer().
+         
+      IF VALID-OBJECT(loAgrCust) 
+      THEN DO:          
+          IF loAgrCust:Has("custnum")
+          THEN aoCustomer:mFindData(loAgrCust:GetInteger("custnum")).
+          ELSE aoCustomer:mCreateData(loAgrCust).
+          
+          ASSIGN THIS-OBJECT:isACCOrder = TRUE.
+      END. 
+      ELSE IF VALID-OBJECT(loCustAcct)
+      THEN DO:
+          IF loCustAcct:Has("custnum")
+          THEN aoCustomer:mFindData(loCustAcct:GetInteger("custnum")).
+      END.      
 
       ASSIGN
-         loAgrCust = ioJsonObject:GetJsonObject("agreement-customer")
-         aoCustomer = NEW bss.cls.Customer().
-
-      IF loAgrCust:Has("custnum")
-      THEN aoCustomer:mFindData(loAgrCust:GetInteger("custnum")).
-      ELSE aoCustomer:mCreateData(loAgrCust).
-
-      ASSIGN
-         ldaCreateDate = ioJsonObject:GetDate("created-at")
-         THIS-OBJECT:ContractId   = ioJsonObject:GetCharacter("contractid")
+         ldaCreateDate            = ioJsonObject:GetDate("created-at")
+         THIS-OBJECT:ContractId   = ioJsonObject:GetCharacter("contractid") 
          THIS-OBJECT:Salesman     = ioJsonObject:GetCharacter("salesman")
          THIS-OBJECT:OrderChannel = ioJsonObject:GetCharacter("channel")
          THIS-OBJECT:CrStamp      = YEAR(ldaCreateDate) * 10000 +
@@ -138,11 +180,11 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          Order.OrderId       = NEXT-VALUE(OrderId)
          THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
          Order.StatusCode    = {&ORDER_STATUS_ONGOING}
-         Order.OrderType     = {&ORDER_TYPE_ACC}
+         Order.OrderType     = (IF THIS-OBJECT:isACCOrder THEN {&ORDER_TYPE_ACC} ELSE {&ORDER_TYPE_NEW})
          Order.Source        = "bssapi"
          Order.CustNum       = aoCustomer:CustNum
-         Order.MsSeq         = THIS-OBJECT:MsSeq
-         Order.CLI           = THIS-OBJECT:CLI
+         Order.MsSeq         = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:MsSeq ELSE NEXT-VALUE(MobSub))
+         Order.CLI           = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:CLI   ELSE THIS-OBJECT:lcCLI)
          Order.ContractID    = THIS-OBJECT:ContractId
          Order.SalesMan      = THIS-OBJECT:Salesman
          Order.OrderChannel  = THIS-OBJECT:OrderChannel

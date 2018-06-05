@@ -39,17 +39,17 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 	METHOD PUBLIC VOID mFindData
 	  (iiCustNum AS INTEGER):
 
-      DEFINE BUFFER Customer FOR Customer.
+      DEFINE BUFFER bfCustomer FOR Customer.
+      
+      FIND FIRST bfCustomer NO-LOCK WHERE bfCustomer.CustNum = iiCustNum NO-ERROR.
 
-      FIND Customer NO-LOCK WHERE Customer.CustNum = iiCustNum NO-ERROR.
-
-      IF NOT AVAILABLE Customer
+      IF NOT AVAILABLE bfCustomer
       THEN UNDO, THROW NEW ParamError
                (SUBSTITUTE("customer_not_found|&1", iiCustNum)).
 
       ASSIGN
-         THIS-OBJECT:CustNum  = Customer.CustNum
-         THIS-OBJECT:Category = Customer.Category.
+         THIS-OBJECT:CustNum  = bfCustomer.CustNum
+         THIS-OBJECT:Category = bfCustomer.Category.
 
 	END METHOD.
 

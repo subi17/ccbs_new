@@ -11,6 +11,7 @@
 
 USING Progress.Lang.*.
 USING profcgi.RPC.JSON.InternalError.
+USING profcgi.RPC.JSON.ParamError.
 USING Progress.Json.ObjectModel.JsonObject.
 USING Progress.Json.ObjectModel.JsonArray.
 
@@ -68,8 +69,17 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
 
       ASSIGN
          ActionType         = ioItemObject:GetCharacter("type")
-         ProductID          = ioItemObject:GetCharacter("product-id") 
+         ProductID          = ioItemObject:GetCharacter("product-id")      WHEN ioItemObject:Has("product-id")
          ProductOfferingID  = ioItemObject:GetCharacter("product-offering-id").
+         
+     IF ActionType = "mobile-subscription" 
+     THEN DO:
+         
+         IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CliType = ProductID)
+         THEN UNDO, THROW NEW ParamError
+               (SUBSTITUTE("Unknown Product: ", ProductID)).
+             
+     END.
 
       mCreateDataForType(ioItemObject).
 
