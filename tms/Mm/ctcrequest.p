@@ -350,23 +350,21 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
                   bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:   
 
          liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
-         IF liOrderId EQ 0 THEN fReqError("OrderID not found").
-         
-         /* This call makes synchronous termination request to MuleDB */ 
-         ocResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
+         IF liOrderId EQ 0
+            THEN ocResult = "OrderID not found".
+                    
+         /* This call makes synchronous termination request to MuleDB */
+         ELSE ocResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
       END.   
    END.
 
-   IF ocResult > "" THEN DO:
-      FIND FIRST MobSub WHERE MobSub.brand EQ "1" AND
-                             MobSub.MsSeq = MSrequest.MsSeq NO-LOCK NO-ERROR.
-      IF AVAIL MobSub THEN    
-         Func.Common:mWriteMemo("MobSub",
-                                STRING(MSrequest.MsSeq),
-                                MobSub.CustNum,
-                                "Fixed number termination failed",
-                                ocResult).
-         fReqError("Fixed number termination failed: " +  ocResult).                                
+   IF ocResult > "" THEN DO:  
+      Func.Common:mWriteMemo("MobSub",
+                             STRING(MSrequest.MsSeq),
+                             MobSub.CustNum,
+                             "Fixed number termination failed",
+                             ocResult).
+      fReqError("Fixed number termination failed: " +  ocResult).                                
    END.
    ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.     
 END.   

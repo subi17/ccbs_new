@@ -17,7 +17,6 @@ DEF VAR lcDSSResult                AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidBundles       AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO. 
-DEF VAR liOrderId                  AS INT  NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 
@@ -156,6 +155,7 @@ PROCEDURE pSolog:
    DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
    DEF VAR liError       AS INT NO-UNDO.
    DEF VAR lcResult      AS CHAR NO-UNDO.
+   DEF VAR liOrderId     AS INT  NO-UNDO.
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -212,10 +212,11 @@ PROCEDURE pSolog:
                   MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
 
                liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
-               IF liOrderId EQ 0 THEN fReqError("OrderID not found").
-               
+               IF liOrderId EQ 0
+                  THEN lcResult = "OrderID not found".
                /* This call makes synchronous termination request to MuleDB */
-               lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+               ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+               
                IF lcResult > "" THEN DO:
                   Func.Common:mWriteMemo("MobSub",
                               STRING(BufMobsub.MsSeq),
