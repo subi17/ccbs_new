@@ -137,8 +137,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       END.
 
       IF ldeProFeeAmount <> 0 THEN 
-          add_double(lcResultStruct,"pro_extra_monthly_fee", FMItem.Amount).
-      ELSE IF fCLITypeIsExtraLine(bf_CliType.CliType) THEN 
+          add_double(lcResultStruct,"pro_extra_monthly_fee", ldeProFeeAmount).
+      ELSE IF fCLITypeIsExtraLine(CLIType.CliType) THEN 
           add_double(lcResultStruct,"pro_extra_monthly_fee", 0.0). /* Web is dependent on this 0.0 value */
    END.   
 
