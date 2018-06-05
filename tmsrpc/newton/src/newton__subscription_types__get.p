@@ -34,6 +34,7 @@ DEF VAR ldaCont15PromoEnd      AS DATE NO-UNDO.
 DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
 DEF VAR lcProFeeContract       AS CHAR NO-UNDO. 
+DEF VAR ldeProFeeAmount        AS DECI NO-UNDO.
 
 FUNCTION fGetSLAmount RETURNS DECIMAL 
   (icServiceLimitGroup AS CHARACTER,
@@ -118,6 +119,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.
 
    IF lcProFeeContract > "" THEN
+   DO:
+      ASSIGN ldeProFeeAmount = 0.
+
       FOR FIRST DayCampaign NO-LOCK WHERE
                 DayCampaign.Brand  = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = lcProFeeContract AND
@@ -128,8 +132,14 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                 FMItem.PriceList = "PRO_" + CLIType.CLIType AND
                 FMItem.FromDate <= TODAY AND
                 FMItem.Todate >= TODAY:
-         add_double(lcResultStruct,"pro_extra_monthly_fee", FMItem.Amount).
-       END.
+         ASSIGN ldeProFeeAmount = FMItem.Amount.
+      END.
+
+      IF ldeProFeeAmount <> 0 THEN 
+          add_double(lcResultStruct,"pro_extra_monthly_fee", FMItem.Amount).
+      ELSE IF fCLITypeIsExtraLine(bf_CliType.CliType) THEN 
+          add_double(lcResultStruct,"pro_extra_monthly_fee", 0.0). /* Web is dependent on this 0.0 value */
+   END.   
 
    IF CLIType.UsageType = 1 THEN
       add_string(lcResultStruct,"usage_type", "voice").
