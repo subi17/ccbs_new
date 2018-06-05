@@ -122,9 +122,6 @@ IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
    END.
 END.
 
-IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES}) > 0 THEN
-   fOrderCancellationToAPI(Order.OrderId).
-
 fSetOrderStatus(Order.OrderId,icOrderStatus).
 
 fMarkOrderStamp(Order.OrderID,

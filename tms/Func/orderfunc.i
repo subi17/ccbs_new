@@ -178,6 +178,24 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                                   0).
                END.
 
+               IF (bfOrder.OrderType EQ {&ORDER_TYPE_NEW} OR 
+                   bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR 
+                   bfOrder.OrderType EQ {&ORDER_TYPE_STC})   AND 
+                   bfOrder.CLIType BEGINS "CONTFH"           THEN DO:
+
+                  CREATE FusionMessage.
+                  ASSIGN FusionMessage.MessageSeq      = NEXT-VALUE(FusionMessageSeq)
+                         FusionMessage.OrderID         = bfOrder.OrderID
+                         FusionMessage.MsSeq           = bfOrder.MsSeq
+                         FusionMessage.CreatedTS       = Func.Common:mMakeTS()
+                         FusionMessage.UpdateTS        = FusionMessage.CreatedTS
+                         FusionMessage.MessageType     = {&FUSIONMESSAGE_TYPE_CANCEL_APPOINTMENT}
+                         FusionMessage.MessageStatus   = {&FUSIONMESSAGE_STATUS_HANDLED}
+                         FusionMessage.Source          = {&FUSIONMESSAGE_SOURCE_TMS}
+                         FusionMessage.OrderType       = STRING(bfOrder.OrderType).
+
+               END.    
+
                FIND FIRST OrderAccessory OF bfOrder WHERE
                           OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
                           NO-LOCK NO-ERROR.

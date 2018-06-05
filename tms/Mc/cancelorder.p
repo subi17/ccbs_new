@@ -42,9 +42,6 @@ IF NOT AVAIL Order THEN RETURN "".
 
 IF LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 THEN RETURN "".
 
-IF LOOKUP(Order.StatusCode, {&ORDER_ROI_STATUSES}) > 0 THEN 
-   fOrderCancellationToAPI(Order.OrderId).
-
 IF ilCheckLOStatus THEN DO:
 
    FIND FIRST OrderDelivery OF Order NO-LOCK USE-INDEX OrderId NO-ERROR.
