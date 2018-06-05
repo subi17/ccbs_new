@@ -2187,7 +2187,7 @@ PROCEDURE pUpdateDSSAccount:
                                         INPUT "DELETE",
                                         INPUT "",      /* Optional param list */
                                         INPUT iiMainRequest,
-                                        INPUT ldeLastDayEndStamp,
+                                        INPUT Func.Common:mMakeTS(),
                                         INPUT {&REQUEST_SOURCE_STC},
                                         INPUT lcBundleId).
                   /* Remove subs. immediately */
@@ -2253,7 +2253,7 @@ PROCEDURE pUpdateDSSAccount:
                                         INPUT "DELETE",
                                         INPUT "",     /* Optional param list */
                                         INPUT iiMainRequest,
-                                        INPUT ldeLastDayEndStamp,
+                                        INPUT Func.Common:mMakeTS(),
                                         INPUT {&REQUEST_SOURCE_STC},
                                         INPUT lcBundleId).
 

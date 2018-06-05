@@ -651,7 +651,7 @@ PROCEDURE pTerminate:
                             FMItem.FeeModel     EQ FeeModel.FeeModel AND
                             FMItem.Todate       >= TODAY             AND
                             FMItem.BrokenRental EQ 1: /* full month */
-                     ttContract.ActTS = ldeMonthEndTS.
+                     ttContract.ActTS = ldCurrTS.
                   END.
                END.
             END.
