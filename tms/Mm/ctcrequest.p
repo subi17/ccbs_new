@@ -39,11 +39,9 @@ DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
 DEF VAR liError                AS INT  NO-UNDO.
-DEF VAR liOrderId              AS INT  NO-UNDO.
 
 DEF BUFFER lbMobSub     FOR MobSub.
 DEF BUFFER bMobSubCust  FOR MobSub.
-DEF BUFFER bCLIType     FOR CLIType.
 
 FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
 
@@ -338,37 +336,6 @@ IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR
 
 /* Check sub-requests */      
 IF fChkSubRequest(MSrequest.MSRequest) THEN  fReqStatus(8,"").          
-
-IF fIsConvergenceTariff(MobSub.CLIType) AND
-   NOT fIsConvergenceTariff(MSRequest.ReqCParam2) THEN DO:
-   MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
-   
-   IF fHasConvergenceTariff(MSrequest.MsSeq) THEN DO:
-      IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                  bCLIType.Brand      = Syst.Var:gcBrand AND
-                  bCLIType.CLIType    = MSRequest.ReqCParam2 AND
-                  bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:   
-
-         liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
-         IF liOrderId EQ 0
-            THEN ocResult = "OrderID not found".
-                    
-         /* This call makes synchronous termination request to MuleDB */
-         ELSE ocResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
-      END.   
-   END.
-
-   IF ocResult > "" THEN DO:  
-      Func.Common:mWriteMemo("MobSub",
-                             STRING(MSrequest.MsSeq),
-                             MobSub.CustNum,
-                             "Fixed number termination failed",
-                             ocResult).
-      fReqError("Fixed number termination failed: " +  ocResult).                                
-   END.
-   ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.     
-END.   
-   
 
 /* YDR-1847 */
 fAdditionalLineSTC(iiReqId,

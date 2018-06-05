@@ -63,6 +63,8 @@ DEF VAR ldeActStamp        AS DEC  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
+DEF VAR liOrderId           AS INT  NO-UNDO.
+DEF VAR lcResult            AS CHAR NO-UNDO.
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -201,6 +203,38 @@ END.
 llOldPayType = (bOldType.PayType = 2).
   
 FIND Customer OF Mobsub NO-LOCK. 
+
+
+IF fIsConvergenceTariff(MobSub.CLIType) AND
+   NOT fIsConvergenceTariff(MSRequest.ReqCParam2) THEN DO:
+   MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+   
+   IF fHasConvergenceTariff(MSrequest.MsSeq) THEN DO:
+      IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                  bCLIType.Brand      = Syst.Var:gcBrand AND
+                  bCLIType.CLIType    = MSRequest.ReqCParam2 AND
+                  bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:   
+
+         liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
+         IF liOrderId EQ 0
+            THEN lcResult = "OrderID not found".
+                    
+         /* This call makes synchronous termination request to MuleDB */
+         ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
+      END.   
+   END.
+
+   IF lcResult > "" THEN DO:  
+      Func.Common:mWriteMemo("MobSub",
+                             STRING(MSrequest.MsSeq),
+                             MobSub.CustNum,
+                             "Fixed number termination failed",
+                             lcResult).
+      fReqError("Fixed number termination failed: " +  lcResult).                                
+   END.
+   ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.     
+END.
+
 
 /* first round of status 7/8 */
 IF MsRequest.ReqCParam4 = "" THEN DO:
