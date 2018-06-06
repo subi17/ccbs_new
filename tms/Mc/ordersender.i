@@ -324,7 +324,7 @@
 
                
             /* Renove handling */ 
-            IF Order.OrderType = 2 THEN DO:
+            IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN DO:
               
                /* YBP-588 */
                /* prevent duplicate renove request creation */
@@ -392,6 +392,28 @@
 
                RELEASE Order.
                NEXT {1}.
+            END.
+            
+            IF Order.OrderType EQ {&ORDER_TYPE_ACC} THEN DO:
+
+               RUN Mm/acc_order.p(Order.OrderID, OUTPUT liRequestID).
+               
+               IF liRequestID > 0 THEN
+                  /* YBP-597 */ 
+                  llOrdStChg = fSetOrderStatus(Order.OrderId,"12").
+               ELSE DO:
+                  /* YBP-598 */ 
+                  Func.Common:mWriteMemo("Order",
+                                   STRING(Order.OrderID),
+                                   0,
+                                   "ACC request creation failed",
+                                   RETURN-VALUE).
+                  llOrdStChg = fSetOrderStatus(Order.OrderId,"4").
+               END.
+
+               RELEASE Order.
+               NEXT {1}.
+            
             END.
              
              /* YBP-594 */ 

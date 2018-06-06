@@ -8,7 +8,6 @@
 {Func/forderstamp.i}
 {Func/orderchk.i}
 {Func/orderfunc.i}
-{Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
 {Func/profunc.i}
 {Func/main_add_lines.i}
@@ -99,15 +98,16 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrder).
 END.               
       
-FIND FIRST OrderCustomer WHERE
-   OrderCustomer.Brand = Syst.Var:gcBrand AND
-   OrderCustomer.OrderId = Order.OrderId AND
-   OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+FIND OrderCustomer WHERE
+     OrderCustomer.Brand = Syst.Var:gcBrand AND
+     OrderCustomer.OrderId = Order.OrderId AND
+     OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
-llCompanyScoringNeeded = 
-   (Order.CREventQty = 0 AND 
-   Order.CredOk = FALSE AND
-   OrderCustomer.CustidType = "CIF").
+IF AVAIL OrderCustomer THEN
+   llCompanyScoringNeeded = 
+      (Order.CREventQty = 0 AND 
+      Order.CredOk = FALSE AND
+      OrderCustomer.CustidType = "CIF").
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 
@@ -161,7 +161,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
     Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT})  AND /* shouldn't never get this value because of YDR-2575 */
     Order.OrderType  EQ {&ORDER_TYPE_STC}           AND
-    fIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
+    Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
 
    IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP_RETENTION}).
@@ -343,7 +343,7 @@ END.
 
 /* MNP Retention Project */
 IF Order.OrderChannel BEGINS "retention" AND
-   fIsMNPOutOngoing(INPUT Order.CLI) THEN DO:
+   Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) THEN DO:
    lcNewStatus = {&ORDER_STATUS_MNP_RETENTION}.
 END. /* IF Order.statuscode NE "4" AND */
 
@@ -430,9 +430,10 @@ END.
 /* Release pending additional lines, in case of pending convergent 
    or mobile main line order is released */
 /* YTS-10832 fix, checking correct status of order */
-IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
-   lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
-   lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+IF LOOKUP(STRING(Order.OrderType),"0,1,3,4") > 0 AND
+   (lcNewStatus = {&ORDER_STATUS_NEW}                 OR
+    lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
+    lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE}) THEN DO:
   
    fActionOnAdditionalLines (OrderCustomer.CustIdType,
                              OrderCustomer.CustID,

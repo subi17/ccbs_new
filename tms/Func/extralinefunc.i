@@ -197,7 +197,6 @@ FUNCTION fCheckForMandatoryExtraLine RETURNS LOGICAL
                      Order.Brand        EQ Syst.Var:gcBrand                    AND 
                      Order.MultiSimId   EQ iiMultiSimId                        AND
                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0   AND 
-                     Order.CustNum      EQ iiCustNum                           AND
                      Order.CLIType      EQ ENTRY(1,TMSRelation.ChildValue,"_") AND 
                      Order.OrderType    NE {&ORDER_TYPE_RENEWAL}               AND 
                      Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE})          THEN
