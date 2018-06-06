@@ -333,9 +333,10 @@ DEF BUFFER bMNPDetails FOR MNPDetails.
 DEF BUFFER bMNPProcess FOR MNPProcess.
 DEF BUFFER bMNPSub FOR MNPSub.
 
+DEFINE VARIABLE lcbarringstatus AS CHARACTER NO-UNDO INITIAL "Debt_Hotl,Debt_Hotl,Debt_HOTLP".
+DEFINE VARIABLE lcResCatNames   AS CHARACTER NO-UNDO INITIAL "RESIDENTIAL NIF,RESIDENTIAL NIE,UNKNOWN CONSUMER,CONSUMER PASSPORT,VIP - MM GROUP EXTERNAL CUSTOMER,SELF EMPLOYEE NIF,SELF EMPLOYEE NIE,DEFAULT CUSTOMERS".
 
-
-lcRetExcludeFile = lcRootDir + "/spool/" + "mnp_retention_exclude_" +
+lcRetExcludeFile = lcRootDir + "/spool/" + "mnp_retention_residential_exclude_" +
                    STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") +
                    "_" + STRING(TIME) + ".txt".
 
@@ -351,7 +352,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
       FIRST MNPDetails NO-LOCK WHERE
             MNPDetails.mnpseq = MNPProcess.mnpseq:
 
-      IF mnpdetails.statuslimitts < Func.Common:mMakeTS() THEN NEXT MNP_LOOP.
+      IF mnpdetails.statuslimitts < Func.Common:mMakeTS() THEN NEXT MNP_LOOP. 
       /* IF mnpdetails.custidtype EQ "CIF" THEN NEXT MNP_LOOP. 
       Commented out YOT-4095 */
    
@@ -367,56 +368,77 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
          FIND FIRST Segmentation NO-LOCK WHERE
                     Segmentation.MsSeq = MNPSub.MsSeq NO-ERROR.
          IF AVAILABLE Segmentation THEN DO:
-
             IF MobSub.PayType = TRUE THEN
-               liExcludeOffset = -720. /* Prepaid 30 days (YOT-4929) */
-            ELSE
-               liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
-
-            /* Exclude Prepaid/postpaid clients from generated retention file */
-            FOR EACH bMNPSub NO-LOCK WHERE
-                     bMNPSub.MsSeq = MobSub.MsSeq,
-               FIRST bMNPProcess NO-LOCK WHERE
-                     bMNPProcess.MNPSeq = bMNPSub.MNPSeq AND
-                     bMNPProcess.MNPType = {&MNP_TYPE_OUT} AND
-                     bMNPProcess.MNPSeq NE MNPProcess.MNPSeq.
-               IF bMNPProcess.CreatedTS > Func.Common:mOffSetTS(liExcludeOffset) THEN DO:
-                  PUT STREAM sExclude UNFORMATTED
-                     MobSub.CLI ";R1"
-                     SKIP.
-                  NEXT MNP_SUB_LOOP.
-               END.
+            DO:
+               PUT STREAM sExclude UNFORMATTED
+                        MobSub.CLI ";R1"
+                        SKIP.
+               NEXT MNP_SUB_LOOP.
             END.
-
-            /* already sent */
+                              
+            liExcludeOffset = -720. /* Prepaid 30 days (YDR-2887) */
+             
             IF mnpsub.RetentionPlatform > "" THEN NEXT.
 
-            /* YOT-2301 - Exclude all data subs. and segmentation code with SN */
-            IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
-               Segmentation.SegmentCode = "SN" AND
-               MobSub.ActivationTS > Func.Common:mOffSetTS(liExcludeOffSet) THEN DO:
+            IF MobSub.ActivationTS > Func.Common:mOffSetTS(liExcludeOffSet) THEN DO:
                PUT STREAM sExclude UNFORMATTED
+                  MobSub.CLI ";R4"
+                  SKIP.
+               NEXT  MNP_SUB_LOOP.
+            END.                              
+            
+            FOR EACH Barring NO-LOCK
+               WHERE Barring.msseq  = MobSub.msseq
+                 AND lookup(Barring.BarringCode,lcbarringstatus) > 0
+                 AND Barring.BarringStatus = {&BARR_STATUS_ACTIVE} :
+                 PUT STREAM sExclude UNFORMATTED
                   MobSub.CLI ";R3"
                   SKIP.
-               NEXT.
+               NEXT  MNP_SUB_LOOP.
             END.
-            /* YOT-4929, If customer created less than 1 month ago */
-
-            IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT.
-
-            /* YOT-4956 R6: If suscriber has not any invoices paid, subscription is excluded from Retention file changed to only Postpaid subscriptions */
-            IF MobSub.PayType = FALSE AND
-               NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                                  Invoice.Brand   = Syst.Var:gcBrand            AND
-                                  Invoice.CustNum = MobSub.CustNum     AND
-                                  Invoice.InvType = {&INV_TYPE_NORMAL} AND
-                                  Invoice.PaymState = 2) THEN DO:
-               PUT STREAM sExclude UNFORMATTED
-                  MobSub.CLI ";R6"
-                  SKIP.
-               NEXT.
+            
+            FIND FIRST Customer NO-LOCK
+                 WHERE Customer.CustNum = MobSub.CustNum NO-ERROR.
+            IF AVAILABLE Customer THEN
+            FIND FIRST CustCat NO-LOCK
+                 WHERE CustCat.Brand    = Syst.Var:gcBrand
+                   AND CustCat.Category = Customer.Category NO-ERROR.
+            IF AVAILABLE CustCat THEN 
+            DO:
+               CASE CustCat.CatName:
+                  WHEN "Company CIF" THEN 
+                  DO:
+                     PUT STREAM sExclude UNFORMATTED
+                         MobSub.CLI ";R5"
+                     SKIP.
+                     NEXT  MNP_SUB_LOOP.
+                  END.                     
+                  WHEN "Employees - Internal Customer" THEN 
+                  DO:
+                     PUT STREAM sExclude UNFORMATTED
+                         MobSub.CLI ";R2"
+                     SKIP.
+                     NEXT  MNP_SUB_LOOP.
+                  END.                  
+               END CASE.
+               IF LOOKUP(CustCat.CatName,lcResCatNames) = 0 THEN NEXT MNP_SUB_LOOP.
             END.
+                      
+            /* IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT. */
+            
+            RULE_LOOP:          
+            FOR EACH  MNPRetentionRule NO-LOCK 
+                WHERE MNPRetentionRule.Brand    =  Syst.Var:gcBrand 
+                  AND MNPRetentionRule.ToDate   >= TODAY 
+                  AND MNPRetentionRule.FromDate <= TODAY:
 
+            IF MNPRetentionRule.SegmentCode > "" AND 
+                Segmentation.SegmentOffer NE MNPRetentionRule.SegmentCode THEN NEXT RULE_LOOP.
+           
+               lcRetentionSMSText = MNPRetentionRule.SMSText.
+           
+           END.
+            
             FIND FIRST ttData NO-LOCK WHERE
                        ttData.custnum = MobSub.custnum AND 
                        ttData.msseq = MobSub.msseq AND 
@@ -426,8 +448,8 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             CREATE ttData.
             ASSIGN 
                ttData.custnum = MobSub.custnum
-               ttData.MsSeq = MobSub.msseq
-               ttData.mnpseq = mnpprocess.mnpseq
+               ttData.MsSeq   = MobSub.msseq
+               ttData.mnpseq  = mnpprocess.mnpseq
                ttData.smsText = lcRetentionSMSText
                i = i + 1.
              
@@ -479,10 +501,6 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                end.  
             END.
          END.
-         ELSE
-            PUT STREAM sExclude UNFORMATTED
-               MobSub.CLI ";R4"
-               SKIP.
       END.
    END.
 END.
@@ -630,7 +648,7 @@ PROCEDURE pFileDump:
            ttMNPRetPlatform.Operators = ttOperCategory.Operators:
 
       ttMNPRetPlatform.RetentionFile = lcRootDir + "/spool/" + 
-        "mnp_retention_" + 
+        "mnp_retention_residential_" + 
         ttMNPRetPlatform.RetentionPlatformName + "_" + 
     /*    ttMNPRetPlatform.RetentionPlatform + "_" +
         lcDate + "_" + STRING(TIME) + ".txt".  */
