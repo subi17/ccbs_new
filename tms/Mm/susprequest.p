@@ -540,7 +540,7 @@ PROCEDURE pDone.
    END.
 
    DEF VAR lcActiveBarrings AS CHAR NO-UNDO. 
-   lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
+   lcActiveBarrings = Func.BarrMethod:mGetActiveBarrings(MobSub.MsSeq).
 
    /* Activate/Suspend the BB service based on the fraud barring */
    IF fIsInList(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) THEN DO:

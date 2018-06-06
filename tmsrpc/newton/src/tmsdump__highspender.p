@@ -72,7 +72,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
     FIND FIRST MobSub WHERE MobSub.CLI = phHighUsage.CLI NO-LOCK NO-ERROR.
     IF AVAIL MobSub THEN DO: 
       lcCLIType = MobSub.CliType.  
-      lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
+      lcActiveBarrings = Func.BarrMethod:mGetActiveBarrings(MobSub.MsSeq).
       
       IF lcActiveBarrings > "" THEN DO:
          DO i = 1 TO NUM-ENTRIES(lcActiveBarrings):

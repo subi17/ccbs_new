@@ -43,6 +43,25 @@ FUNCTION fTPServiceError RETURNS CHAR
    RETURN "".
 
 END FUNCTION.
+   
+
+FUNCTION fCanRetryMasmovilMessage RETURNS LOGICAL
+  (icError AS CHAR,
+   icResultCode AS CHAR,
+   icResultDesc AS CHAR):
+/* automatic resending check */
+   IF (icError BEGINS "NW_ERROR" AND 
+       (LOOKUP(icResultCode,"1,2,3") = 0 OR
+        icResultDesc EQ "Could not parse JSON")) /* YTS-10682 */
+      OR
+      (icResultCode EQ {&MASMOVIL_ERROR_ADAPTER_NETWORK} OR
+      (icResultCode EQ {&MASMOVIL_ERROR_MASMOVIL} AND
+       LOOKUP(icResultDesc,{&MASMOVIL_RETRY_ERROR_CODES}) > 0))
+      OR
+      LOOKUP(icResultCode,{&MASMOVIL_RETRY_ERROR_CODES}) > 0 THEN RETURN TRUE.
+
+   RETURN FALSE.
+END.
 
 FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
  (BUFFER ibFusionMessage FOR FusionMessage,
@@ -58,16 +77,10 @@ FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
 
   IF liMaxRetry EQ 0 THEN RETURN FALSE.
 
-   /* automatic resending check */
-   IF (icError BEGINS "NW_ERROR" AND 
-       (LOOKUP(icResultCode,"1,2,3") = 0 OR
-        icResultDesc EQ "Could not parse JSON")) /* YTS-10682 */
-      OR
-      (icResultCode EQ {&MASMOVIL_ERROR_ADAPTER_NETWORK} OR
-      (icResultCode EQ {&MASMOVIL_ERROR_MASMOVIL} AND
-       LOOKUP(icResultDesc,{&MASMOVIL_RETRY_ERROR_CODES}) > 0))
-      OR
-      LOOKUP(icResultCode,{&MASMOVIL_RETRY_ERROR_CODES}) > 0 THEN DO:
+   IF fCanRetryMasmovilMessage(
+      icError,
+      icResultCode,
+      icResultDesc) THEN DO:
 
       FOR EACH bFusionMessage NO-LOCK WHERE
                bFusionMessage.OrderID = ibFusionMessage.OrderID AND
