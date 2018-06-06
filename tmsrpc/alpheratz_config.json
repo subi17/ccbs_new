@@ -1,56 +1,48 @@
 {
-	"newton": {
-		"3000": {
-			"/": [ "newton", {
-				"check-local": "\"disable\"",
-				"idle-timeout": "3600",
-				"disable-time": "60",
-				"min-procs": "1",
-				"max-procs": "2",
-				"max-load-per-proc": "1",
-				"kill-signal": "10"
-			}],			
-			"server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
-			"server.network-backend": "\"writev\""
-		}
-	},
-	"dextra": {
-		"3010": {
-			"/tmsrpc_xfera": [ "dextra", {
-				"check-local": "\"disable\"",
-				"min-procs": "1",
-				"max-procs": "1",
-				"kill-signal": "10"
-			}],			
-         "/masmovil": [ "masmovil", {
-            "check-local": "\"disable\"",
-            "min-procs": "1",
-            "max-procs": "1",
-            "kill-signal": "10"
-         }],
-			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
-			"server.max-keep-alive-idle": "2",
-			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
-		}
-	},
-	"mnp": {
-		"3050": {
-			"/mnp": [ "mnp", {
-				"check-local": "\"disable\"",
-				"min-procs": "1",
-				"max-procs": "1",
-				"kill-signal": "10"
-			}],			
-			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
-			"server.max-keep-alive-idle": "2",
-			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
-		}
-	},
-    "mnp_mock": {
-        "3051": {
-            "/mnp": [ "mnp_mock", {
+    "newton": {
+        "3000": {
+            "/": [ "newton", {
+                "check-local": "\"disable\"",
+                "idle-timeout": "3600",
+                "disable-time": "60",
+                "min-procs": "1",
+                "max-procs": "2",
+                "max-load-per-proc": "1",
+                "kill-signal": "10"
+            }],
+            "/bss": [ "bss", {
+                "check-local": "\"disable\"",
+                "min-procs": "2",
+                "max-procs": "2",
+                "kill-signal": "10"
+            }],
+            "server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
+            "server.network-backend": "\"writev\""
+        }
+    },
+    "dextra": {
+        "3010": {
+            "/tmsrpc_xfera": [ "dextra", {
+                "check-local": "\"disable\"",
+                "min-procs": "1",
+                "max-procs": "1",
+                "kill-signal": "10"
+            }],
+            "/masmovil": [ "masmovil", {
+                "check-local": "\"disable\"",
+                "min-procs": "1",
+                "max-procs": "1",
+                "kill-signal": "10"
+            }],
+            "server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
+            "server.max-keep-alive-idle": "2",
+            "server.max-keep-alive-requests": "0",
+            "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+        }
+    },
+    "mnp": {
+        "3050": {
+            "/mnp": [ "mnp", {
                     "check-local": "\"disable\"",
                     "min-procs": "1",
                     "max-procs": "1",
@@ -62,18 +54,32 @@
             "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
         }
     },
-	"selfservice": {
-		"3060": {
-			"/selfservice": [ "selfservice", {
-				"check-local": "\"disable\"",
-				"min-procs": "1",
-				"max-procs": "1",
-				"kill-signal": "10"
-			}],			
-			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
-			"server.max-keep-alive-idle": "2",
-			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
-		}
-	}
+    "mnp_mock": {
+        "3051": {
+            "/mnp": [ "mnp_mock", {
+                "check-local": "\"disable\"",
+                "min-procs": "1",
+                "max-procs": "1",
+                "kill-signal": "10"
+            }],
+            "server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
+            "server.max-keep-alive-idle": "2",
+            "server.max-keep-alive-requests": "0",
+            "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+        }
+    },
+    "selfservice": {
+        "3060": {
+            "/selfservice": [ "selfservice", {
+                    "check-local": "\"disable\"",
+                    "min-procs": "1",
+                    "max-procs": "1",
+                    "kill-signal": "10"
+            }],
+            "server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
+            "server.max-keep-alive-idle": "2",
+            "server.max-keep-alive-requests": "0",
+            "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
+        }
+    }
 }
