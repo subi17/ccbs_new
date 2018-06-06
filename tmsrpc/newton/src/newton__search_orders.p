@@ -31,6 +31,7 @@ DEFINE VARIABLE lcSearchBy     AS CHARACTER NO-UNDO. /* YDR-2688 */
 DEFINE VARIABLE lii            AS INTEGER   NO-UNDO. /* YDR-2688 */ 
 DEFINE VARIABLE lcDocTypes     AS CHARACTER NO-UNDO INITIAL "NIF,CIF,Passport,NIE". /* YDR-2688 */
 DEFINE VARIABLE lcCustIdType   AS CHARACTER NO-UNDO.  /* YDR-2688 */
+DEFINE VARIABLE liCount        AS INTEGER   NO-UNDO. 
 
 /* IF validate_request(param_toplevel_id, "string,string,string,string,int") EQ ? THEN RETURN.  YDR-2688 */
 IF validate_request(param_toplevel_id, "string,string,string,int") EQ ? THEN RETURN.
@@ -47,8 +48,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_array = add_array(response_toplevel_id, "").
 
-FUNCTION fAddOrderStruct RETURN LOGICAL (INPUT piCountOrder AS INTEGER):
+FUNCTION fAddOrderStruct RETURN LOGICAL ():
+
    DEFINE VARIABLE lcOrderStruct AS CHARACTER NO-UNDO. 
+   DEF BUFFER OrderFusion FOR OrderFusion.
+
    lcOrderStruct = add_struct(top_array,"").
 
    add_int(   lcOrderStruct, "tms_id" , Order.OrderId          ).
@@ -56,8 +60,16 @@ FUNCTION fAddOrderStruct RETURN LOGICAL (INPUT piCountOrder AS INTEGER):
    add_string(lcOrderStruct, "cli"    , Order.CLI              ).
    add_string(lcOrderStruct, "fname"  , OrderCustomer.FirstName).
    add_string(lcOrderStruct, "lname"  , OrderCustomer.SurName1 ).
+   
+   FIND FIRST OrderFusion NO-LOCK WHERE 
+              OrderFusion.Brand = Syst.Var:gcBrand AND
+              OrderFusion.OrderId EQ Order.OrderId NO-ERROR.
    IF AVAIL OrderFusion THEN  
       add_string(lcOrderStruct, "fixed_number", OrderFusion.fixednumber).
+      
+   liCount = liCount + 1.
+   RETURN (liCount < piMaxCount).
+
 END.
 
 
@@ -73,51 +85,37 @@ FUNCTION fIsRecordsAvailable RETURN LOGICAL:
 
 END.
 
-FUNCTION fCheckFixedNumber RETURN LOGICAL:
-   
-   FIND FIRST OrderFusion WHERE 
-              OrderFusion.Brand = Syst.Var:gcBrand AND
-              OrderFusion.OrderId EQ Order.OrderId
-              NO-LOCK NO-ERROR.
-
-   RETURN AVAILABLE OrderFusion.
-
-END.
-
 FUNCTION fAddOrdersBasedOnCLI RETURN CHARACTER:
-   DEFINE VARIABLE iCount AS INTEGER NO-UNDO. 
-   iCount = 0.
+  
    OrdersBasedOnCLI:
    FOR EACH Order WHERE 
-      Order.Brand = Syst.Var:gcBrand AND 
-      Order.CLI = pcSearchString NO-LOCK:
+            Order.Brand = Syst.Var:gcBrand AND 
+            Order.CLI = pcSearchString AND
+            Order.OrderType <= {&ORDER_TYPE_STC} NO-LOCK:
+      
       IF NOT fIsRecordsAvailable() THEN 
          NEXT OrdersBasedOnCLI.
-      fCheckFixedNumber().
 
-      fAddOrderStruct(iCount).
-      iCount = iCount + 1.
-      IF iCount = piMaxCount THEN
+      IF NOT fAddOrderStruct() THEN
          LEAVE OrdersBasedOnCLI.
    END.
    RETURN "".
 END.
 
 FUNCTION fAddOrdersBasedOnFixed RETURN CHARACTER:
-   DEFINE VARIABLE iCount AS INTEGER NO-UNDO. 
-   iCount = 0.
+
    OrdersBasedOnFixed:
    FOR EACH OrderFusion WHERE 
       OrderFusion.FixedNumber = pcSearchString NO-LOCK:
       FOR EACH Order WHERE
                Order.Brand = Syst.Var:gcBrand AND
-               Order.OrderId = OrderFusion.OrderId NO-LOCK:
+               Order.OrderId = OrderFusion.OrderId AND
+               Order.OrderType <= {&ORDER_TYPE_STC} NO-LOCK:
+         
          IF NOT fIsRecordsAvailable() THEN 
             NEXT OrdersBasedOnFixed.
 
-         fAddOrderStruct(iCount).
-         iCount = iCount + 1.
-         IF iCount = piMaxCount THEN
+         IF NOT fAddOrderStruct() THEN
             LEAVE OrdersBasedOnFixed.
       END.
    END.
@@ -125,7 +123,6 @@ FUNCTION fAddOrdersBasedOnFixed RETURN CHARACTER:
 END.
 
 FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
-   DEFINE VARIABLE iCount AS INTEGER NO-UNDO INIT 0. 
    
    OrdersBasedOnCustID:
    FOR EACH OrderCustomer WHERE 
@@ -135,13 +132,10 @@ FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
             OrderCustomer.Rowtype = 1 NO-LOCK:
       FOR EACH Order WHERE
                Order.Brand = "1" AND
-               Order.OrderId = OrderCustomer.OrderId NO-LOCK:
+               Order.OrderId = OrderCustomer.OrderId AND
+               Order.OrderType <= {&ORDER_TYPE_STC} NO-LOCK:
                    
-         fCheckFixedNumber().
-         fAddOrderStruct(iCount).
-         iCount = iCount + 1.
-         
-         IF iCount = piMaxCount THEN
+         IF NOT fAddOrderStruct() THEN
             LEAVE OrdersBasedOnCustID.
       END.
    END.
@@ -149,26 +143,23 @@ FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
 END.
 
 FUNCTION fAddOrdersBasedOnOrderId RETURN CHARACTER:
-   DEFINE VARIABLE iCount   AS INTEGER NO-UNDO. 
+
    DEFINE VARIABLE iOrderId AS INTEGER NO-UNDO. 
    iOrderId = INTEGER(pcSearchString) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN
       RETURN "Search string was not integer as order ID should be".
 
-   iCount = 0.
    OrdersBasedOnOrderId:
    FOR EACH Order WHERE 
-      Order.Brand   = Syst.Var:gcBrand  AND 
-      Order.OrderId = iOrderId 
+            Order.Brand   = Syst.Var:gcBrand  AND 
+            Order.OrderId = iOrderId AND
+            Order.OrderType <= {&ORDER_TYPE_STC}
       NO-LOCK:
 
       IF NOT fIsRecordsAvailable() THEN 
          NEXT OrdersBasedOnOrderId.
 
-      fCheckFixedNumber().
-      fAddOrderStruct(iCount).
-      iCount = iCount + 1.
-      IF iCount = piMaxCount THEN
+      IF NOT fAddOrderStruct() THEN
          LEAVE OrdersBasedOnOrderId.
    END.
    RETURN "".
@@ -247,7 +238,8 @@ DO:
                    OrderCustomer.Rowtype = 1 NO-LOCK:
              IF CAN-FIND(FIRST Order WHERE
                                Order.Brand = "1" AND
-                               Order.OrderId = OrderCustomer.OrderId NO-LOCK) THEN 
+                               Order.OrderId = OrderCustomer.OrderId AND   
+                               Order.OrderType <= {&ORDER_TYPE_STC} NO-LOCK) THEN 
              DO:
                 IF NUM-ENTRIES(lcCustIdType) > 0 THEN 
                     lcCustIdType = lcCustIdType + "," + ENTRY(lii,lcDocTypes).
