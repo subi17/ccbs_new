@@ -23,7 +23,6 @@
 {Func/dss_matrix.i}
 {Func/msisdn_prefix.i}
 {Func/fsubstermreq.i}
-{Mnp/mnpoutchk.i}
 {Func/ordercancel.i}
 {Func/dextra.i}
 {Func/add_lines_request.i}
@@ -112,17 +111,19 @@ FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
                  lbMLMobSub.MsSeq      = iiMultiSimId        AND
                 (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
                  lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
-      IF AVAIL lbMLMobSub THEN
-         RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
-                               INPUT lbMLMobsub.CLI,
-                               INPUT lbMLMobsub.CustNum,
-                               INPUT "REMOVE",
-                               INPUT "",        /* Optional param list */
-                               INPUT iiMsRequest,
-                               INPUT ideActStamp,
-                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                               INPUT lcBundleId).
-
+      IF AVAIL lbMLMobSub THEN DO:
+         IF fExtraLineCountForMainLine(lbMLMobsub.MsSeq,
+                                       lbMLMobsub.CustNum) EQ 1 THEN
+            RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
+                                  INPUT lbMLMobsub.CLI,
+                                  INPUT lbMLMobsub.CustNum,
+                                  INPUT "REMOVE",
+                                  INPUT "",        /* Optional param list */
+                                  INPUT iiMsRequest,
+                                  INPUT ideActStamp,
+                                  INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                                  INPUT lcBundleId).
+      END.
    END.
    ELSE IF fCLITypeIsMainLine(icCLIType) THEN DO:
 
@@ -496,7 +497,7 @@ PROCEDURE pTerminate:
                                   INPUT "DELETE",
                                   INPUT "",      /* Optional param list */
                                   INPUT MsRequest.MsRequest,
-                                  INPUT ldeMonthEndTS,
+                                  INPUT ldCurrTS,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* If DSS is transferred then remove subs. from DSS group */
@@ -538,7 +539,7 @@ PROCEDURE pTerminate:
                                   INPUT "DELETE",
                                   INPUT "",     /* Optional param list */
                                   INPUT MsRequest.MsRequest,
-                                  INPUT ldeMonthEndTS,
+                                  INPUT ldCurrTS,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* Otherwise just remove subs. from DSS group */
@@ -649,7 +650,7 @@ PROCEDURE pTerminate:
                             FMItem.FeeModel     EQ FeeModel.FeeModel AND
                             FMItem.Todate       >= TODAY             AND
                             FMItem.BrokenRental EQ 1: /* full month */
-                     ttContract.ActTS = ldeMonthEndTS.
+                     ttContract.ActTS = ldCurrTS.
                   END.
                END.
             END.
@@ -779,10 +780,14 @@ PROCEDURE pTerminate:
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
       MSRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}:
 
-      CASE MSRequest.ReqStatus:
-      WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
-      WHEN 8 THEN fReqStatus(4,"Cancelled by subs. termination").
-      WHEN 19 THEN fReqStatus(4,"Cancelled by subs. termination").
+      IF LOOKUP(STRING(MSRequest.ReqStatus),
+                SUBSTITUTE("&1,&2,&3",
+                           {&REQUEST_STATUS_NEW},
+                           {&REQUEST_STATUS_SUB_REQUEST_DONE},
+                           {&REQUEST_STATUS_CONFIRMATION_PENDING})) > 0
+      THEN DO:
+         fReqStatus(4,"Cancelled by subs. termination").
+         fChangeOrderStatus(MsRequest.ReqIParam4, {&ORDER_STATUS_CLOSED}).
       END.
    END.
 
@@ -1623,7 +1628,7 @@ PROCEDURE pMultiSIMTermination:
           MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
           LOOKUP(STRING(MsRequest.ReqStatus),
           {&REQ_INACTIVE_STATUSES}) = 0) AND
-      NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
+      NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
 
       ASSIGN ldaSecSIMTermDate  = ADD-INTERVAL(TODAY, 1,"months")
              ldaSecSIMTermDate  = Func.Common:mLastDayOfMonth(ldaSecSIMTermDate)
