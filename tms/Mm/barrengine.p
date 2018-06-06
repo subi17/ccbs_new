@@ -69,7 +69,7 @@ IF fISInList(icBarringCommands,lcDebtBarrings) EQ TRUE THEN DO:
      RETURN.
    END.
 
-   lcActiveBarrings = fGetActiveBarrings(iiMsSeq).
+   lcActiveBarrings = Func.BarrMethod:mGetActiveBarrings(iiMsSeq).
 
    IF icBarringCommands EQ "Debt_HOTL=1" AND
       LOOKUP("Debt_HOTLP",lcActiveBarrings) > 0 THEN DO:
