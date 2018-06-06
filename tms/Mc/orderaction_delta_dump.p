@@ -8,9 +8,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{Syst/commali.i}
 {Syst/dumpfile_run.i}
-{Func/forderstamp.i}
+{Syst/tmsconst.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT PARAMETER idLastDump       AS DEC  NO-UNDO.
@@ -69,6 +68,11 @@ FOR EACH EventLog NO-LOCK where
    
    liOrderID = int(entry(2,key,chr(255))) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN NEXT.
+
+   FIND Order NO-LOCK WHERE
+        Order.Brand = Syst.Var:gcBrand AND
+        Order.OrderID = liOrderID NO-ERROR.
+   IF AVAIL Order AND Order.OrderType EQ {&ORDER_TYPE_ACC} THEN NEXT.
    
    FOR EACH OrderAction NO-LOCK WHERE
             OrderAction.Brand = Syst.Var:gcBrand AND
