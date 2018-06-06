@@ -1257,6 +1257,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO. 
    DEF VAR lcICCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcTariff AS CHAR NO-UNDO.
+   DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
    DEF VAR lcCaseTypeId AS CHAR NO-UNDO.
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
@@ -1267,7 +1268,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcPrevHandset AS CHAR NO-UNDO.
    DEF VAR lcNewPermanency AS CHAR NO-UNDO.
    DEF VAR lcPrevPermanency AS CHAR NO-UNDO.
-  
+
+   DEF BUFFER MobSub FOR MobSub.
 
    ASSIGN
       lcICCCaseTypeID   = '4d'
@@ -1310,12 +1312,18 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             STRING(MsRequest.ReqCparam2).  
          END.
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
-            lcCaseTypeId = lcACCCaseTypeId.
-            /*fenerate tariff:*/
-            lcTariff = "".
-            FIND FIRST MobSub NO-LOCK WHERE
-                       MobSub.MsSeq EQ MsRequest.MsSeq NO-ERROR.
-            IF AVAIL MobSub THEN lcTariff = MobSub.CLIType.
+
+            ASSIGN
+               lcCaseTypeId = lcACCCaseTypeId
+               lcTariff = ""
+               lcFixedNumber = "".
+
+            /*generate tariff:*/
+            FIND MobSub NO-LOCK WHERE
+                 MobSub.MsSeq EQ MsRequest.MsSeq NO-ERROR.
+            IF AVAIL MobSub THEN ASSIGN
+               lcTariff = MobSub.CLIType
+               lcFixedNumber = MobSub.FixedNumber WHEN MobSub.FixedNumber > "".
 
             lcCaseFileRow =
             lcCaseTypeId                                    + lcDelim +
@@ -1328,7 +1336,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*.ACC_Request_date*/
             fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*.Current Tariff*/
-            lcTariff.
+            lcTariff                                        + lcDelim + 
+            lcFixedNumber.
          END.
          WHEN {&REQTYPE_BUNDLE_CHANGE} THEN DO:
             lcCaseTypeId = lcSTCCaseTypeId.
