@@ -34,7 +34,6 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 {Func/fsubser.i}
 {Func/fctserval.i}
 {Func/barrfunc.i}
-{Mnp/mnpoutchk.i}
 {Func/fdss.i}
 
 IF llDoEvent THEN DO:
@@ -1151,7 +1150,7 @@ PROCEDURE local-find-others.
 */      
       lcBarrMask = fGetFinalMask(MobSub.MsSeq).
       
-      lcMNP = fGetMNPOutOngoing(MobSub.CLI).
+      lcMNP = Mnp.MNPOutGoing:mGetMNPOutOngoing(MobSub.CLI).
       IF lcMNP NE "" THEN lcMNP = "MNP: " + lcMNP.
 
       /* Display DSS related information */

@@ -34,7 +34,6 @@ Syst.Var:gcBrand = "1".
 {Func/penaltyfee.i}
 {Func/orderchk.i}
 {Func/fcustpl.i}
-{Mnp/mnpoutchk.i}
 {Func/fixedfee.i}
 {Func/cparam2.i}
 {Func/barrfunc.i}
@@ -204,7 +203,7 @@ FIND FIRST Segmentation NO-LOCK WHERE
 IF NOT AVAIL Segmentation THEN RETURN appl_err("general").
 
 IF NOT pcChannel BEGINS "retention" AND
-   fIsMNPOutOngoing(mobsub.cli) THEN RETURN appl_err("ongoing_mnp_out_request").
+   Mnp.MNPOutGoing:mIsMNPOutOngoing(mobsub.cli) THEN RETURN appl_err("ongoing_mnp_out_request").
 
 IF pcOfferId > "" AND
    NOT fMatchOfferCriterias((IF MobSub.PayType = TRUE THEN "2" ELSE "1"),
