@@ -227,8 +227,9 @@
                                     OrderAction.ItemKey  = Order.CLIType + "DISC") THEN 
                   DO:
                      
-                     /* Check Mainline Convergent fixedline is installed OR it is still ongoing */
-                     IF NOT fCheckFixedLineInstalledForMainLine(Order.MultiSimId) THEN   /* Mainline Order Id */
+                     /* Check Mainline Convergent is delivered or closed, 
+                        if true then don't move extraline to 76 (Pending mainline status) */
+                     IF NOT fCheckMainLineOrderStatus(Order.MultiSimId) THEN   /* Mainline Order Id */
                      DO:
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.

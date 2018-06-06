@@ -460,6 +460,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
 
    DEF VAR lcNewAddress AS CHAR NO-UNDO.
    DEF VAR lcregion AS CHAR NO-UNDO.
+   DEF VAR lcInvGroup AS CHAR NO-UNDO.
 
    DEF BUFFER bCustomer       FOR Customer.
    DEF BUFFER bOrder          FOR Order.
@@ -525,6 +526,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    IF bOrderCustomer.Block NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Block.
    lcNewAddress = RIGHT-TRIM(lcNewAddress).
    lcNewAddress = REPLACE(lcNewAddress, "  ", " ").
+   lcInvGroup = fDefInvGroup(Region.Region).
 
    FIND CURRENT bCustomer EXCLUSIVE-LOCK NO-ERROR.
    IF llDoEvent THEN DO:
@@ -539,7 +541,8 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
       bCustomer.Address = lcNewAddress WHEN bCustomer.Address NE lcNewAddress
       bCustomer.ZipCode = bOrderCustomer.ZipCode WHEN bCustomer.ZipCode NE bOrderCustomer.ZipCode
       bCustomer.PostOffice = CAPS(bOrderCustomer.PostOffice) WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
-      bCustomer.Region = Region.Region WHEN bCustomer.Region NE Region.Region.
+      bCustomer.Region = Region.Region WHEN bCustomer.Region NE Region.Region
+      bCustomer.InvGroup = lcInvGroup WHEN bCustomer.InvGroup NE lcInvGroup.
 
    IF llDoEvent THEN DO:
       RUN StarEventMakeModifyEvent(lhCustomer).

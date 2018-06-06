@@ -111,17 +111,19 @@ FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
                  lbMLMobSub.MsSeq      = iiMultiSimId        AND
                 (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
                  lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
-      IF AVAIL lbMLMobSub THEN
-         RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
-                               INPUT lbMLMobsub.CLI,
-                               INPUT lbMLMobsub.CustNum,
-                               INPUT "REMOVE",
-                               INPUT "",        /* Optional param list */
-                               INPUT iiMsRequest,
-                               INPUT ideActStamp,
-                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                               INPUT lcBundleId).
-
+      IF AVAIL lbMLMobSub THEN DO:
+         IF fExtraLineCountForMainLine(lbMLMobsub.MsSeq,
+                                       lbMLMobsub.CustNum) EQ 1 THEN
+            RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
+                                  INPUT lbMLMobsub.CLI,
+                                  INPUT lbMLMobsub.CustNum,
+                                  INPUT "REMOVE",
+                                  INPUT "",        /* Optional param list */
+                                  INPUT iiMsRequest,
+                                  INPUT ideActStamp,
+                                  INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                                  INPUT lcBundleId).
+      END.
    END.
    ELSE IF fCLITypeIsMainLine(icCLIType) THEN DO:
 
@@ -495,7 +497,7 @@ PROCEDURE pTerminate:
                                   INPUT "DELETE",
                                   INPUT "",      /* Optional param list */
                                   INPUT MsRequest.MsRequest,
-                                  INPUT ldeMonthEndTS,
+                                  INPUT ldCurrTS,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* If DSS is transferred then remove subs. from DSS group */
@@ -537,7 +539,7 @@ PROCEDURE pTerminate:
                                   INPUT "DELETE",
                                   INPUT "",     /* Optional param list */
                                   INPUT MsRequest.MsRequest,
-                                  INPUT ldeMonthEndTS,
+                                  INPUT ldCurrTS,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* Otherwise just remove subs. from DSS group */
@@ -648,7 +650,7 @@ PROCEDURE pTerminate:
                             FMItem.FeeModel     EQ FeeModel.FeeModel AND
                             FMItem.Todate       >= TODAY             AND
                             FMItem.BrokenRental EQ 1: /* full month */
-                     ttContract.ActTS = ldeMonthEndTS.
+                     ttContract.ActTS = ldCurrTS.
                   END.
                END.
             END.
