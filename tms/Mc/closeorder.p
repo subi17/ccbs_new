@@ -5,7 +5,7 @@
                     01.02.07 kl  allow close when invoice is credited
 
 */
-
+   
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/forderstamp.i}

@@ -76,12 +76,12 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
          lcReturnValue = "".
 
          CASE bFusionMessage.MessageType:
- 
+
             WHEN {&FUSIONMESSAGE_TYPE_RESERVE_NUMBER} THEN DO:
                RUN Gwy/masmovil_reserve_number.p(FusionMessage.MessageSeq).
                lcReturnValue = RETURN-VALUE.
             END.
-
+            
             WHEN {&FUSIONMESSAGE_TYPE_CREATE_ORDER} THEN DO:
                RUN Gwy/masmovil_create_order.p(FusionMessage.MessageSeq).
                lcReturnValue = RETURN-VALUE.

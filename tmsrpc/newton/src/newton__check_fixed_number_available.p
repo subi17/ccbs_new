@@ -47,6 +47,7 @@ IF NOT CAN-FIND(FIRST MobSub WHERE
          LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) EQ 0:
       
          llgAvail = FALSE. 
+         LEAVE.
 
       END.
 
@@ -57,7 +58,3 @@ END.
 ELSE llgAvail = FALSE.
 
 add_boolean(response_toplevel_id, "", llgAvail).
-
-FINALLY:
-
-END.
