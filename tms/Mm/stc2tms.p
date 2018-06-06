@@ -2221,7 +2221,7 @@ PROCEDURE pUpdateDSSAccount:
                                         INPUT "DELETE",
                                         INPUT "",      /* Optional param list */
                                         INPUT iiMainRequest,
-                                        INPUT ldeLastDayEndStamp,
+                                        INPUT Func.Common:mMakeTS(),
                                         INPUT {&REQUEST_SOURCE_STC},
                                         INPUT lcBundleId).
                   /* Remove subs. immediately */
@@ -2287,7 +2287,7 @@ PROCEDURE pUpdateDSSAccount:
                                         INPUT "DELETE",
                                         INPUT "",     /* Optional param list */
                                         INPUT iiMainRequest,
-                                        INPUT ldeLastDayEndStamp,
+                                        INPUT Func.Common:mMakeTS(),
                                         INPUT {&REQUEST_SOURCE_STC},
                                         INPUT lcBundleId).
 
@@ -2476,7 +2476,7 @@ PROCEDURE pMultiSimSTC:
           MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
           LOOKUP(STRING(MsRequest.ReqStatus),
                  {&REQ_INACTIVE_STATUSES}) = 0) AND
-      NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
+      NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
 
       fTermAdditionalSim(lbMobSub.Msseq,
                          lbMobSub.CLI,
