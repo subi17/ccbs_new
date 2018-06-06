@@ -93,6 +93,23 @@ FOR EACH MNPProcess WHERE
       RETURN lcError.
    END.
 END.
+
+IF Order.OrderType EQ {&ORDER_TYPE_ACC} THEN DO:
+
+   FOR EACH MsRequest NO-LOCK WHERE 
+            MsRequest.MsSeq = Order.Msseq AND
+            MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
+            MsRequest.ReqIParam4 = Order.OrderID AND
+            MsRequest.Actstamp <= Func.Common:mMakeTS() AND
+            LOOKUP(STRING(MsRequest.ReqStatus),
+                  {&REQ_INACTIVE_STATUSES}) = 0:
+      lcError = "Cannot close order. Ongoing ACC request".
+      IF NOT ilSilent THEN   
+         MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
+      RETURN lcError.
+   END.
+END.
+
    
 IF NOT ilSilent THEN DO:   
    
