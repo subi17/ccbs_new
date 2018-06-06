@@ -254,7 +254,6 @@ Syst.Var:katun = "NewtonRPC".
 {Func/terminaloffer.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
-{Mnp/mnpoutchk.i}
 {Func/create_eventlog.i}
 {Func/fmakemsreq.i}
 {Func/main_add_lines.i}
@@ -872,7 +871,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             NOT plUpdate AND
             piMultiSimType NE {&MULTISIMTYPE_SECONDARY} THEN DO:
 
-            IF NOT fSubscriptionLimitCheck(
+            IF NOT Func.ValidateACC:mSubscriptionLimitCheck(
                lcIdOrderCustomer,
                lcIdTypeOrderCustomer,
                llSelfEmployed,
@@ -2298,7 +2297,7 @@ ELSE IF Order.statuscode NE "4" AND(
    /*YPR-5316*/
    (fIsConvergenceTariff(Order.Clitype) AND pcNumberType EQ "stc")) 
    AND
-   fIsMNPOutOngoing(INPUT Order.CLI) 
+   Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) 
    THEN DO:
 
    Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}.
