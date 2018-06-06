@@ -17,10 +17,15 @@
 DEFINE STREAM bkp.
 DEFINE STREAM err.
 
+DEFINE VARIABLE lcDumpScript AS CHARACTER NO-UNDO.
 RUN ipUpdateBundleTarget.
 RUN ipCreateBundleUpsellValues.
 RUN ipModifyMenuTree.
 RUN ipCreateUpsellMenu.
+
+ASSIGN lcDumpScript= "/apps/yoigo/tms_support/201805/tmsrelation_dump_create.p".
+
+RUN VALUE(lcDumpScript).
 
 PROCEDURE ipUpdateBundleTarget:
     
