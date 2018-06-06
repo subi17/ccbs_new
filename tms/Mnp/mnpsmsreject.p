@@ -51,29 +51,29 @@ FOR EACH MNPProcess NO-LOCK
       AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}   
       AND MNPProcess.UpdateTS    >  idLastDump:
     IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) = 0 THEN NEXT ERROR_LOOP.
-      
-       FIND FIRST MNPSub NO-LOCK 
-            WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
-       IF NOT AVAILABLE MNPSub THEN NEXT ERROR_LOOP.
-       
+            
        FIND FIRST MNPDetails NO-LOCK 
             WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
-       IF NOT AVAILABLE MNPDetails THEN NEXT ERROR_LOOP.                          
-                                                   
-       PUT STREAM sdump UNFORMATTED 
-           Func.Common:mTS2HMS(MNPProcess.CreatedTS) lcDelimiter
-           MNPSub.Cli lcDelimiter
-           MNPDetails.DonorCode lcDelimiter
-           MNPProcess.FormRequest lcDelimiter
-           MNPProcess.StatusReason lcDelimiter
-           Func.Common:mTS2HMS(MNPProcess.UpdateTS) SKIP.
-                          
-       oiEvents = oiEvents + 1.
-       IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
-       DO:
-           PAUSE 0.
-           DISP oiEvents WITH FRAME fColl.
-       END.                     
+       IF NOT AVAILABLE MNPDetails THEN NEXT ERROR_LOOP.     
+       
+       FOR EACH MNPSub NO-LOCK 
+            WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq:
+                                                                        
+            PUT STREAM sdump UNFORMATTED 
+                Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
+                MNPSub.Cli lcDelimiter
+                MNPDetails.DonorCode lcDelimiter
+                MNPProcess.PortRequest lcDelimiter
+                MNPProcess.StatusReason lcDelimiter
+                Func.Common:mTS2HMS(MNPProcess.UpdateTS) SKIP.
+                                
+            oiEvents = oiEvents + 1.
+            IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
+            DO:
+                PAUSE 0.
+                DISP oiEvents WITH FRAME fColl.
+            END.  
+       END.                   
 END.
 
 OUTPUT STREAM sdump close.

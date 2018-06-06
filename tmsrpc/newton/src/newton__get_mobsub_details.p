@@ -118,7 +118,6 @@ Syst.Var:gcBrand = "1".
 {Func/fcustpl.i}
 {Func/fixedfee.i}
 {Func/fctchange.i}
-{Mnp/mnpoutchk.i}
 {Func/multitenantfunc.i}
 
 ASSIGN
@@ -253,7 +252,8 @@ add_int(resp_struct, "mnp_available", liMNPOutExists).
 order_array = add_array(resp_struct,"orders").
 liMNPStatus = ?.
 FOR EACH Order NO-LOCK WHERE
-         Order.MsSeq = MobSub.MsSeq BY Order.CrStamp:
+         Order.MsSeq = MobSub.MsSeq AND
+         Order.OrderType <= {&ORDER_TYPE_STC} BY Order.CrStamp:
 
    order_struct = add_struct(order_array,"").
    add_int(order_struct,"id",Order.OrderId).
@@ -502,7 +502,7 @@ ELSE IF (MobSub.MultiSIMType > 0 AND
             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
             LOOKUP(STRING(MsRequest.ReqStatus),
             {&REQ_INACTIVE_STATUSES}) = 0) AND
-            NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
+            NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
             add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).
 
         /* Return warning flag for secondary line if primary line outporting */
@@ -517,8 +517,8 @@ ELSE IF (MobSub.MultiSIMType > 0 AND
                 MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                 LOOKUP(STRING(MsRequest.ReqStatus),
                 {&REQ_INACTIVE_STATUSES}) = 0) AND
-                NOT fIsMNPOutOngoing(INPUT MobSub.CLI) AND
-                fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
+                NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT MobSub.CLI) AND
+                Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
                 add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).   
          
     END.            
