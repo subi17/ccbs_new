@@ -79,8 +79,9 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
    ELSE IF RequestAction.ActionType = "BarringsNotAllowed" 
       AND iiMsSeq > 0 THEN DO:
       IF bfMobsub.MsStatus = 8 THEN DO:
-         IF fIsInList(fGetActiveBarrings(iiMsSeq),
-                      RequestAction.ActionKey) EQ TRUE THEN DO:
+         IF Func.BarrMethod:mSubsHaveActiveBarring(iiMsSeq,
+                                                   RequestAction.ActionKey)
+         THEN DO:
             ocError = {&MSG_NOT_ALLOWED}.         
             RETURN FALSE.
          END.

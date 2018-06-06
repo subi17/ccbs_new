@@ -9,7 +9,6 @@
 {Func/cparam2.i}
 {Mm/fbundle.i}
 {Func/stc_extension.i}
-{Mnp/mnpoutchk.i}
 {Func/fctchange.i}
 
 FUNCTION fBundleChangeRequest RETURNS INTEGER
@@ -314,7 +313,7 @@ FUNCTION fValidateBTC RETURNS LOGICAL
 
    /* MNP OUT validation for Tariff BTC, reason YTS-6053 */
    IF LOOKUP(pcnewBundle,lcBONOContracts) = 0 THEN DO:
-      lcMNP = fGetMNPOutOngoing(MobSub.CLI).
+      lcMNP = Mnp.MNPOutGoing:mGetMNPOutOngoing(MobSub.CLI).
       IF lcMNP NE "" THEN DO: 
          
          FIND MNPProcess WHERE
