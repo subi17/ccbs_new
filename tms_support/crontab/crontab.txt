@@ -394,7 +394,7 @@
 0,15,30,45 * * * * pike -C /apps/yoigo/tms batch -- Syst/mmlog_count all -param 1 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mmlog_count >> /scratch/cron/batch.log
 
 #YCO-276 upsell renew
-#1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_3m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_3m >> /scratch/cron/batch.log
+#2 0,8,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_3m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_3m >> /scratch/cron/batch.log
 #1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_6m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_6m >> /scratch/cron/batch.log
 #1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_12m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_12m >> /scratch/cron/batch.log
 
@@ -406,4 +406,11 @@
 #1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_6m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_6m_no_penalty >> /scratch/cron/batch.log
 #1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_12m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_12m_no_penalty >> /scratch/cron/batch.log
 
+#YCO-469 percontract_bob.p every 60 minutes
+#1 * * * * pike -C /apps/yoigo/tms batch -- Mm/percontract_bob all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py percontract_bob >> /scratch/cron/batch.log
 
+
+
+#ITOC-1590 automatic compression and removal of daemon related log files
+10 0 * * * /usr/bin/find /apps/var/log/ -type f -name 'd-*.log' -mtime +7 -exec gzip -9 {} \; > /dev/null 2>&1
+15 0 * * * /usr/bin/find /apps/var/log/ -type f -name 'd-*.log.gz' -mtime +180 -exec rm -f {} \; > /dev/null 2>&1 
