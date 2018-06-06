@@ -23,7 +23,6 @@ function fMakeCommLine returns CHAR
    DEF VAR lcPayTypes AS CHAR NO-UNDO INIT "UNKNOWN,POSTPAID,PREPAID".
    DEF VAR lcProfile  AS CHAR NO-UNDO.
    DEF VAR lcPayType  AS CHAR NO-UNDO.
-   DEF VAR liOrderId  AS INT  NO-UNDO.
 
    DEF VAR lhMobSub   AS HANDLE NO-UNDO.
 
@@ -52,15 +51,10 @@ function fMakeCommLine returns CHAR
       
    FOR EACH Order NO-LOCK WHERE
             Order.MSSeq = ProvSolog.MSSeq AND
-            Order.OrderType NE 2 AND
-            Order.OrderType NE 4 BY Order.CrStamp DESC:
-      liOrderId = Order.OrderId.
+            LOOKUP(STRING(Order.OrderType),"0,1,3") > 0
+      BY Order.CrStamp DESC:
       LEAVE.
-   END. /* FOR LAST Order WHERE */
-
-   FIND FIRST Order WHERE
-              Order.Brand   = Syst.Var:gcBrand AND
-              Order.OrderId = liOrderId NO-LOCK NO-ERROR.
+   END.
   
    /* CREATE extra parameters */ 
    IF LOOKUP(icValue, "CREATE,REACTIVATE") > 0 THEN DO:
@@ -218,7 +212,6 @@ function fMakeCommLine2 returns CHAR
    DEF VAR lcPayTypes AS CHAR NO-UNDO INIT "UNKNOWN,POSTPAID,PREPAID".
    DEF VAR lcNewtype  AS CHAR NO-UNDO.
    DEF VAR llNewType  AS LOG  NO-UNDO.
-   DEF VAR liOrderId  AS INT  NO-UNDO.
   
    DEF VAR lhMobSub   AS HANDLE NO-UNDO.
 
@@ -247,16 +240,11 @@ function fMakeCommLine2 returns CHAR
    
    FOR EACH Order NO-LOCK WHERE
             Order.MSSeq = ProvSolog.MSSeq AND
-            Order.OrderType NE 2 AND
-            Order.OrderType NE 4 BY Order.CrStamp DESC:
-      liOrderId = Order.OrderId.
+            LOOKUP(STRING(Order.OrderType),"0,1,3") > 0
+      BY Order.CrStamp DESC:
       LEAVE.
-   END. /* FOR LAST Order WHERE */
+   END.
 
-   FIND FIRST Order WHERE
-              Order.Brand   = Syst.Var:gcBrand AND
-              Order.OrderId = liOrderId NO-LOCK NO-ERROR.
-  
    IF ProvMSrequest.ReqCParam1 = "CHANGEMSISDN" THEN DO:
    
       lcReturn = STRING(ProvSolog.Solog)      +  " " +
