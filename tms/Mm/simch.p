@@ -18,7 +18,6 @@
 {Mc/lib/tokenchk.i 'SIM'}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}
-{Mnp/mnpoutchk.i}
 {Syst/tmsconst.i}
 
 IF lcRight NE "RW" THEN DO:
@@ -140,7 +139,7 @@ IF NOT AVAIL sim THEN DO:
    LEAVE.  
 END.     
    
-IF fIsMNPOutOngoing(mobsub.cli) THEN DO:
+IF Mnp.MNPOutGoing:mIsMNPOutOngoing(mobsub.cli) THEN DO:
    MESSAGE "Ongoing MNP OUT request" VIEW-AS ALERT-BOX.
    LEAVE.
 END.
