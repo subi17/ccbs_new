@@ -41,7 +41,6 @@
 {Func/fbankdata.i}
 {Func/matrix.i}
 {Syst/tmsconst.i}
-{Mnp/mnpoutchk.i}
 {Func/profunc.i}
 
 IF llDoEvent THEN DO:
@@ -689,7 +688,7 @@ REPEAT  WITH FRAME main:
                    MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                    LOOKUP(STRING(MsRequest.ReqStatus),
                    {&REQ_INACTIVE_STATUSES}) = 0) AND
-               NOT fIsMNPOutOngoing(INPUT bbMobSub.CLI) THEN DO:
+               NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bbMobSub.CLI) THEN DO:
                MESSAGE "STC will also trigger subscription " +
                        bbMobSub.CLI + " termination (multisim secondary subscription)"
                VIEW-AS ALERT-BOX.
