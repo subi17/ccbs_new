@@ -1518,10 +1518,14 @@ PROCEDURE pFinalize:
    DEF VAR ldaCont15PromoFrom        AS DATE NO-UNDO. 
    DEF VAR ldaCont15PromoEnd         AS DATE NO-UNDO. 
    DEF VAR ldaOrderDate AS DATE NO-UNDO. 
+   DEF VAR llgMatrixAvailable AS LOG NO-UNDO. 
+   DEF VAR lcActDSSBundleId   AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest    FOR MsRequest.
    DEF BUFFER bTerMsRequest FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
+   DEF BUFFER bELMobSub     FOR MobSub.
+   DEF BUFFER bPriMobSub    FOR MobSub.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
@@ -1811,28 +1815,64 @@ PROCEDURE pFinalize:
                             ELSE Func.Common:mMakeTS())
                 lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
                 lcDSS4PrimarySubsType = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
-  
-         IF LOOKUP(MsRequest.ReqCparam3,lcDSS4PrimarySubsType) > 0 THEN 
-            ASSIGN lcDSSRelatedSubsType = lcDSS4PrimarySubsType
-                   lcDSSId              = {&DSS4}.
-         ELSE IF LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) > 0 THEN   
-            ASSIGN lcDSSRelatedSubsType = lcDSS2PrimarySubsType
-                   lcDSSId              = {&DSS2}.
 
-         IF (LOOKUP(MsRequest.ReqCparam3,lcDSSRelatedSubsType) > 0 OR
-            (LOOKUP(MsOwner.CLIType,lcDSSRelatedSubsType)      > 0 AND 
-             CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                            CLIType.Brand      EQ Syst.Var:gcBrand   AND 
-                            CLIType.CLIType    EQ MsOwner.CLIType    AND 
-                            CLIType.BaseBundle EQ MsRequest.ReqCParam3))) AND
-            NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS)                    AND
-            NOT fOngoingDSSAct(MsOwner.CustNum)                           AND
+         IF fCLITypeIsMainLine(MsOwner.CLIType) THEN DO:
+
+             llgMatrixAvailable = fCheckActiveExtraLinePair(MsOwner.MsSeq,
+                                                            MsOwner.CLIType,
+                                                            OUTPUT lcActDSSBundleId).
+             FIND FIRST bELMobSub NO-LOCK WHERE
+                        bELMobSub.Brand      EQ Syst.Var:gcBrand AND
+                        bELMobSub.MultiSimId EQ MsOwner.MsSeq    NO-ERROR.
+
+             IF AVAIL bELMobSub    AND 
+                llgMatrixAvailable THEN DO: 
+
+                IF LOOKUP(bELMobSub.CLIType,lcAllowedDSS4SubsType) GT 0  AND
+                    lcActDSSBundleId EQ {&DSS4}                          AND
+                   fIsDSSActivationAllowed(bELMobSub.CustNum,
+                                           bELMobSub.MsSeq,
+                                           ldCurrTS,
+                                           {&DSS4},
+                                           OUTPUT liDSSMsSeq,
+                                           OUTPUT lcError) THEN
+                      ASSIGN lcDSSRelatedSubsType = lcDSS4PrimarySubsType
+                             lcDSSId              = {&DSS4}.
+                ELSE IF LOOKUP(bELMobSub.CLIType,lcAllowedDSS2SubsType) GT 0 AND
+                    lcActDSSBundleId EQ {&DSS2}                              AND
+                   fIsDSSActivationAllowed(bELMobSub.CustNum,
+                                           bELMobSub.MsSeq,
+                                           ldCurrTS,
+                                           {&DSS2},
+                                           OUTPUT liDSSMsSeq,
+                                           OUTPUT lcError) THEN
+                      ASSIGN lcDSSRelatedSubsType = lcDSS2PrimarySubsType 
+                             lcDSSId              = {&DSS2}. 
+             END.  
+
+         END.
+         ELSE IF LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) GT 0 AND 
             fIsDSSActivationAllowed(MsOwner.CustNum,
                                     0,
                                     ldCurrTS,
                                     lcDSSId,
                                     OUTPUT liDSSMsSeq,
-                                    OUTPUT lcError) THEN DO:
+                                    OUTPUT lcError) THEN 
+            ASSIGN lcDSSRelatedSubsType = lcDSS2PrimarySubsType
+                   lcDSSId              = {&DSS2}.
+
+         FIND FIRST bPriMobSub NO-LOCK WHERE 
+                    bPriMobSub.MsSeq EQ liDSSMsSeq NO-ERROR.
+
+         IF AVAIL bPriMobSub                                              AND
+            (LOOKUP(MsRequest.ReqCparam3,lcDSSRelatedSubsType) GT 0 OR
+            (LOOKUP(MsOwner.CLIType,lcDSSRelatedSubsType)      GT 0 AND 
+             CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+                            CLIType.Brand      EQ Syst.Var:gcBrand   AND 
+                            CLIType.CLIType    EQ MsOwner.CLIType    AND 
+                            CLIType.BaseBundle EQ MsRequest.ReqCParam3))) AND
+            NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS)                    AND
+            NOT fOngoingDSSAct(MsOwner.CustNum)                           THEN DO:
 
             /* Functionality changed to deny DSS2 creation if 
                   there is DSS2 termination request. YTS-8140 
@@ -1846,8 +1886,8 @@ PROCEDURE pFinalize:
          LOOKUP(STRING(bTerMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") EQ 0 NO-ERROR.
             
             IF NOT AVAIL bTerMsRequest THEN 
-               liRequest = fDSSCreateRequest(MsOwner.MsSeq,
-                                             MsOwner.CustNum,
+               liRequest = fDSSCreateRequest(bPriMobSub.MsSeq,
+                                             bPriMobSub.CustNum,
                                              lcDSSId,
                                              MsRequest.ReqSource,
                                              MsRequest.MsRequest,
@@ -1855,7 +1895,7 @@ PROCEDURE pFinalize:
                                              "DSS2 activation failed in percontr handling", /* Error Msg */
                                              OUTPUT lcError).
 
-         END. /* IF NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS) AND */ 
+         END. /* IF AVAIL bPriMobSub */ 
          ELSE IF fOngoingDSSTerm(MsOwner.CustNum,ldeLastDayofMonthStamp) AND
                  fIsDSSActivationAllowed(MsOwner.CustNum,
                                          0,
@@ -2817,8 +2857,8 @@ PROCEDURE pContractTermination:
       /* YDR-1818 */
       IF MsRequest.ReqSource  = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
          ( DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
-           DayCampaign.DCType = {&DCTYPE_BUNDLE})                          AND 
-         ( DayCampaign.BundleType NE {&DC_BUNDLE_TYPE_TARIFF} )           THEN DO:
+           DayCampaign.DCType = {&DCTYPE_BUNDLE})                          AND
+         ( DayCampaign.BundleType NE {&DC_BUNDLE_TYPE_TARIFF} )           THEN DO:  
       
          FIND FIRST MobSub NO-LOCK WHERE
                     MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.

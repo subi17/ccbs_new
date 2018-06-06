@@ -1,0 +1,16 @@
+"" 553 "OrderProduct" "OrderProductID" "OrderProductID" 1 01/05/18 31/12/49
+"" 553 "OrderProduct" "@version" "1" 2 01/05/18 31/12/49
+"" 553 "OrderProduct" "OrderProductID" "OrderProductID" 3 01/05/18 31/12/49
+"" 553 "OrderProduct" "OrderId" "OrderId" 4 01/05/18 31/12/49
+"" 553 "OrderProduct" "ActionType" "ActionType" 5 01/05/18 31/12/49
+"" 553 "OrderProduct" "OrderProductID" "OrderProductID" 6 01/05/18 31/12/49
+"" 553 "OrderProduct" "ProductOfferingID" "ProductOfferingID" 7 01/05/18 31/12/49
+"" 554 "OrderProductParam" "#KeyValue" "KeyValue" 1 01/05/18 31/12/49
+"" 554 "OrderProductParam" "@Version" "1" 2 01/05/18 31/12/49
+"" 554 "OrderProductParam" "OrderProductID" "OrderProductID" 3 01/05/18 31/12/49
+"" 554 "OrderProductParam" "ParamName" "ParamName" 4 01/05/18 31/12/49
+"" 554 "OrderProductParam" "ValueType" "ValueType" 5 01/05/18 31/12/49
+"" 554 "OrderProductParam" "DateValue" "DateValue" 6 01/05/18 31/12/49
+"" 554 "OrderProductParam" "CharValue" "CharValue" 7 01/05/18 31/12/49
+"" 554 "OrderProductParam" "IntValue" "IntValue" 8 01/05/18 31/12/49
+"" 554 "OrderProductParam" "DecValue" "DecValue" 9 01/05/18 31/12/49
