@@ -211,7 +211,8 @@ END.
 /* orders */
 order_array = add_array(resp_struct,"orders").
 FOR EACH Order NO-LOCK WHERE
-         Order.MsSeq = TermMobSub.MsSeq :
+         Order.MsSeq = TermMobSub.MsSeq AND
+         Order.OrderType <= {&ORDER_TYPE_STC}:
 
    order_struct = add_struct(order_array,"").
    add_int(order_struct,"id",Order.OrderId).
