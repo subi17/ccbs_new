@@ -1,9 +1,9 @@
 /*--------------------------------------------------------------------
-  MODULE .......: YCO-276_upsell_update_monthly_3gb_12m.p
-  TASK .........: Activating 3gb upsell for 12 months - FID3GB_12m_R_Upsell
+  MODULE .......: YCO-275_upsell_update_monthly_5gb_12m_with_penalty.p
+  TASK .........: Activating 5gb upsell for 12 months - RET5GB_12mP_R_UPSELL
   APPLICATION ..: TMS
   AUTHOR .......: Diego Pastrana
-  CREATED ......: 27/04/2018
+  CREATED ......: 09/05/2018
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
@@ -33,16 +33,10 @@ DEF VAR lcResult            AS CHAR NO-UNDO.
 DEF VAR lcOutRow            AS CHAR NO-UNDO.
 DEF VAR ldCampaignStart     AS DEC  NO-UNDO.
 DEF VAR ldCampaignEnd       AS DEC  NO-UNDO.
-DEF VAR lcclitype           AS CHAR NO-UNDO. /* YCO-457 */
-DEF VAR lcBundleCLITypes    AS CHAR NO-UNDO. /* YCO-457 */
 
 /* List of valid tariffs for this upsell */
 DEF VAR cValidList AS CHAR INITIAL
    "CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000,CONTFH39_50,CONTFH49_300,CONTFH69_1000,CONTFH48_50,CONTFH58_300,CONTFH76_1000,CONTFH3G_50,CONTFH3G_300,CONTFH3G_1000,CONTFH7G_50,CONTFH7G_300,CONTFH7G_1000,CONTFH59_50,CONTFH69_300,CONTFH89_1000,CONTFH99_50,CONTFH109_300,CONTFH129_1000,CONT34,CONT15,CONT33,CONT25,CONTFH35_50,CONTFH45_300,CONTFH65_1000".
-
-/* YCO-457 - Adding legacy tariffs to the list so they are also renewed */
-cValidList = cValidList + ",CONT6,CONT7,CONT8,CONT9,CONTF11,CONTF20D,CONTF30,CONTF40,CONTF55,CONTF8,CONTM,CONTM2,CONT23,CONT24,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONT28,CONT27,CONT31,CONTRD1,CONTRD2,CONTRD3,CONTRD4,CONTRD9".
-
 
 /* Temp table for orders of activated mobsubs during the collection period */
 DEF TEMP-TABLE ttMobSubList NO-UNDO
@@ -53,22 +47,21 @@ DEF TEMP-TABLE ttMobSubList NO-UNDO
 DEF STREAM sLogFile.
 
 ASSIGN 
-   llgSimulation   = FALSE                                     /* TRUE -> only log writing, FALSE -> make real updates */
-   lcActionId      = "FID3GB_12m_R_UPSELL"                     /* For execution lock                                   */
-   lcTableName     = "FID3GB_12m-Promo"                        /* For execution lock                                   */
+   llgSimulation   = FALSE                                      /* TRUE -> only log writing, FALSE -> make real updates */
+   lcActionId      = "RET5GB_12mP_R_UPSELL"                      /* For execution lock                                   */
+   lcTableName     = "RET5GB_12m-with-penalty-Promo"              /* For execution lock                                   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
-   lcUpsell        = "FID3GB_12m_R_UPSELL"                     /* Upsells that will be added in the promo              */
-   ldCampaignStart = fCParamDe("YCO-276-FID3GB_12m-FromDate")  /* Promotion start date                                 */
-   ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_12m-ToDate")    /* Promotion end date                                   */
-   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").       /* YCO-457 */
+   lcUpsell        = "RET5GB_12mP_R_UPSELL"                      /* Upsells that will be added in the promo              */
+   ldCampaignStart = fCParamDe("YCO-275-RET5GB_12m-FromDate")   /* Promotion start date                                 */
+   ldCampaignEnd   = fCParamDe("YCO-275-RET5GB_12m-ToDate").    /* Promotion end date                                   */
 
 ASSIGN 
    ldaReadDate  = TODAY
-   lcLogDir     = fCParam("YCO-276-Dir","YCO-276-FID3GB_Xm-Logs").
+   lcLogDir     = fCParam("YCO-275-Dir","YCO-275-RET5GB_Xm-Logs").
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
 ASSIGN 
-   lcLogFile    = lcLogDir + "FID3GB_12m_upsell_3Gb_update_" +
+   lcLogFile    = lcLogDir + "RET5GB_12mP_upsell_5Gb_update_" +
                              STRING(YEAR(ldaReadDate)) +
                              STRING(MONTH(ldaReadDate),"99") +
                              STRING(DAY(ldaReadDate),"99") +
@@ -115,20 +108,10 @@ FUNCTION fCollect RETURNS CHAR
          NEXT.
       END.
 
-      /* YCO-457
-         - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
-         - The compatibility matrix have the specific tariffs rather than the "families"
-           because not all members of a "family" are compatible. So I have to pass the
-           tariffbundle that contains the specific tariff to the function in charge of the validation */
-      IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN
-          lcclitype = Mobsub.tariffbundle.
-      ELSE 
-          lcclitype = Mobsub.CliType.      
-
-      IF fIsValid(lcclitype) NE TRUE THEN DO:
+      IF fIsValid(Mobsub.CliType) NE TRUE THEN DO:
          lcErr = "No valid CLITYPE"      + "|" +
                  STRING(MobSub.cli)      + "|" +
-                 STRING(lcclitype)       + "|" +
+                 STRING(MobSub.clitype)  + "|" +
                  STRING(MSRequest.MsSeq).
          PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
          NEXT.
@@ -223,7 +206,7 @@ END.
 /* **************************** MAIN BLOCK *************************** */
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
-PUT STREAM sLogFile UNFORMATTED "FID3GB_12m 3Gb Activation starts " +
+PUT STREAM sLogFile UNFORMATTED "RET5GB_12m with penalty 5Gb Activation starts " +
                                  Func.Common:mTS2HMS(ldCurrentTimeTS) SKIP.
 IF llgSimulation EQ TRUE THEN
    PUT STREAM sLogFile UNFORMATTED "Simulation mode" SKIP.
@@ -306,7 +289,7 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
-PUT STREAM sLogFile UNFORMATTED "FID3GB_12m 3Gb Activation done " +
+PUT STREAM sLogFile UNFORMATTED "RET5GB_12m with penalty 5Gb Activation done " +
                                  Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLogFile CLOSE.
 
