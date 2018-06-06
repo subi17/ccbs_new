@@ -10,7 +10,6 @@
  * @output success;boolean
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Mnp/mnpoutchk.i}
 {Func/msreqfunc.i}
 
 DEF VAR liReq AS INTEGER NO-UNDO.
@@ -80,7 +79,7 @@ WHERE MsRequest.MsSeq     EQ mobsub.MsSeq
 IF AVAIL MsRequest THEN
    RETURN appl_err("ICC change process already exists").
 
-IF fIsMNPOutOngoing(mobsub.cli) THEN RETURN appl_err("Ongoing MNP OUT request").
+IF Mnp.MNPOutGoing:mIsMNPOutOngoing(mobsub.cli) THEN RETURN appl_err("Ongoing MNP OUT request").
 
 IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
