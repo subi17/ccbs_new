@@ -422,8 +422,8 @@ ELSE DO:
                   Order.Brand EQ Syst.Var:gcBrand AND
                   Order.OrderID = OrderCustomer.OrderID:
 
-             IF Order.OrderType NE {&ORDER_TYPE_NEW} OR
-                Order.OrderType NE {&ORDER_TYPE_MNP} OR
+             IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+                Order.OrderType NE {&ORDER_TYPE_MNP} AND
                 Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
              IF OrderCustomer.PRO EQ FALSE THEN 
