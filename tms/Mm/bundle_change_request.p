@@ -419,7 +419,7 @@ PROCEDURE pMultiSimBTC:
       MsRequest.MsSeq   = lbMobSub.Msseq AND
       MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
       LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) OR
-      fIsMNPOutOngoing(INPUT lbMobSub.CLI)
+      Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI)
    THEN RETURN.
 
    fTermAdditionalSim(lbMobSub.MsSeq,
