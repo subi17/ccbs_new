@@ -33,10 +33,15 @@ DEF VAR lcResult            AS CHAR NO-UNDO.
 DEF VAR lcOutRow            AS CHAR NO-UNDO.
 DEF VAR ldCampaignStart     AS DEC  NO-UNDO.
 DEF VAR ldCampaignEnd       AS DEC  NO-UNDO.
+DEF VAR lcclitype           AS CHAR NO-UNDO. /* YCO-457 */
+DEF VAR lcBundleCLITypes    AS CHAR NO-UNDO. /* YCO-457 */
 
 /* List of valid tariffs for this upsell */
 DEF VAR cValidList AS CHAR INITIAL
    "CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000,CONTFH39_50,CONTFH49_300,CONTFH69_1000,CONTFH48_50,CONTFH58_300,CONTFH76_1000,CONTFH3G_50,CONTFH3G_300,CONTFH3G_1000,CONTFH7G_50,CONTFH7G_300,CONTFH7G_1000,CONTFH59_50,CONTFH69_300,CONTFH89_1000,CONTFH99_50,CONTFH109_300,CONTFH129_1000,CONT34,CONT15,CONT33,CONT25,CONTFH35_50,CONTFH45_300,CONTFH65_1000".
+
+/* YCO-457 - Adding legacy tariffs to the list so they are also renewed */
+cValidList = cValidList + ",CONT6,CONT7,CONT8,CONT9,CONTF11,CONTF20D,CONTF30,CONTF40,CONTF55,CONTF8,CONTM,CONTM2,CONT23,CONT24,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONT28,CONT27,CONT31,CONTRD1,CONTRD2,CONTRD3,CONTRD4,CONTRD9".
 
 /* Temp table for orders of activated mobsubs during the collection period */
 DEF TEMP-TABLE ttMobSubList NO-UNDO
@@ -53,7 +58,8 @@ ASSIGN
    ldCurrentTimeTS = Func.Common:mMakeTS()
    lcUpsell        = "FID3GB_6m_R_UPSELL"                     /* Upsells that will be added in the promo              */
    ldCampaignStart = fCParamDe("YCO-276-FID3GB_6m-FromDate")  /* Promotion start date                                 */
-   ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_6m-ToDate").   /* Promotion end date                                   */
+   ldCampaignEnd   = fCParamDe("YCO-276-FID3GB_6m-ToDate")    /* Promotion end date                                   */
+   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").      /* YCO-457 */
 
 ASSIGN 
    ldaReadDate  = TODAY
@@ -108,10 +114,20 @@ FUNCTION fCollect RETURNS CHAR
          NEXT.
       END.
 
-      IF fIsValid(Mobsub.CliType) NE TRUE THEN DO:
+      /* YCO-457
+         - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
+         - The compatibility matrix have the specific tariffs rather than the "families"
+           because not all members of a "family" are compatible. So I have to pass the
+           tariffbundle that contains the specific tariff to the function in charge of the validation */
+      IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN
+          lcclitype = Mobsub.tariffbundle.
+      ELSE 
+          lcclitype = Mobsub.CliType.      
+
+      IF fIsValid(lcclitype) NE TRUE THEN DO:
          lcErr = "No valid CLITYPE"      + "|" +
                  STRING(MobSub.cli)      + "|" +
-                 STRING(MobSub.clitype)  + "|" +
+                 STRING(lcclitype)       + "|" +
                  STRING(MSRequest.MsSeq).
          PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
          NEXT.

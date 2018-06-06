@@ -1,0 +1,1 @@
+{triggers/hpddelete_generic.i OrderProductParam ORDERPRODUCTPARAM Ordercanal OrderProductID ParamName}
