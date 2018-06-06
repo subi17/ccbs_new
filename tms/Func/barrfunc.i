@@ -36,27 +36,6 @@ DEFINE TEMP-TABLE ttProvCommand NO-UNDO
    FIELD FixedValue AS LOG
    FIELD DropService AS CHAR.
 
-FUNCTION fGetActiveBarrings RETURNS CHAR
-   (iiMsSeq AS INTEGER):
-
-   /*groups of checked barrings*/
-   DEF VAR lcBList AS CHAR NO-UNDO.
-
-   DEF BUFFER Barring FOR Barring.
-
-   FOR EACH Barring NO-LOCK WHERE
-            Barring.MsSeq EQ iiMsSeq
-            USE-INDEX MsSeq BREAK BY Barring.BarringCode:
-
-      IF FIRST-OF(BarringCode) AND
-         Barring.BarringStatus NE {&BARR_STATUS_INACTIVE} THEN DO:
-         IF lcBList EQ "" THEN lcBList =  Barring.BarringCode.
-         ELSE lcBList = LcBList + "," + Barring.BarringCode.
-      END.
-  END.
-  RETURN RIGHT-TRIM(lcBList, ",").
-END.
-
 /*
 fCheckBarrStatus:
 Parameters:
@@ -95,7 +74,7 @@ FUNCTION fCheckBarrStatus RETURNS LOGICAL
    END.
 
    /* Find active barrings */
-   ocActiveList = fGetActiveBarrings(iiMsSeq).
+   ocActiveList = Func.BarrMethod:mGetActiveBarrings(iiMsSeq).
 
    RETURN llRet.
 
@@ -449,9 +428,9 @@ FUNCTION fExistBarredSubForCustomer RETURNS LOGICAL
             MobSub.Brand = Syst.Var:gcBrand AND 
             MobSub.CustNum = piCustNum AND 
             MobSub.MsStatus = 8 : 
-      lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
-      IF fIsInList(lcActiveBarrings,{&FRAUD_BARR_CODES}) EQ TRUE THEN 
-         RETURN TRUE.
+      IF Func.BarrMethod:mSubsHaveActiveBarring(MobSub.MsSeq,
+                                                {&FRAUD_BARR_CODES})
+      THEN RETURN TRUE.
    END.
    RETURN FALSE.
 END FUNCTION.
