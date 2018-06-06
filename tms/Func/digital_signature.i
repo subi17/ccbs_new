@@ -45,6 +45,11 @@ FUNCTION fHandleSignature RETURNS CHAR
    IF NOT AVAIL bOrder THEN
       RETURN "Error".
 
+   IF bOrder.OrderType NE {&ORDER_TYPE_NEW} AND
+      bOrder.OrderType NE {&ORDER_TYPE_MNP} AND
+      bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} AND
+      bOrder.OrderType NE {&ORDER_TYPE_STC} THEN RETURN "Unsupported order type".
+
    /* Check that we are handling Tienda or Telesales order */
    
    IF /* bOrder.Logistics NE "" AND*/
