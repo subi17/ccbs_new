@@ -23,7 +23,7 @@ Syst.Var:gcBrand = "1".
 {Func/upsellbundle.i}
 {Func/msreqfunc.i}
 {Func/fsendsms.i}
-{Func/fdss.i}
+{Func/dss_request.i}
 {Func/fprepaidfee.i}
 {Mm/fbundle.i}
 
@@ -148,7 +148,8 @@ FUNCTION fSetMDUB RETURNS INT
          IF pcBundleID EQ "VOICE200B" THEN DO:
             IF NOT fIsBundleAllowed(Mobsub.CLIType,
                                 "VOICE200B",
-                                OUTPUT lcError) THEN
+                                OUTPUT lcError) OR
+               NOT fAllowMDUBActivation("VOICE_") THEN
                ocError = pcBundleID + " Actiavtion not allowed".
          END.
 

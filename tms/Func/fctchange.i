@@ -13,12 +13,10 @@
 &IF "{&fctchange}" NE "YES"
 &THEN
 &GLOBAL-DEFINE fctchange YES
-{Syst/commali.i}
 {Func/cparam2.i}
 {Func/fctserval.i}
 {Func/matrix.i}
 {Syst/tmsconst.i}
-{Mnp/mnpoutchk.i}
 {Mnp/mnp.i}
 {Mm/requestaction_exec.i}
 {Func/fcustpl.i}
@@ -268,7 +266,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    IF ocError NE "" THEN RETURN FALSE.
    
    /* 4 */
-   lcMNP = fGetMNPOutOngoing(MobSub.CLI).
+   lcMNP = Mnp.MNPOutGoing:mGetMNPOutOngoing(MobSub.CLI).
    IF lcMNP NE "" THEN DO: 
       
       FIND MNPProcess WHERE

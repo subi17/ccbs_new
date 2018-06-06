@@ -86,7 +86,8 @@ DEFINE VARIABLE lcTerritoryOwner   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCoverageToken    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcAddressID        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcToday            AS CHARACTER NO-UNDO.
-
+DEFINE VARIABLE liMonth            AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liYear             AS INTEGER   NO-UNDO.
 
 /* ***************************  Main Block  *************************** */
 
@@ -222,90 +223,125 @@ DO ON ERROR UNDO , LEAVE:
                     PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) ";install_address_change_request_failed;" + "Order is not a Convergent Order."  SKIP.
                     NEXT.
                 END.
-                FIND FIRST OrderCustomer WHERE 
-                           OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
-                           OrderCustomer.OrderId EQ liOrderID        AND
-                           OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-                           EXCLUSIVE-LOCK NO-ERROR.      
-                IF LOCKED OrderCustomer THEN 
-                DO:
-                    PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_request_failed;" + "OrderCustomer record is locked"  SKIP.
-                    PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_request_failed;" + "OrderCustomer record is locked"  SKIP.
-                    NEXT.
-                END.
-                ASSIGN 
-                    llCreation      = FALSE
-                    lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
-                
-                IF NOT AVAILABLE  OrderCustomer THEN DO:
-                    llCreation = TRUE .
-                    CREATE OrderCustomer. 
-                    RUN StarEventInitialize(lhOrderCustomer).
-                END.
-                ELSE 
-                    RUN StarEventSetOldBuffer(lhOrderCustomer).
-                    
-                ASSIGN
-                    OrderCustomer.Brand          = Syst.Var:gcBrand 
-                    OrderCustomer.Order          = liOrderID
-                    OrderCustomer.RowType        = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-                    OrderCustomer.FirstName      = lcFirstName
-                    OrderCustomer.Surname1       = lcSurname1
-                    OrderCustomer.Surname2       = lcSurname2
-                    OrderCustomer.MobileNumber   = lcPhoneNumber
-                    OrderCustomer.Street         = lcStreet
-                    OrderCustomer.PostOffice     = lcCity
-                    OrderCustomer.ZipCode        = lcZipCode
-                    OrderCustomer.BuildingNum    = lcStreetNumber
-                    OrderCustomer.Region         = lcRegion
-                    OrderCustomer.Email          = lcEmail
-                    OrderCustomer.Gescal         = lcGescal
-                    OrderCustomer.Floor          = lcFloor
-                    OrderCustomer.StreetType     = lcStreetType
-                    OrderCustomer.BisDuplicate   = lcBisDuplicate
-                    OrderCustomer.Block          = lcBlock
-                    OrderCustomer.Door           = lcDoor
-                    OrderCustomer.Letter         = lcLetter
-                    OrderCustomer.Stair          = lcStair
-                    OrderCustomer.Hand           = lcHand
-                    OrderCustomer.Km             = lcKm
-                    OrderCustomer.TerritoryOwner = lcTerritoryOwner
-                    OrderCustomer.CoverageToken  = lcCoverageToken
-                    OrderCustomer.AddressId      = lcAddressID
-                    OrderCustomer.Address        = OrderCustomer.Street .
-                IF OrderCustomer.BuildingNum NE "" THEN 
-                   OrderCustomer.Address = OrderCustomer.Address + " " +
-                                            OrderCustomer.BuildingNum.         
-                IF llCreation THEN
-                    RUN StarEventMakeCreateEvent(lhOrderCustomer ). 
-                ELSE 
-                    RUN StarEventMakeModifyEvent(lhOrderCustomer).
-                RELEASE OrderCustomer.
 
-                PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_changed;" SKIP.
-                PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_changed;" SKIP.
-                
-                IF llCreateSTC  THEN DO:
-                    ldActivationTS = Func.Common:mMake2DT( TODAY + 1 , 0 ).
-                    llReqExist4Month = FALSE.
+                IF NOT llCreateSTC THEN
+                DO:
+                    FIND FIRST OrderCustomer WHERE 
+                               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
+                               OrderCustomer.OrderId EQ liOrderID        AND
+                               OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+                               EXCLUSIVE-LOCK NO-ERROR.      
+                    IF LOCKED OrderCustomer THEN 
+                    DO:
+                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_request_failed;" + "OrderCustomer record is locked"  SKIP.
+                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_request_failed;" + "OrderCustomer record is locked"  SKIP.
+                        NEXT.
+                    END.
+                    ASSIGN 
+                        llCreation      = FALSE
+                        lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
+                    
+                    IF NOT AVAILABLE  OrderCustomer THEN DO:
+                        llCreation = TRUE .
+                        CREATE OrderCustomer. 
+                        RUN StarEventInitialize(lhOrderCustomer).
+                    END.
+                    ELSE 
+                        RUN StarEventSetOldBuffer(lhOrderCustomer).
+                        
+                    ASSIGN
+                        OrderCustomer.Brand          = Syst.Var:gcBrand 
+                        OrderCustomer.Order          = liOrderID
+                        OrderCustomer.RowType        = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+                        OrderCustomer.FirstName      = lcFirstName
+                        OrderCustomer.Surname1       = lcSurname1
+                        OrderCustomer.Surname2       = lcSurname2
+                        OrderCustomer.MobileNumber   = lcPhoneNumber
+                        OrderCustomer.Street         = lcStreet
+                        OrderCustomer.PostOffice     = lcCity
+                        OrderCustomer.ZipCode        = lcZipCode
+                        OrderCustomer.BuildingNum    = lcStreetNumber
+                        OrderCustomer.Region         = lcRegion
+                        OrderCustomer.Email          = lcEmail
+                        OrderCustomer.Gescal         = lcGescal
+                        OrderCustomer.Floor          = lcFloor
+                        OrderCustomer.StreetType     = lcStreetType
+                        OrderCustomer.BisDuplicate   = lcBisDuplicate
+                        OrderCustomer.Block          = lcBlock
+                        OrderCustomer.Door           = lcDoor
+                        OrderCustomer.Letter         = lcLetter
+                        OrderCustomer.Stair          = lcStair
+                        OrderCustomer.Hand           = lcHand
+                        OrderCustomer.Km             = lcKm
+                        OrderCustomer.TerritoryOwner = lcTerritoryOwner
+                        OrderCustomer.CoverageToken  = lcCoverageToken
+                        OrderCustomer.AddressId      = lcAddressID
+                        OrderCustomer.Address        = OrderCustomer.Street .
+                    IF OrderCustomer.BuildingNum NE "" THEN 
+                       OrderCustomer.Address = OrderCustomer.Address + " " +
+                                                OrderCustomer.BuildingNum.         
+                    IF llCreation THEN
+                        RUN StarEventMakeCreateEvent(lhOrderCustomer ). 
+                    ELSE 
+                        RUN StarEventMakeModifyEvent(lhOrderCustomer).
+                    RELEASE OrderCustomer.
+
+                    PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_changed;" SKIP.
+                    PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_changed;" SKIP.
+                END.
+                ELSE 
+                DO:
+                    ASSIGN 
+                        liMonth          = 0
+                        liYear           = 0
+                        llReqExist4Month = FALSE
+                        ldActivationTS   = Func.Common:mMake2DT(TODAY + 1, 0).
+                        
                     FOR EACH MsRequest 
-                       WHERE MsRequest.Msseq   = Order.Msseq
-                         AND Msrequest.reqtype = 0 NO-LOCK BY MsRequest.CreStamp DESC:
+                       WHERE MsRequest.Msseq     = Order.Msseq
+                         AND MsRequest.ReqType   = 0 
+                         AND MsRequest.ReqStatus = 2 NO-LOCK BY MsRequest.CreStamp DESC:
                              /* Not in current month */
-                        IF ( MONTH(Func.Common:mTSToDate(MsRequest.CreStamp)) NE MONTH(TODAY) ) AND 
-                           ( YEAR(Func.Common:mTSToDate(MsRequest.CreStamp))  EQ YEAR(TODAY)  ) THEN LEAVE.
-                        FIND CliType1 WHERE CliType1.Brand = Order.Brand AND CliType1.CliType = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
-                        FIND CliType2 WHERE CliType2.Brand = Order.Brand AND CliType2.CliType = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
-                        IF NOT AVAILABLE CliType1 OR  NOT AVAILABLE CLiType2 THEN NEXT.
-                        /* same tech then NEXT  */
-                        IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN NEXT .
-                        llReqExist4Month = TRUE .
+                        ASSIGN 
+                            liMonth = MONTH(Func.Common:mTSToDate(MsRequest.CreStamp))
+                            liYear  =  YEAR(Func.Common:mTSToDate(MsRequest.CreStamp)).
+                             
+                        IF liMonth NE MONTH(TODAY) OR (liMonth EQ MONTH(TODAY) AND liYear <> YEAR(TODAY)) THEN 
+                            LEAVE.
+
+                        llReqExist4Month = TRUE.
+
                         LEAVE.
                     END.
-                    IF llReqExist4Month THEN DO:
-                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_fail;" + "There exist STC already for this month." SKIP.
-                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_fail;" + "There exist STC already for this month." SKIP.
-                        NEXT.
+
+                    IF llReqExist4Month THEN 
+                    DO:
+                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_creation;" + "There exist STC already for this month, so request is created for next month." SKIP.
+                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_creation;" + "There exist STC already for this month, so request is created for next month." SKIP.
+                        ASSIGN ldActivationTS = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(TODAY + 1) + 1), 0).
+                    END.
+
+                    /* same tech then NEXT  */
+                    FIND FIRST MobSub WHERE MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
+                    IF AVAILABLE MobSub THEN
+                    DO:
+                        FIND CliType1 WHERE CliType1.Brand = Order.Brand AND CliType1.CliType = MobSub.CliType NO-LOCK NO-ERROR.
+                        FIND CliType2 WHERE CliType2.Brand = Order.Brand AND CliType2.CliType = lcNewCliType   NO-LOCK NO-ERROR.
+                        IF NOT AVAILABLE CliType1 OR  NOT AVAILABLE CLiType2 THEN NEXT.
+                        
+                        IF NOT (LOOKUP(STRING(CliType1.TariffType),"{&CLITYPE_TARIFFTYPE_CONVERGENT},{&CLITYPE_TARIFFTYPE_FIXEDONLY}") > 0 AND 
+                                LOOKUP(STRING(CliType2.TariffType),"{&CLITYPE_TARIFFTYPE_CONVERGENT},{&CLITYPE_TARIFFTYPE_FIXEDONLY}") > 0) THEN
+                        DO:
+                            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_fail;" + "STC request between non-convergent nor non-fixedonly." SKIP.
+                            PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_fail;" + "STC request between non-convergent nor non-fixedonly." SKIP.
+                            NEXT.
+                        END.
+                        ELSE IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN
+                        DO:
+                            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_fail;" + "STC request between same technology." SKIP.
+                            PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_fail;" + "STC request between same technology." SKIP.
+                            NEXT.
+                        END.
                     END.
                                                         
                     liRequest = fCTChangeRequest ( Order.msseq,
@@ -321,22 +357,22 @@ DO ON ERROR UNDO , LEAVE:
                                     "" ,    /* Creator           */
                                     0  ,    /* Charge            */
                                     {&REQUEST_SOURCE_YOIGO_TOOL}, 
-                                    liOrderID , 
+                                    0  , 
                                     0  ,    /* Parent Request */
                                     '' ,    /* Conract ID */
                                     OUTPUT ocInfo).
                     IF ocInfo > "" THEN DO:
-                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_creation_failed;" + ocInfo SKIP.
-                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_creation_failed;" + ocInfo  SKIP.
+                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_creation_failed;" + ocInfo SKIP.
+                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_creation_failed;" + ocInfo  SKIP.
                     END.
                     ELSE DO:
-                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
-                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
+                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
+                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
                     END.   
                 END.
                 CATCH err AS Progress.Lang.Error :
-                    PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_creation_failed;" + err:GetMessage(1) SKIP.
-                    PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_creation_failed;" + err:GetMessage(1) SKIP.
+                    PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_creation_failed;" + err:GetMessage(1) SKIP.
+                    PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_creation_failed;" + err:GetMessage(1) SKIP.
                 END CATCH.
             END. /* repeat  */            
             INPUT STREAM sCurrentFile CLOSE.

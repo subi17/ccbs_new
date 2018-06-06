@@ -9,15 +9,13 @@
   --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/fmakemsreq.i}
 {Func/fpcmaintreq.i}
 {Func/service.i}
-{Func/cparam2.i}
+{Func/fmakemsreq.i}
 {Mm/requestaction_exec.i}
-{Syst/tmsconst.i}
 {Func/penaltyfee.i}
 {Func/fcustpl.i}
-{Func/fdss.i}
+{Func/dss_matrix.i}
 {Mm/fbundle.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
@@ -121,7 +119,7 @@ PROCEDURE pRequestActions:
    BY RequestAction.Action DESC    /* terminations before activations */
    BY ttAction.ActionType
    BY ttAction.ActionKey:
- 
+
       /* additional rules defined */
       RUN pDoRulesAllow(liMsSeq,
                         icCLIType,

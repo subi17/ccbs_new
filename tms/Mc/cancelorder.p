@@ -12,7 +12,7 @@ hell MODULE .......: cancelorder.p
 {Func/fsubstermreq.i}
 {Func/ordercancel.i}
 {Func/fmakemsreq.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.
@@ -41,6 +41,10 @@ FIND Order NO-LOCK WHERE
 IF NOT AVAIL Order THEN RETURN "".
 
 IF LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 THEN RETURN "".
+
+IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+   Order.OrderType NE {&ORDER_TYPE_MNP} AND
+   Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN RETURN "".
 
 IF ilCheckLOStatus THEN DO:
 

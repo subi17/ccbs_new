@@ -221,15 +221,15 @@
                   IF Order.MultiSimId     <> 0                                 AND 
                      Order.MultiSimType   = {&MULTISIMTYPE_EXTRALINE}          AND 
                      CAN-FIND(FIRST OrderAction NO-LOCK WHERE 
-                                    OrderAction.Brand    = Syst.Var:gcBrand             AND 
+                                    OrderAction.Brand    = Syst.Var:gcBrand    AND 
                                     OrderAction.OrderID  = Order.OrderID       AND
                                     OrderAction.ItemType = "ExtraLineDiscount" AND  
                                     OrderAction.ItemKey  = Order.CLIType + "DISC") THEN 
                   DO:
                      
-                     /* Check Mainline Convergent fixedline is installed OR it is still ongoing */
-                     IF fCheckFixedLineInstalledForMainLine(Order.MultiSimId,   /* Mainline Order Id  */
-                                                            Order.OrderId) THEN /* Extraline Order Id */
+                     /* Check Mainline Convergent is delivered or closed, 
+                        if true then don't move extraline to 76 (Pending mainline status) */
+                     IF NOT fCheckMainLineOrderStatus(Order.MultiSimId) THEN   /* Mainline Order Id */
                      DO:
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.
@@ -324,7 +324,7 @@
 
                
             /* Renove handling */ 
-            IF Order.OrderType = 2 THEN DO:
+            IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN DO:
               
                /* YBP-588 */
                /* prevent duplicate renove request creation */
@@ -392,6 +392,28 @@
 
                RELEASE Order.
                NEXT {1}.
+            END.
+            
+            IF Order.OrderType EQ {&ORDER_TYPE_ACC} THEN DO:
+
+               RUN Mm/acc_order.p(Order.OrderID, OUTPUT liRequestID).
+               
+               IF liRequestID > 0 THEN
+                  /* YBP-597 */ 
+                  llOrdStChg = fSetOrderStatus(Order.OrderId,"12").
+               ELSE DO:
+                  /* YBP-598 */ 
+                  Func.Common:mWriteMemo("Order",
+                                   STRING(Order.OrderID),
+                                   0,
+                                   "ACC request creation failed",
+                                   RETURN-VALUE).
+                  llOrdStChg = fSetOrderStatus(Order.OrderId,"4").
+               END.
+
+               RELEASE Order.
+               NEXT {1}.
+            
             END.
              
              /* YBP-594 */ 

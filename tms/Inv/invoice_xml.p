@@ -727,7 +727,7 @@ PROCEDURE pSubInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
       lhXML:START-ELEMENT("ContractType").      
       IF fIsPro(Customer.Category) THEN
-         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName + " PRO").  
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName + " PRO"). /* YCO-27 */ 
       ELSE
          lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName). /* No PRO logic needed */               
       lhXML:WRITE-CHARACTERS(ttSub.CLIType).      
@@ -736,7 +736,7 @@ PROCEDURE pSubInvoice2XML:
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
          IF fIsPro(Customer.Category) THEN
-            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").  /* YCO-27 */
          ELSE
             lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName). /* No PRO logic needed */
          
@@ -756,6 +756,7 @@ PROCEDURE pSubInvoice2XML:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
          lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
+         lhXML:WRITE-DATA-ELEMENT("CustomerIUA", ttSub.IUA).
          lhXML:END-ELEMENT("CustomContract").
       END.
       IF ttSub.MessageType > "" THEN DO:

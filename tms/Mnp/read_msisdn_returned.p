@@ -18,6 +18,7 @@ Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Func/email.i}
 {Func/msisdn.i}
+{Func/msisdn_prefix.i}
 
 DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
@@ -40,6 +41,7 @@ DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO.
 DEFINE VARIABLE llSkipFile AS LOGICAL NO-UNDO.
+DEFINE VARIABLE liNumSkipped AS INTEGER NO-UNDO. 
 
 /* field variables */
 DEFINE VARIABLE lcMSISDN AS CHARACTER NO-UNDO. 
@@ -80,7 +82,8 @@ REPEAT:
    ASSIGN
       liNumErr = 0
       liNumOK = 0
-      llSkipFile = FALSE.
+      llSkipFile = FALSE
+      liNumSkipped = 0.
 
    IMPORT STREAM sFile UNFORMATTED lcFileName.
  
@@ -158,18 +161,19 @@ REPEAT:
          RUN pReturnMSISDN(lcMSISDN,
                          ldaDate).
    
-         IF RETURN-VALUE BEGINS "ERROR" THEN DO:
-            fError(ENTRY(2,RETURN-VALUE,":")).
+      IF RETURN-VALUE BEGINS "ERROR" THEN
             liNumErr = liNumErr + 1 .
-         END.
-         ELSE DO:
-            liNumOK = liNumOK + 1 .
-         END.
+      ELSE IF RETURN-VALUE BEGINS "SKIPPED" THEN
+         liNumSkipped = liNumSkipped + 1.
+      ELSE liNumOK = liNumOK + 1 .
+         
+      IF RETURN-VALUE NE "" THEN fLogLine(RETURN-VALUE).
       END.
      
       PUT STREAM sLog UNFORMATTED 
-          "input: " STRING(liNumOK + liNumErr) ", "
+       "input: " STRING(liNumOK + liNumErr + liNumSkipped) ", "
           "updated: " STRING(liNumOK) ", "
+       "skipped: " STRING(liNumSkipped) ", "
           "errors: " STRING(liNumErr) SKIP.
    END.
 
@@ -195,6 +199,9 @@ PROCEDURE pReturnMSISDN:
 
    DEF INPUT PARAMETER icMSISDN AS CHAR NO-UNDO.
    DEF INPUT PARAMETER idaDate AS DATE NO-UNDO.
+
+   IF NOT fIsYoigoCLI(icMSISDN) THEN
+      RETURN "SKIPPED:MSISDN is not in Yoigo range".
 
    FIND FIRST MSISDN WHERE 
        MSISDN.Brand = Syst.Var:gcBrand AND

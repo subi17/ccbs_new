@@ -33,7 +33,7 @@ Syst.Var:gcBrand = "1".
 {Func/penaltyfee.i}
 {Func/fctchange.i}
 {Func/main_add_lines.i}
-{Func/fdss.i}
+{Func/dss_matrix.i}
 {Func/fixedlinefunc.i}
 
 /* Input parameters */
@@ -159,7 +159,8 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
 
    lcBono = fGetCurrentSpecificBundle(Mobsub.MsSeq,"BONO").
 
-   IF NOT fSTCPossible(MobSub.CustNum, pcNewCLIType)
+   IF fCLITypeIsExtraLine(pcNewCLIType)   AND               
+      NOT fValidateExtraLineSTC(MobSub.CustNum, pcNewCLIType)
    THEN DO:
       add_string(warning_array,"","STC_EXTRALINE_ERROR").
       RETURN FALSE.
@@ -198,10 +199,11 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
       lcParentValue = "CONVERGENT".
       /* If the old CLIType can have extraline and the extraline actually exists */
       IF fCLITypeIsMainLine(MobSub.CLIType) AND
-         CAN-FIND(FIRST lELMobSub NO-LOCK WHERE
-                        lELMobSub.MsSeq         EQ MobSub.MultiSimId          AND
-                        lELMobSub.MultiSimId    EQ MobSub.MsSeq               AND
-                        lELMobSub.MultiSimtype  EQ {&MULTISIMTYPE_EXTRALINE}  AND
+         CAN-FIND(FIRST lELMobSub USE-INDEX MultiSimID NO-LOCK WHERE
+                        lELMobSub.Brand        EQ Syst.Var:gcBrand AND
+                        lELMobSub.MultiSimId   EQ MobSub.MsSeq               AND
+                        lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE}  AND
+                        lELMobSub.Custnum      EQ Mobsub.Custnum AND
                        (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
                         lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}))
       THEN lcParentValue = fExtraLineForMainLine(MobSub.CLIType).

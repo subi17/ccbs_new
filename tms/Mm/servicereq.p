@@ -19,6 +19,7 @@
 {Func/msopenbatch.i}
 {Func/remfees.i}
 {Func/barrfunc.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -267,13 +268,14 @@ PROCEDURE pServCompUpdate:
    DEF VAR lcBarring AS CHAR NO-UNDO. 
    DEF VAR lrBarring AS ROWID no-undo.
    DEF VAR llOngoing AS LOG NO-UNDO. 
-      
 
    DEF BUFFER bOrigRequest    FOR MsRequest.
    DEF BUFFER bMobsub         FOR MobSub.
    DEF BUFFER bOrder          FOR Order.
    DEF BUFFER bOrderAccessory FOR OrderAccessory.
    DEF BUFFER bSubSer         FOR SubSer.
+   DEF BUFFER bRequest        FOR MsRequest.
+
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".

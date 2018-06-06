@@ -9,10 +9,7 @@
 &IF "{&DEXTRA_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE DEXTRA_I YES
-{Syst/commali.i}
-{Func/fgettxt.i}
 {Func/fmakesms.i}
-{Syst/tmsconst.i}
 {Func/fcreatereq.i}
 {Func/msisdn_prefix.i}
 

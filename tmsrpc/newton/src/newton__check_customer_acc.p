@@ -26,6 +26,7 @@ Syst.Var:gcBrand = "1".
 {Func/orderchk.i}
 {Func/custfunc.i}
 {Func/profunc.i}
+{Func/barrfunc.i}
 
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.
@@ -59,6 +60,7 @@ DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO.
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
+DEF VAR liMLMsSeq                     AS INT NO-UNDO. 
 DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcExtraLineCLITypes AS CHARACTER NO-UNDO.
 
@@ -92,7 +94,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.
 
-llOrderAllowed = fSubscriptionLimitCheck(
+llOrderAllowed = Func.ValidateACC:mSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
@@ -161,8 +163,11 @@ END.
 lcExtraLineCLITypes = fExtraLineCLITypes().
 
 DO lii = 1 TO NUM-ENTRIES(lcExtraLineCLITypes):
-   IF fCheckConvergentAvailableForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0 OR
-      fCheckOngoingConvergentAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0
+   IF fCheckExistingMainLineAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), 
+                                              pcIdType,
+                                              pcPersonId, 
+                                              OUTPUT liMLMsSeq) > 0                               OR
+      fCheckOngoingMainLineAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0
    THEN lcExtraLineAllowed = lcExtraLineAllowed + "," + ENTRY(lii,lcExtraLineCLITypes).
 END.
 
@@ -180,6 +185,7 @@ IF lcAddLineAllowed = "" THEN DO:
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
             Order.OrderType          NE {&ORDER_TYPE_STC} AND 
+            Order.OrderType          NE {&ORDER_TYPE_ACC} AND 
             Order.SalesMan NE "GIFT" AND
             LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0,
        FIRST CLIType NO-LOCK WHERE

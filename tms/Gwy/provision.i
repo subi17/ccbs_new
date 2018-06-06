@@ -8,26 +8,21 @@
 {Syst/tmsconst.i}
 {Func/multitenantfunc.i}
 
-DEF BUFFER provSolog     FOR Solog.
-DEF BUFFER provMobsub    FOR Mobsub.
-DEF BUFFER provMSREquest FOR MSRequest.
-DEF BUFFER provCliType   FOR CLIType.
-DEF BUFFER provIMSI      FOR IMSI.
-DEF BUFFER provSIM       FOR SIM.
-DEF BUFFER provTermMobsub FOR TermMobsub.
-
-DEF VAR oiValue      AS INT NO-UNDO.
-
 function fMakeCommLine returns CHAR
 (INPUT iiSolog     AS INT,
  INPUT icValue     AS CHAR).
-                      
+
+   DEF BUFFER provSolog     FOR Solog.
+   DEF BUFFER provMobsub    FOR Mobsub.
+   DEF BUFFER provMSREquest FOR MSRequest.
+   DEF BUFFER provCliType   FOR CLIType.
+   DEF BUFFER provTermMobsub FOR TermMobsub.
+
    DEF VAR lcAdkey    AS CHAR NO-UNDO.
    DEF VAR lcReturn   AS CHAR NO-UNDO.
    DEF VAR lcPayTypes AS CHAR NO-UNDO INIT "UNKNOWN,POSTPAID,PREPAID".
    DEF VAR lcProfile  AS CHAR NO-UNDO.
    DEF VAR lcPayType  AS CHAR NO-UNDO.
-   DEF VAR liOrderId  AS INT  NO-UNDO.
 
    DEF VAR lhMobSub   AS HANDLE NO-UNDO.
 
@@ -56,15 +51,10 @@ function fMakeCommLine returns CHAR
       
    FOR EACH Order NO-LOCK WHERE
             Order.MSSeq = ProvSolog.MSSeq AND
-            Order.OrderType NE 2 AND
-            Order.OrderType NE 4 BY Order.CrStamp DESC:
-      liOrderId = Order.OrderId.
+            LOOKUP(STRING(Order.OrderType),"0,1,3") > 0
+      BY Order.CrStamp DESC:
       LEAVE.
-   END. /* FOR LAST Order WHERE */
-
-   FIND FIRST Order WHERE
-              Order.Brand   = Syst.Var:gcBrand AND
-              Order.OrderId = liOrderId NO-LOCK NO-ERROR.
+   END.
   
    /* CREATE extra parameters */ 
    IF LOOKUP(icValue, "CREATE,REACTIVATE") > 0 THEN DO:
@@ -160,7 +150,7 @@ function fMakeCommLine returns CHAR
                 "MSISDN=34" + lhMobSub::Cli       + ","  +     /* MSISDN    */
                 "IMSI="   + lhMobSub::Imsi       + ","  +     /* IMSI      */
                 ",PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID") +
-                ",OPERATOR=YOIGO,NW=ERICSSON," + lcadkey    .
+                ",OPERATOR=YOIGO," + lcadkey    .
    END.                       
    
    ELSE IF Avail ProvMobsub  THEN DO:
@@ -169,14 +159,14 @@ function fMakeCommLine returns CHAR
                "MSISDN=34" + lhMobSub::Cli   + ","  +     /* MSISDN       */
                "IMSI="   + lhMobSub::Imsi  + ","  +     /* IMSI         */
                "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID") +
-               ",OPERATOR=YOIGO,NW=ERICSSON,"     .
+               ",OPERATOR=YOIGO,"     .
    END.
    ELSE IF icValue = "REACTIVATE"  THEN
      lcReturn = STRING(ProvSolog.Solog)      + " "  + 
                 "CREATE"                     + ","  +  /* Action-use the same command line for Reactivation */
                "MSISDN=34" + lhMobSub::Cli   + ","  +  /* MSISDN       */
                "IMSI="   + lhMobSub::Imsi  + ","  +    /* IMSI         */
-               ",OPERATOR=YOIGO,NW=ERICSSON," + lcAdkey.
+               ",OPERATOR=YOIGO," + lcAdkey.
    ELSE IF NOT AVAIL ProvMObsub AND Avail Order  
    THEN DO:
         
@@ -187,14 +177,14 @@ function fMakeCommLine returns CHAR
                  icValue                      + ","  +     /* Action  */
                 "MSISDN=34" + Order.Cli        + ","  +     /* MSISDN       */
                 "IMSI="   + Imsi.Imsi        + ","  +     /* IMSI         */
-                "OPERATOR=YOIGO,NW=ERICSSON," + 
+                "OPERATOR=YOIGO," + 
                 lcAdkey .
    END.
    ELSE DO:
      lcReturn = STRING(ProvSolog.Solog)      +  " " + 
                 icValue     + ","  +     /* Action  */
                "MSISDN=34" + Order.Cli        + ","  +     /* MSISDN       */
-               "OPERATOR=YOIGO,NW=ERICSSON," + 
+               "OPERATOR=YOIGO," + 
                lcAdKey                      + "," .   
    END.
 
@@ -209,12 +199,19 @@ function fMakeCommLine2 returns CHAR
  INPUT iiMSRequest AS INT,
  INPUT ilSTCResend AS LOG).
 
+   DEF BUFFER provSolog     FOR Solog.
+   DEF BUFFER provMobsub    FOR Mobsub.
+   DEF BUFFER provMSREquest FOR MSRequest.
+   DEF BUFFER provCliType   FOR CLIType.
+   DEF BUFFER provTermMobsub FOR TermMobsub.
+   DEF BUFFER provIMSI      FOR IMSI.
+   DEF BUFFER provSIM       FOR SIM.
+
    DEF VAR lcAdkey    AS CHAR NO-UNDO.
    DEF VAR lcReturn   AS CHAR NO-UNDO.
    DEF VAR lcPayTypes AS CHAR NO-UNDO INIT "UNKNOWN,POSTPAID,PREPAID".
    DEF VAR lcNewtype  AS CHAR NO-UNDO.
    DEF VAR llNewType  AS LOG  NO-UNDO.
-   DEF VAR liOrderId  AS INT  NO-UNDO.
   
    DEF VAR lhMobSub   AS HANDLE NO-UNDO.
 
@@ -243,16 +240,11 @@ function fMakeCommLine2 returns CHAR
    
    FOR EACH Order NO-LOCK WHERE
             Order.MSSeq = ProvSolog.MSSeq AND
-            Order.OrderType NE 2 AND
-            Order.OrderType NE 4 BY Order.CrStamp DESC:
-      liOrderId = Order.OrderId.
+            LOOKUP(STRING(Order.OrderType),"0,1,3") > 0
+      BY Order.CrStamp DESC:
       LEAVE.
-   END. /* FOR LAST Order WHERE */
+   END.
 
-   FIND FIRST Order WHERE
-              Order.Brand   = Syst.Var:gcBrand AND
-              Order.OrderId = liOrderId NO-LOCK NO-ERROR.
-  
    IF ProvMSrequest.ReqCParam1 = "CHANGEMSISDN" THEN DO:
    
       lcReturn = STRING(ProvSolog.Solog)      +  " " +
@@ -260,7 +252,7 @@ function fMakeCommLine2 returns CHAR
                 "MSISDN=34" + lhMobSub::Cli   + "->34" +    /* MSISDN  */
                  ProvMSrequest.ReqCParam2     + ","  +
                 "IMSI="   + lhMobSub::Imsi  + ","  +    /* IMSI    */
-                "OPERATOR=YOIGO,NW=ERICSSON," + 
+                "OPERATOR=YOIGO," + 
                 "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID").
 
    END.
@@ -277,7 +269,7 @@ function fMakeCommLine2 returns CHAR
                 "MSISDN=34" + lhMobSub::Cli   +  ","  +    /* MSISDN  */
                 "IMSI="     + lhMobSub::IMSI + "->" + ProvIMSI.IMSI  + "," +
                 "KI=" +       ProvImsi.ki  +  "," +          
-                "OPERATOR=YOIGO,NW=ERICSSON," +
+                "OPERATOR=YOIGO," +
                 "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID").
       
    END.
@@ -324,7 +316,7 @@ function fMakeCommLine2 returns CHAR
               "MODIFY"                    + ","  +     /* Action  */
               "MSISDN=34" + lhMobSub::Cli       + ","  +     /* MSISDN       */
               "IMSI="   +   lhMobSub::Imsi      + ","  +     /* IMSI         */
-              "OPERATOR=YOIGO,NW=ERICSSON," + 
+              "OPERATOR=YOIGO," + 
               lcAdkey .
    END.
   

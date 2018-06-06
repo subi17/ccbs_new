@@ -8,10 +8,12 @@
 {Func/fmakemsreq.i}
 {Func/service.i}
 {Syst/tmsconst.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Mc/dpmember.i}
 {Func/q25functions.i}
 {Func/orderfunc.i}
+{Func/mdub.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
@@ -29,6 +31,9 @@ DEF VAR lcAllPostpaidContracts AS CHAR NO-UNDO.
 DEF VAR lcFHParam AS CHAR NO-UNDO. 
 DEF VAR lcSHParam AS CHAR NO-UNDO. 
 DEF VAR lcBundleId AS CHAR NO-UNDO.
+DEFINE VARIABLE lcContractID AS CHARACTER NO-UNDO.
+DEFINE VARIABLE iCounter     AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcItemParams AS CHARACTER NO-UNDO.
 
 FIND FIRST MSRequest WHERE
            MSRequest.brand EQ Syst.Var:gcBrand AND
@@ -104,6 +109,11 @@ FOR EACH OrderAction NO-LOCK WHERE
              LOOKUP(OrderAction.ItemKey,lcIPLContracts) > 0 OR
              LOOKUP(OrderAction.ItemKey,lcCONTSFContracts) > 0 OR
              OrderAction.ItemKey = "GPRS") THEN NEXT.
+
+         IF OrderAction.ItemKey EQ "VOICE200B" THEN DO:
+            /* should not exist any MDUB valid to the future */
+            IF fGetActiveMDUB("VOICE_", INPUT Func.Common:mMakeTS()) > "" THEN NEXT.
+         END.
 
          RUN pPeriodicalContract.
       END.
@@ -352,10 +362,28 @@ PROCEDURE pPeriodicalContract:
          END.     
       END.
 
-      ASSIGN lcSVAParams = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "").
+      ASSIGN
+          lcSVAParams  = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "")
+          lcContractID = "" .
 
-      IF lcSVAParams <> "" THEN
-          lcSVAParams = lcSVAParams + (IF OrderAction.ItemParam <> "" THEN "|||" ELSE "") + OrderAction.ItemParam.
+      IF lcSVAParams <> "" THEN DO:
+          lcItemParams = OrderAction.ItemParam.
+          DO iCounter = 2 TO 5:
+              IF NUM-ENTRIES(lcItemParams,"|") >= iCounter THEN  
+                  IF ENTRY(iCounter,lcItemParams,"|") BEGINS "contract_id" THEN
+                    ASSIGN  
+                      lcContractID = ENTRY(2,ENTRY(iCounter,lcItemParams,"|"),"=")
+                      ENTRY(iCounter,lcItemParams,"|") = CHR(10) + CHR(13)
+                      lcItemParams = REPLACE(lcItemParams ,( "|" + CHR(10) + CHR(13) )  , "") .
+          END.
+          CASE DayCampaign.DCEvent :
+              WHEN "OFFICE365" OR 
+              WHEN "FAXTOEMAIL" THEN DO:
+                  lcSVAParams = lcSVAParams + "|" + lcItemParams.
+              END.
+              OTHERWISE lcSVAParams = lcSVAParams + (IF lcItemParams <> "" THEN "|||" ELSE "") + lcItemParams. 
+          END CASE.
+      END.
 
       liRequest = fPCActionRequest(MobSub.MsSeq,
                                 OrderAction.ItemKey,
@@ -374,6 +402,11 @@ PROCEDURE pPeriodicalContract:
                                 0,
                                 lcSVAParams,
                                 OUTPUT lcResult).
+         IF liRequest NE 0 AND lcContractID NE "" THEN DO:
+            FIND MsRequest WHERE MsRequest.MsRequest = liRequest EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+               IF AVAIL MsRequest THEN
+                    ASSIGN MsRequest.Memo = MsRequest.Memo + (IF MsRequest.Memo > "" THEN ", "  ELSE "") + "WebContractID=" + lcContractID.
+         END.
    END.
  
    IF liRequest = 0 THEN 
@@ -438,6 +471,9 @@ PROCEDURE pDiscountPlan:
 
    DEF VAR lcResult AS CHAR NO-UNDO. 
    DEF VAR ldaOrderDate AS DATE NO-UNDO. 
+   DEFINE VARIABLE ldeDiscAmt AS DECIMAL NO-UNDO.
+   DEFINE VARIABLE llError AS LOGICAL NO-UNDO.
+   DEFINE VARIABLE liDiscPeriods AS INTEGER NO-UNDO.
 
    Func.Common:mts2Date(Order.CrStamp, OUTPUT ldaOrderDate).
    
@@ -462,15 +498,6 @@ PROCEDURE pDiscountPlan:
    IF NOT AVAIL DPRate THEN
       RETURN "ERROR:DPRate: " + OrderAction.ItemKey + " not found".
    
-   FIND FIRST DPMember NO-LOCK WHERE
-              DPMember.DPId      = DiscountPlan.DpID AND
-              DPMember.HostTable = "Mobsub"                 AND
-              DPMember.KeyValue  = STRING(Order.MsSeq)      AND
-              DPMember.ValidTo  >= TODAY                    NO-ERROR.
-   IF AVAIL DPMember THEN 
-      RETURN "ERROR:DPMember: " + OrderAction.ItemKey + " for " + 
-         STRING(Order.MsSeq) + " already exist".
-   
    FOR EACH DPMember NO-LOCK WHERE
             DPMember.Hosttable = "Mobsub" AND
             DPMember.KeyValue = STRING(Order.MsSeq) AND
@@ -487,51 +514,35 @@ PROCEDURE pDiscountPlan:
          fCloseDiscount(bDiscountPlan.DPRuleID,
                         Order.MsSeq,
                         TODAY - 1,
-                        FALSE).
+                        NO).
    END.
-
-   CREATE DPMember.
-   ASSIGN DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-          DPMember.DPId      = DiscountPlan.DPId
-          DPMember.HostTable = "MobSub"
-          DPMember.KeyValue  = STRING(Order.MsSeq)
-          DPMember.ValidFrom = TODAY.
-
-   IF OrderAction.ItemParam > "" THEN DO:
-      ASSIGN
-          lcFHParam = ENTRY(1,OrderAction.ItemParam,"|")
-          lcSHParam = ENTRY(2,OrderAction.ItemParam,"|") WHEN
-            NUM-ENTRIES(OrderAction.ItemParam,"|") > 1 
-          DPMember.ValidTo = fCalcDPMemberValidTo(DPMember.ValidFrom,
-                                   INT(ENTRY(2,lcSHParam,"=")))
-          DPMember.DiscValue = DEC(ENTRY(2,lcFHParam,"=")).
-   END.
-   ELSE DO:
-      ASSIGN
-         DPMember.ValidTo = fCalcDPMemberValidTo(DPMember.ValidFrom,
-                                       DiscountPlan.ValidPeriods)
-         DPMember.DiscValue = DPRate.DiscValue.
-   END.
-
-   /* YPR-5616, March promo 2017:
-      BONO6WEBDISC 1GB 6 Months
-      BONO7DISC 3GB 6 months
-   */
-   IF DiscountPlan.dprule EQ "BONO7DISC" OR 
-      DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: 
-      ASSIGN
-      ldate              = ADD-INTERVAL(MobSub.TariffActDate,5,"months")
-      DPMember.ValidFrom = MobSub.TariffActDate
-      DPMember.ValidTo   = Func.Common:mLastDayOfMonth(lDate)      
-      DPMember.DiscValue = DPRate.DiscValue.
-   END.
-
-   /* ADDLINE-20 Additional Line */
-   IF LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
-      DPMember.ValidTo = ? THEN
-      DPMember.ValidTo = 12/31/49.
    
-   RETURN "".
+   IF OrderAction.ItemParam > ""
+   THEN DO:
+      IF NUM-ENTRIES(ENTRY(1,OrderAction.ItemParam,"|"),"=") > 1
+      THEN ldeDiscAmt = DECIMAL(ENTRY(2,ENTRY(1,OrderAction.ItemParam,"|"),"=")) NO-ERROR.
+      IF ERROR-STATUS:ERROR = TRUE
+      THEN llError = TRUE.
+      IF NUM-ENTRIES(OrderAction.ItemParam,"|") > 1 AND 
+         NUM-ENTRIES(ENTRY(2,OrderAction.ItemParam,"|"),"=") > 1
+      THEN liDiscPeriods = INTEGER(ENTRY(2,ENTRY(2,OrderAction.ItemParam,"|"),"=")) NO-ERROR.
+      IF ERROR-STATUS:ERROR = TRUE
+      THEN llError = TRUE.
+   END.
+
+   IF NOT OrderAction.ItemParam > "" OR
+      llError
+   THEN ASSIGN
+          ldeDiscAmt    = DPRate.DiscValue
+          liDiscPeriods = DiscountPlan.ValidPeriods.
+
+   RETURN fAddDiscountPlanMember(Order.MsSeq,
+                                 DiscountPlan.DPRuleID,
+                                 ldeDiscAmt,
+                                 TODAY,
+                                 ?,
+                                 liDiscPeriods,
+                                 0).
 
 END PROCEDURE.
 
@@ -696,7 +707,6 @@ PROCEDURE pQ25Discount:
 
    DEF VAR liPercontractId AS INT NO-UNDO. 
    DEF VAR ldeDiscount AS DEC NO-UNDO. 
-   DEF VAR lcResult AS CHAR NO-UNDO. 
    DEF VAR lcDiscountPlan AS CHAR NO-UNDO. 
 
    liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
@@ -732,14 +742,13 @@ PROCEDURE pQ25Discount:
       lcDiscountPlan = "RVTERMDT4DISC".
    ELSE lcDiscountPlan = "RVTERMDT1DISC".
 
-   fAddDiscountPlanMember(MobSub.MsSeq,
-                         lcDiscountPlan, 
-                         ldeDiscount,
-                         fPer2Date(SingleFee.BillPeriod,0),
-                         1,
-                         SingleFee.OrderId, /* Q25 OrderId */
-                         OUTPUT lcResult).
-   RETURN lcResult.
+   RETURN fAddDiscountPlanMember(MobSub.MsSeq,
+                                 lcDiscountPlan,
+                                 ldeDiscount,
+                                 fPer2Date(SingleFee.BillPeriod,0),
+                                 ?,
+                                 1,
+                                 SingleFee.OrderId). /* Q25 OrderId */
 
 END PROCEDURE.
 

@@ -42,16 +42,11 @@
 
 &GLOBAL-DEFINE fmakemsreq YES
 
-{Func/msreqfunc.i}
 {Func/fcreatereq.i}
 {Func/fctserval.i}
 {Func/fcustdata.i}
-{Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
-
-DEF BUFFER bReqOwner FOR MsOwner.
-DEF BUFFER bReqComp  FOR ServCom.
-DEF BUFFER bReqSer   FOR SubSer.
+{Func/cparam2.i}
 
 DEF VAR liReqCreated AS INT  NO-UNDO.
 
@@ -270,7 +265,10 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
    DEF VAR ldChgStamp  AS DEC  NO-UNDO. 
    DEF VAR liCReqTime  AS INT  NO-UNDO.
    DEF VAR ldtCReqDate AS DATE NO-UNDO.
-   
+
+   DEF BUFFER bReqComp  FOR ServCom.
+   DEF BUFFER bReqSer   FOR SubSer.
+
    /* default is current time */
    ASSIGN ldtCReqDate = TODAY
           liCReqTime  = TIME
@@ -829,6 +827,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    
    DEF BUFFER bMsRequest FOR MsRequest.
    DEF BUFFER ServiceLimit FOR ServiceLimit.
+   DEF BUFFER bReqOwner FOR MsOwner.
 
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
    
@@ -1605,6 +1604,44 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
    RETURN liRequest.
 
 END FUNCTION.
+
+FUNCTION fCustomerCategoryChangeRequest RETURNS INTEGER
+   (INPUT idActStamp      AS DECIMAL   ,    /* when request should be handled */
+    INPUT icUserCode      AS CHARACTER ,   /* user code */
+    INPUT iiMSSeq         AS INTEGER   ,
+    INPUT iiCustnum       AS INTEGER   ,
+    INPUT icNewCategory   AS CHARACTER ,     
+    INPUT icOldCategory   AS CHARACTER ,
+    INPUT icCLI           AS CHARACTER ,   /* mobsub CLI */
+    INPUT icSource        AS CHARACTER ,
+    OUTPUT ocResult       AS CHARACTER ):
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+
+   /* set activation time */
+   IF idActStamp = 0 OR idActStamp = ? THEN
+      idActStamp = Func.Common:mMakeTS().
+
+   fCreateRequest({&REQTYPE_CATEGORY_CHG},
+                  idActStamp,
+                  icUserCode,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms         */
+
+   ASSIGN
+      bCreaReq.CLI        = icCLI
+      bCreaReq.MsSeq      = iiMSSeq
+      bCreaReq.Custnum    = iiCustnum
+      bCreaReq.ReqCparam1 = icNewCategory
+      bCreaReq.ReqCparam2 = icOldCategory
+      bCreaReq.ReqSource  = icSource
+      liReqCreated        = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+
+   RETURN liReqCreated.
+
+END FUNCTION. /* FUNCTION fCustomerCategoryChangeRequest*/
 
 &ENDIF            
  

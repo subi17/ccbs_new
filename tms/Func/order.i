@@ -4,7 +4,11 @@
                 14.02.06/aam assign firstname
                 20.11.06/aam new db structure
 */
-{Syst/commali.i}   
+&IF "{&order_i}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE order_i YES
+
 {Func/fwebuser.i}
 {Func/fcustdata.i}
 {Func/ftmrlimit.i}
@@ -14,13 +18,12 @@
 {Func/profunc.i}
 {Func/custfunc.i}
 {Func/log.i}
+{Func/msreqfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
-
-DEF BUFFER bUpdOrderCustomer FOR OrderCustomer.
 
 
 FUNCTION fInvGroup RETURN CHARACTER
@@ -200,62 +203,65 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
 
     DEFINE BUFFER bf_MsRequest FOR MsRequest.
     DEFINE BUFFER bf_Customer  FOR Customer.
-    DEFINE BUFFER bf_CustCat   FOR CustCat.
+    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+    DEFINE BUFFER Order FOR Order.
 
     DEF VARIABLE ldeCurrentTime AS DECIMAL NO-UNDO.
+    DEF VAR liCount AS INT NO-UNDO.
+    DEF VAR liLoop AS INT NO-UNDO.
+    DEF VAR llISPro AS LOG NO-UNDO. 
 
-    ASSIGN ldeCurrentTime = Func.Common:mMakeTS().
+    ASSIGN ldeCurrentTime = Func.Common:mMakeTS()
+           licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
 
-    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = Syst.Var:gcBrand                                      AND 
-                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
-                                LOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
-                                bf_MsRequest.ActStamp >= ldeCurrentTime                               NO-LOCK:
+   DO liLoop = 1 TO licount:
+      FOR EACH bf_MsRequest WHERE
+               bf_MsRequest.Brand     = Syst.Var:gcBrand                             AND
+               bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND
+               bf_MsRequest.ReqStatus = INT(ENTRY(liLoop,({&REQ_ONGOING_STATUSES}))) and
+               bf_MsRequest.ActStamp >= ldeCurrentTime                           NO-LOCK: 
 
-        IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = "" OR 
-           ENTRY(13,bf_MsRequest.ReqCParam1,";") = "" THEN
-           NEXT.
+            IF bf_MsRequest.ReqIParam4 > 0 THEN DO:
+               FIND OrderCustomer NO-LOCK WHERE
+                    OrderCustomer.Brand = Syst.Var:gcBrand AND
+                    OrderCustomer.OrderID = bf_MsRequest.ReqIParam4 AND
+                    OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_ACC} AND
+                    OrderCustomer.CustIDType = icCustomerIDType AND
+                    OrderCustomer.CustID = icCustomerID NO-ERROR.
+               IF NOT AVAIL OrderCustomer THEN NEXT.
+            END.
+            ELSE DO:
+               IF NOT (ENTRY(12,bf_MsRequest.ReqCParam1,";") EQ icCustomerIDType AND
+                       ENTRY(13,bf_MsRequest.ReqCParam1,";") EQ icCustomerID) THEN NEXT.
+            END.
 
-        IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = icCustomerIdType AND 
-           ENTRY(13,bf_MsRequest.ReqCParam1,";") = icCustomerId     THEN
-        DO:
             FIND FIRST bf_Customer WHERE bf_Customer.CustNum = bf_MsRequest.CustNum NO-LOCK NO-ERROR.
-            IF AVAIL bf_Customer THEN
-            DO:
-                FIND FIRST bf_CustCat WHERE bf_CustCat.Brand = Syst.Var:gcBrand AND bf_CustCat.Category = bf_Customer.Category NO-LOCK NO-ERROR.
-                IF AVAIL bf_CustCat THEN 
-                DO:
-                    IF icCloseType = "Pro" THEN 
-                    DO:
-                        IF bf_CustCat.Pro = FALSE THEN 
-                            NEXT.
-                    END.
-                    ELSE /* Non-pro */ 
-                    DO:
-                        IF bf_CustCat.Pro = TRUE THEN 
-                            NEXT.
-                    END.
+            IF NOT AVAIL bf_Customer THEN NEXT.
+            
+            llISPro = fIsPro(bf_Customer.Category).
 
-                    BUFFER bf_MsRequest:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-                    IF NOT AVAIL bf_MsRequest THEN 
-                    DO:
-                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" , Syst.Var:katun).
-                        NEXT.
-                    END.
+            IF (icCloseType = "Pro" AND NOT llISPro = FALSE) OR
+               (icCloseType NE "Pro" AND llISPro = TRUE) THEN NEXT.
+                                           
+            IF NOT fChangeReqStatus(bf_MsRequest.MsRequest,
+                        {&REQUEST_STATUS_CANCELLED},
+                       ("Non-pro order#" + STRING(iiOrder) + " for ACCed customer is handled. That means ACCed customer " + 
+                        "has been added as Non-pro too system, so this pending ACC request is not valid anymore")) THEN DO:
+                fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" , Syst.Var:katun).
+                NEXT.
+            END.
 
-                    ASSIGN 
-                        bf_MsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
-                        bf_MsRequest.UpdateStamp = Func.Common:mMakeTS()
-                        bf_MsRequest.DoneStamp   = Func.Common:mMakeTS()
-                        bf_MsRequest.Memo        = bf_MsRequest.Memo + 
-                                                   (IF bf_MsRequest.Memo > "" THEN ", " ELSE "") + 
-                                                   "Non-pro order#" + STRING(iiOrder) + " for ACCed customer is handled. That means ACCed customer " + 
-                                                   "has been added as Non-pro too system, so this pending ACC request is not valid anymore".
-                END.
-            END.    
-        END.   
-           
+            IF MsRequest.ReqIParam4 > 0 THEN DO:
+               FIND Order NO-LOCK WHERE
+                    Order.Brand = Syst.Var:gcBrand AND
+                    Order.OrderID = MsRequest.ReqIParam4 AND
+                    Order.OrderType = {&ORDER_TYPE_ACC} AND
+                    Order.StatusCode = {&ORDER_STATUS_ONGOING} NO-ERROR.
+               IF AVAIL Order THEN RUN fSetOrderStatus(Order.OrderID,{&ORDER_STATUS_CLOSED}).
+            END.
+
+       END.
     END.
-    RELEASE bf_MsRequest.
     
     RETURN TRUE.
 
@@ -271,6 +277,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    DEF BUFFER AgrCust  FOR Customer.
    DEF BUFFER InvCust  FOR Customer.
    DEF BUFFER UserCust FOR Customer.
+   DEF BUFFER bUpdOrderCustomer FOR OrderCustomer.
 
    DEF VAR lcCategory AS CHAR NO-UNDO.
 
@@ -440,34 +447,110 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
 
 END.
 
-FUNCTION fGetTerminalOfferItemId RETURN INTEGER
-  (INPUT pcOffer AS CHARACTER, 
-   INPUT pcGroup AS CHARACTER,
-   INPUT pdeTime AS DECIMAL):
+/*
+   Function updates latest convergent/fixed order install address
+   to Customer table. 
+   Preconditions: Invoice delivery method is other than Paper and 
+   Fixed line has been successfully installed. Company customers 
+   Contact person address is not updated.
+   Project: FIAD-1 Batch to update billing address in TMS.
+*/
+FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
+   (INPUT iiOrder AS INT):
 
-   DEFINE VARIABLE iOfferItemId AS INTEGER NO-UNDO. 
-   iOfferItemId = -1.
+   DEF VAR lcNewAddress AS CHAR NO-UNDO.
+   DEF VAR lcregion AS CHAR NO-UNDO.
+   DEF VAR lcInvGroup AS CHAR NO-UNDO.
 
-   DEFINE BUFFER xOfferItem FOR OfferItem.
-   DEFINE BUFFER xBillItem  FOR BillItem.
+   DEF BUFFER bCustomer       FOR Customer.
+   DEF BUFFER bOrder          FOR Order.
+   DEF BUFFER bOrderComp      FOR Order.
+   DEF BUFFER bOrderCustomer  FOR OrderCustomer.
+   DEF BUFFER bOrderFusion    FOR OrderFusion.
 
-   LoopItems:
-   FOR EACH xOfferItem WHERE 
-      xOfferItem.Brand = Syst.Var:gcBrand  AND
-      xOfferItem.Offer     = pcOffer AND 
-      xOfferItem.ItemType  = "BillItem" AND
-      xOfferItem.EndStamp   >= pdeTime AND
-      xOfferItem.BeginStamp <= pdeTime NO-LOCK:
-      FIND xBillItem WHERE 
-           xBillItem.Brand = Syst.Var:gcBrand AND 
-           xBillItem.BillCode = xOfferItem.ItemKey AND
-           xBillItem.BIGroup = pcGroup NO-LOCK NO-ERROR.
-      IF AVAIL xBillItem THEN DO:
-         iOfferItemId = xOfferItem.OfferItemId.
-         LEAVE LoopItems.
-      END.
+   FIND FIRST bOrder NO-LOCK WHERE
+              bOrder.Brand EQ Syst.Var:gcBrand AND
+              bOrder.OrderId EQ iiOrder NO-ERROR.
+   IF NOT AVAIL bOrder THEN RETURN FALSE.
+
+   FIND FIRST bCustomer NO-LOCK WHERE
+              bCustomer.CustNum EQ bOrder.CustNum NO-ERROR.
+   IF NOT AVAIL bCustomer THEN RETURN FALSE.
+
+   IF bCustomer.DelType EQ 1 THEN RETURN FALSE. /* Type Paper */
+
+   /* Update adress if this is latest order if several convergent orders */
+   FOR EACH bOrderComp NO-LOCK USE-INDEX CustNum WHERE
+            bOrderComp.Brand EQ Syst.Var:gcBrand AND
+            bOrderComp.CustNum EQ bCustomer.CustNum AND
+            bOrderComp.CrStamp > bOrder.CrStamp AND
+            bOrderComp.OrderId NE bOrder.OrderId:
+      IF NOT fIsConvergentORFixedOnly(bOrderComp.CliType) THEN NEXT.
+
+      FIND FIRST bOrderFusion NO-LOCK WHERE
+            borderfusion.Brand EQ Syst.Var:gcBrand AND
+            borderfusion.orderid = bOrderComp.Orderid AND
+            bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
+      IF AVAIL bOrderFusion THEN RETURN FALSE.
    END.
-   RETURN iOfferItemId.
-END.
+   /* Update billing address from installation address */
+   FIND FIRST bOrderCustomer NO-LOCK WHERE
+              bOrderCustomer.Brand   EQ Syst.Var:gcBrand AND
+              bOrderCustomer.OrderId EQ bOrder.OrderId AND
+              bOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} NO-ERROR.
+   IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
+   FIND FIRST bOrderFusion NO-LOCK WHERE
+              borderfusion.Brand EQ Syst.Var:gcBrand AND
+              borderfusion.orderid = bOrder.Orderid AND
+              bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
+   IF NOT AVAIL bOrderFusion THEN RETURN FALSE.
 
+   /* FIAD-10 Few names come incorrectly from web coverage check */
+   lcregion = bOrderCustomer.Region.
+   IF bOrderCustomer.Region EQ "ISLAS BALEARES" THEN lcregion = "Baleares".
+   IF bOrderCustomer.Region EQ "TENERIFE" THEN lcregion = "Sta.Cruz Tenerife".
+   IF bOrderCustomer.Region EQ "LLEIDA" THEN lcregion = "Lérida".
+
+   FIND FIRST Region NO-LOCK WHERE
+              Region.RgName EQ lcregion NO-ERROR.
+   IF NOT AVAIL Region THEN RETURN FALSE.
+
+   /* FIAD-9 Make new address from different data fields in installation address */
+   lcNewAddress = CAPS(bordercustomer.address).
+   IF bOrderCustomer.Floor NE "" THEN lcNewAddress = lcNewAddress + " " + LEFT-TRIM(bOrderCustomer.Floor,"0").
+   IF bOrderCustomer.Hand NE "" THEN lcNewAddress = lcNewAddress + bOrderCustomer.Hand.
+   IF bOrderCustomer.Letter NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Letter.
+   IF bOrderCustomer.Stair NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Stair.
+   IF bOrderCustomer.Door NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Door.
+   IF bOrderCustomer.Block NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Block.
+   lcNewAddress = RIGHT-TRIM(lcNewAddress).
+   lcNewAddress = REPLACE(lcNewAddress, "  ", " ").
+   lcInvGroup = fDefInvGroup(Region.Region).
+
+   FIND CURRENT bCustomer EXCLUSIVE-LOCK NO-ERROR.
+   IF llDoEvent THEN DO:
+      DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
+      lhCustomer = BUFFER bCustomer:HANDLE.
+      RUN StarEventInitialize(lhCustomer).
+      RUN StarEventSetOldBuffer(lhCustomer).
+   END.
+
+   /* Update Customer */
+   ASSIGN
+      bCustomer.Address = lcNewAddress WHEN bCustomer.Address NE lcNewAddress
+      bCustomer.ZipCode = bOrderCustomer.ZipCode WHEN bCustomer.ZipCode NE bOrderCustomer.ZipCode
+      bCustomer.PostOffice = CAPS(bOrderCustomer.PostOffice) WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
+      bCustomer.Region = Region.Region WHEN bCustomer.Region NE Region.Region
+      bCustomer.InvGroup = lcInvGroup WHEN bCustomer.InvGroup NE lcInvGroup.
+
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent(lhCustomer).
+      fCleanEventObjects().
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+&ENDIF

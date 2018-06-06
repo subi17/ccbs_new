@@ -14,6 +14,10 @@
 {Syst/tmsconst.i}
 {Func/femailinvoice.i}
 {Func/heartbeat.i}
+{Func/msisdn_prefix.i}
+{Func/msreqfunc.i}
+{Func/email.i}
+
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
@@ -31,9 +35,38 @@ DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
 DEF VAR lcRecipient AS CHAR NO-UNDO.
+DEF VAR lcContactNbr AS CHAR NO-UNDO.
+DEF VAR llFirstInv AS LOGICAL NO-UNDO INIT FALSE.
+DEF VAR liCounter AS INT NO-UNDO.
 
 DEF STREAM sIn. /*1st/Last notification recipients*/
 
+DEF STREAM sPilot.
+OUTPUT STREAM sPilot TO VALUE("/scratch/log/esi/ESI_logging.txt") APPEND.
+PUT STREAM sPilot UNFORMATTED "Satrt " + 
+                               STRING(DATE(TODAY)) + " " +
+                               STRING(TIME,"hh:mm:ss") SKIP.
+
+FUNCTION fFindSMSTarget RETURNS CHAR
+   (icCLI AS CHAR):
+   DEF BUFFER bMobsub FOR mobsub.
+   DEF BUFFER bCustomer FOR customer.
+
+   if fIsMobileNumber(icCLI) EQ TRUE THEN RETURN icCLI.
+   ELSE DO:
+      FIND FIRST bMobsub NO-LOCK WHERE
+                 bMobsub.Brand EQ "1" AND
+                 bMobsub.CLI EQ icCLI NO-ERROR.
+      IF NOT AVAIL bMobsub THEN RETURN "".
+      FIND FIRST bCustomer  NO-LOCK  WHERE
+                 bCustomer.brand eq bMobsub.Brand AND
+                 bCustomer.Custnum EQ bMobsub.Custnum.
+     IF NOT AVAIL bCustomer THEN RETURN "".
+     RETURN bCustomer.smsnumber.
+      /*Find contactnumber.*/
+   END.
+   RETURN "".
+END.
 
 FUNCTION fGenerateEinvoiceTemplate RETURNS CHAR
    (icTemplate AS CHAR,
@@ -81,6 +114,16 @@ FUNCTION fGenerateEinvoiceTemplate RETURNS CHAR
 RETURN "".
 END.
 
+FUNCTION fSpecialNotify RETURNS CHAR
+   (icContent AS CHAR):
+   INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.sms").
+   REPEAT:
+      IMPORT STREAM sIn UNFORMATTED lcRecipient.
+      Mm.MManMessage:mCreateMMLogSMS(lcRecipient, FALSE).
+   END.
+   RETURN "".
+END.
+
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest
 NO-LOCK NO-ERROR.
@@ -103,19 +146,6 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        lcLink        = fCParamC("ESI_LinkBase")
        liTestFilter  = fCparamI("ESI_TestFilter")
        lcTestCustomers = fCparamC("ESI_TestCustomers").
-
-IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
-   IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageStarted", 1)EQ TRUE THEN DO:
-      INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.sms").
-      REPEAT:
-         IMPORT STREAM sIn UNFORMATTED lcRecipient.
-         Mm.MManMessage:mCreateMMLogSMS(lcRecipient, FALSE).
-      END.
-      Mm.MManMessage:mClearData().
-   END.
-END.
-
- 
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
@@ -149,66 +179,77 @@ FOR EACH Invoice WHERE
       IF NOT AVAIL MobSub OR
          MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
 
+      /*Ilkka test 28.3.2018*/
+/*      
+         IF NOT (Mobsub.CLI EQ "661473828" OR
+                 Mobsub.CLI EQ "661485255" OR
+                 Mobsub.CLI EQ "639152671") THEN NEXT SUBINVOICE_LOOP.
+*/
       IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO:
          lcTemplate = fGetSMSTxt("EInvMessage",
                                  TODAY,
                                  5,
                                  OUTPUT ldeActStamp).
+ /*Check to Customer's SMS if the mobsub is not mobile.*/
+         lcContactNbr = fFindSMSTarget(Mobsub.CLI).
+
+         PUT STREAM sPilot UNFORMATTED
+            STRING(Customer.Custnum) + ";" +
+            STRING(Mobsub.CLI) + ";" +
+            STRING(lcContactNbr) + ";" +
+            STRING(Invoice.InvAmt) SKIP.
 
          lcTemplate = fGenerateEinvoiceTemplate(lcTemplate,
                                              MobSub.MsSeq,
                                              MobSub.CLI,
                                              Invoice.InvAmt,
-                                             STRING(Invoice.InvDate),
+                                   STRING(/*Invoice.InvDate*/ Invoice.DueDate),
                                              lcLink,
                                              Invoice.InvNum,
                                              liBillPeriod,
                                              Customer.Language).
 
-         Mm.MManMessage:ParamKeyValue = lcTemplate.                                      Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
+         Mm.MManMessage:ParamKeyValue = lcTemplate.
+         IF llFirstInv EQ FALSE THEN DO:
+            fSpecialNotify(lcTemplate).
+            llFirstInv = TRUE.
+         END.
+         Mm.MManMessage:mCreateMMLogSMS(lcContactNbr).
       END.
       ELSE DO:
       END.
+      /*counter for following subinvoice handling speed with log*/
+      liCounter = liCounter + 1.
+      IF liCounter MOD 10000 EQ 0 THEN DO:
+      PUT STREAM sPilot UNFORMATTED 
+         "Count " +
+         STRING(liCounter) + ";" +
+         STRING(DATE(TODAY)) + " " +
+         STRING(TIME,"hh:mm:ss") SKIP.
+      END.
+      /*Workaround to slowness: making pause connection is repoened 
+        and this releases buffers*/
+      IF liCounter MOD 50000 EQ 0 THEN PAUSE(120).
+       
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
 
 END. /* FOR EACH Invoice WHERE */
 
 /*notify the last message.*/
-IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
-   IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageDone", 1)EQ TRUE THEN DO:
-      INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.sms").
-      REPEAT:
-         IMPORT STREAM sIn UNFORMATTED lcRecipient.
-         Mm.MManMessage:mCreateMMLogSMS(lcRecipient, FALSE).
-      END.
-      Mm.MManMessage:mClearData().
-   END.
+IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO:
+   Mm.MManMessage:ParamKeyValue = lcTemplate.
+   fSpecialNotify(lcTemplate).
 END.
-/*
-IF lcAddrConfDir + "/smsinvoice.email" NE ? THEN DO:
-   IF Mm.MManMessage:mGetMessage("EMAIL", "EInvMessageDone", 5)EQ TRUE THEN DO:
-      INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.email").
-      REPEAT:
-         IMPORT STREAM sIn UNFORMATTED lcRecipient.
-         Mm.MManMessage:mCreateMMLogEmail(lcRecipient, FALSE).
-      END.
-      Mm.MManMessage:mClearData().
-   END.
-END.
-*/
-
 /* Send an email to configure list*/
-/*TODO: this must be removed because TMS is not aware when last sms is sent.*/
-/*
 IF lcAddrConfDir > "" THEN
-   lcAddrConfDir = lcAddrConfDir + "einvoice.email".
+   lcAddrConfDir = lcAddrConfDir + "smsinvoice.email".
 
 IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = "1"            AND
+             InvText.Brand     = Syst.Var:gcBrand            AND
              InvText.Target    = "General"          AND
-             InvText.KeyValue  = "EmailConfEInv"  AND
-             InvText.Language  = 5                  AND 
+             InvText.KeyValue  = "EmailConfSMSInv"  AND
+             InvText.Language  = 5                  AND
              InvText.FromDate <= today              AND
              InvText.ToDate   >= today:
        lcMailContent = InvText.InvText.
@@ -223,5 +264,11 @@ IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    /* Send via mail */
    SendMail(lcContConFile,"").
 END. /* IF SEARCH(lcAddrConfDir) <> ? THEN DO: */
-*/
+
+
 fReqStatus(2,""). /* request handled succesfully */
+PUT STREAM sPilot UNFORMATTED "Done " + 
+                               STRING(DATE(TODAY)) + " " +
+                               STRING(TIME,"hh:mm:ss") SKIP.
+
+

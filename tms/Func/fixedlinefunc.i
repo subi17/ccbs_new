@@ -11,64 +11,10 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
-{Func/cparam2.i}
-{Syst/tmsconst.i}
-{Syst/eventval.i}
-{Func/create_eventlog.i}
+
 {Func/matrix.i}
-{Func/extralinefunc.i}
+{Syst/tmsconst.i}
 {Func/fcustpl.i}
-
-/* Function makes new MSOwner when subscription is partially
-   terminated or mobile part order closed. Calling program must have
-   commali.i, Syst.Var:katun defined and call fCleanEventObjects after this function */
-FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
-   (iiMsSeq AS INT,
-    icFixedNumber AS CHAR):
-   DEF VAR ldUpdateTS AS DEC NO-UNDO.
-   DEF BUFFER MsOwner FOR MsOwner.
-   DEF BUFFER bNewMsowner FOR Msowner.
-
-   ldUpdateTS = Func.Common:mMakeTS().
-   FIND FIRST MSOwner WHERE 
-              MSOwner.MsSeq  = iiMsSeq AND
-              MSOwner.TsEnd >= ldUpdateTS
-   EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAIL MSOwner THEN RETURN FALSE.
-
-   IF llDoEvent THEN DO:
-      DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
-      lhMsOwner = BUFFER MSOwner:HANDLE.
-      RUN StarEventInitialize(lhMsOwner).
-      RUN StarEventSetOldBuffer (lhMsOwner).
-   END.
-
-   MSOwner.TsEnd = ldUpdateTS.
-
-   IF llDoEvent THEN DO:
-      RUN StarEventMakeModifyEvent (lhMsOwner).
-   END.
-
-   CREATE bNewMsowner.
-   BUFFER-COPY MSOwner EXCEPT TsEnd tsbegin TO bNewMsowner.
-   ASSIGN
-      bNewMsowner.CLI = icFixedNumber
-      bNewMsowner.imsi = ""
-      bNewMsowner.CliEvent = "F"
-      bNewMsowner.tsbegin = Func.Common:mSecOffSet(ldUpdateTS,1)
-      bNewMsowner.TsEnd = 99999999.99999.
-
-   IF llDoEvent THEN DO:
-      lhMsOwner = BUFFER bNewMsowner:HANDLE.
-      fMakeCreateEvent (lhMsOwner, "", "", "").
-   END.
-
-   RELEASE MSOwner.
-   RELEASE bNewMsowner.
-   RETURN TRUE.
-
-END FUNCTION.
-
 
 /*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
@@ -298,7 +244,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
        EACH bOrder NO-LOCK WHERE
             bOrder.Brand      EQ Syst.Var:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
+            LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Var:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
@@ -307,8 +253,6 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
 
-      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
-          
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
 
@@ -322,24 +266,37 @@ END FUNCTION.
 FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
    (INPUT iiCustNum AS INT):
 
-   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
-   DEFINE BUFFER bOrder         FOR Order.
-   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
-   DEFINE BUFFER bClitype       FOR Clitype.
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER Order         FOR Order.
+   DEFINE BUFFER OrderFusion   FOR OrderFusion.
+   DEFINE BUFFER Clitype       FOR Clitype.
    DEFINE BUFFER Customer       FOR Customer.
    DEFINE BUFFER CustCat        FOR CustCat.
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
-       EACH CustCat WHERE CustCat.Brand = Syst.Var:gcBrand AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
-       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = TRUE NO-LOCK,
-       EACH bOrder WHERE bOrder.Brand EQ Syst.Var:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK,
-       FIRST bOrderFusion WHERE bOrderFusion.Brand = Syst.Var:gcBrand AND bOrderFusion.OrderID = bOrder.OrderID NO-LOCK,
-       FIRST bCliType WHERE bCliType.Brand = Syst.Var:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
+       EACH CustCat WHERE 
+            CustCat.Brand EQ Syst.Var:gcBrand AND 
+            CustCat.Category EQ Customer.Category AND 
+            CustCat.Pro EQ False NO-LOCK, 
+       EACH OrderCustomer WHERE 
+            OrderCustomer.Brand EQ Syst.Var:gcBrand AND 
+            OrderCustomer.CustIdType EQ Customer.CustIdType     AND
+            OrderCustomer.CustId     EQ Customer.OrgId          AND
+            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND 
+            OrderCustomer.Pro EQ TRUE NO-LOCK,
+       EACH Order WHERE 
+            Order.Brand EQ Syst.Var:gcBrand AND 
+            Order.orderid EQ OrderCustomer.Orderid AND
+            LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
+      FIRST OrderFusion WHERE 
+            OrderFusion.Brand EQ Syst.Var:gcBrand AND 
+            OrderFusion.OrderID EQ Order.OrderID NO-LOCK,
+      FIRST CliType WHERE 
+            CliType.Brand EQ Syst.Var:gcBrand AND 
+            CliType.CliType EQ Order.CliType aND
+            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} NO-LOCK:
 
-      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-          NEXT.
-
-      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
+      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
          NEXT.    
 
       RETURN TRUE.
@@ -353,20 +310,31 @@ END FUNCTION.
 FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
    (INPUT iiCustNum AS INT):
 
-   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
-   DEFINE BUFFER bOrder         FOR Order.
-   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
-   DEFINE BUFFER bClitype       FOR Clitype.
-   DEFINE BUFFER Customer       FOR Customer.
-   DEFINE BUFFER CustCat        FOR CustCat.
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER Order         FOR Order.
+   DEFINE BUFFER Customer      FOR Customer.
+   DEFINE BUFFER CustCat       FOR CustCat.
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
-       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = True NO-LOCK, 
-       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = False NO-LOCK,
-       EACH bOrder WHERE bOrder.Brand EQ Syst.Var:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK:
+       EACH CustCat WHERE 
+            CustCat.Brand = Syst.Var:gcBrand AND 
+            CustCat.Category = Customer.Category AND 
+            CustCat.Pro = True NO-LOCK, 
+       EACH OrderCustomer WHERE 
+            OrderCustomer.Brand = Syst.Var:gcBrand AND 
+            OrderCustomer.CustIdType = Customer.CustIdType AND 
+            OrderCustomer.CustId = Customer.OrgID AND 
+            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND 
+            OrderCustomer.Pro = False NO-LOCK,
+       EACH Order NO-LOCK WHERE 
+            Order.Brand EQ Syst.Var:gcBrand AND 
+            Order.orderid EQ OrderCustomer.Orderid:
 
-      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
-         NEXT.    
+      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
+
+      IF Order.OrderType NE {&ORDER_TYPE_NEW} OR
+         Order.OrderType NE {&ORDER_TYPE_MNP} OR
+         Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
       RETURN TRUE.
 
@@ -432,7 +400,6 @@ FUNCTION fCheckOngoing2PConvergentOrder RETURNS LOGICAL
        EACH bOrder NO-LOCK WHERE
             bOrder.Brand      EQ Syst.Var:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
             bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Var:gcBrand AND
@@ -552,16 +519,15 @@ FUNCTION fIsProSubscription RETURNS LOGICAL
    DEFINE BUFFER bCustCat  FOR CustCat.
 
    FIND FIRST bMobSub WHERE bMobSub.MsSeq = iiMsSeq AND bMobSub.PayType = FALSE NO-LOCK NO-ERROR.
-   IF AVAIL bMobsub THEN 
+   IF NOT AVAIL bMobSub THEN RETURN FALSE.
+
+   FIND FIRST bCustomer WHERE bCustomer.CustNum = bMobSub.Custnum NO-LOCK NO-ERROR.
+   IF AVAIL bCustomer THEN 
    DO:
-       FIND FIRST bCustomer WHERE bCustomer.CustNum = bMobSub.InvCust AND bCustomer.Roles <> "inactive" NO-LOCK NO-ERROR.
-       IF AVAIL bCustomer THEN 
-       DO:
-           FIND FIRST bCustCat WHERE bCustCat.Brand = Syst.Var:gcBrand AND bCustCat.Category = bCustomer.Category AND bCustCat.Pro = TRUE NO-LOCK NO-ERROR.
-           IF AVAIL bCustCat THEN 
-               RETURN TRUE.    
-       END.        
-   END.
+       FIND FIRST bCustCat WHERE bCustCat.Brand = Syst.Var:gcBrand AND bCustCat.Category = bCustomer.Category AND bCustCat.Pro = TRUE NO-LOCK NO-ERROR.
+       IF AVAIL bCustCat THEN 
+           RETURN TRUE.    
+   END.        
 
    RETURN FALSE.
        
@@ -721,132 +687,6 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
 
 END FUNCTION.
 
-
-FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
-   (INPUT icExtraLineCLIType AS CHAR,
-    INPUT icCustIDType       AS CHAR,
-    INPUT icCustID           AS CHAR):
-
-   IF NOT icExtraLineCLIType > ""
-   THEN RETURN 0.
-
-   DEFINE BUFFER Customer FOR Customer.
-   DEFINE BUFFER MobSub   FOR MobSub.
-   DEFINE BUFFER Order    FOR Order.
-
-   FOR FIRST Customer WHERE
-             Customer.Brand      = Syst.Var:gcBrand AND
-             Customer.OrgId      = icCustID                AND
-             Customer.CustidType = icCustIDType            AND
-             Customer.Roles     NE "inactive"              NO-LOCK,
-       EACH  MobSub NO-LOCK USE-INDEX CustNum WHERE
-             MobSub.Brand    = Syst.Var:gcBrand AND
-             MobSub.CustNum  = Customer.CustNum        AND
-             MobSub.PayType  = FALSE                   AND
-             MobSub.MultiSimID = 0                     AND
-             MobSub.MultiSimType = 0                   AND
-            (MobSub.MsStatus = {&MSSTATUS_ACTIVE} OR
-             MobSub.MsStatus = {&MSSTATUS_BARRED})
-       BY MobSub.ActivationTS:
-
-       IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)
-       THEN NEXT.
-
-       FIND LAST Order NO-LOCK WHERE 
-                 Order.MsSeq      = MobSub.MsSeq              AND 
-                 Order.CLIType    = MobSub.CLIType            AND 
-                 Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
-          LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
-          IF NOT AVAIL Order THEN 
-             FIND LAST Order NO-LOCK WHERE 
-                       Order.MsSeq      = MobSub.MsSeq              AND 
-                       Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
-                LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
-
-       IF NOT AVAIL Order THEN NEXT.          
-
-       RETURN Order.OrderId. 
-
-   END.
-
-   RETURN 0.
-
-END FUNCTION.
-
-FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
-   (INPUT icExtraLineCLIType AS CHAR,
-    INPUT icCustIDType       AS CHAR,
-    INPUT icCustID           AS CHAR):
-   
-   IF NOT icExtraLineCLIType > ""
-   THEN RETURN 0.
-
-   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
-   DEFINE BUFFER Order         FOR Order.
-   DEFINE BUFFER OrderFusion   FOR OrderFusion.
-
-   FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
-            OrderCustomer.CustId     EQ icCustID                AND
-            OrderCustomer.CustIdType EQ icCustIDType            AND
-            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-       EACH Order NO-LOCK WHERE
-            Order.Brand        EQ Syst.Var:gcBrand AND
-            Order.orderid      EQ OrderCustomer.Orderid   AND
-            Order.OrderType    NE {&ORDER_TYPE_RENEWAL}   AND
-            Order.MultiSimId   EQ 0                       AND 
-            Order.MultiSimType EQ 0,
-      FIRST OrderFusion NO-LOCK WHERE
-            OrderFusion.Brand   = Syst.Var:gcBrand AND
-            OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
-
-       IF NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)
-       THEN NEXT.
-
-      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
- 
-      RETURN Order.OrderId.
- 
-   END.
-
-   RETURN 0.
-
-END FUNCTION.
-
-FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
-   (INPUT liMainLineOrderId  AS INT,
-    INPUT liExtraLineOrderId AS INT):
-
-   DEFINE BUFFER Order FOR Order. 
-
-   FIND FIRST Order NO-LOCK WHERE
-              Order.Brand        EQ Syst.Var:gcBrand    AND
-              Order.OrderId      EQ liMainLineOrderId          AND
-       LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
-              Order.MultiSimId   EQ liExtraLineOrderId         AND
-              Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND 
-              Order.OrderType    NE {&ORDER_TYPE_RENEWAL}      NO-ERROR.
-
-   IF AVAIL Order THEN DO: 
-     
-      /* If Fixed line is installed for Main line Convergent Order 
-         THEN dont move extra line order to 76 */
-      FIND FIRST OrderFusion NO-LOCK WHERE
-                 OrderFusion.Brand        = Syst.Var:gcBrand          AND
-                 OrderFusion.OrderID      = Order.OrderID                    AND 
-                 OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
-                 
-      IF AVAIL OrderFusion THEN 
-         RETURN FALSE.
-
-      RETURN TRUE.
-
-   END.   
-
-   RETURN FALSE.
-
-END FUNCTION.
-
 /* If main line is installed for Main line (Convergent order or Mobile only)
    then don't move additional line order to 76 */
 FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
@@ -956,65 +796,5 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
 
 END FUNCTION. 
 
-
-FUNCTION fGetOldestCLITypeOfMobSub RETURNS CHAR
-   (iiCustNum AS INT):
-
-DEF VAR lcOldestCLIType  AS CHAR   NO-UNDO.
-
-   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
-                                 MobSub.CustNum = iiCustNum 
-                                 BY CreationDate:
-      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
-         lcOldestCLIType = MobSub.CLIType.
-         LEAVE.
-      END.
-   END.
-
-   RETURN lcOldestCLIType.
-
-END FUNCTION.
-
-
-FUNCTION fGetOldestCLITypeOfOrder RETURNS CHAR
-   (iiCustNum AS INT):
-
-DEF VAR lcOldestCLIType  AS CHAR  NO-UNDO.
-
-   FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
-                      Order.CustNum = iiCustNum AND
-                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0
-                      BY CrStamp:                      
-      IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
-         lcOldestCLIType = Order.CLIType.
-         LEAVE.            
-      END.
-   END.
-
-   RETURN lcOldestCLIType.
-   
-END FUNCTION.
-
-
-FUNCTION fGetPayType RETURNS CHAR
-   (iiCustNum AS INT):
-
-DEF VAR lcPayType        AS CHAR NO-UNDO.
-DEF VAR lcCLIType        AS CHAR NO-UNDO.
-
-   /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
-   lcCLIType = fGetOldestCLITypeOfMobSub(iiCustNum).
-   IF lcCLIType EQ "" THEN
-      lcCLIType = fGetOldestCLITypeOfOrder(iiCustNum).
-
-   IF INDEX(lcCLIType,"DSL") > 0 THEN
-      lcPayType = "66".
-   ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
-      lcPayType = "67".
-   ELSE lcPayType = "68".
-    
-   RETURN lcPayType.    
-      
-END FUNCTION.
 
 &ENDIF

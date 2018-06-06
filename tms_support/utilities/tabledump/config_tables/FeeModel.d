@@ -1,8 +1,9 @@
+"" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_POSTPAID" "Agreement Customer Change Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_PREPAID" "Agreement Customer Change Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "AGILETVMF" "Agile TV Service" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ANGELTECHMF" "Angel Tecnologico" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"ASISTMF" "Asistencia Negocios" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"ASISTMF" "Soluciona Negocios" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BALANCE_PREPAID" "Balance Query Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "BBMF" "BlackBerry Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BONO_VOIPMF" "Mobile data usage bundle VoIP" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -36,6 +37,8 @@
 "CONT30MF" "Contrato 30" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT31MF" "La Tarifa Tic Tac" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT32MF" "La Sinfín 3 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT33MF" "La Sinfín 7 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT34MF" "La Ciento 2 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT7MF" "Contrato 7 Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT8MF" "La del Uno service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT9MF" "Contrato 9 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -104,8 +107,12 @@
 "FLEX_5GB_UPSELLMF" "5GB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_MFUPS" "Flex upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD110" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD140" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD177" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD187" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD233" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD243" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_PREPAID" "Change of ICC Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
@@ -136,6 +143,9 @@
 "MDUBTOMDUB9" "Bono 8 to Bono 9 Upgrade Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "MSISDN_POSTPAID" "Change MSISDN Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "MSISDN_PREPAID" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"NEBTERMPERIOD160" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"NEBTERMPERIOD237" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"NEBTERMPERIOD293" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "OFFICE365MF" "OFFICE 365 Essentials" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELSIM" "Payment on deliver cost - SIM only" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELTER" "Payment on deliver cost - Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

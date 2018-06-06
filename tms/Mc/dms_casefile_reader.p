@@ -16,6 +16,15 @@ ASSIGN
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/dms.i}
+{Syst/eventval.i}
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
+   DEF VAR lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
+   RUN StarEventInitialize(lhCustomer).
+END.
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.
@@ -225,78 +234,113 @@ PROCEDURE pUpdateDMS:
       ldStatusTS      = DECIMAL(ENTRY(7,pcLine,lcSep))
       lcDocList       = ENTRY(8,pcLine,lcSep).
       
-   FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ Syst.Var:gcBrand AND
-              Order.OrderID EQ liOrderId NO-ERROR.
-   IF NOT AVAIL Order THEN 
-      RETURN "ERROR:ORDER NOT AVAILABLE:" + STRING(liOrderId).
+    IF lcCaseTypeID =  {&DMS_CASE_TYPE_ID_CATEGORY_CHG} THEN DO: /* Customer Category Change */
+       /* Get Request              */
+       FIND MSRequest WHERE 
+            MSRequest.Brand     = Syst.var:gcBrand      AND 
+            MSRequest.MsRequest = INTEGER(lcContractID) EXCLUSIVE-LOCK NO-ERROR.
+       /* Change Customer category */
+       IF AVAILABLE MSRequest AND MSRequest.ReqStatus =  {&REQUEST_STATUS_UNDER_WORK} 
+          AND lcStatusCode = "OK" THEN DO:
+              FIND Customer WHERE Customer.Brand = MSRequest.Brand  AND Customer.CustNum = MSRequest.CustNum EXCLUSIVE-LOCK NO-ERROR.
+              IF AVAILABLE Customer THEN 
+                  IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
+                  Customer.Category = MSRequest.ReqCParam1.
+                  IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+          MSRequest.ReqStatus =  {&REQUEST_STATUS_DONE}.  
+       END.
 
-   lcUpdateDMS = fUpdateDMS(lcDmsExternalID,
-                            lcCaseTypeID,
-                            lcContractID,
-                            "Order",
-                            liOrderId,
-                            lcStatusCode,
-                            lcStatusDesc,
-                            "",
-                            ldStatusTS,
-                            lcDocList,
-                            {&DMS_DOCLIST_SEP}).
-
-   lcDeposit = fFindDeposit(lcDocList, {&DMS_DOCLIST_SEP}).                         
-   lcErr = fSendChangeInformation(lcStatusCode, 
-                                  liOrderId, 
-                                  lcDeposit, 
-                                  {&DMS_DOCLIST_SEP},
-                                  "casef_reader",
-                                  lcMsg).
-
-   fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
-   IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS + ":UPDATE".
-   ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
-            lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
-      CASE lcStatusCode:
-         WHEN "E" THEN DO:
-            IF ((Order.StatusCode = "20" OR Order.StatusCode = "21") AND
-                 Order.PayType = True) THEN
-               RUN Mc/orderhold.p(liOrderId, "RELEASE_BATCH").
-            ELSE IF Order.StatusCode = "44" THEN
-               RUN Mc/orderinctrl.p(liOrderId, 0, TRUE).
-         END.
-         WHEN "J" THEN RUN Mc/closeorder.p(liOrderId, TRUE). /*status is checked in closeorder.p */
-         WHEN "F" THEN DO:
-            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
-               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
-               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
-               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
-            THEN
-               RUN Mc/orderbyfraud.p(liOrderId, TRUE,
-                                           {&ORDER_STATUS_CLOSED_BY_FRAUD}).
-            ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
-                            Order.StatusCode + " cannot be moved to " +
-                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
-         END.
-         WHEN "N" OR
-         WHEN "G" THEN DO:
-            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
-               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
-               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
-               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
-            THEN
-               RUN Mc/orderbyfraud.p(liOrderId, TRUE,
-                                           {&ORDER_STATUS_AUTO_CLOSED}).
-            ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
-                            Order.StatusCode + " cannot be moved to " +
-                            {&ORDER_STATUS_AUTO_CLOSED}).
-         END.
-      END CASE.
-   END.
-
-   IF RETURN-VALUE > "" THEN RETURN "ERROR:" + RETURN-VALUE.
-   
-   RETURN "OK".
-
-
-
+       /* Set Request to Done */
+       lcUpdateDMS = fUpdateDMS(lcDmsExternalID,
+                                lcCaseTypeID,
+                                lcContractID,
+                                "MsRequest",
+                                liOrderId,
+                                lcStatusCode,
+                                lcStatusDesc,
+                                "",
+                                ldStatusTS,
+                                lcDocList,
+                                {&DMS_DOCLIST_SEP}).       
+       RETURN "OK".
+    END.
+    ELSE DO: /* All other DMS cases */
+       FIND FIRST Order NO-LOCK WHERE
+                  Order.Brand EQ Syst.Var:gcBrand AND
+                  Order.OrderID EQ liOrderId NO-ERROR.
+       IF NOT AVAIL Order THEN 
+          RETURN "ERROR:ORDER NOT AVAILABLE:" + STRING(liOrderId).
+    
+       lcUpdateDMS = fUpdateDMS(lcDmsExternalID,
+                                lcCaseTypeID,
+                                lcContractID,
+                                "Order",
+                                liOrderId,
+                                lcStatusCode,
+                                lcStatusDesc,
+                                "",
+                                ldStatusTS,
+                                lcDocList,
+                                {&DMS_DOCLIST_SEP}).
+    
+       lcDeposit = fFindDeposit(lcDocList, {&DMS_DOCLIST_SEP}).                         
+       lcErr = fSendChangeInformation(lcStatusCode, 
+                                      liOrderId, 
+                                      lcDeposit, 
+                                      {&DMS_DOCLIST_SEP},
+                                      "casef_reader",
+                                      lcMsg).
+    
+       fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
+       IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS + ":UPDATE".
+       ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
+                lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
+          CASE lcStatusCode:
+             WHEN "E" THEN DO:
+                IF ((Order.StatusCode = "20" OR Order.StatusCode = "21") AND
+                     Order.PayType = True) THEN
+                   RUN Mc/orderhold.p(liOrderId, "RELEASE_BATCH").
+                ELSE IF Order.StatusCode = "44" THEN
+                   RUN Mc/orderinctrl.p(liOrderId, 0, TRUE).
+             END.
+             WHEN "J" THEN RUN Mc/closeorder.p(liOrderId, TRUE). /*status is checked in closeorder.p */
+             WHEN "F" THEN DO:
+                IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
+                   Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
+                   Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
+                   Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
+                THEN
+                   RUN Mc/orderbyfraud.p(liOrderId, TRUE,
+                                               {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+                ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
+                                Order.StatusCode + " cannot be moved to " +
+                                {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+             END.
+             WHEN "N" OR
+             WHEN "G" THEN DO:
+                IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
+                   Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
+                   Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
+                   Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
+                THEN
+                   RUN Mc/orderbyfraud.p(liOrderId, TRUE,
+                                               {&ORDER_STATUS_AUTO_CLOSED}).
+                ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
+                                Order.StatusCode + " cannot be moved to " +
+                                {&ORDER_STATUS_AUTO_CLOSED}).
+             END.
+          END CASE.
+       END.
+    
+       IF RETURN-VALUE > "" THEN RETURN "ERROR:" + RETURN-VALUE.
+       
+       RETURN "OK".
+          
+    END.
 
 END PROCEDURE.
+
+FINALLY:
+   IF llDoEvent THEN fCleanEventObjects().
+END.
+

@@ -250,10 +250,10 @@
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "NewtonRPC".
 {Func/orderchk.i}
-{Func/order.i}
+{Func/custfunc.i}
+{Func/terminaloffer.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
-{Mnp/mnpoutchk.i}
 {Func/create_eventlog.i}
 {Func/fmakemsreq.i}
 {Func/main_add_lines.i}
@@ -269,9 +269,10 @@ Syst.Var:katun = "NewtonRPC".
 {Func/smsmessage.i}
 {Mc/orderfusion.i}
 {Func/fixedlinefunc.i}
-{Func/profunc.i}
+{Func/barrfunc.i}
 
 {Migration/migrationfunc.i}
+{Func/digital_signature.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -331,7 +332,8 @@ DEF VAR pcOfferId  AS CHAR NO-UNDO.
 DEF VAR pdePriceSelTime AS DEC NO-UNDO.
 DEF VAR liTermOfferItemID AS INTEGER NO-UNDO.
 DEF VAR piMultiSimID AS INT NO-UNDO. 
-DEF VAR piMultiSimType AS INT NO-UNDO. 
+DEF VAR piMultiSimType AS INT NO-UNDO.
+DEF VAR liMLMsSeq      AS INT NO-UNDO. 
 DEF VAR plExcTermPenalty AS LOG NO-UNDO.
 DEF VAR plExtendTermContract AS LOG NO-UNDO.
 DEF VAR pcMandateId AS CHAR NO-UNDO. 
@@ -472,6 +474,19 @@ DEF TEMP-TABLE ttDiscount NO-UNDO
    FIELD discount_valid_periods AS INT
 INDEX discount_valid_periods IS PRIMARY discount_valid_periods. 
 
+DEFINE VARIABLE bundleExtraDataStruct  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcExtraDataStruct      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE office365Struct        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcoffice365Struct      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE cData                  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE faxtoEmailStruct       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcfaxtoEmailStruct     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcWebContractIds       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liEntry                AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcExtraDS              AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNumber          AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcAddFTERM             AS CHARACTER NO-UNDO.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
@@ -572,7 +587,7 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
          ASSIGN 
              pcBundleStruct = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt))
-             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id").
+             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id,contract_id").
 
          IF LOOKUP('bundle_id'     , lcBundleFields) GT 0 AND 
             LOOKUP('extra_offer_id', lcBundleFields) GT 0 THEN 
@@ -584,9 +599,61 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
                  pcAdditionalOfferList  = pcAdditionalOfferList                              + 
                                           (IF pcAdditionalOfferList <> "" THEN "," ELSE "")  + 
                                           get_string(pcBundleStruct, "extra_offer_id").
+             IF LOOKUP('contract_id',lcBundleFields) GT 0 THEN 
+                  lcWebContractIds = lcWebContractIds +
+                                     (IF LENGTH(lcWebContractIds) > 0 THEN "," ELSE "")  +
+                                     get_string(pcBundleStruct, "contract_id").
+             ELSE 
+                  lcWebContractIds = lcWebContractIds + 
+                                     (IF LENGTH(lcWebContractIds) > 0 THEN "," ELSE "  ") .
          END.                           
       END.
    END.
+
+    IF LOOKUP("bundle_extra_data",lcOrderStruct) > 0 THEN 
+    DO:
+        bundleExtraDataStruct = get_struct(pcOrderStruct , "bundle_extra_data").
+        lcExtraDataStruct     = validate_request(bundleExtraDataStruct, pcAdditionalBundleList).
+        DO liCount = 1 TO NUM-ENTRIES(lcExtraDataStruct):
+            lcExtraDS = ENTRY(liCount,lcExtraDataStruct).
+            CASE lcExtraDS:
+                WHEN 'OFFICE365' THEN DO:
+                    office365Struct    = get_struct(bundleExtraDataStruct , "OFFICE365").
+                    lcoffice365Struct  = validate_request(office365Struct, 'email!').
+                    liEntry            = LOOKUP('OFFICE365',pcAdditionalBundleList) .     
+                    cData = "".
+                    cData = "|" + get_string(office365Struct, "email").
+                    cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
+                    cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+                    ENTRY( liEntry , pcAdditionalOfferList ) = cData NO-ERROR.                     
+                END.
+                WHEN  'FAXTOEMAIL' THEN DO:
+                    faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
+                    lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number').    
+                    liEntry             = LOOKUP('FAXTOEMAIL',pcAdditionalBundleList) .     
+                    cData = "".
+                    /*Take fixed_number from field if available. 
+                      If not try to take from fusion data.
+                      If not available, try from mobsub. */
+                    IF LOOKUP('fixed_number', faxtoEmailStruct) > 0 THEN
+                       lcFixedNumber = get_string(faxtoEmailStruct, "fixed_number").
+                    IF lcFixedNumber = "" THEN lcFixedNumber = lcFixedLineNumber.
+                    IF lcFixedNumber = "" THEN DO:
+                       IF AVAIL MobSub AND 
+                                MobSub.FixedNumber NE ? AND 
+                                MobSub.FixedNumber NE "" THEN lcFixedNumber = MobSub.FixedNumber.
+                    END.
+
+                    
+                    cData = lcFixedNumber.
+                    cData = cData + "|" + get_string(faxtoEmailStruct, "email").
+                    cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
+                    cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+                    ENTRY( liEntry ,pcAdditionalOfferList ) = cData NO-ERROR.                     
+                END.
+            END CASE. 
+        END.        
+    END.
 
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
       pcMobsubBundleType = get_string(pcOrderStruct,"subscription_bundle").
@@ -672,23 +739,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    RETURN TRUE.
 END.
-
-
-FUNCTION fCreateMemo RETURNS LOGICAL (INPUT pcTitle AS CHARACTER,
-   INPUT pcText  AS CHAR, INPUT pcCreUser AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = Syst.Var:gcBrand 
-      Memo.HostTable = "Order" 
-      Memo.KeyValue  = STRING(Order.OrderId) 
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = pcCreUser 
-      Memo.MemoTitle = pcTitle
-      Memo.MemoText  = pcText.
-END.
-
 
 /* YBP-531 */
 FUNCTION fCreateOrderCustomer RETURNS CHARACTER 
@@ -821,7 +871,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             NOT plUpdate AND
             piMultiSimType NE {&MULTISIMTYPE_SECONDARY} THEN DO:
 
-            IF NOT fSubscriptionLimitCheck(
+            IF NOT Func.ValidateACC:mSubscriptionLimitCheck(
                lcIdOrderCustomer,
                lcIdTypeOrderCustomer,
                llSelfEmployed,
@@ -830,8 +880,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                OUTPUT liSubLimit,
                OUTPUT liSubs,
                OUTPUT liSubLimit,
-               OUTPUT liActs) THEN lcFError = "subscription limit".
-            
+               OUTPUT liActs) THEN lcFError = "subscription limit".            
+                
             IF lcFError EQ "" THEN
                FOR FIRST Customer WHERE
                          Customer.Brand      = Syst.Var:gcBrand  AND
@@ -1349,6 +1399,7 @@ gcOrderStructFields = "brand!," +
                       "order_inspection_rule_id," +
                       "order_inspection_risk_code," + 
                       "additional_bundle," +
+                      "bundle_extra_data," + /* Ashok */ 
                       "subscription_bundle," +
                       "dss," +
                       "bono_voip," +
@@ -1604,9 +1655,8 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
 IF pcAdditionalBundleList > "" THEN
 DO:
    DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
-                                           
       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liBundleCnt,pcAdditionalBundleList),OUTPUT lcError) THEN
-          RETURN appl_err(lcError).
+         RETURN appl_err(lcError).
    END.
 END.
 
@@ -1770,7 +1820,7 @@ DO:
    lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcPoUserStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-   
+
 /* YBP-536 */
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
@@ -2007,27 +2057,20 @@ IF pcQ25Struct > "" THEN DO:
       
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
+  
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
 IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
-   piMultiSimID = fCheckConvergentAvailableForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine order id */
+   piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
 
-   IF piMultiSimID EQ 0
-   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
+   IF piMultiSimID EQ 0 THEN 
+      piMultiSimID = fCheckOngoingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
    IF piMultiSimID = 0 THEN  
       RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
-
-   FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
-              ExtraLineMainOrder.Brand   = Syst.Var:gcBrand      AND 
-              ExtraLineMainOrder.OrderId = piMultiSimID NO-ERROR.
-
-   IF NOT AVAIL ExtraLineMainOrder THEN 
-      RETURN appl_err("Extra line associated main line order is not available").
 
    /* Discount rule id input is not necessary from WEB to TMS, 
       As it is extra line we have to give default discount */
@@ -2095,36 +2138,64 @@ IF AVAIL AddLineDiscountPlan THEN DO:
 END.
 
 IF lcFixedLinePermanency > "" THEN DO:
-   fCreateOrderAction(Order.Orderid,
-                      "FixedPermanency",
-                      lcFixedLinePermanency,
-                      "").
+   /* NEBA / Wish is that WEB would tell both exactly in future */
+   IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
+      IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
+         lcAddFTERM = "FTERM12-110".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
+         lcAddFTERM = "FTERM12-187".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
+         lcAddFTERM = "FTERM12-243".
+      ELSE lcAddFTERM = "".
+
+      IF lcAddFTERM NE "" THEN /* Create FTERM */
+        fCreateOrderAction(Order.Orderid,
+                           "FixedPermanency",
+                           lcAddFTERM,
+                           "").
+      /* Entry for NEBTERM penalty */
+      fCreateOrderAction(Order.Orderid,
+                         "NebaPenalty",
+                         lcFixedLinePermanency,
+                         "").
+
+   END.
+   ELSE DO:
+      /* Normal Fixed Line Contract */
+      fCreateOrderAction(Order.Orderid,
+                         "FixedPermanency",
+                         lcFixedLinePermanency,
+                         "").
+   END.
 END.
 
 /* Extra line discount */
-IF fCLITypeIsExtraLine(pcSubType) THEN DO:
-   
-    /* Update Mainline multisimid and multisimtype values before 
-       extra line discount orderaction record is created */
-    ASSIGN ExtraLineMainOrder.MultiSimID   = Order.OrderId   /* Extraline order id */ 
-           ExtraLineMainOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
-   
+IF fCLITypeIsExtraLine(pcSubType) THEN 
     fCreateOrderAction(Order.Orderid,
                        "ExtraLineDiscount",
                        ExtraLineDiscountPlan.DPRuleId,
                        "").
-END.
 
 /* YBP-548 */
-IF pcMemo NE "" THEN 
-   fCreateMemo("Info", pcMemo, pcSalesMan).
+IF pcMemo NE ""
+THEN Func.Common:mWriteMemoWithType("Order",
+                                    STRING(Order.OrderId),
+                                    0,
+                                    "Info",
+                                    pcMemo,
+                                    "",
+                                    pcSalesMan).
 
 /* YBP-549 */
-IF plCheck THEN 
-   fCreateMemo("ORDER CHANNEL in Standalone model", 
-               "When order made channel was in standalone mode," 
-                + " please notice this.",
-               pcSalesMan).
+IF plCheck
+THEN Func.Common:mWriteMemoWithType("Order",
+                                    STRING(Order.OrderId),
+                                    0,
+                                    "ORDER CHANNEL in Standalone model",
+                                    "When order made channel was in standalone mode," +
+                                    " please notice this.",
+                                    "",
+                                    pcSalesMan).
 
 /* YBP-550 */
 fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, TRUE).
@@ -2179,12 +2250,16 @@ IF Order.OrderChannel BEGINS "retention" THEN
 
       RUN Mc/closeorder.p(lbOrder.OrderId, TRUE).
 
-      IF RETURN-VALUE > "" THEN 
-         fCreateMemo("Automatic order closing failed", 
-                     SUBST("Failed to close pending order. " + 
-                           "Order ID: &1, Error: &2", 
-                           lbOrder.orderid, RETURN-VALUE),
-                     "Newton RPC").
+      IF RETURN-VALUE > ""
+      THEN Func.Common:mWriteMemoWithType("Order",
+                                          STRING(Order.OrderId),
+                                          0,
+                                          "Automatic order closing failed",
+                                          SUBST("Failed to close pending order. " + 
+                                                "Order ID: &1, Error: &2", 
+                                                lbOrder.orderid, RETURN-VALUE),
+                                          "",
+                                          "Newton RPC").
    END.
 
 
@@ -2193,10 +2268,14 @@ IF Order.OrderChannel BEGINS "retention" THEN
 IF fOngoingOrders(pcCli,pcNumberType) THEN DO:
 
    Order.statuscode = "4".
-   fCreateMemo("Order exists with same MSISDN", 
-               SUBST("Orderid: &1", Order.orderid),
-               "Newton RPC").
 
+   Func.Common:mWriteMemoWithType("Order",
+                                  STRING(Order.OrderId),
+                                  0,
+                                  "Order exists with same MSISDN",
+                                  SUBST("Orderid: &1", Order.orderid),
+                                  "",
+                                  "Newton RPC").
 END.
 
 /* YBP-557 */
@@ -2218,7 +2297,7 @@ ELSE IF Order.statuscode NE "4" AND(
    /*YPR-5316*/
    (fIsConvergenceTariff(Order.Clitype) AND pcNumberType EQ "stc")) 
    AND
-   fIsMNPOutOngoing(INPUT Order.CLI) 
+   Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) 
    THEN DO:
 
    Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}.
@@ -2233,9 +2312,13 @@ ELSE IF Order.statuscode NE "4" AND(
          MsRequest.ReqIParam2 = Order.OrderId.
       ELSE DO:
          Order.StatusCode = {&ORDER_STATUS_IN_CONTROL}.
-         fCreateMemo("STC request was not found", 
-                     "", 
-                     "Newton RPC").
+         Func.Common:mWriteMemoWithType("Order",
+                                        STRING(Order.OrderId),
+                                        0,
+                                        "STC request was not found",
+                                        "",
+                                        "",
+                                        "Newton RPC").
       END. /* ELSE DO: */
    END. /* IF Order.OrderChannel = "retention_stc" THEN DO: */
 END. /* IF Order.statuscode NE "4" AND */
@@ -2252,9 +2335,11 @@ ELSE IF Order.statuscode NE "4" THEN DO:
          OrderCustomer.RowType = 1 EXCLUSIVE-LOCK NO-ERROR.
 
       CASE Order.OrderChannel:
-         WHEN "renewal" OR WHEN "renewal_telesales" OR WHEN "retention" OR
+         WHEN "renewal" OR 
+         WHEN "renewal_telesales" OR 
+         WHEN "retention" OR
          WHEN "renewal_ctc" THEN DO:
-            IF fCheckRenewalData() = TRUE THEN
+            IF fCheckRenewalData(Order.Orderid) = TRUE THEN
                /* YBP-560 */
                Order.StatusCode = {&ORDER_STATUS_RENEWAL}.
             ELSE DO:
@@ -2312,9 +2397,13 @@ ELSE IF Order.statuscode NE "4" THEN DO:
             END.
             ELSE DO:
                Order.StatusCode = {&ORDER_STATUS_IN_CONTROL}.
-               fCreateMemo("STC request was not found", 
-                  "", 
-                  "Newton RPC").
+               Func.Common:mWriteMemoWithType("Order",
+                                              STRING(Order.OrderId),
+                                              0,
+                                              "STC request was not found",
+                                              "",
+                                              "",
+                                              "Newton RPC").
             END.
          END.
       END.
@@ -2429,34 +2518,51 @@ CASE pcROIresult:
          END.
          ELSE Order.StatusCode = STRING(40 + INTEGER(pcROIlevel)).
             
-         IF pcROIruleId NE '' THEN
-            fCreateMemo("ROI Risk Rule_Id", 
-                      pcROIruleId,
-                      "Newton RPC ROI").
-         IF pcROIdescription NE '' THEN
-             fCreateMemo("ROI Description", 
-                         pcROIdescription,
-                         "Newton RPC ROI").
+         IF pcROIruleId NE ''
+         THEN Func.Common:mWriteMemoWithType("Order",
+                                             STRING(Order.OrderId),
+                                             0,
+                                             "ROI Risk Rule_Id",
+                                             pcROIruleId,
+                                             "",
+                                             "Newton RPC ROI").
+         IF pcROIdescription NE ''
+         THEN Func.Common:mWriteMemoWithType("Order",
+                                             STRING(Order.OrderId),
+                                             0,
+                                             "ROI Description",
+                                             pcROIdescription,
+                                             "",
+                                             "Newton RPC ROI").
 
      END.
-     WHEN "exception" THEN DO:
-         fCreateMemo("ROI Description", 
-                   pcROIdescription,
-                   "Newton RPC ROI").
-     END.
-     WHEN "unexpected response" THEN DO:
-         fCreateMemo("ROI Unexpected Response", 
-                   pcROIdescription,
-                   "Newton RPC ROI").
-     END.
+     WHEN "exception"
+     THEN Func.Common:mWriteMemoWithType("Order",
+                                         STRING(Order.OrderId),
+                                         0,
+                                         "ROI Description",
+                                         pcROIdescription,
+                                         "",
+                                         "Newton RPC ROI").
+     WHEN "unexpected response"
+     THEN Func.Common:mWriteMemoWithType("Order",
+                                         STRING(Order.OrderId),
+                                         0,
+                                         "ROI Unexpected Response",
+                                         pcROIdescription,
+                                         "",
+                                         "Newton RPC ROI").
      WHEN "busy" OR WHEN "concern" OR
      WHEN "ParamsException" OR WHEN "inspectionException" THEN DO:
          Order.StatusCode = "43".
-         IF pcROIdescription NE '' THEN
-             fCreateMemo("ROI Description",
-                         pcROIdescription,
-                         "Newton RPC ROI").
-
+         IF pcROIdescription NE ''
+         THEN Func.Common:mWriteMemoWithType("Order",
+                                             STRING(Order.OrderId),
+                                             0,
+                                             "ROI Description",
+                                             pcROIdescription,
+                                             "",
+                                             "Newton RPC ROI").
      END.
 END.
 
@@ -2467,8 +2573,12 @@ DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign AND LOOKUP(STRING(DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE}) + "," + 
-                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN 
-       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
+                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN DO:
+       IF ENTRY (liBundleCnt,lcWebContractIds) NE "" THEN
+           fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ( ENTRY(liBundleCnt,pcAdditionalOfferList)  + "|contract_id=" + ENTRY (liBundleCnt,lcWebContractIds) )  ).
+       ELSE 
+          fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
+   END.
    ELSE         
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.
@@ -2564,10 +2674,15 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     INPUT  0.0,
                     INPUT {&REQUEST_SOURCE_ICC_CHANGE_AUTO},
                     OUTPUT lcError).
-   IF liRequest = 0 THEN
-      fCreateMemo("ICC change request creation failed", 
-                  SUBST("Orderid: &1", Order.orderid),
-                  "Newton RPC").
+   IF liRequest = 0
+   THEN Func.Common:mWriteMemoWithType("Order",
+                                       STRING(Order.OrderId),
+                                       0,
+                                       "ICC change request creation failed",
+                                       SUBST("Orderid: &1", Order.orderid),
+                                       "",
+                                       "Newton RPC").
+
    /* YBP-584 */ 
    /* Update SIM status to reserve for ICC change */
    ELSE DO:
@@ -2705,6 +2820,9 @@ IF INDEX(Order.OrderChannel, "pos") EQ 0  AND
       RUN Mc/sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
    END.
 END.
+
+/* RES-538 Digital Signature for Tienda and Telesales only */
+fHandleSignature(liOrderId,Order.statusCode).
 
 add_int(response_toplevel_id, "", liOrderId).
 

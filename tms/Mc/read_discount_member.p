@@ -30,7 +30,9 @@ DEF VAR ldaValidTo   AS DATE NO-UNDO.
 DEF VAR lcSep        AS CHAR NO-UNDO. 
 DEF VAR liMsSeq      AS INT  NO-UNDO. 
 DEF VAR ldaLimitedTo AS DATE NO-UNDO.
-DEF VAR liLinesRead  AS INT NO-UNDO. 
+DEF VAR liLinesRead  AS INT  NO-UNDO.
+DEF VAR lcError      AS CHAR NO-UNDO.
+
 
 DEF BUFFER bUpdMember FOR DPMember.
 
@@ -96,7 +98,6 @@ IF NOT SESSION:BATCH THEN DO:
    PAUSE 0.
    VIEW FRAME fQty.
 END.
-
 
 REPEAT TRANS:
 
@@ -191,62 +192,33 @@ REPEAT TRANS:
               NEXT.
       END.
    END.
-  
-   FIND FIRST DPMember WHERE
-              DPMember.DPId = DiscountPlan.DPId AND
-              DPMember.HostTable = "MobSub" AND
-              DPMember.KeyValue  = STRING(liMsSeq) AND
-              DPMember.ValidTo >= ldaValidFrom AND
-              DPMember.ValidFrom <= ldaValidTo NO-LOCK NO-ERROR.
 
-   /* end the current one */
-   IF AVAILABLE DPMember THEN DO:
-      IF DPMember.DiscValue = ldDiscount AND 
-         DPMember.ValidFrom = ldaValidFrom AND
-         DPMember.ValidTo = ldaValidTo THEN DO:
-            fLogLine("No changes").
-            NEXT.
-      END.
-         
-      FIND CURRENT DPMember EXCLUSIVE-LOCK.
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPMember).
-      DPMember.ValidTo = ldaValidFrom - 1.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
-   END.
-   
-   IF ldDiscount NE 0 THEN DO:
-      CREATE DPMember.
-      ASSIGN 
-         DPMember.DPId      = DiscountPlan.DPId 
-         DPMember.HostTable = "MobSub" 
-         DPMember.KeyValue  = STRING(liMsSeq) 
-         DPMember.ValidFrom = ldaValidFrom
-         DPMember.ValidTo   = ldaValidTo          
-         DPMember.DiscValue = ldDiscount
-         DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-         .
-   
-      /* dpmember creations not logged anymore YDR-1078 */
-      /*
-      IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhDPMember).
-      */
-   
-      fLogLine("OK"). 
-
-      oiDone = oiDone + 1.
-   END.
-   ELSE DO:
-      IF NOT AVAILABLE DPMember THEN DO:
-         fError("Discount does not exist").
+   IF ldDiscount > 0 THEN DO:
+      lcError = fAddDiscountPlanMember(liMsSeq,
+                                       DiscountPlan.DPRuleID,
+                                       ldDiscount,
+                                       ldaValidFrom,
+                                       ldaValidTo,
+                                       ?,
+                                       0).
+      IF lcError BEGINS "ERROR"
+      THEN DO:
+         fLogLine(lcError).
+         oiErrors = oiErrors + 1.
          NEXT.
       END.
-      ELSE DO:
-         fLogLine("OK"). 
-
-         oiDone = oiDone + 1.
-      END.
+      ELSE IF lcError > ""
+      THEN fLogLine("NOTE: " + lcError).
    END.
-   
+   ELSE fCloseDiscount(DiscountPlan.DPRuleID,
+                       liMsSeq,
+                       ldaValidFrom - 1,
+                       NO).
+
+   fLogLine("OK").
+
+   oiDone = oiDone + 1.
+
    IF NOT SESSION:BATCH AND 
       (oiDone < 100 OR oiDone MOD 100 = 0) THEN DO:
       PAUSE 0.

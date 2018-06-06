@@ -4,12 +4,13 @@
  *
  * @input msseq;int;mandatory;id of subscription
  *        username;string;mandatory; who create the Discount
-          discount;structure;mandatory; discount details
+          discount;structure;mandatory; discount details          
  * @discount id;string;mandatory; Discount Plan Rule ID
              disc_value;decimal;mandatory; Amount of discount
              valid_from;date;mandatory; Discount start date
              valid_periods;int;mandatory; Discount duration
              discount_monthly_limit;double;mandatory;Discount amount monthly limit
+             permanency;string;optional;Periodical contract
   * @output ret;boolean; Return value
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -19,13 +20,15 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fcounter.i}
 {Func/fixedlinefunc.i}
+{Func/fmakemsreq.i}
 
 /* Input parameters */
 DEFINE VARIABLE piMsSeq          AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcUserName       AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcStruct         AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcStruct         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStruct         AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStructType     AS CHARACTER NO-UNDO.
+
 /* Output parameters */
 /* Local variables */
 DEFINE VARIABLE lcDPRuleID       AS CHARACTER NO-UNDO.
@@ -38,33 +41,18 @@ DEFINE VARIABLE ldeMonthlyLimit  AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcPerContract    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liResult         AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcResult         AS CHARACTER NO-UNDO.
+
 /* ALFMO-14 for web memo creation */
 DEFINE VARIABLE lcMainLine    AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
 
-lcStructType = validate_request(param_toplevel_id, "int,string,struct,[boolean]").
+lcStructType = validate_request(param_toplevel_id, "int,string,struct,[string]").
 IF lcStructType EQ ? THEN RETURN.
-
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-      
-END FUNCTION.
 
 /* ALFMO-14 Procedure returns the convergent main line MSISDN 
    For web memo creation */
@@ -153,13 +141,18 @@ pcUserName = "VISTA_" + get_string(param_toplevel_id, "1").
 pcStruct = get_struct(param_toplevel_id,"2").
 
 lcStruct = validate_struct(pcStruct, "id!,disc_value!,valid_from!," +
-                                     "valid_periods!,discount_monthly_limit!").
+                                     "valid_periods!,discount_monthly_limit!," +
+                                     "permanency").
+
 
 lcDPRuleID     = get_string(pcStruct, "id").
 ldeAmount      = get_double(pcStruct, "disc_value").
 ldaValidFrom   = get_date(pcStruct, "valid_from").
 liValidPeriods = get_int(pcStruct, "valid_periods").
 ldeMonthlyLimit = get_double(pcStruct, "discount_monthly_limit").
+
+ASSIGN lcPerContract = get_string(pcStruct, "permanency") WHEN
+         LOOKUP ("permanency", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -222,6 +215,16 @@ IF liValidPeriods = 999 THEN
 ELSE
    ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
 
+/* YCO-468. Periodical contract for Permanency. Validation. */
+IF lcPerContract <> "" THEN DO:
+   FIND FIRST DayCampaign NO-LOCK WHERE 
+              DayCampaign.Brand   EQ Syst.Var:gcBrand AND 
+              DayCampaign.DCEvent EQ lcPerContract
+              USE-INDEX DCEvent NO-ERROR.
+   IF NOT AVAILABLE DayCampaign THEN 
+      RETURN appl_err("Unknown Periodical Contract " + lcPerContract). 
+END.
+
 /* ALFMO-14 Additional Line with mobile only ALFMO-5 */
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN 
 DO:      
@@ -252,27 +255,10 @@ DO:
    END.
 END.
 
-FOR EACH bDiscountPlan NO-LOCK WHERE
-         bDiscountPlan.Brand = Syst.Var:gcBrand AND
-  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0,
-  FIRST DPMember NO-LOCK WHERE
-        DPMember.DPId       = bDiscountPlan.DPId   AND
-        DPMember.HostTable  = "MobSub"             AND
-        DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-        DPMember.ValidTo   >= ldaValidFrom         AND
-        DPMember.ValidFrom <= ldaValidTo:
-   RETURN appl_err("Discount Plan already exists").
-END.
-
-FIND FIRST DPMember WHERE
-           DPMember.DPId = DiscountPlan.DPId AND
-           DPMember.HostTable = "MobSub" AND
-           DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
-           DPMember.ValidTo >= ldaValidFrom AND
-           DPMember.ValidFrom <= ldaValidTo NO-LOCK NO-ERROR.
-
-IF AVAILABLE DPMember THEN
-   RETURN appl_err("Discount Plan already exists").
+/* YCO-458. Validation about existing additional lines */
+/* discounts removed, as far as now we are checking    */
+/* "incompatible discount matrix" (TMSRelation table)  */
+/* in fAddDiscountPlanMember (dpmember.i)              */ 
 
 IF DiscountPlan.DPUnit = "Percentage" THEN
    ldeMaxAmount = DiscountPlan.MaxAmount.
@@ -295,22 +281,45 @@ END.
 IF ( ldeMonthAmt + ldeMaxAmount) > ldeMonthlyLimit THEN
        RETURN appl_err("Change exceeds the monthly limit ").
 
-CREATE DPMember.
-ASSIGN 
-   DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-   DPMember.DPId      = DiscountPlan.DPId
-   DPMember.HostTable = "MobSub" 
-   DPMember.KeyValue  = STRING(MobSub.MsSeq) 
-   DPMember.ValidFrom = ldaValidFrom
-   DPMember.ValidTo   = ldaValidTo
-   DPMember.DiscValue = ldeAmount.
+lcError = fAddDiscountPlanMember(MobSub.MsSeq,
+                                 DiscountPlan.DPRuleID,
+                                 ldeAmount,
+                                 ldaValidFrom,
+                                 ldaValidTo,
+                                 ?,
+                                 0). /* OrderId */
+
+IF lcError BEGINS "ERROR"
+THEN RETURN appl_err(lcError).
+
+/* YCO-468. Assign permanency when lcPerContract <> "" */
+IF lcPerContract <> "" THEN DO:
+   liResult = fPCActionRequest(
+                        Mobsub.MsSeq,             /* subscription */
+                        lcPerContract,            /* DayCampaign.DCEvent */
+                        "act",                    /* act,term,canc,iterm,cont */
+                        0,                        /* when request should be handled, 0 --> Now */
+                        TRUE,                     /* fees */
+                        {&REQUEST_SOURCE_NEWTON}, /* where created */
+                        pcUserName,               /* creator  */
+                        0,                        /* main request  */
+                        FALSE,                    /* main request waits for this */
+                        "",                       /* sms                  */
+                        0,                        /* payterm residual fee */
+                        0,                        /* Periodical Contract-ID  */ 
+                        "",                       /* Parameters to be stored for SVA       */
+                        OUTPUT lcResult).
+   IF liResult EQ 0 THEN 
+      RETURN appl_err(lcResult).   
+END.    
 
 /* ALFMO-14 For creating web memo */
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 OR
    LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN
 DO:
-   fLocalMemo("Invoice",
+   Func.Common:mWriteMemo("Invoice",
               STRING(MobSub.MsSeq),
+              (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
               "Descuento 50% línea adicional",
               "Línea principal " + lcMainLine).
 END.
@@ -318,8 +327,9 @@ END.
 /* YTS-10992 - Adding logging for dpmember creation 
    (Using already available Memo creation function instead of 
     including event creation logic) */
-fLocalMemo("MobSub",
+Func.Common:mWriteMemo("MobSub",
            STRING(MobSub.MsSeq),
+           (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
            "DiscountCreation",
            "Added from Vista").
 

@@ -71,8 +71,6 @@ DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
 DEFINE BUFFER DelivCustomer   FOR OrderCustomer.
 DEFINE BUFFER bBillItem       FOR BillItem.
-DEFINE BUFFER lbMobSub        FOR MobSub.
-DEFINE BUFFER bOrder          FOR Order.
 
 DEFINE TEMP-TABLE ttOutputText 
    FIELD cText AS CHARACTER
@@ -1663,33 +1661,15 @@ FOR EACH Order NO-LOCK WHERE
      NOT (Order.MNPStatus EQ 6 OR
           Order.MNPStatus EQ 7)            THEN NEXT.
       
-   IF fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN DO:
+   IF NOT fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN NEXT.
 
-      IF fDelivSIM(Order.OrderId,
-                   TRUE,
-                   "",
-                   "") THEN DO: 
-         fUpdateOrderLogisticsValue(Order.OrderId).
-
-         IF llDoEvent THEN DO:
-            lhOrder = BUFFER Order:HANDLE.
-            RUN StarEventInitialize(lhOrder).
-            RUN StarEventSetOldBuffer(lhOrder).
-         END.
-
-         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
-         
-         IF llDoEvent THEN DO:
-            RUN StarEventMakeModifyEvent(lhOrder).
-            fCleanEventObjects().
-         END.
-      
-      END.
-   
-   END.
+   IF fDelivSIM(Order.OrderId,
+                TRUE,
+                "",
+                "") THEN  
+      fUpdateOrderLogisticsValue(Order.OrderId).
 
 END.
-
 
 /* Order has to be second time when order was already sent with
    despachar value "02" - Previously order was sent twice when 
@@ -1705,9 +1685,10 @@ FOR EACH OrderGroup NO-LOCK WHERE
              ENTRY(1,bufOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN NEXT. 
 
    FIND FIRST Order NO-LOCK WHERE 
-              Order.Brand     EQ Syst.Var:gcBrand   AND 
-              Order.OrderId   EQ OrderGroup.OrderId AND 
-              Order.Logistics EQ ""                 NO-ERROR.
+              Order.Brand     EQ Syst.Var:gcBrand            AND 
+              Order.OrderId   EQ OrderGroup.OrderId          AND 
+              Order.Logistics EQ ""                          AND 
+       LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 NO-ERROR.
 
    IF AVAIL Order THEN DO: 
       
@@ -1715,11 +1696,42 @@ FOR EACH OrderGroup NO-LOCK WHERE
         NOT (Order.MNPStatus EQ 6 OR
              Order.MNPStatus EQ 7)            THEN NEXT.
 
+      /* For convergent + terminal order, LO info should not be sent
+         if fixed line is not yet installed */
+      IF fIsConvergenceTariff(Order.CLIType)         AND
+         fIsTerminalOrder(Order.OrderId,
+                          OUTPUT lcTerminalBillCode) THEN DO:
+
+         IF NOT CAN-FIND(FIRST OrderFusion NO-LOCK WHERE
+                               OrderFusion.Brand        EQ Syst.Var:gcBrand AND
+                               OrderFusion.OrderId      EQ Order.OrderId    AND
+                               OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}) THEN
+            NEXT.
+
+      END.
+
       IF fDelivSIM(Order.OrderId,
                    TRUE,
                    STRING(OrderGroup.GroupId),
-                   "01") THEN 
+                   "01") THEN DO:
+
          fUpdateOrderLogisticsValue(Order.OrderId).
+
+         IF llDoEvent THEN DO:
+            lhOrder = BUFFER Order:HANDLE.
+            RUN StarEventInitialize(lhOrder).
+            RUN StarEventSetOldBuffer(lhOrder).
+         END.
+
+         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+         
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhOrder).
+            fCleanEventObjects().
+         END.
+
+      END.
+
    END.    
 
 END.  

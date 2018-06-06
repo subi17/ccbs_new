@@ -166,6 +166,12 @@ REPEAT:
          NEXT.
       END.
       
+      IF LOOKUP(lcNCStatus,"NENV,NCON,NMIG") > 0 
+         THEN DO:
+         liSkipped = liSkipped + 1.
+         NEXT.
+      END.
+      
       ldeNCTime = ?.
       ldeNCTime = Func.Common:mHMS2TS(date(int(substring(lcNCTime,5,2)),
           int(substring(lcNCTime,7,2)),
@@ -277,7 +283,8 @@ PROCEDURE pMNPStatusCheck:
                MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
          FIND MobSub WHERE
               MobSub.MsSeq = MNPSub.MsSeq NO-LOCK NO-ERROR.
-         IF AVAIL MobSub THEN RETURN
+         IF AVAIL MobSub AND 
+                  MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN RETURN
             "ERROR: subscription exists: " + STRING(MNPSub.MsSeq).
       END.
          

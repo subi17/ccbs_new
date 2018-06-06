@@ -8,12 +8,7 @@
 
 &GLOBAL-DEFINE FSUBSTERMREQ_I YES
    
-{Syst/commali.i}
-{Func/fcreatereq.i}
 {Func/flimitreq.i}
-{Syst/tmsconst.i}
-{Mnp/mnpoutchk.i}
-{Func/msisdn_prefix.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
 
@@ -160,7 +155,7 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
       RETURN 4.
    END.
    
-   IF fIsMNPOutOngoing(mobsub.cli) THEN DO:
+   IF Mnp.MNPOutGoing:mIsMNPOutOngoing(mobsub.cli) THEN DO:
       ocError = "Ongoing MNP OUT Process".
       RETURN 5.
    END.

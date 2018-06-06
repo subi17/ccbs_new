@@ -22,8 +22,7 @@ Syst.Var:gcBrand = "1".
 {Func/barrfunc.i}
 {Mm/fbundle.i}
 {Func/service.i}
-{Func/vasfunc.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -71,28 +70,6 @@ DEF VAR liSVARequest   AS INT NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
-
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    iiCustNum   AS INT,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = iiCustNum
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.MemoType  = "service"
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-END FUNCTION.
-
 
 pcReqList = validate_request(param_toplevel_id, "int,string,string,array,[struct]").
 IF pcReqList EQ ? THEN RETURN.
@@ -198,18 +175,30 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          END.
       END.
  
-      liValidate = fSubSerValidate(
-         INPUT MobSub.MsSeq,
-         INPUT Subser.ServCom,
-         INPUT liValue,
-         OUTPUT ocError).
+      /* RES-885 NRTR */
+      IF SubSer.ServCom EQ "NW" THEN DO:
+         liValidate = fSubSerValidateNW(
+            INPUT MobSub.MsSeq,
+            INPUT Subser.ServCom,
+            INPUT pcValue,
+            OUTPUT ocError).
+         liValue = INT(pcValue).
+      END.
+      ELSE
+         liValidate = fSubSerValidate(
+            INPUT MobSub.MsSeq,
+            INPUT Subser.ServCom,
+            INPUT liValue,
+            OUTPUT ocError).
 
       IF liValidate NE 0 THEN 
       CASE liValidate:
+         WHEN 0 THEN appl_err("Service change succeeded").
          WHEN 3 THEN RETURN appl_err("Ongoing network command").
+         WHEN 4 THEN RETURN appl_err("Illegal network profile"). /* RES-885 error */
          OTHERWISE appl_err("Service change is not allowed").
       END.
-
+ 
       liValidate = fSubSerSSStat(
          INPUT MobSub.MsSeq,
          INPUT Subser.ServCom,
@@ -222,8 +211,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       /* Return error if new value is same as existing value */ 
       IF SubSer.ServCom = "BB" AND
          (liValue = SubSer.SSStat OR (SubSer.SSStat = 2 AND liValue = 0)) THEN
-         RETURN appl_err("Service is already " +
+         RETURN appl_err("Selected service is already " +
                          (IF liValue = 1 THEN "active" ELSE "suspended")).
+
+      /* Return error if new NW value is same as existing value */
+      IF SubSer.ServCom = "NW" AND
+         liValue = SubSer.SSStat THEN
+         RETURN appl_err("Selected service is already active").
 
       /* check the validity of change date */
       ldActStamp = fServiceActStamp(SubSer.MsSeq,
@@ -313,13 +307,15 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          ELSE IF liValue = 1 THEN lcToStat = "active".
          ELSE IF liValue = 2 THEN lcToStat = "suspended".
  
-         fLocalMemo(INPUT "MobSub",
+         Func.Common:mWriteMemoWithType(INPUT "MobSub",
                     INPUT STRING(MobSub.MsSeq),
                     INPUT MobSub.CustNum,
                     INPUT lcMemoTitle,
                     INPUT lcMemoContent + ". " + UPPER(pcServiceID) +
                           " service status is changed from " + lcFromStat +
-                          " to " + lcToStat).
+                          " to " + lcToStat,
+                    "service",
+                    Syst.Var:katun).
       END. /* IF lcMemoTitle > "" THEN DO: */
       add_boolean(response_toplevel_id, "", TRUE).
       RETURN.
@@ -387,12 +383,14 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                          SubSer.ServCom + "; " + lcInfo).
 
       IF lcMemoTitle > "" THEN
-         fLocalMemo(INPUT "MobSub",
+         Func.Common:mWriteMemoWithType(INPUT "MobSub",
                     INPUT STRING(MobSub.MsSeq),
                     INPUT MobSub.CustNum,
                     INPUT lcMemoTitle,
                     INPUT lcMemoContent + ". " + UPPER(pcServiceID) +
-                          " service status is changed to active.").
+                          " service status is changed to active.",
+                    "service",
+                    Syst.Var:katun).
 
       add_boolean(response_toplevel_id, "", TRUE).
       RETURN.

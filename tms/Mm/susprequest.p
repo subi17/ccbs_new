@@ -16,7 +16,7 @@
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Func/service.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/barrfunc.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INTEGER   NO-UNDO.
@@ -532,7 +532,7 @@ PROCEDURE pDone.
    END.
 
    DEF VAR lcActiveBarrings AS CHAR NO-UNDO. 
-   lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
+   lcActiveBarrings = Func.BarrMethod:mGetActiveBarrings(MobSub.MsSeq).
 
    /* Activate/Suspend the BB service based on the fraud barring */
    IF fIsInList(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) THEN DO:

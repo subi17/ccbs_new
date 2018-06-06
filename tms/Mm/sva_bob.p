@@ -12,10 +12,9 @@ Syst.Var:gcBrand = "1".
 {Func/q25functions.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
-{Func/fmakemsreq.i}
 {Func/barrfunc.i}
 {Func/msreqfunc.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 
 DEF VAR lcInDir AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
@@ -30,6 +29,7 @@ DEF VAR liReqType AS INT NO-UNDO.
 DEF VAR liReqStatus AS INT NO-UNDO.
 DEF VAR lcSpoolDir AS CHAR NO-UNDO.
 DEF VAR lcInProcessedDir AS CHAR NO-UNDO.
+DEF VAR llReqStatus AS LOGICAL NO-UNDO.
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
@@ -43,10 +43,10 @@ lcOutDir =  "/tmp/".
 
 lcLogDir = fCParam("YPRO", "YPRO_SVA_log_base_dir").
 lcErrDir = fCParam("YPRO", "YPRO_SVA_err_base_dir").
-lcInDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "/incoming/".
+lcInDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "incoming/".
 lcOutDir = fCParam("YPRO", "YPRO_SVA_out_base_dir").
-lcSpoolDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "/spool/".
-lcInProcessedDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "/processed/".
+lcSpoolDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "spool/".
+lcInProcessedDir = fCParam("YPRO", "YPRO_SVA_in_base_dir") + "processed/".
 
 
 
@@ -77,7 +77,7 @@ REPEAT:
 
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
 
-   OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+   OUTPUT STREAM sLog TO VALUE(lcLog) append.
 
    PUT STREAM sLog UNFORMATTED
               lcFilename  " "
@@ -144,12 +144,9 @@ PROCEDURE pReadFileData:
          OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
          PUT STREAM sErr UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sErr CLOSE.
-         OUTPUT STREAM sLog TO VALUE(lcLog) append.
-         PUT STREAM sLog UNFORMATTED lcErrText SKIP.
-         OUTPUT STREAM sLog CLOSE.
-
          NEXT. /*next line*/
       END.
+     
       /*Allowed state transitions:
       pending deactivation -> inactive
       pending activation -> active.*/
@@ -165,18 +162,13 @@ PROCEDURE pReadFileData:
          lcErrText = lcLine + "Incorrect action code " + lcSetStatus.
          OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
          PUT STREAM sErr UNFORMATTED lcErrText SKIP.
-         OUTPUT STREAM sErr CLOSE.
-         OUTPUT STREAM sLog TO VALUE(lcLog) append.
-         PUT STREAM sLog UNFORMATTED lcErrText SKIP.
-         OUTPUT STREAM sLog CLOSE.
-       
+         OUTPUT STREAM sErr CLOSE.     
          NEXT.
- 
       END.
       liReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
       FIND FIRST MsRequest WHERE
-                 MsRequest.Brand      EQ Syst.Var:gcBrand AND
+                 MsRequest.MsSeq      EQ MobSub.MsSeq     AND
                  MsRequest.ReqType    EQ liReqType        AND
                  MsRequest.ReqStatus  EQ liReqStatus      AND
                  MsRequest.ReqCParam3 EQ lcServiceCode    NO-LOCK NO-ERROR.
@@ -185,11 +177,7 @@ PROCEDURE pReadFileData:
          lcErrText = lcLine + ";" + "Action not allowed: Requested " + lcSetStatus.
          OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
          PUT STREAM sErr UNFORMATTED lcErrText SKIP.
-         OUTPUT STREAM sErr CLOSE.
-         OUTPUT STREAM sLog TO VALUE(lcLog) append.
-         PUT STREAM sLog UNFORMATTED lcErrText SKIP.
-         OUTPUT STREAM sLog CLOSE.
-                     
+         OUTPUT STREAM sErr CLOSE. 
          NEXT.
       END.
       /*Make actual status change for the request and create / remove fee*/
@@ -199,22 +187,31 @@ PROCEDURE pReadFileData:
          lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, "SVA_" + MsRequest.ReqCparam3).
          IF lcEmailErr NE "" THEN 
             MESSAGE "ERROR: " + lcEmailErr VIEW-AS ALERT-BOX.
-         fReqStatus(4, "SVA operation cancelled ").
+         llReqStatus =  fReqStatus(4, "SVA operation cancelled ").           
       END.
       ELSE DO:
-         fReqStatus(6, "Execute SVA operation ").
+         llReqStatus = fReqStatus(6, "Execute SVA operation ").
          /* in case of incativation, inactivate its activation request */
          IF lcSetStatus EQ "Inactive" THEN 
          DO:
            FIND FIRST MsRequest WHERE
-                      MsRequest.Brand      EQ Syst.Var:gcBrand               AND
+                      MsRequest.MsSeq      EQ MobSub.MsSeq                   AND
                       MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
                       MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
                       MsRequest.ReqCParam3 EQ lcServiceCode                  NO-LOCK NO-ERROR.
            IF AVAIL MsRequest THEN
-              fReqStatus(9, "SVA operation, inactivated").
+              llReqStatus = fReqStatus(9, "SVA operation, inactivated").
          END.
       END.
+
+      IF llReqStatus = FALSE THEN DO: /* another process is handling same request */
+         lcErrText = lcLine + ";" + "Changing status of request failed: Requested " + lcSetStatus.
+         OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
+         PUT STREAM sErr UNFORMATTED lcErrText SKIP.
+         OUTPUT STREAM sErr CLOSE. 
+         NEXT.
+      END.   
+
       OUTPUT STREAM sLog TO VALUE(lcLog) append.
       PUT STREAM sLog UNFORMATTED "Operation done" SKIP.
       OUTPUT STREAM sLog CLOSE.

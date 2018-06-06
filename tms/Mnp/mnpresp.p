@@ -28,7 +28,7 @@ Syst.Var:katun = "MNP".
 {Func/ordercancel.i}
 {Func/msisdn_prefix.i}
 {Func/orderchk.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/fgettxt.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
@@ -81,7 +81,10 @@ DO WHILE TRUE
    PUT SCREEN ROW 22 COL 1
       "Processing messages ...                                       ".
    
-   FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = 5 TENANT-WHERE TENANT-ID() >= 0 
+   FOR EACH MNPOperation NO-LOCK WHERE 
+            MNPOperation.Sender = 1 AND
+            MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}
+          TENANT-WHERE TENANT-ID() >= 0 
        liNumMsgs = 1 to 1000 ON ERROR UNDO, THROW:
 
       PUT SCREEN ROW 2 COL 2 STRING(RECID(MNPOperation)).
@@ -164,15 +167,13 @@ FUNCTION fArecExistCheck RETURNS LOGICAL
    liTextPos = index(icResponseDesc, "contrato ").
    IF liTextPos = 0 THEN RETURN FALSE.
    lcContrato = substring(icResponseDesc, liTextPos + 9, 11).
-   IF NOT lcContrato BEGINS "005" AND 
-      NOT lcContrato BEGINS "200" THEN RETURN FALSE.
+   IF NOT lcContrato BEGINS "005" THEN RETURN FALSE.
    IF ibMNPProcess.FormRequest NE lcContrato THEN RETURN FALSE.
    
    liTextPos = index(icResponseDesc, "referencia ").
    IF liTextPos = 0 THEN RETURN FALSE. 
    lcRefCode = substring(icResponseDesc, liTextPos + 11, 23).
-   IF NOT lcRefCode BEGINS "005" AND
-      NOT lcRefCode BEGINS "200" THEN RETURN FALSE.
+   IF NOT lcRefCode BEGINS "005" THEN RETURN FALSE.
    IF ibMNPProcess.PortRequest NE lcRefCode AND
       CAN-FIND(FIRST MNPProcess WHERE
                      MNPProcess.PortRequest = lcRefCode) THEN RETURN FALSE.
@@ -202,8 +203,8 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE liMNPProCount AS INT NO-UNDO. 
    DEFINE VARIABLE liRespLength AS INT NO-UNDO. 
    DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
-   DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
-   DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
+   DEFINE VARIABLE llConfirm AS LOG NO-UNDO. 
+   DEFINE VARIABLE lcOperName AS CHAR NO-UNDO. 
    
    FIND MessageBuf WHERE RECID(MessageBuf) = pRecId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
    IF ERROR-STATUS:ERROR OR LOCKED(MessageBuf) THEN 
@@ -334,7 +335,7 @@ PROCEDURE pHandleQueue:
 
          IF MessageBuf.MessageType = 
             "crearSolicitudIndividualAltaPortabilidadMovil" AND
-            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST,AREC CUPO1") > 0
+            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST,AREC CUPO1,AREC FMAYO") > 0
             THEN DO:
             
             IF lcResponseCode NE "AREC EXIST" OR 
@@ -379,39 +380,20 @@ PROCEDURE pHandleQueue:
                IF lcResponseCode EQ "AREC ENUME" THEN DO: 
                   
                   ASSIGN liRespLength    = 0
-                         lcNewOper       = ""
-                         llgMNPOperName  = FALSE
-                         llgMNPOperBrand = FALSE. 
+                         lcNewOper       = "".
 
                   IF liMNPProCount = 1 AND 
                      lcResponseDesc MATCHES "El MSISDN * no pertenece al operador donante *, pertenece al operador *" THEN DO:
                      
                      ASSIGN 
-                        liRespLength   = LENGTH(lcResponseDesc) 
-                        lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength).
+                        liRespLength = LENGTH(lcResponseDesc) 
+                        lcNewOper    = TRIM(SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength)).
                     
-                     FIND MNPOperator NO-LOCK WHERE
-                          MNPOperator.Brand    = Syst.Var:gcBrand         AND
-                          MNPOperator.OperCode = TRIM(lcNewOper) AND
-                          MNPOperator.Active   = TRUE NO-ERROR.
-                     
-                     IF NOT AVAIL MNPOperator THEN 
-                        FIND MNPOperator NO-LOCK WHERE
-                             MNPOperator.Brand    = Syst.Var:gcBrand         AND
-                             MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
+                     lcOperName = fGetMNPOperatorName(lcNewOper).
 
-                     IF AVAIL MNPOperator THEN llgMNPOperName = TRUE.
-                     ELSE DO:
-                        FIND FIRST MNPOperator NO-LOCK WHERE
-                                   MNPOperator.Brand    = Syst.Var:gcBrand         AND
-                                   MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
-                        IF AVAIL MNPOperator AND 
-                                 MNPOperator.OperBrand > "" THEN 
-                           llgMNPOperBrand = TRUE.         
-                        ELSE llgMNPOperName = TRUE. 
-                     END.
+                     IF lcNewOper EQ "005" THEN .
+                     ELSE IF lcOperName > "" THEN DO:
 
-                     IF AVAIL MNPOperator THEN DO:
                         IF llDoEvent THEN DO:
                            DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
                            lhOrder = BUFFER Order:HANDLE.
@@ -419,10 +401,7 @@ PROCEDURE pHandleQueue:
                            RUN StarEventSetOldBuffer(lhOrder).
                         END.
                         
-                        IF llgMNPOperBrand THEN 
-                           Order.CurrOper = MNPOperator.OperBrand. 
-                        ELSE IF llgMNPOperName THEN  
-                           Order.CurrOper = MNPOperator.OperName.        
+                        Order.CurrOper = lcOperName.
 
                         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
                         
@@ -564,6 +543,33 @@ PROCEDURE pHandleQueue:
                       "800622600",
                       Order.OrderId).
 
+         END.
+                     
+         FIND MNPDetails NO-LOCK WHERE
+              MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+         
+         IF lcPortCode BEGINS "A05" THEN lcNewOper = "005".
+         ELSE lcNewOper = SUBSTRING(lcPortCode,4,3).
+
+         IF AVAIL MNPDetails AND
+                  MNPDetails.DonorCode NE lcNewOper THEN
+            lcOperName = fGetMNPOperatorName(lcNewOper).
+         ELSE lcOperName = "".
+
+         /* CIFM-52 */
+         IF lcOperName > "" THEN DO:
+
+            IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER Order:HANDLE)).
+            Order.CurrOper = lcOperName.
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER Order:HANDLE)).
+
+            FIND CURRENT MNPDetails EXCLUSIVE-LOCK.
+            IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER MNPDetails:HANDLE)).
+            ASSIGN
+               MNPDetails.DonorCode = lcNewOper
+               MNPProcess.opercode = lcNewOper.
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER MNPDetails:HANDLE)).
+            RELEASE MNPDetails.
          END.
          
          ASSIGN
@@ -774,7 +780,33 @@ PROCEDURE pHandleQueue:
       
       /* 1.10 Confirm portability activation request query */
       WHEN "confirmarSolicitudAltaPortabilidadMovil" THEN DO:
-         RUN pHandleFromASOL2ACON.
+
+         /* Multiple MNP out */
+         FIND MNPSub NO-LOCK WHERE
+              MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+
+         /* In case of multiple MNP OUT, additioanal confirmation is required from NC side */
+         IF AMBIGUOUS MNPSub THEN DO:
+            
+            llConfirm = FALSE.
+            
+            FOR EACH MNPSub NO-LOCK WHERE
+                     MNPSub.MNPSeq = MNPProcess.MNPSeq:
+               IF MNPSub.StatusReason = "" THEN DO:
+                  messagebuf.StatusCode = {&MNP_MSG_WAITING_CONFIRM}.
+                  MNPProcess.StateFlag = {&MNP_STATEFLAG_WAITING_CONFIRM}.
+                  RETURN.
+               END.
+               IF MNPSub.StatusReason EQ "CONFIRM" THEN DO:
+                  llConfirm = TRUE.
+                  LEAVE.
+               END.
+            END.
+         END.
+         ELSE llConfirm = TRUE.
+   
+         IF llConfirm THEN RUN pHandleFromASOL2ACON.
+         ELSE RUN pHandleFromASOL2AREC.
       END.
       
       /* 1.11 Reject portability activation request */
@@ -839,7 +871,7 @@ PROCEDURE pHandleQueue:
                FIND FIRST MsRequest WHERE
                           MsRequest.MsSeq = Order.MsSeq AND
                           MsRequest.ReqType = ({&REQTYPE_SUBSCRIPTION_CREATE}) AND
-                          MsRequest.ReqStatus NE ({&REQUEST_STATUS_NEW})
+                          MsRequest.ReqStatus NE ({&REQUEST_STATUS_CANCELLED})
                     NO-LOCK NO-ERROR.
                IF AVAIL MsRequest THEN DO:
                   lcResponseDesc = "Cancellation failed, ongoing subscription request".
@@ -873,11 +905,8 @@ PROCEDURE pHandleQueue:
                                       FALSE,
                                       "RELEASE"). 
 
-            IF fCLITypeIsMainLine(Order.CLIType)       AND
-               Order.MultiSimId                  NE 0  AND
-               Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN
-               fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                                        Order.OrderId,    /* Main line Order Id  */
+            IF fCLITypeIsMainLine(Order.CLIType) THEN 
+               fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
                                         "RELEASE").       /* Action              */
 
          END.
@@ -1005,6 +1034,9 @@ PROCEDURE pHandleFromASOL2ACON:
    FOR EACH MNPSub WHERE
       MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
 
+      IF MNPSub.StatusReason NE "" AND
+         MNPSub.StatusReason NE "CONFIRM" THEN NEXT.
+
       FIND MobSub WHERE
            MobSub.MsSeq = MNPSub.MsSeq AND
            MobSub.CLI = MNPSub.CLI NO-LOCK NO-ERROR.
@@ -1082,6 +1114,9 @@ PROCEDURE pHandleFromASOL2AREC:
 
    DEF BUFFER bMNPSub FOR MNPSub.
    DEF BUFFER bMNPProcess FOR MNPProcess.
+   
+   /* Do not process duplicate internal MNP IN rejections */
+   IF MNPProcess.MNPType EQ 1 THEN RETURN.
 
    FOR EACH MNPSub WHERE
             MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:

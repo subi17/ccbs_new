@@ -84,6 +84,7 @@ DEF VAR llCheckSC AS LOG NO-UNDO INIT TRUE.
 DEF VAR llVoIPActive AS LOG NO-UNDO.
 DEF VAR lcShaperConfId AS CHAR NO-UNDO.
 DEF VAR lcBaseBundle AS CHAR NO-UNDO.
+DEF VAR lcParam AS CHAR NO-UNDO. 
 
 DEF BUFFER bSubSer FOR SubSer.
 DEF BUFFER bSSPara FOR SubSerPara.
@@ -332,13 +333,24 @@ IF ServCom.ActType = 0 THEN DO:
   END. /* IF lcServName EQ "SHAPER" AND */
   ELSE IF LOOKUP(MsRequest.ReqCParam1,"CF") > 0 THEN
      ttSolog.CommLine = ttSolog.CommLine + lcServName + ",".
-  ELSE
+  ELSE DO:
+
+     lcParam = STRING(MsRequest.ReqIParam1).
+
+     IF MsRequest.ReqIParam1 > 0 AND
+        MsRequest.ReqCparam2 NE "" THEN lcParam = MsRequest.ReqCParam2.
+     ELSE IF lcServName EQ "NW" THEN DO:
+       CASE MsRequest.ReqIParam1:
+          WHEN 1 THEN lcParam = "YOIGO".
+          WHEN 2 THEN lcParam = "YOIGO_ORANGE".
+          WHEN 3 THEN lcParam = "YOIGO_ORANGE_TELEFONICA".
+       END.
+     END.
+      
      ttSolog.CommLine = ttSolog.CommLine +
                       TRIM(lcServName)   + "="  +
-                      (IF MsRequest.ReqIParam1 > 0 AND
-                          MsRequest.ReqCParam2 NE "" 
-                       THEN MsRequest.ReqCParam2  
-                       ELSE STRING(MsRequest.ReqIParam1)) + ",".
+                      lcParam + ",".
+  END.
 END.     
 
 /* entries to db */
@@ -387,8 +399,8 @@ BY ttSolog.ActStamp:
       (MSrequest.ReqCParam1 = "HSDPA" AND
        LOOKUP(Mobsub.CLIType,lcPrepaidVoiceTariffs) > 0) THEN DO:
 
-      FIND FIRST ProvCliType WHERE
-                 ProvCliType.CliType = Mobsub.CliType 
+      FIND FIRST bCliType WHERE
+                 bCliType.CliType = Mobsub.CliType
       NO-LOCK NO-ERROR.
 
       IF MsRequest.ReqCParam1 = "HSDPA" AND
@@ -413,15 +425,15 @@ BY ttSolog.ActStamp:
             IF MsRequest.ReqIParam1 EQ 1 THEN
                lcServiceClass = ",SERVICECLASS=0081".
             ELSE
-               lcServiceClass = (IF AVAIL ProvCliType THEN
-                                 ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+               lcServiceClass = (IF AVAIL bCliType THEN
+                                 ",SERVICECLASS=" + bCliType.ServiceClass ELSE "").
          END. /* WHEN "TARJ" THEN DO: */
          WHEN "TARJ4" THEN DO:
             IF MsRequest.ReqIParam1 EQ 1 THEN
                lcServiceClass = ",SERVICECLASS=0084".
             ELSE
-               lcServiceClass = (IF AVAIL ProvCliType THEN
-                                 ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+               lcServiceClass = (IF AVAIL bCliType THEN
+                                 ",SERVICECLASS=" + bCliType.ServiceClass ELSE "").
          END. /* WHEN "TARJ4" THEN DO: */
          WHEN "TARJ5" THEN DO:
          
@@ -433,8 +445,8 @@ BY ttSolog.ActStamp:
             ELSE DO:
                IF liCurrentServiceClass EQ {&SC_TARJ5_PROMOTIONAL}
                THEN lcServiceClass = "".
-               ELSE lcServiceClass = (IF AVAIL ProvCliType THEN
-                    ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+               ELSE lcServiceClass = (IF AVAIL bCliType THEN
+                    ",SERVICECLASS=" + bCliType.ServiceClass ELSE "").
             END.
          END. /* WHEN "TARJ5" THEN DO: */
          WHEN "TARJ6" THEN DO:
@@ -444,8 +456,8 @@ BY ttSolog.ActStamp:
             IF MsRequest.ReqIParam1 EQ 0 THEN
                lcServiceClass = "".
             ELSE
-               lcServiceClass = (IF AVAIL ProvCliType THEN
-                                 ",SERVICECLASS=" + ProvCliType.ServiceClass
+               lcServiceClass = (IF AVAIL bCliType THEN
+                                 ",SERVICECLASS=" + bCliType.ServiceClass
                                  ELSE "").
          END. /* WHEN "TARJ6" THEN DO: */
          WHEN "TARJ7" THEN DO:
@@ -457,8 +469,8 @@ BY ttSolog.ActStamp:
             IF MsRequest.ReqIParam1 EQ 1 THEN
                lcServiceClass = ",SERVICECLASS=0082".
             ELSE
-               lcServiceClass = (IF AVAIL ProvCliType THEN
-                                 ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+               lcServiceClass = (IF AVAIL bCliType THEN
+                                 ",SERVICECLASS=" + bCliType.ServiceClass ELSE "").
          END. /* WHEN "TARJ8" THEN DO: */
          WHEN "TARJ9" THEN DO:
             IF MsRequest.ReqIParam1 EQ 1 THEN
@@ -486,9 +498,9 @@ BY ttSolog.ActStamp:
             ELSE lcServiceClass = "".
          END. /* WHEN "TARJ13" THEN DO: */
          OTHERWISE
-            lcServiceClass = (IF AVAIL ProvCliType AND
-                                       ProvCliType.ServiceClass > "" THEN
-                              ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+            lcServiceClass = (IF AVAIL bCliType AND
+                                       bCliType.ServiceClass > "" THEN
+                              ",SERVICECLASS=" + bCliType.ServiceClass ELSE "").
       END CASE.
 
       ttSolog.CommLine = ttSolog.CommLine + lcServiceClass.

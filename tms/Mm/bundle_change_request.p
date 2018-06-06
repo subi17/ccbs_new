@@ -7,20 +7,15 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Syst/eventval.i}
-{Syst/tmsconst.i}
-{Func/fmakemsreq.i}
 {Func/service.i}
-{Func/msreqfunc.i}
-{Mm/active_bundle.i}
 {Rate/rerate_request.i}
-{Func/fsubstermreq.i}
 {Func/fsendsms.i}
 {Func/fbtc.i}
-{Mnp/mnpoutchk.i}
-{Func/main_add_lines.i}
 {Mc/invoicetarget.i}
+{Func/dss_matrix.i}
+{Func/dss_request.i}
 {Mc/dpmember.i}
+{Func/add_lines_request.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -204,6 +199,7 @@ END PROCEDURE.
 PROCEDURE pFinalize:
 
    DEF VAR lcError                 AS CHAR NO-UNDO.
+   DEFINE VARIABLE lhDPMember AS HANDLE NO-UNDO.
 
    DEF BUFFER bDPMember  FOR DPMember.
 
@@ -314,16 +310,8 @@ PROCEDURE pFinalize:
                                DPSubject.ValidFrom <= ldaActivationDate AND
                                DPSubject.ValidTo   >= ldaActivationDate)
          THEN DO TRANS:
-            /* Log dpmember modification */
-            IF llDoEvent THEN DO:
-               lhDPMember = BUFFER DPMember:HANDLE.
-               RUN StarEventInitialize(lhDPMember).
-               RUN StarEventSetOldBuffer(lhDPMember).
-            END.
-            FIND FIRST bDPMember WHERE RECID(bDPMember) = RECID(DPMember)
-                 EXCLUSIVE-LOCK.
-            bDPMember.ValidTo = ldaActivationDate - 1.
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+            fCloseDPMember(DPMember.DPMemberID,
+                           ldaActivationDate - 1).
          END.
       END.
 
@@ -431,7 +419,7 @@ PROCEDURE pMultiSimBTC:
       MsRequest.MsSeq   = lbMobSub.Msseq AND
       MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
       LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) OR
-      fIsMNPOutOngoing(INPUT lbMobSub.CLI)
+      Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI)
    THEN RETURN.
 
    fTermAdditionalSim(lbMobSub.MsSeq,
@@ -486,8 +474,12 @@ PROCEDURE pActivateDSS2:
    IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
       NOT fIsDSSActive(MobSub.CustNum,ideActStamp) AND
       NOT fOngoingDSSAct(MobSub.CustNum) AND
-      fIsDSS2Allowed(MobSub.CustNum,0,ideActStamp,
-                     OUTPUT liDSSMsSeq,OUTPUT lcError)
+      fIsDSSActivationAllowed(MobSub.CustNum,
+                              0,
+                              ideActStamp,
+                              {&DSS2},
+                              OUTPUT liDSSMsSeq,
+                              OUTPUT lcError)
    THEN DO:
       FIND FIRST bMobSub WHERE
                  bMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.

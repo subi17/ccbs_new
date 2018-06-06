@@ -16,9 +16,9 @@
 {Func/fmakemsreq.i}
 {Func/fmakesms.i}
 {Func/fsendsms.i}
-{Func/fdss.i}
+{Func/dss_matrix.i}
 {Func/fsubstermreq.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/fixedlinefunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
@@ -509,7 +509,10 @@ DO TRANSACTION:
                  lcCancelReason,
                  OUTPUT lcMessage).
       IF NOT lcMessage BEGINS "Error" THEN DO:
-         IF MsRequest.ReqType = 10 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
+         IF MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
+            LOOKUP(STRING(iiToStatus),"4,9") > 0
+         THEN DO:
+            fChangeOrderStatus(MsRequest.ReqIParam4, {&ORDER_STATUS_CLOSED}).
             /* cancel pending sms */
             FOR FIRST CallAlarm EXCLUSIVE-LOCK USE-INDEX CLI WHERE
                       CallAlarm.Brand    = Syst.Var:gcBrand       AND

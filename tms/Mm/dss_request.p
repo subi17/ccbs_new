@@ -7,13 +7,14 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Syst/tmsconst.i}
 {Func/fsendsms.i}
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
 {Func/service.i}
 {Mm/fbundle.i}
-
+{Func/dss_matrix.i}
+{Func/dss_request.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 
@@ -247,8 +248,12 @@ PROCEDURE pFinalize:
       YTS-8140: To extend DELETE request matching also for DSS2 */
    IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
       MsRequest.ReqCparam1 = "DELETE" AND
-      fIsDSS2Allowed(MsRequest.CustNum,0,Func.Common:mMakeTS(),
-                     OUTPUT liDSSPriMsSeq,OUTPUT lcResult) AND
+      fIsDSSActivationAllowed(MsRequest.CustNum,
+                              0,
+                              Func.Common:mMakeTS(),
+                              {&DSS2},
+                              OUTPUT liDSSPriMsSeq,
+                              OUTPUT lcResult) AND
       NOT fIsDSSActive(MsRequest.CustNum,Func.Common:mMakeTS()) AND
       NOT fOngoingDSSAct(MsRequest.CustNum) THEN DO:
 

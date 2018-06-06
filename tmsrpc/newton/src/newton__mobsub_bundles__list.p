@@ -47,6 +47,10 @@ RUN pAdd_DataBundle.
 
 RUN pAdd_VoiceBundle.
 
+RUN pAdd_3Gg_flex_upsell. /* YCO-276 */
+
+RUN pAdd_5Gg_flex_upsell. /* YCO-275 */
+
 PROCEDURE pAdd_DataBundle:
     DEF VAR liCount                AS INT  NO-UNDO.
     DEF VAR lcError                AS CHAR NO-UNDO.
@@ -146,20 +150,23 @@ PROCEDURE pAdd_DSS:
     DEF VAR lcPRODSSUpsellList    AS CHAR NO-UNDO.
     DEF VAR lcMatrixAnalyseResult AS CHAR NO-UNDO.
     DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+    DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO.   
     DEF VAR llProSubscription     AS LOGI NO-UNDO.
     DEF VAR lcUpsell              AS CHAR NO-UNDO.
 
     ASSIGN 
         llProSubscription     = fIsProSubscription(piMsSeq)
         lcPRODSSUpsellList    = fCParamC("PRO_DSS_FLEX_UPSELL_LIST")
-        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+        lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
 
     IF NOT MobSub.PayType THEN
         lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT ldCurrentDateTime).
 
     /* Return DSS bundle and upsell if DSS is active */
-    IF lcDSSBundleId = {&DSS} OR 
-       (lcDSSBundleId = "DSS2" AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) THEN 
+    IF lcDSSBundleId EQ {&DSS} OR 
+      (lcDSSBundleId EQ {&DSS2} AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) OR 
+      (lcDSSBundleId EQ {&DSS4} AND LOOKUP(MobSub.CLIType, lcAllowedDSS4SubsType) > 0) THEN
     DO:
         add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
         /*Find upsells and add all to reponse*/
@@ -188,6 +195,93 @@ PROCEDURE pAdd_DSS:
     END.    
 
 END PROCEDURE.
+
+/* YCO-276 Returning bundle list for 3Gb flex upsell compatible tariffs */
+PROCEDURE pAdd_3Gg_flex_upsell:      
+    DEF VAR liUpsellCount         AS INTE NO-UNDO.
+    DEF VAR lcUpsell              AS CHAR NO-UNDO.
+    DEF VAR lcResult              AS CHAR NO-UNDO.
+    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO.
+    DEF VAR lcclitype             AS CHAR NO-UNDO. /* YCO-457 */
+    DEF VAR lcBundleCLITypes      AS CHAR NO-UNDO. /* YCO-457 */
+ 
+    lcUpsell_Id  = fCParamC("RETENTION_3GB_UPSELLS").  
+    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES"). /* YCO-457 */
+
+    /* YCO-457
+       - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
+       - The compatibility matrix have the specific tariffs rather than the "families" 
+         because not all members of a "family" are compatible. So I have to pass the
+         tariffbundle that contains the specific tariff to the function in charge of the validation */         
+    IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN
+        lcclitype = Mobsub.tariffbundle.
+    ELSE 
+        lcclitype = Mobsub.CliType.      
+    /* YCO-457 end */
+    
+    DO liUpsellCount = 1 TO NUM-ENTRIES(lcUpsell_Id):
+       
+       lcUpsell = ENTRY(liUpsellCount,lcUpsell_Id).
+             
+       IF fMatrixAnalyse(Syst.Var:gcBrand,
+                         "PERCONTR",
+                         "PerContract;SubsTypeTo",
+                         lcUpsell + ";" + lcclitype, /* YCO-457 */
+                         OUTPUT lcResult) NE 1 AND
+          ENTRY(1,lcResult,";") NE "?" THEN 
+          NEXT.             
+       
+       IF INDEX(lcUpsell,lcResultArray) = 0 THEN
+          add_string(lcResultArray,"", lcUpsell + "|" + STRING(Mobsub.MsSeq)).
+    
+    END.    
+
+END PROCEDURE.
+/* YCO-276 end */
+
+/* YCO-275 Returning bundle list for 5Gb flex upsell compatible tariffs */
+PROCEDURE pAdd_5Gg_flex_upsell:      
+    DEF VAR liUpsellCount         AS INTE NO-UNDO.
+    DEF VAR lcUpsell              AS CHAR NO-UNDO.
+    DEF VAR lcResult              AS CHAR NO-UNDO.
+    DEF VAR lcUpsell_Id           AS CHAR NO-UNDO.
+    DEF VAR lcclitype             AS CHAR NO-UNDO. /* YCO-457 */
+    DEF VAR lcBundleCLITypes      AS CHAR NO-UNDO. /* YCO-457 */
+ 
+    lcUpsell_Id  = fCParamC("RETENTION_5GB_UPSELLS"). 
+    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES"). /* YCO-457 */
+
+    /* YCO-457
+       - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
+       - The compatibility matrix have the specific tariffs rather than the "families"
+         because not all members of a "family" are compatible. So I have to pass the
+         tariffbundle that contains the specific tariff to the function in charge of the validation */
+    IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN
+        lcclitype = Mobsub.tariffbundle.
+    ELSE 
+        lcclitype = Mobsub.CliType.      
+    /* YCO-457 end */
+    
+    DO liUpsellCount = 1 TO NUM-ENTRIES(lcUpsell_Id):
+       
+       lcUpsell = ENTRY(liUpsellCount,lcUpsell_Id).
+
+                    
+       IF fMatrixAnalyse(Syst.Var:gcBrand,
+                         "PERCONTR",
+                         "PerContract;SubsTypeTo",
+                         lcUpsell + ";" + lcclitype,  /* YCO-457 */
+                         OUTPUT lcResult) NE 1 AND
+          ENTRY(1,lcResult,";") NE "?" THEN 
+          NEXT.             
+       
+       IF INDEX(lcUpsell,lcResultArray) = 0 THEN
+          add_string(lcResultArray,"", lcUpsell + "|" + STRING(Mobsub.MsSeq)).
+    
+    END.    
+
+END PROCEDURE.
+/* YCO-275 end */
 
 FINALLY:
    END.

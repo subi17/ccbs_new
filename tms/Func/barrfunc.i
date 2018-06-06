@@ -15,7 +15,6 @@
 &THEN
 
 &GLOBAL-DEFINE barrfunc YES
-{Func/fmakemsreq.i}
 {Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttBarringCmd NO-UNDO
@@ -36,27 +35,6 @@ DEFINE TEMP-TABLE ttProvCommand NO-UNDO
    FIELD BarringCmd AS CHAR
    FIELD FixedValue AS LOG
    FIELD DropService AS CHAR.
-
-FUNCTION fGetActiveBarrings RETURNS CHAR
-   (iiMsSeq AS INTEGER):
-
-   /*groups of checked barrings*/
-   DEF VAR lcBList AS CHAR NO-UNDO.
-
-   DEF BUFFER Barring FOR Barring.
-
-   FOR EACH Barring NO-LOCK WHERE
-            Barring.MsSeq EQ iiMsSeq
-            USE-INDEX MsSeq BREAK BY Barring.BarringCode:
-
-      IF FIRST-OF(BarringCode) AND
-         Barring.BarringStatus NE {&BARR_STATUS_INACTIVE} THEN DO:
-         IF lcBList EQ "" THEN lcBList =  Barring.BarringCode.
-         ELSE lcBList = LcBList + "," + Barring.BarringCode.
-      END.
-  END.
-  RETURN RIGHT-TRIM(lcBList, ",").
-END.
 
 /*
 fCheckBarrStatus:
@@ -96,7 +74,7 @@ FUNCTION fCheckBarrStatus RETURNS LOGICAL
    END.
 
    /* Find active barrings */
-   ocActiveList = fGetActiveBarrings(iiMsSeq).
+   ocActiveList = Func.BarrMethod:mGetActiveBarrings(iiMsSeq).
 
    RETURN llRet.
 
@@ -439,42 +417,6 @@ FUNCTION fIFSBarring RETURNS CHAR
 END.
 
 
-FUNCTION fCreateBP RETURNS LOGICAL
-(INPUT icPackage AS CHARACTER,
- INPUT iiInvCust AS INTEGER,
- INPUT icCli     AS CHARACTER,
- INPUT iiMsSeq   AS INTEGER,
- INPUT icCLB     AS CHARACTER,
- INPUT iiMandReq AS INTEGER,
- INPUT icSource  AS CHARACTER,
- INPUT icCreator AS CHARACTER,
- INPUT idActStamp AS DECIMAL,
- INPUT icSMSText  AS CHAR,
- INPUT icPrevBarr AS CHAR,
- OUTPUT oiCrReqId AS INTEGER):
-   
-   fCreateRequest(35,idActStamp,icCreator,FALSE,FALSE).
-
-    
-   ASSIGN bCreaReq.ReqCParam1  = icPackage
-          bCreaReq.CustNum     = iiInvCust
-          bCreaReq.Cli         = icCli
-          bCreaReq.MsSeq       = iiMsSeq
-          bCreaReq.ReqCParam2  = icCLB
-          bCreaReq.ReqCParam4  = icPrevBarr 
-          /* another request must be completed before this request */
-          bCreaReq.ReqIParam2  = iiMandReq
-          bCreaReq.ReqSource   = icSource 
-          oiCrReqId            = bCreaReq.MsRequest.
-
-   /* Need to send SMS (fraud tool) */
-   IF icSMSText > "" THEN ASSIGN bCreaReq.SMSText   = icSMSText
-                                 bCreaReq.SendSMS   = 1.
-   RELEASE bCreaReq.
-   
-   RETURN TRUE.
-
-END FUNCTION.
 
 FUNCTION fExistBarredSubForCustomer RETURNS LOGICAL 
          (INPUT piCustNum AS INT): 
@@ -486,9 +428,9 @@ FUNCTION fExistBarredSubForCustomer RETURNS LOGICAL
             MobSub.Brand = Syst.Var:gcBrand AND 
             MobSub.CustNum = piCustNum AND 
             MobSub.MsStatus = 8 : 
-      lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
-      IF fIsInList(lcActiveBarrings,{&FRAUD_BARR_CODES}) EQ TRUE THEN 
-         RETURN TRUE.
+      IF Func.BarrMethod:mSubsHaveActiveBarring(MobSub.MsSeq,
+                                                {&FRAUD_BARR_CODES})
+      THEN RETURN TRUE.
    END.
    RETURN FALSE.
 END FUNCTION.

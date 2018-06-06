@@ -28,7 +28,7 @@
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "Newton".
 {Syst/tmsconst.i}
-{Mm/fbundle.i}
+{Func/barrfunc.i}
 {Mm/active_bundle.i}
 {Func/fdss.i}
 {Func/orderchk.i}
@@ -577,7 +577,7 @@ FOR EACH MobSub NO-LOCK WHERE
    END. /* DO liCount = 1 TO liNumberOfBundles: */
    
    /*Any Barrings Exist*/
-   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN 
+   IF plBarring AND Func.BarrMethod:mGetActiveBarrings(MobSub.MsSeq) EQ "" THEN 
       NEXT EACH_MOBSUB.
 
    /* YDA-1012 and YDA-1017  */

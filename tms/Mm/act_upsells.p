@@ -45,6 +45,8 @@ DEF VAR liRead           AS INT NO-UNDO.
 DEF VAR liErrors         AS INT NO-UNDO. 
 DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcMemoText       AS CHAR NO-UNDO.
+DEF VAR lcResult         AS CHAR NO-UNDO.  /* YCO-441 */
+DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.  /* YCO-457 */
 
 /* YCO-1 List of compatible tariffs */ 
 DEF VAR cValidList AS CHAR INITIAL
@@ -64,7 +66,8 @@ ASSIGN
                  STRING(MONTH(TODAY),"99")  +
                  STRING(DAY(TODAY),"99")
    lcTime      = REPLACE(STRING(TIME,"hh:mm:ss"),":","")
-   lcBONOContracts = fCParamC("BONO_CONTRACTS").
+   lcBONOContracts = fCParamC("BONO_CONTRACTS")
+   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES"). /* YCO-457 */
 
 
 FUNCTION fLogLine RETURNS LOG(icMessage AS CHAR):
@@ -173,24 +176,35 @@ PROCEDURE pBobCheckUpsell:
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO. 
    DEF VAR lcUpSellList          AS CHAR NO-UNDO. 
    DEF VAR lcMemoTitle           AS CHAR NO-UNDO. 
-
-   IF NUM-ENTRIES(pcLine,lcSep) <> 3 THEN /* YCO-3 - Now we have 3 parameters (previously it was 2) */
+   DEF VAR lcclitype          AS CHAR NO-UNDO. /* YCO-457 */
+   
+   /* YCO-3 - Santarder upsells are based on a 3 items per line format */
+   IF NUM-ENTRIES(pcLine,lcSep) < 2 OR 
+      NUM-ENTRIES(pcLine,lcSep) > 3 THEN 
       RETURN "ERROR:Wrong file format".
 
    /* YCO-3 - Adding 1gb and 5gb upsells to the list */
+   /* YCO-441 - Adding 3Gb rentention upsell to the list */
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
-      lcSMS          = TRIM(ENTRY(3,pcLine,lcSep))
-      lcUpSellList   = "SAN1GB_001,SAN5GB_002,DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
+      lcUpSellList   = "FID3GB_R_UPSELL,SAN1GB_001,SAN5GB_002,DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
       RETURN "ERROR: invalid or missing upsell".
 
-   llSMS = LOGICAL(lcSMS) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN 
-      RETURN "ERROR: invalid SMS value".
+   IF NUM-ENTRIES(pcLine,lcSep) = 3 THEN 
+   DO:
+      ASSIGN 
+         lcSMS = TRIM(ENTRY(3,pcLine,lcSep))
+         llSMS = LOGICAL(lcSMS) NO-ERROR.
+         IF ERROR-STATUS:ERROR THEN 
+            RETURN "ERROR: invalid SMS value".
+            
+   END.   
+   ELSE 
+      llSMS = FALSE.
 
    lcUpsell = UPPER(lcUpsell).
 
@@ -201,59 +215,91 @@ PROCEDURE pBobCheckUpsell:
    IF NOT AVAIL MobSub OR MobSub.PayType = TRUE THEN 
       RETURN "ERROR:TARJ contract or Invalid MSISDN".
       
-   lcDssId = fGetActiveDSSId(MobSub.CustNum,Func.Common:mMakeTS()).
- 
-   IF lcDssID EQ "" AND 
-      lcUpsell BEGINS "DSS" THEN 
-   RETURN "ERROR: DSS is not active for this subscription".
    
-   /* YCO-3 1g and 5g upsell are daycampaign.dctype = 6 so ServiceLimitGroup.GroupCode = DCCampaign.DCEvent and the DCEvent codes are "SAN1GB_001" and "SAN5GB_002" so there is no need to adapt the code below */
-   
-   IF lcDssId EQ "DSS" THEN 
+   /* YCO-441 Checking Tariff is compatible with 3Gb retention upsell.
+              Retention upsell can be activated as long as it is tariff compatible.
+              Upsell does not have to be shared in DSS */
+   IF lcUpsell = "FID3GB_R_UPSELL" THEN 
    DO:
-      IF lcUpsell EQ "DATA6_UPSELL" OR lcUpsell EQ "FLEX_UPSELL" THEN
-         lcUpsell = "DSS_UPSELL".
-      ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
-         lcUpsell = "DSS200_UPSELL".
-      ELSE IF lcUpsell EQ "FLEX_500MB_UPSELL" THEN
-         lcUpsell = "DSS_FLEX_500MB_UPSELL".
-      ELSE IF lcUpsell EQ "FLEX_5GB_UPSELL" THEN
-         lcUpsell = "DSS_FLEX_5GB_UPSELL".
-      ELSE IF lcUpsell NE "DSS_UPSELL" AND lcUpsell NE "DSS200_UPSELL" THEN
-         RETURN "ERROR:Upsell is not DSS compatible".
+      /* YCO-457
+         - some old legacy tariffs store the tariff in mobsub.tariffbundle rather than mobsub.clitype
+         - The compatibility matrix have the specific tariffs rather than the "families" 
+           because not all members of a "family" are compatible. So I have to pass the
+           tariffbundle that contains the specific tariff to the function in charge of the validation */         
+
+      IF LOOKUP(Mobsub.CliType,lcBundleCLITypes) > 0 THEN 
+          lcclitype = Mobsub.tariffbundle.
+      ELSE 
+          lcclitype = Mobsub.CliType.       
+      /* YCO-457 end */
+      
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
+                        "PERCONTR",
+                        "PerContract;SubsTypeTo",
+                        lcUpsell + ";" + lcclitype, /* YCO-457 */
+                        OUTPUT lcResult) NE 1 AND
+         ENTRY(1,lcResult,";") NE "?" THEN 
+       RETURN "ERROR:Upsell is not compatible with " + MobSub.clitype + " tariff".
    END.
-   ELSE IF lcDssId EQ "DSS2" THEN DO:
-      
-      lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
-      
-      IF lcUpsell NE "DSS2_UPSELL"    AND
-         lcUpsell NE "DATA6_UPSELL"   AND 
-         lcUpsell NE "DSS200_UPSELL"  AND
-         lcUpsell NE "DATA200_UPSELL" AND 
-         lcUpsell NE "FLEX_UPSELL"    THEN
-        RETURN "ERROR:Upsell is not DSS2 compatible".
-      
-      IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 THEN DO:
+   ELSE
+   DO:
+      /* Doing usual behaviour before adding the FID3GB_R_UPSELL */   
+      lcDssId = fGetActiveDSSId(MobSub.CustNum,Func.Common:mMakeTS()).
+ 
+      IF lcDssID EQ "" AND 
+         lcUpsell BEGINS "DSS" THEN 
+         RETURN "ERROR: DSS is not active for this subscription".
+   
+      IF lcDssId EQ "DSS" THEN 
+      DO:
          IF lcUpsell EQ "DATA6_UPSELL" OR lcUpsell EQ "FLEX_UPSELL" THEN
-            lcUpsell = "DSS2_UPSELL".
+            lcUpsell = "DSS_UPSELL".
          ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
             lcUpsell = "DSS200_UPSELL".
          ELSE IF lcUpsell EQ "FLEX_500MB_UPSELL" THEN
             lcUpsell = "DSS_FLEX_500MB_UPSELL".
          ELSE IF lcUpsell EQ "FLEX_5GB_UPSELL" THEN
             lcUpsell = "DSS_FLEX_5GB_UPSELL".
+         ELSE IF lcUpsell NE "DSS_UPSELL" AND lcUpsell NE "DSS200_UPSELL" THEN
+            RETURN "ERROR:Upsell is not DSS compatible".
       END.
-      ELSE IF lcUpsell NE "DATA6_UPSELL"   AND 
-              lcUpsell NE "FLEX_UPSELL"    AND 
-              lcUpsell NE "DATA200_UPSELL" THEN 
-         RETURN "ERROR:Subscription is not DSS2 compatible".
-   END.
+      ELSE IF lcDssId EQ "DSS2" THEN
+      DO:
+      
+         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+      
+         IF lcUpsell NE "DSS2_UPSELL"    AND
+            lcUpsell NE "DATA6_UPSELL"   AND 
+            lcUpsell NE "DSS200_UPSELL"  AND
+            lcUpsell NE "DATA200_UPSELL" AND 
+            lcUpsell NE "FLEX_UPSELL"    THEN
+            RETURN "ERROR:Upsell is not DSS2 compatible".
+      
+         IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 THEN
+         DO:
+            IF lcUpsell EQ "DATA6_UPSELL" OR lcUpsell EQ "FLEX_UPSELL" THEN
+               lcUpsell = "DSS2_UPSELL".
+            ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
+               lcUpsell = "DSS200_UPSELL".
+            ELSE IF lcUpsell EQ "FLEX_500MB_UPSELL" THEN
+               lcUpsell = "DSS_FLEX_500MB_UPSELL".
+            ELSE IF lcUpsell EQ "FLEX_5GB_UPSELL" THEN
+               lcUpsell = "DSS_FLEX_5GB_UPSELL".
+         END.
+         ELSE IF lcUpsell NE "DATA6_UPSELL"   AND 
+                 lcUpsell NE "FLEX_UPSELL"    AND 
+                 lcUpsell NE "DATA200_UPSELL" THEN 
+                 RETURN "ERROR:Subscription is not DSS2 compatible".
+      END.
 
-   /* YCO-1 "1Gb and 5Gb upsell are not compatible with 1.5Gb tariff CONT10."
-      In fact, the upsell is not available to all tariffs. 
-      As part of Phase I this is the list of avaialble Tariffs. */
-   IF LOOKUP(MobSub.clitype,cValidList) = 0 THEN
-       RETURN "ERROR:Upsell is not compatible with " + MobSub.clitype + " tariff".
+      /* YCO-1 "1Gb and 5Gb upsell are not compatible with 1.5Gb tariff CONT10."
+         In fact, the upsell is not available to all tariffs. 
+         As part of Phase I this is the list of available Tariffs. */
+      IF (lcUpsell = "SAN1GB_001" OR lcUpsell = "SAN5GB_002") AND  
+         LOOKUP(MobSub.clitype,cValidList) = 0 THEN
+         RETURN "ERROR:Upsell is not compatible with " + MobSub.clitype + " tariff".
+
+   END.
 
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
@@ -291,6 +337,9 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "FLEX 500MB upsell".
       WHEN "FLEX_5GB_UPSELL" THEN
          lcMemoTitle = "FLEX 5GB upsell".    
+      /* YCO-276 Adding memos */   
+      WHEN "FID3GB_R_UPSELL" THEN   
+         lcMemoTitle = "3Gb retention upsell 1 mes".
    END CASE.
       
    /* YCO-4 - Send SMS for SAN1GB_001 and SAN5G_002 activation */

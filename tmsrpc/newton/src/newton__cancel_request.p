@@ -25,7 +25,7 @@ Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Func/fsendsms.i}
 {Func/fsubstermreq.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 /* Input parameters */
 DEF VAR pcTenant    AS CHAR NO-UNDO.
@@ -231,6 +231,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
          IF MsRequest.ReqStatus = 0 OR 
             MsRequest.ReqStatus = 8 THEN DO:
             fReqStatus(4, pcMemo).
+            fChangeOrderStatus(MsRequest.ReqIParam4, {&ORDER_STATUS_CLOSED}).
             RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",
