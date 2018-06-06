@@ -94,7 +94,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.
 
-llOrderAllowed = fSubscriptionLimitCheck(
+llOrderAllowed = Func.ValidateACC:mSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
@@ -185,6 +185,7 @@ IF lcAddLineAllowed = "" THEN DO:
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
             Order.OrderType          NE {&ORDER_TYPE_STC} AND 
+            Order.OrderType          NE {&ORDER_TYPE_ACC} AND 
             Order.SalesMan NE "GIFT" AND
             LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0,
        FIRST CLIType NO-LOCK WHERE
