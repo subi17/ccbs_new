@@ -83,7 +83,6 @@ DEF VAR liReqActTime          AS INT  NO-UNDO.
 DEF VAR ldeActivationTS       AS DEC  NO-UNDO.
 DEF VAR ldaActDate            AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber        AS CHAR NO-UNDO. 
-DEF VAR llgExtraLine          AS LOG  NO-UNDO INITIAL NO. 
 DEF VAR llgPriDSSMobSub       AS LOG  NO-UNDO.
 DEF VAR liOngoingOrderId      AS INT  NO-UNDO.
 DEF VAR liExistingOrderId     AS INT  NO-UNDO. 
@@ -102,6 +101,7 @@ DEF BUFFER bTerMsRequest   FOR MsRequest.
 DEF BUFFER bMsOwner        FOR MsOwner.
 DEF BUFFER lbMLOrder       FOR Order.
 DEF BUFFER lbMLMobSub      FOR MobSub.
+DEF BUFFER lbELMobSub      FOR MobSub. 
 DEF BUFFER lbMobSubs       FOR MobSub.
 DEF BUFFER lbPriDSSMobSub  FOR MobSub.
 DEF BUFFER lbELOrderAction FOR OrderAction.
@@ -455,8 +455,7 @@ IF NOT AVAIL mobsub THEN DO:
 
       IF AVAIL lbMLMobSub THEN 
          ASSIGN MobSub.MultiSimID   = lbMLMobSub.MsSeq         /* Mainline Subid  */
-                MobSub.MultiSimType = Order.MultiSimType       /* Extraline = 3   */
-                llgExtraLine        = YES.
+                MobSub.MultiSimType = Order.MultiSimType.      /* Extraline = 3   */
       ELSE DO:
          
          liExistingOrderId = fCheckExistingMainLineAvailForExtraLine(Order.CLIType,
@@ -469,8 +468,7 @@ IF NOT AVAIL mobsub THEN DO:
 
          IF AVAIL lbMLMobSub THEN 
             ASSIGN MobSub.MultiSimID   = lbMLMobSub.MsSeq         /* Mainline Subid  */
-                   MobSub.MultiSimType = Order.MultiSimType       /* Extraline = 3   */
-                   llgExtraLine        = YES.
+                   MobSub.MultiSimType = Order.MultiSimType.      /* Extraline = 3   */
          ELSE DO:
 
             liOngoingOrderId = fCheckOngoingMainLineAvailForExtraLine(Order.CLIType,
@@ -483,13 +481,11 @@ IF NOT AVAIL mobsub THEN DO:
                           lbOngOrder.OrderId EQ liOngoingOrderId NO-ERROR.
                IF AVAILABLE lbOngOrder THEN
                   ASSIGN MobSub.MultiSimID   = lbOngOrder.MsSeq
-                         MobSub.MultiSimType = Order.MultiSimType
-                         llgExtraLine        = YES.
+                         MobSub.MultiSimType = Order.MultiSimType.
             END.
             ELSE DO:
-               ASSIGN MobSub.MultiSimID       = 0
-                      MobSub.MultiSimType     = 0
-                      llgExtraLine            = YES.
+               ASSIGN MobSub.MultiSimID   = 0
+                      MobSub.MultiSimType = 0.
                
                FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
                           lbELOrderAction.Brand    EQ Syst.Var:gcBrand       AND
@@ -739,8 +735,6 @@ ELSE DO:
          ROWID(MSOwner) = ROWID(bMsOwner).
    END.
 
-   /* llgExtraLine value has to be set to TRUE when mobile part of 
-      convergent is processed, because of DSS2 activation */
    ASSIGN
       MsRequest.Custnum = Customer.Custnum
       MsOwner.imsi      = IMSI.IMSI WHEN AVAIL IMSI
@@ -966,18 +960,45 @@ IF NOT MobSub.PayType THEN DO:
       IF lcBundleId = {&DSS} OR
         (lcBundleId = {&DSS2}                              AND
          LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) GT 0 AND 
-         NOT fCLITypeIsMainLine(MobSub.CLIType))           THEN
+         NOT fCLITypeIsMainLine(MobSub.CLIType)            AND 
+         NOT fCLITypeIsExtraLine(MobSub.CLIType))          THEN
          fDSSAddRequest(Mobsub.MsSeq,
                         lcBundleId,
                         MsRequest.MsRequest,
                         MsRequest.ReqSource).
-      ELSE IF llgExtraLine                                             AND 
+      ELSE IF llgMatrixAvailable                                       AND 
               ((lcBundleId EQ {&DSS2} AND lcDSSBundleId EQ {&DSS2}) OR  
                (lcBundleId EQ {&DSS4}))                                THEN DO:
-            fDSSAddRequest(Mobsub.MsSeq,
+         fDSSAddRequest(Mobsub.MsSeq,
+                        lcBundleId,
+                        MsRequest.MsRequest,
+                        MsRequest.ReqSource).
+              
+         /* Extraline Business Functionality                                            */
+         /* Rule 1: In case of adding any Mainline subscription to existing DSS group,  */
+         /*         then add its associated Extralines to the group.                    */
+         /* Rule 2: In case of adding any Extraline subscription to existing DSS group, */
+         /*         then its associated mainline DSS add request call has to be         */
+         /*         done only once - when its first Extraline subscription is added     */
+         IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
+             FOR EACH lbELMobSub NO-LOCK WHERE
+                      lbELMobSub.Brand      EQ Syst.Var:gcBrand AND
+                      lbELMobSub.MultiSimId EQ MobSub.MsSeq:
+                fDSSAddRequest(lbELMobSub.MsSeq,
+                               lcBundleId,
+                               MsRequest.MsRequest,
+                               MsRequest.ReqSource).
+             END.
+         END.
+         ELSE IF fCLITypeIsExtraLine(MobSub.CLIType)             AND 
+                 fExtraLineCountForMainLine(MobSub.MultiSimId,
+                                            MobSub.CustNum) EQ 1 THEN DO:
+            fDSSAddRequest(MobSub.MultiSimId,
                            lcBundleId,
                            MsRequest.MsRequest,
                            MsRequest.ReqSource).
+         END.
+
       END.
    END.
    ELSE IF NOT fOngoingDSSAct(MobSub.CustNum) THEN DO:
