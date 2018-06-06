@@ -11,7 +11,6 @@
 {Func/cparam2.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
-{Mnp/mnpoutchk.i}
 {Func/main_add_lines.i}
 
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO. 
@@ -255,7 +254,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                 MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                 LOOKUP(STRING(MsRequest.ReqStatus),
                        {&REQ_INACTIVE_STATUSES}) = 0) AND
-            NOT fIsMNPOutOngoing(INPUT bbMobSub.CLI) THEN DO:
+            NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bbMobSub.CLI) THEN DO:
             MESSAGE "BTC will also trigger subscription " +
                     bbMobSub.CLI + " termination (multisim secondary subscription)"
             VIEW-AS ALERT-BOX.
