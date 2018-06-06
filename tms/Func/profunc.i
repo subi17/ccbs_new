@@ -206,6 +206,7 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
 
    FOR EACH bOrder NO-LOCK WHERE
             bOrder.MsSeq EQ iiMsSeq BY CrStamp DESC:
+      IF bOrder.OrderType EQ {&ORDER_TYPE_ACC} THEN NEXT.
       IF fIsConvergenceTariff(bOrder.CLIType) THEN
          RETURN STRING(bOrder.OrderId).
    END.
@@ -258,25 +259,6 @@ FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR,
    END.
    RETURN "".
 END.
-
-FUNCTION fCheckOngoingOrders RETURNS LOGICAL (INPUT icCustId AS CHAR,
-                                              INPUT icCustIdType AS CHAR,
-                                              INPUT iimsseq AS INT):
-   FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
-            OrderCustomer.CustId     EQ icCustId AND
-            OrderCustomer.CustIdType EQ icCustIDType AND
-            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-      FIRST Order NO-LOCK WHERE
-            Order.Brand              EQ Syst.Var:gcBrand AND
-            Order.orderid            EQ Ordercustomer.Orderid AND
-            Order.msseq              NE iimsseq AND
-           LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
-      RETURN TRUE.
-   END.
-   RETURN FALSE.
-
-END FUNCTION.
 
 /*SVA of Yoigo PRO*/
 /*This function provides a dirty solution.
