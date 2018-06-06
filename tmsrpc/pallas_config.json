@@ -1,36 +1,48 @@
 {
-	"newton": {
-		"3001": {
-			"/fcgiproxy_xfera": [ "newton", {
-				"check-local": "\"disable\"",
-				"idle-timeout": "3600",
-				"disable-time": "60",
-				"min-procs": "5",
-				"max-procs": "10",
-				"max-load-per-proc": "1",
-				"kill-signal": "16"
-			}],			
-			"server.username": "\"tmsrpc\"",
-			"server.groupname": "\"yapps\"",
-			"server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
-			"server.network-backend": "\"writev\"",
+    "newton": {
+        "3001": {
+            "/fcgiproxy_xfera": [ "newton", {
+                "check-local": "\"disable\"",
+                "idle-timeout": "3600",
+                "disable-time": "60",
+                "min-procs": "5",
+                "max-procs": "10",
+                "max-load-per-proc": "1",
+                "kill-signal": "16"
+            }],
+            "/bss": [ "bss", {
+                "check-local": "\"disable\"",
+                "min-procs": "2",
+                "max-procs": "2",
+                "kill-signal": "16"
+            }],
+            "server.username": "\"tmsrpc\"",
+            "server.groupname": "\"yapps\"",
+            "server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
+            "server.network-backend": "\"writev\"",
             "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
-		},
-		"3002": {
-			"/fcgiproxy_xfera": [ "newton", {
-				"check-local": "\"disable\"",
-				"idle-timeout": "3600",
-				"disable-time": "60",
-				"min-procs": "5",
-				"max-procs": "10",
-				"max-load-per-proc": "1",
-				"kill-signal": "16"
-			}],			
-			"server.username": "\"tmsrpc\"",
-			"server.groupname": "\"yapps\"",
-			"server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
-			"server.network-backend": "\"writev\"",
+        },
+        "3002": {
+            "/fcgiproxy_xfera": [ "newton", {
+                "check-local": "\"disable\"",
+                "idle-timeout": "3600",
+                "disable-time": "60",
+                "min-procs": "5",
+                "max-procs": "10",
+                "max-load-per-proc": "1",
+                "kill-signal": "16"
+            }],
+            "/bss": [ "bss", {
+                "check-local": "\"disable\"",
+                "min-procs": "2",
+                "max-procs": "2",
+                "kill-signal": "16"
+            }],
+            "server.username": "\"tmsrpc\"",
+            "server.groupname": "\"yapps\"",
+            "server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
+            "server.network-backend": "\"writev\"",
             "conditional_param": { "$HTTP[\"remoteip\"] == \"127.0.0.1\"": [ { "param": "status.status-url", "value": "\"/server-status\"" } ] }
-		}
-	}
+        }
+    }
 }

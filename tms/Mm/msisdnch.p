@@ -16,7 +16,6 @@
 {Mc/lib/tokenchk.i 'MSISDN'}
 {Func/fmakemsreq.i}
 {Func/msisdn.i} 
-{Mnp/mnpoutchk.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 
@@ -101,7 +100,7 @@ FIND FIRST MobSub WHERE
            MobSub.MsSeq = MsSeq
 NO-LOCK NO-ERROR.
       
-IF fIsMNPOutOngoing(mobsub.cli) THEN DO:
+IF Mnp.MNPOutGoing:mIsMNPOutOngoing(mobsub.cli) THEN DO:
    MESSAGE "Ongoing MNP OUT request" VIEW-AS ALERT-BOX.
    LEAVE.
 END.
