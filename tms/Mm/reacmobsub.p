@@ -806,8 +806,9 @@ DO TRANSACTION:
       If Main line is getting reactivated then
       activate the additional line discount */
    ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                    CLIType.Brand      = Syst.Var:gcBrand                           AND
-                    CLIType.CLIType    = MobSub.CLIType                    AND                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) 
+                          CLIType.Brand      EQ Syst.Var:gcBrand AND
+                          CLIType.CLIType    EQ MobSub.CLIType   AND
+                          CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}) 
    THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = Syst.Var:gcBrand        AND

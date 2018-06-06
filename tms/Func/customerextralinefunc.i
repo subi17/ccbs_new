@@ -209,11 +209,11 @@ FUNCTION fReassigningExtralines RETURNS LOGICAL
 
       DO liManELCount = 1 TO NUM-ENTRIES(lcMandatoryExtraLines): 
      
-         FOR EACH lELMobSub EXCLUSIVE-LOCK WHERE
+         FOR EACH lELMobSub EXCLUSIVE-LOCK USE-INDEX Custnum WHERE
                   lELMobSub.Brand        EQ Syst.Var:gcBrand      AND
+                  lELMobSub.CustNum      EQ lbMLMobSub.CustNum    AND
                   lELMobSub.MultiSimId   EQ 0                     AND
                   lELMobSub.MultiSimType EQ 0                     AND
-                  lELMobSub.CustNum      EQ lbMLMobSub.CustNum    AND
                  (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
                   lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
 
