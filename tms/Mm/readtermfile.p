@@ -297,7 +297,8 @@ REPEAT:
    ELSE DO:
       IF fIsFixedOnly(lcCLIType) OR
          ( NOT fIsConvergentORFixedOnly(lcCLIType) ) THEN DO:
-         fError("Partial termination not allowed for fixed only CLIType: " + lcCLIType + " use FULL termination").
+         fError("Partial termination not allowed for " + lcTerminationType + " only CLIType: " 
+                                                       + lcCLIType + " use FULL termination").
          NEXT.
       END.
 
