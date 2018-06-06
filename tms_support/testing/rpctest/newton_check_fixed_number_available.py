@@ -14,5 +14,5 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-p=s.newton.check_fixed_number_available(var1)
+p=s.newton.check_fixed_number_available('yoigo',var1)
 print_results(p)

@@ -86,7 +86,10 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcUriQuery,
                            lcUriQueryVal,
                            loRequestJson,
-                           OUTPUT loResponseJson).  
+                           OUTPUT loResponseJson). 
+
+RETURN "".
+
 FINALLY:
    IF VALID-OBJECT(loRequestjson)
    THEN DELETE OBJECT loRequestjson.
