@@ -107,8 +107,11 @@
 "1" "OFFICE365" "OFFICE 365 Essentials" 04/07/17 31/12/49
 "1" "PMDUB" "Prepaid MDUB" 01/05/11 31/12/49
 "1" "PMDUB_UPSELL" "Pre Mobile Data Usage Bundle" 01/06/11 31/12/49
+"1" "RET5GB_12mP_R_UPSELL" "Mobile Data Usage Upsell 5G permanency" 01/06/18 31/12/49
 "1" "RET5GB_12m_R_UPSELL" "Mobile Data Usage Upsell 5G" 24/05/18 31/12/49
+"1" "RET5GB_3mP_R_UPSELL" "Mobile Data Usage Upsell 5G permanency" 01/06/18 31/12/49
 "1" "RET5GB_3m_R_UPSELL" "Mobile Data Usage Upsell 5G" 24/05/18 31/12/49
+"1" "RET5GB_6mP_R_UPSELL" "Mobile Data Usage Upsell 5G permanency" 01/06/18 31/12/49
 "1" "RET5GB_6m_R_UPSELL" "Mobile Data Usage Upsell 5G" 24/05/18 31/12/49
 "1" "SAN1GB_001" "Mobile Data Usage Upsell 1G" 21/02/18 31/12/49
 "1" "SAN5GB_002" "Mobile Data Usage Upsell 5G" 21/02/18 31/12/49

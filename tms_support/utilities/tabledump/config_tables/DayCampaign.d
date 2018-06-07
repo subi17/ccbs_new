@@ -79,6 +79,8 @@
 "DSS_FLEX_UPSELL" 01/11/17 4 31/12/49 "" 0 "" "" "DSS FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS_UPSELL" 23/11/11 4 31/12/49 "DSS" 0 "" "" "Internet compartido - Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DSSMFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0 1 0 0
 "DSS_UPSELL_UPGRADE" 23/03/12 4 31/12/49 "UPGRADEDATA" 0 "" "" "Upsell Upgrade DSS customer" 93 0 "1" "6" 1 2 1 0 "" "" "" 3 1 0 yes 100 0 0 2 "" 0 1 0 0
+"DTERM12-120" 06/06/18 0 31/12/49 "" 0 "" "" "DTERM12-120 Discount permanency" 0 0 "1" "3" 1 3 12 0 "" "" "DTERMPERIOD120" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"DTERM24-240" 06/06/18 0 31/12/49 "" 0 "" "" "DTERM24-240 Discount permanency" 0 0 "1" "3" 1 3 24 0 "" "" "DTERMPERIOD240" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "DUB" 31/01/11 4 31/12/49 "DUB" 0 "" "" "Data Usage Bundle 500 MB" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1 0 1
 "DUB2" 01/05/12 4 31/12/49 "DUB2" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT7MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 59 1 0 1
 "DUB3" 01/12/12 4 31/12/49 "DUB3" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT8MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 59 1 0 1
@@ -133,27 +135,55 @@
 "PAYTERM18_8" 02/04/12 0 31/12/49 "PAYTERM18" 0 "" "" "Installment" 0 0 "1" "5" 1 3 18 0 "PAYTERM18_8" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_1" 01/03/14 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_1" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_10" 01/12/11 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM2410" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_11" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_11" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_12" 01/02/14 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_12" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_13" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_13" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_14" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_14" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_15" 01/12/11 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM2415" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_16" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_16" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_17" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_17" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_18" 01/02/14 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_18" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_19" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_19" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_2" 28/09/15 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_2" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_20" 01/08/12 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_20" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_21" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_21" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_22" 01/02/14 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_22" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_23" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_23" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_24" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_24" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_25" 01/08/12 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_25" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_26" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_26" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_27" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_27" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_28" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_28" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_29" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_29" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_3" 01/08/11 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_3" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_30" 01/08/12 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_30" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_31" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_31" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_32" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_32" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_33" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_33" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_34" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_34" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_35" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_35" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_36" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_36" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_37" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_37" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_38" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_38" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_39" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_39" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_4" 01/03/14 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_4" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_40" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_40" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_5" 01/12/11 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_5" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_6" 25/11/15 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_6" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_7" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_7" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PAYTERM24_8" 02/04/12 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_8" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
+"PAYTERM24_9" 06/06/18 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_9" "" "TERMPAYTERM" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PMDUB" 01/05/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8" 93 0 "1" "4" 4 1 0 0 "PMDUBFee" "" "" 0 1 0 yes 1 0 0 1 "PMDUB_UPSELL" 0 2 0 0
 "PMDUB_UPSELL" 01/06/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8 Upsell" 93 0 "1" "6" 1 2 1 0 "UPSELL_PMDUBFee" "" "" 3 1 0 yes 10 0 0 1 "" 0 2 0 0
 "POSTRENOVE" 01/09/08 0 26/05/10 "TERMPERIOD" 0 "" "" "Terminal contract for current Postpaid" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "POSTRENOVEII" 09/09/09 0 26/05/10 "TERMPERIOD" 0 "" "" "Terminal contract for current Postpaid" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD2" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "PRERENOVE" 01/09/08 0 26/01/11 "" 0 "" "" "Terminal contract for current Prepaid" 0 0 "1" "3" 1 3 18 0 "" "" "" 2 1 0 yes 1 0 0 1 "" 0 2 0 0
 "PRETERM" 01/12/06 0 26/01/11 "" 0 "" "" "Terminal discount(Prepaid)" 0 0 "1" "3" 1 3 18 0 "" "" "" 2 1 0 yes 1 0 0 1 "" 0 2 0 0
+"RET5GB_12mP_R_UPSELL" 01/06/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 12 meses con penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "RET5GB_12m_R_UPSELL" 24/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 12 meses sin penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
+"RET5GB_3mP_R_UPSELL" 01/06/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 3 meses con penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "RET5GB_3m_R_UPSELL" 24/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 3 meses sin penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
+"RET5GB_6mP_R_UPSELL" 01/06/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 6 meses con penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "RET5GB_6m_R_UPSELL" 24/05/18 4 31/12/49 "" 0 "" "" "Bono de datos 5Gb adicionales 6 meses sin penalización" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
 "RVTERM12" 25/11/15 0 31/12/49 "RVTERM" 0 "" "" "RVTERM12 periodical contract" 0 0 "1" "5" 1 3 12 0 "RVTERM12" "" "TERMRVTERM" 2 1 1 yes 1 0 0 1 "" 0 1 0 0
 "SAN1GB_001" 21/02/18 4 31/12/49 "" 0 "" "" "Santander 1Gb for free" 93 0 "1" "6" 1 2 1 0 "SAN1GBMFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0 0
@@ -198,6 +228,9 @@
 "TERM24VI" 01/12/10 0 31/12/49 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 24 0 "" "" "TERMPERIOD6" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "TVTERM12-72" 22/08/17 0 31/12/49 "" 0 "" "" "TV Permanency Contract" 0 0 "1" "3" 1 3 12 0 "" "" "TVTERMPERIODPF" 2 1 2 yes 1 0 0 1 "" 0 1 0 0
 "UPGRADE_UPSELL" 23/03/12 4 31/12/49 "UPGRADEDATA" 0 "" "" "Upsell Upgrade" 93 0 "1" "6" 1 2 1 0 "" "" "" 3 1 0 yes 1 0 0 2 "" 0 1 0 0
+"UTERM12-120" 01/06/18 0 31/12/49 "" 0 "" "" "UTERM12-120 Upsell permanency" 0 0 "1" "3" 1 3 12 0 "" "" "UTERMPERIOD120" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"UTERM3-30" 01/06/18 0 31/12/49 "" 0 "" "" "UTERM3-30 Upsell permanency" 0 0 "1" "3" 1 3 3 0 "" "" "UTERMPERIOD30" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"UTERM6-60" 01/06/18 0 31/12/49 "" 0 "" "" "UTERM6-60 Upsell permanency" 0 0 "1" "3" 1 3 6 0 "" "" "UTERMPERIOD60" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "VOICE100" 01/01/15 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
 "VOICE200" 01/06/17 0 31/12/49 "" 0 "" "" "Promo 200 min/mes gratis" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0 0
 "VOICE200B" 22/08/17 0 31/12/49 "" 0 "" "" "Bono 200 minutos" 0 0 "1" "1" 1 1 0 0 "VOICE200BMF" "" "" 0 1 0 yes 1 1 0 1 "" 0 1 0 0
