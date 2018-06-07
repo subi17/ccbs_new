@@ -49,6 +49,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
    METHOD PUBLIC LOG create(): 
  
       lcJson = '~{"BillItemDataSet":~{"BillItem":~[' + lcJson + '~]~}~}'.
+      
       IF loRequestMaker:parser_error(DATASET BillItemDataset BIND, lcJson) THEN
          RETURN FALSE.
    
@@ -86,8 +87,8 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
          BillItem.BIName   = ttBillItem.name
          BillItem.InvSect  = ttBillItem.invoice_section
          BillItem.BIGroup  = ttBillItem.billing_item_group
-         BillItem.TaxClass = ttBillItem.tax_class.
-      //   BillItem.DebtType = ttBillItem.debt_type.
+         BillItem.TaxClass = ttBillItem.tax_class
+         BillItem.DebtType = ttBillItem.debt_type.
 
       loEventLogMaker:make_eventlog("create",BUFFER BillItem:HANDLE).
 
@@ -100,7 +101,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
 
       RELEASE BillItem.
 
-       /* error cases get response via logError, make response for the 
+      /* error cases get response via logError, make response for the 
        succesful one */
       IF lcCorrelationID > "" THEN
          loRequestMaker:create_response("BillItem",
@@ -116,89 +117,89 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
       &ENDIF
     END METHOD.
 
-    METHOD PUBLIC LOG update():
+   METHOD PUBLIC LOG update():
 
-       IF lcModelid = ? THEN 
-          RETURN loRequestMaker:logError('BillItem ID not given').
+      IF lcModelid = ? THEN 
+         RETURN loRequestMaker:logError('BillItem ID not given').
 
-       IF lcModelid = "" THEN 
-          RETURN loRequestMaker:logError("Invalid BillItem ID").
+      IF lcModelid = "" THEN 
+         RETURN loRequestMaker:logError("Invalid BillItem ID").
 
-       lcJson = '~{"BillItemDataSet":~{"BillItem":~[' + lcJson + '~]~}~}'.
-       IF loRequestMaker:parser_error(DATASET BillItemDataset BIND, lcJson) THEN
-          RETURN FALSE.
+      lcJson = '~{"BillItemDataSet":~{"BillItem":~[' + lcJson + '~]~}~}'.
+      IF loRequestMaker:parser_error(DATASET BillItemDataset BIND, lcJson) THEN
+         RETURN FALSE.
    
-       FIND ttBillItem NO-ERROR.
-       IF NOT AVAILABLE ttBillItem THEN
-          RETURN loRequestMaker:logError("Empty BillItem set").
+      FIND ttBillItem NO-ERROR.
+      IF NOT AVAILABLE ttBillItem THEN
+         RETURN loRequestMaker:logError("Empty BillItem set").
        
-       DO WHILE TRUE:
-          FIND FIRST BillItem EXCLUSIVE-LOCK WHERE 
-                     BillItem.Brand = gcBrand AND
-                     BillItem.BillCode = lcModelid 
-                     NO-ERROR NO-WAIT.
-          IF LOCKED(BillItem) THEN 
-          DO:
+      DO WHILE TRUE:
+         FIND FIRST BillItem EXCLUSIVE-LOCK WHERE 
+                    BillItem.Brand = gcBrand AND
+                    BillItem.BillCode = lcModelid 
+                    NO-ERROR NO-WAIT.
+         IF LOCKED(BillItem) THEN 
+         DO:
              liWait = liWait + 1.
              IF liWait > {&WAIT_CONFIG_LOCK} THEN 
                 RETURN loRequestMaker:logError("Billing item was not available for update").
-                PAUSE 1 NO-MESSAGE. 
-                NEXT. 
+             PAUSE 1 NO-MESSAGE. 
+             NEXT. 
           END.
-          LEAVE.
-       END.
+         LEAVE.
+      END.
  
-       IF NOT AVAILABLE BillItem THEN 
-          RETURN loRequestMaker:logError("Unknown BillItem").
+      IF NOT AVAILABLE BillItem THEN 
+         RETURN loRequestMaker:logError("Unknown BillItem").
 
-       lcError = validate_billitem(FALSE).
-       IF lcError > "" THEN 
-          RETURN loRequestMaker:logError(lcError).
+      lcError = validate_billitem(FALSE).
+      IF lcError > "" THEN 
+         RETURN loRequestMaker:logError(lcError).
  
-       lcError = loRepTextMaker:validate_reptext(TABLE ttRepText BIND,
-                                                  1,
-                                                  BillItem.BillCode,
-                                                  RECID(ttBillItem)).
-       IF lcError > "" THEN 
-          RETURN loRequestMaker:logError(lcError).
+      lcError = loRepTextMaker:validate_reptext(TABLE ttRepText BIND,
+                                                1,
+                                                BillItem.BillCode,
+                                                RECID(ttBillItem)).
+      IF lcError > "" THEN 
+         RETURN loRequestMaker:logError(lcError).
 
-       loEventLogMaker:make_eventlog("oldbuffer",BUFFER BillItem:HANDLE).
+      loEventLogMaker:make_eventlog("oldbuffer",BUFFER BillItem:HANDLE).
 
-       IF ttBillItem.name > "" THEN 
-          BillItem.BIName = ttBillItem.name.
-       IF ttBillItem.invoice_section > "" THEN 
-          BillItem.InvSect = ttBillItem.invoice_section.
-       IF ttBillItem.billing_item_group > "" THEN    
-          BillItem.BIGroup = ttBillItem.billing_item_group.
-       IF ttBillItem.tax_class > "" THEN    
-          BillItem.TaxClass = ttBillItem.tax_class.
-       IF ttBillItem.debt_type > "" THEN    
-          BillItem.DebtType = ttBillItem.debt_type. 
+      IF ttBillItem.name > "" THEN 
+         BillItem.BIName = ttBillItem.name.
+      IF ttBillItem.invoice_section > "" THEN 
+         BillItem.InvSect = ttBillItem.invoice_section.
+      IF ttBillItem.billing_item_group > "" THEN    
+         BillItem.BIGroup = ttBillItem.billing_item_group.
+      IF ttBillItem.tax_class > "" THEN    
+         BillItem.TaxClass = ttBillItem.tax_class.
+      IF ttBillItem.debt_type > "" THEN    
+         BillItem.DebtType = ttBillItem.debt_type. 
    
-       loEventLogMaker:make_eventlog("modify",BUFFER BillItem:HANDLE).
+      loEventLogMaker:make_eventlog("modify",BUFFER BillItem:HANDLE).
 
-       lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
-                                               1,
-                                               BillItem.BillCode,
-                                               RECID(ttBillItem)). 
-       IF lcError > "" THEN 
-          RETURN loRequestMaker:logError(lcError).
+      lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
+                                              1,
+                                              BillItem.BillCode,
+                                              RECID(ttBillItem)). 
+      IF lcError > "" THEN 
+         RETURN loRequestMaker:logError(lcError).
 
-       RELEASE BillItem.
+      RELEASE BillItem.
 
-        /* error cases get response via logError, make response for the succesful one */
-       IF lcCorrelationID > "" THEN
-          loRequestMaker:create_response("BillItem",
-                                         lcModelid,
-                                         "OK",
-                                         ""). 
-       &IF {&MQ_BASED} 
-       &THEN 
-       loRequestMaker:create_log(SUBSTITUTE("BillItem update: Id=&1 Ext.Request=&2", 
-                                 lcModelid,
-                                 lcCorrelationID), 
-                                 "DEBUG").
-       &ENDIF
+      /* error cases get response via logError, make response for the succesful one */
+      IF lcCorrelationID > "" THEN
+         loRequestMaker:create_response("BillItem",
+                                        lcModelid,
+                                        "OK",
+                                        ""). 
+      &IF {&MQ_BASED} 
+      &THEN 
+      loRequestMaker:create_log(SUBSTITUTE("BillItem update: Id=&1 Ext.Request=&2", 
+                                lcModelid,
+                                lcCorrelationID), 
+                                "DEBUG").
+      &ENDIF
    END METHOD.
 
    METHOD PUBLIC CHAR validate_BillItem (ilCreate AS LOG):
@@ -252,4 +253,3 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
    END DESTRUCTOR.
 
 END CLASS.
-
