@@ -1174,6 +1174,11 @@
 "" 225 "OrderCustomer" "OutSMSMarketing" "OutSMSMarketing" 41 04/04/18 31/12/49
 "" 225 "OrderCustomer" "OutBankMarketing" "OutBankMarketing" 42 04/04/18 31/12/49
 "" 225 "OrderCustomer" "DontSharePersData" "DontSharePersData" 43 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OperAllMarketing" "OperAllMarketing" 44 06/06/18 31/12/49
+"" 225 "OrderCustomer" "FixedNumber" "FixedNumber" 45 06/06/18 31/12/49
+"" 225 "OrderCustomer" "BankCode" "BankCode" 46 06/06/18 31/12/49
+"" 225 "OrderCustomer" "Country" "Country" 47 06/06/18 31/12/49
+"" 225 "OrderCustomer" "#Language" "Language" 48 06/06/18 31/12/49
 "" 226 "OrderDelivery" "#KeyValue" "KeyValue" 1 01/01/14 31/12/49
 "" 226 "OrderDelivery" "@Version" "1" 2 01/01/14 31/12/49
 "" 226 "OrderDelivery" "OrderId" "OrderId" 3 01/01/14 31/12/49
@@ -1574,3 +1579,20 @@
 "1" 552 "" "#PAYTERMAMT" "PayTerm Amount" 7 21/02/18 31/12/49
 "1" 552 "" "#Q25AMT" "Q25 Amount" 8 21/02/18 31/12/49
 "1" 552 "" "#Q25EXTNAMT" "Q25 Extension Amount" 9 21/02/18 31/12/49
+"" 554 "OrderProduct" "OrderProductID" "OrderProductID" 1 01/05/18 31/12/49
+"" 554 "OrderProduct" "@version" "1" 2 01/05/18 31/12/49
+"" 554 "OrderProduct" "OrderProductID" "OrderProductID" 3 01/05/18 31/12/49
+"" 554 "OrderProduct" "OrderId" "OrderId" 4 01/05/18 31/12/49
+"" 554 "OrderProduct" "ActionType" "ActionType" 5 01/05/18 31/12/49
+"" 554 "OrderProduct" "ProductID" "ProductID" 6 01/05/18 31/12/49
+"" 554 "OrderProduct" "ProductOfferingID" "ProductOfferingID" 7 01/05/18 31/12/49
+"" 555 "OrderProductParam" "#KeyValue" "KeyValue" 1 01/05/18 31/12/49
+"" 555 "OrderProductParam" "@Version" "1" 2 01/05/18 31/12/49
+"" 555 "OrderProductParam" "OrderProductID" "OrderProductID" 3 01/05/18 31/12/49
+"" 555 "OrderProductParam" "ParamName" "ParamName" 4 01/05/18 31/12/49
+"" 555 "OrderProductParam" "ValueType" "ValueType" 5 01/05/18 31/12/49
+"" 555 "OrderProductParam" "DateValue" "DateValue" 6 01/05/18 31/12/49
+"" 555 "OrderProductParam" "CharValue" "CharValue" 7 01/05/18 31/12/49
+"" 555 "OrderProductParam" "IntValue" "IntValue" 8 01/05/18 31/12/49
+"" 555 "OrderProductParam" "DecValue" "DecValue" 9 01/05/18 31/12/49
+"" 555 "OrderProductParam" "OrderID" "OrderID" 10 01/05/18 31/12/49
