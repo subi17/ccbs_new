@@ -298,16 +298,32 @@ DO lii = 1 TO NUM-ENTRIES(lcDataFields):
             
          IF Customer.Language NE liLanguage THEN llCustomerChanged = TRUE.
       END.
+      ELSE IF lcField EQ "Profession" THEN DO:  /*APIBSS-174 */
+         lcc = get_string(pcstruct, lcField).
+        
+         IF lcc NE lcCustomerData[lii] THEN
+         DO:
+            IF NOT CAN-FIND(FIRST TMSCodes WHERE
+                                  TMSCodes.TableName = "OrderCustomer" AND
+                                  TMSCodes.FieldName = "Profession"    AND 
+                                  TMSCodes.InUse     = 1               AND 
+                                  TMSCodes.CodeValue = lcc NO-LOCK) THEN
+               RETURN appl_err(SUBST("Incorrect profession: &1", lcc)).
+            
+            lcCustomerData[lii] = lcc.
+            llCustomerChanged = TRUE.
+         END.
+      END.    
       ELSE DO:  
-        lcc = get_string(pcstruct, ENTRY(lii, lcDataFields)).
-        IF lcc NE lcCustomerData[lii] THEN DO:
+         lcc = get_string(pcstruct, ENTRY(lii, lcDataFields)).
+         IF lcc NE lcCustomerData[lii] THEN DO:
             /* Store id_type and person_id to CustContact table if
                corporate customer is used */
             IF LOOKUP(ENTRY(lii, lcDataFields),"id_type,person_id") > 0 AND
             Customer.CustIdType = "CIF" THEN NEXT.
             lcCustomerData[lii] = lcc.
             llCustomerChanged = TRUE.
-        END.
+         END.
       END.    
       
       IF gi_xmlrpc_error NE 0 THEN RETURN.
