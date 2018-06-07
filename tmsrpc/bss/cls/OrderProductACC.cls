@@ -90,11 +90,11 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF aoOrder:aoCustomer:CustNum EQ 0
       THEN UNDO, THROW NEW ParamError("donor_customer_has_to_exist").
 
-
       DEFINE VARIABLE lcSubType     AS CHARACTER        NO-UNDO.
       DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE loMemo        AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE lcReturnValue AS CHARACTER        NO-UNDO.
+      DEFINE VARIABLE lcReqSource   AS CHARACTER        NO-UNDO.
 
       ASSIGN
          loAttributes  = ioItemObject:GetJsonObject("attributes")
@@ -115,10 +115,17 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       IF lcReturnValue > ""
       THEN UNDO, THROW NEW InternalError(lcReturnValue).
 
+      IF aoOrder:OrderChannel = "newton"
+      THEN lcReqSource = {&REQUEST_SOURCE_NEWTON}.
+      ELSE IF aoOrder:OrderChannel = "retail_newton"
+      THEN lcReqSource = {&REQUEST_SOURCE_RETAIL_NEWTON}.
+      ELSE UNDO, THROW NEW ParamError
+                  (SUBSTITUTE("Invalid order channel|&1", aoOrder:OrderChannel)).
+
       lcReturnValue = Func.ValidateACC:mCheckSubscriptionForACC(aoOrder:MsSeq,
                                                                 0,
                                                                 0,
-                                                                {&REQUEST_SOURCE_NEWTON}).
+                                                                lcReqSource).
 
       IF lcReturnValue > ""
       THEN UNDO, THROW NEW InternalError(SUBSTRING(lcReturnValue,INDEX(lcReturnValue,"|") + 1)).
