@@ -259,7 +259,8 @@ PROCEDURE pSolog:
                               BufMobsub.Custnum,
                               "Fixed number termination failed",
                               lcResult).
-                  fReqError("Fixed number termination failed" + lcResult).                                 
+                  fReqError("Fixed number termination failed: " + lcResult).
+                  RETURN.
                END.       
             END.
          END.

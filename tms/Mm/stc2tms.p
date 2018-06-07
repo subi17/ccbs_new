@@ -230,7 +230,8 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
                              MobSub.CustNum,
                              "Fixed number termination failed",
                              lcResult).
-      fReqError("Fixed number termination failed: " +  lcResult).                                
+      fReqError("Fixed number termination failed: " +  lcResult).
+      RETURN.
    END.
    ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.     
 END.
