@@ -70,16 +70,14 @@ ASSIGN DumpFile.Brand           =     Syst.Var:gcBrand
        DumpFile.Active          =     YES
        .
        
-fCreateDumpFileds(INPUT "TMSRelationID", INPUT "KeyValue"      ,   INPUT 1 ).
-fCreateDumpFileds(INPUT "@Version"     , INPUT "1"             ,   INPUT 2 ).
-fCreateDumpFileds(INPUT "TMSRelationID", INPUT "TMSRelationID" ,   INPUT 3 ).
-fCreateDumpFileds(INPUT "TableName"    , INPUT "TableName"     ,   INPUT 4 ).
-fCreateDumpFileds(INPUT "KeyType"      , INPUT "KeyType"       ,   INPUT 5 ).
-fCreateDumpFileds(INPUT "ParentValue"  , INPUT "ParentValue"   ,   INPUT 6 ).
-fCreateDumpFileds(INPUT "ChildValue"   , INPUT "ChildValue"    ,   INPUT 7 ).
-fCreateDumpFileds(INPUT "RelationType" , INPUT "RelationType"  ,   INPUT 8 ).
-fCreateDumpFileds(INPUT "FromTime"     , INPUT "FromTime"      ,   INPUT 9 ).
-fCreateDumpFileds(INPUT "ToTime"       , INPUT "ToTime"        ,   INPUT 10).
+fCreateDumpFileds(INPUT "TMSRelationID", INPUT "TMSRelationID" ,   INPUT 1 ).
+fCreateDumpFileds(INPUT "TableName"    , INPUT "TableName"     ,   INPUT 2 ).
+fCreateDumpFileds(INPUT "KeyType"      , INPUT "KeyType"       ,   INPUT 3 ).
+fCreateDumpFileds(INPUT "ParentValue"  , INPUT "ParentValue"   ,   INPUT 4 ).
+fCreateDumpFileds(INPUT "ChildValue"   , INPUT "ChildValue"    ,   INPUT 5 ).
+fCreateDumpFileds(INPUT "RelationType" , INPUT "RelationType"  ,   INPUT 6 ).
+fCreateDumpFileds(INPUT "FromTime"     , INPUT "FromTime"      ,   INPUT 7 ).
+fCreateDumpFileds(INPUT "ToTime"       , INPUT "ToTime"        ,   INPUT 8 ).
 
 
 CREATE DumpHPD.
