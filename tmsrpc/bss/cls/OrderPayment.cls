@@ -88,13 +88,7 @@ CLASS bss.cls.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
                  THIS-OBJECT:PayerID  =  ioPaymentObject:GetCharacter("payer-id") WHEN ioPaymentObject:Has("payer-id")
                  THIS-OBJECT:PMethod  =  {&ORDERPAYMENT_M_PAYPAL}
                  .
-                 
-        OUTPUT TO "/home/komaddal/debug.txt" APPEND.
-        
-            EXPORT DELIMITER "," THIS-OBJECT:PayMethod THIS-OBJECT:PMethod.
-         
-        OUTPUT CLOSE.
-	        
+            
 	END.
 	
 	METHOD PUBLIC VOID mStoreData() :
