@@ -228,9 +228,9 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
       Func.Common:mWriteMemo("MobSub",
                              STRING(MSrequest.MsSeq),
                              MobSub.CustNum,
-                             "Fixed number termination failed",
+                             "La baja del sevicio fijo ha fallado: ", /* "Fixed number termination failed" */
                              lcResult).
-      fReqError("Fixed number termination failed: " +  lcResult).
+      fReqError("La baja del sevicio fijo ha fallado: " +  lcResult).
       RETURN.
    END.
    ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.     

@@ -257,9 +257,9 @@ PROCEDURE pSolog:
                   Func.Common:mWriteMemo("MobSub",
                               STRING(BufMobsub.MsSeq),
                               BufMobsub.Custnum,
-                              "Fixed number termination failed",
+                              "La baja del sevicio fijo ha fallado: ", /* Fixed number termination failed" */
                               lcResult).
-                  fReqError("Fixed number termination failed: " + lcResult).
+                  fReqError("La baja del sevicio fijo ha fallado: " + lcResult).
                   RETURN.
                END.       
             END.
