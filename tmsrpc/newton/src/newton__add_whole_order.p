@@ -2153,12 +2153,12 @@ IF lcFixedLinePermanency > "" THEN DO:
       END.
       ELSE DO:
          /* new rules YCO-515 / YCO-297 */
-         IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
+         IF lcFixedLinePermanency EQ "NEBTERM12-150" THEN
             lcAddFTERM = "FTERM12-150".
-         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
+         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-190" THEN
             lcAddFTERM = "FTERM12-190".
-         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
-            lcAddFTERM = "FTERM12-233".
+         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-283" THEN
+            lcAddFTERM = "FTERM12-283".
          ELSE lcAddFTERM = "".
  
       END.
