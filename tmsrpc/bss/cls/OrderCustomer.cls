@@ -239,11 +239,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
               AddressCodC = CustomerReport.StreetCode
               AddressCodP = CustomerReport.CityCode
               AddressCodM = CustomerReport.TownCode.
-      
-      IF NOT THIS-OBJECT:BankCode > ""  AND
-         aoOrder:PayType EQ FALSE 
-      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("bank_account_invalid|&1",
-                                      THIS-OBJECT:BankCode)).
 
    END METHOD.
 
@@ -356,11 +351,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
                                           THIS-OBJECT:OutPostMarketing   OR
                                           THIS-OBJECT:OperSMSMarketing   OR
                                           THIS-OBJECT:OutSMSMarketing.
-
-      IF NOT THIS-OBJECT:BankCode > ""  AND
-         aoOrder:PayType EQ FALSE 
-      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("bank_account_invalid|&1",
-                                      THIS-OBJECT:BankCode)).
 
       IF THIS-OBJECT:BankCode > "" AND
          NOT Func.BankAccount:mValid(THIS-OBJECT:BankCode)

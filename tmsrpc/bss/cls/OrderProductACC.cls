@@ -172,6 +172,11 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       /* OrderCustomer data will be updated from the customer property */
       IF loAttributes:Has("customer")
       THEN aoOrderCustomer:mCreateData(loAttributes:GetJsonObject("customer")).
+      
+      IF NOT aoOrderCustomer:BankCode > ""  AND
+         aoOrder:PayType EQ FALSE 
+      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("bank_account_invalid|&1",
+                                      aoOrderCustomer:BankCode)).
 
       IF loAttributes:Has("custnum")
       THEN DO:
