@@ -12,6 +12,7 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
 {Syst/eventval.i}
+{Func/lib/accesslog.i}
 
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
@@ -59,6 +60,7 @@ DEF VAR lcSurname1   AS CHAR                   NO-UNDO.
 DEF VAR lcFirstName  AS CHAR                   NO-UNDO.
 DEF VAR lcSurName2   AS CHAR                   NO-UNDO.
 DEF VAR lcCompany    AS CHAR                   NO-UNDO.
+DEF VAR llAccess     AS LOGICAL                NO-UNDO.
 
 form
     Customer.CustNum     /* COLUMN-LABEL FORMAT */
@@ -175,6 +177,7 @@ PrintPage:
 
         REPEAT WITH FRAME sel:
            IF AVAILABLE Customer THEN DO:
+              llAccess = TRUE.
               RUN local-disp-row.
               rtab[FRAME-LINE] = recid(Customer).
               RUN local-find-NEXT.
@@ -356,12 +359,14 @@ BROWSE:
      ELSE IF (LOOKUP(Syst.Var:nap,"2,f2") > 0 OR LOOKUP(Syst.Var:nap, "enter,return") > 0)
           AND lcRight = "RW" THEN DO:  
         RUN local-find-this (FALSE).
+        IF llAccess THEN
+           RUN CreateReadAccess("Mobsub",Syst.Var:katun,Customer.custnum). 
         IF icCriteria      = "ID" OR 
-           icCriteria      = "AGRNAME" THEN 
+           icCriteria      = "AGRNAME" THEN
            RUN Mm/mobsub.p(Customer.CustNum, "AGREEMENT").
         ELSE IF icCriteria = "UserName" THEN
            RUN Mm/mobsub.p(Customer.CustNum, "USER").
-        
+       
         ufkey = true.
                               
      END.

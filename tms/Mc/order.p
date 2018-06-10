@@ -93,7 +93,8 @@
                   28.08.07/aam ordertopup, 
                                Order.FatAmount
                   31.10.07 jp  new parameter for msrequest
-                  
+                  01.06.18     Func/lib/accesslog.i
+
   Version ......: yoigo
    ---------------------------------------------------------------------- */
 
@@ -121,6 +122,7 @@ DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 {Func/orderfunc.i}
 {Mnp/mnp.i}
 {Func/freacmobsub.i}
+{Func/lib/accesslog.i}
 
 session:system-alert-boxes = true.
 
@@ -1992,7 +1994,10 @@ PROCEDURE local-update-customer:
           lcCurrHeader = ac-hdr.
           
    CASE iiRole:
-      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN lcNewHeader = " AGREEMENT".
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
+            lcNewHeader = "AGREEMENT".
+            RUN CreateReadAccess(Syst.Var:katun,"Order", Order.CustNum).
+         END.
       WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
          IF Order.InvCustRole NE 2 THEN DO:
             MESSAGE "Invoice customer role is" Order.InvCustRole
