@@ -2107,6 +2107,10 @@
 1 "" 2 "Compra 1,5 GB" 0 "DSSMFUPS1" "1" 15/09/15 31/12/49
 1 "" 3 "1,5 GB-ren erosketa" 0 "DSSMFUPS1" "1" 15/09/15 31/12/49
 1 "" 5 "Buy 1.5 GB" 0 "DSSMFUPS1" "1" 15/09/15 31/12/49
+1 "" 1 "Descuento" 0 "DTERMPERIOD" "1" 31/05/18 31/12/49
+1 "" 2 "Descompte" 0 "DTERMPERIOD" "1" 31/05/18 31/12/49
+1 "" 3 "Deskontua" 0 "DTERMPERIOD" "1" 31/05/18 31/12/49
+1 "" 5 "Discount" 0 "DTERMPERIOD" "1" 31/05/18 31/12/49
 1 "" 1 "Internet" 0 "DUB" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "DUB" "1" 01/02/11 31/03/12
 1 "" 2 "Internet" 0 "DUB" "1" 01/04/12 31/12/49
@@ -11947,6 +11951,10 @@
 1 "" 3 "Llamadas Fuera de Tarifa" 0 "USONORAZONABLE" "1" 27/09/12 31/12/49
 1 "" 4 "Llamadas Fuera de Tarifa" 0 "USONORAZONABLE" "1" 27/09/12 31/12/49
 1 "" 5 "Llamadas Fuera de Tarifa" 0 "USONORAZONABLE" "1" 27/09/12 31/12/49
+1 "" 1 "Incumplimiento de Permanencia" 0 "UTERMPERIOD" "1" 01/06/18 31/12/49
+1 "" 2 "Incompliment de Permanència" 0 "UTERMPERIOD" "1" 01/06/18 31/12/49
+1 "" 3 "Iraupen-konpromisoa ez betetzea" 0 "UTERMPERIOD" "1" 01/06/18 31/12/49
+1 "" 5 "Failure to comply with Minimum Contract Period" 0 "UTERMPERIOD" "1" 01/06/18 31/12/49
 1 "" 1 "Multimedia Premium" 0 "VASMOMMS" "1" 01/04/12 31/12/49
 1 "" 1 "Premium MMS" 0 "VASMOMMS" "1" 01/01/06 31/03/12
 1 "" 2 "Multimèdia Premium" 0 "VASMOMMS" "1" 01/04/12 31/12/49
