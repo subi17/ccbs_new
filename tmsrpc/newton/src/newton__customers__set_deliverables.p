@@ -102,29 +102,44 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
       IF Customer.Email = "" THEN
          RETURN appl_err("Invoice delivery type to Email can not be " +
                          "changed since customer does not have email address").
-
-      /* If DelType is Email then set to Email Pending first and send
-         an email to customer to activate the email service */
-      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
-                                       INPUT TODAY,
-                                       INPUT Syst.Var:katun,
-                                       INPUT 0,
-                                       INPUT "",
-                                       INPUT Customer.Custnum,
-                                       INPUT {&REQUEST_SOURCE_NEWTON},
-                                       INPUT Customer.Email,
-                                       INPUT 0, /* msseq */
-                                       OUTPUT lcError).
-      IF liRequest = 0 THEN DO:
-         IF lcError = "Customer already has an active request" THEN .
-         ELSE RETURN appl_err("Invoice delivery type to Email can not be changed").
-      END. /* IF liRequest = 0 THEN DO: */
-
-      /* If Email already validated then mark DelType EMAIL */
-      IF liRequest = 1 THEN
-         Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
-      ELSE
-         Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}.
+      
+      /* APIBSS-188 There is no need to send any validation email when the
+      customer has already validated the email. In any other case, follow
+      the previous behaviour */
+      IF customer.email_validated <> 2 THEN
+      DO:
+         /* If DelType is Email then set to Email Pending first and send
+            an email to customer to activate the email service */
+         liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
+                                          INPUT TODAY,
+                                          INPUT Syst.Var:katun,
+                                          INPUT 0,
+                                          INPUT "",
+                                          INPUT Customer.Custnum,
+                                          INPUT {&REQUEST_SOURCE_NEWTON},
+                                          INPUT Customer.Email,
+                                          INPUT 0, /* msseq */
+                                          OUTPUT lcError).
+         IF liRequest = 0 THEN DO:
+            IF lcError = "Customer already has an active request" THEN .
+            ELSE RETURN appl_err("Invoice delivery type to Email can not be changed").
+         END. /* IF liRequest = 0 THEN DO: */
+         
+         /* If Email already validated then mark DelType EMAIL */
+         IF liRequest = 1 THEN
+            ASSIGN 
+               Customer.DelType = {&INV_DEL_TYPE_EMAIL}
+               /* APIBSS-188 It looks like this is only going to happen 
+                  if the customer is re-using a previously used email
+                  within TMS for postpaid.  2 = validated */
+               Customer.Email_validated = 2.
+         ELSE
+            ASSIGN 
+               Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}
+               /* APIBSS-188  Moved to 1 = not validated */
+               Customer.Email_validated = 1.
+      END.
+      
    END. /* IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO: */
    ELSE DO:
       Customer.DelType = liDelType.

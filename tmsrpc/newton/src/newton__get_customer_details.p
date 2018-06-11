@@ -45,6 +45,7 @@
        profession;string; customer profession
        site_name;string; employer company
        segment;string;customer segment
+       email_validated;integer;email validated flag
  * @company_contact title;string;
                     fname;string;
                     lname;string;
@@ -298,6 +299,9 @@ IF liActs >= liActLimit THEN
    add_boolean(top_struct,"activation_limit_reached",TRUE).
 ELSE
    add_boolean(top_struct,"activation_limit_reached",FALSE).
+
+/* APIBSS-188 adding email_validated */
+add_int(top_struct, "email_validated", Customer.email_validated).
 
 FINALLY:
    END.

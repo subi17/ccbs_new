@@ -2419,7 +2419,12 @@ PROCEDURE local-update-fin:
                       NEXT.
                   END. /* IF Customer.Email = "" THEN DO: */
 
-                  liRequest = fEmailInvoiceRequest(
+                  /* APIBSS-188 There is no need to send validation email if
+                     the customer has already the email validated. In any other 
+                     case, follow usual behaviour. */
+                  IF Customer.email_validated <> 2 THEN
+                  DO: 
+                     liRequest = fEmailInvoiceRequest(
                                        INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
                                        INPUT Syst.Var:katun,
@@ -2430,20 +2435,24 @@ PROCEDURE local-update-fin:
                                        INPUT Customer.Email,
                                        INPUT 0, /*orderid*/
                                        OUTPUT lcResult).
-                  IF liRequest = 0 THEN DO:
-                     IF lcResult = "Customer already has an active request" THEN .
-                     ELSE DO:
-                        MESSAGE "Invoice delivery type to Email " +
-                                "can not be changed: " + lcResult
-                        VIEW-AS ALERT-BOX ERROR.
-                        NEXT.
-                     END. /* ELSE DO: */
-                  END. /* IF liRequest = 0 THEN DO: */
+                     IF liRequest = 0 THEN DO:
+                        IF lcResult = "Customer already has an active request" THEN .
+                        ELSE DO:
+                           MESSAGE "Invoice delivery type to Email " +
+                                   "can not be changed: " + lcResult
+                           VIEW-AS ALERT-BOX ERROR.
+                           NEXT.
+                        END. /* ELSE DO: */
+                     END. /* IF liRequest = 0 THEN DO: */
                   
-                  /* If Email already validated then mark DelType EMAIL */
-                  IF liRequest NE 1 THEN ASSIGN
-                     Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}
-                     llUpdateDelType = FALSE.
+                     /* If Email already validated then mark DelType EMAIL */
+                     IF liRequest NE 1 THEN 
+                        ASSIGN
+                           Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}
+                           llUpdateDelType = FALSE
+                           /* APIBSS-188  Moved to 1 = not validated */
+                           Customer.Email_validated = 1.
+                  END.
                END. /* IF INPUT Customer.DelType = {&INV_DEL_TYPE_EMAIL} */
                ELSE IF (INPUT Customer.DelType = {&INV_DEL_TYPE_SMS} OR
                         INPUT Customer.DelType = {&INV_DEL_TYPE_ESI}) AND

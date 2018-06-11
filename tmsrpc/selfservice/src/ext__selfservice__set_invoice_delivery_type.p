@@ -96,55 +96,69 @@ IF Customer.DelType NE piDelType THEN DO:
    RUN StarEventInitialize(lhCustomer).
    RUN StarEventSetOldBuffer(lhCustomer).
 
-   /* If DelType is Email then set to Email Pending first and send 
-      an email to customer to activate the email service */
-   IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
-      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
-                                       INPUT TODAY,
-                                       INPUT Syst.Var:katun,
-                                       INPUT MobSub.MsSeq,
-                                       INPUT MobSub.CLI,
-                                       INPUT Mobsub.Custnum,
-                                       INPUT {&REQUEST_SOURCE_EXTERNAL_API},
-                                       INPUT Customer.Email,
-                                       INPUT 0, /* msseq */
-                                       OUTPUT lcResult).
-      IF liRequest = 0 THEN DO:
-         IF lcResult = "Customer already has an active request" THEN .
-         ELSE RETURN appl_err("Invoice delivery type to Email can not be changed").
-      END. /* IF liRequest = 0 THEN DO: */
+   /* APIBSS-188 There is no need to send any validation email when the
+      customer has already validated the email. In any other case, follow
+      the previous behaviour */
+   IF Customer.Email_validated <> 2 THEN 
+   DO:
+      /* If DelType is Email then set to Email Pending first and send 
+         an email to customer to activate the email service */
+      IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
+         liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
+                                          INPUT TODAY,
+                                          INPUT Syst.Var:katun,
+                                          INPUT MobSub.MsSeq,
+                                          INPUT MobSub.CLI,
+                                          INPUT Mobsub.Custnum,
+                                          INPUT {&REQUEST_SOURCE_EXTERNAL_API},
+                                          INPUT Customer.Email,
+                                          INPUT 0, /* msseq */
+                                          OUTPUT lcResult).
+         IF liRequest = 0 THEN DO:
+            IF lcResult = "Customer already has an active request" THEN .
+            ELSE RETURN appl_err("Invoice delivery type to Email can not be changed").
+         END. /* IF liRequest = 0 THEN DO: */
 
-      /* If Email already validated then mark DelType EMAIL */
-      IF liRequest = 1 THEN
-         Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
-      ELSE
-         Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}.
+         /* If Email already validated then mark DelType EMAIL */
+         IF liRequest = 1 THEN
+            ASSIGN 
+               Customer.DelType = {&INV_DEL_TYPE_EMAIL}
+               /* APIBSS-188 It looks like this is only going to happen 
+                  if the customer is re-using a previously used email
+                  within TMS for postpaid.  2 = validated */
+               Customer.Email_validated = 2.
+         ELSE
+            ASSIGN
+               Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}
+               /* APIBSS-188  Moved to 1 = not validated */
+               Customer.Email_validated = 1.
 
-   END. /* IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO: */
-   ELSE DO:
-      Customer.DelType = piDelType.
+      END. /* IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO: */
+      ELSE DO:
+         Customer.DelType = piDelType.
 
-      /* Cancel Ongoing Email Activation Request (if any) */
-      FIND FIRST InvoiceTargetGroup WHERE
-                 InvoiceTargetGroup.CustNum = Customer.CustNum AND
-                 InvoiceTargetGroup.ToDate >= TODAY AND
-                (InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} OR
-                 InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL})
-           NO-LOCK NO-ERROR.
-      IF NOT AVAIL InvoiceTargetGroup AND
-         fPendingEmailActRequest(INPUT Mobsub.Custnum) THEN
-         fCancelPendingEmailActRequest(INPUT Mobsub.Custnum,
-                                       INPUT "Invoice Delivery Type is " +
-                                       "changed to " + STRING(Customer.DelType)).
-      IF piDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN
-         FOR EACH MobSub WHERE
-                  MobSub.brand EQ Syst.Var:gcBrand AND
-                  Mobsub.custnum EQ Customer.Custnum NO-LOCK:
-            fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
-                           "InvDelivTypeChanged",Customer.Language,0,
-                           "622","").
-         END.         
-   END. /* ELSE DO: */
+         /* Cancel Ongoing Email Activation Request (if any) */
+         FIND FIRST InvoiceTargetGroup WHERE
+                    InvoiceTargetGroup.CustNum = Customer.CustNum AND
+                    InvoiceTargetGroup.ToDate >= TODAY AND
+                   (InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} OR
+                    InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL})
+              NO-LOCK NO-ERROR.
+         IF NOT AVAIL InvoiceTargetGroup AND
+            fPendingEmailActRequest(INPUT Mobsub.Custnum) THEN
+            fCancelPendingEmailActRequest(INPUT Mobsub.Custnum,
+                                          INPUT "Invoice Delivery Type is " +
+                                          "changed to " + STRING(Customer.DelType)).
+         IF piDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN
+            FOR EACH MobSub WHERE
+                     MobSub.brand EQ Syst.Var:gcBrand AND
+                     Mobsub.custnum EQ Customer.Custnum NO-LOCK:
+               fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
+                              "InvDelivTypeChanged",Customer.Language,0,
+                              "622","").
+            END.         
+       END. /* ELSE DO: */
+   END. /* IF Customer.Email_validated <> 2 THEN */
 
    FIND CURRENT Customer NO-LOCK.
    RUN StarEventMakeModifyEvent(lhCustomer).

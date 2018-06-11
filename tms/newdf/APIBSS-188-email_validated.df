@@ -5,6 +5,3 @@ ADD FIELD "Email_validated" OF "Customer" AS integer
   LABEL "Email validated"
   MAX-WIDTH 4
   HELP "0 = Unknown, 1 = Not validated, 2 = Validated"
-.
-PSC
-cpstream=ISO8859-1

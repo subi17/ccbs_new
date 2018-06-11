@@ -36,6 +36,7 @@ DEF VAR lcResult AS CHAR NO-UNDO.
 DEF VAR liRequest AS INT NO-UNDO. 
 DEF VAR lcEmailAddress AS CHAR NO-UNDO.
 DEF VAR lcMemo    AS CHAR  NO-UNDO. 
+DEF VAR liEmail_validated AS INT NO-UNDO. /* APIBSS-188 */
 
 ASSIGN lcMemo = "Agent" + CHR(255) + "TMS".
 
@@ -157,7 +158,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
          ELSE DO:
       
             IF Customer.Email NE INPUT Customer.Email THEN DO:
-               lcEmailAddress = INPUT Customer.Email.
+               ASSIGN 
+                  lcEmailAddress = INPUT Customer.Email
+                  liEmail_validated = 1.  /* APIBSS-188 1 = Not validated */
 
                IF Customer.DelType EQ {&INV_DEL_TYPE_EMAIL} OR
                   Customer.DelType EQ {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
@@ -188,7 +191,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
 
                   /* If Email already validated then mark DelType EMAIL */
                   IF liRequest = 1 THEN
-                     Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
+                     ASSIGN 
+                        Customer.DelType = {&INV_DEL_TYPE_EMAIL}
+                        /* APIBSS-188 It looks like this is only going to happen 
+                        if the customer is re-using a previously used email
+                        within TMS for postpaid.  2 = validated */
+                        liEmail_validated = 2.
                   ELSE
                      Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}.
                END.
@@ -243,7 +251,8 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
             ASSIGN
                Customer.Email
                Customer.SMSNumber
-               Customer.Phone.
+               Customer.Phone
+               Customer.Email_validated = liEmail_validated. /* APIBSS-188 */
             
             IF llDoEvent THEN 
                RUN StarEventMakeModifyEventWithMemo(lhCustomer, 

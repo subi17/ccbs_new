@@ -64,20 +64,28 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
 
    RELEASE bInvoiceTargetGroup.
 
+   /* APIBSS-188 There is no need to send any validation email when the
+      customer has already validated the email. In any other case, follow
+      the previous behaviour */
+      
    /* Send validation email to customer */
-   IF iiDelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} AND
-      NOT fPendingEmailActRequest(INPUT bCustomer.Custnum) THEN
-      fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
-                           INPUT TODAY,
-                           INPUT Syst.Var:katun,
-                           INPUT 0, /* msseq */
-                           INPUT "", /* cli */
-                           INPUT bCustomer.CustNum,
-                           INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
-                           INPUT bCustomer.Email,
-                           INPUT 0, /*orderid*/
-                           OUTPUT lcResult).
-
+   IF bCustomer.Email_validated <> 2 THEN 
+   DO:
+      IF iiDelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} AND
+         NOT fPendingEmailActRequest(INPUT bCustomer.Custnum) THEN
+         fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
+                              INPUT TODAY,
+                              INPUT Syst.Var:katun,
+                              INPUT 0, /* msseq */
+                              INPUT "", /* cli */
+                              INPUT bCustomer.CustNum,
+                              INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
+                              INPUT bCustomer.Email,
+                              INPUT 0, /*orderid*/
+                              OUTPUT lcResult).
+   END.
+   /* APIBSS-188 end */
+   
    RETURN liITGroupId.
 END FUNCTION. 
 

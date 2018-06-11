@@ -89,7 +89,9 @@ IF Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
    RUN StarEventInitialize(lhCustomer).
    RUN StarEventSetOldBuffer(lhCustomer).
 
-   Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
+   ASSIGN 
+      Customer.DelType = {&INV_DEL_TYPE_EMAIL}
+      Customer.Email_validated = 2.  /* APIBSS-188  2 = validated */
 
    FIND CURRENT Customer NO-LOCK.
    RUN StarEventMakeModifyEvent(lhCustomer).
