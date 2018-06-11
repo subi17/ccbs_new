@@ -192,7 +192,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                          FusionMessage.CreatedTS       = Func.Common:mMakeTS()
                          FusionMessage.UpdateTS        = FusionMessage.CreatedTS
                          FusionMessage.MessageType     = {&FUSIONMESSAGE_TYPE_CANCEL_APPOINTMENT}
-                         FusionMessage.MessageStatus   = {&FUSIONMESSAGE_STATUS_HANDLED}
+                         FusionMessage.MessageStatus   = {&FUSIONMESSAGE_STATUS_NEW}
                          FusionMessage.Source          = {&FUSIONMESSAGE_SOURCE_TMS}
                          FusionMessage.OrderType       = STRING(bfOrder.OrderType).
 

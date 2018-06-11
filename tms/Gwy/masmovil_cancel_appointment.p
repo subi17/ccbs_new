@@ -48,7 +48,7 @@ FIND FusionMessage EXCLUSIVE-LOCK WHERE
 IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_CANCEL_APPOINTMENT} THEN
    RETURN SUBST("Incorrect message type: &1", FusionMessage.MessageType).
 
-FIND Order EXCLUSIVE-LOCK WHERE
+FIND Order NO-LOCK WHERE
      Order.Brand   EQ Syst.Var:gcBrand      AND
      Order.OrderId EQ FusionMessage.OrderID NO-ERROR.
 
@@ -56,16 +56,16 @@ IF NOT AVAIL Order THEN
    RETURN SUBST("OrderId is not available: &1", FusionMessage.OrderId).
 
 ASSIGN
-   lcHost        = fCParam("Masmovil","cancelAppointmentHost")
-   liport        = fIparam("Masmovil","cancelAppointmentPort")
-   lcAuthType    = fCParam("Masmovil","cancelAppointmnetAuthType")
-   lcRealm       = fCParam("Masmovil","cancelAppointmentRealm")
-   lcUserId      = fCParam("Masmovil","cancelAppointmentUserId")
-   lcPassword    = fCParam("Masmovil","cancelAppointmentPass")
-   lcUriPath     = fCParam("Masmovil","cancelAppointmentUriPath")
+   lcHost        = fCParam("Masmovil","AppointmentHost")
+   liport        = fIparam("Masmovil","AppointmentPort")
+   lcAuthType    = fCParam("Masmovil","AppointmnetAuthType")
+   lcRealm       = fCParam("Masmovil","AppointmentRealm")
+   lcUserId      = fCParam("Masmovil","AppointmentUserId")
+   lcPassword    = fCParam("Masmovil","AppointmentPass")
+   lcUriPath     = fCParam("Masmovil","AppointmentUriPath")
    lcUriQuery    = ""
    lcUriQueryVal = ""
-   liLogRequest  = fIParam("Masmovil","cancelAppointmentLogRequest")
+   liLogRequest  = fIParam("Masmovil","AppointmentLogRequest")
    llLogRequest  = LOGICAL(liLogRequest)
    lcUriPath     = lcUriPath + SUBST("Y&1", Order.OrderID).
 
@@ -87,6 +87,9 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcUriQueryVal,
                            loRequestJson,
                            OUTPUT loResponseJson). 
+
+ASSIGN FusionMessage.UpdateTS      = Func.Common:mMakeTS()
+       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
 RETURN "".
 
