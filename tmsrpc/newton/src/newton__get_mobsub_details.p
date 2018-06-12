@@ -118,7 +118,6 @@ Syst.Var:gcBrand = "1".
 {Func/fcustpl.i}
 {Func/fixedfee.i}
 {Func/fctchange.i}
-{Mnp/mnpoutchk.i}
 {Func/multitenantfunc.i}
 
 ASSIGN
@@ -253,7 +252,8 @@ add_int(resp_struct, "mnp_available", liMNPOutExists).
 order_array = add_array(resp_struct,"orders").
 liMNPStatus = ?.
 FOR EACH Order NO-LOCK WHERE
-         Order.MsSeq = MobSub.MsSeq BY Order.CrStamp:
+         Order.MsSeq = MobSub.MsSeq AND
+         Order.OrderType <= {&ORDER_TYPE_STC} BY Order.CrStamp:
 
    order_struct = add_struct(order_array,"").
    add_int(order_struct,"id",Order.OrderId).
@@ -424,78 +424,105 @@ FIND FIRST PIndicator  WHERE
 IF AVAIL PIndicator THEN 
     add_string(resp_struct,"satisfaction_value",PIndicator.IndicatorValue) .
 
+IF fCLITypeIsExtraLine(MobSub.CLIType)
+THEN DO:
 
-IF MobSub.MultiSIMType > 0 AND
-   MobSub.MultiSIMID   > 0 THEN DO:
-
-   liMultiSIMType = (IF MobSub.MultiSIMType EQ {&MULTISIMTYPE_PRIMARY}
-                     THEN {&MULTISIMTYPE_SECONDARY} ELSE {&MULTISIMTYPE_PRIMARY}).
-  
-   /* Check if it Extra line hard associated subscription */
-   FIND FIRST lbELMobSub NO-LOCK  WHERE 
-              lbELMobSub.MsSeq        = MobSub.MultiSimId         AND 
-              lbELMobSub.MultiSimId   = MobSub.MsSeq              AND 
-              lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR. 
-              
-   FIND FIRST lbMLMobSub NO-LOCK  WHERE 
-              lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND 
-              lbMLMobSub.MultiSimId   = MobSub.MsSeq            AND 
-              lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR. 
+    FIND FIRST lbMLMobSub NO-LOCK  WHERE 
+               lbMLMobSub.Brand        = Syst.Var:gcBrand        AND
+               lbMLMobSub.CustNum      = MobSub.CustNum          AND 
+               lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND 
+              (lbMLMobSub.MsStatus     = {&MSSTATUS_ACTIVE}      OR
+               lbMLMobSub.MsStatus     = {&MSSTATUS_BARRED}) NO-ERROR.
    
-   FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-              lbMobSub.Brand        = Syst.Var:gcBrand           AND
-              lbMobSub.MultiSimID   = MobSub.MultiSimID AND
-              lbMobSub.MultiSimType = liMultiSIMType    AND
-              lbMobSub.Custnum      = MobSub.Custnum    NO-ERROR.
-   
-   IF AVAIL lbELMobSub THEN
-      ASSIGN 
-         liMultiSimTypeValue = {&MULTISIMTYPE_EXTRALINE}
-         lcMultiSimCLI       = lbELMobSub.CLI. 
-   ELSE IF AVAIL lbMLMobSub THEN
-      ASSIGN
+    IF AVAIL lbMLMobSub 
+    THEN ASSIGN
          liMultiSimTypeValue = {&MULTISIMTYPE_PRIMARY} 
-         lcMultiSimCLI       = lbMLMobSub.FixedNumber + " / " + lbMLMobSub.CLI. 
-   ELSE IF AVAIL lbMobSub THEN 
-      ASSIGN 
+         lcMultiSimCLI       = lbMLMobSub.FixedNumber + " / " + lbMLMobSub.CLI.
+         
+         
+    add_int(resp_struct,"multisim_type", liMultiSimTypeValue) .
+    add_string(resp_struct,"multisim_msisdn", lcMultiSimCLI).     
+     
+END.
+ELSE IF fCLITypeIsMainLine(MobSub.CLIType)
+THEN DO:
+     
+    FOR EACH lbELMobSub NO-LOCK WHERE
+             lbELMobSub.Brand        = Syst.Var:gcBrand        AND
+             lbELMobSub.CustNum      = MobSub.CustNum          AND
+             lbELMobSub.MultiSimId   = MobSub.MsSeq            AND 
+            (lbELMobSub.MsStatus     = {&MSSTATUS_ACTIVE}  OR
+             lbELMobSub.MsStatus     = {&MSSTATUS_BARRED})     AND
+             lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE} :
+             
+        ASSIGN  
+            liMultiSimTypeValue =   {&MULTISIMTYPE_EXTRALINE}
+            lcMultiSimCLI       =   lcMultiSimCLI + ";" + lbELMobSub.CLI .  
+           
+    END.
+    
+    ASSIGN lcMultiSimCLI = TRIM(lcMultiSimCLI,";") .   
+    
+    add_int(resp_struct,"multisim_type", liMultiSimTypeValue) .
+    add_string(resp_struct,"multisim_msisdn", lcMultiSimCLI).        
+        
+END.
+ELSE IF (MobSub.MultiSIMType > 0 AND
+         MobSub.MultiSIMID   > 0 AND
+         Mobsub.MultiSimType NE {&MULTISIMTYPE_EXTRALINE})  
+ THEN DO:
+    
+    liMultiSIMType = (IF MobSub.MultiSIMType EQ {&MULTISIMTYPE_PRIMARY} THEN {&MULTISIMTYPE_SECONDARY} ELSE {&MULTISIMTYPE_PRIMARY} ).
+    
+    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
+               lbMobSub.Brand        = Syst.Var:gcBrand  AND
+               lbMobSub.MultiSimID   = MobSub.MultiSimID AND
+               lbMobSub.MultiSimType = liMultiSIMType    AND
+               lbMobSub.Custnum      = MobSub.Custnum    NO-ERROR.     
+               
+    IF AVAIL lbMobSub  
+    THEN ASSIGN 
          liMultiSimTypeValue = MobSub.MultiSimType
          lcMultiSimCLI       = lbMobSub.CLI.
+         
+    add_int(resp_struct,"multisim_type", liMultiSimTypeValue) .
+    add_string(resp_struct,"multisim_msisdn", lcMultiSimCLI).  
+    
+    IF AVAIL lbMobSub THEN 
+    DO:
+        /* Return warning flag for secondary line */
+        IF MobSub.MultiSIMType = {&MULTISIMTYPE_PRIMARY} AND
+            NOT CAN-FIND (FIRST MsRequest WHERE
+            MsRequest.MsSeq   = lbMobSub.Msseq AND
+            MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+            LOOKUP(STRING(MsRequest.ReqStatus),
+            {&REQ_INACTIVE_STATUSES}) = 0) AND
+            NOT CAN-FIND (FIRST MsRequest WHERE
+            MsRequest.MsSeq   = lbMobSub.Msseq AND
+            MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+            LOOKUP(STRING(MsRequest.ReqStatus),
+            {&REQ_INACTIVE_STATUSES}) = 0) AND
+            NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
+            add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).
 
-   add_int(resp_struct,"multisim_type", liMultiSimTypeValue) .
-   add_string(resp_struct,"multisim_msisdn", lcMultiSimCLI).
-   
-   IF AVAIL lbMobSub THEN DO:
-      /* Return warning flag for secondary line */
-      IF MobSub.MultiSIMType = {&MULTISIMTYPE_PRIMARY} AND
-         NOT CAN-FIND (FIRST MsRequest WHERE
-             MsRequest.MsSeq   = lbMobSub.Msseq AND
-             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-             LOOKUP(STRING(MsRequest.ReqStatus),
-                    {&REQ_INACTIVE_STATUSES}) = 0) AND
-         NOT CAN-FIND (FIRST MsRequest WHERE
-             MsRequest.MsSeq   = lbMobSub.Msseq AND
-             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-             LOOKUP(STRING(MsRequest.ReqStatus),
-                    {&REQ_INACTIVE_STATUSES}) = 0) AND
-         NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
-         add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).
-
-      /* Return warning flag for secondary line if primary line outporting */
-      ELSE IF MobSub.MultiSIMType = {&MULTISIMTYPE_SECONDARY} AND
-         NOT CAN-FIND (FIRST MsRequest WHERE
-             MsRequest.MsSeq   = MobSub.Msseq AND
-             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-             LOOKUP(STRING(MsRequest.ReqStatus),
-                    {&REQ_INACTIVE_STATUSES}) = 0) AND
-         NOT CAN-FIND (FIRST MsRequest WHERE
-             MsRequest.MsSeq   = MobSub.Msseq AND
-             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-             LOOKUP(STRING(MsRequest.ReqStatus),
-                    {&REQ_INACTIVE_STATUSES}) = 0) AND
-         NOT fIsMNPOutOngoing(INPUT MobSub.CLI) AND
-         fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
-         add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).
-   END.
+        /* Return warning flag for secondary line if primary line outporting */
+        ELSE IF MobSub.MultiSIMType = {&MULTISIMTYPE_SECONDARY} AND
+                NOT CAN-FIND (FIRST MsRequest WHERE
+                MsRequest.MsSeq   = MobSub.Msseq AND
+                MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                LOOKUP(STRING(MsRequest.ReqStatus),
+                {&REQ_INACTIVE_STATUSES}) = 0) AND
+                NOT CAN-FIND (FIRST MsRequest WHERE
+                MsRequest.MsSeq   = MobSub.Msseq AND
+                MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                LOOKUP(STRING(MsRequest.ReqStatus),
+                {&REQ_INACTIVE_STATUSES}) = 0) AND
+                NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT MobSub.CLI) AND
+                Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN
+                add_boolean(resp_struct,"multisim_warning_for_secondary",TRUE).   
+         
+    END.            
+  
 END.
 
 FINALLY:

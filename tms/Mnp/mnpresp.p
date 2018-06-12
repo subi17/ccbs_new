@@ -335,7 +335,7 @@ PROCEDURE pHandleQueue:
 
          IF MessageBuf.MessageType = 
             "crearSolicitudIndividualAltaPortabilidadMovil" AND
-            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST,AREC CUPO1") > 0
+            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST,AREC CUPO1,AREC FMAYO") > 0
             THEN DO:
             
             IF lcResponseCode NE "AREC EXIST" OR 
@@ -565,7 +565,9 @@ PROCEDURE pHandleQueue:
 
             FIND CURRENT MNPDetails EXCLUSIVE-LOCK.
             IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER MNPDetails:HANDLE)).
-            MNPDetails.DonorCode = lcNewOper.
+            ASSIGN
+               MNPDetails.DonorCode = lcNewOper
+               MNPProcess.opercode = lcNewOper.
             IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER MNPDetails:HANDLE)).
             RELEASE MNPDetails.
          END.
@@ -869,7 +871,7 @@ PROCEDURE pHandleQueue:
                FIND FIRST MsRequest WHERE
                           MsRequest.MsSeq = Order.MsSeq AND
                           MsRequest.ReqType = ({&REQTYPE_SUBSCRIPTION_CREATE}) AND
-                          MsRequest.ReqStatus NE ({&REQUEST_STATUS_NEW})
+                          MsRequest.ReqStatus NE ({&REQUEST_STATUS_CANCELLED})
                     NO-LOCK NO-ERROR.
                IF AVAIL MsRequest THEN DO:
                   lcResponseDesc = "Cancellation failed, ongoing subscription request".
@@ -903,9 +905,7 @@ PROCEDURE pHandleQueue:
                                       FALSE,
                                       "RELEASE"). 
 
-            IF fCLITypeIsMainLine(Order.CLIType)       AND
-               Order.MultiSimId                  NE 0  AND
-               Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN
+            IF fCLITypeIsMainLine(Order.CLIType) THEN 
                fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
                                         "RELEASE").       /* Action              */
 

@@ -20,6 +20,21 @@ DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DMSStatusTS    AS DEC FORMAT "99999999.99999"
    FIELD Comment        AS CHAR.
 
+FUNCTION fChkDMSExists RETURNS LOGICAL
+   (icHostTable   AS CHARACTER,
+    iiHostID      AS INTEGER):
+
+   DEFINE BUFFER bDMS FOR DMS.
+
+   FIND FIRST bDMS NO-LOCK WHERE
+              bDMS.HostTable   = icHostTable  AND
+              bDMS.HostID      = iiHostID
+              NO-ERROR.
+
+   RETURN AVAILABLE(bDMS).
+
+END.
+
 FUNCTION fGetOrderStatusDMS RETURNS CHAR
    (icContractID AS CHAR):
    FIND FIRST DMS NO-LOCK WHERE
@@ -159,6 +174,13 @@ FUNCTION fIsHolder RETURNS LOGICAL
                          OrderCustomer.RowType = iiRowType).
 
 END FUNCTION.
+
+/* Function is used in customer category change documentation */
+/* If we see that there are need for changes a specific CPARAM will be added */
+FUNCTION fNeededDocsCategoryChange RETURNS CHAR
+():
+   RETURN "15".
+END.
 
 FUNCTION fNeededDocs RETURNS CHAR
    (BUFFER Order FOR Order):

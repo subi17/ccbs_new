@@ -28,6 +28,7 @@ DEF VAR pcInputArray AS CHAR NO-UNDO.
 
 DEF VAR pcStruct     AS CHAR NO-UNDO.
 DEF VAR pcServiceId  AS CHAR NO-UNDO.
+DEF VAR pcWebContractId AS CHAR NO-UNDO.
 DEF VAR pcValue      AS CHAR NO-UNDO.
 DEF VAR pcParam2     AS CHAR NO-UNDO.
 DEF VAR pcParamOffer AS CHAR NO-UNDO.
@@ -85,10 +86,12 @@ ASSIGN Syst.Var:katun = "Newton".
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
 
-   lcStruct = validate_request(pcStruct,"service_id!,value!,param,param2").
+   lcStruct = validate_request(pcStruct,"service_id!,contract_id,value!,param,param2").
    IF lcStruct EQ ? THEN RETURN.
 
    pcServiceId = get_string(pcStruct, "service_id").
+   IF LOOKUP("contract_id",lcStruct) > 0 THEN 
+      pcWebContractId = get_string(pcStruct, "contract_id").
    pcValue = get_string(pcStruct, "value").
 
    IF LOOKUP('param', lcStruct) GT 0 THEN
@@ -149,6 +152,8 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                IF lcErr NE "" THEN 
                    RETURN appl_err("SVA email request failure " + lcErr).
                */
+               FIND MsRequest WHERE MsRequest.MsRequest = liSVARequest EXCLUSIVE-LOCK NO-ERROR.
+               ASSIGN MsRequest.Memo = MsRequest.Memo + (IF MsRequest.Memo > "" THEN ", "  ELSE "") + "WebContractID=" + pcWebContractId.  
                CREATE Memo.
                ASSIGN
                    Memo.CreStamp  = {&nowTS}

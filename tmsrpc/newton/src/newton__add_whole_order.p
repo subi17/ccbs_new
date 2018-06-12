@@ -254,7 +254,6 @@ Syst.Var:katun = "NewtonRPC".
 {Func/terminaloffer.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
-{Mnp/mnpoutchk.i}
 {Func/create_eventlog.i}
 {Func/fmakemsreq.i}
 {Func/main_add_lines.i}
@@ -475,6 +474,19 @@ DEF TEMP-TABLE ttDiscount NO-UNDO
    FIELD discount_valid_periods AS INT
 INDEX discount_valid_periods IS PRIMARY discount_valid_periods. 
 
+DEFINE VARIABLE bundleExtraDataStruct  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcExtraDataStruct      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE office365Struct        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcoffice365Struct      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE cData                  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE faxtoEmailStruct       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcfaxtoEmailStruct     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcWebContractIds       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liEntry                AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcExtraDS              AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNumber          AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcAddFTERM             AS CHARACTER NO-UNDO.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
@@ -575,7 +587,7 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
          ASSIGN 
              pcBundleStruct = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt))
-             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id").
+             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id,contract_id").
 
          IF LOOKUP('bundle_id'     , lcBundleFields) GT 0 AND 
             LOOKUP('extra_offer_id', lcBundleFields) GT 0 THEN 
@@ -587,9 +599,61 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
                  pcAdditionalOfferList  = pcAdditionalOfferList                              + 
                                           (IF pcAdditionalOfferList <> "" THEN "," ELSE "")  + 
                                           get_string(pcBundleStruct, "extra_offer_id").
+             IF LOOKUP('contract_id',lcBundleFields) GT 0 THEN 
+                  lcWebContractIds = lcWebContractIds +
+                                     (IF LENGTH(lcWebContractIds) > 0 THEN "," ELSE "")  +
+                                     get_string(pcBundleStruct, "contract_id").
+             ELSE 
+                  lcWebContractIds = lcWebContractIds + 
+                                     (IF LENGTH(lcWebContractIds) > 0 THEN "," ELSE "  ") .
          END.                           
       END.
    END.
+
+    IF LOOKUP("bundle_extra_data",lcOrderStruct) > 0 THEN 
+    DO:
+        bundleExtraDataStruct = get_struct(pcOrderStruct , "bundle_extra_data").
+        lcExtraDataStruct     = validate_request(bundleExtraDataStruct, pcAdditionalBundleList).
+        DO liCount = 1 TO NUM-ENTRIES(lcExtraDataStruct):
+            lcExtraDS = ENTRY(liCount,lcExtraDataStruct).
+            CASE lcExtraDS:
+                WHEN 'OFFICE365' THEN DO:
+                    office365Struct    = get_struct(bundleExtraDataStruct , "OFFICE365").
+                    lcoffice365Struct  = validate_request(office365Struct, 'email!').
+                    liEntry            = LOOKUP('OFFICE365',pcAdditionalBundleList) .     
+                    cData = "".
+                    cData = "|" + get_string(office365Struct, "email").
+                    cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
+                    cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+                    ENTRY( liEntry , pcAdditionalOfferList ) = cData NO-ERROR.                     
+                END.
+                WHEN  'FAXTOEMAIL' THEN DO:
+                    faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
+                    lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number').    
+                    liEntry             = LOOKUP('FAXTOEMAIL',pcAdditionalBundleList) .     
+                    cData = "".
+                    /*Take fixed_number from field if available. 
+                      If not try to take from fusion data.
+                      If not available, try from mobsub. */
+                    IF LOOKUP('fixed_number', faxtoEmailStruct) > 0 THEN
+                       lcFixedNumber = get_string(faxtoEmailStruct, "fixed_number").
+                    IF lcFixedNumber = "" THEN lcFixedNumber = lcFixedLineNumber.
+                    IF lcFixedNumber = "" THEN DO:
+                       IF AVAIL MobSub AND 
+                                MobSub.FixedNumber NE ? AND 
+                                MobSub.FixedNumber NE "" THEN lcFixedNumber = MobSub.FixedNumber.
+                    END.
+
+                    
+                    cData = lcFixedNumber.
+                    cData = cData + "|" + get_string(faxtoEmailStruct, "email").
+                    cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
+                    cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+                    ENTRY( liEntry ,pcAdditionalOfferList ) = cData NO-ERROR.                     
+                END.
+            END CASE. 
+        END.        
+    END.
 
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
       pcMobsubBundleType = get_string(pcOrderStruct,"subscription_bundle").
@@ -807,7 +871,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             NOT plUpdate AND
             piMultiSimType NE {&MULTISIMTYPE_SECONDARY} THEN DO:
 
-            IF NOT fSubscriptionLimitCheck(
+            IF NOT Func.ValidateACC:mSubscriptionLimitCheck(
                lcIdOrderCustomer,
                lcIdTypeOrderCustomer,
                llSelfEmployed,
@@ -1335,6 +1399,7 @@ gcOrderStructFields = "brand!," +
                       "order_inspection_rule_id," +
                       "order_inspection_risk_code," + 
                       "additional_bundle," +
+                      "bundle_extra_data," + /* Ashok */ 
                       "subscription_bundle," +
                       "dss," +
                       "bono_voip," +
@@ -2073,10 +2138,35 @@ IF AVAIL AddLineDiscountPlan THEN DO:
 END.
 
 IF lcFixedLinePermanency > "" THEN DO:
-   fCreateOrderAction(Order.Orderid,
-                      "FixedPermanency",
-                      lcFixedLinePermanency,
-                      "").
+   /* NEBA / Wish is that WEB would tell both exactly in future */
+   IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
+      IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
+         lcAddFTERM = "FTERM12-110".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
+         lcAddFTERM = "FTERM12-187".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
+         lcAddFTERM = "FTERM12-243".
+      ELSE lcAddFTERM = "".
+
+      IF lcAddFTERM NE "" THEN /* Create FTERM */
+        fCreateOrderAction(Order.Orderid,
+                           "FixedPermanency",
+                           lcAddFTERM,
+                           "").
+      /* Entry for NEBTERM penalty */
+      fCreateOrderAction(Order.Orderid,
+                         "NebaPenalty",
+                         lcFixedLinePermanency,
+                         "").
+
+   END.
+   ELSE DO:
+      /* Normal Fixed Line Contract */
+      fCreateOrderAction(Order.Orderid,
+                         "FixedPermanency",
+                         lcFixedLinePermanency,
+                         "").
+   END.
 END.
 
 /* Extra line discount */
@@ -2207,7 +2297,7 @@ ELSE IF Order.statuscode NE "4" AND(
    /*YPR-5316*/
    (fIsConvergenceTariff(Order.Clitype) AND pcNumberType EQ "stc")) 
    AND
-   fIsMNPOutOngoing(INPUT Order.CLI) 
+   Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) 
    THEN DO:
 
    Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}.
@@ -2245,9 +2335,11 @@ ELSE IF Order.statuscode NE "4" THEN DO:
          OrderCustomer.RowType = 1 EXCLUSIVE-LOCK NO-ERROR.
 
       CASE Order.OrderChannel:
-         WHEN "renewal" OR WHEN "renewal_telesales" OR WHEN "retention" OR
+         WHEN "renewal" OR 
+         WHEN "renewal_telesales" OR 
+         WHEN "retention" OR
          WHEN "renewal_ctc" THEN DO:
-            IF fCheckRenewalData() = TRUE THEN
+            IF fCheckRenewalData(Order.Orderid) = TRUE THEN
                /* YBP-560 */
                Order.StatusCode = {&ORDER_STATUS_RENEWAL}.
             ELSE DO:
@@ -2481,8 +2573,12 @@ DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign AND LOOKUP(STRING(DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE}) + "," + 
-                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN 
-       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
+                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN DO:
+       IF ENTRY (liBundleCnt,lcWebContractIds) NE "" THEN
+           fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ( ENTRY(liBundleCnt,pcAdditionalOfferList)  + "|contract_id=" + ENTRY (liBundleCnt,lcWebContractIds) )  ).
+       ELSE 
+          fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
+   END.
    ELSE         
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.

@@ -119,7 +119,7 @@ PROCEDURE pRequestActions:
    BY RequestAction.Action DESC    /* terminations before activations */
    BY ttAction.ActionType
    BY ttAction.ActionKey:
- 
+
       /* additional rules defined */
       RUN pDoRulesAllow(liMsSeq,
                         icCLIType,

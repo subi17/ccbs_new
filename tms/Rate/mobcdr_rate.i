@@ -72,10 +72,21 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 1063 THEN b_CallType =  1.
       WHEN 1064 THEN b_CallType =  1.
       WHEN 1066 THEN DO: 
-         b_CallType =  1.
-         IF ttCall.BillDur <= 11     THEN b_callType = 23.
-         ELSE b_callType = 24.
-      END.   
+         IF ttCall.DateSt >= 05/09/2018 THEN DO: /* temporary 9.5.2018 */
+            /* YDR-2876 duration conditions changed 05/2018 */
+            IF ttCall.BillDur <= 20 THEN 
+                       b_callType = 23.
+            ELSE       b_callType = 24.
+            /* Temporary until network starts to cut CDRs / YTS-12982 */
+            IF ttCall.BillDur > 620 AND 
+               ttCall.GsmBnr BEGINS "118" THEN ttCall.BillDur = 620.
+         END.
+         ELSE DO: /* temporary, old functionality */
+            b_CallType =  1.
+            IF ttCall.BillDur <= 11 THEN b_callType = 23.
+            ELSE b_callType = 24.
+         END. /* temporary */
+      END.
       WHEN 1074 THEN b_CallType =  1.
       WHEN 1075 THEN b_CallType =  1.
       WHEN 1    THEN b_CallType =  4.
@@ -100,12 +111,22 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 97   THEN b_CallType =  10.
       WHEN 105  THEN b_CallType =  10.
       WHEN 106  THEN b_CallType =  10.
-      /* last category 22 is not needed anymore after 21.10.09 */
       WHEN 66 THEN DO:
-          IF       ttCall.BillDur <= 11     THEN b_callType = 20.
-          ELSE  IF ttCall.BillDur <= 70 OR
-                   ttCall.DateSt >= 10/21/9 THEN b_callType = 21.
-          ELSE                                   b_callType = 22.
+         IF ttCall.DateSt >= 05/09/2018 THEN DO: /* temporary 9.5.2018 */
+            /* YDR-2876 duration conditions changed */
+            IF ttCall.BillDur <= 20 THEN 
+                        b_callType =  20.
+            ELSE        b_callType =  21.
+            /* Temporary until network starts to cut CDRs / YTS-12982 */
+            IF ttCall.BillDur > 620 AND
+               ttCall.GsmBnr BEGINS "118" THEN ttCall.BillDur = 620.
+         END.   
+         ELSE DO: /* temporary, old functionality */
+             IF       ttCall.BillDur <= 11     THEN b_callType = 20.
+             ELSE  IF ttCall.BillDur <= 70 OR
+                      ttCall.DateSt >= 10/21/9 THEN b_callType = 21.
+             ELSE                                   b_callType = 22.
+         END. /* temporary */
       END.
       OTHERWISE      b_callType =   4.
    END.

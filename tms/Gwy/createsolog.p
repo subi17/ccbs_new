@@ -6,22 +6,30 @@
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
-DEF VAR ldActStamp AS DEC  NO-UNDO.
-DEF VAR liOffSet   AS INT  NO-UNDO.
-DEF VAR liReq AS INT NO-UNDO. 
-DEF VAR lcError AS CHAR NO-UNDO. 
-DEF VAR ldeCurrMonthLimit AS DEC NO-UNDO. 
-DEF VAR ldeConsumedData AS DEC NO-UNDO. 
-DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO. 
-DEF VAR lcDSSResult AS CHAR NO-UNDO. 
+DEF VAR ldActStamp                 AS DEC  NO-UNDO.
+DEF VAR liOffSet                   AS INT  NO-UNDO.
+DEF VAR liReq                      AS INT  NO-UNDO. 
+DEF VAR lcError                    AS CHAR NO-UNDO. 
+DEF VAR ldeCurrMonthLimit          AS DEC  NO-UNDO. 
+DEF VAR ldeConsumedData            AS DEC  NO-UNDO. 
+DEF VAR ldeOtherMonthLimit         AS DEC  NO-UNDO. 
+DEF VAR lcDSSResult                AS CHAR NO-UNDO. 
 DEF VAR lcALLPostpaidBundles       AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
+DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO. 
+DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO. 
+DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcDSSId AS CHARACTER NO-UNDO. 
 
 DEF BUFFER bbMsRequest FOR MSRequest.
+DEF BUFFER bDSSMobSub  FOR MobSub.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
 IF NOT AVAILABLE MsRequest THEN RETURN "ERROR".
+
+lcDependentErrMsg = "ERROR:Another request that this depends on has not been " + 
+                    "completed".
    
 IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} THEN DO:
 
@@ -54,13 +62,16 @@ IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
   IF AVAILABLE bbMsRequest AND
      LOOKUP(STRING(bbMsRequest.ReqStatus),
             {&REQ_INACTIVE_STATUSES} + ",3") = 0 THEN
-     RETURN "ERROR:Another request that this depends on has not been " +
-            "completed".
+     RETURN lcDependentErrMsg.
 END.
 
 /* Verify the criteria again and update ReqCParam2 */
 IF MsRequest.ReqType = {&REQTYPE_DSS} AND
    MsRequest.ReqCParam1 = "CREATE" THEN DO:
+
+   IF fOngoingDSSTerm(MsRequest.CustNum,
+                      Func.Common:mSecOffSet(MsRequest.ActStamp,180)) THEN 
+      RETURN lcDependentErrMsg.
 
    IF MsRequest.ReqIParam2 > 0 THEN DO:
       FIND FIRST bbMsRequest NO-LOCK WHERE 
@@ -68,8 +79,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
       IF AVAILABLE bbMsRequest AND 
          LOOKUP(STRING(bbMsRequest.ReqStatus),
                 {&REQ_INACTIVE_STATUSES} + ",3") = 0 THEN 
-         RETURN "ERROR:Another request that this depends on has not been " +
-                "completed".
+         RETURN lcDependentErrMsg.
    END. /* IF MsRequest.ReqIParam2 > 0 THEN DO: */
 
    ASSIGN lcALLPostpaidBundles = fCParamC("ALL_POSTPAID_CONTRACTS")
@@ -83,8 +93,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
             LOOKUP(bbMsRequest.ReqCParam3,lcALLPostpaidUPSELLBundles) > 0) AND
            LOOKUP(STRING(bbMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0
            USE-INDEX CustNum) THEN
-      RETURN "ERROR:Another request that this depends on has not been " +
-             "completed".
+      RETURN lcDependentErrMsg.
 
    IF CAN-FIND(FIRST bbMsRequest NO-LOCK WHERE
                     bbMsRequest.Brand   = Syst.Var:gcBrand AND
@@ -94,8 +103,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
                     bbMsRequest.ReqCparam2 = "DEFAULT" AND
            LOOKUP(STRING(bbMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0
            USE-INDEX CustNum) THEN
-      RETURN "ERROR:Another request that this depends on has not been " +
-             "completed".
+      RETURN lcDependentErrMsg.
 
    IF NOT fIsDSSAllowed(INPUT  MsRequest.CustNum,
                         INPUT  MsRequest.MsSeq,
@@ -120,6 +128,36 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE MsRequest THEN
          MsRequest.ReqCParam2 = lcDSSResult.
+   END.
+END.
+
+/* This is a hack this has to be removed after root cause fix */
+DO TRANSACTION:
+   IF MsRequest.ReqType    EQ {&REQTYPE_DSS} AND 
+      MsRequest.ReqCParam3 EQ ""             THEN DO:
+      
+      FIND FIRST bDSSMobSub NO-LOCK WHERE 
+                 bDSSMobSub.MsSeq EQ MsRequest.MsSeq NO-ERROR.
+
+      IF NOT AVAIL bDSSMobSub THEN 
+         RETURN "DSS subscription not available".
+
+      ASSIGN lcDSS2PrimarySubTypes = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+             lcDSS4PrimarySubTypes = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
+
+      IF LOOKUP(bDSSMobSub.CLIType,lcDSS4PrimarySubTypes) > 0 THEN 
+         lcDSSId = {&DSS4}.
+      ELSE IF LOOKUP(bDSSMobSub.CLIType,lcDSS2PrimarySubTypes) > 0 THEN  
+         lcDSSId = {&DSS2}.
+
+      IF lcDSSId > "" THEN DO:
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
+
+         IF AVAIL MsRequest THEN 
+            MsRequest.ReqCParam3 = lcDSSId.
+
+      END.
+
    END.
 END.
 
@@ -156,10 +194,12 @@ PROCEDURE pSolog:
 
    ELSE IF MsRequest.ReqCParam1 = "CREATE" THEN DO:
       
-      FIND FIRST BufOrder WHERE 
-                 BufOrder.MSSeq = MsreQuest.MsSeq AND
-                 BufOrder.OrderType NE 2
-      NO-LOCK NO-ERROR.
+      FOR EACH BufOrder NO-LOCK WHERE
+               BufOrder.MSSeq = MsreQuest.MSSeq AND
+               LOOKUP(STRING(BufOrder.OrderType),"0,1,3") > 0
+         BY BufOrder.CrStamp DESC:
+         LEAVE.
+      END.
 
       IF NOT AVAILABLE bufOrder THEN DO:
          fReqError("Order Subscription not found").

@@ -13,7 +13,7 @@
 &THEN
 
 &GLOBAL-DEFINE digital_signature YES
-&GLOBAL-DEFINE DIGITAL_SIGNATURE_EXCLUDED_STATUSES "7,8,9,20,21,41,42,43,44"
+
 {Mc/offer.i}
 
 /*
@@ -45,6 +45,11 @@ FUNCTION fHandleSignature RETURNS CHAR
    IF NOT AVAIL bOrder THEN
       RETURN "Error".
 
+   IF bOrder.OrderType NE {&ORDER_TYPE_NEW} AND
+      bOrder.OrderType NE {&ORDER_TYPE_MNP} AND
+      bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} AND
+      bOrder.OrderType NE {&ORDER_TYPE_STC} THEN RETURN "Unsupported order type".
+
    /* Check that we are handling Tienda or Telesales order */
    
    IF /* bOrder.Logistics NE "" AND*/
@@ -66,7 +71,8 @@ FUNCTION fHandleSignature RETURNS CHAR
 
    /* Process ActionLog */
    ASSIGN
-      lcExcludedDSStatuses = {&DIGITAL_SIGNATURE_EXCLUDED_STATUSES}.
+      /* logic changed and using excluded statuses now */
+      lcExcludedDSStatuses = fCParam("SignatureApi", "ExcludedStatuses").
 
    IF LOOKUP(icStatus, lcExcludedDSStatuses) = 0 THEN
       lcActionID = "dssent".

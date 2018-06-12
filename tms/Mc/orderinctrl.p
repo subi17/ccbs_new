@@ -8,7 +8,6 @@
 {Func/forderstamp.i}
 {Func/orderchk.i}
 {Func/orderfunc.i}
-{Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
 {Func/profunc.i}
 {Func/main_add_lines.i}
@@ -99,15 +98,16 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrder).
 END.               
       
-FIND FIRST OrderCustomer WHERE
-   OrderCustomer.Brand = Syst.Var:gcBrand AND
-   OrderCustomer.OrderId = Order.OrderId AND
-   OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+FIND OrderCustomer WHERE
+     OrderCustomer.Brand = Syst.Var:gcBrand AND
+     OrderCustomer.OrderId = Order.OrderId AND
+     OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
-llCompanyScoringNeeded = 
-   (Order.CREventQty = 0 AND 
-   Order.CredOk = FALSE AND
-   OrderCustomer.CustidType = "CIF").
+IF AVAIL OrderCustomer THEN
+   llCompanyScoringNeeded = 
+      (Order.CREventQty = 0 AND 
+      Order.CredOk = FALSE AND
+      OrderCustomer.CustidType = "CIF").
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 
@@ -161,7 +161,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
     Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT})  AND /* shouldn't never get this value because of YDR-2575 */
     Order.OrderType  EQ {&ORDER_TYPE_STC}           AND
-    fIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
+    Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
 
    IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP_RETENTION}).
@@ -343,7 +343,7 @@ END.
 
 /* MNP Retention Project */
 IF Order.OrderChannel BEGINS "retention" AND
-   fIsMNPOutOngoing(INPUT Order.CLI) THEN DO:
+   Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT Order.CLI) THEN DO:
    lcNewStatus = {&ORDER_STATUS_MNP_RETENTION}.
 END. /* IF Order.statuscode NE "4" AND */
 
@@ -358,7 +358,8 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
       WHEN "renewal_telesales" OR
       WHEN "retention" OR
       WHEN "renewal_ctc" THEN DO:
-         IF fCheckRenewalData() = TRUE OR OrderCustomer.DataChecked NE ? THEN
+         IF fCheckRenewalData(Order.OrderID) = TRUE OR 
+            OrderCustomer.DataChecked NE ? THEN
             lcNewStatus =  {&ORDER_STATUS_RENEWAL}.
          ELSE DO:
 
@@ -426,31 +427,14 @@ IF llDoEvent THEN DO:
    fCleanEventObjects().
 END.
 
-/* Release pending additional lines (OR) extra line orders, 
-   in case of pending convergent or mobile main line order is released */
+/* Release pending additional lines, in case of pending convergent 
+   or mobile main line order is released */
 /* YTS-10832 fix, checking correct status of order */
-IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
-   lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
-   lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+IF LOOKUP(STRING(Order.OrderType),"0,1,3,4") > 0 AND
+   (lcNewStatus = {&ORDER_STATUS_NEW}                 OR
+    lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
+    lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE}) THEN DO:
   
-   /*-----------------------------------------------------------
-     New rule for extralines (29/12/2017):
-     A subscription type with "La Duo" is released once mobile 
-     part order of the Convergent product has been delivered.
-     https://kethor.qvantel.com/browse/DIAM-76
-     So, this code is moved to Mm/createmobsub.p.  
-   
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
-
-   IF lcExtraMainLineCLITypes                       NE "" AND 
-      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
-      Order.MultiSimId                              NE 0  AND 
-      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
-      fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                               Order.OrderId,    /* Main line Order Id  */
-                               "RELEASE").       /* Action              */
-   -----------------------------------------------------------*/    
-
    fActionOnAdditionalLines (OrderCustomer.CustIdType,
                              OrderCustomer.CustID,
                              Order.CLIType,      
