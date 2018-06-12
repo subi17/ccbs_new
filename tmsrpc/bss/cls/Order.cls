@@ -66,10 +66,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          THEN DO:
             IF CAN-FIND(TermMobSub NO-LOCK WHERE TermMobSub.MSSeq = iiMSSeq)
             THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("subscription_not_active|&1", iiMSSeq)).
+                  (SUBSTITUTE("subscription-not-active|&1", iiMSSeq)).
 
             UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("subscription_not_found|&1", iiMSSeq)).
+                  (SUBSTITUTE("subscription-not-found|&1", iiMSSeq)).
          END.
          ASSIGN
             THIS-OBJECT:MsSeq         = iiMSSeq
@@ -123,7 +123,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
       END.
-      ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
+      ELSE UNDO, THROW NEW ParamError("order-items-are-mandatory").
 
 	END METHOD.
 
