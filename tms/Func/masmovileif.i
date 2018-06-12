@@ -108,6 +108,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR ldaCreDate AS DATE NO-UNDO.
    DEF VAR lcLastName AS CHAR NO-UNDO.
    DEF VAR lcCategory AS CHAR NO-UNDO.
+   DEF VAR lcGescalValue AS CHAR NO-UNDO. 
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
@@ -415,9 +416,14 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
    END.
 
+   IF LENGTH(OrderCustomer.Gescal) < 37 THEN
+      lcGescalValue = OrderCustomer.Gescal + FILL(" ",(37 - LENGTH(OrderCustomer.Gescal))).
+   ELSE 
+      lcGescalValue = OrderCustomer.Gescal.
+
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
                       "gescal",               /*param name*/
-                      OrderCustomer.Gescal,             /*param value*/
+                      lcGescalValue,          /*param value*/
                       "").                    /*old value*/
 
    IF gi_xmlrpc_error NE 0 THEN
