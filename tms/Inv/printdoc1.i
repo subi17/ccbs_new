@@ -206,12 +206,13 @@ DEF BUFFER bttRow FOR ttRow.
 
 /*
    Function can be used to print test logs.
+   Set path below.
 */
 FUNCTION fTestLog RETURN LOG(
    icLogText AS CHAR):
  
    IF liWrites EQ 0 THEN
-      OUTPUT STREAM sTestLog TO VALUE("/your_path_here/testlog.txt") APPEND.
+      OUTPUT STREAM sTestLog TO VALUE("./testlog.txt") APPEND.
  
    liWrites = liWrites + 1.
  
@@ -912,10 +913,10 @@ PROCEDURE pGetSubInvoiceHeaderData:
              ttSub.FixedNumber = SubInvoice.FixedNumber
              ttSub.MsSeq       = SubInvoice.MsSeq. 
       
-      fTestLog(
+      /* fTestLog(
          "FOR EACH Begin..." +
          " ttSub.CLI:" + STRING(ttSub.CLI) +
-         " ttSub.FixedNum:" + ttSub.FixedNumber).
+         " ttSub.FixedNum:" + ttSub.FixedNumber).*/
       /*NEBACO-7*/
       /*Find IUA for the subscription*/
       IF ttSub.FixedNumber NE "" AND ttSub.FixedNumber NE ? THEN DO:
@@ -1500,16 +1501,14 @@ PROCEDURE pGetInvoiceRowData:
                bttRow.RowAmt    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmt).
          END.
       END.
-      fTestLog(
-       "EACH SubInvoice end" +
-       "SubInvoice.InvNum: " + STRING(SubInvoice.InvNum) +
-       "SubInvoice.SubInvNum: " + STRING(SubInvoice.SubInvNum) +
-       "SubInvoice.AmtExclVat: " + STRING(SubInvoice.AmtExclVat) +
-       "SubInvoice.InvAmt: " + STRING(SubInvoice.InvAmt) +
-       "SubInvoice.CLI : " + SubInvoice.CLI +
-       "SubInvoice.FixedNumber : " + SubInvoice.FixedNumber).
-
-
+      /* fTestLog(
+         "EACH SubInvoice end..." +
+         " SubInvoice.InvNum: " + STRING(SubInvoice.InvNum) +
+         " SubInvoice.SubInvNum: " + STRING(SubInvoice.SubInvNum) +
+         " SubInvoice.AmtExclVat: " + STRING(SubInvoice.AmtExclVat) +
+         " SubInvoice.InvAmt: " + STRING(SubInvoice.InvAmt) +
+         " SubInvoice.CLI : " + SubInvoice.CLI +
+         " SubInvoice.FixedNumber : " + SubInvoice.FixedNumber).*/
    END.
 
    RETURN "".

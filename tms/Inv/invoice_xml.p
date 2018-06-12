@@ -953,11 +953,6 @@ PROCEDURE pSubInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.SubscriptionTotal + ttSub.Discounts)). /* Discount is negative, so added here */
       lhXML:END-ELEMENT("TotalCategory").
 
-      lhXML:START-ELEMENT("TotalCategory").
-         /* lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttRow.SubTotal)).*/
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.SubscriptionTotal)).
-      lhXML:END-ELEMENT("TotalCategory").
-
       RUN pCollectCDR(SubInvoice.InvSeq,
                       INPUT-OUTPUT llPremiumNumberText,
                       INPUT-OUTPUT llGBText).
