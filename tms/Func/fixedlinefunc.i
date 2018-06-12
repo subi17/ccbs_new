@@ -805,7 +805,7 @@ FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
    DEFINE VARIABLE loJsonConstruct AS CLASS Progress.Json.ObjectModel.JsonConstruct     NO-UNDO.
    DEFINE VARIABLE lii             AS INTEGER         NO-UNDO.
    DEFINE VARIABLE lcError         AS CHARACTER       NO-UNDO.
-/*
+
    DO ON ERROR UNDO, THROW:
 
       objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
@@ -857,7 +857,6 @@ FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
       END FINALLY.
 
    END.
-*/
    RETURN "".
 
 END FUNCTION.
