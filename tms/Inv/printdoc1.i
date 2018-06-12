@@ -98,7 +98,6 @@ DEF TEMP-TABLE ttRow NO-UNDO
    FIELD RowToDate     AS DATE
    FIELD VoiceLimit    AS INT
    FIELD DataLimit     AS INT
-   FIELD SubTotal      AS DEC /* YDR-2848 */
    INDEX RowCode SubInvNum RowCode
    INDEX RowName SubInvNum RowName RowGroup.
 
@@ -205,19 +204,20 @@ DEFINE TEMP-TABLE ttMSOwner NO-UNDO
 
 DEF BUFFER bttRow FOR ttRow.
 
-
+/*
+   Function can be used to print test logs.
+*/
 FUNCTION fTestLog RETURN LOG(
    icLogText AS CHAR):
-          
-   IF liWrites EQ 0 THEN 
-      OUTPUT STREAM sTestLog TO VALUE("/home/kahannul/ydr_2848_testlog.txt") APPEND.
-                         
+ 
+   IF liWrites EQ 0 THEN
+      OUTPUT STREAM sTestLog TO VALUE("/your_path_here/testlog.txt") APPEND.
+ 
    liWrites = liWrites + 1.
-
+ 
    PUT STREAM sTestLog UNFORMATTED
       Func.Common:mTS2HMS(Func.Common:mMakeTS()) ":" icLogText skip.
 END.
-
 
 FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
@@ -1157,18 +1157,18 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
-      fTestLog(
+      /* fTestLog(
          "ttSub..." +
          " ttSub.CLI:" + STRING(ttSub.CLI) +
          " ttSub.CliType:" + STRING(ttSub.CliType) +
          " ttSub.CTName:" + STRING(ttSub.CTName) +
          " ttSub.OldCliType:" + STRING(ttSub.OldCliType) +
-         " ttSub.OldCTName:" + STRING(ttSub.OldCTName)).
+         " ttSub.OldCTName:" + STRING(ttSub.OldCTName)). */
 
       FOR EACH ttRow WHERE
                ttRow.SubInvNum = SubInvoice.SubInvNum NO-LOCK:
 
-         fTestLog(
+         /* fTestLog(
          "ttRow.SubInvNum:" + STRING(ttRow.SubInvNum) +
          " RowType:" + ttRow.RowType +
          " RowCode:" + ttRow.RowCode +
@@ -1176,9 +1176,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
          " RowName:" + ttRow.RowName +
          " RowAmtEclVat:" + STRING(ttRow.RowAmtExclVat) +
          " RowVatAmt:" + STRING(ttRow.RowVatAmt) +
-         " RowAmt:" + STRING(ttRow.RowAmt) +
-         " SubTotal:" + STRING(ttRow.SubTotal)).
-         
+         " RowAmt:" + STRING(ttRow.RowAmt)).*/
 
          /*Google billing*/
          IF ttRow.RowCode BEGINS "44" THEN
@@ -1190,48 +1188,36 @@ PROCEDURE pGetSubInvoiceHeaderData:
          /* YDR-2848 The sum of the discounts applied to the line */
          IF ttRow.RowCode BEGINS "13" AND
             ttRow.RowGroup  = "13" THEN DO:
-            ttSub.Discounts = ttSub.Discounts + ttRow.RowAmt.
+            ttSub.Discounts = ttSub.Discounts + ttRow.RowAmtExclVat. /* ttRow.RowAmt.*/
             /* Check phone discounts */
             IF ttSub.InstallmentAmt > 0 THEN
                IF LOOKUP(ttRow.RowBillCode,{&INSTALLMENT_DISCOUNT_BILLCODES}) > 0 THEN
                   ttSub.InstallmentDiscAmt = ttSub.InstallmentDiscAmt + ttRow.RowAmt.
          END.
 
-         /* YDR-2848 The sum of the charges applied to the line */
-         IF ttRow.RowCode BEGINS "31" THEN DO:
-            ttSub.Charges = ttSub.Charges + ttRow.RowAmt.
-            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
-         END.
-      
-         /* YDR-2848 Sum of amount due to bundles of data and data upsells */
-         IF (ttRow.RowCode BEGINS "35" OR
-             ttRow.RowCode BEGINS "37" OR
-             ttRow.RowCode BEGINS "39" OR
-             ttRow.RowCode BEGINS "40" OR
-             ttRow.RowCode BEGINS "42") THEN DO:
-            ttSub.Bundles = ttSub.Bundles + ttRow.RowAmt.
-            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
-         END.
-      
+          /* YDR-2848 The sum of the charges applied to the line */
+          IF ttRow.RowCode BEGINS "31" THEN DO:
+             ttSub.Charges = ttSub.Charges + ttRow.RowAmtExclVat.
+             ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
+          END.
+
+          /* YDR-2848 Sum of amount due to bundles of data and data upsells */
+          IF ttRow.RowGroup EQ "3" AND ttRow.Rowname EQ "INTERNET" THEN DO:
+             ttSub.Bundles = ttSub.Bundles + ttRow.RowAmtExclVat.
+             ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
+          END.
+ 
          /* YDR-2848 The sum of outgoings that aren.t included in the 
             tariff fee: SMS, MMS, international calls, AgileTV etc. */
          IF ttRow.RowCode BEGINS "55" THEN DO:
-            ttSub.Others = ttSub.Others + ttRow.RowAmt.
+            ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
             ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
          END.
 
          /* YDR-2848 Subscription level TOTAL sum */
-         ttRow.SubTotal = ttRow.SubTotal + ttRow.RowAmt.
          IF ttRow.RowCode BEGINS "18" OR
             ttRow.RowCode BEGINS "46" THEN
             ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
-            
-         /* ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.*/
-         
-         fTestLog(
-         " ttRow.SubTotal 2:" + STRING(ttRow.SubTotal) +
-         " ttRow.RowCode:" + STRING(ttRow.RowCode) +
-         " ttSub.SubsTotal:" + STRING(ttSub.SubscriptionTotal)).
 
          /* ttRows contains combined invrows => no need to check duplicates */
          IF ttRow.RowCode BEGINS "33" AND
@@ -1264,29 +1250,18 @@ PROCEDURE pGetSubInvoiceHeaderData:
          END.
       END.
 
-      fTestLog("ttSub.CLI:" + ttSub.CLI + 
-      " FixedNumber:" + ttSub.FixedNumber +
-      " CliTYpe:" + ttSub.CliType +
-      " CTName: " + ttSub.CTName +
-      " MsSeq:" + STRING(ttSub.MsSeq) +
-      " InstallmentAmt:" + STRING(ttSub.InstallmentAmt) +
-      " PenaltyAmt: " + STRING(ttSub.PenaltyAmt) +
-      " RowAmt:" + STRING(ttRow.RowAmt) +
-      " InstallmentDiscAmt:" + STRING(ttSub.InstallmentDiscAmt) +
-      " OldCLIType: " + ttSub.OldCLIType +
-      " OldCTName: " + ttSub.OldCTName +
-      " SubscriptionTotal: " + STRING(ttSub.SubscriptionTotal)).
+      /* fTestLog("ttSub.CLI:" + ttSub.CLI + 
+               " FixedNumber:" + ttSub.FixedNumber +
+               " CliTYpe:" + ttSub.CliType +
+               " CTName: " + ttSub.CTName +
+               " MsSeq:" + STRING(ttSub.MsSeq) +
+               " InstallmentAmt:" + STRING(ttSub.InstallmentAmt) +
+               " PenaltyAmt: " + STRING(ttSub.PenaltyAmt) +
+               " InstallmentDiscAmt:" + STRING(ttSub.InstallmentDiscAmt) +
+               " OldCLIType: " + ttSub.OldCLIType +
+               " OldCTName: " + ttSub.OldCTName +
+               " SubscriptionTotal: " + STRING(ttSub.SubscriptionTotal)).*/
 
-      /*
-      IF ttSub.InstallmentAmt > 0 THEN
-         FOR EACH ttRow NO-LOCK WHERE 
-                  ttRow.SubInvNum = SubInvoice.SubInvNum AND 
-                  ttRow.RowCode BEGINS "13" AND
-                  ttRow.RowGroup  = "13" AND
-                  LOOKUP(ttRow.RowBillCode,{&INSTALLMENT_DISCOUNT_BILLCODES}) > 0:
-            ttSub.InstallmentDiscAmt = ttSub.InstallmentDiscAmt + ttRow.RowAmt.
-         END.              
-      */
       IF llPTFinancedByBank THEN 
          fTFBankFooterText("PAYTERM"). 
       IF llRVFinancedByBank THEN
@@ -1442,33 +1417,6 @@ PROCEDURE pGetInvoiceRowData:
                     ttRow.SubInvNum = InvRow.SubInvNum AND
                     ttRow.RowCode   = lcRowCode NO-ERROR.
 
-         /* YDR-2848 - To group the fee of 3p tariff in only one concept.
-            Add all convergent tariff data under same BillingItem */
-         IF NOT AVAIL ttRow AND
-                     (ttBillItemAndGroup.BiGroup EQ "18" OR
-                      ttBillItemAndGroup.BiGroup EQ "46") THEN DO:
-            FIND FIRST ttRow WHERE
-                       ttRow.SubInvNum = InvRow.SubInvNum AND
-                      /* ttRow.RowName   = lcRowName AND */
-                      (ttRow.RowGroup EQ "18" OR
-                       ttRow.RowGroup EQ "46") NO-ERROR.
-
-      fTestLog(
-       " HERE WE GO:" +
-       " ttRow.RowGroup:" + ttRow.RowGroup + 
-       " ttRow.RowCode" + ttRow.RowCode).
-
-            IF AVAIL ttRow AND ttRow.RowGroup EQ "46" THEN DO: /* 30.5. returned back "18"--> 46 */
-               ASSIGN /* Use 46 as defaulf for convergent tariff */
-                  ttRow.RowCode  = STRING(ttBillItemAndGroup.BiGroup) + lcRowName
-                  ttRow.RowGroup = ttBillItemAndGroup.BIGroup.
-                 fTestLog(
-                     " HERE WE GO_2:" +
-                     " ttRow.RowGroup:" + ttRow.RowGroup + 
-                     " ttRow.RowCode" + ttRow.RowCode).
-            END.
-         END.
-
          IF NOT AVAILABLE ttRow THEN DO:
       
             CREATE ttRow.
@@ -1479,6 +1427,14 @@ PROCEDURE pGetInvoiceRowData:
                liRowOrder       = liRowOrder + 2
                ttRow.RowOrder   = liRowOrder
                ttRow.GroupOrder = ttBillItemAndGroup.GroupOrder.
+
+            /* fTestLog(
+               "CREATE ttRow..." +
+               " ttRow.RowGroup:" + STRING(ttRow.RowGroup) +
+               " ttRow.RowCode:" + STRING(ttRow.RowCode) +
+               " ttRow.RowOrder:" + STRING(ttRow.RowOrder) +
+               " ttRow.RowQty:" + STRING(ttRow.RowQty) +
+               " InvRow.Qty:" + STRING(InvRow.Qty)).*/
          END.
 
          ASSIGN 
@@ -1491,8 +1447,19 @@ PROCEDURE pGetInvoiceRowData:
             ttRow.RowDur        = ttRow.RowDur + InvRow.Min
             ttRow.RowBillCode   = ttBillItemAndGroup.BillCode
             ttRow.RowName       = lcRowName
-            ttRow.RowToDate     = InvRow.ToDate.  
+            ttRow.RowToDate     = InvRow.ToDate.
+
+         /* YDR-2848 -  group the fee of 3p tariff in only one concept*/
+         IF ttRow.RowGroup EQ "46" THEN ttRow.RowGroup = "18".
       END.
+
+      /* fTestLog(
+          "After CREATE ttRow..." +
+          " ttRow.RowGroup:" + STRING(ttRow.RowGroup) +
+          " ttRow.RowCode:" + STRING(ttRow.RowCode) +
+          " ttRow.RowOrder:" + STRING(ttRow.RowOrder) +
+          " ttRow.RowQty:" + STRING(ttRow.RowQty) +
+          " InvRow.Qty:" + STRING(InvRow.Qty)).*/
 
       /* subtotals are wanted as headers, so calculate them here and make
          rows out of them */
