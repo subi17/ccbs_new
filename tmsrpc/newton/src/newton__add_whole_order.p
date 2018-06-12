@@ -2142,7 +2142,7 @@ IF lcFixedLinePermanency > "" THEN DO:
    IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
    /* YCO-515 / YCO-297 temporary code. This old code can be removed
       in August 2018 when we are sure that old orders are handled. */
-      IF Order.CrStamp < 20180620 THEN DO:   
+      IF Order.CrStamp < /*20180620*/ 20180612 THEN DO:   /*changed date for testing */
          IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
             lcAddFTERM = "FTERM12-110".
          ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
