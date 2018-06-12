@@ -37,7 +37,7 @@ DEFINE VARIABLE liPrintXML AS INTEGER NO-UNDO.
 
 DEF BUFFER bOrder FOR Order.
 /*For testing*/
-liPrintXML = 1.
+liPrintXML = 0.
 DEF STREAM sOut.
  
 /*NOTE: This must be modified to match our functionality naming. */
