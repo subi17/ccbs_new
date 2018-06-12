@@ -4,4 +4,5 @@ ADD FIELD "Email_validated" OF "Customer" AS integer
   INITIAL "0"
   LABEL "Email validated"
   MAX-WIDTH 4
+  ORDER 1610
   HELP "0 = Unknown, 1 = Not validated, 2 = Validated"
