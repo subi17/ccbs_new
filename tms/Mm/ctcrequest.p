@@ -44,7 +44,8 @@ DEF BUFFER bMobSubCust  FOR MobSub.
 
 FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
 
-IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 0 THEN 
+IF NOT AVAILABLE MsRequest OR 
+  ( MsRequest.ReqType NE 0 AND MsRequest.ReqType NE {&REQTYPE_2P3P_MERGE} ) THEN 
    RETURN "ERROR:Invalid request ID".
 
 IF MsRequest.ReqStatus NE 0 THEN RETURN.
