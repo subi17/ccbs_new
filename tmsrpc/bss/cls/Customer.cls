@@ -45,7 +45,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
       IF NOT AVAILABLE bfCustomer
       THEN UNDO, THROW NEW ParamError
-               (SUBSTITUTE("customer_not_found|&1", iiCustNum)).
+               (SUBSTITUTE("customer-not-found|&1", iiCustNum)).
 
       ASSIGN
          THIS-OBJECT:CustNum  = bfCustomer.CustNum
