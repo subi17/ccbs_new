@@ -12,6 +12,7 @@
 {Mc/invoicetarget.i}
 {Rate/rerate_request.i}
 {Func/customerextralinefunc.i}
+{Func/dss_deactivation.i}
 {Func/fcpfat.i}
 {Func/servcomfee.i}
 {Func/addline_discount.i}
@@ -312,15 +313,15 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
                        {&REQUEST_SOURCE_STC}).
 
    /* subrequests created -> second round of status 7/8 */
-   IF RETURN-VALUE BEGINS "SubRequest" THEN DO:
+  IF RETURN-VALUE BEGINS "SubRequest" THEN DO:
       FIND Current MsRequest EXCLUSIVE-LOCK.
       MsRequest.ReqCParam4 = "SR".
       fReqStatus(7,"").
       RETURN.
-   END.
+   END. 
    
 END.
-    
+
 RUN pFinalize.    
 
 FINALLY:
@@ -893,15 +894,12 @@ PROCEDURE pUpdateSubscription:
                                               INPUT Customer.CustIdType,
                                               INPUT Customer.OrgID,
                                               OUTPUT liMLMsSeq).
-      IF liMLMsSeq > 0 THEN DO: 
+      IF liMLMsSeq > 0 THEN  
          llgDSSBundle = fResetExtralineSubscription(MobSub.MsSeq,
                                                     "",
                                                     liMLMsSeq,
                                                     {&MULTISIMTYPE_EXTRALINE},
-                                                    TRUE).                         
-         /* Creating discount, so CREATE/ADD DSS group */
-         IF llgDSSBundle THEN .
-      END.
+                                                    TRUE).                        
 
    END.
    ELSE IF (NOT fCLITypeIsMainLine(CLIType.CliType)  AND  
@@ -1377,7 +1375,7 @@ PROCEDURE pFinalize:
               SUBST("Wrong order status: &1",Order.statusCode)).
       END.
    END.
-   
+
    /* request handled succesfully */
    fReqStatus(2,"").
    
@@ -2017,24 +2015,40 @@ PROCEDURE pUpdateDSSAccount:
    DEF VAR lcBundleId                AS CHAR NO-UNDO.
    DEF VAR llOldSubTypeRemove        AS LOG  NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType     AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS4SubsType     AS CHAR NO-UNDO.  
    DEF VAR ldeDataBundleLimit        AS DEC  NO-UNDO.
    DEF VAR ldeLastDayEndStamp        AS DEC  NO-UNDO.
    DEF VAR lcDSSBunldeId             AS CHAR NO-UNDO. 
+   DEF VAR lcDSSId                   AS CHAR NO-UNDO. 
+   DEF VAR llgMatrixAvailable        AS LOG  NO-UNDO INITIAL FALSE. 
+   DEF VAR llgRemoveELMatrix         AS LOG  NO-UNDO INITIAL FALSE.
 
-   DEF BUFFER bMobSub  FOR MobSub.
+   DEF BUFFER bELMobSub     FOR MobSub.   
+   DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bTerMsRequest FOR MsRequest.
 
    /* end old bundles to the end of previous tariff period */
-   ASSIGN ldEndDate   = idActDate - 1
-          ldeEndStamp = Func.Common:mMake2DT(ldEndDate,86399)
+   ASSIGN ldEndDate          = idActDate - 1
+          ldeEndStamp        = Func.Common:mMake2DT(ldEndDate,86399)
           ldeLastDayEndStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldEndDate),86399).
 
    /* If ongoing DSS termination request in past then return */
    IF fOngoingDSSTerm(INPUT MobSub.CustNum,
                       INPUT ideActStamp) THEN RETURN.
 
-   lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+   ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+          lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
 
+   IF (fCLITypeIsMainLine(CLIType.CLIType) OR
+       fCLITypeIsExtraLine(CLIType.CLIType)) THEN DO:
+
+      llgMatrixAvailable = fCheckActiveExtraLinePair(MobSub.MsSeq,
+                                                     MobSub.CLIType,
+                                                     OUTPUT lcDSSBunldeId).
+      IF NOT llgMatrixAvailable THEN RETURN.                                               
+   
+   END.
+   
    /* Check whether DSS bundle is active or not for this customer */
    IF NOT fGetDSSMsSeqLimit(INPUT MobSub.CustNum,
                             INPUT ideActStamp,
@@ -2042,103 +2056,106 @@ PROCEDURE pUpdateDSSAccount:
                             OUTPUT ldeDSSLimit,
                             OUTPUT lcBundleId) THEN DO:
 
-      IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
-         NOT fOngoingDSSAct(MobSub.CustNum) AND
-         fIsDSSActivationAllowed(MobSub.CustNum,
-                                 0,
-                                 ideActStamp,
-                                 {&DSS2},
-                                 OUTPUT liDSSMsSeq,
-                                 OUTPUT lcError)
-      THEN DO:
-         FIND FIRST bMobSub WHERE
-                    bMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.
-         IF AVAIL bMobSub THEN DO:
-            /* Functionality changed to deny DSS2 creation if 
-                  there is DSS2 termination request. YTS-8140 
-               used bMobSub.Custnum cause of ACC */
-            FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                       bTerMsRequest.Brand = Syst.Var:gcBrand AND
-                       bTerMsRequest.ReqType = 83 AND
-                       bTerMsRequest.Custnum = bMobSub.Custnum AND
-                       bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
-                       bTerMsRequest.ReqCParam1 = "DELETE" AND
-                      LOOKUP(STRING(bTerMsRequest.ReqStatus),
-                             {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
-            IF NOT AVAIL bTerMsRequest THEN DO:
-               liRequest = fDSSRequest(bMobSub.MsSeq,
-                                       bMobSub.CustNum,
-                                       "CREATE",
-                                       "",
-                                       "DSS2",
-                                       ideActStamp,
-                                       {&REQUEST_SOURCE_STC},
-                                       "",
-                                       TRUE, /* create fees */
-                                       iiMainRequest,
-                                       FALSE,
-                                       OUTPUT lcError).
-               IF liRequest = 0 THEN
-                  /* write possible error to a memo */
-                  Func.Common:mWriteMemo("MobSub",
-                                   STRING(MobSub.MsSeq),
-                                   MobSub.Custnum,
-                                   "DSS2 activation failed in STC",
-                                   lcError).
-            END.
-         END.
+      IF NOT fOngoingDSSAct(MobSub.CustNum) THEN DO:
+
+         IF LOOKUP(MobSub.CLIType,lcAllowedDSS4SubsType) > 0 AND  
+            fIsDSSActivationAllowed(MobSub.CustNum,
+                                    MobSub.MsSeq,
+                                    ideActStamp,
+                                    {&DSS4},
+                                    OUTPUT liDSSMsSeq,
+                                    OUTPUT lcError) THEN 
+            lcDSSId = {&DSS4}. 
+         ELSE IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND  
+            fIsDSSActivationAllowed(MobSub.CustNum,
+                                    MobSub.MsSeq,
+                                    ideActStamp,
+                                    {&DSS2},
+                                    OUTPUT liDSSMsSeq,
+                                    OUTPUT lcError) THEN
+            lcDSSId = {&DSS2}.
+
+         FIND FIRST bMobSub NO-LOCK WHERE
+                    bMobSub.MsSeq EQ liDSSMsSeq NO-ERROR.
+         
+         IF NOT AVAIL bMobSub THEN RETURN.
+
+         FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                    bTerMsRequest.Brand      EQ Syst.Var:gcBrand  AND
+                    bTerMsRequest.ReqType    EQ 83                AND
+                    bTerMsRequest.Custnum    EQ bMobSub.Custnum   AND
+                    bTerMsRequest.ReqCParam3 BEGINS "DSS"         AND
+                    bTerMsRequest.ReqCParam1 EQ "DELETE"          AND
+                    LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                            {&REQ_INACTIVE_STATUSES} + ",3") EQ 0 NO-ERROR.
+
+         IF NOT AVAIL bTerMsRequest THEN 
+            liRequest = fDSSCreateRequest(bMobSub.MsSeq,
+                                          bMobSub.CustNum,
+                                          lcDSSId,
+                                          {&REQUEST_SOURCE_STC},
+                                          iiMainRequest,
+                                          ideActStamp,
+                                          "DSS activation failed in STC", /* Error Msg */
+                                          OUTPUT lcError).
       END.
 
       RETURN.
    END.
 
-   /* DSS/DSS2 is active --> */
-
-   /* Check CLIType PayType */
+   /* If DSS/DSS2/DSS4 is active */
    CASE bOldType.PayType:
-      /* Postpaid */
-      WHEN 1 THEN DO:
+      
+      WHEN 1 THEN DO: /* Postpaid */
+         
+         IF CLIType.PayType = 1 THEN DO: /* postpaid to postpaid */
 
-         /* postpaid to postpaid */
-         IF CLIType.PayType = 1 THEN DO:
-
-            IF lcBundleId = "DSS2" THEN DO:
+            IF LOOKUP(lcBundleId,SUBSTITUTE("&1,&2",{&DSS2},{&DSS4})) GT 0 THEN DO:
+               
                /* If both postpaid subs. types compatible with DSS2 */
-               IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) > 0 AND
-                  LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  > 0 THEN RETURN.
+               IF NOT llgMatrixAvailable                              AND
+                  LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) GT 0 AND
+                  LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  GT 0 THEN RETURN.
 
-               IF (fCLITypeIsMainLine(CLIType.CLIType) OR
-                   fCLITypeIsExtraLine(CLIType.CLIType)) THEN 
-                  IF NOT fCheckActiveExtraLinePair(MobSub.MsSeq,
-                                                   MobSub.CLIType,
-                                                   OUTPUT lcDSSBunldeId) THEN RETURN.  
+               FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                          bTerMsRequest.Brand      EQ Syst.Var:gcBrand AND
+                          bTerMsRequest.ReqType    EQ 83               AND
+                          bTerMsRequest.Custnum    EQ Mobsub.Custnum   AND
+                          bTerMsRequest.ReqCParam3 BEGINS "DSS"        AND
+                          bTerMsRequest.ReqCParam1 EQ "DELETE"         AND
+                          LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                                 {&REQ_INACTIVE_STATUSES} + ",3") EQ 0 NO-ERROR.
 
-               /* If new postpaid subs. type compatible with DSS2 */
-               IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND
-                  LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  > 0 THEN DO:
-                  /* Functionality changed to deny DSS2 adding if 
-                        there is DSS2 termination request. YTS-8140 
-                      used Mobsub.Custnum cause of ACC */
-                  FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                             bTerMsRequest.Brand = Syst.Var:gcBrand AND
-                             bTerMsRequest.ReqType = 83 AND
-                             bTerMsRequest.Custnum = Mobsub.Custnum AND
-                             bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
-                             bTerMsRequest.ReqCParam1 = "DELETE" AND
-                            LOOKUP(STRING(bTerMsRequest.ReqStatus),
-                                   {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
-                  IF NOT AVAIL bTerMsRequest OR
-                     bTerMsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
-                     RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                           INPUT Mobsub.CLI,
-                                           INPUT Mobsub.CustNum,
-                                           INPUT "ADD",
-                                           INPUT "",        /* Optional param list */
-                                           INPUT iiMainRequest,
-                                           INPUT ideActStamp,
-                                           INPUT {&REQUEST_SOURCE_STC},
-                                           INPUT lcBundleId).
+               IF NOT AVAIL bTerMsRequest                         OR
+                  bTerMsRequest.ActStamp GT Func.Common:mMakeTS() THEN DO:
+               
+                  IF llgMatrixAvailable       AND
+                     lcDSSBunldeId EQ {&DSS4} AND 
+                     lcBundleId    EQ {&DSS2} THEN DO:
 
+                     fDSSCreateDSS2ToDSS4(MobSub.MsSeq,
+                                          iiMainRequest,
+                                          {&REQUEST_SOURCE_STC},
+                                          ideActStamp,
+                                          "DSS activation failed in STC").
+                     RETURN.
+                  END.
+                  ELSE IF (LOOKUP(CLIType.CLIType,lcAllowedDSS4SubsType) GT 0  OR
+                           LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType) GT 0) THEN DO:
+
+                     IF llgMatrixAvailable THEN 
+                        fDSSAddExtralineGroup(Mobsub.MsSeq,
+                                              lcBundleId,
+                                              iiMainRequest,
+                                              {&REQUEST_SOURCE_STC},
+                                              ideActStamp).
+                     ELSE
+                        fDSSAddRequest(MobSub.MsSeq,
+                                       lcBundleId,
+                                       iiMainRequest,
+                                       {&REQUEST_SOURCE_STC},
+                                       ideActStamp).
+                     
                      /* Add the limit if bono is transferable */
                      ldeDataBundleLimit = fGetActiveBonoLimit(INPUT MobSub.MsSeq,
                                                               INPUT ideActStamp).
@@ -2160,25 +2177,43 @@ PROCEDURE pUpdateDSSAccount:
                                                    INPUT ideActStamp,
                                                    INPUT {&REQUEST_SOURCE_STC},
                                                    INPUT lcBundleId).
-                     END.
-                  END.
-               END.
-            END.
+                     END. /* IF ldeDataBundleLimit > 0 */
+                  
+                  END. /* ELSE IF LOOKUP(CLIType.CLIType,lcAllowedDSS4SubsType) GT 0 */
+            
+               END. /* IF NOT AVAIL bTerMsRequest */
+
+            END. /* IF LOOKUP(lcBundleId,SUBSTITUTE("&1,&2",{&DSS2},{&DSS4})) GT 0 */
             ELSE RETURN.
-         END.
+         END. /* IF CLIType.PayType = 1 THEN DO: */
    
-         IF lcBundleId = "DSS2" AND
-            LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) > 0 AND
-            LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  = 0 THEN
-            llOldSubTypeRemove = TRUE.
-         ELSE IF lcBundleId = "DSS" AND
-            bOldType.PayType = 1 AND CLIType.PayType = 2 THEN
-            llOldSubTypeRemove = TRUE.
+         CASE lcBundleId:
+            WHEN {&DSS4} THEN DO:
+               IF (LOOKUP(bOldType.CLIType,lcAllowedDSS4SubsType) GT 0  AND
+                   LOOKUP(CLIType.CLIType,lcAllowedDSS4SubsType)  EQ 0) THEN
+               llOldSubTypeRemove = TRUE.
+            END.
+            WHEN {&DSS2} THEN DO:
+               IF (LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) GT 0  AND
+                   LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  EQ 0) THEN
+               llOldSubTypeRemove = TRUE.
+            END.
+            WHEN {&DSS} THEN DO:
+               IF bOldType.PayType EQ 1 AND 
+                  CLIType.PayType  EQ 2 THEN
+               llOldSubTypeRemove = TRUE.
+            END.
+         END CASE.
 
          /* Postpaid to Prepaid - remove subs. from DSS group      */
          /* If this subs. is directly linked to DSS then either    */
          /* transfer DSS to OLD postpaid subs. or delete DSS group */
          IF llOldSubTypeRemove THEN DO:
+
+            IF LOOKUP(lcBundleId,SUBSTITUTE("&1,&2",{&DSS2},{&DSS4})) GT 0                 AND 
+               (fCLITypeIsMainLine(MobSub.CLIType) OR fCLITypeIsExtraLine(MobSub.CLIType)) THEN 
+            llgRemoveELMatrix = TRUE.   
+
             /* If directly linked to DSS */
             IF MobSub.MsSeq = liDSSMsSeq THEN DO:
                IF fIsDSSTransferAllowed(INPUT MobSub.CLI,
@@ -2227,29 +2262,23 @@ PROCEDURE pUpdateDSSAccount:
                                         INPUT lcBundleId).
                   /* Remove subs. immediately */
                   IF DAY(idActDate) <> 1 THEN
-                     RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                           INPUT Mobsub.CLI,
-                                           INPUT Mobsub.CustNum,
-                                           INPUT "REMOVE",
-                                           INPUT "", /* Optional param list */
-                                           INPUT iiMainRequest,
-                                           INPUT ldeEndStamp,
-                                           INPUT {&REQUEST_SOURCE_STC},
-                                           INPUT lcBundleId).
+                     fDSSRemoveRequest(MobSub.MsSeq,
+                                       lcBundleId,
+                                       iiMainRequest,
+                                       {&REQUEST_SOURCE_STC},
+                                       ldeEndStamp,
+                                       llgRemoveELMatrix).      
 
                END. /* IF NOT llDSSTransferred THEN DO: */
                /* If DSS is transferred then remove subs. from DSS group */
                ELSE DO:
-                  RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                        INPUT Mobsub.CLI,
-                                        INPUT Mobsub.CustNum,
-                                        INPUT "REMOVE",
-                                        INPUT "",    /* Optional param list */
-                                        INPUT iiMainRequest,
-                                        INPUT ldeEndStamp,
-                                        INPUT {&REQUEST_SOURCE_STC},
-                                        INPUT lcBundleId).
-
+                  fDSSRemoveRequest(MobSub.MsSeq,
+                                    lcBundleId,
+                                    iiMainRequest,
+                                    {&REQUEST_SOURCE_STC},
+                                    ldeEndStamp,
+                                    llgRemoveELMatrix).      
+                  
                   /* Reduce the limit if bono is transferable */
                   ldeDataBundleLimit = fGetActiveBonoLimit(INPUT MobSub.MsSeq,
                                                            INPUT ideActStamp).
@@ -2294,28 +2323,22 @@ PROCEDURE pUpdateDSSAccount:
 
                   /* Remove subs. immediately */
                   IF DAY(idActDate) <> 1 THEN
-                     RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                           INPUT Mobsub.CLI,
-                                           INPUT Mobsub.CustNum,
-                                           INPUT "REMOVE",
-                                           INPUT "",  /* Optional param list */
-                                           INPUT iiMainRequest,
-                                           INPUT ldeEndStamp,
-                                           INPUT {&REQUEST_SOURCE_STC},
-                                           INPUT lcBundleId).
+                     fDSSRemoveRequest(MobSub.MsSeq,
+                                       lcBundleId,
+                                       iiMainRequest,
+                                       {&REQUEST_SOURCE_STC},
+                                       ldeEndStamp,
+                                       llgRemoveELMatrix).
 
                END. /* IF NOT fCanDSSKeepActive(INPUT  Mobsub.CustNum */
                /* Otherwise just remove subs. from DSS group */
                ELSE DO:
-                  RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                        INPUT Mobsub.CLI,
-                                        INPUT Mobsub.CustNum,
-                                        INPUT "REMOVE",
-                                        INPUT "", /* Optional param list */
-                                        INPUT iiMainRequest,
-                                        INPUT ldeEndStamp,
-                                        INPUT {&REQUEST_SOURCE_STC},
-                                        INPUT lcBundleId).
+                  fDSSRemoveRequest(MobSub.MsSeq,
+                                    lcBundleId,
+                                    iiMainRequest,
+                                    {&REQUEST_SOURCE_STC},
+                                    ldeEndStamp,
+                                    llgRemoveELMatrix).
 
                   /* Reduce the limit if bono is transferable */
                   ldeDataBundleLimit = fGetActiveBonoLimit(INPUT MobSub.MsSeq,
@@ -2349,36 +2372,57 @@ PROCEDURE pUpdateDSSAccount:
          /* Prepaid to postpaid - add subs. to DSS group */
          IF CLIType.PayType = 1 THEN DO:
 
-            /* If New CLIType is not compitable with DSS2 */
-            IF lcBundleId = "DSS2" AND
-               LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType) = 0 THEN RETURN.
+            CASE lcBundleId:            
+               WHEN {&DSS4} THEN 
+                  IF LOOKUP(CLIType.CLIType,lcAllowedDSS4SubsType) EQ 0 THEN RETURN.
+               WHEN {&DSS2} THEN 
+                  IF LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType) EQ 0 THEN RETURN.
+            END CASE.
 
-            /* Functionality changed to deny DSS2 adding if 
-                  there is DSS2 termination request. YTS-8140 
-                used Mobsub.Custnum cause of ACC */
             FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                       bTerMsRequest.Brand = Syst.Var:gcBrand AND
-                       bTerMsRequest.ReqType = 83 AND
-                       bTerMsRequest.Custnum = Mobsub.Custnum AND
-                       bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
-                       bTerMsRequest.ReqCParam1 = "DELETE" AND
+                       bTerMsRequest.Brand      EQ Syst.Var:gcBrand AND
+                       bTerMsRequest.ReqType    EQ 83               AND
+                       bTerMsRequest.Custnum    EQ Mobsub.Custnum   AND
+                       bTerMsRequest.ReqCParam3 BEGINS "DSS"        AND
+                       bTerMsRequest.ReqCParam1 EQ "DELETE"         AND
                       LOOKUP(STRING(bTerMsRequest.ReqStatus),
-                             {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+                             {&REQ_INACTIVE_STATUSES} + ",3") EQ 0  NO-ERROR.
+
             IF NOT AVAIL bTerMsRequest OR
                bTerMsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
-               RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                     INPUT Mobsub.CLI,
-                                     INPUT Mobsub.CustNum,
-                                     INPUT "ADD",
-                                     INPUT "",        /* Optional param list */
-                                     INPUT iiMainRequest,
-                                     INPUT ideActStamp,
-                                     INPUT {&REQUEST_SOURCE_STC},
-                                     INPUT lcBundleId).
-            END.
+
+               IF llgMatrixAvailable       AND
+                  lcDSSBunldeId EQ {&DSS4} AND
+                  lcBundleId    EQ {&DSS2} THEN DO:
+
+                  fDSSCreateDSS2ToDSS4(MobSub.MsSeq,
+                                       iiMainRequest,
+                                       {&REQUEST_SOURCE_STC},
+                                       ideActStamp,
+                                       "DSS activation failed in STC").
+                  RETURN.
+               END.
+               ELSE IF (LOOKUP(CLIType.CLIType,lcAllowedDSS4SubsType) GT 0  OR
+                        LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType) GT 0) THEN DO:
+
+                  IF llgMatrixAvailable THEN
+                     fDSSAddExtralineGroup(Mobsub.MsSeq,
+                                           lcBundleId,
+                                           iiMainRequest,
+                                           {&REQUEST_SOURCE_STC},
+                                           ideActStamp).
+                  ELSE
+                     fDSSAddRequest(MobSub.MsSeq,
+                                    lcBundleId,
+                                    iiMainRequest,
+                                    {&REQUEST_SOURCE_STC},
+                                    ideActStamp).
+               END.
+
+            END. /*  IF NOT AVAIL bTerMsRequest */      
+               
          END.
-         /* Prepaid to prepaid - no change */
-         ELSE RETURN.
+         ELSE RETURN. /* Prepaid to prepaid - no change */
       END. /* WHEN 2 THEN DO: */
       OTHERWISE RETURN.
    END CASE.
