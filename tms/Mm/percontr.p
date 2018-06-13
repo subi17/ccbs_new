@@ -3147,6 +3147,10 @@ PROCEDURE pContractTermination:
             MsRequest.ReqCParam3 = lcDCEvent AND
             MsRequest.CreStamp > bMsRequest.CreStamp THEN NEXT.
 
+         IF AVAILABLE bMsRequest                          AND
+            MsRequest.ReqStatus  EQ {&REQUEST_STATUS_NEW} AND
+            MsRequest.ReqCParam3 NE bMsRequest.ReqCParam3 THEN NEXT.
+
          CASE MsRequest.ReqStatus:
             WHEN 0 THEN fReqStatus(4,"DSS is terminated.").
             WHEN 3 THEN fReqStatus(9,"DSS is terminated.").
