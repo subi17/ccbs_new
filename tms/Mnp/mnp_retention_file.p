@@ -155,6 +155,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
 END.
 
 DEF STREAM sout.
+DEF STREAM sout-bus.
 
 /*ydr-2632*/
 DEF TEMP-TABLE ttOperCategory NO-UNDO
@@ -169,6 +170,7 @@ DEFINE TEMP-TABLE ttData NO-UNDO
    FIELD smstext AS CHAR
    FIELD RetentionPlatform AS CHAR /*1,2,3*/
    FIELD operatorcat AS CHAR /*category of operators */
+   FIELD CustCatName LIKE CustCat.CatName
 INDEX operatorcat operatorcat   
 INDEX RetentionPlatform RetentionPlatform 
 INDEX custnum IS PRIMARY UNIQUE custnum mnpseq msseq.
@@ -189,7 +191,24 @@ DEFINE TEMP-TABLE ttMNPRetPlatform NO-UNDO LIKE MNPRetPlatform
    FIELD CasesPerPlatform AS INT
    fIELD RetentionPlatformName AS CHAR
    FIELD RetentionFile AS CHAR.
-
+   
+DEFINE TEMP-TABLE ttFileCategory NO-UNDO
+       FIELD FileCategory AS CHAR.
+       
+DEFINE TEMP-TABLE ttCust NO-UNDO
+       FIELD MSISDN  LIKE mobsub.cli   
+       FIELD CreatedTS  LIKE  mnpprocess.CreatedTS
+       FIELD PortingTime  LIKE mnpprocess.portingtime
+       FIELD Operator  AS CHAR    
+       FIELD Clitype AS CHAR 
+       FIELD FirstName LIKE customer.firstname 
+       FIELD CustName LIKE customer.custname   
+       FIELD SurName2 LIKE customer.surname2
+       FIELD SMSNumber LIKE  customer.smsnumber
+       FIELD Phone  LIKE  customer.phone   
+       FIELD SegmentCode LIKE  Segmentation.SegmentCode
+       FIELD CatName LIKE CustCat.CatName    
+       FIELD Period AS CHAR.   
 
 lcRootDir = fCParam("MNP","MNPRetention").
 IF lcRootDir = ? OR lcRootDir EQ "" THEN DO:
@@ -336,7 +355,7 @@ DEF BUFFER bMNPSub FOR MNPSub.
 DEFINE VARIABLE lcbarringstatus AS CHARACTER NO-UNDO INITIAL "Debt_Hotl,Debt_Hotl,Debt_HOTLP".
 DEFINE VARIABLE lcResCatNames   AS CHARACTER NO-UNDO INITIAL "RESIDENTIAL NIF,RESIDENTIAL NIE,UNKNOWN CONSUMER,CONSUMER PASSPORT,VIP - MM GROUP EXTERNAL CUSTOMER,SELF EMPLOYEE NIF,SELF EMPLOYEE NIE,DEFAULT CUSTOMERS".
 
-lcRetExcludeFile = lcRootDir + "/spool/" + "mnp_retention_residential_exclude_" +
+lcRetExcludeFile = lcRootDir + "/spool/" + "mnp_retention_exclude_" +
                    STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") +
                    "_" + STRING(TIME) + ".txt".
 
@@ -421,7 +440,6 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                      NEXT  MNP_SUB_LOOP.
                   END.                  
                END CASE.
-               IF LOOKUP(CustCat.CatName,lcResCatNames) = 0 THEN NEXT MNP_SUB_LOOP.
             END.
                       
             /* IF NOT fCheckRetentionRule(BUFFER MobSub, BUFFER Segmentation, OUTPUT lcRetentionSMSText) THEN NEXT. */
@@ -437,7 +455,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
            
                lcRetentionSMSText = MNPRetentionRule.SMSText.
            
-           END.
+            END.
             
             FIND FIRST ttData NO-LOCK WHERE
                        ttData.custnum = MobSub.custnum AND 
@@ -451,8 +469,30 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                ttData.MsSeq   = MobSub.msseq
                ttData.mnpseq  = mnpprocess.mnpseq
                ttData.smsText = lcRetentionSMSText
+               ttData.CustCatName = CustCat.CatName
                i = i + 1.
-             
+               
+            IF LOOKUP(CustCat.CatName,lcResCatNames) > 0 THEN
+            DO:
+               FIND FIRST ttFileCategory 
+                    WHERE ttFileCategory.FileCategory = "Residential" NO-ERROR.
+               IF NOT AVAILABLE ttFileCategory THEN 
+               DO:
+                  Create ttFileCategory.
+                  ASSIGN ttFileCategory.FileCategory = "Residential".
+               END.               
+            END.
+            ELSE
+            DO:
+               FIND FIRST ttFileCategory 
+                    WHERE ttFileCategory.FileCategory = "Business" NO-ERROR.
+               IF NOT AVAILABLE ttFileCategory THEN 
+               DO:
+                  Create ttFileCategory.
+                  ASSIGN ttFileCategory.FileCategory = "Business".
+               END.               
+            END.
+                                        
             DEF VAR lcOldMNPCat AS CHAR NO-UNDO. 
 
             MNP_OTHER_LOOP:
@@ -505,10 +545,10 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
    END.
 END.
 
-FOR EACH ttMNPRetPlatform:
+FOR EACH ttMNPRetPlatform:            
     ttMNPRetPlatform.CasesPerPlatform  =
          fGetCaseAmount(ttMNPRetPlatForm.Operators) *
-      (ttMNPRetPlatForm.Percentage / 100).
+      (ttMNPRetPlatForm.Percentage / 100).               
 END.
 
 /* Allocate data to retention platforms (files) */
@@ -643,18 +683,21 @@ PROCEDURE pFileDump:
             string(day(today),"99").
    lcTime = STRING(TIME).
    
-   FOR EACH ttOperCategory NO-LOCK,
-      EACH ttMNPRetPlatform WHERE
+   FOR EACH ttFileCategory NO-LOCK,
+       EACH ttOperCategory NO-LOCK,
+       EACH ttMNPRetPlatform WHERE
            ttMNPRetPlatform.Operators = ttOperCategory.Operators:
-
-      ttMNPRetPlatform.RetentionFile = lcRootDir + "/spool/" + 
-        "mnp_retention_residential_" + 
-        ttMNPRetPlatform.RetentionPlatformName + "_" + 
-    /*    ttMNPRetPlatform.RetentionPlatform + "_" +
-        lcDate + "_" + STRING(TIME) + ".txt".  */
-        lcDate + "_" + lcTime + ".txt".
-      OUTPUT STREAM sout TO VALUE (ttMNPRetPlatform.RetentionFile) APPEND.
-
+      
+      IF ttFileCategory.FileCategory BEGINS "Residential" THEN 
+      DO:
+         ttMNPRetPlatform.RetentionFile = lcRootDir + "/spool/" + 
+            "mnp_retention_" + ttFileCategory.FileCategory + "_" +
+            ttMNPRetPlatform.RetentionPlatformName + "_" + 
+            lcDate + "_" + lcTime + ".txt".                
+         OUTPUT STREAM sout TO VALUE (ttMNPRetPlatform.RetentionFile) APPEND.
+      END.    
+      
+      EMPTY TEMP-TABLE ttCust.   
       FOR EACH ttData NO-LOCK WHERE
                ttData.RetentionPlatform = ttMNPRetPlatform.RetentionPlatform,
          FIRST Customer NO-LOCK WHERE
@@ -677,21 +720,42 @@ PROCEDURE pFileDump:
              INPUT liMaxPeriods,
              OUTPUT ldaDueDate).
          
-         put stream sout unformatted 
-            mobsub.cli "|"
-            Func.Common:mTS2HMS(mnpprocess.CreatedTS) "|"
-            Func.Common:mTS2HMS(mnpprocess.portingtime) "|"
-            lcopername "|"
-            mobsub.clitype "|"
-            customer.firstname "|"
-            customer.custname "|"
-            customer.surname2 "|"
-            customer.smsnumber "|"
-            customer.phone "|"
-            Segmentation.SegmentCode "|"
-            (IF liPeriods <= 3 THEN "Y" ELSE "")
-            skip.
-
+            IF LOOKUP(ttData.CustCatName,lcResCatNames) > 0 THEN
+            DO:
+               put stream sout unformatted 
+                  mobsub.cli "|"
+                  Func.Common:mTS2HMS(mnpprocess.CreatedTS) "|"
+                  Func.Common:mTS2HMS(mnpprocess.portingtime) "|"
+                  lcopername "|"
+                  mobsub.clitype "|"
+                  customer.firstname "|"
+                  customer.custname "|"
+                  customer.surname2 "|"
+                  customer.smsnumber "|"
+                  customer.phone "|"
+                  Segmentation.SegmentCode "|"
+                  ttData.CustCatName "|"
+                  (IF liPeriods <= 3 THEN "Y" ELSE "")
+                  skip.
+            END.
+            ELSE
+            DO:
+               Create ttCust.
+               ASSIGN ttCust.MSISDN       =  mobsub.cli
+                      ttCust.CreatedTS    =  mnpprocess.CreatedTS
+                      ttCust.PortingTime  =  mnpprocess.portingtime
+                      ttCust.Operator     =  lcopername
+                      ttCust.Clitype      =  mobsub.clitype
+                      ttCust.FirstName    =  customer.firstname
+                      ttCust.CustName     =  customer.custname
+                      ttCust.SurName2     =  customer.surname2
+                      ttCust.SMSNumber    =  customer.smsnumber
+                      ttCust.Phone        =  customer.phone
+                      ttCust.SegmentCode  =  Segmentation.SegmentCode
+                      ttCust.CatName      =  ttData.CustCatName
+                      ttCust.Period       =  IF liPeriods <= 3 THEN "Y" ELSE "".                                   
+            END.
+                                             
          lcRetentionSMSText = fGetSMSTxt(ttData.SMSText,
                                 TODAY,
                                 Customer.Language,
@@ -721,10 +785,33 @@ PROCEDURE pFileDump:
             RELEASE MNPSub.
          END.
       END.
+      FIND FIRST ttCust NO-LOCK NO-ERROR.
+      IF AVAILABLE ttCust THEN
+      DO:
+         ttMNPRetPlatform.RetentionFile = lcRootDir + "/spool/" + 
+            "mnp_retention_" + ttFileCategory.FileCategory + "_" +
+            ttMNPRetPlatform.RetentionPlatformName + "_" + 
+            lcDate + "_" + lcTime + ".txt".                
+         OUTPUT STREAM sout-bus TO VALUE (ttMNPRetPlatform.RetentionFile) APPEND. 
+         FOR EACH ttCust:
+            put stream sout-bus unformatted 
+                  ttCust.MSISDN  "|"
+                  Func.Common:mTS2HMS(ttCust.CreatedTS) "|"
+                  Func.Common:mTS2HMS(ttCust.PortingTime) "|"
+                  ttCust.Operator "|"
+                  ttCust.Clitype "|"
+                  ttCust.FirstName "|"
+                  ttCust.CustName "|"
+                  ttCust.SurName2 "|"
+                  ttCust.SMSNumber "|"
+                  ttCust.Phone "|"
+                  ttCust.SegmentCode "|"
+                  ttCust.CatName "|"
+                  ttCust.Period 
+                  skip.        
+         END.         
+      END.     
       OUTPUT STREAM sout close.
+      OUTPUT STREAM sout-bus close.
    END. /*Category loop*/
-
 END PROCEDURE. 
-
-
-
