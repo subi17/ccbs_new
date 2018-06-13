@@ -88,6 +88,8 @@ DEFINE VARIABLE lcAddressID        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcToday            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liMonth            AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liYear             AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcPermanencyRule   AS CHARACTER NO-UNDO.
+
 
 /* ***************************  Main Block  *************************** */
 
@@ -209,7 +211,8 @@ DO ON ERROR UNDO , LEAVE:
                     lcKm             =  ENTRY(22,lcLine,lcDelimiter)  
                     lcTerritoryOwner =  ENTRY(23,lcLine,lcDelimiter)  
                     lcCoverageToken  =  ENTRY(24,lcLine,lcDelimiter)  
-                    lcAddressID      =  ENTRY(25,lcLine,lcDelimiter) NO-ERROR.
+                    lcAddressID      =  ENTRY(25,lcLine,lcDelimiter)
+                    lcPermanencyRule =  ENTRY(26,lcLine,lcDelimiter) NO-ERROR.
                 
                 FIND Order WHERE Order.Brand = Syst.Var:gcBrand AND Order.OrderId = liOrderID NO-LOCK NO-ERROR.
                 IF NOT AVAILABLE Order THEN DO:
@@ -223,7 +226,11 @@ DO ON ERROR UNDO , LEAVE:
                     PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) ";install_address_change_request_failed;" + "Order is not a Convergent Order."  SKIP.
                     NEXT.
                 END.
-
+                IF lcPermanencyRule NE "FTERM=3" THEN DO:
+                    PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" +  STRING(liOrderID) + ";install_address_change_request_failed;" + "Permanency rule not allowed."  SKIP.
+                    PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) ";install_address_change_request_failed;" + "Permanency rule not allowed."  SKIP.
+                    NEXT.
+                END.
                 IF NOT llCreateSTC THEN
                 DO:
                     FIND FIRST OrderCustomer WHERE 
@@ -350,7 +357,7 @@ DO ON ERROR UNDO , LEAVE:
                                     '' , /* Bank Acc */ 
                                     ldActivationTS,
                                     0  ,    /* Credit Check OK   */ 
-                                    0  ,    /* Request Flag = 0  */
+                                    INT(SUBSTRING(lcPermanencyRule,7,1))  ,    /* Request Flag = 0  */
                                     "" ,    /* SalesMan          */
                                     FALSE , /* Create Fees       */
                                     FALSE , /* Send SMS          */

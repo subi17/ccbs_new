@@ -1687,8 +1687,8 @@ PROCEDURE pCloseContracts:
             (0=no extend_term_contract
              1=extend_term_contract
              2=exclude_term_penalty)
-          */
-         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
+          */ 
+         IF AVAILABLE(bOrigRequest) AND (bOrigRequest.ReqIParam5 EQ 2 OR bOrigRequest.ReqIParam5 EQ 3) AND
             CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
                                                      DayCampaign.DCEvent EQ lcContract          AND 
                                                      DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
