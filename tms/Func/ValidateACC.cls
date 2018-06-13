@@ -534,8 +534,8 @@ CLASS Func.ValidateACC FINAL:
 
       IF NOT Func.ValidateACC:mSubscriptionLimitCheck(icCustId,
                                                       icCustIdType,
-                                                      llSRCPRO,
                                                       llSelfEmployed, 
+                                                      llSRCPRO,
                                                       1,
                                                       OUTPUT liTemp,
                                                       OUTPUT liTemp,
