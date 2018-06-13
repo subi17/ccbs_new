@@ -55,6 +55,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY MobSubCustNum AS INTEGER NO-UNDO
       GET.
       SET.
+   
+   DEFINE PUBLIC PROPERTY PayType AS LOGICAL NO-UNDO
+      GET.
+      SET.
 
    /* A value for this property is populated in OrderProduct class */
    DEFINE PUBLIC PROPERTY MsSeq AS INTEGER NO-UNDO
@@ -66,15 +70,16 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          THEN DO:
             IF CAN-FIND(TermMobSub NO-LOCK WHERE TermMobSub.MSSeq = iiMSSeq)
             THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("subscription_not_active|&1", iiMSSeq)).
+                  (SUBSTITUTE("subscription-not-active|&1", iiMSSeq)).
 
             UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("subscription_not_found|&1", iiMSSeq)).
+                  (SUBSTITUTE("subscription-not-found|&1", iiMSSeq)).
          END.
          ASSIGN
             THIS-OBJECT:MsSeq         = iiMSSeq
             THIS-OBJECT:CLI           = MobSub.CLI
-            THIS-OBJECT:MobSubCustNum = MobSub.CustNum.
+            THIS-OBJECT:MobSubCustNum = MobSub.CustNum
+            THIS-OBJECT:PayType       = MobSub.PayType.
       END SET.
 
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
@@ -123,7 +128,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
       END.
-      ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
+      ELSE UNDO, THROW NEW ParamError("order-items-are-mandatory").
 
 	END METHOD.
 
