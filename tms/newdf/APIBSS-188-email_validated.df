@@ -1,4 +1,4 @@
-ADD FIELD "Email_validated" OF "Customer" AS integer 
+ADD FIELD "EmailValidated" OF "Customer" AS integer 
   DESCRIPTION "Possible values: 0 = Unknown, 1 = Not validated, 2 = Validated"
   FORMAT ">9"
   INITIAL "0"
