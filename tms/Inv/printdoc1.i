@@ -98,8 +98,7 @@ DEF TEMP-TABLE ttRow NO-UNDO
    FIELD RowToDate     AS DATE
    FIELD VoiceLimit    AS INT
    FIELD DataLimit     AS INT
-   INDEX RowCode SubInvNum RowCode
-   INDEX RowName SubInvNum RowName RowGroup.
+   INDEX RowCode SubInvNum RowCode.
 
 DEF TEMP-TABLE ttGraph NO-UNDO
    FIELD GraphGroup AS CHAR
@@ -1197,23 +1196,17 @@ PROCEDURE pGetSubInvoiceHeaderData:
          END.
 
           /* YDR-2848 The sum of the charges applied to the line */
-          IF ttRow.RowCode BEGINS "31" THEN DO:
+          IF ttRow.RowCode BEGINS "31" THEN
              ttSub.Charges = ttSub.Charges + ttRow.RowAmtExclVat.
-             ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
-          END.
 
           /* YDR-2848 Sum of amount due to bundles of data and data upsells */
-          IF ttRow.RowGroup EQ "3" AND ttRow.Rowname EQ "INTERNET" THEN DO:
+          IF ttRow.RowGroup EQ "3" AND ttRow.Rowname EQ "INTERNET" THEN
              ttSub.Bundles = ttSub.Bundles + ttRow.RowAmtExclVat.
-             ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
-          END.
  
          /* YDR-2848 The sum of outgoings that aren.t included in the 
             tariff fee: SMS, MMS, international calls, AgileTV etc. */
-         IF ttRow.RowCode BEGINS "55" THEN DO:
+         IF ttRow.RowCode BEGINS "55" THEN
             ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
-            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
-         END.
 
          /* YDR-2848 Subscription level TOTAL sum */
          IF ttRow.RowCode BEGINS "18" OR
@@ -1371,11 +1364,11 @@ PROCEDURE pGetInvoiceRowData:
                THEN ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.               
             END.
             /* YDR-2848 Amount charged for TV service (taxes are not applicable). */
-            WHEN "55" 
+           /* WHEN "55" 
             THEN
-               ttInvoice.AgileTV = ttInvoice.AgileTV + InvRow.Amt.
+               ttInvoice.AgileTV = ttInvoice.AgileTV + InvRow.Amt.*/
             /* YDR-2848 Any concept that must be included in the invoice without taxes */
-            /* WHEN "xx" 
+           /* WHEN "xx" 
             THEN
                ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRowAmt.*/
          END CASE.
@@ -1413,6 +1406,18 @@ PROCEDURE pGetInvoiceRowData:
                                               liLanguage)).
 
          lcRowCode = STRING(ttBillItemAndGroup.BiGroup) + lcRowName.
+
+         /* YDR-2848 - group 55 handling */
+         CASE ttBillItemAndGroup.BIGroup:
+         WHEN "55"
+         THEN
+            IF lcRowname BEGINS "Agile" THEN
+               /* Amount charged for TV service (taxes are not applicable). */
+               ttInvoice.AgileTV = ttInvoice.AgileTV + InvRow.Amt.
+            ELSE
+               /* Any concept that must be included in the invoice without taxes */
+               ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRow.Amt.
+         END CASE.
 
          FIND FIRST ttRow WHERE
                     ttRow.SubInvNum = InvRow.SubInvNum AND

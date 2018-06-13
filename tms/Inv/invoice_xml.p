@@ -731,8 +731,6 @@ PROCEDURE pSubInvoice2XML:
    DEF VAR liTFCount              AS INT  NO-UNDO.
    DEF VAR llGBText               AS LOGICAL INITIAL FALSE  NO-UNDO.
    DEF VAR lcFooterNotice         AS CHAR NO-UNDO.
-
-   DEF VAR ldTotal                AS DEC NO-UNDO.
     
    lhXML:START-ELEMENT("Contract").
 
@@ -793,8 +791,6 @@ PROCEDURE pSubInvoice2XML:
 
       /* invoice rows */
       lhXML:START-ELEMENT("InvoiceRow").
-      /* Reset total value */
-      ldtotal = 0.
 
       FOR EACH ttRow WHERE
                ttRow.SubInvNum = SubInvoice.SubInvNum
@@ -814,11 +810,6 @@ PROCEDURE pSubInvoice2XML:
          END.
          
          lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
-
-         /* Sum of base tarifa per subscription. YDR-2848 */
-         IF ttRow.RowCode BEGINS "18" OR
-            ttRow.RowCode BEGINS "46" THEN
-            ldTotal = ldTotal + ttRow.RowAmtExclVat.
 
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
@@ -899,7 +890,7 @@ PROCEDURE pSubInvoice2XML:
       /* Total Base Imponible */
       lhXML:INSERT-ATTRIBUTE("Header","AmountExclTaxAndInstallment").
       /* YDR-2848 */
-      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ldTotal)).
+      lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttSub.SubscriptionTotal)).
 
       lhXML:END-ELEMENT("AdditionalAmount").
      
@@ -950,7 +941,7 @@ PROCEDURE pSubInvoice2XML:
 
       /* Sum of different categories per subscription. YDR-2848 */
       lhXML:START-ELEMENT("TotalCategory").
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.SubscriptionTotal + ttSub.Discounts)). /* Discount is negative, so added here */
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(SubInvoice.AmtExclVat)).
       lhXML:END-ELEMENT("TotalCategory").
 
       RUN pCollectCDR(SubInvoice.InvSeq,
