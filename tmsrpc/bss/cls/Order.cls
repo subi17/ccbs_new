@@ -67,11 +67,15 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY MobSubCustNum AS INTEGER NO-UNDO
       GET.
       SET.
-      
+
+   DEFINE PUBLIC PROPERTY PayType AS LOGICAL NO-UNDO
+      GET.
+      SET.
+
    DEFINE PUBLIC PROPERTY isACCOrder AS LOGICAL NO-UNDO
       GET.
       SET.
-      
+
    DEFINE PUBLIC PROPERTY lcCLI AS CHARACTER NO-UNDO
       GET.
       SET(icCLI AS CHARACTER):
@@ -98,7 +102,8 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          ASSIGN
             THIS-OBJECT:MsSeq         = iiMSSeq
             THIS-OBJECT:CLI           = MobSub.CLI
-            THIS-OBJECT:MobSubCustNum = MobSub.CustNum.
+            THIS-OBJECT:MobSubCustNum = MobSub.CustNum
+            THIS-OBJECT:PayType       = MobSub.PayType.
       END SET.
 
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
