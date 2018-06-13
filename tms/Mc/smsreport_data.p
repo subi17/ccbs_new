@@ -333,6 +333,8 @@ DEFINE VARIABLE liCorporatePostpaidMNP AS INTEGER NO-UNDO.
 FOR EACH Order WHERE
          Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp >= ldeBegin NO-LOCK:
+
+   IF Order.OrderType EQ {&ORDER_TYPE_ACC} THEN NEXT.
    
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = Syst.Var:gcBrand AND
