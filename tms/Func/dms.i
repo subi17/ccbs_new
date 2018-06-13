@@ -44,6 +44,32 @@ FUNCTION fGetOrderStatusDMS RETURNS CHAR
    RETURN "".      
 END.
 
+FUNCTION fSetSendToROI RETURNS LOGICAL
+   (iiOrderId AS INTEGER):
+
+   DEFINE BUFFER lbOrder   FOR Order.
+
+   FIND FIRST lbOrder EXCLUSIVE-LOCK WHERE
+              lbOrder.Brand     = Syst.Var:gcBrand AND
+              lbOrder.OrderID   = iiOrderId NO-ERROR.
+   IF AVAILABLE lbOrder THEN
+      lbOrder.SendToROI = {&ROI_HISTORY_TO_SEND}.
+
+END.
+
+FUNCTION fGetOrderDMSStatus RETURNS CHAR
+   (iiOrderId AS INTEGER):
+
+   FIND FIRST DMS NO-LOCK WHERE
+              DMS.HostTable = {&DMS_HOST_TABLE_ORDER} AND
+              DMS.HostID    = iiOrderId
+              NO-ERROR.
+   IF AVAIL DMS THEN RETURN DMS.StatusCode.
+
+   RETURN "".
+
+END.
+
 FUNCTION fCparamNotNull RETURNS CHAR
    (icGR AS CHAR,
     icP AS CHAR):
@@ -69,6 +95,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
 
    DEF VAR i         AS INT NO-UNDO.
    DEF VAR llCompare AS LOG NO-UNDO.
+   DEFINE VARIABLE lcPrevStatusCode    AS    CHARACTER   NO-UNDO.
 
    FIND DMS EXCLUSIVE-LOCK WHERE
         DMS.ContractID = icContractID 
@@ -80,6 +107,8 @@ FUNCTION fUpdateDMS RETURNS CHAR
       ASSIGN DMS.DMSID    = NEXT-VALUE(DMS)
              DMS.StatusTS = Func.Common:mMakeTS().
    END.
+   ELSE
+      lcPrevStatusCode = DMS.StatusCode.
 
    ASSIGN DMS.DmsExternalID = icDmsExternalID WHEN icDmsExternalID NE ""
           DMS.CaseTypeID    = icCaseTypeID
@@ -98,6 +127,11 @@ FUNCTION fUpdateDMS RETURNS CHAR
       IF AVAILABLE Order THEN DMS.OrderStatus = Order.StatusCode.
    END.
    ELSE IF icOrderStatus NE "" THEN DMS.OrderStatus = icOrderstatus.
+
+   IF LOOKUP(DMS.OrderStatus, {&ORDER_SENDTOROI_STATUSES}) > 0 AND 
+      (NEW DMS OR DMS.StatusCode <> lcPrevStatusCode) 
+   THEN
+      fSetSendToROI(DMS.HostId).
 
    /*YPR-3077:A0 response must erase SENT doocuments*/
    IF DMS.StatusCode EQ "A0" THEN DO:
