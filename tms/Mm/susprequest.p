@@ -392,10 +392,18 @@ PROCEDURE pDone.
          
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
    IF INDEX(MsRequest.ReqCParam5,"1") = 0
-   THEN ASSIGN MobSub.MsStatus = 4
-               MobSub.BarrCode = "".
-   ELSE ASSIGN MobSub.MsStatus = 8
-               MobSub.BarrCode = MsRequest.ReqCParam5.
+   THEN DO: 
+      IF NOT (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+              MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN
+         ASSIGN MobSub.MsStatus = {&MSSTATUS_ACTIVE}.
+      ASSIGN  MobSub.BarrCode = "".
+   END.
+   ELSE DO:
+      IF NOT (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+              MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN
+         ASSIGN MobSub.MsStatus = {&MSSTATUS_BARRED}.
+      ASSIGN MobSub.BarrCode = MsRequest.ReqCParam5.
+   END.
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    
    FIND CURRENT MobSub NO-LOCK.
@@ -580,7 +588,10 @@ PROCEDURE pDone.
                     LOOKUP(STRING(MsRequest.ReqStatus),
                            {&REQ_INACTIVE_STATUSES}) = 0 AND
                     MsRequest.ActStamp >= ldActStamp NO-LOCK NO-ERROR.
-         IF AVAIL MsRequest THEN DO:
+         IF AVAIL MsRequest AND
+            NOT ((MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+                  MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
+                  fIsFixedOnly(MsRequest.ReqCParam2)) THEN DO: /* Allow STC to 2P */
             fReqStatus(4,"Cancelled due to fraud barring").
             llCancelSTC = TRUE.
 
