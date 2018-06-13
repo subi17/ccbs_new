@@ -72,7 +72,7 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
             THEN loOrderProduct = NEW bss.cls.OrderProductACC(ioOrder).
             WHEN "main"
             THEN loOrderProduct = NEW bss.cls.OrderProductPC(ioOrder).
-            WHEN "mobile-subscription"
+            WHEN "mobile_subscription"
             THEN loOrderProduct = NEW bss.cls.OrderProductSubscription(ioOrder).
             WHEN "sim"
             THEN loOrderProduct = NEW bss.cls.OrderProductSIM(ioOrder).

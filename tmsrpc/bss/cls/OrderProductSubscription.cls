@@ -70,12 +70,12 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         THEN DO:
             
             ASSIGN
-                lcNumberType = loAttributes:GetCharacter("number-type") 
+                lcNumberType = loAttributes:GetCharacter("number_type") 
                 AttrCLI      = loAttributes:GetCharacter("number") 
                 .
                 
             IF LOOKUP(lcNumberType,"new,mnp,renewal,stc") = 0 
-            THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number-type: ", lcNumberType)). 
+            THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", lcNumberType)). 
             
             IF lcNumberType = "mnp" AND 
                 CAN-FIND(FIRST Order WHERE Order.CLI = AttrCLI AND 
@@ -88,7 +88,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             IF lcReturnValue > ""
             THEN UNDO, THROW NEW InternalError(lcReturnValue). 
                                                       
-            mCreateDataOrderProductParamData(loAttributes,"number-type","Char").
+            mCreateDataOrderProductParamData(loAttributes,"number_type","Char").
             mCreateDataOrderProductParamData(loAttributes,"number","Char").                                 
                                              
             IF loAttributes:Has("old-operator-code") 

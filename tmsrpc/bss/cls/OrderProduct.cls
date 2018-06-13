@@ -69,7 +69,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
 
       ASSIGN
          ActionType         = ioItemObject:GetCharacter("type")
-         ProductID          = ioItemObject:GetCharacter("product-id")      WHEN ioItemObject:Has("product-id")
+         ProductID          = ioItemObject:GetCharacter("product-id")  WHEN ioItemObject:Has("product-id")   
          ProductOfferingID  = ioItemObject:GetCharacter("product-offering-id").
          
      IF ActionType = "mobile-subscription" 

@@ -13,6 +13,7 @@ USING Progress.Lang.*.
 USING profcgi.RPC.JSON.InternalError.
 USING profcgi.RPC.JSON.ParamError.
 USING Progress.Json.ObjectModel.JsonObject.
+USING Progress.Json.ObjectModel.JsonArray.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -29,6 +30,135 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY Category AS CHARACTER NO-UNDO
       GET.
       SET.
+      
+    DEFINE PUBLIC PROPERTY CustTitle AS CHARACTER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY FirstName AS CHARACTER NO-UNDO
+        GET.
+        SET.
+
+    DEFINE PUBLIC PROPERTY SurName1 AS CHARACTER NO-UNDO
+        GET.
+        SET.
+
+    DEFINE PUBLIC PROPERTY SurName2 AS CHARACTER NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY Profession AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY Nationality AS CHARACTER NO-UNDO
+        GET.
+        SET.
+
+    DEFINE PUBLIC PROPERTY Language AS CHARACTER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY CustIdType AS CHARACTER INITIAL ? NO-UNDO
+        GET.
+        SET.
+
+    DEFINE PUBLIC PROPERTY CustId AS CHARACTER INITIAL ? NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY SelfEmployed AS LOGICAL NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY BirthDay AS DATE NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY FoundationDate AS DATE NO-UNDO
+        GET.
+        SET.
+   
+    DEFINE PUBLIC PROPERTY Email AS CHARACTER NO-UNDO
+        GET.
+        SET.
+    DEFINE PUBLIC PROPERTY MobileNumber AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY FixedNumber AS CHARACTER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY OperEMailMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY OutEMailMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+    
+    
+    DEFINE PUBLIC PROPERTY OperPostMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY OutPostMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY OperSMSMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY OutSMSMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY OutBankMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY DontSharePersData AS LOGICAL NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY OperAllMarketing AS LOGICAL NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY AuthCustIdType AS CHARACTER NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY AuthCustId AS CHARACTER NO-UNDO
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY AddressIndex AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY AddrID AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY AddressDataIndex AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY aOCustAcct AS bss.cls.CustomerAccount NO-UNDO 
+        GET.
+        SET.   
+        
+    DEFINE PUBLIC PROPERTY isNewCustomer AS LOGICAL NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
+        FIELDS custacctobj  AS CLASS Progress.Lang.Object
+        FIELDS custacctnum  AS INTEGER
+        INDEX custacctnum IS PRIMARY UNIQUE custacctnum. 
 
 	CONSTRUCTOR PUBLIC Customer():
 	END CONSTRUCTOR.
@@ -53,20 +183,198 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
 	END METHOD.
 
+
+   METHOD PUBLIC VOID mFindCustomer (INPUT iiCustAcct AS INTEGER) :
+       
+       FIND FIRST CustomerAccount 
+            WHERE CustomerAccount.AccountID  = iiCustAcct NO-LOCK NO-ERROR .
+            
+       IF NOT AVAILABLE CustomerAccount
+       THEN  UNDO, THROW NEW ParamError
+               (SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
+               
+       FIND FIRST Customer WHERE Customer.CustNum = CustomerAccount.CustNum NO-LOCK NO-ERROR.
+       IF NOT AVAILABLE Customer
+       THEN UNDO, THROW NEW ParamError
+               (SUBSTITUTE("customer_not_found|&1", CustomerAccount.CustNum)).
+               
+        ASSIGN THIS-OBJECT:CustNum  = Customer.CustNum
+               THIS-OBJECT:Category = Customer.Category.
+      
+       
+   END METHOD.
+   
    METHOD PUBLIC VOID mCreateData
      (ioJsonObject AS CLASS JsonObject):
 
-      UNDO, THROW NEW InternalError("mCreateCustomer is not implemented").
+       DEFINE VARIABLE liCustnum AS INTEGER NO-UNDO.
+       DEFINE VARIABLE CustAccounts AS CLASS JsonArray NO-UNDO.
+       DEFINE VARIABLE CustAcctObj  AS CLASS JsonObject NO-UNDO.
+       DEFINE VARIABLE liCustAcctCnt AS INTEGER NO-UNDO.
+       DEFINE VARIABLE lcSupportedTitles AS CHARACTER INITIAL
+           "Sr.,Mr.,Sr,Mr,Mrs.,Sra.,Mrs,Sra" NO-UNDO.
+           
+       DEFINE VARIABLE MarketingData AS CLASS JsonObject NO-UNDO .
 
+       IF ioJsonObject:Has("title")
+       THEN DO:
+           IF LOOKUP(ioJsonObject:GetCharacter("title"), lcSupportedTitles) EQ 0
+               THEN UNDO, THROW NEW ParamError(SUBSTITUTE("unsupported_person_title|&1",
+                   ioJsonObject:GetCharacter("title"))).
+           THIS-OBJECT:CustTitle = ioJsonObject:GetCharacter("title").
+       END.
+       
+       FIND LAST customer USE-INDEX custnum NO-LOCK NO-ERROR.
+       IF NOT AVAILABLE customer 
+       THEN ASSIGN liCustNum = 1.
+       ELSE liCustnum = Customer.CustNum + 1 .
+       
+       ASSIGN 
+       THIS-OBJECT:isNewCustomer  = TRUE
+       THIS-OBJECT:FirstName      = ioJsonObject:GetCharacter("fname")
+       THIS-OBJECT:SurName1       = ioJsonObject:GetCharacter("lname")
+       THIS-OBJECT:SurName2       = ioJsonObject:GetCharacter("lname2")
+       THIS-OBJECT:Profession     = ioJsonObject:GetCharacter("profession")
+       THIS-OBJECT:Nationality    = ioJsonObject:GetCharacter("nationality")
+       THIS-OBJECT:Language       = mGetLanguage(ioJsonObject:GetCharacter("language"))
+       THIS-OBJECT:CustIdType     = ioJsonObject:GetCharacter("id_type")  
+       THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("person_id")
+       THIS-OBJECT:SelfEmployed   = ioJsonObject:GetLogical("self_employed")
+       THIS-OBJECT:BirthDay       = Func.Common:mGetDate(ioJsonObject:GetCharacter("birthday"))
+       THIS-OBJECT:FoundationDate = Func.Common:mGetDate(ioJsonObject:GetCharacter("foundation_date"))
+       THIS-OBJECT:Email          = ioJsonObject:GetCharacter("email")
+       THIS-OBJECT:MobileNumber   = ioJsonObject:GetCharacter("sms_number")
+       THIS-OBJECT:FixedNumber    = ioJsonObject:GetCharacter("phone_number")
+       THIS-OBJECT:CustNum        = liCustnum
+       THIS-OBJECT:AddressIndex   = ioJsonObject:GetInteger("default_address_data_index")
+       .
+       
+       IF ioJsonObject:Has("marketing")
+       THEN DO:
+           ASSIGN MarketingData                  = ioJsonObject:GetJsonObject("marketing")
+                  THIS-OBJECT:OperEMailMarketing = MarketingData:GetLogical("email")
+                  THIS-OBJECT:OperPostMarketing  = MarketingData:GetLogical("post")
+                  THIS-OBJECT:OperSMSMarketing   = MarketingData:GetLogical("sms")
+                  THIS-OBJECT:OutBankMarketing   = MarketingData:GetLogical("bank_3rd")
+                  THIS-OBJECT:OutEMailMarketing  = MarketingData:GetLogical("email_3rd")
+                  THIS-OBJECT:OutPostMarketing   = MarketingData:GetLogical("post_3rd")
+                  THIS-OBJECT:OutSMSMarketing    = MarketingData:GetLogical("sms_3rd")
+                  THIS-OBJECT:DontSharePersData  = MarketingData:GetLogical("dont_share_personal_data")
+                  THIS-OBJECT:OperAllMarketing   = THIS-OBJECT:OperEMailMarketing OR
+                                                   THIS-OBJECT:OutEMailMarketing  OR
+                                                   THIS-OBJECT:OperPostMarketing  OR
+                                                   THIS-OBJECT:OutPostMarketing   OR
+                                                   THIS-OBJECT:OperSMSMarketing   OR
+                                                   THIS-OBJECT:OutSMSMarketing
+                  .
+       END.
+       ELSE UNDO, THROW NEW ParamError ("Marketing data does not exist.").
+       
+       IF ioJsonObject:Has("customer_accounts")
+       THEN DO:
+           
+           ASSIGN CustAccounts  =  ioJsonObject:GetJsonArray("customer_accounts").
+           
+           DO liCustAcctCnt  = 1 TO CustAccounts:LENGTH :
+               
+               ASSIGN CustAcctObj = CustAccounts:GetJsonObject(liCustAcctCnt)
+                      aOCustAcct = NEW bss.cls.CustomerAccount(THIS-OBJECT).
+               
+               CREATE ttCustAccts.
+               ASSIGN ttCustAccts.custacctobj = aOCustAcct
+                      ttCustAccts.custacctnum = mGetNextCustAcctNum().
+
+           END.
+       END.
+       ELSE UNDO, THROW NEW ParamError ("Customer Account data does not exist.").
+       
+       
    END METHOD.
 
    METHOD PUBLIC VOID mStoreData():
 
-      IF THIS-OBJECT:CustNum > 0
-      THEN RETURN.
+       CREATE Customer.
+       ASSIGN 
+           Customer.CustNum           = THIS-OBJECT:CustNum
+           Customer.HonTitle          = THIS-OBJECT:CustTitle  
+           Customer.FirstName         = THIS-OBJECT:FirstName
+           Customer.CustName          = THIS-OBJECT:SurName1
+           Customer.SurName2          = THIS-OBJECT:SurName2
+           Customer.Nationality       = THIS-OBJECT:Nationality
+           Customer.Language          = INTEGER(THIS-OBJECT:Language)
+           Customer.CustIdType        = THIS-OBJECT:CustIdType
+           Customer.OrgId             = THIS-OBJECT:CustId
+           Customer.AuthCustIdType    = THIS-OBJECT:AuthCustIdType
+           Customer.AuthCustId        = THIS-OBJECT:AuthCustId
+           Customer.Birthday          = THIS-OBJECT:BirthDay
+           Customer.Email             = THIS-OBJECT:Email
+           Customer.SMSNumber         = THIS-OBJECT:MobileNumber
+           Customer.Phone             = THIS-OBJECT:FixedNumber
+           Customer.OutMarkBank       = THIS-OBJECT:OutBankMarketing
+           Customer.DontSharePersData = THIS-OBJECT:DontSharePersData
+           Customer.DirMarkEmail      = THIS-OBJECT:OperEMailMarketing
+           Customer.OutMarkEmail      = THIS-OBJECT:OutEMailMarketing
+           Customer.DirMarkPost       = THIS-OBJECT:OperPostMarketing
+           Customer.OutMarkPost       = THIS-OBJECT:OutPostMarketing
+           Customer.DirMarkSMS        = THIS-OBJECT:OperSMSMarketing
+           Customer.OutMarkSMS        = THIS-OBJECT:OutSMSMarketing
+           Customer.FoundationDate    = THIS-OBJECT:FoundationDate
+           . 
+      
+       /* How to Fetch the address record here.. do we need to really assign customer from address record???*/
+       
+       /*FIND FIRST Address NO-LOCK WHERE Address.AddressID = THIS-OBJECT:AddrId  NO-ERROR.
+       IF NOT AVAILABLE Address
+           THEN UNDO, THROW NEW ParamError ("Address record does not exist.").
+     
+       ASSIGN 
+           Customer.Address    = Address.Street
+           Customer.PostOffice = Address.CityCode
+           Customer.Region     = Address.Region
+           Customer.ZipCode    = Address.zipCode
+           Customer.Country    = Address.Country
+           .     
+            
+     
+       IF NOT CAN-FIND(FIRST CustomerReport WHERE CustomerReport.CustNum  =  Customer.CustNum)
+       THEN DO:
+         
+           CREATE CustomerReport.
+           ASSIGN 
+               CustomerReport.StreetCode = Address.StreetCode
+               CustomerReport.CityCode   = Address.CityCode
+               CustomerReport.TownCode   = Address.towncode
+               .
 
-      UNDO, THROW NEW InternalError("mStoreData is not implemented").
-
+       END.       
+       */
+       FOR EACH ttCustAccts :
+           CAST(ttCustAccts.custacctobj,bss.cls.CustomerAccount):mStoreData().
+       END.
+      
    END METHOD.
+   
+    METHOD PRIVATE CHARACTER mGetLanguage
+        (icLanguage AS CHARACTER):
+
+        FOR FIRST Language NO-LOCK WHERE
+            Language.LanguageCode = icLanguage:
+            RETURN STRING(Language.Language).
+        END.
+
+        UNDO, THROW NEW ParamError(SUBSTITUTE("language_unknown|&1", icLanguage)).
+
+    END METHOD.
+    
+        
+    METHOD PUBLIC INTEGER mGetNextCustAcctNum():
+        
+        FIND LAST ttCustAccts USE-INDEX custacctnum NO-ERROR.
+        IF NOT AVAILABLE ttCustAccts
+        THEN RETURN 1.
+        ELSE RETURN ( ttCustAccts.custacctnum + 1 ). 
+         
+    END METHOD.
+    
 
 END CLASS.

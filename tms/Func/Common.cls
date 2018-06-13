@@ -1137,5 +1137,24 @@ CLASS Func.Common FINAL:
          ocText = REPLACE(ocText,"#EXPDATESMSBUNDLE",STRING((idate + 30 ),"99-99-9999")) .
       END.
    END.
+   
+   METHOD PUBLIC STATIC DATE mGetDate (icDate AS CHARACTER) :
+       
+       DEFINE VARIABLE liMonth AS INTEGER NO-UNDO.
+       DEFINE VARIABLE liDay   AS INTEGER NO-UNDO.
+       DEFINE VARIABLE liYear  AS INTEGER NO-UNDO.
+        
+       ASSIGN
+           liDay   = INTEGER(ENTRY(3,icDate,"-")) 
+           liMonth = INTEGER(ENTRY(2,icDate,"-"))
+           liYear  = INTEGER(ENTRY(1,icDate,"-"))
+           NO-ERROR.
+           
+       IF ERROR-STATUS:ERROR 
+       THEN RETURN ? . 
+        
+       RETURN DATE(liMonth,liDay,liYear).
+       
+   END METHOD.
 
 END CLASS.

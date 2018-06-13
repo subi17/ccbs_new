@@ -71,13 +71,13 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         IF VALID-OBJECT(loShipAddress) 
         THEN DO:
             
-            aoShippingCustomer  = NEW bss.cls.OrderCustomer(aoOrder).
+            /*aoShippingCustomer  = NEW bss.cls.OrderCustomer(aoOrder).
             ASSIGN 
                 aoShippingCustomer:RowType          = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
                 aoShippingCustomer:isShipCustomer   = YES
             .
             aoShippingCustomer:mCreateData(loShipAddress).
-            
+            */
         END.
         
     END METHOD.

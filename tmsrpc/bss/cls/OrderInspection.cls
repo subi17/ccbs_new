@@ -44,7 +44,7 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY ROIDeliverySecure AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY ROIDeliverySecure AS LOGICAL  NO-UNDO
        GET.
        SET.
 	
@@ -68,9 +68,9 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:ROIResult         =  ioPaymentObject:GetCharacter("result")          WHEN ioPaymentObject:Has("result")
             THIS-OBJECT:ROIDescription    =  ioPaymentObject:GetCharacter("description")     WHEN ioPaymentObject:Has("description")
             THIS-OBJECT:ROILevel          =  ioPaymentObject:GetCharacter("level")           WHEN ioPaymentObject:Has("level")
-            THIS-OBJECT:ROIRuleID         =  ioPaymentObject:GetCharacter("rule-id")         WHEN ioPaymentObject:Has("rule-id")
-            THIS-OBJECT:ROIRiskCode       =  ioPaymentObject:GetCharacter("risk-code")       WHEN ioPaymentObject:Has("risk-code")
-            THIS-OBJECT:ROIDeliverySecure =  ioPaymentObject:GetInteger("delivery-secure")   WHEN ioPaymentObject:Has("delivery-secure")
+            THIS-OBJECT:ROIRuleID         =  ioPaymentObject:GetCharacter("rule_id")         WHEN ioPaymentObject:Has("rule_id")
+            THIS-OBJECT:ROIRiskCode       =  ioPaymentObject:GetCharacter("risk_code")       WHEN ioPaymentObject:Has("risk_code")
+            THIS-OBJECT:ROIDeliverySecure =  ioPaymentObject:GetLogical("delivery_secure")   WHEN ioPaymentObject:Has("delivery_secure")
             .
         
     END METHOD.
@@ -90,9 +90,10 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
         
         ASSIGN 
             Order.ROIResult      =   THIS-OBJECT:ROIResult
-            Order.ROILevel       =   INT(THIS-OBJECT:ROILevel)  
+            Order.ROILevel       =   INTEGER(THIS-OBJECT:ROILevel)  
             Order.RiskCode       =   THIS-OBJECT:ROIRiskCode 
-            Order.DeliverySecure =   THIS-OBJECT:ROIDeliverySecure.
+            Order.DeliverySecure =   INTEGER(THIS-OBJECT:ROIDeliverySecure)
+            .
            
     END METHOD.
     

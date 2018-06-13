@@ -13,7 +13,7 @@ USING Progress.Lang.*.
 USING profcgi.RPC.JSON.InternalError.
 USING profcgi.RPC.JSON.ParamError.
 USING Progress.Json.ObjectModel.JsonObject.
-
+USING Progress.Json.ObjectModel.JsonArray.
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
@@ -23,7 +23,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 	 Purpose:
 	 Notes:
 	------------------------------------------------------------------------------*/
-
+	
    DEFINE PUBLIC PROPERTY OrderId AS INTEGER NO-UNDO
       GET.
       SET.
@@ -45,6 +45,22 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       SET.
       
    DEFINE PUBLIC PROPERTY loCustAcct AS CLASS JsonObject NO-UNDO
+      GET.
+      SET.
+      
+   /*DEFINE PUBLIC PROPERTY aoOrderAddressData AS CLASS bss.cls.OrderAddressData NO-UNDO 
+      GET.
+      SET.
+     */ 
+   DEFINE PUBLIC PROPERTY aoOrderInspection AS CLASS bss.cls.OrderInspection NO-UNDO 
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY aoOrderPayment AS CLASS bss.cls.OrderPayment NO-UNDO
+      GET.
+      SET.  
+      
+   DEFINE PUBLIC PROPERTY aoOrderAddress AS CLASS bss.cls.OrderAddress NO-UNDO 
       GET.
       SET.
 
@@ -104,6 +120,13 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
       GET.
       SET.
+      
+    DEFINE TEMP-TABLE ttOrderAddress NO-UNDO 
+        FIELDS AddrObj  AS CLASS Progress.Lang.Object
+        FIELDS AddrNum  AS INTEGER
+        FIELDS AddressID AS INTEGER
+        INDEX AddrNum IS PRIMARY UNIQUE AddrNum 
+        .
 
 	CONSTRUCTOR PUBLIC Order():
 	END CONSTRUCTOR.
@@ -126,14 +149,18 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
-      DEFINE VARIABLE loAgrCust     AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE ldaCreateDate AS DATE             NO-UNDO.
+        DEFINE VARIABLE loAgrCust       AS CLASS     JsonObject           NO-UNDO.
+        DEFINE VARIABLE ldaCreateDate   AS DATE      NO-UNDO.
+        DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.
+        DEFINE VARIABLE arrayAddrObject AS CLASS     JsonObject           NO-UNDO.
+        DEFINE VARIABLE loAddrObject    AS CLASS     bss.cls.OrderAddress NO-UNDO.
+        DEFINE VARIABLE loAddrArray     AS CLASS     JsonArray NO-UNDO.
       
       ASSIGN
          loAgrCust            =   ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
-         loCustAcct           =   ioJsonObject:GetJsonObject("customer-account")   WHEN ioJsonObject:Has("customer-account")
-         OrderPaymentData     =   ioJsonObject:GetJsonObject("payment")            WHEN ioJsonObject:Has("payment")
-         OrderInspectionData  =   ioJsonObject:GetJsonObject("order-inspection")   WHEN ioJsonObject:Has("order-inspection")
+         loCustAcct           =   ioJsonObject:GetJsonObject("customer")           WHEN ioJsonObject:Has("customer")
+         OrderPaymentData     =   ioJsonObject:GetJsonObject("payment_method")     WHEN ioJsonObject:Has("payment_method")
+         OrderInspectionData  =   ioJsonObject:GetJsonObject("inspection")         WHEN ioJsonObject:Has("inspection")
          aoCustomer           =   NEW bss.cls.Customer().
          
       IF VALID-OBJECT(loAgrCust) 
@@ -146,12 +173,13 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       END. 
       ELSE IF VALID-OBJECT(loCustAcct)
       THEN DO:
-          IF loCustAcct:Has("custnum")
-          THEN aoCustomer:mFindData(loCustAcct:GetInteger("custnum")).
+          IF loCustAcct:Has("account_id")
+          THEN aoCustomer:mFindCustomer(loCustAcct:GetInteger("account_id")).
+          ELSE aoCustomer:mCreateData(loCustAcct).
       END.      
 
       ASSIGN
-         ldaCreateDate            = ioJsonObject:GetDate("created-at")
+         ldaCreateDate            = Func.Common:mGetDate(ioJsonObject:GetCharacter("created-at"))
          THIS-OBJECT:ContractId   = ioJsonObject:GetCharacter("contractid") 
          THIS-OBJECT:Salesman     = ioJsonObject:GetCharacter("salesman")
          THIS-OBJECT:OrderChannel = ioJsonObject:GetCharacter("channel")
@@ -159,6 +187,26 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
                                     MONTH(ldaCreateDate) * 100 +
                                     DAY(ldaCreateDate)
          .
+         
+        IF ioJsonObject:Has("addresses")
+        THEN DO:
+          
+            loAddrArray  =  ioJsonObject:GetJsonArray("addresses").
+          
+            DO licount = 1 TO loAddrArray:LENGTH :
+                ASSIGN 
+                    arrayAddrObject = loAddrArray:GetJsonObject(licount)
+                    loAddrObject    = NEW bss.cls.OrderAddress(THIS-OBJECT).
+                CREATE ttOrderAddress.
+                ASSIGN 
+                    ttOrderAddress.AddrObj = loAddrObject
+                    ttOrderAddress.AddrNum = mGetNextAddrNum()
+                    .
+                loAddrObject:mCreateData(arrayAddrObject).
+                ASSIGN 
+                    ttOrderAddress.AddressID = loAddrObject:AddrID.
+            END.
+        END.
 
       IF ioJsonObject:Has("items")
       THEN DO:
@@ -166,33 +214,62 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          aoOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
       END.
       ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
+      
+      IF VALID-OBJECT(OrderInspectionData)
+      THEN DO:
+          ASSIGN aoOrderInspection = NEW bss.cls.OrderInspection(THIS-OBJECT).
+          aoOrderInspection:mCreateData(OrderInspectionData).
+      END.
+      
+      IF VALID-OBJECT(OrderPaymentData)
+      THEN DO:
+          ASSIGN aoOrderPayment  = NEW bss.cls.OrderPayment(THIS-OBJECT).
+          aoOrderPayment:mCreateData(OrderPaymentData).
+      END.
 
 	END METHOD.
 
-   METHOD PUBLIC VOID mStoreData():
+    METHOD PUBLIC VOID mStoreData():
 
-      /* If there is a new customer data we need to create it first */
-      aoCustomer:mStoreData().
+        /* If there is a new customer data we need to create it first */
+        IF aoCustomer:isNewCustomer THEN
+        aoCustomer:mStoreData().
 
-      CREATE Order.
-      ASSIGN
-         Order.Brand         = Syst.Var:gcBrand
-         Order.OrderId       = NEXT-VALUE(OrderId)
-         THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
-         Order.StatusCode    = {&ORDER_STATUS_ONGOING}
-         Order.OrderType     = (IF THIS-OBJECT:isACCOrder THEN {&ORDER_TYPE_ACC} ELSE {&ORDER_TYPE_NEW})
-         Order.Source        = "bssapi"
-         Order.CustNum       = aoCustomer:CustNum
-         Order.MsSeq         = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:MsSeq ELSE NEXT-VALUE(MobSub))
-         Order.CLI           = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:CLI   ELSE THIS-OBJECT:lcCLI)
-         Order.ContractID    = THIS-OBJECT:ContractId
-         Order.SalesMan      = THIS-OBJECT:Salesman
-         Order.OrderChannel  = THIS-OBJECT:OrderChannel
-         Order.CrStamp       = THIS-OBJECT:CrStamp.
+        CREATE Order.
+        ASSIGN
+            Order.Brand         = Syst.Var:gcBrand
+            Order.OrderId       = NEXT-VALUE(OrderId)
+            THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
+            Order.StatusCode    = {&ORDER_STATUS_ONGOING}
+            Order.OrderType     = (IF THIS-OBJECT:isACCOrder THEN {&ORDER_TYPE_ACC} ELSE {&ORDER_TYPE_NEW})
+            Order.Source        = "bssapi"
+            Order.CustNum       = aoCustomer:CustNum
+            Order.MsSeq         = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:MsSeq ELSE NEXT-VALUE(MobSub))
+            Order.CLI           = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:CLI   ELSE THIS-OBJECT:lcCLI)
+            Order.ContractID    = THIS-OBJECT:ContractId
+            Order.SalesMan      = THIS-OBJECT:Salesman
+            Order.OrderChannel  = THIS-OBJECT:OrderChannel
+            Order.CrStamp       = THIS-OBJECT:CrStamp
+            .
 
-      aoOrderProductFactory:mStoreData().
+        aoOrderProductFactory:mStoreData().
+      
+        IF VALID-OBJECT(OrderInspectionData)
+            THEN aoOrderInspection:mStoreData().
+      
+        IF VALID-OBJECT(OrderPaymentData)
+            THEN aoOrderPayment:mStoreData().
+            
+        IF TEMP-TABLE ttOrderAddress:HAS-RECORDS 
+        THEN DO:
+            
+            FOR EACH ttOrderAddress:
+                CAST(ttOrderAddress.AddrObj, bss.cls.OrderAddress):mStoreData().
+            END.
+            
+        END.
 
-   END METHOD.
+    END METHOD.
 
    METHOD PUBLIC JsonObject mResult():
 
@@ -206,5 +283,13 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       RETURN loJsonObject.
 
    END METHOD.
+   
+    METHOD PUBLIC INTEGER mGetNextAddrNum() :
+        
+        FIND LAST ttOrderAddress USE-INDEX AddrNum NO-ERROR.
+        IF NOT AVAILABLE ttOrderAddress THEN RETURN 1.
+        ELSE RETURN (ttOrderAddress.AddrNum + 1).
+        
+    END METHOD.
 
 END CLASS.
