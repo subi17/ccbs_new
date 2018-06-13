@@ -278,7 +278,8 @@ PROCEDURE pDSSAccount:
          fDSSAddRequest(lbMobsub.MsSeq,
                         lcBundleId,
                         0,
-                        {&REQUEST_SOURCE_SCRIPT}).
+                        {&REQUEST_SOURCE_SCRIPT},
+                        0).
          
          ASSIGN lcDSSAction = "ADD"
                 lcResult    = lcBundleId + " ADD Request created".
@@ -290,7 +291,8 @@ PROCEDURE pDSSAccount:
             fDSSAddRequest(lbMobsub.MsSeq,
                            lcBundleId,
                            0,
-                           {&REQUEST_SOURCE_SCRIPT}).
+                           {&REQUEST_SOURCE_SCRIPT},
+                           0).
 
             ASSIGN lcDSSAction = "ADD"
                    lcResult    = lcBundleId + " ADD Request created".               
