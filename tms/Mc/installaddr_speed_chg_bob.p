@@ -226,7 +226,7 @@ DO ON ERROR UNDO , LEAVE:
                     PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) ";install_address_change_request_failed;" + "Order is not a Convergent Order."  SKIP.
                     NEXT.
                 END.
-                IF lcPermanencyRule NE "FTERM=3" OR lcPermanencyRule NE "" THEN DO:
+                IF lcPermanencyRule NE "FTERM=3" AND lcPermanencyRule NE "" THEN DO:
                     PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" +  STRING(liOrderID) + ";install_address_change_request_failed;" + "Permanency rule not allowed."  SKIP.
                     PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) ";install_address_change_request_failed;" + "Permanency rule not allowed."  SKIP.
                     NEXT.
