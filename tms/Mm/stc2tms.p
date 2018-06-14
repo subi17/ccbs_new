@@ -1698,8 +1698,9 @@ PROCEDURE pCloseContracts:
 
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
-                                        lcContract,
-                                        "term",
+                                        lcContract,                                           
+                                        (IF bOrigRequest.ReqIParam5 EQ 3
+                                            THEN "recreate" ELSE "term"),                                           
                                         idEndStamp,
                                         llCreateFees,   /* create fee */
                                         icReqSource,
@@ -1711,13 +1712,15 @@ PROCEDURE pCloseContracts:
                                         (IF AVAIL DayCampaign AND DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN liContractID ELSE 0),
                                         "",
                                         OUTPUT lcError).
+                                        
          IF liTerminate = 0 THEN
             Func.Common:mWriteMemo("MobSub",
                        STRING(iiMsSeq),
                        MobSub.CustNum,
                        "Subscription type change",
-                       "Per.contract termination request creation failed; " +
-                          lcError).                
+                       (IF bOrigRequest.ReqIParam5 EQ 3
+                          THEN "Per.contract recreation request creation failed; "  + lcError 
+                       ELSE "Per.contract termination request creation failed; "  + lcError)).                                         
          ELSE DO:
             IF LOOKUP(lcContract,lcBonoContracts) > 0 THEN
                liBonoTerminate = liTerminate.
