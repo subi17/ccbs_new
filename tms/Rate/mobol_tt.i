@@ -226,7 +226,16 @@ FUNCTION fFillSLGAnalyse RETURNS LOGICAL:
 
                   FOR EACH bf_ttMxItem WHERE bf_ttMxItem.MxSeq = ttMxItem.MxSeq AND bf_ttMxItem.MXName = "PerContract":
                       IF LOOKUP(bf_ttMxItem.MxValue, lcAllowedBundles) = 0 THEN                 
-                         ASSIGN lcAllowedBundles = lcAllowedBundles + (IF lcAllowedBundles <> "" THEN "," ELSE "") + bf_ttMxItem.MxValue.
+                      DO:
+                          FOR EACH TMSRelation WHERE TMSRelation.TableName   = "DayCampaign" AND 
+                                                     TMSRelation.KeyType     = "UPSELL"      AND
+                                                     TMSRelation.ParentValue = bf_ttMxItem.MxValue NO-LOCK:
+                              IF LOOKUP(TMSRelation.ChildValue, lcAllowedBundles) = 0 THEN                       
+                                  ASSIGN lcAllowedBundles = lcAllowedBundles + (IF lcAllowedBundles <> "" THEN "," ELSE "") + TMSRelation.ChildValue.
+                          END. 
+
+                          ASSIGN lcAllowedBundles = lcAllowedBundles + (IF lcAllowedBundles <> "" THEN "," ELSE "") + bf_ttMxItem.MxValue.
+                      END.
                   END.
 
               END.
