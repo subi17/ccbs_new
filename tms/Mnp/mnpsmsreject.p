@@ -28,6 +28,7 @@ DEFINE OUTPUT PARAMETER olInterrupted AS LOGICAL    NO-UNDO.
 
 /* ********************  Stream/Variable Definitions  ************************** */
 DEFINE STREAM sdump.
+DEFINE BUFFER bCallAlarm FOR CallAlarm.
 
 DEFINE VARIABLE lcDelimiter   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStatusReason  AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC ENUME,RECH_BNUME,RECH_ICCID,RECH_IDENT".
@@ -48,9 +49,10 @@ ERROR_LOOP:
 FOR EACH MNPProcess NO-LOCK 
     WHERE MNPProcess.Brand       =  Syst.Var:gcBrand 
       AND MNPProcess.MNPType     =  {&MNP_TYPE_IN} 
-      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}   
+      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}
+       OR MNPProcess.StatusCode  =  {&MNP_ST_AREC_CLOSED}    
       AND MNPProcess.UpdateTS    >  idLastDump:
-    IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) = 0 THEN NEXT ERROR_LOOP.
+   IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) = 0 THEN NEXT ERROR_LOOP. 
             
        FIND FIRST MNPDetails NO-LOCK 
             WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
@@ -58,6 +60,11 @@ FOR EACH MNPProcess NO-LOCK
        
        FOR EACH MNPSub NO-LOCK 
             WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq:
+               
+       FIND FIRST CallAlarm NO-LOCK
+            WHERE CallAlarm.Brand      =  Syst.Var:gcBrand
+              AND CallAlarm.Cli        =  MNPSub.Cli
+              AND CallAlarm.ActStamp  >=  MNPProcess.UpdateTS NO-ERROR.
                                                                         
             PUT STREAM sdump UNFORMATTED 
                 Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
@@ -65,7 +72,9 @@ FOR EACH MNPProcess NO-LOCK
                 MNPDetails.DonorCode lcDelimiter
                 MNPProcess.PortRequest lcDelimiter
                 MNPProcess.StatusReason lcDelimiter
-                Func.Common:mTS2HMS(MNPProcess.UpdateTS) SKIP.
+                Func.Common:mTS2HMS(MNPProcess.UpdateTS) lcDelimiter 
+                IF AVAILABLE CallAlarm AND CallAlarm.DeliStat = 3 THEN Func.Common:mTS2HMS(CallAlarm.DeliStamp)  ELSE "" lcDelimiter 
+                IF AVAILABLE CallAlarm AND CallAlarm.DeliStat = 3 THEN CallAlarm.DeliMsg  ELSE "" SKIP.
                                 
             oiEvents = oiEvents + 1.
             IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
