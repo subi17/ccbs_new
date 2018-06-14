@@ -83,7 +83,7 @@
       <xs:attribute name="Document" type="xs:string"/>
       <xs:attribute name="Version" type="xs:string">
         <xs:annotation>
-          <xs:documentation>Version 3.4</xs:documentation>
+          <xs:documentation>Version 3.5</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
