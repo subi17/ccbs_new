@@ -1688,7 +1688,7 @@ PROCEDURE pCloseContracts:
              1=extend_term_contract
              2=exclude_term_penalty)
           */ 
-         IF AVAILABLE(bOrigRequest) AND (bOrigRequest.ReqIParam5 EQ 2 OR bOrigRequest.ReqIParam5 EQ 3) AND
+         IF AVAILABLE(bOrigRequest) AND (bOrigRequest.ReqIParam5 EQ 2 OR (bOrigRequest.ReqIParam5 EQ 3 AND lcContract BEGINS "FTERM")) AND
             CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
                                                      DayCampaign.DCEvent EQ lcContract          AND 
                                                      DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
@@ -1699,7 +1699,7 @@ PROCEDURE pCloseContracts:
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
                                         lcContract,                                           
-                                        (IF bOrigRequest.ReqIParam5 EQ 3
+                                        (IF bOrigRequest.ReqIParam5 EQ 3 AND lcContract BEGINS "FTERM"
                                             THEN "recreate" ELSE "term"),                                           
                                         idEndStamp,
                                         llCreateFees,   /* create fee */
@@ -1718,7 +1718,7 @@ PROCEDURE pCloseContracts:
                        STRING(iiMsSeq),
                        MobSub.CustNum,
                        "Subscription type change",
-                       (IF bOrigRequest.ReqIParam5 EQ 3
+                       (IF bOrigRequest.ReqIParam5 EQ 3 AND lcContract BEGINS "FTERM"
                           THEN "Per.contract recreation request creation failed; "  + lcError 
                        ELSE "Per.contract termination request creation failed; "  + lcError)).                                         
          ELSE DO:

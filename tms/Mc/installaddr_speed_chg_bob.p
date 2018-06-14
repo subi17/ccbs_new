@@ -179,7 +179,7 @@ DO ON ERROR UNDO , LEAVE:
                 IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
                 IF TRIM (lcLine) = "" THEN NEXT.
                 
-                IF NUM-ENTRIES(lcLine,lcDelimiter) < 25 THEN DO:
+                IF NUM-ENTRIES(lcLine,lcDelimiter) < 26 THEN DO:
                     PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";install_address_change_request_failed;" + "Incorrect number of entries"  SKIP.
                     PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";install_address_change_request_failed;" + "Incorrect number of entries"  SKIP.
                     NEXT.
@@ -226,7 +226,7 @@ DO ON ERROR UNDO , LEAVE:
                     PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) ";install_address_change_request_failed;" + "Order is not a Convergent Order."  SKIP.
                     NEXT.
                 END.
-                IF lcPermanencyRule NE "FTERM=3" THEN DO:
+                IF lcPermanencyRule NE "FTERM=3" OR lcPermanencyRule NE "" THEN DO:
                     PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" +  STRING(liOrderID) + ";install_address_change_request_failed;" + "Permanency rule not allowed."  SKIP.
                     PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) ";install_address_change_request_failed;" + "Permanency rule not allowed."  SKIP.
                     NEXT.
@@ -356,8 +356,9 @@ DO ON ERROR UNDO , LEAVE:
                                     '' , /* DataBundle */
                                     '' , /* Bank Acc */ 
                                     ldActivationTS,
-                                    0  ,    /* Credit Check OK   */ 
-                                    INT(SUBSTRING(lcPermanencyRule,7,1))  ,    /* Request Flag = 0  */
+                                    0  ,    /* Credit Check OK   */
+                                    (IF lcPermanencyRule EQ "FTERM=3" 
+                                       THEN INT(SUBSTRING(lcPermanencyRule,7,1)) ELSE 0),                                    
                                     "" ,    /* SalesMan          */
                                     FALSE , /* Create Fees       */
                                     FALSE , /* Send SMS          */
