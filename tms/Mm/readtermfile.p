@@ -302,7 +302,9 @@ REPEAT:
          NEXT.
       END.
 
-      IF fIsConvergenceTariff(lcCLIType) THEN DO.
+      IF fIsConvergenceTariff(lcCLIType) AND 
+         NOT CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = MobSub.MsSeq)
+      THEN DO.
          IF lcTerminationType EQ "MOBILE" THEN DO:
             liRequest = fTerminationRequest(MobSub.MSSeq,
                                             ldKillStamp,
@@ -358,6 +360,11 @@ REPEAT:
             END.
          END.
       END.
+      ELSE DO:
+         fError("Subscription is partially terminated. Use FULL termination.").
+         NEXT.
+      END.   
+      
    END. /* else do */
 END.
 
