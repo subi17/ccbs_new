@@ -25,6 +25,12 @@ RUN ipModifyMenuTree.
 RUN ipCreateUpsellMenu.
 RUN ipUpdateDayCampaignDump.
 
+MESSAGE "This script will creae the HPD Dump for TMSRelation table." SKIP 
+        "Are you sure you want to proceed?"
+        VIEW-AS ALERT-BOX QUESTION  BUTTONS YES-NO UPDATE lgChoice AS LOGICAL.
+
+IF NOT lgChoice THEN RETURN.
+
 ASSIGN lcDumpScript= "/apps/yoigo/tms_support/201805/tmsrelation_dump_create.p".
 
 RUN VALUE(lcDumpScript).
