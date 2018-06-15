@@ -912,10 +912,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
              ttSub.FixedNumber = SubInvoice.FixedNumber
              ttSub.MsSeq       = SubInvoice.MsSeq. 
       
-      /* fTestLog(
-         "FOR EACH Begin..." +
-         " ttSub.CLI:" + STRING(ttSub.CLI) +
-         " ttSub.FixedNum:" + ttSub.FixedNumber).*/
       /*NEBACO-7*/
       /*Find IUA for the subscription*/
       IF ttSub.FixedNumber NE "" AND ttSub.FixedNumber NE ? THEN DO:
@@ -1157,26 +1153,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
-      /* fTestLog(
-         "ttSub..." +
-         " ttSub.CLI:" + STRING(ttSub.CLI) +
-         " ttSub.CliType:" + STRING(ttSub.CliType) +
-         " ttSub.CTName:" + STRING(ttSub.CTName) +
-         " ttSub.OldCliType:" + STRING(ttSub.OldCliType) +
-         " ttSub.OldCTName:" + STRING(ttSub.OldCTName)). */
-
       FOR EACH ttRow WHERE
                ttRow.SubInvNum = SubInvoice.SubInvNum NO-LOCK:
-
-         /* fTestLog(
-         "ttRow.SubInvNum:" + STRING(ttRow.SubInvNum) +
-         " RowType:" + ttRow.RowType +
-         " RowCode:" + ttRow.RowCode +
-         " RowBillCode:" + ttRow.RowBillCode +
-         " RowName:" + ttRow.RowName +
-         " RowAmtEclVat:" + STRING(ttRow.RowAmtExclVat) +
-         " RowVatAmt:" + STRING(ttRow.RowVatAmt) +
-         " RowAmt:" + STRING(ttRow.RowAmt)).*/
 
          /*Google billing*/
          IF ttRow.RowCode BEGINS "44" THEN
@@ -1186,8 +1164,10 @@ PROCEDURE pGetSubInvoiceHeaderData:
             ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
 
          /* YDR-2848 The sum of the discounts applied to the line */
-         IF ttRow.RowGroup  = "13" OR
-            ttRow.RowGroup  = "10" THEN DO:
+          IF (ttRow.RowCode BEGINS "13" AND
+              ttRow.RowGroup  = "13") OR
+             (ttRow.RowCode BEGINS "10" AND
+              ttRow.RowGroup  = "10") THEN DO:
             ttSub.Discounts = ttSub.Discounts + ttRow.RowAmtExclVat.
             /* Check phone discounts */
             IF ttSub.InstallmentAmt > 0 THEN
@@ -1243,18 +1223,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
             THEN llRVFinancedByBank = TRUE.
          END.
       END.
-
-      /* fTestLog("ttSub.CLI:" + ttSub.CLI + 
-               " FixedNumber:" + ttSub.FixedNumber +
-               " CliTYpe:" + ttSub.CliType +
-               " CTName: " + ttSub.CTName +
-               " MsSeq:" + STRING(ttSub.MsSeq) +
-               " InstallmentAmt:" + STRING(ttSub.InstallmentAmt) +
-               " PenaltyAmt: " + STRING(ttSub.PenaltyAmt) +
-               " InstallmentDiscAmt:" + STRING(ttSub.InstallmentDiscAmt) +
-               " OldCLIType: " + ttSub.OldCLIType +
-               " OldCTName: " + ttSub.OldCTName +
-               " SubscriptionTotal: " + STRING(ttSub.SubscriptionTotal)).*/
 
       IF llPTFinancedByBank THEN 
          fTFBankFooterText("PAYTERM"). 
@@ -1363,14 +1331,6 @@ PROCEDURE pGetInvoiceRowData:
                   InvRow.BillCode BEGINS "RVTERM"
                THEN ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.               
             END.
-            /* YDR-2848 Amount charged for TV service (taxes are not applicable). */
-           /* WHEN "55" 
-            THEN
-               ttInvoice.AgileTV = ttInvoice.AgileTV + InvRow.Amt.*/
-            /* YDR-2848 Any concept that must be included in the invoice without taxes */
-           /* WHEN "xx" 
-            THEN
-               ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRowAmt.*/
          END CASE.
 
          IF InvRow.RowType EQ 9 AND
@@ -1433,14 +1393,6 @@ PROCEDURE pGetInvoiceRowData:
                liRowOrder       = liRowOrder + 2
                ttRow.RowOrder   = liRowOrder
                ttRow.GroupOrder = ttBillItemAndGroup.GroupOrder.
-
-            /* fTestLog(
-               "CREATE ttRow..." +
-               " ttRow.RowGroup:" + STRING(ttRow.RowGroup) +
-               " ttRow.RowCode:" + STRING(ttRow.RowCode) +
-               " ttRow.RowOrder:" + STRING(ttRow.RowOrder) +
-               " ttRow.RowQty:" + STRING(ttRow.RowQty) +
-               " InvRow.Qty:" + STRING(InvRow.Qty)).*/
          END.
 
          ASSIGN 
@@ -1458,14 +1410,6 @@ PROCEDURE pGetInvoiceRowData:
          /* YDR-2848 -  group the fee of 3p tariff in only one concept*/
          IF ttRow.RowGroup EQ "46" THEN ttRow.RowGroup = "18".
       END.
-
-      /* fTestLog(
-          "After CREATE ttRow..." +
-          " ttRow.RowGroup:" + STRING(ttRow.RowGroup) +
-          " ttRow.RowCode:" + STRING(ttRow.RowCode) +
-          " ttRow.RowOrder:" + STRING(ttRow.RowOrder) +
-          " ttRow.RowQty:" + STRING(ttRow.RowQty) +
-          " InvRow.Qty:" + STRING(InvRow.Qty)).*/
 
       /* subtotals are wanted as headers, so calculate them here and make
          rows out of them */
@@ -1506,14 +1450,6 @@ PROCEDURE pGetInvoiceRowData:
                bttRow.RowAmt    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmt).
          END.
       END.
-      /* fTestLog(
-         "EACH SubInvoice end..." +
-         " SubInvoice.InvNum: " + STRING(SubInvoice.InvNum) +
-         " SubInvoice.SubInvNum: " + STRING(SubInvoice.SubInvNum) +
-         " SubInvoice.AmtExclVat: " + STRING(SubInvoice.AmtExclVat) +
-         " SubInvoice.InvAmt: " + STRING(SubInvoice.InvAmt) +
-         " SubInvoice.CLI : " + SubInvoice.CLI +
-         " SubInvoice.FixedNumber : " + SubInvoice.FixedNumber).*/
    END.
 
    RETURN "".

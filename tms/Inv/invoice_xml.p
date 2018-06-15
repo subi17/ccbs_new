@@ -591,23 +591,6 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
      
-      /* Total fractura line removed 
-      IF ttInvoice.InstallmentAmt > 0 OR
-         ttInvoice.GBValue > 0 THEN DO:
-         lhXML:START-ELEMENT("AdditionalDetail").
-         lhXML:START-ELEMENT("AdditionalAmount").
-         lhXML:INSERT-ATTRIBUTE("Header","TotalAmountExclInstallment").
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(
-                                Invoice.InvAmt
-                                - ttInvoice.InstallmentAmt
-                                - ttInvoice.PenaltyAmt
-                                - ttInvoice.InstallmentDiscAmt
-                                - ttInvoice.GBValue
-                                - ttInvoice.GBDiscValue)).
-         lhXML:END-ELEMENT("AdditionalAmount").
-         lhXML:END-ELEMENT("AdditionalDetail").
-      END.*/
-      
       IF ttInvoice.PenaltyAmt > 0 THEN DO:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
