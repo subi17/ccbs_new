@@ -10,6 +10,8 @@ DEF INPUT PARAM piMessageSeq AS INT NO-UNDO.
 
 DEF BUFFER bFusionMessage FOR FusionMessage.
 
+DEF VAR liMaxRetry     AS INTEGER    NO-UNDO INIT 0.
+DEF VAR liCount        AS INTEGER    NO-UNDO INIT 0.
 DEF VAR lcHost         AS CHARACTER  NO-UNDO.
 DEF VAR liPort         AS INTEGER    NO-UNDO.
 DEF VAR lcAuthType     AS CHARACTER  NO-UNDO.
@@ -21,6 +23,8 @@ DEF VAR lcUriQuery     AS CHARACTER  NO-UNDO.
 DEF VAR lcUriQueryVal  AS CHARACTER  NO-UNDO.
 DEF VAR liLogRequest   AS INTEGER    NO-UNDO.
 DEF VAR llLogRequest   AS LOGICAL    NO-UNDO INIT TRUE.
+DEF VAR oiStatusCode   AS INTEGER    NO-UNDO. 
+DEF VAR ocStatusReason AS CHARACTER  NO-UNDO. 
 DEF VAR loRequestJson  AS JsonObject NO-UNDO.
 DEF VAR loResponseJson AS JsonObject NO-UNDO.
 
@@ -33,7 +37,7 @@ FUNCTION fLogRequest RETURNS CHAR
    IF llLogRequest AND VALID-OBJECT(ioJson) THEN
    DO:
       ioJson:WRITE( llcJson,TRUE).
-      OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_" + string(iiOrderId) + "_cancel_appointment_" + REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") + ".json") APPEND.
+      OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_" + STRING(iiOrderId) + "_cancel_appointment_" + REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") + ".json") APPEND.
       PUT STREAM sOut UNFORMATTED string(llcJson) SKIP.
       OUTPUT STREAM sOut CLOSE.
    END.
@@ -86,10 +90,34 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcUriQuery,
                            lcUriQueryVal,
                            loRequestJson,
+                           OUTPUT oiStatusCode,
+                           OUTPUT ocStatusReason,
                            OUTPUT loResponseJson). 
 
-ASSIGN FusionMessage.UpdateTS      = Func.Common:mMakeTS()
-       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
+IF oiStatusCode NE 200 THEN DO:
+
+   ASSIGN FusionMessage.UpdateTS       = Func.Common:mMakeTS()
+          FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_ERROR}
+          FusionMessage.ResponseCode   = "ERROR " + STRING(oiStatusCode)
+          FusionMessage.AdditionalInfo = ocStatusReason 
+          liMaxRetry                   = fIParam("Masmovil","AppointmentRetryMax").
+
+   FOR EACH bFusionMessage NO-LOCK WHERE
+            bFusionMessage.OrderID     EQ FusionMessage.OrderID     AND
+            bFusionMessage.MessageType EQ FusionMessage.MessageType AND
+            ROWID(bFusionMessage)      NE ROWID(FusionMessage):
+      liCount = liCount + 1.
+   END.
+
+   IF liCount < liMaxRetry THEN 
+      RETURN "RETRY".
+
+END.
+ELSE 
+   ASSIGN FusionMessage.UpdateTS       = Func.Common:mMakeTS()
+          FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_HANDLED}
+          FusionMessage.ResponseCode   = "ERROR " + STRING(oiStatusCode)
+          FusionMessage.AdditionalInfo = ocStatusReason.
 
 RETURN "".
 

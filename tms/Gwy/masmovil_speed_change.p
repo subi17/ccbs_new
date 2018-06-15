@@ -26,6 +26,8 @@ DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
 DEF VAR liLogRequest   AS INTE       NO-UNDO.
 DEF VAR llLogRequest   AS LOGICAL    NO-UNDO INIT TRUE.
 DEF VAR loRequestJson  AS JsonObject NO-UNDO.
+DEF VAR oiStatusCode   AS INTEGER    NO-UNDO.
+DEF VAR ocStatusReason AS CHARACTER  NO-UNDO.
 DEF VAR loJson         AS JsonObject NO-UNDO.
 
 DEF STREAM sOut.
@@ -112,6 +114,8 @@ RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
                            lcUriQuery,
                            lcUriQueryVal,
                            loRequestJson,
+                           OUTPUT oiStatusCode,
+                           OUTPUT ocStatusReason,
                            OUTPUT loJson).
 
 IF VALID-OBJECT(loJson) THEN
