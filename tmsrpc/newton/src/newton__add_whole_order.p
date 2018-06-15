@@ -2142,26 +2142,21 @@ IF lcFixedLinePermanency > "" THEN DO:
    IF Order.CLIType BEGINS "CONTFHNB" THEN DO:
    /* YCO-515 / YCO-297 temporary code. This old code can be removed
       in August 2018 when we are sure that old orders are handled. */
-      IF Order.CrStamp < /*20180620*/ 20180612 THEN DO:   /*changed date for testing */
-         IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
-            lcAddFTERM = "FTERM12-110".
-         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
-            lcAddFTERM = "FTERM12-187".
-         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
-            lcAddFTERM = "FTERM12-243".
-         ELSE lcAddFTERM = "".
-      END.
-      ELSE DO:
-         /* new rules YCO-515 / YCO-297 */
-         IF lcFixedLinePermanency EQ "NEBTERM12-150" THEN
-            lcAddFTERM = "FTERM12-150".
-         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-190" THEN
-            lcAddFTERM = "FTERM12-190".
-         ELSE IF lcFixedLinePermanency EQ "NEBTERM12-283" THEN
-            lcAddFTERM = "FTERM12-283".
-         ELSE lcAddFTERM = "".
+      IF lcFixedLinePermanency EQ "NEBTERM12-160" THEN
+         lcAddFTERM = "FTERM12-110".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-237" THEN
+         lcAddFTERM = "FTERM12-187".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-293" THEN
+         lcAddFTERM = "FTERM12-243".
+      /* new rules YCO-515 / YCO-297 */
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-150" THEN
+         lcAddFTERM = "FTERM12-150".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-190" THEN
+         lcAddFTERM = "FTERM12-190".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-283" THEN
+         lcAddFTERM = "FTERM12-283".
+      ELSE lcAddFTERM = "".
  
-      END.
       IF lcAddFTERM NE "" THEN /* Create FTERM */
         fCreateOrderAction(Order.Orderid,
                            "FixedPermanency",
