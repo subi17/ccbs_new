@@ -18,10 +18,12 @@ DEFINE STREAM bkp.
 DEFINE STREAM err.
 
 DEFINE VARIABLE lcDumpScript AS CHARACTER NO-UNDO.
+
 RUN ipUpdateBundleTarget.
 RUN ipCreateBundleUpsellValues.
 RUN ipModifyMenuTree.
 RUN ipCreateUpsellMenu.
+RUN ipUpdateDayCampaignDump.
 
 ASSIGN lcDumpScript= "/apps/yoigo/tms_support/201805/tmsrelation_dump_create.p".
 
@@ -215,3 +217,88 @@ PROCEDURE ipCreateUpsellMenu:
             "Script Completed." VIEW-AS ALERT-BOX.
             
 END PROCEDURE.
+
+PROCEDURE ipUpdateDayCampaignDump :
+    
+    MESSAGE "This script will remove the BundleUpsell field form the HPD Dump" SKIP 
+            "Do you want to procedd"
+    VIEW-AS ALERT-BOX QUESTION  BUTTONS YES-NO UPDATE lgChoice AS LOGICAL.
+    
+    IF NOT lgChoice THEN RETURN.
+    
+    DEFINE VARIABLE liFieldIndex AS INTEGER NO-UNDO.
+    DEFINE VARIABLE liCount      AS INTEGER NO-UNDO.
+    OUTPUT STREAM bkp TO "/apps/yoigo/tms_support/201805/hpd_dc_dump_bkp.txt".
+    OUTPUT STREAM err TO "/apps/yoigo/tms_support/201805/hpd_dc_dump_err.txt".
+    
+    DEFINE BUFFER bfDFField FOR DFField.
+    
+    FIND FIRST DumpFile WHERE DumpFile.DumpID  =  207 NO-LOCK NO-ERROR.
+    
+    IF NOT AVAILABLE DumpFile 
+    THEN DO:
+        MESSAGE "Dump does not exist."
+            VIEW-AS ALERT-BOX.
+        RETURN.
+    END.
+    
+    FIND FIRST DFField NO-LOCK  WHERE 
+              DFField.DumpID   = DumpFile.DumpID AND 
+              DFField.OrderNbr > 0               AND 
+              DFField.DFField  = "BundleUpsell" NO-ERROR.
+              
+    IF NOT AVAILABLE DFField THEN 
+    DO:
+        
+        MESSAGE "BundleUpsell field is not in the HPD Dump"
+        VIEW-AS ALERT-BOX.
+        RETURN.
+        
+    END.
+    
+    ASSIGN liFieldIndex = DFField.OrderNbr
+           liCount      = liFieldIndex.
+    
+    FIND FIRST DFField WHERE DFField.DumpID     =   DumpFile.DumpID 
+                         AND DFField.OrderNbr   =   liFieldIndex 
+                         EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+                         
+    IF LOCKED(DFField) OR NOT AVAILABLE DFField THEN 
+    DO:
+        EXPORT STREAM err "DumpField record is not available to delete.".        
+        RETURN.
+    END.
+    
+    EXPORT STREAM bkp DFField.
+    
+    DELETE DFField.
+    
+    FOR EACH DFField NO-LOCK WHERE 
+             DFField.DumpID  =  DumpFile.DumpID AND 
+             DFField.OrderNbr > liFieldIndex BY DFField.OrderNbr :
+                 
+           FIND FIRST bfDFField WHERE ROWID(bfDFField) = ROWID(DFField) EXCLUSIVE-LOCK NO-WAIT NO-ERROR. 
+           
+           IF LOCKED(bfDFField) OR 
+           NOT AVAILABLE(bfDFField)
+           THEN DO:
+               EXPORT STREAM err "DumpField record is not available to update.".        
+               RETURN.
+           END.
+                  
+           EXPORT STREAM bkp bfDFField.
+
+           ASSIGN bfDFField.OrderNbr   =  liCount
+                  liCount              =  liCount + 1.
+                 
+    END.
+    
+    MESSAGE "HPD_Daycampaign dump fileds updated."
+    VIEW-AS ALERT-BOX.
+    
+    OUTPUT STREAM bkp CLOSE.
+    OUTPUT STREAM err CLOSE.
+    
+END PROCEDURE.
+
+
