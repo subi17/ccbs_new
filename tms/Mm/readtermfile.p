@@ -333,9 +333,14 @@ REPEAT:
                OldCliType.Brand   = Syst.Var:gcBrand AND
                OldCliType.CliType = lcCLIType NO-LOCK NO-ERROR.
 
-            IF lcNewCliType = "" THEN
-               lcNewCliType = OldCliType.BaseBundle.
-   
+            IF lcNewCliType = "" THEN DO:
+               IF LOOKUP(OldCliType.BaseBundle, "DUB,CONT30,CONTS2GB") > 0 THEN 
+                  lcNewCliType = "CONT25".
+               ELSE IF OldCliType.BaseBundle EQ "CONT32" THEN              
+                  lcNewCliType = "CONT33".
+               ELSE lcNewCliType = OldCliType.BaseBundle.
+            END.
+            
             liRequest = fCTChangeRequest(MobSub.msseq,
                                          lcNewCliType,
                                          "",
