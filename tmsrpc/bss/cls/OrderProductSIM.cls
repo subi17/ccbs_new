@@ -34,6 +34,10 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         GET.
         SET.
 		
+    DEFINE PUBLIC PROPERTY lhAddrHandle AS HANDLE NO-UNDO
+            GET.
+            SET.		
+		
 	CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS bss.cls.Order ):
 		
         SUPER(ioOrder).
@@ -64,20 +68,18 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
             aoSIMParams:mCreateData(loAttributes,"ICC","Char").
             
         END.
-        
-        ASSIGN 
-            loShipAddress = ioItemObject:GetJsonObject("shipping-address") WHEN ioItemObject:Has("shipping-address").
-        
-        IF VALID-OBJECT(loShipAddress) 
+       
+        IF loAttributes:Has("shipping-address")
         THEN DO:
             
-            /*aoShippingCustomer  = NEW bss.cls.OrderCustomer(aoOrder).
             ASSIGN 
-                aoShippingCustomer:RowType          = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
-                aoShippingCustomer:isShipCustomer   = YES
-            .
-            aoShippingCustomer:mCreateData(loShipAddress).
-            */
+                aoShippingCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
+                aoShippingCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
+                loShipAddress              = NEW JsonObject()
+                loShipAddress              = loAttributes:GetJsonObject("shipping-address").
+                    
+                aoShippingCustomer:mCreateRowCustomerData(loShipAddress).
+        
         END.
         
     END METHOD.
@@ -86,9 +88,10 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         
         IF VALID-OBJECT(aoSIMParams)
         THEN aoSIMParams:mStoreData().
-
+        
         IF VALID-OBJECT(aoShippingCustomer)
         THEN aoShippingCustomer:mStoreData().
+        
         
     END METHOD.
 

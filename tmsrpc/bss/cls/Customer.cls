@@ -147,13 +147,33 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aOCustAcct AS bss.cls.CustomerAccount NO-UNDO 
+    DEFINE PUBLIC PROPERTY aOCustAcct AS CLASS bss.cls.CustomerAccount NO-UNDO 
         GET.
         SET.   
         
     DEFINE PUBLIC PROPERTY isNewCustomer AS LOGICAL NO-UNDO
        GET.
        SET.
+       
+    DEFINE PUBLIC PROPERTY aoDefaultCustAddress AS bss.cls.OrderAddress NO-UNDO 
+        GET.
+        SET.
+    
+    DEFINE PUBLIC PROPERTY DefaultAddrID AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY CompanyName AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY CustAcctData AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY DefaultAddressObj AS CLASS JsonObject NO-UNDO 
+        GET.
+        SET.   
        
     DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
         FIELDS custacctobj  AS CLASS Progress.Lang.Object
@@ -215,6 +235,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            "Sr.,Mr.,Sr,Mr,Mrs.,Sra.,Mrs,Sra" NO-UNDO.
            
        DEFINE VARIABLE MarketingData AS CLASS JsonObject NO-UNDO .
+       DEFINE VARIABLE ioCustIDObject AS CLASS JsonObject NO-UNDO.
 
        IF ioJsonObject:Has("title")
        THEN DO:
@@ -237,8 +258,6 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        THIS-OBJECT:Profession     = ioJsonObject:GetCharacter("profession")
        THIS-OBJECT:Nationality    = ioJsonObject:GetCharacter("nationality")
        THIS-OBJECT:Language       = mGetLanguage(ioJsonObject:GetCharacter("language"))
-       THIS-OBJECT:CustIdType     = ioJsonObject:GetCharacter("id_type")  
-       THIS-OBJECT:CustId         = ioJsonObject:GetCharacter("person_id")
        THIS-OBJECT:SelfEmployed   = ioJsonObject:GetLogical("self_employed")
        THIS-OBJECT:BirthDay       = Func.Common:mGetDate(ioJsonObject:GetCharacter("birthday"))
        THIS-OBJECT:FoundationDate = Func.Common:mGetDate(ioJsonObject:GetCharacter("foundation_date"))
@@ -246,8 +265,17 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        THIS-OBJECT:MobileNumber   = ioJsonObject:GetCharacter("sms_number")
        THIS-OBJECT:FixedNumber    = ioJsonObject:GetCharacter("phone_number")
        THIS-OBJECT:CustNum        = liCustnum
-       THIS-OBJECT:AddressIndex   = ioJsonObject:GetInteger("default_address_data_index")
        .
+       
+       IF ioJsonObject:Has("residential")
+       THEN DO:
+           ioCustIDObject  = NEW JsonObject().
+           ioCustIDObject = ioJsonObject:GetJsonObject("residential").
+           ASSIGN 
+           THIS-OBJECT:CustIdType     = ioCustIDObject:GetCharacter("id_type")  
+           THIS-OBJECT:CustId         = ioCustIDObject:GetCharacter("person_id")
+           .
+       END.
        
        IF ioJsonObject:Has("marketing")
        THEN DO:
@@ -270,6 +298,19 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        END.
        ELSE UNDO, THROW NEW ParamError ("Marketing data does not exist.").
        
+       IF ioJsonObject:Has("default-address")
+       THEN DO:
+           
+           ASSIGN
+               THIS-OBJECT:DefaultAddressObj = ioJsonObject:GetJsonObject("default-address")
+               aoDefaultCustAddress          = NEW bss.cls.OrderAddress()
+               aoDefaultCustAddress:KeyValue = THIS-OBJECT:CustNum
+               aoDefaultCustAddress:AddrType = "default"
+               .
+           aoDefaultCustAddress:mCreateData(THIS-OBJECT:DefaultAddressObj).
+           
+       END.
+       
        IF ioJsonObject:Has("customer_accounts")
        THEN DO:
            
@@ -279,16 +320,21 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
                
                ASSIGN CustAcctObj = CustAccounts:GetJsonObject(liCustAcctCnt)
                       aOCustAcct = NEW bss.cls.CustomerAccount(THIS-OBJECT).
+                      
+               aOCustAcct:mCreateData(CustAcctObj).
                
                CREATE ttCustAccts.
                ASSIGN ttCustAccts.custacctobj = aOCustAcct
                       ttCustAccts.custacctnum = mGetNextCustAcctNum().
+                      
+               ASSIGN THIS-OBJECT:CustAcctData = THIS-OBJECT:CustAcctData + ":" + aOCustAcct:mGetCustomerAcctBankData().
 
            END.
        END.
        ELSE UNDO, THROW NEW ParamError ("Customer Account data does not exist.").
        
-       
+       ASSIGN THIS-OBJECT:CustAcctData = TRIM(THIS-OBJECT:CustAcctData, ":").
+     
    END METHOD.
 
    METHOD PUBLIC VOID mStoreData():
@@ -319,35 +365,22 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            Customer.DirMarkSMS        = THIS-OBJECT:OperSMSMarketing
            Customer.OutMarkSMS        = THIS-OBJECT:OutSMSMarketing
            Customer.FoundationDate    = THIS-OBJECT:FoundationDate
-           . 
-      
-       /* How to Fetch the address record here.. do we need to really assign customer from address record???*/
-       
-       /*FIND FIRST Address NO-LOCK WHERE Address.AddressID = THIS-OBJECT:AddrId  NO-ERROR.
-       IF NOT AVAILABLE Address
-           THEN UNDO, THROW NEW ParamError ("Address record does not exist.").
-     
-       ASSIGN 
-           Customer.Address    = Address.Street
-           Customer.PostOffice = Address.CityCode
-           Customer.Region     = Address.Region
-           Customer.ZipCode    = Address.zipCode
-           Customer.Country    = Address.Country
-           .     
-            
-     
-       IF NOT CAN-FIND(FIRST CustomerReport WHERE CustomerReport.CustNum  =  Customer.CustNum)
+           Customer.RateCust          = Customer.CustNum
+           Customer.InvCust           = Customer.CustNum
+           Customer.PaymCust          = Customer.CustNum
+           Customer.RepCust           = Customer.CustNum
+           Customer.AgrCust           = Customer.CustNum
+           Customer.Brand             = Syst.Var:gcBrand
+           Customer.CreUser           = Syst.Var:katun
+           Customer.CreDate           = TODAY .
+           
+       IF VALID-OBJECT(aoDefaultCustAddress)
        THEN DO:
-         
-           CREATE CustomerReport.
-           ASSIGN 
-               CustomerReport.StreetCode = Address.StreetCode
-               CustomerReport.CityCode   = Address.CityCode
-               CustomerReport.TownCode   = Address.towncode
-               .
-
-       END.       
-       */
+           aoDefaultCustAddress:mStoreData().
+           ASSIGN THIS-OBJECT:DefaultAddrID = aoDefaultCustAddress:AddrID.
+           
+       END.
+           
        FOR EACH ttCustAccts :
            CAST(ttCustAccts.custacctobj,bss.cls.CustomerAccount):mStoreData().
        END.
@@ -374,6 +407,29 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
         THEN RETURN 1.
         ELSE RETURN ( ttCustAccts.custacctnum + 1 ). 
          
+    END METHOD.
+    
+    METHOD PUBLIC JsonObject mResult () :
+        
+        DEFINE VARIABLE ioCustAcctObject AS CLASS JsonObject NO-UNDO.
+        DEFINE VARIABLE ioCustArray      AS CLASS JsonArray  NO-UNDO.
+        DEFINE VARIABLE ioCustObj        AS CLASS JsonObject NO-UNDO.
+        
+        ASSIGN ioCustAcctObject = NEW JsonObject()
+               ioCustObj        = NEW JsonObject()
+               ioCustArray      = NEW JsonArray().
+               
+        FOR EACH ttCustAccts :
+            ioCustAcctObject = CAST(ttCustAccts.custacctobj,bss.cls.CustomerAccount):mResult().
+            ioCustArray:Add(ioCustAcctObject).
+        END.      
+        
+        ioCustObj:Add("cust-num" , THIS-OBJECT:CustNum).
+        ioCustObj:Add("Default-addr-id" , THIS-OBJECT:DefaultAddrID).
+        ioCustObj:Add("custome-accounts" , ioCustArray).
+        
+        RETURN ioCustObj.
+        
     END METHOD.
     
 

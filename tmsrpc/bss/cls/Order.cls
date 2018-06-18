@@ -48,10 +48,6 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
       
-   /*DEFINE PUBLIC PROPERTY aoOrderAddressData AS CLASS bss.cls.OrderAddressData NO-UNDO 
-      GET.
-      SET.
-     */ 
    DEFINE PUBLIC PROPERTY aoOrderInspection AS CLASS bss.cls.OrderInspection NO-UNDO 
       GET.
       SET.
@@ -121,13 +117,11 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
       
-    DEFINE TEMP-TABLE ttOrderAddress NO-UNDO 
-        FIELDS AddrObj  AS CLASS Progress.Lang.Object
-        FIELDS AddrNum  AS INTEGER
-        FIELDS AddressID AS INTEGER
-        INDEX AddrNum IS PRIMARY UNIQUE AddrNum 
-        .
-
+   DEFINE PUBLIC PROPERTY loAddrArray AS CLASS JsonArray NO-UNDO 
+       GET.
+       SET.
+       
+   
 	CONSTRUCTOR PUBLIC Order():
 	END CONSTRUCTOR.
 
@@ -154,8 +148,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.
         DEFINE VARIABLE arrayAddrObject AS CLASS     JsonObject           NO-UNDO.
         DEFINE VARIABLE loAddrObject    AS CLASS     bss.cls.OrderAddress NO-UNDO.
-        DEFINE VARIABLE loAddrArray     AS CLASS     JsonArray NO-UNDO.
-      
+              
       ASSIGN
          loAgrCust            =   ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
          loCustAcct           =   ioJsonObject:GetJsonObject("customer")           WHEN ioJsonObject:Has("customer")
@@ -187,27 +180,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
                                     MONTH(ldaCreateDate) * 100 +
                                     DAY(ldaCreateDate)
          .
-         
-        IF ioJsonObject:Has("addresses")
-        THEN DO:
-          
-            loAddrArray  =  ioJsonObject:GetJsonArray("addresses").
-          
-            DO licount = 1 TO loAddrArray:LENGTH :
-                ASSIGN 
-                    arrayAddrObject = loAddrArray:GetJsonObject(licount)
-                    loAddrObject    = NEW bss.cls.OrderAddress(THIS-OBJECT).
-                CREATE ttOrderAddress.
-                ASSIGN 
-                    ttOrderAddress.AddrObj = loAddrObject
-                    ttOrderAddress.AddrNum = mGetNextAddrNum()
-                    .
-                loAddrObject:mCreateData(arrayAddrObject).
-                ASSIGN 
-                    ttOrderAddress.AddressID = loAddrObject:AddrID.
-            END.
-        END.
-
+      
       IF ioJsonObject:Has("items")
       THEN DO:
          aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
@@ -230,7 +203,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
 	END METHOD.
 
     METHOD PUBLIC VOID mStoreData():
-
+        
         /* If there is a new customer data we need to create it first */
         IF aoCustomer:isNewCustomer THEN
         aoCustomer:mStoreData().
@@ -251,45 +224,38 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.OrderChannel  = THIS-OBJECT:OrderChannel
             Order.CrStamp       = THIS-OBJECT:CrStamp
             .
-
-        aoOrderProductFactory:mStoreData().
-      
+            
         IF VALID-OBJECT(OrderInspectionData)
             THEN aoOrderInspection:mStoreData().
       
         IF VALID-OBJECT(OrderPaymentData)
             THEN aoOrderPayment:mStoreData().
-            
-        IF TEMP-TABLE ttOrderAddress:HAS-RECORDS 
-        THEN DO:
-            
-            FOR EACH ttOrderAddress:
-                CAST(ttOrderAddress.AddrObj, bss.cls.OrderAddress):mStoreData().
-            END.
-            
-        END.
+
+        aoOrderProductFactory:mStoreData().       
 
     END METHOD.
 
    METHOD PUBLIC JsonObject mResult():
 
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
-
+      DEFINE VARIABLE loCustObject AS CLASS JsonObject NO-UNDO.
+      DEFINE VARIABLE loAddrObject AS CLASS JsonObject NO-UNDO.
+      DEFINE VARIABLE loAddrArray  AS CLASS JsonArray NO-UNDO.
+      
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("order-id", THIS-OBJECT:OrderId).
-
+      
+      IF aoCustomer:isNewCustomer 
+      THEN DO:
+          ASSIGN loCustObject = NEW JsonObject().
+          loCustObject =  aoCustomer:mResult().
+          loJsonObject:Add("customer" , loCustObject). 
+      END.
+       
       aoOrderProductFactory:mResult(loJsonObject).
 
       RETURN loJsonObject.
 
    END METHOD.
-   
-    METHOD PUBLIC INTEGER mGetNextAddrNum() :
-        
-        FIND LAST ttOrderAddress USE-INDEX AddrNum NO-ERROR.
-        IF NOT AVAILABLE ttOrderAddress THEN RETURN 1.
-        ELSE RETURN (ttOrderAddress.AddrNum + 1).
-        
-    END METHOD.
-
+    
 END CLASS.

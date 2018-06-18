@@ -59,6 +59,18 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
+    DEFINE PUBLIC PROPERTY BillAddrID AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY aoBillAddrObj AS CLASS bss.cls.OrderAddress NO-UNDO 
+        GET.
+        SET.    
+        
+    DEFINE PUBLIC PROPERTY BankAccts AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
     DEFINE TEMP-TABLE ttBillingAcct NO-UNDO 
         FIELDS BillAcctObj  AS CLASS Progress.Lang.Object
         FIELDS BillAcctNum  AS INTEGER
@@ -82,6 +94,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	    DEFINE VARIABLE BillAcctArray AS CLASS JsonArray NO-UNDO.
 	    DEFINE VARIABLE BillAcctObj   AS CLASS JsonObject NO-UNDO.
 	    DEFINE VARIABLE liBillAcctCnt AS INTEGER NO-UNDO.
+	    DEFINE VARIABLE loBillAddress AS CLASS JsonObject NO-UNDO.
 	    
         ASSIGN 
             THIS-OBJECT:DefaultAcct = ioCustAcctObject:GetLogical("default_account")
@@ -90,9 +103,18 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             THIS-OBJECT:ValiTo      =  DATETIME-TZ(Func.Common:mGetDate(ioCustAcctObject:GetCharacter("valid_to")))
             THIS-OBJECT:AccountID   =  NEXT-VALUE (accountid)  
             THIS-OBJECT:CustNum     =  ioCustomerObj:CustNum
-            THIS-OBJECT:StatusCode  =  1 /*0=pending, 1=active*/
-            THIS-OBJECT:BillingAddressIndex = ioCustAcctObject:GetInteger("billing_address_data_index")
+            THIS-OBJECT:StatusCode  =  0 /*0=pending, 1=active*/
             .
+            
+        IF ioCustAcctObject:Has("billing-address")
+        THEN DO:
+            
+            aoBillAddrObj = NEW bss.cls.OrderAddress().
+            aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing-address")).
+            ASSIGN aoBillAddrObj:KeyValue  = THIS-OBJECT:CustNum
+                   aoBillAddrObj:AddrType  = "billing". 
+                          
+        END.
         
         IF ioCustAcctObject:Has("billing_accounts")
         THEN DO:
@@ -110,12 +132,14 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                 CREATE ttBillingAcct.
                 ASSIGN ttBillingAcct.BillAcctObj = aoBillingAcct
                        ttBillingAcct.BillAcctNum = mNextBillAcctNum().
+                       
+                ASSIGN THIS-OBJECT:BankAccts  =  THIS-OBJECT:BankAccts + "," + aoBillingAcct:mGetBankAcct().
                 
-            END.
-            
+            END.            
         END.
         ELSE UNDO, THROW NEW ParamError("Billing Account Data is not available.").
         
+        ASSIGN THIS-OBJECT:BankAccts  = TRIM(THIS-OBJECT:BankAccts , ",").
 	    
 	END METHOD.
 	
@@ -130,10 +154,21 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	           CustomerAccount.ToDate      = THIS-OBJECT:ValiTo
 	           CustomerAccount.StatusCode  = THIS-OBJECT:StatusCode
 	     .
-	           
+	   
+	     IF VALID-OBJECT(aoBillAddrObj)
+	     THEN DO:
+             aoBillAddrObj:mStoreData().
+             ASSIGN THIS-OBJECT:BillAddrID = aoBillAddrObj:AddrID.	         
+	     END.
 	     FOR EACH ttBillingAcct :
              CAST(ttBillingAcct.BillAcctObj, bss.cls.BillingAccount):mStoreData().
 	     END.
+	    
+	END METHOD.
+	
+	METHOD PUBLIC CHARACTER mGetCustomerAcctBankData() :
+	    
+	    RETURN (STRING(THIS-OBJECT:AccountID) + ";" + THIS-OBJECT:BankAccts ).
 	    
 	END METHOD.
 	
@@ -144,6 +179,31 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	    ELSE RETURN ( ttBillingAcct.BillAcctNum + 1 ) . 
 	
 	END METHOD.
+	
+    METHOD PUBLIC JsonObject mResult():
+        
+        DEFINE VARIABLE loBillAcctArray AS CLASS JsonArray NO-UNDO.
+        DEFINE VARIABLE loBillAcctobj   AS CLASS JsonObject NO-UNDO.
+        DEFINE VARIABLE loCustAcctObj   AS CLASS JsonObject NO-UNDO.
+        
+        ASSIGN loBillAcctArray = NEW JsonArray()
+               loBillAcctobj   = NEW JsonObject()
+               loCustAcctObj   = NEW JsonObject(). 
+               
+        FOR EACH ttBillingAcct:
+            
+            loBillAcctobj = CAST(ttBillingAcct.BillAcctObj, bss.cls.BillingAccount):mResult().
+            loBillAcctArray:Add(loBillAcctobj).
+            
+        END.
+        
+        loCustAcctObj:Add("cust-acct-num" , THIS-OBJECT:AccountID).
+        loCustAcctObj:Add("billaddress-id" , THIS-OBJECT:BillAddrID).
+        loCustAcctObj:Add("billing-accounts" , loBillAcctArray).
+        
+        RETURN loCustAcctObj.
+
+    END METHOD.
 	
     
 END CLASS.

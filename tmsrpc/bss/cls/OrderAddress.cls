@@ -127,12 +127,16 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
       
-    DEFINE PUBLIC PROPERTY aoOrder AS CLASS bss.cls.Order NO-UNDO 
+    DEFINE PUBLIC PROPERTY KeyValue AS INTEGER NO-UNDO 
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY AddrType AS CHARACTER NO-UNDO
        GET.
-       SET.  
+       SET.
 		
-	CONSTRUCTOR PUBLIC OrderAddress ( ioOrder AS CLASS  bss.cls.Order):
-		ASSIGN aoOrder = ioOrder. 
+	CONSTRUCTOR PUBLIC OrderAddress ( ):
+		 
 	END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC OrderAddress ( ):
@@ -163,21 +167,21 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:City              = ioOrderAddress:GetCharacter("city")
             THIS-OBJECT:Region            = ioOrderAddress:GetCharacter("region")
             THIS-OBJECT:ZIP               = ioOrderAddress:GetCharacter("zip")
-            THIS-OBJECT:Country           = ioOrderAddress:GetCharacter("country")
-            THIS-OBJECT:OrderAddrID       = ioOrderAddress:GetInteger("address_id")
-            THIS-OBJECT:Gescal            = ioOrderAddress:GetCharacter("gescal")
-            THIS-OBJECT:CoverageToken     = ioOrderAddress:GetCharacter("coveragetoken")
+            THIS-OBJECT:Country           = mGetCountry(ioOrderAddress:GetCharacter("country"))
+            THIS-OBJECT:Gescal            = ioOrderAddress:GetCharacter("gescal") WHEN ioOrderAddress:Has("gescal")
+            THIS-OBJECT:CoverageToken     = ioOrderAddress:GetCharacter("coveragetoken") WHEN ioOrderAddress:Has("coveragetoken")
         .
 	    
 	    IF ioOrderAddress:Has("validation_data") 
 	    THEN DO:
 	        
-	        ASSIGN AddrValidData                =   ioOrderAddress:GetJsonObject("validation_data")
+	        
+	        ASSIGN AddrValidData                =   NEW JsonObject()
+	               AddrValidData                =   ioOrderAddress:GetJsonObject("validation_data")
                    THIS-OBJECT:CityCode         =   AddrValidData:GetCharacter("city_code")
                    THIS-OBJECT:StreetCode       =   AddrValidData:GetCharacter("street_code")
                    THIS-OBJECT:MunicipalityCode =   AddrValidData:GetCharacter("municipality_code")
                    .
-	        
 	    END. 
 	    ELSE UNDO, THROW NEW ParamError("Validation Data missing for the AddressID " + STRING(THIS-OBJECT:AddrID)).    
 	    
@@ -210,12 +214,48 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
                Address.StreetCode    = THIS-OBJECT:StreetCode
                Address.towncode      = THIS-OBJECT:MunicipalityCode
                Address.HostTable     = "Customer"
-               Address.KeyValue      = STRING(aoOrder:aoCustomer:CustNum)
-               /*Address.AddressType   = liAddrType*/
+               Address.KeyValue      = STRING(THIS-OBJECT:KeyValue)
+               Address.AddressType   = THIS-OBJECT:AddrType
                Address.Gescal        = THIS-OBJECT:Gescal
                Address.CoverageToken = THIS-OBJECT:CoverageToken
-               .     
-               
+               .    
+         IF NOT CAN-FIND(FIRST CustomerReport WHERE CustomerReport.CustNum = INTEGER(Address.KeyValue))
+         AND THIS-OBJECT:OrderAddrID = 1 
+         THEN DO:
+             
+             CREATE CustomerReport.
+             ASSIGN 
+                 CustomerReport.CustNum     =   INTEGER(Address.KeyValue)
+                 CustomerReport.CityCode    =   Address.CityCode
+                 CustomerReport.StreetCode  =   Address.StreetCode
+                 CustomerReport.TownCode    =   Address.towncode
+                 .
+             
+         END.                      
 	END.  
+	
+    METHOD PRIVATE CHARACTER mGetCountry
+        (icCountry AS CHARACTER):
+
+        FOR Country NO-LOCK WHERE
+            Country.Country = icCountry:
+            RETURN Country.Country.
+        END.
+
+        UNDO, THROW NEW ParamError(SUBSTITUTE("country-unknown|&1", icCountry)).
+
+    END METHOD.
+	
+	METHOD PUBLIC JsonObject mResult() :
+	    
+	    DEFINE VARIABLE ioAddrObject AS CLASS JsonObject NO-UNDO.
+	    
+	    ASSIGN ioAddrObject = NEW JsonObject().
+	    
+	    ioAddrObject:Add("address-id" , THIS-OBJECT:AddrID).
+	    
+	    RETURN ioAddrObject.
+	    
+	END METHOD.
 
 END CLASS.

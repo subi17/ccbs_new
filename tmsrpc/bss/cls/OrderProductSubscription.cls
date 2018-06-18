@@ -46,6 +46,14 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
     DEFINE PUBLIC PROPERTY lcNumberType AS CHARACTER NO-UNDO
        GET.
        SET.
+       
+    DEFINE PUBLIC PROPERTY liBillAcctID AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY aoOrderAggrementCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
+        GET.
+        SET. 
 		
 	CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS bss.cls.Order ):
 	    
@@ -61,8 +69,10 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
 	
 	METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( ioItemObject AS CLASS JsonObject ):
             
-        DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
-        DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE loAttributes      AS CLASS     JsonObject NO-UNDO.
+        DEFINE VARIABLE lcReturnValue     AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lcOldOperatorCode AS CHARACTER NO-UNDO.
+        
         ASSIGN loAttributes                     = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes")
                THIS-OBJECT:aoBillingAcctIndex   = ioItemObject:GetInteger("billing-account-index") WHEN ioItemObject:Has("billing-account-index").
         
@@ -70,9 +80,9 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         THEN DO:
             
             ASSIGN
-                lcNumberType = loAttributes:GetCharacter("number_type") 
-                AttrCLI      = loAttributes:GetCharacter("number") 
-                .
+                lcNumberType        = loAttributes:GetCharacter("number_type") 
+                AttrCLI             = loAttributes:GetCharacter("number")
+            .
                 
             IF LOOKUP(lcNumberType,"new,mnp,renewal,stc") = 0 
             THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", lcNumberType)). 
@@ -95,6 +105,26 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             THEN mCreateDataOrderProductParamData(loAttributes,"old-operator-code","Char"). 
             
             ASSIGN aoOrder:lcCLI = AttrCLI.
+            
+            IF ioItemObject:Has("billing_account_id")
+            THEN DO:
+                
+                ASSIGN liBillAcctID  =  ioItemObject:GetInteger("billing_account_id").
+             
+            END. 
+            
+            IF ioItemObject:Has("billing_account_index")
+            THEN DO:
+                
+            END.
+            
+            ASSIGN 
+                aoOrderAggrementCustomer         =  NEW bss.cls.OrderCustomer(aoOrder)
+                aoOrderAggrementCustomer:RowType =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+                .
+                
+            aoOrderAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
+            
             /*TODO PC:Please check the MULTIHOLDER INFROMATION WITH KIRAN*/
             
         END.
@@ -105,6 +135,11 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         
         FOR EACH ttOrderProductParam:
             CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
+        END.
+        
+        IF VALID-OBJECT (aoOrderAggrementCustomer)
+        THEN DO:
+            aoOrderAggrementCustomer:mStoreData().
         END.
 
     END METHOD.

@@ -60,11 +60,11 @@ CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct:
         AND aoOrder:aoCustomer:CustNum = 0 
         THEN UNDO, THROW NEW ParamError("Customer entered in Customer Account does not exist.").
         
-        ASSIGN
+       /* ASSIGN
             aoOrderCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
             aoOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
             .
-        
+        */
         IF loCustAcct:Has("custnum")
         THEN DO:
             /*aoOrderCustomer:mCreateData(loCustAcct:GetInteger("custnum")).*/
@@ -91,9 +91,9 @@ CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct:
     
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
-        IF VALID-OBJECT(aoOrderCustomer)
+    /*    IF VALID-OBJECT(aoOrderCustomer)
         THEN aoOrderCustomer:mStoreData().
-       
+      */ 
     END METHOD. 
     
 

@@ -13,6 +13,7 @@ USING Progress.Lang.*.
 USING profcgi.RPC.JSON.InternalError.
 USING profcgi.RPC.JSON.ParamError.
 USING Progress.Json.ObjectModel.JsonObject.
+USING Progress.Json.ObjectModel.JsonArray.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
@@ -50,7 +51,7 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
 		
-	DEFINE PUBLIC PROPERTY PayMethod AS INTEGER NO-UNDO
+	DEFINE PUBLIC PROPERTY PaymentMethod AS INTEGER NO-UNDO
        GET.
        SET.	
        
@@ -70,7 +71,7 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.   
        
-    DEFINE PUBLIC PROPERTY DefaultGroup AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY DefaultGroup AS LOGICAL NO-UNDO
        GET.
        SET.
        
@@ -102,7 +103,7 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY FromDate AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY FromDate AS DATE NO-UNDO
        GET.
        SET.
 		
@@ -120,6 +121,8 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
 	
     METHOD PUBLIC VOID mCreateData (ioBillingAcct AS CLASS JsonObject) :
         
+        DEFINE VARIABLE ioInvoiceShipAddress AS JsonObject NO-UNDO.
+        
         ASSIGN 
             THIS-OBJECT:ITGroupID     = NEXT-VALUE(ITGroupID)
             THIS-OBJECT:AccountID     = aoCustAcct:AccountID
@@ -127,7 +130,7 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:Currency      = ioBillingAcct:GetCharacter("currency")
             THIS-OBJECT:BankAccount   = ioBillingAcct:GetCharacter("bank_account")
             THIS-OBJECT:BankName      = ioBillingAcct:GetCharacter("bank_name")
-            THIS-OBJECT:PaymentMethod = ioBillingAcct:GetCharacter("invoice_charge_type")
+            THIS-OBJECT:PaymentMethod = mGetTMSCodeValue("AccRec" , "ChargeType" , ioBillingAcct:GetCharacter("invoice_charge_type"))
             THIS-OBJECT:MandateID     = ioBillingAcct:GetCharacter("mandate_id")
             THIS-OBJECT:MandateDate   = Func.Common:mGetDate(ioBillingAcct:GetCharacter("mandate_date"))
             THIS-OBJECT:CustNum       = aoCustAcct:CustNum
@@ -135,13 +138,21 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:DefaultGroup  = TRUE /*TODO-JSON*/
             THIS-OBJECT:BillCycle     = ioBillingAcct:GetInteger("invoice_cycle")
             THIS-OBJECT:InvInterval   = ioBillingAcct:GetInteger("invoice_interval")
-            THIS-OBJECT:DelType       = ioBillingAcct:GetCharacter("invoice_delivery_type")
+            THIS-OBJECT:DelType       = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type"))
             THIS-OBJECT:InvGroup      = ioBillingAcct:GetCharacter("invoice_group")
             THIS-OBJECT:DurDateOffSet = 0 /*TODO-JSON*/
-            THIS-OBJECT:StatusCode    = 1
+            THIS-OBJECT:StatusCode    = 0
             THIS-OBJECT:FromDate      = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_from"))
             THIS-OBJECT:ToDate        = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to"))
             .
+        
+        IF ioBillingAcct:Has("invoice-ship-address")
+        THEN DO:
+            
+            ASSIGN ioInvoiceShipAddress= ioBillingAcct:GetJsonObject("invoice-ship-address").
+            
+        END.
+        
         
     END METHOD.
     
@@ -149,9 +160,10 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
         
         CREATE InvoiceTargetGroup.
         ASSIGN 
+            InvoiceTargetGroup.Brand         = Syst.Var:gcBrand
             InvoiceTargetGroup.ITGroupID     = THIS-OBJECT:ITGroupID
             InvoiceTargetGroup.AccountID     = THIS-OBJECT:AccountID
-            InvoiceTargetGroup.CustAcctName  = THIS-OBJECT:CustAcctName
+            InvoiceTargetGroup.CustAccName   = THIS-OBJECT:CustAcctName
             InvoiceTargetGroup.Currency      = THIS-OBJECT:Currency
             InvoiceTargetGroup.BankAccount   = THIS-OBJECT:BankAccount
             InvoiceTargetGroup.BankName      = THIS-OBJECT:BankName
@@ -165,12 +177,47 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             InvoiceTargetGroup.InvInterval   = THIS-OBJECT:InvInterval
             InvoiceTargetGroup.DelType       = THIS-OBJECT:DelType
             InvoiceTargetGroup.InvGroup      = THIS-OBJECT:InvGroup
-            InvoiceTargetGroup.DurDateOffSet = THIS-OBJECT:DurDateOffSet
+            InvoiceTargetGroup.DueDateOffSet = THIS-OBJECT:DurDateOffSet
             InvoiceTargetGroup.StatusCode    = THIS-OBJECT:StatusCode
             InvoiceTargetGroup.FromDate      = THIS-OBJECT:FromDate
             InvoiceTargetGroup.ToDate        = THIS-OBJECT:ToDate
             .
+            
+    END METHOD.
+    
+    METHOD PUBLIC CHARACTER mGetBankAcct():
+        
+        RETURN THIS-OBJECT:BankAccount.
+        
+    END.
+
+   METHOD PUBLIC JsonObject mResult ():
+
+        DEFINE VARIABLE loBillObj AS CLASS JsonObject NO-UNDO.
+        loBillObj = NEW JsonObject().
+        loBillObj:Add("Bill-acct-num" , THIS-OBJECT:ITGroupID ).
+        
+        RETURN loBillObj.
         
     END METHOD.
+
+    METHOD PUBLIC INTEGER mGetTMSCodeValue( INPUT icCodeGroup AS CHARACTER ,
+                                            INPUT icFieldName AS CHARACTER , 
+                                            INPUT icCodeName AS CHARACTER ) :
+        
+        FIND FIRST TMSCodes 
+                WHERE TMSCodes.CodeGroup = icCodeGroup
+                  AND TMSCodes.FieldName = icFieldName
+                  AND TMSCodes.TableName = "Invoice"
+                  AND TMSCodes.CodeName  = icCodeName                  NO-LOCK NO-ERROR.
+                  
+        IF NOT AVAILABLE TMSCodes 
+        THEN UNDO, THROW NEW ParamError ("TMSCodes record does not exist for the Billing Account.").
+        
+        RETURN INTEGER(TMSCodes.CodeValue).
+        
+    END METHOD .
+
+
 
 END CLASS.
