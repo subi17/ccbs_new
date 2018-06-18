@@ -130,10 +130,11 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
    DEF BUFFER MobSub FOR MobSub.
 
-   DEF VAR lcResult   AS CHAR    NO-UNDO. 
-   DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR lcResult       AS CHAR    NO-UNDO. 
+   DEF VAR llHardBook     AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
-   DEF VAR liRequest  AS INT NO-UNDO.
+   DEF VAR liRequest      AS INT     NO-UNDO.
+   DEF VAR lcPrevStatus   AS CHAR    NO-UNDO INIT "". 
 
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -147,7 +148,9 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
            bfOrder.OrderId = iOrderId
          EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE bfOrder THEN DO:  
-         bfOrder.StatusCode = icStatus.
+         
+         ASSIGN lcPrevStatus       = bfOrder.StatusCode
+                bfOrder.StatusCode = icStatus.
 
          /* orders to status new should not be reported to ROI */
          IF LOOKUP(icStatus,"1,3,30") = 0 AND
@@ -181,9 +184,9 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                IF (bfOrder.OrderType EQ {&ORDER_TYPE_NEW} OR 
                    bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR 
-                   bfOrder.OrderType EQ {&ORDER_TYPE_STC})       AND 
-                   bfOrder.CLIType BEGINS "CONTFH"               AND 
-            LOOKUP(bfOrder.StatusCode,{&ORDER_ROI_STATUSES}) GT 0 THEN DO:
+                   bfOrder.OrderType EQ {&ORDER_TYPE_STC})  AND 
+                   bfOrder.CLIType BEGINS "CONTFH"          AND 
+            LOOKUP(lcPrevStatus,{&ORDER_ROI_STATUSES}) GT 0 THEN DO:
 
                   CREATE FusionMessage.
                   ASSIGN FusionMessage.MessageSeq      = NEXT-VALUE(FusionMessageSeq)

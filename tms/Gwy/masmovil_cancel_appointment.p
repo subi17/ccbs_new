@@ -62,7 +62,7 @@ IF NOT AVAIL Order THEN
 ASSIGN
    lcHost        = fCParam("Masmovil","AppointmentHost")
    liport        = fIparam("Masmovil","AppointmentPort")
-   lcAuthType    = fCParam("Masmovil","AppointmnetAuthType")
+   lcAuthType    = fCParam("Masmovil","AppointmentAuthType")
    lcRealm       = fCParam("Masmovil","AppointmentRealm")
    lcUserId      = fCParam("Masmovil","AppointmentUserId")
    lcPassword    = fCParam("Masmovil","AppointmentPass")
@@ -116,7 +116,7 @@ END.
 ELSE 
    ASSIGN FusionMessage.UpdateTS       = Func.Common:mMakeTS()
           FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_HANDLED}
-          FusionMessage.ResponseCode   = "ERROR " + STRING(oiStatusCode)
+          FusionMessage.ResponseCode   = STRING(oiStatusCode)
           FusionMessage.AdditionalInfo = ocStatusReason.
 
 RETURN "".
