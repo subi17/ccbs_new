@@ -1678,6 +1678,7 @@ PROCEDURE pGetPENALTYFEE:
       lcList = lclist + CHR(10) + lcText.
 
       /*YCO-279 + refactoring text 532*/
+      /*before this 532 was hardcoded with 100E + 12 months*/
       lcErr =  fSelectFTERMFee(Order.OrderId,
                                OUTPUT ldAmt,
                                OUTPUT lcTermName).

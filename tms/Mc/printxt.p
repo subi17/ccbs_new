@@ -1321,7 +1321,17 @@ IF NOT llErrors THEN DO:
             NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
              LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
          THEN lcList = CHR(10) + fTeksti(532,liLanguage).
-Ilkka koodaa tänne.
+
+         /*YCO-279 + refactoring text 532 writing*/
+         /*before this 532 was hardcoded with 100E + 12 months*/
+         lcErr =  fSelectFTERMFee(Order.OrderId,
+                                  OUTPUT ldAmt,
+                                  OUTPUT lcTermName).
+         IF lcErr EQ "" THEN
+            lcText = REPLACE(lcText,"#AMOUNT",STRING(ldAmt)).
+         ELSE
+            lcText = REPLACE(lcText,"#AMOUNT",STRING(100)).
+
 
          RUN Mc/offer_penaltyfee.p(Order.OrderID,
                               Output liTermMonths,
