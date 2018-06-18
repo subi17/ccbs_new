@@ -15,6 +15,7 @@
 --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
+{Func/cparam2.i}    /* SAPC-44 */
 
 DEF BUFFER new-Customer FOR Customer.
 
@@ -36,11 +37,14 @@ DEF INPUT        PARAMETER   debug  AS LOGICAL NO-UNDO .
 DEF VAR ok                          AS LO NO-UNDO.
 DEF VAR new-no                      AS I  NO-UNDO.
 DEF VAR lcCustName                  AS CHAR NO-UNDO.
+DEF VAR lcSAPC                      AS CHAR  NO-UNDO. /* SAPC-44 */
 
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK NO-ERROR.
 PAUSE 0.
 
-lcCustName = Func.Common:mDispCustName(BUFFER Customer).
+ASSIGN 
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer)
+   lcSAPC     = fCParamC("SAPC_ENABLED_NEW_CUSTOMERS"). /* SAPC-44 */   
                                     
 ok = FALSE.
 IF DEBUG THEN 
@@ -82,7 +86,9 @@ IF ok THEN DO:
       new-Customer.AgrCust   = new-no
       new-customer.Brand     = Syst.Var:gcBrand
       new-customer.CreUser   = Syst.Var:katun
-      new-customer.CreDate   = TODAY.
+      new-customer.CreDate   = TODAY
+      /* SAPC-44 - Provisioning path: 1 for PL, 2 for SAPC */
+      new-customer.AccGrp    = (IF lcSAPC = "SAPC" THEN 2 ELSE 1).
 
 
    IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhCustomer).
