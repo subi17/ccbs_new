@@ -3,10 +3,11 @@ import json
 import sys
 
 def instruction():
+   print "input json file required which exists in rpctest/bssjson/ directory"
    print "Example: python bss_order_create_pc.py inputorder.json"
    sys.exit()
 
-if len(sys.argv) < 1: 
+if len(sys.argv) < 2: 
     instruction()
  
 def main(args):
