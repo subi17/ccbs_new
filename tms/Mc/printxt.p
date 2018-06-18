@@ -1321,6 +1321,7 @@ IF NOT llErrors THEN DO:
             NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
              LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
          THEN lcList = CHR(10) + fTeksti(532,liLanguage).
+Ilkka koodaa tänne.
 
          RUN Mc/offer_penaltyfee.p(Order.OrderID,
                               Output liTermMonths,

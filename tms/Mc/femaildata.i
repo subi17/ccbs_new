@@ -60,6 +60,36 @@ lcEndTag = '&euro;</strong></td></tr>'.
 
 ASSIGN Syst.Var:gcBrand = "1".
 
+FUNCTION fSelectFTERMFee RETURNS CHAR
+   (INPUT iiOrderID  AS INT,
+    OUTPUT odValue   AS DEC,
+    OUTPUT ocFeeName AS CHAR):
+
+   odValue = 0.0.
+   ocFeeName = "".
+
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand EQ Syst.Var:gcBrand AND
+              OrderAction.Orderid EQ iiOrderId AND
+              OrderAction.itemkey BEGINS "fterm" NO-ERROR.
+   IF NOT AVAIL OrderAction THEN RETURN "No FTERM orderaction".
+
+   FIND FIRST DayCampaign NO-LOCK WHERE
+              DayCampaign.brand EQ Syst.Var:gcBrand AND
+              DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DayCampaign THEN RETURN "No FTERM dayycampaign".
+
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand  EQ DayCampaign.Brand AND
+              FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
+   IF NOT AVAIL FMItem THEN RETURN "No FTERM fmitem".
+
+   odValue = FMItem.Amount.
+   ocFeeName = FMItem.FeeModel.
+   RETURN "".
+END.
+
+
 FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
 /* Check if order is needed to get */
    IF NOT AVAILABLE Order THEN DO:
@@ -1598,6 +1628,8 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcTariffType AS CHAR NO-UNDO.
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
    DEF VAR lcText AS CHAR NO-UNDO. 
+   DEF VAR lcTermName AS CHAR NO-UNDO.
+
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
    
    RUN Mc/offer_penaltyfee.p(Order.OrderID,
@@ -1644,6 +1676,15 @@ PROCEDURE pGetPENALTYFEE:
       lcText = REPLACE(lcText,"#MONTHS",STRING(liMonths)).
 
       lcList = lclist + CHR(10) + lcText.
+
+      /*YCO-279 + refactoring text 532*/
+      lcErr =  fSelectFTERMFee(Order.OrderId,
+                               OUTPUT ldAmt,
+                               OUTPUT lcTermName).
+      IF lcErr EQ "" THEN                         
+         lcText = REPLACE(lcText,"#AMOUNT",STRING(ldAmt)).
+      ELSE
+         lcText = REPLACE(lcText,"#AMOUNT",STRING(100)).
    END.
                   
    lcList = REPLACE(lcList,"euros","&euro;"). 
