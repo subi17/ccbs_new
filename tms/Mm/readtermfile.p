@@ -328,12 +328,11 @@ REPEAT:
 
          ELSE IF lcTerminationType EQ "FIXED" THEN DO:
 
-
-            FIND FIRST OldCliType WHERE
-               OldCliType.Brand   = Syst.Var:gcBrand AND
-               OldCliType.CliType = lcCLIType NO-LOCK NO-ERROR.
-
             IF lcNewCliType = "" THEN DO:
+               FIND FIRST OldCliType WHERE
+                  OldCliType.Brand   = Syst.Var:gcBrand AND
+                  OldCliType.CliType = lcCLIType NO-LOCK NO-ERROR.
+
                IF LOOKUP(OldCliType.BaseBundle, "DUB,CONT30,CONTS2GB") > 0 THEN 
                   lcNewCliType = "CONT25".
                ELSE IF OldCliType.BaseBundle EQ "CONT32" THEN              
