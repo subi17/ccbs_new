@@ -102,6 +102,7 @@ DEF OUTPUT PARAMETER ocErrFile     AS CHAR NO-UNDO.
 */
 
 DEF VAR lcErr         AS CHAR NO-UNDO.
+DEF VAR lcTermName    AS CHAR NO-UNDO.
 DEF VAR lcEPLFile     AS CHAR NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO.
 DEF VAR lcErrTxt      AS CHAR NO-UNDO.
