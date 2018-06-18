@@ -22,7 +22,7 @@
 {Syst/tmsconst.i}
 {Func/profunc.i}
 {Func/transname.i}
-
+{Func/fixedlinefunc.i}
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"
 &SCOPED-DEFINE ORDERTYPE_NEW_EN "New number"
@@ -59,35 +59,6 @@ lcMiddleTag = '</td><td style="width:34px; text-align:right; padding:0 5px 0 0 ;
 lcEndTag = '&euro;</strong></td></tr>'.
 
 ASSIGN Syst.Var:gcBrand = "1".
-
-FUNCTION fSelectFTERMFee RETURNS CHAR
-   (INPUT iiOrderID  AS INT,
-    OUTPUT odValue   AS DEC,
-    OUTPUT ocFeeName AS CHAR):
-
-   odValue = 0.0.
-   ocFeeName = "".
-
-   FIND FIRST OrderAction NO-LOCK WHERE
-              OrderAction.Brand EQ Syst.Var:gcBrand AND
-              OrderAction.Orderid EQ iiOrderId AND
-              OrderAction.itemkey BEGINS "fterm" NO-ERROR.
-   IF NOT AVAIL OrderAction THEN RETURN "No FTERM orderaction".
-
-   FIND FIRST DayCampaign NO-LOCK WHERE
-              DayCampaign.brand EQ Syst.Var:gcBrand AND
-              DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
-   IF NOT AVAIL DayCampaign THEN RETURN "No FTERM dayycampaign".
-
-   FIND FIRST FMItem NO-LOCK WHERE
-              FMItem.Brand  EQ DayCampaign.Brand AND
-              FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
-   IF NOT AVAIL FMItem THEN RETURN "No FTERM fmitem".
-
-   odValue = FMItem.Amount.
-   ocFeeName = FMItem.FeeModel.
-   RETURN "".
-END.
 
 
 FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
