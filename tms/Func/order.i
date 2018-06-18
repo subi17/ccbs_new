@@ -55,7 +55,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
       ASSIGN 
          Customer.Email = OrderCustomer.EMail
          /* APIBSS-188 Changing email: new email has to be validated
-            1 = not validated */
+            1 = not validated. */
          Customer.Email_validated = 1.  
 
       IF Customer.DelType EQ {&INV_DEL_TYPE_EMAIL} OR
@@ -80,12 +80,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
          IF liRequest > 0 THEN DO:
             /* If Email already validated then mark DelType EMAIL */
             IF liRequest = 1 THEN
-               ASSIGN 
-                  Customer.DelType = {&INV_DEL_TYPE_EMAIL}
-                  /* APIBSS-188 It looks like this is only going to happen 
-                     if the customer is re-using a previously used email
-                     within TMS for postpaid.  2 = validated */
-                  Customer.Email_validated = 2.
+               Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
             ELSE
                Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}.
          END. /* IF liRequest > 0 THEN DO: */
@@ -168,12 +163,7 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL
 
             /* If Email already validated then mark DelType EMAIL */
             IF liRequest = 1 THEN
-               ASSIGN 
-                  Customer.DelType = {&INV_DEL_TYPE_EMAIL}
-                  /* APIBSS-188 It looks like this is only going to happen 
-                     if the customer is re-using a previously used email
-                     within TMS for postpaid.  2 = validated */
-                  Customer.Email_validated = 2.
+               Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
             ELSE
                Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}.
 

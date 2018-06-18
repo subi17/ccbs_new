@@ -191,12 +191,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
 
                   /* If Email already validated then mark DelType EMAIL */
                   IF liRequest = 1 THEN
-                     ASSIGN 
-                        Customer.DelType = {&INV_DEL_TYPE_EMAIL}
-                        /* APIBSS-188 It looks like this is only going to happen 
-                        if the customer is re-using a previously used email
-                        within TMS for postpaid.  2 = validated */
-                        liEmail_validated = 2.
+                     Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
                   ELSE
                      Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}.
                END.
