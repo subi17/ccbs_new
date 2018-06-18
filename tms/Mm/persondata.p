@@ -45,7 +45,9 @@ DEF VAR liCustNum   AS INT                             NO-UNDO.
 DEF VAR liInvCust   AS INT                             NO-UNDO.
 DEF VAR liAgrCust   AS INT                             NO-UNDO.
 DEF VAR lcCLI       AS CHAR                            NO-UNDO.
+DEF VAR lcProgram   AS CHAR                            NO-UNDO.
 
+lcProgram  = PROGRAM-NAME(1).
 lcPassword = fCParamC("TestUser").
 
 IF lcPassword = ? THEN lcPassword = "".
@@ -102,7 +104,7 @@ DO WHILE TRUE:
    IF FRAME-INDEX EQ 1 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liAgrCust) THEN DO:
-         RUN CreateReadAccess("MobSub", Syst.Var:katun, Customer.CustNum).
+         RUN CreateReadAccess("Customer", Syst.Var:katun, liAgrCust, lcProgram ).
          RUN Mc/nnasse.p(liAgrCust,"").
       END.
       ELSE 
@@ -120,7 +122,7 @@ DO WHILE TRUE:
       ELSE DO:
          IF CAN-FIND(FIRST Customer WHERE
                            Customer.CustNum = liInvCust) THEN DO:
-            RUN CreateReadAccess("MobSub", Syst.Var:katun, Customer.CustNum).
+            RUN CreateReadAccess("Customer", Syst.Var:katun, liInvCust, lcProgram ).
             RUN Mc/nnasse.p(liInvCust,"").
          END.
          ELSE 
@@ -133,7 +135,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 3 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liCustNum) THEN DO:
-         RUN CreateReadAccess("MobSub", Syst.Var:katun, Customer.CustNum).
+         RUN CreateReadAccess("Customer", Syst.Var:katun, liCustNum, lcProgram ).
          RUN Mc/nnasse.p(liCustNum,"").
       END.
       ELSE 

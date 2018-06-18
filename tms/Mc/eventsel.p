@@ -21,8 +21,6 @@
                   14.04.05/aam input icTableName and icKey
                   08.05.06/aam smaller frame when icTableName given,
                                #BEGIN in icKey
-                  01.06.18     Func/lib/accesslog.i for Accesslog table
-
   Version ......: M15
   ---------------------------------------------------------------------- */
 
@@ -30,8 +28,8 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Eventlog'}
 {Func/lib/accesslog.i}
+{Syst/tmsconst.i}
 
-&GLOBAL-DEFINE STAR_ACCESSLOG "Customer"
 &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
 {Func/lib/eventlog.i}
@@ -67,9 +65,11 @@ DEF VAR lcTable      AS CHAR FORMAT "X(20)"    NO-UNDO.
 DEF VAR lcKey        AS CHAR FORMAT "X(20)"    NO-UNDO.
 DEF VAR lcevtime     AS CHAR FORMAT "XX:XX:XX" NO-UNDO.
 DEF VAR llBegins     AS LOG                    NO-UNDO.
+DEF VAR lcProgram    AS CHAR                   NO-UNDO.
 
 DEFINE VARIABLE muutokset AS CHARACTER NO-UNDO.
-DEFINE VARIABLE llAccess AS LOGICAL NO-UNDO.
+
+lcProgram = PROGRAM-NAME(1).
 
 form
     Eventlog.EventDate 
@@ -449,41 +449,31 @@ REPEAT WITH FRAME sel:
 
        SET lcTable lcKey WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
-       IF lcTable = {&STAR_ACCESSLOG} THEN DO:
+       IF lcTable ENTERED OR lcKey ENTERED THEN
+       DO:
           IF lcKey NE "" THEN DO:
              FIND FIRST Eventlog NO-LOCK WHERE 
-                Eventlog.TableName = lcTable AND
-                EventLog.Key BEGINS replace(lcKey," / ",chr(255))
-                NO-ERROR.
-             IF AVAILABLE Eventlog THEN DO:
-                llAccess = TRUE.
-                RUN CreateReadAccess(Syst.Var:katun, 
-                   Eventlog.TableName, 
-                   Eventlog.Key).
-             END.
-          END.
-       ELSE DO: 
+                        Eventlog.TableName = lcTable AND
+                        EventLog.Key BEGINS replace(lcKey," / ",chr(255))
+             NO-ERROR.
+             IF LOOKUP(lcTable, {&ACCESSLOG_TABLES} ) > 0  THEN
+                RUN CreateReadAccess(lcTable, Syst.Var:katun, EventLog.Key, lcProgram ).
+          END.  
+          ELSE 
           FIND FIRST Eventlog NO-LOCK WHERE 
-          Eventlog.TableName = lcTable NO-ERROR.
-          IF AVAILABLE Eventlog THEN DO:
-             llAccess = TRUE.
-             RUN CreateReadAccess(Syst.Var:katun, 
-                Eventlog.TableName, 
-                Eventlog.Key ).
-          END.
-          ELSE DO:
+                     Eventlog.TableName = lcTable NO-ERROR.
+          IF NOT AVAILABLE Eventlog THEN DO:
              BELL.
              MESSAGE "NOT FOUND !".
              PAUSE 1 NO-MESSAGE.
              NEXT BROWSE.
           END.
-       END.
-       /* some eventlog/tablename was found */
-       ASSIGN 
-          order      = 3 
-          memory     = recid(Eventlog) 
-          must-print = TRUE.
-       NEXT LOOP.
+          /* some eventlog/tablename was found */
+          ASSIGN 
+                order      = 3 
+                memory     = recid(Eventlog) 
+                must-print = TRUE.
+          NEXT LOOP. 
        END.
      END. /* Search-3 */
 

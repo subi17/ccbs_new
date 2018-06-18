@@ -8,13 +8,12 @@
                   03.10.03/aam input custnum and salesman
                   06.10.03/aam ContrType, CloseDate, FeeModel
                   13.10.03/aam tokens
-                  01.06.18 Func/lib/accesslog.i
   Version ......: M15
   ---------------------------------------------------------------------- */
 /* &GLOBAL-DEFINE BrTable Order */
 
 {Syst/commali.i}
-{Func/lib/accesslog.i}
+
 
 DEFINE TEMP-TABLE ttOrder NO-UNDO
  FIELD OrderId    AS INTEGER
@@ -292,7 +291,7 @@ BROWSE:
      END. /* NEXT page */
 
      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
-        RUN CreateReadAccess(Syst.Var:katun, "Order", Order.CustNum).
+        
         RUN local-find-THIS(FALSE).
         
         oOrderId = ttOrder.OrderId.
@@ -375,5 +374,4 @@ PROCEDURE local-disp-row:
        WITH FRAME sel.
 
 END PROCEDURE.
-
 

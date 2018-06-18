@@ -1,50 +1,42 @@
 &IF "{&ACCESSLOG_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE ACCESSLOG_I YES
+/*------------------------------------------------------------------------------
+    File        : Func/lib/accesslog.i
+    Purpose     : Create AccessLog record for all read of customer data
+    Author(s)   : Surbhi Yadav 
+    Created     : Sat Jun 01 16:02:10 IST 2018
+    Notes       : Create AccessLog for all TMS cui user search and 
+                  view customer information intentionally.
+  -----------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------------
-   File......:  Func/lib/accesslog.i
-   Purpose...:  Create Accesslog table to log data of user when 
-                user view or read customer's data.
-
-   Author(s).:  Ramesh Chand Rebari
-   Created...:  FRI JUNE 01 17:33:36 IST 2018
-
-   Notes.....:  01.06.2018/v.1 If user try to view customer's data 
-                               intensionally then only user's data
-                               will log into Accesslog Table. 
-                          
------------------------------------------------------------------------- */
-
-/* ***************************  Internal Procedure ***********************/
+/* *******************************  Internal Procedure *************************/
 
 
 PROCEDURE CreateReadAccess:
 
-/*-------------------------------------------------------------------------
+/*-------------------------------------------------------------------------------
+  Parameters:  1. Table Name  - Stores TableName which is viewed by TMS user.
+               2. User Id     - Stores TMS User's ID that views the customer data.
+               3. Key         - Stores customer number which is viewed by user.
+               4. Information - Stores current program name.
+  ------------------------------------------------------------------------------*/
 
-   Purpose...:  Create Read Accesslog table
-   Parameters:  1. User code - User's code that views the customer data
-                2. TableName - Table name which is viewed by user   
-                3. Key       - Customer's data that customer views by user         
-
- ------------------------------------------------------------------------*/ 
-   
-   DEFINE INPUT PARAMETER icUserCode   AS   CHARACTER NO-UNDO.
-   DEFINE INPUT PARAMETER icTable      AS   CHARACTER NO-UNDO.
-   DEFINE INPUT PARAMETER icKey        AS   CHARACTER NO-UNDO.
-
-   CREATE Accesslog.
+   DEFINE INPUT PARAMETER icTable     AS   CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icUserCode  AS   CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icKey       AS   CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icInfo      AS   CHARACTER NO-UNDO.   
+	
+   CREATE AccessLog.
    ASSIGN
-      Accesslog.EventTs   = NOW
-      Accesslog.UserCode  = icUserCode
-      Accesslog.TableName = icTable
-      Accesslog.Action    = 'Read' 
-      Accesslog.Key       = icKey
-   .
+      AccessLog.EventTs   = NOW
+      AccessLog.Action    = 'Read'      
+      AccessLog.UserCode  = icUserCode
+      AccessLog.Key       = icKey 
+      AccessLog.TableName = icTable
+      AccessLog.Info      = icInfo
+      .
        
-END PROCEDURE.       
+END PROCEDURE.
 
 &ENDIF
-
-

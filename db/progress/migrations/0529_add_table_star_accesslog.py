@@ -1,4 +1,3 @@
-from gearbox.migrations import Migration
 class AddTableAccessLog(Migration):
 
    database = "star"
@@ -17,4 +16,3 @@ class AddTableAccessLog(Migration):
 
    def down(self):
       self.drop_table('AccessLog')
-	 

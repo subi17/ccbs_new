@@ -93,8 +93,7 @@
                   28.08.07/aam ordertopup, 
                                Order.FatAmount
                   31.10.07 jp  new parameter for msrequest
-                  01.06.18     Func/lib/accesslog.i
-
+                  
   Version ......: yoigo
    ---------------------------------------------------------------------- */
 
@@ -232,10 +231,14 @@ DEF VAR liRequestId AS INT NO-UNDO.
 DEF VAR lcDeliveryType AS CHAR NO-UNDO. 
 DEF VAR liDeliveryType AS INT NO-UNDO. 
 DEF VAR lcSIMonlyMNP AS CHAR NO-UNDO.   /* Added since this is used in ordersender.i */
+DEF VAR lcProgram    AS CHAR NO-UNDO.
+DEF VAR llAccess     AS LOG  NO-UNDO.
 
 DEF BUFFER bOldOrder FOR Order.
 DEF BUFFER bSIM FOR SIM.
 DEF BUFFER lbOrder FOR Order.
+
+lcProgram = PROGRAM-NAME(1).
 
 form
     "Title ........:" OrderCustomer.CustTitle                
@@ -1036,6 +1039,11 @@ BROWSE:
               NEXT Browse.
            END.
            
+           IF OrderCustomer.CustNum = 0 THEN
+              RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, SUBSTITUTE("ROWID;&1", ROWID(OrderCustomer)), lcProgram ).
+           ELSE
+              RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.CustNum, lcProgram ).
+           
            RUN Mc/orderbr.p(lcCustomerId,lcCustIdType,icStatus,OUTPUT oOrderID).
                  
            FIND FIRST Order WHERE
@@ -1056,6 +1064,11 @@ BROWSE:
                          ordercustomer.brand      = lcBrand
               NO-LOCK NO-ERROR.
               IF AVAILABLE OrderCustomer THEN DO:
+	              IF OrderCustomer.CustNum = 0 THEN
+                    RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, SUBSTITUTE("ROWID;&1", ROWID(OrderCustomer)), lcProgram ).
+                 ELSE
+                    RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.CustNum, lcProgram ).
+                 
                  RUN Mc/orderbr.p(OrderCustomer.CustId,
                              OrderCustomer.CustIdType,icStatus,
                              OUTPUT oOrderID).
@@ -2000,11 +2013,13 @@ PROCEDURE local-update-customer:
    ASSIGN liCustRole   = iiRole
           lcCurrHeader = ac-hdr.
           
+   llAccess = FALSE. 
+      
    CASE iiRole:
       WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
-            lcNewHeader = "AGREEMENT".
-            RUN CreateReadAccess(Syst.Var:katun,"Order", Order.CustNum).
-         END.
+         lcNewHeader = " AGREEMENT".
+         llAccess = TRUE.      
+      END. 
       WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
          IF Order.InvCustRole NE 2 THEN DO:
             MESSAGE "Invoice customer role is" Order.InvCustRole
@@ -2054,6 +2069,12 @@ PROCEDURE local-update-customer:
       VIEW-AS ALERT-BOX ERROR.
       RETURN.
    END.
+
+   IF llAccess THEN
+      IF OrderCustomer.CustNum = 0 THEN
+         RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, SUBSTITUTE("ROWID;&1", ROWID(OrderCustomer)), lcProgram ). 
+      ELSE
+         RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.CustNum, lcProgram ).
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderCustomer).
 
