@@ -712,9 +712,11 @@ BROWSE:
             Syst.Var:ufk[4] = 2211
             Syst.Var:ufk[5] = 9796
             Syst.Var:ufk[6] = 9852
-            Syst.Var:ufk[7] = 0
-            Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
-            Syst.Var:ehto   = 3 ufkey = FALSE.
+            Syst.Var:ufk[7] = 9860  /* SAPC-48 */
+            Syst.Var:ufk[8] = 8 
+            Syst.Var:ufk[9] = 1
+            Syst.Var:ehto   = 3 
+            ufkey = FALSE.
           RUN Syst/ufkey.p.
       END.
 
@@ -1114,6 +1116,27 @@ BROWSE:
         END.
      END.
      
+     /* SAPC-48 - SAPC STATUS */
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN 
+     DO ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        
+        RUN local-find-this(FALSE).
+        
+        IF NOT CAN-FIND(FIRST OrderSubscription NO-LOCK WHERE 
+                              OrderSubscription.orderid = order.orderid) THEN
+        DO:
+           MESSAGE "Order subscriptino statuses not found!" 
+              VIEW-AS ALERT-BOX.
+           NEXT Browse.
+        END.
+        ELSE 
+           RUN Mc/ordersubscriptionview.p(Order.OrderId).
+           
+        NEXT LOOP.
+     END.
+
      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
        RUN local-find-this(FALSE).
        RUN pOrderView.
