@@ -316,6 +316,7 @@ DEF VAR llAddressValidated AS LOG NO-UNDO.
 DEF VAR lcProfession  AS CHAR  NO-UNDO.
 DEF VAR lcMemo        AS CHAR  NO-UNDO.
 DEF VAR lcNWProfile   AS CHAR  NO-UNDO. /* RES-885 */
+DEF VAR lcSAPC        AS CHAR  NO-UNDO. /* SAPC-44 */
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
 DEF VAR lcCustAddress LIKE Customer.Address  NO-UNDO.
@@ -375,7 +376,8 @@ ASSIGN
    lcLimitExtGrp = fCParamC("CustCredLimitExternalGrp")
    lcDefCountry  = fCParamC("CountryCodeDef")
    lcCutLine     = FILL("-",78)   
-   lcMemo        = "Agent" + CHR(255) + "TMS".
+   lcMemo        = "Agent" + CHR(255) + "TMS"
+   lcSAPC        = fCParamC("SAPC_ENABLED_NEW_CUSTOMERS"). /* SAPC-44 */
 
 IF lcPassword = ? THEN lcPassword = "".
  
@@ -1100,6 +1102,10 @@ repeat WITH FRAME sel:
               Customer.RateCust = Customer.CustNum 
               Customer.AgrCust  = Customer.CustNum
               Customer.ContrBeg = TODAY
+                            
+              /* SAPC-44 - Provisioning path: 1 for PL, 2 for SAPC */
+              Customer.AccGrp   = (IF lcSAPC = "SAPC" THEN 2 ELSE 1)
+              
               xrecid            = recid(Customer).
 
            FIND CustCat WHERE 
