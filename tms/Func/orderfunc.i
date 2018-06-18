@@ -183,7 +183,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                    bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR 
                    bfOrder.OrderType EQ {&ORDER_TYPE_STC})       AND 
                    bfOrder.CLIType BEGINS "CONTFH"               AND 
-            LOOKUP(bfOrder.StatusCode,"ORDER_ROI_STATUSES") GT 0 THEN DO:
+            LOOKUP(bfOrder.StatusCode,{&ORDER_ROI_STATUSES}) GT 0 THEN DO:
 
                   CREATE FusionMessage.
                   ASSIGN FusionMessage.MessageSeq      = NEXT-VALUE(FusionMessageSeq)
