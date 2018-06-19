@@ -514,10 +514,8 @@ CLASS Gwy.RESTClient:
          aoResultObject = loResponse:Entity
          lcStatusReason = loResponse:StatusReason.
 
-      &IF {&PROGRESS_VERSION} > 11.5 &THEN
       IF NOT lcStatusReason > ""
-      THEN lcStatusReason = STRING(StatusCodeEnum:GetEnum(loResponse:StatusCode)).
-      &ENDIF
+      THEN lcStatusReason = StatusCodeHelper:GetMessage(loResponse:StatusCode).
 
       IF loResponse:StatusCode >= 400
       THEN UNDO, THROW NEW RESTError(loResponse:StatusCode, lcStatusReason, aoResultObject).
