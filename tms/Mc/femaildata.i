@@ -1646,8 +1646,6 @@ PROCEDURE pGetPENALTYFEE:
       ELSE liMonths = 12.
       lcText = REPLACE(lcText,"#MONTHS",STRING(liMonths)).
 
-      lcList = lclist + CHR(10) + lcText.
-
       /*YCO-279 + refactoring text 532*/
       /*before this 532 was hardcoded with 100E + 12 months*/
       lcErr =  fSelectFTERMFee(Order.OrderId,
@@ -1657,6 +1655,9 @@ PROCEDURE pGetPENALTYFEE:
          lcText = REPLACE(lcText,"#AMOUNT",STRING(ldAmt)).
       ELSE
          lcText = REPLACE(lcText,"#AMOUNT",STRING(100)).
+
+      lcList = lclist + CHR(10) + lcText.
+
    END.
                   
    lcList = REPLACE(lcList,"euros","&euro;"). 

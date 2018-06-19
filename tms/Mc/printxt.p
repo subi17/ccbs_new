@@ -1330,9 +1330,9 @@ IF NOT llErrors THEN DO:
                                   OUTPUT ldAmt,
                                   OUTPUT lcTermName).
          IF lcErr EQ "" THEN
-            lcText = REPLACE(lcText,"#AMOUNT",STRING(ldAmt)).
+            lcList = REPLACE(lcList,"#AMOUNT",STRING(ldAmt)).
          ELSE
-            lcText = REPLACE(lcText,"#AMOUNT",STRING(100)).
+            lcList = REPLACE(lcList,"#AMOUNT",STRING(100)).
 
 
          RUN Mc/offer_penaltyfee.p(Order.OrderID,
