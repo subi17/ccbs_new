@@ -478,6 +478,9 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    END METHOD.
 
    METHOD PUBLIC CHARACTER mGetBankAcctNum():
+           
+       IF aoOrder:isPostPaidOrder = NO 
+       THEN RETURN "".
        
        DEFINE VARIABLE lcTotalCustomerBankData AS CHARACTER NO-UNDO.
        DEFINE VARIABLE lcCustAcctData          AS CHARACTER NO-UNDO.

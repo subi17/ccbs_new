@@ -334,8 +334,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
            END.
        END.
-       ELSE UNDO, THROW NEW ParamError ("Customer Account data does not exist.").
-       
+              
        ASSIGN THIS-OBJECT:CustAcctData = TRIM(THIS-OBJECT:CustAcctData, ":").
      
    END METHOD.
@@ -429,7 +428,8 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
         
         ioCustObj:Add("cust-num" , THIS-OBJECT:CustNum).
         ioCustObj:Add("default-billing-address-id" , THIS-OBJECT:DefaultAddrID).
-        ioCustObj:Add("customer-accounts" , ioCustArray).
+        IF TEMP-TABLE ttCustAccts:HAS-RECORDS 
+        THEN ioCustObj:Add("customer-accounts" , ioCustArray).
         
         RETURN ioCustObj.
         

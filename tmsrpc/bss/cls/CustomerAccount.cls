@@ -201,7 +201,8 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         
         loCustAcctObj:Add("cust-acct-num" , THIS-OBJECT:AccountID).
         loCustAcctObj:Add("billing-address-id" , THIS-OBJECT:BillAddrID).
-        loCustAcctObj:Add("billing-accounts" , loBillAcctArray).
+        IF TEMP-TABLE ttBillingAcct:HAS-RECORDS
+        THEN loCustAcctObj:Add("billing-accounts" , loBillAcctArray).
         
         RETURN loCustAcctObj.
 

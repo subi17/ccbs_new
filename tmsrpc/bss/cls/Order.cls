@@ -128,6 +128,18 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY CustAcctNum AS INTEGER NO-UNDO
       GET.
       SET.
+      
+   DEFINE PUBLIC PROPERTY isPostPaidOrder AS LOGICAL NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY OrderType AS INTEGER NO-UNDO
+      GET.
+      SET (iiType AS INTEGER):
+          
+          ASSIGN THIS-OBJECT:OrderType  = iiType.
+          
+      END SET.
        
    
 	CONSTRUCTOR PUBLIC Order():
@@ -180,10 +192,12 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
               
               THIS-OBJECT:liCustNum   =  loCustAcct:GetInteger("custnum").
               aoCustomer:mFindData(THIS-OBJECT:liCustNum).
-              ASSIGN 
-                  THIS-OBJECT:CustAcctNum = loCustAcct:GetInteger("account_id").
-              aoCustomer:mFindCustomer(THIS-OBJECT:CustAcctNum).
-              
+              IF loCustAcct:Has("account_id")
+              THEN DO:              
+                  ASSIGN 
+                      THIS-OBJECT:CustAcctNum = loCustAcct:GetInteger("account_id").
+                  aoCustomer:mFindCustomer(THIS-OBJECT:CustAcctNum).                  
+              END.              
           END.          
           ELSE aoCustomer:mCreateData(loCustAcct).
       END.      
@@ -232,7 +246,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.OrderId       = NEXT-VALUE(OrderId)
             THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
             Order.StatusCode    = {&ORDER_STATUS_ONGOING}
-            Order.OrderType     = (IF THIS-OBJECT:isACCOrder THEN {&ORDER_TYPE_ACC} ELSE {&ORDER_TYPE_NEW})
+            Order.OrderType     = THIS-OBJECT:OrderType
             Order.Source        = "bssapi"
             Order.CustNum       = aoCustomer:CustNum
             Order.MsSeq         = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:MsSeq ELSE NEXT-VALUE(MobSub))
@@ -244,13 +258,13 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             .
             
         IF VALID-OBJECT(OrderInspectionData)
-            THEN aoOrderInspection:mStoreData().
-      
+        THEN aoOrderInspection:mStoreData().
+            
         IF VALID-OBJECT(OrderPaymentData)
-            THEN aoOrderPayment:mStoreData().
-
-        aoOrderProductFactory:mStoreData().       
-
+        THEN aoOrderPayment:mStoreData().
+        
+        aoOrderProductFactory:mStoreData(). 
+        
     END METHOD.
 
    METHOD PUBLIC JsonObject mResult():

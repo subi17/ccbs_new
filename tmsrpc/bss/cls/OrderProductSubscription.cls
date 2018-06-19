@@ -86,40 +86,56 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         THEN DO:
             
             ASSIGN
-                lcNumberType        = loAttributes:GetCharacter("number_type") 
-                AttrCLI             = loAttributes:GetCharacter("number")
-            .
+                THIS-OBJECT:lcNumberType = loAttributes:GetCharacter("number_type") 
+                THIS-OBJECT:AttrCLI      = loAttributes:GetCharacter("number")
                 
-            IF LOOKUP(lcNumberType,"new,mnp,renewal,stc") = 0 
-            THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", lcNumberType)). 
+            .
+                            
+            IF LOOKUP(THIS-OBJECT:lcNumberType,"new,mnp,renewal,stc") = 0 
+            THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", THIS-OBJECT:lcNumberType)). 
             
-            IF lcNumberType = "mnp" AND 
-                CAN-FIND(FIRST Order WHERE Order.CLI = AttrCLI AND 
+            IF THIS-OBJECT:lcNumberType = "mnp" AND 
+                CAN-FIND(FIRST Order WHERE Order.CLI = THIS-OBJECT:AttrCLI AND 
                               (Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING} OR /*60*/
                                Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}))
             THEN UNDO, THROW NEW ParamError ("Requested number is in migration").
             
-            lcReturnValue = Func.ValidateOrder:fCheckMSISDN(AttrCLI,lcNumberType). 
+            IF Func.ValidateOrder:misCLITypeExists(THIS-OBJECT:ProductID) = NO 
+            THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Unknown Product ID : &1 ", THIS-OBJECT:ProductID)).
+                     
+            IF Func.ValidateOrder:misFilledCLI(THIS-OBJECT:AttrCLI) 
+            THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Number &1 is already assigned to other order. ", THIS-OBJECT:AttrCLI)).
+            
+            lcReturnValue = Func.ValidateOrder:fCheckMSISDN(THIS-OBJECT:AttrCLI,THIS-OBJECT:lcNumberType). 
             
             IF lcReturnValue > ""
             THEN UNDO, THROW NEW InternalError(lcReturnValue). 
-                                                      
+            
             mCreateDataOrderProductParamData(loAttributes,"number_type","Char").
-            mCreateDataOrderProductParamData(loAttributes,"number","Char").                                 
-                                             
-            IF loAttributes:Has("old-operator-code") 
-            THEN mCreateDataOrderProductParamData(loAttributes,"old-operator-code","Char"). 
+            mCreateDataOrderProductParamData(loAttributes,"number","Char").  
+                                                 
+            IF loAttributes:Has("old_operator_code") 
+            THEN DO:
+                ASSIGN 
+                    aoOrder:OrderType = {&ORDER_TYPE_MNP}.
+                mCreateDataOrderProductParamData(loAttributes,"old_operator_code","Char").
+            END.
+            ELSE ASSIGN aoOrder:OrderType  =  {&ORDER_TYPE_NEW}. 
             
-            ASSIGN aoOrder:lcCLI = AttrCLI.
-            
+            ASSIGN aoOrder:lcCLI            = THIS-OBJECT:AttrCLI
+                   aoOrder:isPostPaidOrder  = Func.ValidateOrder:mIsPostpaidOrder(THIS-OBJECT:ProductID).
+                   
             IF ioItemObject:Has("billing_account_id")
             THEN DO:
-                
+                /*This will be executed in case of existing customer.*/
                 ASSIGN THIS-OBJECT:liBillAcctID  =  ioItemObject:GetInteger("billing_account_id").
-                mIsBillingAccountExists().  
-                mGetBillingAddressObject().
-             
-            END. 
+                mIsBillingAccountExists(). 
+                mGetBillingAddressObject(). 
+            END.           
+            
+            IF aoOrder:isPostPaidOrder = NO 
+            AND aoOrder:aoCustomer:isNewCustomer = FALSE
+            THEN mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
             
             IF ioItemObject:Has("billing_account_index")
             THEN DO:
@@ -127,17 +143,18 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
                 /*WHAT WAS THE CODE THAT SHOULD BE WRITTEN HERE*/
                 
             END.
-            
+                
             ASSIGN 
                 aoOrderAggrementCustomer           =  NEW bss.cls.OrderCustomer(aoOrder)
                 aoOrderAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                .
+               
             IF aoOrder:aoCustomer:isNewCustomer THEN    
             aoOrderAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
             ELSE aoOrderAggrementCustomer:mCreateRowCustomerData(AddressObj).
-            
+                
             /*TODO PC:Please check the MULTIHOLDER INFROMATION WITH KIRAN*/
-            
+                
         END.
             
     END METHOD.
@@ -157,27 +174,31 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
     
     METHOD PUBLIC VOID mCreateDataOrderProductParamData  (INPUT loAttributes AS CLASS JsonObject ,
                                                           INPUT Attribute    AS CHARACTER,
-                                                          INPUT AttrType     AS CHARACTER  ):                                                              
+                                                          INPUT AttrType     AS CHARACTER  ):  
+                                                              
+        DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
        
         aoSubscriptionParams = NEW bss.cls.OrderProductParam(THIS-OBJECT) .
         aoSubscriptionParams:mCreateData(loAttributes,
                                          Attribute,
                                          AttrType).
-                                         
+       
+        ASSIGN liNextParamNum =  mNextParamNb().
+                                            
         CREATE ttOrderProductParam.
         ASSIGN 
-            ttOrderProductParam.opobject = aoSubscriptionParams
-            ttOrderProductParam.paramnb  = mNextParamNb().  
-        
-        
+            ttOrderProductParam.opobject     = aoSubscriptionParams.
+            ttOrderProductParam.paramnb      = liNextParamNum. 
+                  
     END METHOD.
     
-    METHOD PRIVATE INTEGER mNextParamNb():
+    METHOD PUBLIC INTEGER mNextParamNb():
 
-        FIND LAST ttOrderProductParam USE-INDEX paramnb.
+        FIND LAST ttOrderProductParam USE-INDEX paramnb NO-ERROR.
+               
         IF NOT AVAILABLE ttOrderProductParam
-            THEN RETURN 1.
-
+        THEN RETURN 1.
+        
         RETURN ( ttOrderProductParam.paramnb + 1 ).
 
     END METHOD.
@@ -206,13 +227,13 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         FIND FIRST Address WHERE Address.HostTable    =  "Customer"
                              AND Address.KeyValue     =  STRING(aoOrder:aoCustomer:CustNum)
                              AND Address.AddressType  =  {&ADDR_DEFAULT_BILLING} NO-LOCK NO-ERROR.
-                             
+
         IF NOT AVAILABLE Address 
         THEN UNDO,THROW NEW ParamError("Default Billing Address Not Found.").
         
-        ASSIGN 
-            AddressObj          = NEW JsonObject()
-            loValidationObj     = NEW JsonObject().
+        ASSIGN            
+            loValidationObj          = NEW JsonObject()
+            THIS-OBJECT:AddressObj   = NEW JsonObject().
         
         AddressObj:ADD("address_id"  , Address.AddressRegisterID).
         AddressObj:ADD("street"      , Address.Address).

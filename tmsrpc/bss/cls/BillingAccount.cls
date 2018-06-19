@@ -142,8 +142,8 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:InvGroup      = ioBillingAcct:GetCharacter("invoice_group")
             THIS-OBJECT:DurDateOffSet = 0 /*TODO-JSON*/
             THIS-OBJECT:StatusCode    = 0
-            THIS-OBJECT:FromDate      = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_from"))
-            THIS-OBJECT:ToDate        = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to"))
+            THIS-OBJECT:FromDate      = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_from")) WHEN ioBillingAcct:Has("valid_from")
+            THIS-OBJECT:ToDate        = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to"))   WHEN ioBillingAcct:Has("valid_to")
             .
         
         IF ioBillingAcct:Has("invoice-ship-address")

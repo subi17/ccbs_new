@@ -154,7 +154,8 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 
       ASSIGN
          aoOrderCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
-         aoOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_ACC}.
+         aoOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_ACC}
+         aoOrder:OrderType       = {&ORDER_TYPE_ACC}.
 
       IF loAttributes:Has("custnum")
       THEN DO:
