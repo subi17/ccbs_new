@@ -411,7 +411,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:Email              = aoDefaultCustomer:Email
             THIS-OBJECT:MobileNumber       = aoDefaultCustomer:MobileNumber
             THIS-OBJECT:FixedNumber        = aoDefaultCustomer:FixedNumber
-            THIS-OBJECT:BankCode           = mGetBankAcctNum()
+            THIS-OBJECT:BankCode           = (IF aoOrder:aoCustomer:isNewCustomer THEN mGetBankAcctNum() ELSE aoOrder:aoCustomer:OrderCustBankAcct) 
             THIS-OBJECT:OutBankMarketing   = aoDefaultCustomer:OutBankMarketing
             THIS-OBJECT:DontSharePersData  = aoDefaultCustomer:DontSharePersData
             THIS-OBJECT:OperEMailMarketing = aoDefaultCustomer:OperEMailMarketing

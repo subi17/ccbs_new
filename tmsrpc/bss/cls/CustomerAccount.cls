@@ -17,6 +17,8 @@ USING Progress.Json.ObjectModel.JsonArray.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage : 
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -99,20 +101,20 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         ASSIGN 
             THIS-OBJECT:DefaultAcct = ioCustAcctObject:GetLogical("default_account")
             THIS-OBJECT:AcctName    = ioCustAcctObject:GetCharacter("account_name")
-            THIS-OBJECT:ValidFrom   =  DATETIME-TZ(Func.Common:mGetDate(ioCustAcctObject:GetCharacter("valid_from")))
-            THIS-OBJECT:ValiTo      =  DATETIME-TZ(Func.Common:mGetDate(ioCustAcctObject:GetCharacter("valid_to")))
+            THIS-OBJECT:ValidFrom   =  DATETIME-TZ(TODAY)
+            THIS-OBJECT:ValiTo      =  DATETIME-TZ(DATE(12,31,2049))
             THIS-OBJECT:AccountID   =  NEXT-VALUE (accountid)  
             THIS-OBJECT:CustNum     =  ioCustomerObj:CustNum
             THIS-OBJECT:StatusCode  =  0 /*0=pending, 1=active*/
             .
             
-        IF ioCustAcctObject:Has("billing-address")
+        IF ioCustAcctObject:Has("billing_address")
         THEN DO:
             
             aoBillAddrObj = NEW bss.cls.OrderAddress().
-            aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing-address")).
+            aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
             ASSIGN aoBillAddrObj:KeyValue  = THIS-OBJECT:CustNum
-                   aoBillAddrObj:AddrType  = "billing". 
+                   aoBillAddrObj:AddrType  = {&ADDR_BILLING}. 
                           
         END.
         
@@ -198,7 +200,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         END.
         
         loCustAcctObj:Add("cust-acct-num" , THIS-OBJECT:AccountID).
-        loCustAcctObj:Add("billaddress-id" , THIS-OBJECT:BillAddrID).
+        loCustAcctObj:Add("billing-address-id" , THIS-OBJECT:BillAddrID).
         loCustAcctObj:Add("billing-accounts" , loBillAcctArray).
         
         RETURN loCustAcctObj.

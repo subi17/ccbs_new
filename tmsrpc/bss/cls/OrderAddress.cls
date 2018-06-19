@@ -131,7 +131,7 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
         GET.
         SET.
         
-    DEFINE PUBLIC PROPERTY AddrType AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY AddrType AS INTEGER NO-UNDO
        GET.
        SET.
 		

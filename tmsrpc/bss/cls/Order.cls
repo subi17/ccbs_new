@@ -84,6 +84,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
       
+   DEFINE PUBLIC PROPERTY liCustNum AS INTEGER NO-UNDO
+      GET.
+      SET.
+      
    DEFINE PUBLIC PROPERTY lcCLI AS CHARACTER NO-UNDO
       GET.
       SET(icCLI AS CHARACTER):
@@ -121,6 +125,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
+   DEFINE PUBLIC PROPERTY CustAcctNum AS INTEGER NO-UNDO
+      GET.
+      SET.
+       
    
 	CONSTRUCTOR PUBLIC Order():
 	END CONSTRUCTOR.
@@ -150,10 +158,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE loAddrObject    AS CLASS     bss.cls.OrderAddress NO-UNDO.
               
       ASSIGN
-         loAgrCust            =   ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
-         loCustAcct           =   ioJsonObject:GetJsonObject("customer")           WHEN ioJsonObject:Has("customer")
-         OrderPaymentData     =   ioJsonObject:GetJsonObject("payment_method")     WHEN ioJsonObject:Has("payment_method")
-         OrderInspectionData  =   ioJsonObject:GetJsonObject("inspection")         WHEN ioJsonObject:Has("inspection")
+         loAgrCust            =   ioJsonObject:GetJsonObject("agreement-customer")       WHEN ioJsonObject:Has("agreement-customer")
+         loCustAcct           =   ioJsonObject:GetJsonObject("customer")                 WHEN ioJsonObject:Has("customer")
+         OrderPaymentData     =   ioJsonObject:GetJsonObject("upfront_payment_method")   WHEN ioJsonObject:Has("upfront_payment_method")
+         OrderInspectionData  =   ioJsonObject:GetJsonObject("inspection")               WHEN ioJsonObject:Has("inspection")
          aoCustomer           =   NEW bss.cls.Customer().
          
       IF VALID-OBJECT(loAgrCust) 
@@ -166,8 +174,17 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       END. 
       ELSE IF VALID-OBJECT(loCustAcct)
       THEN DO:
-          IF loCustAcct:Has("account_id")
-          THEN aoCustomer:mFindCustomer(loCustAcct:GetInteger("account_id")).
+          
+          IF loCustAcct:Has("custnum")
+          THEN DO:
+              
+              THIS-OBJECT:liCustNum   =  loCustAcct:GetInteger("custnum").
+              aoCustomer:mFindData(THIS-OBJECT:liCustNum).
+              ASSIGN 
+                  THIS-OBJECT:CustAcctNum = loCustAcct:GetInteger("account_id").
+              aoCustomer:mFindCustomer(THIS-OBJECT:CustAcctNum).
+              
+          END.          
           ELSE aoCustomer:mCreateData(loCustAcct).
       END.      
 
@@ -194,12 +211,13 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
           aoOrderInspection:mCreateData(OrderInspectionData).
       END.
       
+        
       IF VALID-OBJECT(OrderPaymentData)
       THEN DO:
           ASSIGN aoOrderPayment  = NEW bss.cls.OrderPayment(THIS-OBJECT).
           aoOrderPayment:mCreateData(OrderPaymentData).
-      END.
-
+      END.      
+    
 	END METHOD.
 
     METHOD PUBLIC VOID mStoreData():
@@ -207,7 +225,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
         /* If there is a new customer data we need to create it first */
         IF aoCustomer:isNewCustomer THEN
         aoCustomer:mStoreData().
-
+        
         CREATE Order.
         ASSIGN
             Order.Brand         = Syst.Var:gcBrand

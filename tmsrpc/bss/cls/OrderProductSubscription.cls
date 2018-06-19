@@ -54,7 +54,12 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
     DEFINE PUBLIC PROPERTY aoOrderAggrementCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
         GET.
         SET. 
-		
+        
+    DEFINE PUBLIC PROPERTY AddressObj AS CLASS JsonObject  NO-UNDO
+        GET.
+        SET.
+       
+   		
 	CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS bss.cls.Order ):
 	    
         SUPER(ioOrder).
@@ -72,6 +77,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         DEFINE VARIABLE loAttributes      AS CLASS     JsonObject NO-UNDO.
         DEFINE VARIABLE lcReturnValue     AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcOldOperatorCode AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE loBillAddrObj     AS CLASS JsonObject NO-UNDO.
         
         ASSIGN loAttributes                     = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes")
                THIS-OBJECT:aoBillingAcctIndex   = ioItemObject:GetInteger("billing-account-index") WHEN ioItemObject:Has("billing-account-index").
@@ -109,21 +115,26 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             IF ioItemObject:Has("billing_account_id")
             THEN DO:
                 
-                ASSIGN liBillAcctID  =  ioItemObject:GetInteger("billing_account_id").
+                ASSIGN THIS-OBJECT:liBillAcctID  =  ioItemObject:GetInteger("billing_account_id").
+                mIsBillingAccountExists().  
+                mGetBillingAddressObject().
              
             END. 
             
             IF ioItemObject:Has("billing_account_index")
             THEN DO:
                 
+                /*WHAT WAS THE CODE THAT SHOULD BE WRITTEN HERE*/
+                
             END.
             
             ASSIGN 
-                aoOrderAggrementCustomer         =  NEW bss.cls.OrderCustomer(aoOrder)
-                aoOrderAggrementCustomer:RowType =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-                .
-                
+                aoOrderAggrementCustomer           =  NEW bss.cls.OrderCustomer(aoOrder)
+                aoOrderAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+               .
+            IF aoOrder:aoCustomer:isNewCustomer THEN    
             aoOrderAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
+            ELSE aoOrderAggrementCustomer:mCreateRowCustomerData(AddressObj).
             
             /*TODO PC:Please check the MULTIHOLDER INFROMATION WITH KIRAN*/
             
@@ -171,5 +182,64 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
 
     END METHOD.
     
+    METHOD PUBLIC VOID mIsBillingAccountExists() :
+        
+        FIND FIRST InvoiceTargetGroup NO-LOCK WHERE 
+                   InvoiceTargetGroup.ITGroupID    =   THIS-OBJECT:liBillAcctID 
+                   NO-ERROR.
+                   
+        IF NOT AVAILABLE InvoiceTargetGroup
+        THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Billing Account &1 does not exist.", THIS-OBJECT:liBillAcctID)). 
+        
+        IF InvoiceTargetGroup.AccountID  <>  aoOrder:CustAcctNum 
+        THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Billing Account &1 does not associated to the entered customer account &2 .", 
+                                                    THIS-OBJECT:liBillAcctID , aoOrder:CustAcctNum )). 
+                                                    
+        ASSIGN aoOrder:aoCustomer:OrderCustBankAcct  =  InvoiceTargetGroup.BankAccount.
+                             
+    END METHOD.
+    
+    METHOD PUBLIC VOID mGetBillingAddressObject() :
+        
+        DEFINE VARIABLE loValidationObj AS CLASS JsonObject NO-UNDO.
+        
+        FIND FIRST Address WHERE Address.HostTable    =  "Customer"
+                             AND Address.KeyValue     =  STRING(aoOrder:aoCustomer:CustNum)
+                             AND Address.AddressType  =  {&ADDR_DEFAULT_BILLING} NO-LOCK NO-ERROR.
+                             
+        IF NOT AVAILABLE Address 
+        THEN UNDO,THROW NEW ParamError("Default Billing Address Not Found.").
+        
+        ASSIGN 
+            AddressObj          = NEW JsonObject()
+            loValidationObj     = NEW JsonObject().
+        
+        AddressObj:ADD("street"      , Address.Address).
+        AddressObj:Add("street_type" , Address.StreetType).
+        AddressObj:Add("building_number" , Address.BuildingNum).
+        AddressObj:Add("block" , Address.Block).
+        AddressObj:Add("floor" , Address.Floor).
+        AddressObj:Add("stair" , Address.Stair).
+        AddressObj:Add("door" , Address.Door).
+        AddressObj:Add("letter" , Address.Letter).
+        AddressObj:Add("km" , Address.KM).
+        AddressObj:Add("hand" , Address.Hand).
+        AddressObj:Add("bis_duplicate" , Address.bisduplicate).
+        AddressObj:Add("additional_address" , Address.addresscompl).
+        /*AddressObj:Add("normalizedid" ,Address.normalizedid).*/
+        AddressObj:Add("latitude" , Address.Latitude).
+        AddressObj:Add("longitude" , Address.longitude).
+        AddressObj:Add("city" , Address.City).
+        AddressObj:Add("region" , Address.Region).
+        AddressObj:Add("zip" , Address.zipCode).
+        AddressObj:Add("country" , Address.Country).
+        
+        loValidationObj:Add("city_code" , Address.CityCode).
+        loValidationObj:Add("street_code" , Address.StreetCode).
+        loValidationObj:Add("municipality_code" , Address.towncode).
+        
+        AddressObj:Add("validation_data" , loValidationObj).
+        
+    END METHOD.
 
 END CLASS.

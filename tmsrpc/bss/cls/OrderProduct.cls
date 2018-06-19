@@ -69,8 +69,8 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
 
       ASSIGN
          ActionType         = ioItemObject:GetCharacter("type")
-         ProductID          = ioItemObject:GetCharacter("product-id")  WHEN ioItemObject:Has("product-id")   
-         ProductOfferingID  = ioItemObject:GetCharacter("product-offering-id").
+         ProductID          = ioItemObject:GetCharacter("product_id")  WHEN ioItemObject:Has("product_id")   
+         ProductOfferingID  = ioItemObject:GetCharacter("product_offering_id").
          
      IF ActionType = "mobile-subscription" 
      THEN DO:
@@ -88,28 +88,31 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
          aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioItemObject:GetJsonArray("items"), aoOrder).
       END.
-
+     
 	END METHOD.
 
    METHOD PUBLIC ABSTRACT VOID mStoreDataForType().
 
    METHOD PUBLIC VOID mStoreData():
+     
+       IF THIS-OBJECT:ActionType <> "main" THEN            
+       DO:
+           CREATE abOrderProduct.
+           ASSIGN
+               abOrderProduct.OrderProductId    = NEXT-VALUE(OrderProductID)
+               abOrderProduct.OrderId           = aoOrder:OrderId
+               THIS-OBJECT:OrderProductID       = abOrderProduct.OrderProductId
+               THIS-OBJECT:OrderID              = abOrderProduct.OrderId
+               abOrderProduct.ActionType        = THIS-OBJECT:ActionType
+               abOrderProduct.ProductID         = THIS-OBJECT:ProductID
+               abOrderProduct.ProductOfferingID = THIS-OBJECT:ProductOfferingID
+               .
+       END.
+     
+       mStoreDataForType().
 
-      CREATE abOrderProduct.
-      ASSIGN
-         abOrderProduct.OrderProductId     = NEXT-VALUE(OrderProductID)
-         abOrderProduct.OrderId            = aoOrder:OrderId
-         THIS-OBJECT:OrderProductID        = abOrderProduct.OrderProductId
-         THIS-OBJECT:OrderID               = abOrderProduct.OrderId
-         abOrderProduct.ActionType         = THIS-OBJECT:ActionType
-         abOrderProduct.ProductID          = THIS-OBJECT:ProductID
-         abOrderProduct.ProductOfferingID  = THIS-OBJECT:ProductOfferingID
-         .
-
-      mStoreDataForType().
-
-      IF VALID-OBJECT(aoOrderProductFactory)
-      THEN aoOrderProductFactory:mStoreData().
+       IF VALID-OBJECT(aoOrderProductFactory)
+       THEN aoOrderProductFactory:mStoreData().
 
    END METHOD.
 
@@ -120,6 +123,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
 
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("order-item-id", THIS-OBJECT:OrderProductID).
+      loJsonObject:Add("order-item-type" , THIS-OBJECT:ActionType).
       ioJsonArray:Add(loJsonObject).
 
       IF VALID-OBJECT(aoOrderProductFactory)

@@ -17,6 +17,8 @@ USING Progress.Json.ObjectModel.JsonArray.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -174,6 +176,10 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY DefaultAddressObj AS CLASS JsonObject NO-UNDO 
         GET.
         SET.   
+        
+    DEFINE PUBLIC PROPERTY OrderCustBankAcct AS CHARACTER NO-UNDO
+       GET.
+       SET.
        
     DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
         FIELDS custacctobj  AS CLASS Progress.Lang.Object
@@ -197,10 +203,12 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
       THEN UNDO, THROW NEW ParamError
                (SUBSTITUTE("customer_not_found|&1", iiCustNum)).
 
-      ASSIGN
-         THIS-OBJECT:CustNum  = bfCustomer.CustNum
-         THIS-OBJECT:Category = bfCustomer.Category.
-
+        ASSIGN
+            THIS-OBJECT:CustNum    = bfCustomer.CustNum
+            THIS-OBJECT:Category   = bfCustomer.Category
+            THIS-OBJECT:CustID     = bfCustomer.orgID
+            THIS-OBJECT:CustIdType = bfCustomer.CustIdType.
+     
 	END METHOD.
 
 
@@ -213,14 +221,9 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        THEN  UNDO, THROW NEW ParamError
                (SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
                
-       FIND FIRST Customer WHERE Customer.CustNum = CustomerAccount.CustNum NO-LOCK NO-ERROR.
-       IF NOT AVAILABLE Customer
-       THEN UNDO, THROW NEW ParamError
-               (SUBSTITUTE("customer_not_found|&1", CustomerAccount.CustNum)).
-               
-        ASSIGN THIS-OBJECT:CustNum  = Customer.CustNum
-               THIS-OBJECT:Category = Customer.Category.
-      
+       IF THIS-OBJECT:CustNum <> CustomerAccount.CustNum
+       THEN UNDO, THROW NEW ParamError ("Invalid Custnum and AccountID combination.").
+          
        
    END METHOD.
    
@@ -260,7 +263,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        THIS-OBJECT:Language       = mGetLanguage(ioJsonObject:GetCharacter("language"))
        THIS-OBJECT:SelfEmployed   = ioJsonObject:GetLogical("self_employed")
        THIS-OBJECT:BirthDay       = Func.Common:mGetDate(ioJsonObject:GetCharacter("birthday"))
-       THIS-OBJECT:FoundationDate = Func.Common:mGetDate(ioJsonObject:GetCharacter("foundation_date"))
+       /*THIS-OBJECT:FoundationDate = Func.Common:mGetDate(ioJsonObject:GetCharacter("foundation_date"))*/
        THIS-OBJECT:Email          = ioJsonObject:GetCharacter("email")
        THIS-OBJECT:MobileNumber   = ioJsonObject:GetCharacter("sms_number")
        THIS-OBJECT:FixedNumber    = ioJsonObject:GetCharacter("phone_number")
@@ -298,14 +301,14 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        END.
        ELSE UNDO, THROW NEW ParamError ("Marketing data does not exist.").
        
-       IF ioJsonObject:Has("default-address")
+       IF ioJsonObject:Has("default_billing_address")
        THEN DO:
            
            ASSIGN
-               THIS-OBJECT:DefaultAddressObj = ioJsonObject:GetJsonObject("default-address")
+               THIS-OBJECT:DefaultAddressObj = ioJsonObject:GetJsonObject("default_billing_address")
                aoDefaultCustAddress          = NEW bss.cls.OrderAddress()
                aoDefaultCustAddress:KeyValue = THIS-OBJECT:CustNum
-               aoDefaultCustAddress:AddrType = "default"
+               aoDefaultCustAddress:AddrType = {&ADDR_DEFAULT_BILLING}
                .
            aoDefaultCustAddress:mCreateData(THIS-OBJECT:DefaultAddressObj).
            
@@ -425,8 +428,8 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
         END.      
         
         ioCustObj:Add("cust-num" , THIS-OBJECT:CustNum).
-        ioCustObj:Add("Default-addr-id" , THIS-OBJECT:DefaultAddrID).
-        ioCustObj:Add("custome-accounts" , ioCustArray).
+        ioCustObj:Add("default-billing-address-id" , THIS-OBJECT:DefaultAddrID).
+        ioCustObj:Add("customer-accounts" , ioCustArray).
         
         RETURN ioCustObj.
         

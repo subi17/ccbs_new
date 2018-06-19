@@ -52,26 +52,14 @@ CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct:
         DEFINE VARIABLE liActLimit        AS INTEGER   NO-UNDO.
         DEFINE VARIABLE liActs            AS INTEGER   NO-UNDO.
         DEFINE VARIABLE liCustSubLimit AS LOGICAL NO-UNDO.
-        
-        ASSIGN loCustAcct       =  aoOrder:loCustAcct 
-               .
-
-        IF loCustAcct:Has("custnum")
-        AND aoOrder:aoCustomer:CustNum = 0 
-        THEN UNDO, THROW NEW ParamError("Customer entered in Customer Account does not exist.").
-        
-       /* ASSIGN
-            aoOrderCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
-            aoOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-            .
-        */
-        IF loCustAcct:Has("custnum")
-        THEN DO:
-            /*aoOrderCustomer:mCreateData(loCustAcct:GetInteger("custnum")).*/
-            liCustSubLimit =  Func.ValidateACC:mSubscriptionLimitCheck(INPUT aoOrderCustomer:CustId ,
-                                                                       INPUT aoOrderCustomer:CustIdType,
-                                                                       INPUT Func.ValidateACC:mIsSelfEmpl(aoOrderCustomer:Category),
-                                                                       INPUT Func.ValidateACC:mIsPro(aoOrderCustomer:Category),
+      
+        IF aoOrder:aoCustomer:isNewCustomer = FALSE
+        THEN DO:            
+            
+            liCustSubLimit =  Func.ValidateACC:mSubscriptionLimitCheck(INPUT aoOrder:aoCustomer:CustId ,
+                                                                       INPUT aoOrder:aoCustomer:CustIdType,
+                                                                       INPUT Func.ValidateACC:mIsSelfEmpl(aoOrder:aoCustomer:Category),
+                                                                       INPUT Func.ValidateACC:mIsPro(aoOrder:aoCustomer:Category),
                                                                        1,
                                                                        OUTPUT liSubLimit,
                                                                        OUTPUT lisubs,
@@ -79,21 +67,15 @@ CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct:
                                                                        OUTPUT liActs).
                                                                        
             IF liCustSubLimit = FALSE 
-            THEN UNDO, THROW NEW InternalError("Subscription Limit Error to Customer.").                                                                   
-        END.
-        ELSE DO:
-            /*IF VALID-OBJECT(loCustAcct)
-            THEN aoOrderCustomer:mCreateData(loCustAcct).*/
-        END.
+            THEN UNDO, THROW NEW InternalError("Subscription Limit Error to existing Customer.").                                                                   
+        
+        END.               
         
     END METHOD.
     
     
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
-        
-    /*    IF VALID-OBJECT(aoOrderCustomer)
-        THEN aoOrderCustomer:mStoreData().
-      */ 
+   
     END METHOD. 
     
 
