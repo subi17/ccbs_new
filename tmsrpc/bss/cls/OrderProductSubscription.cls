@@ -214,6 +214,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             AddressObj          = NEW JsonObject()
             loValidationObj     = NEW JsonObject().
         
+        AddressObj:ADD("address_id"  , Address.AddressRegisterID).
         AddressObj:ADD("street"      , Address.Address).
         AddressObj:Add("street_type" , Address.StreetType).
         AddressObj:Add("building_number" , Address.BuildingNum).

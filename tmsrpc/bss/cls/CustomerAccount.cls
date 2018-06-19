@@ -61,7 +61,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY BillAddrID AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY BillAddrID AS CHARACTER NO-UNDO
        GET.
        SET.
        
@@ -160,7 +160,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	     IF VALID-OBJECT(aoBillAddrObj)
 	     THEN DO:
              aoBillAddrObj:mStoreData().
-             ASSIGN THIS-OBJECT:BillAddrID = aoBillAddrObj:AddrID.	         
+             ASSIGN THIS-OBJECT:BillAddrID = aoBillAddrObj:AddrRegisterID.	         
 	     END.
 	     FOR EACH ttBillingAcct :
              CAST(ttBillingAcct.BillAcctObj, bss.cls.BillingAccount):mStoreData().

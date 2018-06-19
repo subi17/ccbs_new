@@ -173,6 +173,10 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY aoDefaultCustomer AS bss.cls.Customer NO-UNDO 
        GET.
        SET.
+       
+   DEFINE PUBLIC PROPERTY AddressID AS CHARACTER NO-UNDO
+      GET.
+      SET.
 
    DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
 
@@ -408,6 +412,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:Region             = ioOrderCustAddrObj:GetCharacter("region")
             THIS-OBJECT:ZipCode            = ioOrderCustAddrObj:GetCharacter("zip")
             THIS-OBJECT:Country            = ioOrderCustAddrObj:GetCharacter("country")
+            THIS-OBJECT:AddressID          = ioOrderCustAddrObj:GetCharacter("address_id")
             THIS-OBJECT:Email              = aoDefaultCustomer:Email
             THIS-OBJECT:MobileNumber       = aoDefaultCustomer:MobileNumber
             THIS-OBJECT:FixedNumber        = aoDefaultCustomer:FixedNumber

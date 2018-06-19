@@ -134,6 +134,11 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY AddrType AS INTEGER NO-UNDO
        GET.
        SET.
+       
+    DEFINE PUBLIC PROPERTY AddrRegisterID AS CHARACTER NO-UNDO
+       GET.
+       SET.   
+    
 		
 	CONSTRUCTOR PUBLIC OrderAddress ( ):
 		 
@@ -170,6 +175,7 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:Country           = mGetCountry(ioOrderAddress:GetCharacter("country"))
             THIS-OBJECT:Gescal            = ioOrderAddress:GetCharacter("gescal") WHEN ioOrderAddress:Has("gescal")
             THIS-OBJECT:CoverageToken     = ioOrderAddress:GetCharacter("coveragetoken") WHEN ioOrderAddress:Has("coveragetoken")
+            THIS-OBJECT:AddrRegisterID    = ioOrderAddress:GetCharacter("address_id")
         .
 	    
 	    IF ioOrderAddress:Has("validation_data") 
@@ -189,36 +195,38 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
 	
 	METHOD PUBLIC VOID mStoreData():
 	    
-	    CREATE Address.
-	    ASSIGN Address.AddressID     = THIS-OBJECT:AddrID 
-	           Address.Address       = THIS-OBJECT:Street
-               Address.StreetType    = THIS-OBJECT:StreetType       
-               Address.BuildingNum   = THIS-OBJECT:BuildingNum      
-               Address.Block         = THIS-OBJECT:BlockNum         
-               Address.Floor         = THIS-OBJECT:Floor            
-               Address.Stair         = THIS-OBJECT:Stair            
-               Address.Door          = THIS-OBJECT:Door             
-               Address.Letter        = THIS-OBJECT:Letter           
-               Address.km            = THIS-OBJECT:KM               
-               Address.Hand          = THIS-OBJECT:Hand             
-               Address.bisduplicate  = THIS-OBJECT:BisDuplicate     
-               Address.addresscompl  = THIS-OBJECT:AdditionalAddress
-               /*Address.normalizedid   = THIS-OBJECT:NormalizedID*/     
-               Address.Latitude      = THIS-OBJECT:Latitude         
-               Address.longitude     = THIS-OBJECT:Longitude        
-               Address.City          = THIS-OBJECT:City             
-               Address.Region        = THIS-OBJECT:Region           
-               Address.zipCode       = THIS-OBJECT:ZIP              
-               Address.Country       = THIS-OBJECT:Country
-               Address.CityCode      = THIS-OBJECT:CityCode
-               Address.StreetCode    = THIS-OBJECT:StreetCode
-               Address.towncode      = THIS-OBJECT:MunicipalityCode
-               Address.HostTable     = "Customer"
-               Address.KeyValue      = STRING(THIS-OBJECT:KeyValue)
-               Address.AddressType   = THIS-OBJECT:AddrType
-               Address.Gescal        = THIS-OBJECT:Gescal
-               Address.CoverageToken = THIS-OBJECT:CoverageToken
-               .    
+        CREATE Address.
+        ASSIGN 
+            Address.AddressID         = THIS-OBJECT:AddrID 
+            Address.Address           = THIS-OBJECT:Street
+            Address.StreetType        = THIS-OBJECT:StreetType       
+            Address.BuildingNum       = THIS-OBJECT:BuildingNum      
+            Address.Block             = THIS-OBJECT:BlockNum         
+            Address.Floor             = THIS-OBJECT:Floor            
+            Address.Stair             = THIS-OBJECT:Stair            
+            Address.Door              = THIS-OBJECT:Door             
+            Address.Letter            = THIS-OBJECT:Letter           
+            Address.km                = THIS-OBJECT:KM               
+            Address.Hand              = THIS-OBJECT:Hand             
+            Address.bisduplicate      = THIS-OBJECT:BisDuplicate     
+            Address.addresscompl      = THIS-OBJECT:AdditionalAddress
+            /*Address.normalizedid   = THIS-OBJECT:NormalizedID*/     
+            Address.Latitude          = THIS-OBJECT:Latitude         
+            Address.longitude         = THIS-OBJECT:Longitude        
+            Address.City              = THIS-OBJECT:City             
+            Address.Region            = THIS-OBJECT:Region           
+            Address.zipCode           = THIS-OBJECT:ZIP              
+            Address.Country           = THIS-OBJECT:Country
+            Address.CityCode          = THIS-OBJECT:CityCode
+            Address.StreetCode        = THIS-OBJECT:StreetCode
+            Address.towncode          = THIS-OBJECT:MunicipalityCode
+            Address.HostTable         = "Customer"
+            Address.KeyValue          = STRING(THIS-OBJECT:KeyValue)
+            Address.AddressType       = THIS-OBJECT:AddrType
+            Address.Gescal            = THIS-OBJECT:Gescal
+            Address.CoverageToken     = THIS-OBJECT:CoverageToken
+            Address.AddressRegisterID = THIS-OBJECT:AddrRegisterID
+            .    
          IF NOT CAN-FIND(FIRST CustomerReport WHERE CustomerReport.CustNum = INTEGER(Address.KeyValue))
          AND THIS-OBJECT:OrderAddrID = 1 
          THEN DO:
@@ -252,7 +260,7 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
 	    
 	    ASSIGN ioAddrObject = NEW JsonObject().
 	    
-	    ioAddrObject:Add("address-id" , THIS-OBJECT:AddrID).
+	    ioAddrObject:Add("address-id" , THIS-OBJECT:AddrRegisterID).
 	    
 	    RETURN ioAddrObject.
 	    

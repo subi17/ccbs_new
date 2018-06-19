@@ -161,7 +161,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
         GET.
         SET.
     
-    DEFINE PUBLIC PROPERTY DefaultAddrID AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY DefaultAddrID AS CHARACTER NO-UNDO
        GET.
        SET.
        
@@ -380,7 +380,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        IF VALID-OBJECT(aoDefaultCustAddress)
        THEN DO:
            aoDefaultCustAddress:mStoreData().
-           ASSIGN THIS-OBJECT:DefaultAddrID = aoDefaultCustAddress:AddrID.
+           ASSIGN THIS-OBJECT:DefaultAddrID = aoDefaultCustAddress:AddrRegisterID.
            
        END.
            
