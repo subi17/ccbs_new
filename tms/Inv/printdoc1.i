@@ -1180,13 +1180,17 @@ PROCEDURE pGetSubInvoiceHeaderData:
              ttSub.Charges = ttSub.Charges + ttRow.RowAmtExclVat.
 
           /* YDR-2848 Sum of amount due to bundles of data and data upsells */
-          IF ttRow.RowGroup EQ "3" AND ttRow.Rowname EQ "INTERNET" THEN
+          IF ttRow.RowGroup EQ "3" AND
+             (ttRow.Rowname BEGINS "INTERNET" OR
+              ttRow.Rowname BEGINS "MOBILE") /* mobile internet */ THEN
              ttSub.Bundles = ttSub.Bundles + ttRow.RowAmtExclVat.
  
-         /* YDR-2848 The sum of outgoings that aren.t included in the 
-            tariff fee: SMS, MMS, international calls, AgileTV etc. */
-         IF ttRow.RowCode BEGINS "55" THEN
-            ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
+          /* YDR-2848 The sum of outgoings that aren.t included in the 
+             tariff fee: SMS, MMS, international calls, AgileTV etc. */
+          IF ttRow.RowCode BEGINS "55" OR
+             (ttRow.RowGroup EQ "1" AND
+              ttRow.RowName BEGINS "CALLS") THEN
+             ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
 
          /* YDR-2848 Subscription level TOTAL sum */
          IF ttRow.RowCode BEGINS "18" OR
