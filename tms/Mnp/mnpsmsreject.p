@@ -64,7 +64,8 @@ FOR EACH MNPProcess NO-LOCK
        FIND FIRST CallAlarm NO-LOCK
             WHERE CallAlarm.Brand      =  Syst.Var:gcBrand
               AND CallAlarm.Cli        =  MNPSub.Cli
-              AND CallAlarm.ActStamp  >=  MNPProcess.UpdateTS NO-ERROR.
+              AND CallAlarm.ActStamp  >=  MNPProcess.UpdateTS 
+              AND CallAlarm.DeliType   =  1 NO-ERROR.
                                                                         
             PUT STREAM sdump UNFORMATTED 
                 Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
@@ -72,9 +73,8 @@ FOR EACH MNPProcess NO-LOCK
                 MNPDetails.DonorCode lcDelimiter
                 MNPProcess.PortRequest lcDelimiter
                 MNPProcess.StatusReason lcDelimiter
-                Func.Common:mTS2HMS(MNPProcess.UpdateTS) lcDelimiter 
-                IF AVAILABLE CallAlarm AND CallAlarm.DeliStat = 3 THEN Func.Common:mTS2HMS(CallAlarm.DeliStamp)  ELSE "" lcDelimiter 
-                IF AVAILABLE CallAlarm AND CallAlarm.DeliStat = 3 THEN CallAlarm.DeliMsg  ELSE "" SKIP.
+                Func.Common:mTS2HMS(MNPProcess.MNPUpdateTS) lcDelimiter 
+                IF AVAILABLE CallAlarm AND CallAlarm.DeliStat = 3 THEN Func.Common:mTS2HMS(CallAlarm.DeliStamp)  ELSE "" SKIP.
                                 
             oiEvents = oiEvents + 1.
             IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
