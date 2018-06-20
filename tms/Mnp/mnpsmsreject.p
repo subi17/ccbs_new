@@ -28,10 +28,10 @@ DEFINE OUTPUT PARAMETER olInterrupted AS LOGICAL    NO-UNDO.
 
 /* ********************  Stream/Variable Definitions  ************************** */
 DEFINE STREAM sdump.
-DEFINE BUFFER bCallAlarm FOR CallAlarm.
 
 DEFINE VARIABLE lcDelimiter   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStatusReason  AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC ENUME,RECH_BNUME,RECH_ICCID,RECH_IDENT".
+DEFINE VARIABLE ldDeliStamp   AS DECIMAL NO-UNDO.
 
 /* ***************************  Main Block  *************************** */
 
@@ -49,8 +49,8 @@ ERROR_LOOP:
 FOR EACH MNPProcess NO-LOCK 
     WHERE MNPProcess.Brand       =  Syst.Var:gcBrand 
       AND MNPProcess.MNPType     =  {&MNP_TYPE_IN} 
-      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}
-       OR MNPProcess.StatusCode  =  {&MNP_ST_AREC_CLOSED}    
+      AND (MNPProcess.StatusCode =  {&MNP_ST_AREC}
+       OR MNPProcess.StatusCode  =  {&MNP_ST_AREC_CLOSED})    
       AND MNPProcess.UpdateTS    >  idLastDump:
    IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) = 0 THEN NEXT ERROR_LOOP. 
             
@@ -61,11 +61,17 @@ FOR EACH MNPProcess NO-LOCK
        FOR EACH MNPSub NO-LOCK 
             WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq:
                
-       FIND FIRST CallAlarm NO-LOCK
-            WHERE CallAlarm.Brand      =  Syst.Var:gcBrand
-              AND CallAlarm.Cli        =  MNPSub.Cli
-              AND CallAlarm.ActStamp  >=  MNPProcess.UpdateTS 
-              AND CallAlarm.DeliType   =  1 NO-ERROR.
+       ldDeliStamp = 0.        
+               
+          FOR EACH CallAlarm NO-LOCK
+             WHERE CallAlarm.Brand      =  Syst.Var:gcBrand
+               AND CallAlarm.Cli        =  MNPSub.Cli
+               AND CallAlarm.ActStamp  >=  MNPProcess.UpdateTS 
+               AND CallAlarm.CreditType =  12
+               BREAK BY CallAlarm.ActStamp:
+                  IF FIRST-OF(CallAlarm.ActStamp) THEN
+                  ldDeliStamp = CallAlarm.DeliStamp.
+          END.
                                                                         
             PUT STREAM sdump UNFORMATTED 
                 Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
@@ -74,7 +80,7 @@ FOR EACH MNPProcess NO-LOCK
                 MNPProcess.PortRequest lcDelimiter
                 MNPProcess.StatusReason lcDelimiter
                 Func.Common:mTS2HMS(MNPProcess.MNPUpdateTS) lcDelimiter 
-                IF AVAILABLE CallAlarm AND CallAlarm.DeliStat = 3 THEN Func.Common:mTS2HMS(CallAlarm.DeliStamp)  ELSE "" SKIP.
+                IF ldDeliStamp > 0 THEN Func.Common:mTS2HMS(ldDeliStamp)  ELSE "" SKIP.
                                 
             oiEvents = oiEvents + 1.
             IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
