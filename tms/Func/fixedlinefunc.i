@@ -799,64 +799,69 @@ END FUNCTION.
 FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
    ( INPUT iiOrderId AS INTEGER ):
 
-   DEFINE VARIABLE lcUriPath       AS CHARACTER       NO-UNDO.
-   DEFINE VARIABLE objRESTClient   AS CLASS Gwy.ParamRESTClient.
-   DEFINE VARIABLE loOMParser      AS CLASS Progress.Json.ObjectModel.ObjectModelParser NO-UNDO.
-   DEFINE VARIABLE loJsonConstruct AS CLASS Progress.Json.ObjectModel.JsonConstruct     NO-UNDO.
-   DEFINE VARIABLE lii             AS INTEGER         NO-UNDO.
-   DEFINE VARIABLE lcError         AS CHARACTER       NO-UNDO.
+   DEFINE VARIABLE lcUriPath        AS CHARACTER       NO-UNDO.
+   DEFINE VARIABLE objRESTClient    AS CLASS Gwy.ParamRESTClient.
+   DEFINE VARIABLE loOMParser       AS CLASS Progress.Json.ObjectModel.ObjectModelParser NO-UNDO.
+   DEFINE VARIABLE loJsonConstruct  AS CLASS Progress.Json.ObjectModel.JsonConstruct     NO-UNDO.
+   DEFINE VARIABLE lii              AS INTEGER         NO-UNDO.
+   DEFINE VARIABLE lcError          AS CHARACTER       NO-UNDO.
+   DEFINE VARIABLE liMuleESBIFInUse AS INT             NO-UNDO.
 
+   liMuleESBIFInUse = Syst.Parameters:geti("TerminatioNotificationAPIInUse", "RESTMuleESB").
+   IF liMuleESBIFInUse EQ 0 THEN
+      RETURN "". 
+   
    DO ON ERROR UNDO, THROW:
-
+   
       objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
       objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
-
+   
       objRESTClient:mPOST().
-
+   
       CATCH loRESTError AS Gwy.RESTError:
-
+   
          /* NOTE: The errors automatically are logged to the client log */
-
+   
          IF loRESTError:ErrorMessage > ""
          THEN DO ON ERROR UNDO, THROW:
             ASSIGN
                loOMParser      = NEW Progress.Json.ObjectModel.ObjectModelParser()
                loJsonConstruct = loOMParser:Parse(loRESTError:ErrorMessage).
-
+   
             IF TYPE-OF(loJsonConstruct, Progress.Json.ObjectModel.JsonObject)
-            THEN RETURN CAST(loJsonConstruct, Progress.Json.ObjectModel.JsonObject):GetCharacter("resultDescription").
+               THEN RETURN CAST(loJsonConstruct, Progress.Json.ObjectModel.JsonObject):GetCharacter("resultDescription").
             ELSE RETURN STRING(SUBSTRING(loRESTError:ErrorMessage, 1, 30000)).
-
+   
             CATCH loError AS Progress.Lang.Error:
                RETURN STRING(SUBSTRING(loRESTError:ErrorMessage, 1, 30000)).
             END CATCH.
-
+   
             FINALLY:
                IF VALID-OBJECT(loOMParser)
-               THEN DELETE OBJECT loOMParser.
+                  THEN DELETE OBJECT loOMParser.
             END FINALLY.
          END.
-
+   
          IF loRESTError:ReturnValue > ""
-         THEN RETURN loRESTError:ReturnValue.
-
+            THEN RETURN loRESTError:ReturnValue.
+   
          DO lii = 1 TO loRESTError:NumMessages:
             lcError = lcError + "," + loError:GetMessage(lii).
          END.
-
+   
          IF lcError > ""
-         THEN RETURN LEFT-TRIM(lcError,",").
-
+            THEN RETURN LEFT-TRIM(lcError,",").
+   
          RETURN "Error was thrown but no error message available".
-
+   
       END CATCH.
-  
+     
       FINALLY:
          IF VALID-OBJECT(objRESTClient)
-         THEN DELETE OBJECT objRESTClient.
+            THEN DELETE OBJECT objRESTClient.
       END FINALLY.
 
-   END.
+   END.      
    RETURN "".
 
 END FUNCTION.
