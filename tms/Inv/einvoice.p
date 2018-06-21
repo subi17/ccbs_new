@@ -68,6 +68,65 @@ FUNCTION fFindSMSTarget RETURNS CHAR
    RETURN "".
 END.
 
+/**/
+FUNCTION fShortCrypt RETURNS CHAR
+   (icMSISDN AS CHAR,
+    iiPeriod AS INT):
+   DEF VAR lcChSet AS CHAR NO-UNDO.  /* CharSet of out string */
+   DEF VAR lcNum AS CHAR NO-UNDO.    /* Temp variable */
+   DEF VAR liNum AS INT64 NO-UNDO.   /* long int to be converted to new set */
+   DEF VAR liBase AS INT64 NO-UNDO.  /* base: how many chars are in char set */
+   DEF VAR liRem AS INT64 NO-UNDO.   /* remainder in modulo */
+   DEF VAR lcCharInPosition AS CHAR NO-UNDO. /* corresponding char in chset */
+   DEF VAR lcOut AS CHAR NO-UNDO.    /* Result */
+   /*Support variables for creating security part */
+   DEF VAR liLen AS INT NO-UNDO.
+   DEF VAR lcDigest AS CHAR NO-UNDO. /* Key to support crypting */
+   DEF VAR lcAlpha AS CHAR NO-UNDO.
+   DEF VAR lcDigestPart AS CHAR NO-UNDO.
+   DEF VAR liPosition AS INT NO-UNDO.
+
+   /*1234567890*/
+   /*123 = 3*10^0 + 2*10^1 + 1*10^2*  */
+   lcNum = icMSISDN + SUBSTRING(STRING(iiPeriod),3). /* 201806 -> 1806 */
+   liNum = INT64(lcNum).
+   lcChSet = "kD0EFGHI1Zz5fghijlmnoAYqrstNOPQRS987cdepuvwxTUVW2346abyBCJKLMX"
+   /*+ "<>|-=_.:;,!#¤%&()@§".*/ .
+   lcDigest = STRING(MESSAGE-DIGEST("SHA-256", lcNum, "S0mmarEn")).
+
+   /* HEX test  lcChSet = "0123456789ABCDEF".*/
+   liBase = LENGTH(lcChSet).
+   IF liNum EQ 0 THEN lcOut = SUBSTRING(lcChSet, 1, 1).
+   DO WHILE liNum > 0:
+      liRem = liNum MOD liBase.
+      /* in progress array starts from 1 */
+      lcCharInPosition = SUBSTRING(lcChSet, (liRem + 1), 1).
+      liNum = TRUNCATE(liNum / liBase, 0).
+      lcOut = lcCharInPosition + lcOut.
+
+   END.
+   /* Calculete security part */
+   /* Take alphabethical characters from digest */
+   /* If there are no´t enough alphabets then assign A */
+   liPosition = 1.
+   lcAlpha = "abcdefghijklmnopqrstuvwxyz" +
+             "ABCDEFGHIJKLMNOPQRSTUVWXYZ".
+   DO WHILE LENGTH(lcDigestPart) < 5:
+
+      IF liPosition > LENGTH(lcDigest) THEN DO:
+         lcDigestPart = lcDigestPart + "A".
+      END.
+      ELSE IF INDEX(lcAlpha, SUBSTRING(lcDigest, liPosition,1)) > 0 THEN
+         lcDigestPart = lcDigestPart + SUBSTRING(lcDigest, liPosition,1).
+
+      liPosition = liPosition + 1.
+
+   END.
+   lcOut = lcDigestPart + lcOut.
+
+   RETURN lcOut.
+END.
+
 FUNCTION fGenerateEinvoiceTemplate RETURNS CHAR
    (icTemplate AS CHAR,
     iiMsSeq AS INT,
@@ -92,18 +151,19 @@ FUNCTION fGenerateEinvoiceTemplate RETURNS CHAR
    ELSE lcLang = "en".
  
    ASSIGN
-      lcCrypted =  encrypt_data(icMSISDN + "|" + 
+      
+      /* lcCrypted =  encrypt_data(icMSISDN + "|" + 
                                 STRING(iiPeriod),
                                 {&ENCRYPTION_METHOD}, 
-                                {&ESI_PASSPHRASE}) 
+                                {&ESI_PASSPHRASE}) */
+      lcCrypted = fShortCrypt(icMSISDN, iiPeriod) 
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
       lcCrypted = fUrlEncode(lcCrypted, "query").
    ASSIGN
       lcMessagePayload = icTemplate
       lcMessagePayload = REPLACE(lcMessagePayload,"#LANG",lcLang)
-      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + 
-                                 lcCrypted + "&lang=" + lcLang)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + lcCrypted )
       lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN) 
       lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount))
       lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate)
@@ -203,7 +263,7 @@ FOR EACH Invoice WHERE
                                              MobSub.MsSeq,
                                              MobSub.CLI,
                                              Invoice.InvAmt,
-                                   STRING(/*Invoice.InvDate*/ Invoice.DueDate),
+                                      STRING(Invoice.DueDate),
                                              lcLink,
                                              Invoice.InvNum,
                                              liBillPeriod,
