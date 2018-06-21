@@ -153,10 +153,14 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       IF VALID-OBJECT(aoOrderProductFactory)
       THEN DELETE OBJECT aoOrderProductFactory.
       
-      ASSIGN OrderPaymentData      =  ?
-             OrderInspectionData   =  ?
-             loCustAcct            =  ?
-             .
+        ASSIGN 
+            OrderPaymentData    = ?
+            OrderInspectionData = ?
+            loCustAcct          = ?
+            aoOrderInspection   = ?
+            aoOrderPayment      = ?
+            aoOrderAddress      = ?
+            .
 
 	END DESTRUCTOR.
 

@@ -86,7 +86,8 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 
 	DESTRUCTOR PUBLIC CustomerAccount ( ):
 
-        ASSIGN ioCustomerObj = ?.
+        ASSIGN ioCustomerObj = ?
+               aoBillAddrObj = ?.
 
 	END DESTRUCTOR.
 	

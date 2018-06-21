@@ -190,6 +190,10 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 	END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC Customer():
+	    ASSIGN aOCustAcct            = ?
+               aoDefaultCustAddress  = ?
+               DefaultAddressObj     = ?.
+	           
 	END DESTRUCTOR.
 
 	METHOD PUBLIC VOID mFindData

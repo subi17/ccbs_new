@@ -184,15 +184,12 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
      ( ioOrder AS CLASS bss.cls.Order ):
       aoOrder = ioOrder.
    END CONSTRUCTOR.
-   
-   CONSTRUCTOR PUBLIC OrderCustomer (ioCustomer AS CLASS bss.cls.Customer):
-       
-       ASSIGN aoDefaultCustomer  = ioCustomer.
-       
-   END CONSTRUCTOR.   
 
 	DESTRUCTOR PUBLIC OrderCustomer():
-      aoOrder = ?.
+	    
+      ASSIGN aoOrder = ?
+             aoDefaultCustomer = ?.
+             
 	END DESTRUCTOR.
 
    METHOD PUBLIC VOID mCreateData

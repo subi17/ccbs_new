@@ -68,7 +68,8 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
 
 	DESTRUCTOR PUBLIC OrderProductSubscription ( ):
 	    
-	    ASSIGN aoSubscriptionParams = ?.
+	    ASSIGN aoSubscriptionParams      = ?
+               aoOrderAggrementCustomer  = ?.
 
 	END DESTRUCTOR.
 	
