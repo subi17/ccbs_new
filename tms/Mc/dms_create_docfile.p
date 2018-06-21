@@ -91,8 +91,8 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
-   DEF VAR liAddId AS Int NO-UNDO.
-   DEF VAR liRT AS Int NO-UNDO.
+   DEF VAR liAddId AS INT NO-UNDO.
+   DEF VAR liRT AS INT NO-UNDO.
    DEF VAR liStampTypeCount AS INT NO-UNDO.
    DEF VAR lcStampTypes AS CHAR NO-UNDO.
    DEF VAR lcCancelTypeList AS CHAR NO-UNDO.
@@ -471,26 +471,26 @@ FUNCTION fGetPrevTariff RETURNS CHAR
            (Order.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
             INDEX(Order.OrderChannel,"stc") > 0) /*2 Renewal */ THEN DO:
 
-      FIND FIRST msrequest NO-LOCK where
-                 msrequest.msseq  = order.msseq and
-                 msrequest.reqtype = 0 and
-                 msrequest.reqiparam2 = order.orderid no-error.
+      FIND FIRST msrequest NO-LOCK WHERE
+                 msrequest.msseq  = order.msseq AND
+                 msrequest.reqtype = 0 AND
+                 msrequest.reqiparam2 = order.orderid NO-ERROR.
 
       IF AVAIL msrequest AND
          LOOKUP(msrequest.reqcparam1, lcBundleCLITypes) = 0 THEN
          RETURN msrequest.reqcparam1.
-      ELSE IF NOT AVAIL msrequest or msrequest.reqstatus NE 2 then do:
+      ELSE IF NOT AVAIL msrequest OR msrequest.reqstatus NE 2 THEN DO:
 
-          FIND FIRST Mobsub NO-LOCK where
-                     Mobsub.MsSeq = order.msseq no-error.
-          if not avail Mobsub then return "".
+          FIND FIRST Mobsub NO-LOCK WHERE
+                     Mobsub.MsSeq = order.msseq NO-ERROR.
+          IF NOT AVAIL Mobsub THEN RETURN "".
 
-          if Mobsub.tariffbundle > "" THEN
-            return Mobsub.tariffbundle.
-          ELSE return Mobsub.clitype.
+          IF Mobsub.tariffbundle > "" THEN
+            RETURN Mobsub.tariffbundle.
+          ELSE RETURN Mobsub.clitype.
 
-      end.
-      else do:
+      END.
+      ELSE DO:
 
          /* TODO: not fool proof check */
          /* 100% sure solution: add */
@@ -507,7 +507,7 @@ FUNCTION fGetPrevTariff RETURNS CHAR
                 MSOwner.tariffbundle ELSE MsOwner.CLIType).
 
 
-      end.
+      END.
    END. 
    RETURN "".   
    
@@ -1082,7 +1082,7 @@ END.
 FUNCTION fCreateDocumentCase3 RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR lcName AS CHAR No-UNDO.
+   DEF VAR lcName AS CHAR NO-UNDO.
    DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
@@ -1253,6 +1253,7 @@ END.
 FUNCTION fCreateDocumentCase4 RETURNS CHAR
    (idStartTS AS DECIMAL,
     idEndTS AS DECIMAL):
+   DEF VAR lcInstAddrCaseTypeID AS CHAR NO-UNDO.     
    DEF VAR lcACCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcSTCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO. 
@@ -1273,6 +1274,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF BUFFER MobSub FOR MobSub.
 
    ASSIGN
+      lcInstAddrCaseTypeID = '4e'
       lcICCCaseTypeID   = '4d'
       lcACCCaseTypeID   = '4c'
       lcSTCCaseTypeID   = '4b'
@@ -1289,10 +1291,46 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
              OR MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/
+             OR MsRequest.ReqType EQ {&REQTYPE_INSTALL_ADDRESS_UPDATE} /* */
             ) AND
             MsRequest.ReqCparam6 NE "" AND 
             MsRequest.UpdateStamp <= MsRequest.DoneStamp:
       CASE MsRequest.ReqType:
+         WHEN {&REQTYPE_INSTALL_ADDRESS_UPDATE} THEN DO:
+            lcCaseTypeId = lcInstAddrCaseTypeID.
+            lcCaseFileRow =
+            lcCaseTypeId                                   + lcDelim +
+            /*Contract_ID*/
+            MsRequest.ReqCParam5                           + lcDelim + 
+            /*OrderId*/
+            STRING(MsRequest.ReqIParam1)                   + lcDelim +                        
+            /*SFID*/
+            REPLACE(Msrequest.UserCode, "VISTA_", "")      + lcDelim +
+            /*MSISDN*/
+            STRING(MsRequest.CLI)                          + lcDelim +
+            /*FixNumber*/
+            fGetFixNumber(MsRequest.ReqIParam1)            + lcDelim +
+            /*Change_Request_date*/
+            fPrintDate(MsRequest.CreStamp)                 + lcDelim + 
+            /*Change Reason*/
+            
+            /*Old_Full_Address*/
+            MsRequest.ReqCParam2                           + lcDelim +
+            /*Old_ZipCode*/
+            ENTRY(1,MsRequest.ReqCParam6," ")              + lcDelim +
+            /*Old_Town*/
+            ENTRY(2,MsRequest.ReqCParam6," ")              + lcDelim +
+            /*Old_Gescal*/
+            ENTRY(3,MsRequest.ReqCParam6," ")              + lcDelim +
+            /*New_full_address*/
+            MsRequest.ReqCParam3                           + lcDelim +
+            /*New_ZipCode*/
+            ENTRY(5,MsRequest.ReqCParam4," ")              + lcDelim +
+            /*New_Town*/
+            ENTRY(9,MsRequest.ReqCParam4," ")              + lcDelim +
+            /*New_Gescal*/
+            ENTRY(2,MsRequest.ReqCParam4," ").
+         END.    
          WHEN {&REQTYPE_ICC_CHANGE} THEN DO:
             lcCaseTypeId = lcICCCaseTypeId.
             lcCaseFileRow =
@@ -1646,12 +1684,12 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    DEFINE VARIABLE liStat AS INTEGER NO-UNDO.
 
    lcStatuses = {&REQ_ONGOING_STATUSES} + ",2".
-   do i = 1 to NUM-ENTRIES(lcStatuses):
+   DO i = 1 TO NUM-ENTRIES(lcStatuses):
       liStat = INT(ENTRY(i,lcStatuses)).
       FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ Syst.Var:gcBrand AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-            MsRequest.ReqStatus eq liStat AND
+            MsRequest.ReqStatus EQ liStat AND
             MsRequest.ActStamp >= idStartTS AND
             MsRequest.CreStamp >= idStartTS AND
             MsRequest.CreStamp < idEndTS AND
@@ -1826,7 +1864,7 @@ END.
 
 
 FUNCTION fCreateDocumentRows RETURNS CHAR
- (icCaseID as CHAR):
+ (icCaseID AS CHAR):
    DEF VAR lcStatus AS CHAR NO-UNDO.
    fLogLine("","Create Documents " + icCaseID).
    CASE icCaseID:

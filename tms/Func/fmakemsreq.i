@@ -563,7 +563,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
       END.
    END.
 
-   IF icRegion ne "00" THEN 
+   IF icRegion NE "00" THEN 
       FIND FIRST Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
    IF NOT AVAIL Region THEN DO:
       ocResult = "Unknown region " + icRegion.
@@ -597,7 +597,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
       RETURN 0.
    END.
 
-   IF icRegion ne "00" AND NOT AVAIL Region THEN DO:
+   IF icRegion NE "00" AND NOT AVAIL Region THEN DO:
       ocResult = SUBST("Unknown region &1",icRegion).
       RETURN 0.
    END.
@@ -643,6 +643,93 @@ FUNCTION fAddressRequest RETURNS INTEGER
    
    RETURN liReqCreated.
      
+END FUNCTION.
+
+/* Installation Address Update */
+FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER 
+   (INPUT  iiOrderId        AS INT,
+    INPUT  idActStamp       AS DEC,
+    INPUT  icAmendType      AS CHAR,
+    INPUT  icCurrentDetails AS CHAR,
+    INPUT  icCurrRemDetails AS CHAR,
+    INPUT  icNewDetails     AS CHAR,
+    INPUT  icNewCompDetails AS CHAR, 
+    INPUT  icSource         AS CHAR,        /* source of request */
+    INPUT  iiOrigReq        AS INT,         /* father request  */
+    OUTPUT ocResult         AS CHAR):
+
+   DEF BUFFER bOrdCustomer FOR OrderCustomer.
+   DEF BUFFER bOrder FOR order.
+   
+   FIND FIRST bOrder WHERE
+              bOrder.Brand EQ Syst.Var:gcBrand AND
+              bOrder.OrderId EQ iiOrderId 
+              NO-LOCK NO-ERROR.
+   IF NOT AVAIL bOrder THEN DO: 
+      ocResult = SUBST("Order for &1 not found", iiOrderId).
+      RETURN 0.
+   END.
+              
+   FIND FIRST bOrdCustomer WHERE 
+              bOrdCustomer.Brand   EQ Syst.Var:gcBrand AND
+              bOrdCustomer.OrderId EQ iiOrderId AND 
+              bOrdCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+              NO-LOCK NO-ERROR.
+   IF NOT AVAIL bOrdCustomer THEN DO: 
+      ocResult = SUBST("OrderCustomer for &1 not found", iiOrderId).
+      RETURN 0.
+   END.
+  /* 
+   liZip = INT(icZip) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN ocResult = "ZipCode must be numeral".
+   IF ocResult > "" THEN RETURN 0.
+   
+   liRegion = INT(icRegion) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN ocResult = "Region must be numeral".
+   IF ocResult > "" THEN RETURN 0.
+   
+   IF icRegion NE "00" THEN 
+      FIND FIRST Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
+   IF NOT AVAIL Region THEN DO:
+      ocResult = "Unknown region " + icRegion.
+      RETURN 0.
+   END.
+   */
+
+   ocResult = fChkRequest(bOrder.MsSeq,
+                          {&REQTYPE_INSTALL_ADDRESS_UPDATE},
+                          "",
+                          "").
+
+   IF (ocResult NE "" AND ocResult NE ?) THEN RETURN 0.  
+   
+   /* set activation time */
+   IF idActStamp = 0 OR idActStamp = ? THEN 
+      idActStamp = Func.Common:mMakeTS().
+      
+   fCreateRequest({&REQTYPE_INSTALL_ADDRESS_UPDATE},
+                  idActStamp,
+                  "",
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms */
+   ASSIGN
+      bCreaReq.MsSeq       = bOrder.MsSeq
+      bCreaReq.CustNum     = bOrder.CustNum
+      bCreaReq.ReqCParam1  = icAmendType
+      bCreaReq.ReqCParam2  = icCurrentDetails
+      bCreaReq.ReqCParam6  = icCurrRemDetails
+      bCreaReq.ReqCParam3  = icNewDetails
+      bCreaReq.ReqCParam4  = icNewCompDetails
+      bCreaReq.ReqCParam5  = bOrder.ContractId
+      bCreaReq.ReqIParam1  = bOrdCustomer.OrderId
+      bCreaReq.ReqSource   = icSource
+      bCreaReq.OrigReq     = iiOrigReq
+      liReqCreated         = bCreaReq.MsRequest.
+ 
+   RELEASE bCreaReq.
+   
+   RETURN liReqCreated.   
+
 END FUNCTION.
 
 /* changes to user account */
@@ -931,9 +1018,9 @@ FUNCTION fPCActionRequest RETURNS INTEGER
                      Order.Crstamp < 20170405.25200 AND
                      Order.OrderType < 2) THEN DO:
       
-      FIND ServiceLimit NO-LOCK where
-           ServiceLimit.groupcode = icContrType and
-           ServiceLimit.dialtype = {&DIAL_TYPE_GPRS} no-error.
+      FIND ServiceLimit NO-LOCK WHERE
+           ServiceLimit.groupcode = icContrType AND
+           ServiceLimit.dialtype = {&DIAL_TYPE_GPRS} NO-ERROR.
       IF AVAIL ServiceLimit THEN     
          bCreaReq.ReqDParam1 = ServiceLimit.inclamt * 2.
    END.
