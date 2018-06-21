@@ -2017,10 +2017,10 @@ PROCEDURE local-update-customer:
       
    CASE iiRole:
       WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
-         ASSIGN 
-	    lcNewHeader = " AGREEMENT"
+         ASSIGN
+            lcNewHeader = " AGREEMENT"
             llAccess    = TRUE
-	    .      
+            .      
       END. 
       WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
          IF Order.InvCustRole NE 2 THEN DO:
