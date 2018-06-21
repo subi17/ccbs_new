@@ -1,0 +1,4 @@
+[
+    { "web.cls.ProMessageNotify": "/promessage/{messageid}" },
+    { "profcgi.REST.DefaultWebHandler": "" }
+]
