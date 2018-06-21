@@ -14,6 +14,7 @@ USING OpenEdge.Net.HTTP.StatusCodeEnum.
 USING profcgi.REST.Request.
 USING profcgi.REST.Response.
 USING profcgi.lib.Logger.
+USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -26,10 +27,25 @@ CLASS web.cls.ProMessageNotify INHERITS profcgi.REST.DefaultWebHandler:
    METHOD PROTECTED OVERRIDE VOID HandleGet
       ( Req  AS CLASS Request,
         Resp AS CLASS Response ):
-      
+
       Logger:writeLog(1, SUBSTITUTE("Server software: &1", Req:ServerSoftware), "DEBUG").
       Logger:writeLog(1, SUBSTITUTE("In the URI a promessage id was '&1'",
                                     Req:GetPathParameter("messageid")), "DEBUG").
+
+      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
+
+      loJsonObject = NEW JsonObject().
+      loJsonObject:Add("test", "value").
+      loJsonObject:Add("messageid", Req:GetPathParameter("messageid")).
+
+      /* Note! Resp will delete the object stored to the Entity eventually
+               AND the object is needed after this method has finished.
+         => It is NOT allowed to delete the object stored to Resp:Entity
+            in this method */
+      Resp:Entity = loJsonObject.
+
+      /* Please remember to store the StatusCode for the Resp!!!
+         => Otherwise there will be Internal Server Error returned */
       Resp:StatusCode = 200.
 
    END METHOD.
