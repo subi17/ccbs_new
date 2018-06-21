@@ -265,6 +265,13 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
                               aoOrderCustomer:AuthCustIdType EQ "Passport")
       THEN UNDO, THROW NEW ParamError("passport-in-postpaid-not-allowed").
 
+      IF CAN-FIND(FIRST Customer NO-LOCK WHERE
+                        Customer.Brand = Syst.Var:gcBrand AND
+                        Customer.OrgID = aoOrderCustomer:CustID AND
+                        Customer.CustIDType = aoOrderCustomer:CustIDType AND
+                        Customer.Roles NE "inactive")
+      THEN UNDO, THROW NEW ParamError(SUBST("customer-already-exists:&1", icSubType)).
+
 
    END METHOD.
 
