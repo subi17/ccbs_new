@@ -270,7 +270,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
                         Customer.OrgID = aoOrderCustomer:CustID AND
                         Customer.CustIDType = aoOrderCustomer:CustIDType AND
                         Customer.Roles NE "inactive")
-      THEN UNDO, THROW NEW ParamError(SUBST("customer-already-exists:&1", icSubType)).
+      THEN UNDO, THROW NEW ParamError(SUBST("customer-already-exists|&1", icSubType)).
 
 
    END METHOD.
