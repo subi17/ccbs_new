@@ -263,7 +263,6 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        THIS-OBJECT:Language       = mGetLanguage(ioJsonObject:GetCharacter("language"))
        THIS-OBJECT:SelfEmployed   = ioJsonObject:GetLogical("self_employed")
        THIS-OBJECT:BirthDay       = Func.Common:mGetDate(ioJsonObject:GetCharacter("birthday"))
-       /*THIS-OBJECT:FoundationDate = Func.Common:mGetDate(ioJsonObject:GetCharacter("foundation_date"))*/
        THIS-OBJECT:Email          = ioJsonObject:GetCharacter("email")
        THIS-OBJECT:MobileNumber   = ioJsonObject:GetCharacter("sms_number")
        THIS-OBJECT:FixedNumber    = ioJsonObject:GetCharacter("phone_number")
@@ -279,6 +278,18 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            THIS-OBJECT:CustId         = ioCustIDObject:GetCharacter("person_id")
            .
        END.
+       ELSE IF ioJsonObject:Has("company")
+       THEN DO:
+           ASSIGN 
+           ioCustIDObject  = NEW JsonObject()
+           ioCustIDObject  = ioJsonObject:GetJsonObject("company")
+           THIS-OBJECT:CustId          =  ioCustIDObject:GetCharacter("company_id")
+           THIS-OBJECT:CustIdType      =  ioCustIDObject:GetCharacter("id_type")
+           THIS-OBJECT:FoundationDate  =  Func.Common:mGetDate(ioCustIDObject:GetCharacter("foundation_date"))
+           THIS-OBJECT:CompanyName     =  ioCustIDObject:GetCharacter("site_name")
+           .          
+       END.
+       ELSE UNDO , THROW NEW ParamError ("Customer ID Data does not exist.").
        
        IF ioJsonObject:Has("marketing")
        THEN DO:
@@ -367,6 +378,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            Customer.DirMarkSMS        = THIS-OBJECT:OperSMSMarketing
            Customer.OutMarkSMS        = THIS-OBJECT:OutSMSMarketing
            Customer.FoundationDate    = THIS-OBJECT:FoundationDate
+           Customer.CompanyName       = THIS-OBJECT:CompanyName
            Customer.RateCust          = Customer.CustNum
            Customer.InvCust           = Customer.CustNum
            Customer.PaymCust          = Customer.CustNum

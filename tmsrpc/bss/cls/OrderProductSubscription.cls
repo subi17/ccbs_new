@@ -87,8 +87,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             
             ASSIGN
                 THIS-OBJECT:lcNumberType = loAttributes:GetCharacter("number_type") 
-                THIS-OBJECT:AttrCLI      = loAttributes:GetCharacter("number")
-                
+                THIS-OBJECT:AttrCLI      = loAttributes:GetCharacter("number")                
             .
                             
             IF LOOKUP(THIS-OBJECT:lcNumberType,"new,mnp,renewal,stc") = 0 
@@ -116,11 +115,13 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
                                                  
             IF loAttributes:Has("old_operator_code") 
             THEN DO:
-                ASSIGN 
-                    aoOrder:OrderType = {&ORDER_TYPE_MNP}.
                 mCreateDataOrderProductParamData(loAttributes,"old_operator_code","Char").
             END.
-            ELSE ASSIGN aoOrder:OrderType  =  {&ORDER_TYPE_NEW}. 
+            
+            IF THIS-OBJECT:lcNumberType = "MNP"
+            THEN ASSIGN aoOrder:OrderType = {&ORDER_TYPE_MNP}.
+            ELSE IF THIS-OBJECT:lcNumberType = "NEW" 
+            THEN ASSIGN aoOrder:OrderType = {&ORDER_TYPE_NEW}.
             
             ASSIGN aoOrder:lcCLI            = THIS-OBJECT:AttrCLI
                    aoOrder:isPostPaidOrder  = Func.ValidateOrder:mIsPostpaidOrder(THIS-OBJECT:ProductID).
