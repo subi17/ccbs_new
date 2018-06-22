@@ -220,43 +220,79 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
 END FUNCTION.
 
 FUNCTION fIsStandAloneFixedorMobileLine RETURNS CHARACTER
-   (INPUT iiMsSeq AS INTEGER):
-   
+   (INPUT  iiMsSeq AS INTEGER):
+
    DEFINE VARIABLE lcMsisdn AS CHARACTER NO-UNDO.
-    
+
    FIND FIRST MobSub NO-LOCK
         WHERE MobSub.MsSeq EQ iiMsSeq NO-ERROR.
    IF AVAILABLE MobSub THEN DO:
-       
       FIND FIRST bCliType1 NO-LOCK
            WHERE bCliType1.Brand      EQ Syst.Var:gcBrand
              AND bCliType1.CliType    EQ MobSub.CliType NO-ERROR.
       IF AVAILABLE bCliType1 THEN DO:
-          
+                   
+         ASSIGN
+            lcMsisdn = ''.
+         
          FOR EACH bMobSub NO-LOCK
             WHERE bMobSub.CustNum EQ MobSub.CustNum:
-           
+                                
             FIND FIRST bCliType2 NO-LOCK
                  WHERE bCliType2.Brand   EQ Syst.Var:gcBrand
                    AND bCliType2.CliType EQ bMobSub.CliType NO-ERROR.
-            IF AVAILABLE bCliType2 THEN DO:
-                
-               IF (bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}   AND
-                   bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN
-                  lcMsisdn = bMobSub.CLI.
-               ELSE IF (bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
-                        bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN
-                  lcMsisdn = bMobSub.CLI.
-            END.
+            IF AVAILABLE bCliType2 THEN DO:                        
+               
+              IF (bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}   AND
+                  bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:
+                                                           
+                 IF NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bMobSub.CLI) THEN DO:                   
+                                       
+                    IF(lcMsisdn = '' AND
+                      (NOT CAN-FIND(FIRST MsRequest NO-LOCK
+                                    WHERE MsRequest.MsSeq   EQ bMobsub.MsSeq
+                                AND (MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR
+                                     MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION})
+                                AND LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0))) THEN
+                      
+                       lcMsisdn = bMobSub.CLI.
+
+                    ELSE                      
+                        
+                       IF NOT CAN-FIND(FIRST MsRequest NO-LOCK
+                                       WHERE MsRequest.MsSeq   EQ bMobsub.MsSeq
+                                         AND (MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR
+                                              MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION})
+                                         AND LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0) THEN
+                                                                               
+                          lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.                      
+                              
+                                                     
+                 END. /* IF NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bMobSub.CLI) */
+              
+              END.
+                                             
+              ELSE IF (bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+                       bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN DO:
+                                                 
+                 IF lcMsisdn = '' THEN lcMsisdn = bMobSub.CLI.
+                  
+                 ELSE lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
+              
+              END.
+              
+            END. /* IF AVAILABLE bCliType2 */
+           
          END. /* FOR EACH bMobSub */
-      END.
-      
+
+      END.  /* IF AVAILABLE bCliType1 */
+
       RETURN lcMsisdn.
-      
+   
    END. /* IF AVAILABLE MobSub */
-   
+ 
    RETURN "".
-   
+
 END FUNCTION.
 
 ASSIGN Syst.Var:katun = "Newton".
