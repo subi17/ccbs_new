@@ -91,8 +91,8 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
-   DEF VAR liAddId AS INT NO-UNDO.
-   DEF VAR liRT AS INT NO-UNDO.
+   DEF VAR liAddId AS Int NO-UNDO.
+   DEF VAR liRT AS Int NO-UNDO.
    DEF VAR liStampTypeCount AS INT NO-UNDO.
    DEF VAR lcStampTypes AS CHAR NO-UNDO.
    DEF VAR lcCancelTypeList AS CHAR NO-UNDO.
@@ -471,7 +471,7 @@ FUNCTION fGetPrevTariff RETURNS CHAR
            (Order.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
             INDEX(Order.OrderChannel,"stc") > 0) /*2 Renewal */ THEN DO:
 
-      FIND FIRST msrequest NO-LOCK WHERE
+      FIND FIRST msrequest NO-LOCK where
                  msrequest.msseq  = order.msseq AND
                  msrequest.reqtype = 0 AND
                  msrequest.reqiparam2 = order.orderid NO-ERROR.
@@ -479,18 +479,18 @@ FUNCTION fGetPrevTariff RETURNS CHAR
       IF AVAIL msrequest AND
          LOOKUP(msrequest.reqcparam1, lcBundleCLITypes) = 0 THEN
          RETURN msrequest.reqcparam1.
-      ELSE IF NOT AVAIL msrequest OR msrequest.reqstatus NE 2 THEN DO:
+      ELSE IF NOT AVAIL msrequest or msrequest.reqstatus NE 2 THEN DO:
 
-          FIND FIRST Mobsub NO-LOCK WHERE
-                     Mobsub.MsSeq = order.msseq NO-ERROR.
+          FIND FIRST Mobsub NO-LOCK where
+                     Mobsub.MsSeq = order.msseq no-error.
           IF NOT AVAIL Mobsub THEN RETURN "".
 
-          IF Mobsub.tariffbundle > "" THEN
-            RETURN Mobsub.tariffbundle.
-          ELSE RETURN Mobsub.clitype.
+          if Mobsub.tariffbundle > "" THEN
+            return Mobsub.tariffbundle.
+          ELSE return Mobsub.clitype.
 
-      END.
-      ELSE DO:
+      end.
+      else do:
 
          /* TODO: not fool proof check */
          /* 100% sure solution: add */
@@ -507,7 +507,7 @@ FUNCTION fGetPrevTariff RETURNS CHAR
                 MSOwner.tariffbundle ELSE MsOwner.CLIType).
 
 
-      END.
+      end.
    END. 
    RETURN "".   
    
@@ -1297,39 +1297,59 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             MsRequest.UpdateStamp <= MsRequest.DoneStamp:
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_INSTALL_ADDRESS_UPDATE} THEN DO:
-            lcCaseTypeId = lcInstAddrCaseTypeID.
-            lcCaseFileRow =
-            lcCaseTypeId                                   + lcDelim +
-            /*Contract_ID*/
-            MsRequest.ReqCParam5                           + lcDelim + 
-            /*OrderId*/
-            STRING(MsRequest.ReqIParam1)                   + lcDelim +                        
-            /*SFID*/
-            REPLACE(Msrequest.UserCode, "VISTA_", "")      + lcDelim +
-            /*MSISDN*/
-            STRING(MsRequest.CLI)                          + lcDelim +
-            /*FixNumber*/
-            fGetFixNumber(MsRequest.ReqIParam1)            + lcDelim +
-            /*Change_Request_date*/
-            fPrintDate(MsRequest.CreStamp)                 + lcDelim + 
-            /*Change Reason*/
             
-            /*Old_Full_Address*/
-            MsRequest.ReqCParam2                           + lcDelim +
-            /*Old_ZipCode*/
-            ENTRY(1,MsRequest.ReqCParam6," ")              + lcDelim +
-            /*Old_Town*/
-            ENTRY(2,MsRequest.ReqCParam6," ")              + lcDelim +
-            /*Old_Gescal*/
-            ENTRY(3,MsRequest.ReqCParam6," ")              + lcDelim +
-            /*New_full_address*/
-            MsRequest.ReqCParam3                           + lcDelim +
-            /*New_ZipCode*/
-            ENTRY(5,MsRequest.ReqCParam4," ")              + lcDelim +
-            /*New_Town*/
-            ENTRY(9,MsRequest.ReqCParam4," ")              + lcDelim +
-            /*New_Gescal*/
-            ENTRY(2,MsRequest.ReqCParam4," ").
+            DEF VAR lcCurrAddress AS CHAR NO-UNDO.
+            DEF VAR lcAmendAddress AS CHAR NO-UNDO.
+            DEF VAR liCount AS INT NO-UNDO.
+            
+            DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam3," "):
+               IF liCount < 10 THEN 
+                  ASSIGN 
+                     lcAmendAddress = lcAmendAddress + " " + ENTRY(liCount,MsRequest.ReqCParam3," ")
+                     lcAmendAddress = TRIM(lcAmendAddress).
+            END.
+            
+            DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam4," "):
+               IF liCount < 10 THEN 
+                  ASSIGN 
+                     lcCurrAddress = lcCurrAddress + " " + ENTRY(liCount,MsRequest.ReqCParam4," ")
+                     lcCurrAddress = TRIM(lcCurrAddress).
+            END.
+            
+            ASSIGN        
+               lcCaseTypeId = lcInstAddrCaseTypeID
+               lcCaseFileRow =
+                  lcCaseTypeId                                   + lcDelim +
+                  /*Contract_ID*/
+                  MsRequest.ReqCParam5                           + lcDelim + 
+                  /*OrderId*/
+                  STRING(MsRequest.ReqIParam1)                   + lcDelim +                        
+                  /*SFID*/
+                  Msrequest.ReqCParam1                           + lcDelim +
+                  /*MSISDN*/
+                  STRING(MsRequest.CLI)                          + lcDelim +
+                  /*FixNumber*/
+                  fGetFixNumber(MsRequest.ReqIParam1)            + lcDelim +
+                  /*Change_Request_date*/
+                  fPrintDate(MsRequest.CreStamp)                 + lcDelim + 
+                  /*Change Reason*/
+                  MsRequest.ReqCParam6                           + lcDelim +
+                  /*Old_Full_Address*/
+                  lcCurrAddress                                  + lcDelim +
+                  /*Old_ZipCode*/
+                  ENTRY(10,MsRequest.ReqCParam4," ")             + lcDelim +
+                  /*Old_Town*/
+                  ENTRY(11,MsRequest.ReqCParam4," ")             + lcDelim +
+                  /*Old_Gescal*/
+                  ENTRY(12,MsRequest.ReqCParam4," ")             + lcDelim +
+                  /*New_full_address*/
+                  lcAmendAddress                                 + lcDelim +
+                  /*New_ZipCode*/
+                  ENTRY(10,MsRequest.ReqCParam3," ")             + lcDelim +
+                  /*New_Town*/
+                  ENTRY(11,MsRequest.ReqCParam3," ")             + lcDelim +
+                  /*New_Gescal*/
+                  ENTRY(12,MsRequest.ReqCParam3," ").
          END.    
          WHEN {&REQTYPE_ICC_CHANGE} THEN DO:
             lcCaseTypeId = lcICCCaseTypeId.
@@ -1684,12 +1704,12 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    DEFINE VARIABLE liStat AS INTEGER NO-UNDO.
 
    lcStatuses = {&REQ_ONGOING_STATUSES} + ",2".
-   DO i = 1 TO NUM-ENTRIES(lcStatuses):
+   do i = 1 to NUM-ENTRIES(lcStatuses):
       liStat = INT(ENTRY(i,lcStatuses)).
       FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ Syst.Var:gcBrand AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-            MsRequest.ReqStatus EQ liStat AND
+            MsRequest.ReqStatus eq liStat AND
             MsRequest.ActStamp >= idStartTS AND
             MsRequest.CreStamp >= idStartTS AND
             MsRequest.CreStamp < idEndTS AND
@@ -1860,11 +1880,8 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
 
 END.
 
-
-
-
 FUNCTION fCreateDocumentRows RETURNS CHAR
- (icCaseID AS CHAR):
+ (icCaseID as CHAR):
    DEF VAR lcStatus AS CHAR NO-UNDO.
    fLogLine("","Create Documents " + icCaseID).
    CASE icCaseID:

@@ -563,7 +563,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
       END.
    END.
 
-   IF icRegion NE "00" THEN 
+   IF icRegion ne "00" THEN 
       FIND FIRST Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
    IF NOT AVAIL Region THEN DO:
       ocResult = "Unknown region " + icRegion.
@@ -597,7 +597,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
       RETURN 0.
    END.
 
-   IF icRegion NE "00" AND NOT AVAIL Region THEN DO:
+   IF icRegion ne "00" AND NOT AVAIL Region THEN DO:
       ocResult = SUBST("Unknown region &1",icRegion).
       RETURN 0.
    END.
@@ -647,13 +647,14 @@ END FUNCTION.
 
 /* Installation Address Update */
 FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER 
-   (INPUT  iiOrderId        AS INT,
+   (INPUT  icsfid           AS CHAR,
+    INPUT  iiOrderId        AS INT,
     INPUT  idActStamp       AS DEC,
-    INPUT  icAmendType      AS CHAR,
+    INPUT  icAmendmentType  AS CHAR,
+    INPUT  icAmendmentValue AS CHAR,
     INPUT  icCurrentDetails AS CHAR,
-    INPUT  icCurrRemDetails AS CHAR,
-    INPUT  icNewDetails     AS CHAR,
-    INPUT  icNewCompDetails AS CHAR, 
+    INPUT  icContractId     AS CHAR,
+    INPUT  icReason         AS CHAR,
     INPUT  icSource         AS CHAR,        /* source of request */
     INPUT  iiOrigReq        AS INT,         /* father request  */
     OUTPUT ocResult         AS CHAR):
@@ -713,18 +714,18 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
                   FALSE,    /* create fees */
                   FALSE).   /* sms */
    ASSIGN
-      bCreaReq.MsSeq       = bOrder.MsSeq
-      bCreaReq.CustNum     = bOrder.CustNum
-      bCreaReq.ReqCParam1  = icAmendType
-      bCreaReq.ReqCParam2  = icCurrentDetails
-      bCreaReq.ReqCParam6  = icCurrRemDetails
-      bCreaReq.ReqCParam3  = icNewDetails
-      bCreaReq.ReqCParam4  = icNewCompDetails
-      bCreaReq.ReqCParam5  = bOrder.ContractId
-      bCreaReq.ReqIParam1  = bOrdCustomer.OrderId
-      bCreaReq.ReqSource   = icSource
-      bCreaReq.OrigReq     = iiOrigReq
-      liReqCreated         = bCreaReq.MsRequest.
+      bCreaReq.MsSeq      = bOrder.MsSeq
+      bCreaReq.CustNum    = bOrder.CustNum
+      bCreaReq.ReqCParam1 = icsfid
+      bCreaReq.ReqIParam1 = iiOrderId
+      bCreaReq.ReqCParam2 = icAmendmentType
+      bCreaReq.ReqCParam3 = icAmendmentValue
+      bCreaReq.ReqCParam4 = icCurrentDetails
+      bCreaReq.ReqCParam5 = icContractId
+      bCreaReq.ReqCParam6 = icReason
+      bCreaReq.ReqSource  = icSource
+      bCreaReq.OrigReq    = iiOrigReq
+      liReqCreated        = bCreaReq.MsRequest.
  
    RELEASE bCreaReq.
    
@@ -1018,9 +1019,9 @@ FUNCTION fPCActionRequest RETURNS INTEGER
                      Order.Crstamp < 20170405.25200 AND
                      Order.OrderType < 2) THEN DO:
       
-      FIND ServiceLimit NO-LOCK WHERE
-           ServiceLimit.groupcode = icContrType AND
-           ServiceLimit.dialtype = {&DIAL_TYPE_GPRS} NO-ERROR.
+      FIND ServiceLimit NO-LOCK where
+           ServiceLimit.groupcode = icContrType and
+           ServiceLimit.dialtype = {&DIAL_TYPE_GPRS} no-error.
       IF AVAIL ServiceLimit THEN     
          bCreaReq.ReqDParam1 = ServiceLimit.inclamt * 2.
    END.
