@@ -40,11 +40,11 @@ DO ON ERROR UNDO , LEAVE :
     END.
     IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO: 
         FIND fixedLine WHERE fixedLine.MsSeq = MSRequest.MsSeq NO-LOCK NO-ERROR.
-        FIND mobileLine WHERE mobileLine.Cli = MSRequest.reqCparam3 NO-LOCK NO-ERROR.
+        FIND mobileLine WHERE mobileLine.Cli = ENTRY(1,MSRequest.reqCparam3 ,"|") NO-LOCK NO-ERROR.
     END.
     ELSE IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:           
         FIND mobileLine WHERE mobileLine.MsSeq = MSRequest.MsSeq NO-LOCK NO-ERROR.
-        FIND fixedLine WHERE fixedLine.Cli = MSRequest.reqCparam3 NO-LOCK NO-ERROR.
+        FIND fixedLine WHERE fixedLine.Cli = ENTRY(1,MSRequest.reqCparam3 ,"|") NO-LOCK NO-ERROR.
     END.
     ELSE DO:
         fReqError("Invalid TariffType").
@@ -64,21 +64,21 @@ DO ON ERROR UNDO , LEAVE :
         FOR EACH flFFee NO-LOCK WHERE 
                  flFFee.Brand = "1" AND
                  flFFee.HostTable = 'mobsub' AND 
-                 flFFee.KeyValue = STRING(fixedLine.MsSeq) AND 
+                 flFFee.KeyValue = STRING(mobileLine.MsSeq) AND 
                  flFFee.BillCode BEGINS "PAYTERM" :
             CREATE mlFFee.
             BUFFER-COPY flFFee TO mlFFee 
             ASSIGN 
                 mlFFee.FFNum       = NEXT-VALUE(Contract)
                 mlFFee.HostTable   = 'mobsub'
-                mlFFee.KeyValue    = STRING(mobileLine.MsSeq)
+                mlFFee.KeyValue    = STRING(fixedLine.MsSeq)
                 mlFFee.SourceTable = 'FixedFee'
                 mlFFee.SourceKey   = STRING(flFFee.FFNum) .
             fMakeContractMore(mlFFee.FFNum  , mlFFee.endPeriod) .
         END.
         
-        liTerminate = fPCActionRequest(MsRequest.MsSeq,
-                                       MsRequest.ReqCParam1,
+        liTerminate = fPCActionRequest(Mobileline.MsSeq,
+                                       MobileLine.CliType,
                                        "term",
                                        0,
                                        FALSE,   /* create fee */
@@ -94,7 +94,6 @@ DO ON ERROR UNDO , LEAVE :
     
        IF liTerminate = 0 OR liTerminate = ? THEN 
            UNDO , THROW NEW Progress.Lang.AppError ("Termination request creation failed." + lcError).
-        UNDO , THROW NEW Progress.Lang.AppError ("All went good.").
         CATCH err AS Progress.Lang.Error :
             fReqError("Error occured : " + err:GetMessage(1)).
         END CATCH.  
