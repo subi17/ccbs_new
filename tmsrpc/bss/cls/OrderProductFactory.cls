@@ -17,6 +17,8 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -68,14 +70,18 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
       DO lii = 1 TO ioItemsArray:Length:
          loItemObject = ioItemsArray:GetJsonObject(lii).
          CASE loItemObject:GetCharacter("type"):
-            WHEN "acc"
+            WHEN {&ORDER_PRODUCT_ACC}
             THEN loOrderProduct = NEW bss.cls.OrderProductACC(ioOrder).
-            WHEN "main"
+            WHEN {&ORDER_PRODUCT_MAIN}
             THEN loOrderProduct = NEW bss.cls.OrderProductPC(ioOrder).
-            WHEN "mobile_subscription"
+            WHEN {&ORDER_PRODUCT_SUBSCRIPTION}
             THEN loOrderProduct = NEW bss.cls.OrderProductSubscription(ioOrder).
-            WHEN "sim"
+            WHEN {&ORDER_PRODUCT_SIM}
             THEN loOrderProduct = NEW bss.cls.OrderProductSIM(ioOrder).
+            WHEN {&ORDER_PRODUCT_FIXED_LINE}
+            THEN loOrderProduct = NEW bss.cls.OrderProductFLine(ioOrder).
+            WHEN {&ORDER_PRODUCT_ACCESSORY}
+            THEN loOrderProduct = NEW bss.cls.OrderProductAccessory(ioOrder).
             OTHERWISE
             UNDO, THROW
               NEW ParamError(SUBSTITUTE("Invalid items type '&1'",

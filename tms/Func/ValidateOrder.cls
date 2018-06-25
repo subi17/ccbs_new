@@ -83,6 +83,64 @@ CLASS Func.ValidateOrder FINAL:
         
     END METHOD.
     
+    METHOD PUBLIC STATIC LOGICAL misFilledFixedNumber(INPUT lcFixedNumber AS CHARACTER) :
+        
+        DEFINE BUFFER bfMobSub            FOR MobSub.
+        DEFINE BUFFER bfOrderfusion       FOR OrderFusion.
+        DEFINE BUFFER bfOrder             FOR Order.
+        DEFINE BUFFER bfOrderProductParam FOR OrderProductParam.
+        
+        IF CAN-FIND(FIRST bfMobSub WHERE bfMobSub.Brand          =    Syst.Var:gcBrand
+                                     AND bfMobSub.FixedNumber    =    lcFixedNumber
+                                     AND (bfMobSub.MsStatus      =    {&MSSTATUS_ACTIVE}  OR
+                                          bfMobSub.MsStatus      =    {&MSSTATUS_BARRED}))
+        THEN RETURN TRUE.
+        
+        FIND FIRST bfOrderFusion WHERE bfOrderFusion.Brand         =    Syst.Var:gcBrand 
+                                   AND bfOrderFusion.FixedNumber   =    lcFixedNumber
+                                   NO-LOCK NO-ERROR.
+        IF AVAILABLE bfOrderFusion
+        THEN DO:
+            
+            IF CAN-FIND(FIRST bfOrder WHERE bfOrder.Brand   =   bfOrderFusion.Brand
+                                        AND bfOrder.OrderID >   bfOrderFusion.OrderID
+                                        AND LOOKUP(bfOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0)
+            THEN RETURN TRUE.
+            
+        END.
+        
+        IF Func.ValidateOrder:misOrderProductExistsToFixedNumber(lcFixedNumber)
+        THEN RETURN TRUE.
+        
+        RETURN FALSE.        
+        
+    END METHOD.
+    
+    METHOD PUBLIC STATIC LOGICAL misOrderProductExistsToFixedNumber (INPUT lcFixedNumber AS CHARACTER) :
+        
+        DEFINE BUFFER bfOrderProduct      FOR OrderProduct.
+        DEFINE BUFFER bfOrderProductParam FOR OrderProductParam.
+        DEFINE BUFFER bfOrder             FOR Order.
+        
+        FOR EACH bfOrderProduct NO-LOCK WHERE bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_FIXED_LINE}
+                                          AND bfOrderProduct.OrderID      >  0 :
+                                              
+            IF CAN-FIND(FIRST bfOrder WHERE bfOrder.Brand   =   Syst.Var:gcBrand
+                                        AND bfOrder.OrderID =   bfOrderProduct.OrderID
+                                        AND LOOKUP(bfOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0) THEN NEXT.
+                                        
+            IF CAN-FIND(FIRST bfOrderProductParam WHERE bfOrderProductParam.OrderProductID = bfOrderProduct.OrderProductID
+                                                    AND bfOrderProductParam.ParamName      = {&ORDER_PRODUCT_PARAM_NUMBER}
+                                                    AND bfOrderProductParam.CharValue      = lcFixedNumber)
+            THEN RETURN TRUE.
+                                              
+        END.
+        
+        RETURN FALSE.
+        
+    END METHOD.
+   
+    
     METHOD PUBLIC STATIC LOGICAL misSubscriptionExists(INPUT lcCLI AS CHARACTER) :
         
         DEFINE BUFFER bfMobSub FOR MobSub.
@@ -101,6 +159,36 @@ CLASS Func.ValidateOrder FINAL:
     END METHOD.
     
     
+    METHOD PUBLIC STATIC LOGICAL mIsConvergentORFixedOnly(INPUT icCLIType AS CHARACTER) :
+                               
+       RETURN (Func.ValidateOrder:mIsConvergentTariff(icCLIType) OR
+               Func.ValidateOrder:mIsFixedOnlyTariff(icCLIType)).
+      
+    END.
+    
+    METHOD PUBLIC STATIC LOGICAL mIsConvergentTariff(INPUT icCLIType AS CHARACTER):
+        
+        DEFINE BUFFER bfCLIType FOR CLIType.
+        
+        RETURN (CAN-FIND(FIRST bfCLIType NO-LOCK WHERE
+                                bfCLIType.Brand             EQ Syst.Var:gcBrand AND
+                                bfCLIType.CliType           EQ icCLIType        AND 
+                                bfCLIType.FixedLineDownload NE ?                AND 
+                                bfCLIType.FixedLineDownload NE "" )) .
+        
+        
+    END METHOD.
+    
+    METHOD PUBLIC STATIC LOGICAL mIsFixedOnlyTariff(INPUT icCLIType AS CHARACTER) :
+        
+        DEFINE BUFFER bCLIType FOR CLIType.
+        
+        RETURN (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                               bCLIType.Brand      = Syst.Var:gcBrand           AND
+                               bCLIType.CLIType    = icCLIType                         AND
+                               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})).
+        
+    END METHOD.
     
 
 END CLASS.

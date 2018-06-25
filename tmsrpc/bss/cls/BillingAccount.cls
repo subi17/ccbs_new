@@ -146,14 +146,6 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:ToDate        = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to"))   WHEN ioBillingAcct:Has("valid_to")
             .
         
-        IF ioBillingAcct:Has("invoice-ship-address")
-        THEN DO:
-            
-            ASSIGN ioInvoiceShipAddress= ioBillingAcct:GetJsonObject("invoice-ship-address").
-            
-        END.
-        
-        
     END METHOD.
     
     METHOD PUBLIC VOID mStoreData() :
