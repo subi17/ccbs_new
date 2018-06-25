@@ -336,6 +336,7 @@
 &GLOBAL-DEFINE REQUEST_STATUS_FILE_PENDING 16          /* Pending file creation */
 &GLOBAL-DEFINE REQUEST_STATUS_FILE_DONE 17             /* File created */
 &GLOBAL-DEFINE REQUEST_STATUS_CONFIRMATION_PENDING 19  /* Waiting for confirmation */
+&GLOBAL-DEFINE REQUEST_STATUS_NEW_BYPASS_TERMIN_API 20 /* Bypassing use of fixed line termination API */  
 &GLOBAL-DEFINE REQUEST_STATUS_PROCESS_ERROR 99         /* Process error (Qvantel maintenance required) */
 
 /* Request Sources */

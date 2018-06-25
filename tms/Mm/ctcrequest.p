@@ -47,6 +47,10 @@ FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 0 THEN 
    RETURN "ERROR:Invalid request ID".
 
+IF MsRequest.ReqStatus EQ {&REQUEST_STATUS_NEW_BYPASS_TERMIN_API} THEN DO:
+   MsRequest.ReqStatus = 0.
+END.
+
 IF MsRequest.ReqStatus NE 0 THEN RETURN.
    
 /* request is under work */

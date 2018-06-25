@@ -219,12 +219,12 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
          liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
          IF liOrderId EQ 0
             THEN lcResult = "OrderID not found".
-                    
+
          /* This call makes synchronous termination request to MuleDB */
-         ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
+         ELSE IF MsRequest.ReqDParam2 EQ 0 THEN 
+            lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
       END.   
    END.
-
    IF lcResult > "" THEN DO:  
       Func.Common:mWriteMemo("MobSub",
                              STRING(MSrequest.MsSeq),
@@ -232,8 +232,9 @@ IF fIsConvergenceTariff(MobSub.CLIType) AND
                              "La baja del sevicio fijo ha fallado: ", /* "Fixed number termination failed" */
                              lcResult).
       fReqError("La baja del sevicio fijo ha fallado: " +  lcResult).
+      MsRequest.ReqDParam2 = 1. /* set this to enable possible bypassing terminating interface usage */
       RETURN.
-   END.
+   END.  
    ELSE MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.     
 END.
 

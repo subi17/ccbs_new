@@ -136,6 +136,14 @@ If MsRequest.ReqStat EQ {&REQUEST_STATUS_REJECTED} AND
    RETURN.
 END.
 
+IF MsRequest.ReqStat EQ {&REQUEST_STATUS_REJECTED} AND
+   iiToStatus EQ {&REQUEST_STATUS_NEW_BYPASS_TERMIN_API} AND
+   LOOKUP(STRING(MsRequest.ReqType),"0,18,") > 0 AND 
+   MsRequest.ReqDParam2 = 1 THEN DO:
+   MESSAGE "Relaunch, bybass fixed termination API"
+   VIEW-AS ALERT-BOX.
+END.
+
 /* Confirmation */
 llOk = FALSE.
 MESSAGE "Change status of the request to" 
