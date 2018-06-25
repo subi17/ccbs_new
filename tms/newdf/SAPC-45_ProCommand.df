@@ -1,10 +1,10 @@
-ADD TABLE "ProCommad"
+ADD TABLE "ProCommand"
   MULTITENANT yes
   AREA "Sta_Data_256"
   LABEL "BUS/BPM commands to SAPC"
-  DUMP-NAME "procommad"
+  DUMP-NAME "procommand"
 
-ADD FIELD "OrderId" OF "ProCommad" AS integer 
+ADD FIELD "OrderId" OF "ProCommand" AS integer 
   DESCRIPTION "Order sequence number"
   FORMAT ">>>>>>>>9"
   INITIAL "0"
@@ -14,7 +14,7 @@ ADD FIELD "OrderId" OF "ProCommad" AS integer
   ORDER 10
   MANDATORY
 
-ADD FIELD "OrderProductID" OF "ProCommad" AS integer 
+ADD FIELD "OrderProductID" OF "ProCommand" AS integer 
   DESCRIPTION "Order Product internal id (link from OrderProduct table)."
   FORMAT ">>>>>>>>9"
   INITIAL "0"
@@ -24,7 +24,7 @@ ADD FIELD "OrderProductID" OF "ProCommad" AS integer
   HELP "Order Product internal id"
   ORDER 20
 
-ADD FIELD "CreatedTS" OF "ProCommad" AS datetime-tz 
+ADD FIELD "CreatedTS" OF "ProCommand" AS datetime-tz 
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
   LABEL "Creation"
@@ -32,7 +32,7 @@ ADD FIELD "CreatedTS" OF "ProCommad" AS datetime-tz
   HELP "Date and time when record is created"
   ORDER 30
 
-ADD FIELD "ActivationTS" OF "ProCommad" AS datetime-tz 
+ADD FIELD "ActivationTS" OF "ProCommand" AS datetime-tz 
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
   LABEL "Activation"
@@ -40,7 +40,7 @@ ADD FIELD "ActivationTS" OF "ProCommad" AS datetime-tz
   HELP "Date and time when procommand is sent to BUS/BPM"
   ORDER 40
 
-ADD FIELD "CompletedTS" OF "ProCommad" AS datetime-tz 
+ADD FIELD "CompletedTS" OF "ProCommand" AS datetime-tz 
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
   LABEL "Completed"
@@ -48,7 +48,7 @@ ADD FIELD "CompletedTS" OF "ProCommad" AS datetime-tz
   HELP "Date and time when BUS/BPM response is received"
   ORDER 50
 
-ADD FIELD "ProCommandId" OF "ProCommad" AS int64 
+ADD FIELD "ProCommandId" OF "ProCommand" AS int64 
   FORMAT ">>>>>>>>>9"
   INITIAL "0"
   LABEL "ProCommand Id"
@@ -56,7 +56,7 @@ ADD FIELD "ProCommandId" OF "ProCommad" AS int64
   HELP "Record Unique identifier"
   ORDER 60
 
-ADD FIELD "CommandLine" OF "ProCommad" AS clob 
+ADD FIELD "CommandLine" OF "ProCommand" AS clob 
   FORMAT "x(8)"
   INITIAL ?
   LOB-AREA "Sta_Data_256"
@@ -67,7 +67,7 @@ ADD FIELD "CommandLine" OF "ProCommad" AS clob
   CLOB-TYPE 2
   ORDER 70
 
-ADD FIELD "MsRequest" OF "ProCommad" AS integer 
+ADD FIELD "MsRequest" OF "ProCommand" AS integer 
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "Request ID"
@@ -76,7 +76,7 @@ ADD FIELD "MsRequest" OF "ProCommad" AS integer
   HELP "Unique ID for request"
   ORDER 80
 
-ADD FIELD "MsSeq" OF "ProCommad" AS integer 
+ADD FIELD "MsSeq" OF "ProCommand" AS integer 
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "MobSub Sequence"
@@ -86,7 +86,7 @@ ADD FIELD "MsSeq" OF "ProCommad" AS integer
   ORDER 90
   MANDATORY
 
-ADD FIELD "Response" OF "ProCommad" AS character 
+ADD FIELD "Response" OF "ProCommand" AS character 
   FORMAT "x(256)"
   INITIAL ""
   LABEL "Response"
@@ -94,7 +94,7 @@ ADD FIELD "Response" OF "ProCommad" AS character
   HELP "Response"
   ORDER 100
 
-ADD FIELD "ProCommandStatus" OF "ProCommad" AS integer 
+ADD FIELD "ProCommandStatus" OF "ProCommand" AS integer 
   FORMAT ">>9"
   INITIAL "0"
   LABEL "Status"
@@ -102,7 +102,7 @@ ADD FIELD "ProCommandStatus" OF "ProCommad" AS integer
   HELP "Status: 0-  New, 1 - Ongoing, 2 - Done"
   ORDER 110
 
-ADD FIELD "ProCommandTarget" OF "ProCommad" AS character 
+ADD FIELD "ProCommandTarget" OF "ProCommand" AS character 
   DESCRIPTION "NB for Northbound, BPM for BPM"
   FORMAT "x(8)"
   INITIAL ""
@@ -111,7 +111,7 @@ ADD FIELD "ProCommandTarget" OF "ProCommad" AS character
   HELP "NB for Northbound, BPM for BPM"
   ORDER 120
 
-ADD FIELD "Creator" OF "ProCommad" AS character 
+ADD FIELD "Creator" OF "ProCommand" AS character 
   FORMAT "x(12)"
   INITIAL ""
   LABEL "Creator"
@@ -119,23 +119,23 @@ ADD FIELD "Creator" OF "ProCommad" AS character
   HELP "Who made this procommand request"
   ORDER 130
 
-ADD INDEX "Ix_ProCommandId" ON "ProCommad" 
+ADD INDEX "Ix_ProCommandId" ON "ProCommand" 
   AREA "Sta_Index_64"
   UNIQUE
   PRIMARY
   INDEX-FIELD "ProCommandId" ASCENDING 
 
-ADD INDEX "Ix_MsSeq" ON "ProCommad" 
+ADD INDEX "Ix_MsSeq" ON "ProCommand" 
   AREA "Sta_Index_64"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "ActivationTS" DESCENDING 
 
-ADD INDEX "Ix_OrderId" ON "ProCommad" 
+ADD INDEX "Ix_OrderId" ON "ProCommand" 
   AREA "Sta_Index_64"
   INDEX-FIELD "OrderId" ASCENDING 
   INDEX-FIELD "ActivationTS" DESCENDING 
 
-ADD INDEX "Ix_Status" ON "ProCommad" 
+ADD INDEX "Ix_Status" ON "ProCommand" 
   AREA "Sta_Index_64"
   INDEX-FIELD "ProCommandStatus" ASCENDING 
   INDEX-FIELD "ActivationTS" ASCENDING 
