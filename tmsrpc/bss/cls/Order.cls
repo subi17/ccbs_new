@@ -140,6 +140,10 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
           ASSIGN THIS-OBJECT:OrderType  = iiType.
           
       END SET.
+      
+    DEFINE PUBLIC PROPERTY isFixedOnly AS LOGICAL NO-UNDO
+       GET.
+       SET.
        
    
 	CONSTRUCTOR PUBLIC Order():

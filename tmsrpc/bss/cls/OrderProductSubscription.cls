@@ -63,6 +63,9 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
 	CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS bss.cls.Order ):
 	    
         SUPER(ioOrder).
+        
+        IF aoOrder:isFixedOnly 
+        THEN UNDO,THROW NEW ParamError ("Fixed Only Tariff should not have mobile subscription.").
 		
 	END CONSTRUCTOR.
 

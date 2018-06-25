@@ -66,7 +66,8 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         IF Func.ValidateOrder:mIsConvergentORFixedOnly(THIS-OBJECT:ProductID) = FALSE 
         THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Product &1 is not convergent or fixed only.", THIS-OBJECT:ProductID)). 
         
-        
+        IF Func.ValidateOrder:mIsFixedOnlyTariff(THIS-OBJECT:ProductID)
+        THEN ASSIGN aoOrder:isFixedOnly  =  YES.
         
         DEFINE VARIABLE loAttributes AS CLASS JsonObject NO-UNDO.
         
@@ -108,8 +109,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         
         FOR EACH ttOrderProductParam:
             CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
-        END.
-        
+        END.        
         
         IF VALID-OBJECT(aoAggrementCustomer)
         THEN aoAggrementCustomer:mStoreData().
