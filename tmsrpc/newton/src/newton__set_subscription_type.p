@@ -16,6 +16,7 @@
           extend_term_contract;boolean;optional;false=terminate,true=extent
           exclude_term_penalty (boolean, optional) * To accept the penalty exemption
           memo;struct;optional;
+          merge_with:string;optional;
  * @memo  title;string;mandatory;memo title
           contents;string;mandatory;memo content
  * @output success;boolean
@@ -68,10 +69,12 @@ DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR iiRequestFlags   AS INT  NO-UNDO.
 
 DEF BUFFER NewCliType   FOR CliType.
-
+DEFINE BUFFER bMobSub   FOR MobSub.
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
-
+DEFINE VARIABLE lcMergeWith AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcReqParam3 AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNum AS CHARACTER NO-UNDO.
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -79,7 +82,7 @@ pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct, 
    "brand!,msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
    "charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass," +
-   "extend_term_contract,exclude_term_penalty,memo,contract_id,channel").
+   "extend_term_contract,exclude_term_penalty,memo,contract_id,channel,merge_with").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -108,7 +111,9 @@ ASSIGN
    pcChannel = get_string(pcStruct,"channel")
             WHEN LOOKUP("channel", lcstruct) > 0
    plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
-      WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
+      WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0
+   lcMergeWith = get_string(pcStruct,"merge_with")
+            WHEN LOOKUP("merge_with" , lcStruct) >  0. 
 
 IF LOOKUP("memo", lcstruct) > 0 THEN DO:
    pcMemoStruct = get_struct(pcStruct,"memo").
@@ -195,8 +200,40 @@ DO:
 END.
 ELSE
 IF plExcludeTermPenalty THEN
-   iiRequestFlags = 2.   
-
+   iiRequestFlags = 2.
+      
+IF lcMergeWith > '' AND lcMergeWith NE ? THEN DO:
+    IF MobSub.Fixednumber NE ? AND 
+       MobSub.Fixednumber > ''  THEN 
+       lcFixedNum = MobSub.fixednumber.
+    ELSE DO:
+        FIND bMobSub WHERE bMobSub.cli = lcMergeWith NO-LOCK NO-ERROR.
+        IF AVAILABLE bMobSub THEN 
+            lcFixedNum = bMobSub.fixednumber.      
+    END.   
+    lcReqParam3 = lcMergeWith  
+                  + "|" + STRING(MobSub.FIxednumber)
+                  + "|" + pcDataBundleId 
+                  + "|" + pcBankAcc 
+                  + "|" + STRING(pdActivation)
+                  + "|" + STRING(liCreditCheck)
+                  + "|" + STRING(iiRequestFlags)
+                  + "|" + STRING(pdeCharge > 0)
+                  + "|" + STRING(llSendSMS)
+                  + "|" + STRING(pdeCharge)
+                  + "|" + STRING(pcContractId) .
+     
+     liRequest = fCTMergeChangeRequest( MobSub.msseq,pcCliType, 
+                                  lcReqParam3 , 
+                                  pdActivation ,
+                                  (pdeCharge > 0),
+                                  llSendSMS,
+                                  '' ,
+                                  {&REQUEST_SOURCE_NEWTON}, 
+                                   0, /* order id */
+                                  OUTPUT lcINfo ). 
+END.
+ELSE 
 liRequest = fCTChangeRequest(MobSub.msseq,
                   pcCliType,
                   pcDataBundleId,

@@ -121,6 +121,96 @@ FUNCTION fChkTiming RETURNS CHARACTER
 
 END FUNCTION.
 
+FUNCTION fCTMergeChangeRequest RETURNS INTEGER
+   (INPUT  iiMsSeq        AS INT,
+    INPUT  icNewType      AS CHARACTER,
+    INPUT icReqparam3    AS CHARACTER ,
+    INPUT idChgStamp    AS DECIMAL ,
+    INPUT  ilCreateFees   AS LOG,
+    INPUT  ilSendSMS      AS LOG,
+    INPUT icCreator      AS CHARACTER , 
+    INPUT  icSource       AS CHAR,
+    INPUT  iiOrigReq      AS INT,    /* Father request id */
+    OUTPUT  ocResult       AS CHARACTER ):
+        
+   DEF VAR llCRes        AS LOG  NO-UNDO.
+   DEF VAR lcCReqTime    AS CHAR NO-UNDO.
+   DEF VAR liCReqTime    AS INT  NO-UNDO.
+   DEF VAR ldtCReqDate   AS DATE NO-UNDO.
+   DEF VAR llProCustomer AS LOGI NO-UNDO.
+
+   ocResult = fChkRequest(iiMsSeq,
+                          0,
+                          "",
+                          icCreator).
+
+   IF ocResult > "" THEN RETURN 0.                       
+
+   /* check if there are scheduling rules */
+   IF idChgStamp = ? THEN DO:
+
+      ASSIGN ldtCReqDate = TODAY
+             liCReqTime  = TIME.
+
+      /* all web requests are scheduled to 1st of next month */
+      IF Syst.Var:katun = "WEB" THEN lcCReqTime = "1".
+      
+      /* should old type be closed only on last of month 
+         -> set request date as the 1st of next month */
+      ELSE lcCReqTime = fChkTiming(bReqSub.CLIType,
+                                   "",
+                                   ldtCReqDate).
+                                   
+      IF lcCReqTime > "" THEN DO:
+         IF MONTH(ldtCReqDate) = 12 
+         THEN ldtCReqDate = DATE(1,1,YEAR(ldtCReqDate) + 1).
+         ELSE ldtCReqDate = DATE(MONTH(ldtCReqDate) + 1,1,YEAR(ldtCReqDate)).
+         
+         liCReqTime = 18000.
+      END.
+       
+      /* is there a time limit for scheduling (on old type) */
+      IF DAY(ldtCReqDate) = 1 THEN DO:
+         lcCReqTime = fServAttrValue(bReqSub.CLIType,
+                                      "TypeChg",
+                                      "SchedTime",
+                                      OUTPUT llCRes). 
+         IF lcCReqTime NE ? AND lcCReqTime > "" 
+         THEN liCReqTime = INTEGER(ENTRY(1,lcCReqTime,".")) * 3600 + 
+                           INTEGER(ENTRY(2,lcCReqTime,".")) * 60   -
+                           600.
+      END. 
+      
+      idChgStamp = Func.Common:mMake2DT(ldtCReqDate,
+                            liCReqTime).
+    
+   END. 
+   
+   /* double check (duplicate RPC call) */
+   ocResult = fChkRequest(iiMsSeq,
+                          0,
+                          "",
+                          icCreator).
+   IF ocResult > "" THEN RETURN 0.              
+   
+       fCreateRequest(98,
+          Func.Common:mMakeTS(),
+          icCreator,
+          ilCreateFees,
+          ilSendSMS).
+          
+
+   ASSIGN bCreaReq.ReqCParam1  = bReqSub.CLIType
+          bCreaReq.ReqCParam2  = icNewType
+          bCreaReq.ReqCparam3  = icReqparam3
+          bCreaReq.ReqDParam1  = idChgStamp
+          bCreaReq.ReqSource   = icSource
+          liReqCreated         = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+            
+
+END FUNCTION.
 /* CLI type change */
 FUNCTION fCTChangeRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,
