@@ -18,7 +18,7 @@ DEF VAR FrmRow      AS INT         NO-UNDO INITIAL 1.
 DEF VAR FrmDown     AS INT         NO-UNDO INITIAL 15.
 DEF VAR order       AS INT         NO-UNDO INITIAL 1.
 DEF VAR orders      AS CHAR        NO-UNDO.
-DEF VAR maxOrder    AS INT         NO-UNDO INITIAL 3.
+DEF VAR maxOrder    AS INT         NO-UNDO INITIAL 1.
 DEF VAR memory      AS RECID       NO-UNDO.
 DEF VAR RowNo       AS INT         NO-UNDO.
 DEF VAR must-print  AS LOG         NO-UNDO.
@@ -51,25 +51,24 @@ VIEW FRAME sel.
 orders = " By OrderProductId". /* add other sortings (and the code) if needed */
 
 /* Pre-check */
-IF iiOrderId > 0 THEN
-   FIND FIRST OrderSubscription NO-LOCK WHERE
-              OrderSubscription.OrderId EQ iiOrderId NO-ERROR. 
-   IF NOT AVAIL OrderSubscription THEN DO:
-      MESSAGE "Order Subscription statuses not found!" VIEW-AS ALERT-BOX.
-      RETURN.
-   END.
-
-IF AVAILABLE OrderSubscription THEN
-   ASSIGN
-      memory       = RECID(OrderSubscription)
-      must-print   = TRUE.
-ELSE 
+IF iiOrderId = 0 THEN
 DO:
-   MESSAGE "No Order Subscription statuses available!" VIEW-AS ALERT-BOX.
+   MESSAGE "Order ID not provided!" VIEW-AS ALERT-BOX.
    RETURN.
 END.
 
-order = 1. 
+FIND FIRST OrderSubscription NO-LOCK WHERE
+           OrderSubscription.OrderId EQ iiOrderId NO-ERROR. 
+IF NOT AVAIL OrderSubscription THEN
+DO:
+   MESSAGE "Order Subscription statuses not found for this Order!" VIEW-AS ALERT-BOX.
+   RETURN.
+END.
+
+ASSIGN
+   memory      = RECID(OrderSubscription)
+   must-print  = TRUE
+   order       = 1. 
 
 LOOP:
 REPEAT WITH FRAME sel:

@@ -1127,7 +1127,7 @@ BROWSE:
         IF NOT CAN-FIND(FIRST OrderSubscription NO-LOCK WHERE 
                               OrderSubscription.orderid = order.orderid) THEN
         DO:
-           MESSAGE "Order subscriptino statuses not found!" 
+           MESSAGE "Order subscription statuses not found!" 
               VIEW-AS ALERT-BOX.
            NEXT Browse.
         END.
