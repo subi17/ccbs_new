@@ -2,45 +2,22 @@
 /* Simulate Credit Scoring  Response XML */
 
 
-{Syst/commali.i}
 {Func/cparam2.i}
-Syst.Var:gcBrand = "1".
-
 {Func/xmlfunction.i}
+{Syst/tmsconst.i}
+
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
 INPUT CLOSE.
 
-IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai') = 0 THEN DO:
+IF LOOKUP(lcHostName,{&HOSTNAME_STAGING}) EQ 0 AND
+   LOOKUP(lcHostName,{&HOSTNAME_DEVEL}) EQ 0 THEN DO:
    MESSAGE 'This script is not allowed to run in'
    lcHostName VIEW-AS ALERT-BOX.
    RETURN.
 END.
 
-/*
-FUNCTION fRPCStruct RETURNS LOGICAL
-  (INPUT pcCommand AS CHARACTER,
-   INPUT pcParams  AS CHARACTER,
-   INPUT phDoc     AS HANDLE):
-
-   DEFINE VARIABLE liLoop AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liAmt  AS INTEGER NO-UNDO.
-   DEFINE VARIABLE llOK   AS LOGICAL NO-UNDO.
-
-   liAmt = NUM-ENTRIES(pcParams).
-
-   CASE pcCommand:
-      WHEN "Start" THEN DO liLoop = 1 TO liAmt:
-         llOK = phDOc:START-ELEMENT(ENTRY(liLoop,pcParams)).
-      END.
-      WHEN "End" THEN DO liLoop = liAmt TO 1 BY -1:
-         llOK = phDOc:END-ELEMENT(ENTRY(liLoop,pcParams)).
-      END.
-   END.
-   
-END FUNCTION.
-*/
 FUNCTION fCreditScoring RETURN LOGICAL
          (INPUT-OUTPUT phSAXWriter AS HANDLE):
 

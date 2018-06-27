@@ -18,5 +18,5 @@ else:
       var1 = True
    else:
       var1 = False
-p=s.newton.offers.list({'active':var1})
+p=s.newton.offers.list({'brand':'yoigo','active':var1})
 print_results(p)
