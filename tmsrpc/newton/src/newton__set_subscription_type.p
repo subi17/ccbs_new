@@ -72,9 +72,11 @@ DEF BUFFER NewCliType   FOR CliType.
 DEFINE BUFFER bMobSub   FOR MobSub.
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
-DEFINE VARIABLE lcMergeWith AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcMergeWith AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReqParam3 AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixedNum AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNum  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liMergeReq  AS INTEGER   NO-UNDO.
+DEFINE BUFFER bMsrequest FOR MSRequest.
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -112,7 +114,7 @@ ASSIGN
             WHEN LOOKUP("channel", lcstruct) > 0
    plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
       WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0
-   lcMergeWith = get_string(pcStruct,"merge_with")
+   pcMergeWith = get_string(pcStruct,"merge_with")
             WHEN LOOKUP("merge_with" , lcStruct) >  0. 
 
 IF LOOKUP("memo", lcstruct) > 0 THEN DO:
@@ -202,38 +204,30 @@ ELSE
 IF plExcludeTermPenalty THEN
    iiRequestFlags = 2.
       
-IF lcMergeWith > '' AND lcMergeWith NE ? THEN DO:
+IF pcMergeWith > '' AND pcMergeWith NE ? THEN DO:
     IF MobSub.Fixednumber NE ? AND 
        MobSub.Fixednumber > ''  THEN 
        lcFixedNum = MobSub.fixednumber.
     ELSE DO:
-        FIND bMobSub WHERE bMobSub.cli = lcMergeWith NO-LOCK NO-ERROR.
+        FIND bMobSub WHERE bMobSub.cli = pcMergeWith NO-LOCK NO-ERROR.
         IF AVAILABLE bMobSub THEN 
             lcFixedNum = bMobSub.fixednumber.      
     END.   
-    lcReqParam3 = lcMergeWith  
-                  + "|" + STRING(MobSub.FIxednumber)
-                  + "|" + pcDataBundleId 
-                  + "|" + pcBankAcc 
-                  + "|" + STRING(pdActivation)
-                  + "|" + STRING(liCreditCheck)
-                  + "|" + STRING(iiRequestFlags)
-                  + "|" + STRING(pdeCharge > 0)
-                  + "|" + STRING(llSendSMS)
-                  + "|" + STRING(pdeCharge)
-                  + "|" + STRING(pcContractId) .
-     
-     liRequest = fCTMergeChangeRequest( MobSub.msseq,pcCliType, 
-                                  lcReqParam3 , 
-                                  pdActivation ,
-                                  (pdeCharge > 0),
-                                  llSendSMS,
-                                  '' ,
-                                  {&REQUEST_SOURCE_NEWTON}, 
-                                   0, /* order id */
-                                  OUTPUT lcINfo ). 
+    lcReqParam3 = pcMergeWith + "|" + lcFixedNum .
+    liMergeReq  = fCTMergeChangeRequest( MobSub.MsSeq ,
+                                         pcCliType    , 
+                                         lcReqParam3  , 
+                                         pdActivation ,
+                                         (pdeCharge > 0),
+                                         llSendSMS    ,
+                                         ''           ,
+                                         {&REQUEST_SOURCE_NEWTON}, 
+                                         0, 
+                                         OUTPUT lcINfo ). 
+    IF liMergeReq = 0 THEN 
+        RETURN appl_err("Merge Request creation failed: " +  lcInfo).
 END.
-ELSE 
+ 
 liRequest = fCTChangeRequest(MobSub.msseq,
                   pcCliType,
                   pcDataBundleId,
@@ -248,12 +242,20 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   pdeCharge,
                   {&REQUEST_SOURCE_NEWTON}, 
                   0, /* order id */
-                  0,
-                  pcContractId, /*dms: contract_id,channel ->ReqCParam6*/
+                  liMergeReq   ,
+                  pcContractId , /*dms: contract_id,channel ->ReqCParam6*/
                   OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:
    RETURN appl_err("Request creation failed: " +  lcInfo).
+END.
+IF liMergeReq NE 0 THEN DO:
+    FIND bMsrequest WHERE 
+         bMsrequest.MsRequest = liRequest 
+         EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+    IF AVAILABLE bMsRequest THEN 
+        bMsrequest.ReqStatus = {&REQUEST_STATUS_HOLD}. 
+    RELEASE bMsrequest.
 END.
 
 IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:

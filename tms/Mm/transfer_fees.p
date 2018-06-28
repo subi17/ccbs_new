@@ -15,6 +15,13 @@
 {Func/nncoit2.i }
 {Func/msisdn_prefix.i}
 
+DEF TEMP-TABLE ttContract NO-UNDO
+   FIELD DCEvent   AS CHAR
+   FIELD PerContID AS INT
+   FIELD CreateFee AS LOG
+   FIELD ActTS     AS DEC.
+
+
 DEFINE INPUT PARAMETER iiMsRequestId AS INTEGER   NO-UNDO.
 
 DEFINE BUFFER mobileLine FOR MobSub.
@@ -34,22 +41,15 @@ DEFINE VARIABLE lcTenant         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piQuarTime       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llYoigoTenant    AS LOG       NO-UNDO INIT FALSE.
 DEFINE VARIABLE llMasmovilTenant AS LOG       NO-UNDO INIT FALSE.
+DEFINE VARIABLE lcFFNums         AS CHARACTER NO-UNDO.
 
 DO ON ERROR UNDO , LEAVE :
     
     FIND MsRequest WHERE MSRequest.MsRequest = iiMsRequestId NO-LOCK NO-ERROR.
     IF NOT AVAILABLE MsRequest THEN 
         RETURN "Invalid MsRequest".
-    IF CAN-FIND(FIRST subReq WHERE SubReq.OrigRequest = iiMsRequestId AND 
-        SubReq.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}) THEN 
-    DO:
-        FIND FIRST subReq 
-            WHERE SubReq.OrigRequest = iiMsRequestId AND 
-            SubReq.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} NO-LOCK NO-ERROR.
-        IF subReq.reqStatus = {&REQUEST_STATUS_DONE} THEN 
-            RUN pCreateSTCRequest.
-        RETURN.
-    END. 
+    
+    
     FIND CLIType WHERE CLIType.Clitype = MSRequest.ReqCParam1 NO-LOCK NO-ERROR.
     IF NOT AVAILABLE CLIType THEN 
     DO:
@@ -58,14 +58,17 @@ DO ON ERROR UNDO , LEAVE :
     END.
     IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN 
     DO: 
-        FIND fixedLine WHERE fixedLine.MsSeq = MSRequest.MsSeq NO-LOCK NO-ERROR.
-        FIND mobileLine WHERE mobileLine.Cli = ENTRY(1, MSRequest.reqCparam3 ,"|") NO-LOCK NO-ERROR.
+        FIND fixedLine NO-LOCK WHERE fixedLine.MsSeq = MSRequest.MsSeq NO-ERROR.
+        FIND mobileLine NO-LOCK WHERE 
+             mobileLine.Cli = ENTRY(1, MSRequest.reqCparam3 ,"|") NO-ERROR.
     END.
     ELSE IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
-        DO:           
-            FIND mobileLine WHERE mobileLine.MsSeq = MSRequest.MsSeq NO-LOCK NO-ERROR.
-            FIND fixedLine WHERE fixedLine.Cli = ENTRY(1, MSRequest.reqCparam3 ,"|") NO-LOCK NO-ERROR.
-        END.
+    DO:           
+        FIND mobileLine NO-LOCK WHERE 
+             mobileLine.MsSeq = MSRequest.MsSeq NO-ERROR.
+        FIND fixedLine NO-LOCK WHERE 
+             fixedLine.Cli = ENTRY(1, MSRequest.reqCparam3 ,"|") NO-ERROR.
+    END.
         ELSE 
         DO:
             fReqError("Invalid TariffType").
@@ -81,119 +84,221 @@ DO ON ERROR UNDO , LEAVE :
         RETURN.
     END.
     
-    DO TRANSACTION ON ERROR UNDO , THROW:
-        
-        FOR EACH flFFee NO-LOCK WHERE 
-            flFFee.Brand = "1" AND
-            flFFee.HostTable = 'mobsub' AND 
-            flFFee.KeyValue = STRING(fixedLine.MsSeq) AND 
-            flFFee.BillCode BEGINS "PAYTERM" :
-            CREATE mlFFee.
-            BUFFER-COPY flFFee TO mlFFee 
-                ASSIGN 
-                mlFFee.FFNum       = NEXT-VALUE(Contract)
-                mlFFee.HostTable   = 'mobsub'
-                mlFFee.KeyValue    = STRING(mobileLine.MsSeq)
-                mlFFee.SourceTable = 'FixedFee'
-                mlFFee.SourceKey   = STRING(flFFee.FFNum) .
-            fMakeContractMore(mlFFee.FFNum  , mlFFee.endPeriod) .
-        END.
-        
-        ASSIGN 
-            lcTenant         = BUFFER-TENANT-NAME(fixedLine)
-            llYoigoCLI       = fIsYoigoCLI(fixedLine.CLI)
-            llMasmovilCLI    = fIsMasmovilCLI(fixedLine.CLI)
-            llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
-            llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
-        
-        
-        fInitialiseValues(
-            INPUT 3 ,
-            INPUT llYoigoCLi,
-            INPUT llMasmovilCLI,
-            OUTPUT piMsisdnStat,
-            OUTPUT piSimStat,
-            OUTPUT piQuarTime).
-
-        liTerminate = fTerminationRequest( fixedLine.MsSeq,
-            0,    
-            piMsisdnStat,
-            piSimStat,
-            piQuarTime,  
-            0 ,
-            'Merge',
-            '',
-            {&REQUEST_SOURCE_MERGE_TRANSFER_FEES},
-            "",
-            MSRequest.MsRequest,
-            {&TERMINATION_TYPE_FULL},
-            OUTPUT lcError).
-    
-        IF liTerminate = 0 OR liTerminate = ? THEN 
-            UNDO , THROW NEW Progress.Lang.AppError ( "Termination request creation failed." + lcError , 1 ).
-        
-        CATCH err AS Progress.Lang.Error :
-            fReqError("Error occured : " + err:GetMessage(1)).
-        END CATCH.  
+    IF CAN-FIND(FIRST subReq WHERE 
+             subReq.OrigRequest = iiMsRequestId AND 
+             subReq.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND 
+             subReq.ReqStatus = {&REQUEST_STATUS_DONE}) THEN DO:
+        RUN pCreateTermRequest.
+        RETURN.
     END.
+
+    IF CAN-FIND(FIRST subReq WHERE 
+                      subReq.OrigRequest = iiMsRequestId AND 
+                      subReq.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND 
+                      subReq.reqstatus = {&REQUEST_STATUS_HOLD} ) THEN 
+        DO TRANSACTION ON ERROR UNDO , THROW:
+            
+            FOR EACH flFFee NO-LOCK WHERE 
+                flFFee.Brand = MSRequest.Brand AND
+                flFFee.HostTable = 'mobsub' AND 
+                flFFee.KeyValue = STRING(fixedLine.MsSeq) AND 
+                flFFee.BillCode BEGINS "PAYTERM" :
+                CREATE mlFFee.
+                BUFFER-COPY flFFee TO mlFFee 
+                    ASSIGN 
+                    mlFFee.FFNum       = NEXT-VALUE(Contract)
+                    mlFFee.HostTable   = 'mobsub'
+                    mlFFee.KeyValue    = STRING(mobileLine.MsSeq)
+                    mlFFee.SourceTable = 'FixedFee'
+                    mlFFee.SourceKey   = STRING(flFFee.FFNum) 
+                    mlFFee.Active      = FALSE . 
+                fMakeContractMore(mlFFee.FFNum  , mlFFee.endPeriod) .
+                lcFFNums         = lcFFNums  + "," + STRING(mlFFee.FFNum) .
+            END.
+            lcFFNums = TRIM(lcFFNums).
+    
+            CREATE ActionLog.
+            ASSIGN 
+                ActionLog.Brand        = MSRequest.Brand  
+                ActionLog.TableName    = "MsRequest"  
+                ActionLog.KeyValue     = STRING(iiMsRequestId)
+                ActionLog.UserCode     = 'Newton'
+                ActionLog.ActionID     = "FixedFees"
+                ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
+                ActionLog.ActionChar   = lcFFNums
+                ActionLog.CustNum      = MSRequest.Custnum
+                ActionLog.ActionTS     = Func.Common:mMakeTS().        
+            
+            FIND CURRENT mobileLine EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+            FIND CURRENT fixedLine  EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+            ASSIGN 
+                mobileLine.FixedNumber = fixedline.FixedNumber
+                fixedLine.FixedNumber  = ? .
+                
+            FIND Order WHERE 
+                 Order.Brand = fixedline.Brand AND 
+                 Order.MSSeq = fixedline.MsSeq NO-LOCK NO-ERROR.
+            IF NOT AVAILABLE order THEN
+                UNDO, THROW NEW Progress.Lang.AppError 
+                               ( "Order not found for fixedline" , 2 ). 
+            
+            CREATE ActionLog.
+            ASSIGN 
+                ActionLog.Brand        = fixedline.Brand   
+                ActionLog.TableName    = "FixedNumber"  
+                ActionLog.KeyValue     = mobileLine.FixedNumber
+                ActionLog.UserCode     = 'Newton'
+                ActionLog.ActionID     = "OrderId"
+                ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
+                ActionLog.ActionChar   = STRING(order.OrderID)
+                ActionLog.CustNum      = MSRequest.Custnum
+                ActionLog.ActionTS     = Func.Common:mMakeTS().   
+                                
+            RELEASE mobileLine.
+            RELEASE fixedLine.
+            
+            FIND subReq WHERE 
+                 subReq.OrigRequest = iiMsRequestId AND 
+                 subReq.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} 
+                 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+    
+            IF NOT AVAILABLE SubReq THEN
+                UNDO , THROW NEW Progress.Lang.AppError 
+                       ( "STC request not found " , 1 ). 
+            
+            subReq.ReqStatus = {&REQUEST_STATUS_NEW} .
+            subReq.Mandatory = 1 .
+            
+            fReqStatus( {&REQUEST_STATUS_SUB_REQUEST_PENDING}, "") .
+            
+            CATCH err AS Progress.Lang.Error :
+                fReqError("Error occured : " + err:GetMessage(1)).
+            END CATCH.  
+        END.
 END.
 
-PROCEDURE pCreateSTCRequest:
-    DEFINE VARIABLE liRequest AS INTEGER NO-UNDO.
-    DEFINE VARIABLE  lcInfo   AS CHARACTER NO-UNDO.
-    FIND CLIType WHERE CLIType.Clitype = MSRequest.ReqCParam1 NO-LOCK NO-ERROR.
-    IF NOT AVAILABLE CLIType THEN 
-    DO:
-        fReqError("Invalid CliType.").
-        RETURN.
-    END.
-    IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN 
-    DO: 
-        FIND mobileLine WHERE mobileLine.Cli = ENTRY(1, MSRequest.reqCparam3 ,"|") NO-LOCK NO-ERROR.
-    END.
-    ELSE IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
-    DO:           
-        FIND mobileLine WHERE mobileLine.MsSeq = MSRequest.MsSeq NO-LOCK NO-ERROR.
-    END.
-    ELSE 
-    DO:
-        fReqError("Invalid TariffType").
-        RETURN.
-    END.
-    IF NOT AVAILABLE mobileLine THEN 
-    DO:
-        fReqError("Mobile line not found.").
-        RETURN.
-    END.
+PROCEDURE pCreateTermRequest:
     
-    IF mobileLine.FixedNumber > ''  AND  mobileLine.FixedNumber NE ? THEN DO: 
-        IF NUM-ENTRIES(MSRequest.reqCparam3 ,"|") >  10 THEN 
-            liRequest = fCTChangeRequest(mobileLine.MsSeq ,
-                              MSRequest.ReqCParam2,
-                              ENTRY(3, MSRequest.reqCparam3 ,"|"),
-                              ENTRY(4, MSRequest.reqCparam3 ,"|"),
-                              DECIMAL(ENTRY(5, MSRequest.reqCparam3 ,"|")),
-                              INTEGER(ENTRY(6, MSRequest.reqCparam3 ,"|")) ,
-                              INTEGER(ENTRY(7, MSRequest.reqCparam3 ,"|")) ,
-                              "" ,
-                              LOGICAL(ENTRY(8, MSRequest.reqCparam3 ,"|")) ,
-                              LOGICAL(ENTRY(9, MSRequest.reqCparam3 ,"|")) ,
-                              "",
-                              DECIMAL(ENTRY(10, MSRequest.reqCparam3 ,"|")),
-                              {&REQUEST_SOURCE_MERGE_TRANSFER_FEES},
-                              0 , /* order id */
-                              MSRequest.MsRequest,
-                              ENTRY(11, MSRequest.reqCparam3 ,"|"),
-                              OUTPUT lcInfo).
-         IF liRequest  = 0 OR lcInfo > '' THEN 
-            fReqStatus(3,'STCREQ failed ' + lcInfo ).
-         ELSE 
-            fReqStatus(7,'').
-        RETURN.
-    END.  
+  DEFINE VARIABLE ldCurrTS AS DECIMAL NO-UNDO.
+  DEFINE VARIABLE llCreateFee AS LOGICAL NO-UNDO.
+  DEFINE VARIABLE liTermRequest AS INTEGER NO-UNDO.
+  DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
+  DEFINE BUFFER subReq FOR MSRequest.
+  
+  IF CAN-FIND(FIRST subreq WHERE SubReq.OrigRequest = iiMsRequestId 
+                AND subreq.ReqType = {&REQTYPE_CONTRACT_TERMINATION} ) THEN DO:
+      IF fChkSubRequest(iiMsRequestId) THEN DO:
+          FIND ActionLog WHERE 
+               ActionLog.Brand        = MSRequest.Brand        AND    
+               ActionLog.TableName    = "MsRequest"            AND 
+               ActionLog.KeyValue     = STRING(iiMsRequestId)  AND 
+               ActionLog.ActionID     = "FixedFees" NO-LOCK NO-ERROR.
+          IF AVAILABLE ActionLog THEN DO: 
+            FIND FixedFee WHERE 
+                 FixedFee.FFNum = INTEGER(ActionLog.ActionChar) 
+                 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+            IF AVAILABLE FixedFee THEN 
+                FixedFee.Active = YES.
+            RELEASE FixedFee.
+          END.  
+           fReqStatus( {&REQUEST_STATUS_DONE},""). 
+      END.
+      RETURN.
+  END.
     
-    FIND CURRENT mobileLine EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-    ASSIGN 
-        mobileLine.FixedNumber = ENTRY(2, MSRequest.reqCparam3 ,"|") WHEN NUM-ENTRIES(MSRequest.reqCparam3 ,"|") > 1 .
+  FOR EACH DCCLI EXCLUSIVE-LOCK 
+     WHERE DCCLI.MsSeq = fixedline.MsSeq  
+       AND DCCLI.ValidTo >= TODAY:
+         
+      FIND FIRST DayCampaign NO-LOCK 
+           WHERE DayCampaign.Brand = fixedline.brand 
+             AND DayCampaign.DcEvent = DCCLI.DcEvent NO-ERROR.
+      
+      DCCLI.TermDate = ?.
 
+      CREATE ttContract.
+      ASSIGN
+         ttContract.DCEvent   = DCCLI.DCEvent
+         ttContract.CreateFee = DCCLI.CreateFee
+         ttContract.PerContID = (IF AVAIL DayCampaign AND
+                                   DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
+                                THEN DCCLI.PerContractID 
+                                ELSE 0).
+   END.    
+    
+   ldCurrTS = Func.Common:mMakeTS().
+   
+   FOR EACH MServiceLimit EXCLUSIVE-LOCK 
+      WHERE MServiceLimit.MsSeq = fixedline.MsSeq 
+        AND MServiceLimit.EndTS > ldCurrTS, 
+      FIRST ServiceLimit NO-LOCK USE-INDEX SlSeq 
+      WHERE ServiceLimit.SLSeq = MServiceLimit.SLSeq:
+
+      FIND FIRST DayCampaign  
+           WHERE DayCampaign.Brand      = fixedline.Brand 
+             AND DayCampaign.DCEvent    = ServiceLimit.GroupCode  
+             AND DayCampaign.ValidFrom <= TODAY  
+             AND DayCampaign.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+              
+      IF AVAILABLE DayCampaign THEN DO:
+         IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
+            STRING(DayCampaign.DCType) <> {&DCTYPE_CUMULATIVE_RATING}
+         THEN DO:
+            FIND FIRST ttContract WHERE
+                       ttContract.DCEvent = ServiceLimit.GroupCode NO-ERROR.
+            IF NOT AVAILABLE ttContract THEN DO:
+               CREATE ttContract.
+               ASSIGN
+                  ttContract.DCEvent   = ServiceLimit.GroupCode
+                  ttContract.CreateFee = (DayCampaign.TermFeeModel > "").
+               END.
+            END.
+      END.
+      ELSE DO:
+         MServiceLimit.EndTS = ldCurrTS.
+      END.
+   END.
+
+   FOR EACH ttContract:
+
+      FIND FIRST DayCampaign WHERE 
+                 DayCampaign.Brand      = fixedline.Brand    AND 
+                 DayCampaign.DCEvent    = ttContract.DCEvent AND 
+                 DayCampaign.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+              
+      IF NOT AVAIL DayCampaign THEN DO:
+         NEXT.
+      END.
+
+      llCreateFee = FALSE.
+
+      liTermRequest = 
+         fPCActionRequest(fixedLine.MsSeq,  
+                          ttContract.DCEvent,
+                          "term",
+                          IF ttContract.ActTS > 0
+                          THEN ttContract.ActTS
+                          ELSE Func.Common:mSecOffSet(ldCurrTS,60),
+                          llCreateFee,             /* create fees */
+                          {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                          "",
+                          iiMsRequestId,
+                          TRUE,
+                          "",
+                          0,
+                          ttContract.PerContID,
+                          "",
+                          OUTPUT lcError).
+
+      DELETE ttContract.
+   END.
+   
+   IF CAN-FIND(FIRST subreq WHERE 
+                     SubReq.OrigRequest = iiMsRequestId AND 
+                     subreq.ReqType = {&REQTYPE_CONTRACT_TERMINATION} ) THEN DO:
+        FIND MsRequest WHERE 
+             MSRequest.MsRequest = iiMsRequestId NO-LOCK NO-ERROR.
+        fReqStatus( {&REQUEST_STATUS_SUB_REQUEST_PENDING}, "") .
+   END.
+      
 END PROCEDURE.     
