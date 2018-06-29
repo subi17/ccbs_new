@@ -1717,12 +1717,6 @@ FOR EACH OrderGroup NO-LOCK WHERE
 
          fUpdateOrderLogisticsValue(Order.OrderId).
 
-         IF llDoEvent THEN DO:
-            lhOrder = BUFFER Order:HANDLE.
-            RUN StarEventInitialize(lhOrder).
-            RUN StarEventSetOldBuffer(lhOrder).
-         END.
-
          /* If convergent order fixed line is not installed, and even if (Router + Mobile) info 
             is sent to logistics - Order status should not be changed from 77 */
          IF fIsConvergenceTariff(Order.CLIType) THEN
@@ -1731,6 +1725,12 @@ FOR EACH OrderGroup NO-LOCK WHERE
                                   OrderFusion.OrderId      EQ Order.OrderId    AND
                                   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}) THEN
                NEXT.
+         
+         IF llDoEvent THEN DO:
+            lhOrder = BUFFER Order:HANDLE.
+            RUN StarEventInitialize(lhOrder).
+            RUN StarEventSetOldBuffer(lhOrder).
+         END.
 
          fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
          
