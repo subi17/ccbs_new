@@ -7,13 +7,46 @@
     Created     : Mon Jun 11 12:10:04 IST 2018
     Notes       : as part of 2p3pMerge
   ----------------------------------------------------------------------*/
-  
+
+{Syst/eventval.i}
 {Syst/tmsconst.i} 
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Func/fsubstermreq.i}
 {Func/nncoit2.i }
 {Func/msisdn_prefix.i}
+{Func/create_eventlog.i}
+
+DEFINE BUFFER mobileLine FOR MobSub.
+DEFINE BUFFER fixedLine  FOR MobSub.
+DEFINE BUFFER oldMLOwner FOR MSOwner.
+DEFINE BUFFER oldFLOwner FOR MSOwner.
+DEFINE BUFFER subReq     FOR MsRequest.
+DEFINE BUFFER mlFFee     FOR fixedFee.
+DEFINE BUFFER flFFee     FOR fixedFee.
+
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+
+   {Func/lib/eventlog.i}
+
+   DEFINE VARIABLE lhmobileLine AS HANDLE NO-UNDO.
+   lhmobileLine = BUFFER mobileLine:HANDLE.
+   RUN StarEventInitialize(lhmobileLine).
+
+   DEFINE VARIABLE lhfixedLine AS HANDLE NO-UNDO.
+   lhfixedLine = BUFFER fixedLine:HANDLE.
+   RUN StarEventInitialize(lhfixedLine).
+
+   DEFINE VARIABLE lhMLOwner AS HANDLE NO-UNDO.
+   lhMLOwner = BUFFER oldMLOwner:HANDLE.
+   RUN StarEventInitialize(lhMLOwner).
+
+   DEFINE VARIABLE lhFLOwner AS HANDLE NO-UNDO.
+   lhFLOwner = BUFFER oldFLOwner:HANDLE.
+   RUN StarEventInitialize(lhFLOwner).
+END.
 
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
@@ -23,12 +56,6 @@ DEF TEMP-TABLE ttContract NO-UNDO
 
 
 DEFINE INPUT PARAMETER iiMsRequestId AS INTEGER   NO-UNDO.
-
-DEFINE BUFFER mobileLine FOR MobSub.
-DEFINE BUFFER fixedLine  FOR MobSub.
-DEFINE BUFFER subReq     FOR MsRequest.
-DEFINE BUFFER mlFFee     FOR fixedFee.
-DEFINE BUFFER flFFee     FOR fixedFee.
 
 DEFINE VARIABLE liTerminate      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
@@ -131,13 +158,75 @@ DO ON ERROR UNDO , LEAVE :
             
             FIND CURRENT mobileLine EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
             FIND CURRENT fixedLine  EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+            
+            FIND FIRST oldMLOwner EXCLUSIVE-LOCK 
+                 WHERE oldMLOwner.MSSEQ  = Mobsub.MSSeq  
+                   AND oldMLOwner.CLI    = Mobsub.CLI  
+                   AND oldMLOwner.TSEND >= Func.Common:mMakeTS()  NO-ERROR.
+            
+            FIND FIRST oldFLOwner EXCLUSIVE-LOCK 
+                 WHERE oldFLOwner.MSSEQ  = Mobsub.MSSeq  
+                   AND oldFLOwner.CLI    = Mobsub.CLI  
+                   AND oldFLOwner.TSEND >= Func.Common:mMakeTS()  NO-ERROR.
+            
+            IF llDoEvent THEN DO: 
+                RUN StarEventSetOldBuffer(lhMLOwner).
+                RUN StarEventSetOldBuffer(lhFLOwner).
+            END.
+
+            ASSIGN 
+                oldMLOwner.TsEnd       = Func.Common:mMakeTS()
+                oldFLOwner.TsEnd       = Func.Common:mMakeTS().
+
+            IF llDoEvent THEN DO: 
+                RUN StarEventMakeModifyEvent(lhMLOwner).
+                RUN StarEventMakeModifyEvent(lhFLOwner).
+                
+                RUN StarEventSetOldBuffer(lhmobileLine).
+                RUN StarEventSetOldBuffer(lhfixedLine).
+            END.
+
             ASSIGN 
                 mobileLine.FixedNumber = fixedline.FixedNumber
                 fixedLine.FixedNumber  = ? .
+
+            IF llDoEvent THEN DO: 
+                RUN StarEventMakeModifyEvent(lhmobileLine).
+                RUN StarEventMakeModifyEvent(lhfixedLine).
+            END.
+
+            CREATE MSOwner.
+            BUFFER-COPY oldMLOwner TO Msowner
+            ASSIGN
+                MSOwner.TsBegin     = Func.Common:mMakeTS()
+                MSOWner.TSEnd       = 99999999.99999
+                MsOwner.CLIEvent    = "FixedNumber"
+                MSOwner.FixedNumber = mobileLine.FixedNumber .
                 
+            IF llDoEvent THEN fMakeCreateEvent(
+                 (BUFFER MsOwner:HANDLE),
+                 "",
+                 Syst.Var:katun,
+                 "").                
+
+            CREATE MSOwner.
+            BUFFER-COPY oldFLOwner TO Msowner
+            ASSIGN
+                MSOwner.TsBegin     = Func.Common:mMakeTS()
+                MSOWner.TSEnd       = 99999999.99999
+                MsOwner.CLIEvent    = "FixedNumber"
+                MSOwner.FixedNumber = fixedLine.FixedNumber .
+                
+            IF llDoEvent THEN fMakeCreateEvent(
+                 (BUFFER MsOwner:HANDLE),
+                 "",
+                 Syst.Var:katun,
+                 "").                
+            
             FIND Order WHERE 
                  Order.Brand = fixedline.Brand AND 
                  Order.MSSeq = fixedline.MsSeq NO-LOCK NO-ERROR.
+
             IF NOT AVAILABLE order THEN
                 UNDO, THROW NEW Progress.Lang.AppError 
                                ( "Order not found for fixedline" , 2 ). 
@@ -156,6 +245,7 @@ DO ON ERROR UNDO , LEAVE :
                                 
             RELEASE mobileLine.
             RELEASE fixedLine.
+            RELEASE MSOwner.
             
             FIND subReq WHERE 
                  subReq.OrigRequest = iiMsRequestId AND 
