@@ -290,11 +290,7 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
             LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
       FIRST OrderFusion WHERE 
             OrderFusion.Brand EQ Syst.Var:gcBrand AND 
-            OrderFusion.OrderID EQ Order.OrderID NO-LOCK,
-      FIRST CliType WHERE 
-            CliType.Brand EQ Syst.Var:gcBrand AND 
-            CliType.CliType EQ Order.CliType aND
-            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} NO-LOCK:
+            OrderFusion.OrderID EQ Order.OrderID NO-LOCK:
 
       IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
          NEXT.    

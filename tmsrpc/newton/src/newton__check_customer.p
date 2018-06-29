@@ -145,7 +145,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                          Mobsub.Brand   EQ Syst.Var:gcBrand AND 
                          Mobsub.AgrCust EQ Customer.CustNum:
 
-                   IF fIsFixedOnly(Mobsub.Clitype) THEN
+                   IF Mobsub.IMSI EQ "" THEN
                    DO:
                       fSetError ("PRO migration not possible because of fixed only").
                       LEAVE.
@@ -195,7 +195,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                          Mobsub.Brand   EQ Syst.Var:gcBrand AND 
                          Mobsub.AgrCust EQ Customer.CustNum:
 
-                   IF fIsFixedOnly(Mobsub.Clitype) THEN
+                   IF Mobsub.IMSI EQ "" THEN
                    DO:
                       fSetError ("PRO migration not possible because of fixed only").
                       LEAVE.
@@ -243,7 +243,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                llOrderAllowed = FALSE
                lcReason = "PRO migration not possible because of non commercial active convergent subscription"
                lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
-         ELSE IF fIsFixedOnly(Mobsub.Clitype) THEN
+         ELSE IF Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
              ASSIGN
                  llOrderAllowed = FALSE
                  lcReason = "PRO migration not possible because of fixed only"
@@ -251,8 +251,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
          ELSE IF NOT llNonProToProMigrationOngoing THEN
          DO:
              /* There exists only 1 non-pro mobile subscription, so this is for blocking migrating of non-pro mobile line to pro mobile line */
-             FIND FIRST CliType WHERE CliType.Brand = Syst.Var:gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
-             IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+             IF NOT fIsConvergenceTariff(pcCliType) THEN
                  ASSIGN
                      llOrderAllowed = FALSE
                      lcReason = "Mobile line for non-pro customer from PRO channel"
@@ -443,8 +442,7 @@ ELSE DO:
          /* Assume, there is no ongoing order for customer selected from PRO channels */
          IF NOT llPROOngoingOrder AND NOT llCustCatPro THEN 
          DO:
-             FIND FIRST CliType WHERE CliType.Brand = Syst.Var:gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
-             IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+             IF NOT fIsConvergenceTariff(pcCliType) THEN
              DO:
                  llOrderAllowed = FALSE.
                  lcReason = "Mobile line for non-pro customer from PRO channel".
