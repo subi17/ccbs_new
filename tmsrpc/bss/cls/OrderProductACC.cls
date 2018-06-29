@@ -231,7 +231,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          THEN ASSIGN
                  llPrePaid = YES
                  llCompany = NO.
-         WHEN "existing-customer"
+         WHEN "existing-customer" OR WHEN "existing-customer-update"
          THEN RETURN.
          OTHERWISE UNDO, THROW NEW ParamError
                      (SUBSTITUTE("invalid-type|&1",icSubType)).
