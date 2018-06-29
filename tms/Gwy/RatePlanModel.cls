@@ -6,7 +6,7 @@ USING Gwy.ModelInterface.
 
 CLASS Gwy.RatePlanModel IMPLEMENTS Gwy.ModelInterface:
 
-   DEF VAR lJson           AS LONGCHAR          NO-UNDO.
+   DEF VAR lcJson          AS LONGCHAR          NO-UNDO.
    DEF VAR lcModelid       AS CHAR              NO-UNDO.
    DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
    DEF VAR gcBrand         AS CHAR              NO-UNDO.

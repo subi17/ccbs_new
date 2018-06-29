@@ -3,15 +3,14 @@ USING Progress.Lang.*.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-USING Gwy.ModelInterface.
+{Syst/tmsconst.i}
 
-&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
-&GLOBAL-DEFINE CONFIG_ID_MAX 30
+USING Gwy.ModelInterface.
 
 CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface: 
     
-    DEF VAR lJson           AS LONGCHAR          NO-UNDO.
-    DEF VAR lcBrand         AS CHAR              NO-UNDO.
+    DEF VAR lcJson          AS LONGCHAR          NO-UNDO.
+    DEF VAR lcBrand         AS CHAR              NO-UNDO INIT "1".
     DEF VAR lcModelid       AS CHAR              NO-UNDO.
     DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
     DEF VAR lcError         AS CHAR              NO-UNDO. 
@@ -23,7 +22,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
     DEF TEMP-TABLE ttSLTemplate NO-UNDO SERIALIZE-NAME "SLTemplate"
         FIELD external_id          AS CHAR
         FIELD usage_type           AS CHAR
-        FIELD traffic_type         AS CHAR
+        FIELD destination_type     AS CHAR
         FIELD inside_call_case     AS CHAR
         FIELD unlimited_usage      AS LOG 
         FIELD usage_amount         AS INT
@@ -34,13 +33,12 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         FIELD last_month_limit     AS CHAR 
         FIELD bdestination_limit   AS INT.
         
-    DEF TEMP-TABLE ttoutside_call_case NO-UNDO SERIALIZE-NAME "outside_call_case"
-        FIELD parent_id      AS RECID 
-        FIELD call_case      AS CHAR
-        FIELD call_case_name AS CHAR.
+    DEF TEMP-TABLE ttoriginal_call_case NO-UNDO SERIALIZE-NAME "original_call_case"
+        FIELD parent_id AS RECID 
+        FIELD billing_call_case AS CHAR.
    
-    DEF DATASET SLTemplateDataset FOR ttSLTemplate,ttoutside_call_case
-        PARENT-ID-RELATION idparent FOR ttSLTemplate,ttoutside_call_case
+    DEF DATASET SLTemplateDataset FOR ttSLTemplate,ttoriginal_call_case
+        PARENT-ID-RELATION idparent FOR ttSLTemplate,ttoriginal_call_case
         PARENT-ID-FIELD parent_id.
 
     CONSTRUCTOR PUBLIC RatingBucketsModel ( iJson          AS LONGCHAR,
@@ -50,19 +48,18 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
                                             iReplyTo       AS CHAR):
                                    
         ASSIGN
-            lJson           = iJson
+            lcJson          = iJson
             lcModelId       = iModelid
             lcCorrelationId = iCorrelationID
             loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
-            loEventLogMaker = NEW Gwy.EventLogMaker(iSource)
-            loCommon        = NEW Func.Common().
+            loEventLogMaker = NEW Gwy.EventLogMaker(iSource).
    
     END CONSTRUCTOR.
 
     METHOD PUBLIC LOG create():
  
-        lJson = '~{"SLTemplateDataset":~{"SLTemplate":' + lJson + '~}~}'.
-        IF loRequestMaker:parser_error(DATASET SLTemplateDataset BIND, lJson) THEN
+        lcJson = '~{"SLTemplateDataset":~{"SLTemplate":~[' + lcJson + '~]~}~}'.
+        IF loRequestMaker:parser_error(DATASET SLTemplateDataset BIND, lcJson) THEN
             RETURN FALSE.
        
         FIND ttSLTemplate NO-ERROR.
@@ -77,7 +74,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
                 "Max length for code is {&CONFIG_ID_MAX} characters").
 
         IF CAN-FIND(FIRST SLTemplate WHERE
-            SLTemplate.SLCode = ttSLTemplate.external_id) THEN
+                          SLTemplate.SLCode = ttSLTemplate.external_id) THEN
             RETURN loRequestMaker:logError("SLTemplate already exists").
              
         lcError = validate_sltemplate(TRUE).
@@ -97,10 +94,10 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
             SLTemplate.LastMonthLimit    = ttSLTemplate.last_month_limit
             SLTemplateDataset.BDestLimit = ttSLTemplate.bdestination_limit.
             
-        FOR EACH ttoutside_call_case WHERE 
-                 ttoutside_call_case.parent_id = RECID(ttSLTemplate):
+        FOR EACH ttoriginal_call_case WHERE 
+                 ttoriginal_call_case.parent_id = RECID(ttSLTemplate):
             ASSIGN 
-                SLTemplate.bcc_list = SLTemplate.bcc_list + "," +  ttoutside_call_case.call_case.
+                SLTemplate.bcc_list = SLTemplate.bcc_list + "," +  ttoriginal_call_case.billing_call_case.
         END.   
         
         SLTemplate.bcc_list  = TRIM(SLTemplate.bcc_list , ",") .  
@@ -130,8 +127,8 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         IF lcModelId = ? THEN 
             RETURN loRequestMaker:logError('SLTemplate Code not given').
 
-        lJson = '~{"SLTemplateDataset":~{"SLTemplate":' + lJson + '~}~}'.
-        IF loRequestMaker:parser_error(DATASET SLTemplateDataset BIND, lJson) THEN
+        lcJson = '~{"SLTemplateDataset":~{"SLTemplate":' + lcJson + '~}~}'.
+        IF loRequestMaker:parser_error(DATASET SLTemplateDataset BIND, lcJson) THEN
             RETURN FALSE.
    
         IF lcModelId = "" THEN 
@@ -183,10 +180,10 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
             SLTemplateDataset.BDestLimit = ttSLTemplate.bdestination_limit
                                                WHEN ttSLTemplate.bdestination_limit > 0.                             
         
-        FOR EACH ttoutside_call_case WHERE 
-                 ttoutside_call_case.parent_id = RECID(ttSLTemplate):
+        FOR EACH ttoriginal_call_case WHERE 
+                 ttoriginal_call_case.parent_id = RECID(ttSLTemplate):
             ASSIGN 
-                SLTemplate.bcc_list = SLTemplate.bcc_list + "," +  ttoutside_call_case.call_case.
+                SLTemplate.bcc_list = SLTemplate.bcc_list + "," +  ttoriginal_call_case.billing_call_case.
         END.   
         
         SLTemplate.bcc_list  = TRIM(SLTemplate.bcc_list , ",") .   
@@ -215,7 +212,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         IF(ilCreate OR ttSLTemplate.usage_type > "") AND
             LOOKUP(ttSLTemplate.usage_type,"voice,data,sms") = 0 THEN
             RETURN "Invalid Usage TYPE".
-        ELSE liElemType = loCommon:mTMSCodeValue("SLTemplate",
+        ELSE liElemType = Func.Common:mTMSCodeValue("SLTemplate",
                                                  "UsageType",
                                                  ttSLTemplate.usage_type).
    

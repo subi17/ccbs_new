@@ -7,9 +7,10 @@ USING Gwy.ModelInterface.
 CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
 
    DEF VAR lcJson          AS LONGCHAR          NO-UNDO.
-   DEF VAR lcModelid       AS CHAR              NO-UNDO.
-   DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
+   DEF VAR lcModelId       AS CHAR              NO-UNDO.
+   DEF VAR lcSource        AS CHAR              NO-UNDO.
    DEF VAR gcBrand         AS CHAR              NO-UNDO INIT "1".
+   DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
    DEF VAR lcError         AS CHAR              NO-UNDO. 
    DEF VAR liWait          AS INT               NO-UNDO.
    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
@@ -23,7 +24,8 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
       FIELD display_order      AS INT
       FIELD billing_item_group AS CHAR
       FIELD tax_class          AS CHAR 
-      FIELD debt_type          AS CHAR.  
+      FIELD debt_type          AS CHAR
+      FIELD profit_type        AS CHAR.  
 
    {Gwy/RepText_definition.i}
   
@@ -38,7 +40,8 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
                                     iReplyTo       AS CHAR):
       ASSIGN
          lcJson          = iJson
-         lcModelid       = iModelid
+         lcModelid       = iModelId
+         lcSource        = iSource
          lcCorrelationID = iCorrelationID
          loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
          loEventLogMaker = NEW Gwy.EventLogMaker(iSource)
@@ -88,7 +91,8 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
          BillItem.InvSect  = ttBillItem.invoice_section
          BillItem.BIGroup  = ttBillItem.billing_item_group
          BillItem.TaxClass = ttBillItem.tax_class
-         BillItem.DebtType = ttBillItem.debt_type.
+         BillItem.DebtType = ttBillItem.debt_type
+         BillItem.ProfitType = ttBillItem.profit_type.
 
       loEventLogMaker:make_eventlog("create",BUFFER BillItem:HANDLE).
 
@@ -175,6 +179,8 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
          BillItem.TaxClass = ttBillItem.tax_class.
       IF ttBillItem.debt_type > "" THEN    
          BillItem.DebtType = ttBillItem.debt_type. 
+      IF ttBillItem.Profit_type > "" THEN    
+         BillItem.ProfitType = ttBillItem.profit_type.
    
       loEventLogMaker:make_eventlog("modify",BUFFER BillItem:HANDLE).
 

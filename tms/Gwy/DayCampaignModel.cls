@@ -40,6 +40,7 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
       FIELD penalty_fee_calc_method    AS CHAR 
       FIELD dc_validfrom               AS DATE
       FIELD dc_validto                 AS DATE
+      FIELD dc_pay_type                AS INT
       FIELD dc_category                AS INT 
       FIELD dc_paytype                 AS INT
       FIELD dc_limitunit               AS INT  INIT ?
@@ -147,14 +148,14 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
       IF NOT AVAILABLE ttDayCampaign THEN
          RETURN loRequestMaker:logError("Empty package set").
     
-      lcError = validate_daycampaign(lModelID,
+      lcError = validate_daycampaign(lcModelID,
                                      FALSE).
       IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
     
       DO WHILE TRUE:
          FIND FIRST DayCampaign EXCLUSIVE-LOCK WHERE 
                     DayCampaign.Brand = gcBrand AND
-                    DayCampaign.DCEvent = lModelID  
+                    DayCampaign.DCEvent = lcModelID  
                     NO-ERROR NO-WAIT.
          IF LOCKED(DayCampaign) THEN DO:
             liWait = liWait + 1.
@@ -194,14 +195,14 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
          the succesful one */
       IF lcCorrelationID > "" then   
       loRequestMaker:create_response("DayCampaign",
-                                     lModelId,
+                                     lcModelId,
                                      "OK",
                                      ""). 
       &IF {&MQ_BASED} 
       &THEN    
       loRequestMaker:create_log(
          SUBSTITUTE("DayCampaign update: Id=&1 Ext.Request=&2", 
-                    lModelId,
+                    lcModelId,
                     lcCorrelationID), 
                     "DEBUG").
       &ENDIF
@@ -223,11 +224,12 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
    METHOD PUBLIC CHAR validate_daycampaign(icDayCampaign AS CHAR,
                                            ilCreate AS LOG):
         
-      DEF VAR liValue      AS INT  NO-UNDO. 
-      DEF VAR lcCalcMethod AS CHAR NO-UNDO.
-      DEF VAR lcDurUnit    AS CHAR NO-UNDO. 
-      DEF VAR lcPayType    AS CHAR NO-UNDO.
-      DEF VAR lcEffective  AS CHAR NO-UNDO.
+      DEF VAR liValue        AS INT  NO-UNDO. 
+      DEF VAR lcCalcMethod   AS CHAR NO-UNDO.
+      DEF VAR lcDurUnit      AS CHAR NO-UNDO. 
+      DEF VAR lcPayType      AS CHAR NO-UNDO.
+      DEF VAR lcEffective    AS CHAR NO-UNDO.
+      DEF VAR lcFeeCalMethod AS CHAR NO-UNDO.
     
       IF LENGTH(icDayCampaign) > {&CONFIG_ID_MAX} THEN 
          RETURN "Max length for ID is {&CONFIG_ID_MAX} characters".
@@ -254,7 +256,7 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
       IF ilCreate AND (ttDayCampaign.dc_validfrom = ? OR ttDayCampaign.dc_validto = ?) THEN 
          RETURN "Invalid package period". 
     
-      IF (liCreate OR ttDayCampaign.category > "") THEN DO:
+      IF (ilCreate OR ttDayCampaign.category > "") THEN DO:
          ttDayCampaign.dc_category = LOOKUP(ttDayCampaign.category,{&DC_BUNDLETARGET_MOBILE}).  
          IF ttDayCampaign.dc_category = 0 THEN RETURN "Invalid category". 
       END.                                                 
@@ -280,11 +282,11 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
       END.
     /*
       IF (ilCreate OR ttDayCampaign.target > "") THEN DO:
-         ttDayCampaign.dc_target = loRequestMaker:get_tmscodes_bssapi_internalid(
+         ttDayCampaign.target = loRequestMaker:get_tmscodes_bssapi_internalid(
                                       "DayCampaign",
                                       "DCTarget",
                                       ttDayCampaign.target).
-         IF ttDayCampaign.dc_target = "" THEN RETURN "Invalid package target".
+         IF ttDayCampaign.target = "" THEN RETURN "Invalid package target".
       END.*/
        
       IF ttDayCampaign.limit_unit > "" THEN DO:
@@ -396,10 +398,10 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
                                          WHEN ttDayCampaign.dc_validfrom NE ?
          DayCampaign.ValidTo        = ttDayCampaign.dc_validto
                                          WHEN ttDayCampaign.dc_validto NE ?
-         DayCampaign.DCTarget       = ttDayCampaign.dc_target 
-                                         WHEN ttDayCampaign.dc_target NE ?
-         DayCampaign.DCType         = ttDayCampaign.dc_packagetype 
-                                         WHEN ttDayCampaign.dc_packagetype NE ?
+         DayCampaign.DCTarget       = ttDayCampaign.target 
+                                         WHEN ttDayCampaign.target NE ?
+         DayCampaign.DCType         = ttDayCampaign.package_type 
+                                         WHEN ttDayCampaign.package_type NE ?
          DayCampaign.BundleTarget   = ttDayCampaign.dc_category
                                          WHEN ttDayCampaign.dc_calcmethod NE ?
          DayCampaign.PayType        = ttDayCampaign.dc_paytype
