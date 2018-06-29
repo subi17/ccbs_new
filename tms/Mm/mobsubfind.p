@@ -360,7 +360,7 @@ BROWSE:
      ELSE IF (LOOKUP(Syst.Var:nap,"2,f2") > 0 OR LOOKUP(Syst.Var:nap, "enter,return") > 0)
           AND lcRight = "RW" THEN DO:  
         RUN local-find-this (FALSE).
-        RUN CreateReadAccess("Customer", Syst.Var:katun, Customer.CustNum, lcProgram ).
+        RUN CreateReadAccess("Customer", Syst.Var:katun, Customer.CustNum, lcProgram, "CustNum" ).
         IF icCriteria      = "ID" OR 
            icCriteria      = "AGRNAME" THEN
            RUN Mm/mobsub.p(Customer.CustNum, "AGREEMENT").

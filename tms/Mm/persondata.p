@@ -104,7 +104,7 @@ DO WHILE TRUE:
    IF FRAME-INDEX EQ 1 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liAgrCust) THEN DO:
-         RUN CreateReadAccess("Customer", Syst.Var:katun, liAgrCust, lcProgram ).
+         RUN CreateReadAccess("Customer", Syst.Var:katun, liAgrCust, lcProgram, "CustNum" ).
          RUN Mc/nnasse.p(liAgrCust,"").
       END.
       ELSE 
@@ -122,7 +122,7 @@ DO WHILE TRUE:
       ELSE DO:
          IF CAN-FIND(FIRST Customer WHERE
                            Customer.CustNum = liInvCust) THEN DO:
-            RUN CreateReadAccess("Customer", Syst.Var:katun, liInvCust, lcProgram ).
+            RUN CreateReadAccess("Customer", Syst.Var:katun, liInvCust, lcProgram, "CustNum" ).
             RUN Mc/nnasse.p(liInvCust,"").
          END.
          ELSE 
@@ -135,7 +135,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 3 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liCustNum) THEN DO:
-         RUN CreateReadAccess("Customer", Syst.Var:katun, liCustNum, lcProgram ).
+         RUN CreateReadAccess("Customer", Syst.Var:katun, liCustNum, lcProgram, "CustNum" ).
          RUN Mc/nnasse.p(liCustNum,"").
       END.
       ELSE 

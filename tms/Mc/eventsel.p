@@ -457,7 +457,7 @@ REPEAT WITH FRAME sel:
                         EventLog.Key BEGINS replace(lcKey," / ",chr(255))
              NO-ERROR.
              IF LOOKUP(lcTable, {&ACCESSLOG_TABLES} ) > 0  THEN
-                RUN CreateReadAccess(lcTable, Syst.Var:katun, EventLog.Key, lcProgram ).
+                RUN CreateReadAccess(lcTable, Syst.Var:katun, EventLog.Key, lcProgram, "Key" ).
           END.  
           ELSE 
           FIND FIRST Eventlog NO-LOCK WHERE 

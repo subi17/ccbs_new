@@ -1649,7 +1649,7 @@ repeat WITH FRAME sel:
                ufkey     = TRUE.
 
         IF llAccess THEN
-           RUN CreateReadAccess("Customer", Syst.Var:katun, Customer.CustNum, lcProgram ).
+           RUN CreateReadAccess("Customer", Syst.Var:katun, Customer.CustNum, lcProgram, "CustNum" ).
 
         Action: 
         repeat WITH FRAME lis:

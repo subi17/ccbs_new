@@ -1039,10 +1039,7 @@ BROWSE:
               NEXT Browse.
            END.
            
-           IF OrderCustomer.CustNum = 0 THEN
-              RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, SUBSTITUTE("ROWID;&1", ROWID(OrderCustomer)), lcProgram ).
-           ELSE
-              RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.CustNum, lcProgram ).
+           RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
            
            RUN Mc/orderbr.p(lcCustomerId,lcCustIdType,icStatus,OUTPUT oOrderID).
                  
@@ -1064,10 +1061,7 @@ BROWSE:
                          ordercustomer.brand      = lcBrand
               NO-LOCK NO-ERROR.
               IF AVAILABLE OrderCustomer THEN DO:
-	              IF OrderCustomer.CustNum = 0 THEN
-                    RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, SUBSTITUTE("ROWID;&1", ROWID(OrderCustomer)), lcProgram ).
-                 ELSE
-                    RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.CustNum, lcProgram ).
+                 RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
                  
                  RUN Mc/orderbr.p(OrderCustomer.CustId,
                              OrderCustomer.CustIdType,icStatus,
@@ -2073,10 +2067,7 @@ PROCEDURE local-update-customer:
    END.
 
    IF llAccess THEN
-      IF OrderCustomer.CustNum = 0 THEN
-         RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, SUBSTITUTE("ROWID;&1", ROWID(OrderCustomer)), lcProgram ). 
-      ELSE
-         RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.CustNum, lcProgram ).
+      RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderCustomer).
 

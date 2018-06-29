@@ -11,8 +11,9 @@ class AddTableAccessLog(Migration):
       t.column('Key', 'character', format="x(20)", initial="", label="Key", column_label="Key", help="Key", position=5, order=40)
       t.column('TableName', 'character', format="x(20)", initial="", label="TableName", column_label="Table", help="Table", position=6, order=50)
       t.column('Info', 'character', format="x(20)", initial="", label="Info", column_label="Info", help="Info", position=7, order=60)
-      t.index('EventTS', [['EventTS']], area="Sta_Index_64", primary=True)
-      t.index('TableName', [['TableName'], ['EventTS']], area="Sta_Index_64")
+      t.column('KeyColumn', 'character', format="x(20)", initial="", label="KeyColumn", column_label="KeyColumn", help="KeyColumn", position=8, order=70)
+      t.index('EventTS', [['EventTS' , 'DESC']], area="Sta_Index_64", primary=True)
+      t.index('TableName', [['TableName'], ['EventTS' , 'DESC']], area="Sta_Index_64")
       t.index('Key', [['Key'], ['TableName']], area="Sta_Index_64")
 
    def down(self):
