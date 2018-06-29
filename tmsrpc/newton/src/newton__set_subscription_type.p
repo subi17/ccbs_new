@@ -76,6 +76,8 @@ DEFINE VARIABLE pcMergeWith AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReqParam3 AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFixedNum  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liMergeReq  AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liSTCMsSeq  AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liMgeMsSeq  AS INTEGER   NO-UNDO.
 DEFINE BUFFER bMsrequest FOR MSRequest.
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -203,18 +205,27 @@ END.
 ELSE
 IF plExcludeTermPenalty THEN
    iiRequestFlags = 2.
-      
+
+liSTCMsSeq = MobSub.MsSeq.  
 IF pcMergeWith > '' AND pcMergeWith NE ? THEN DO:
     IF MobSub.Fixednumber NE ? AND 
-       MobSub.Fixednumber > ''  THEN 
-       lcFixedNum = MobSub.fixednumber.
+       MobSub.Fixednumber > ''  THEN DO: 
+       ASSIGN 
+           lcFixedNum = MobSub.fixednumber
+           liMgeMsSeq = MobSub.MsSeq .
+       FIND bMobSub WHERE bMobSub.cli = pcMergeWith NO-LOCK NO-ERROR.
+        IF AVAILABLE bMobSub THEN 
+            liSTCMsSeq  = bMobSub.MsSeq. 
+    END.
     ELSE DO:
         FIND bMobSub WHERE bMobSub.cli = pcMergeWith NO-LOCK NO-ERROR.
         IF AVAILABLE bMobSub THEN 
-            lcFixedNum = bMobSub.fixednumber.      
+            ASSIGN
+                liMgeMsSeq = bMobSub.MsSeq 
+                lcFixedNum = bMobSub.fixednumber.      
     END.   
     lcReqParam3 = pcMergeWith + "|" + lcFixedNum .
-    liMergeReq  = fCTMergeChangeRequest( MobSub.MsSeq ,
+    liMergeReq  = fCTMergeChangeRequest( liMgeMsSeq   ,
                                          pcCliType    , 
                                          lcReqParam3  , 
                                          pdActivation ,
@@ -228,7 +239,7 @@ IF pcMergeWith > '' AND pcMergeWith NE ? THEN DO:
         RETURN appl_err("Merge Request creation failed: " +  lcInfo).
 END.
  
-liRequest = fCTChangeRequest(MobSub.msseq,
+liRequest = fCTChangeRequest(liSTCMsSeq ,
                   pcCliType,
                   pcDataBundleId,
                   pcBankAcc,      /* validation is already done in newton */
