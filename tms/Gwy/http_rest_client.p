@@ -111,6 +111,32 @@ case icAction:
         ELSE 
             undo, throw new Progress.Lang.AppError("API Call Status Code '" + STRING(oResp:StatusCode) + "'", 1).
     end.
+    when 'patch' then 
+    do:
+        if lcUserId <> "" then
+           oReq = RequestBuilder:Patch(oUri,ioRequestJson)
+                    :UsingCredentials(oCreds)
+                    :ContentType('application/json;charset=UTF-8')
+                    :AcceptJson()
+                    :Request.
+        else 
+           oReq = RequestBuilder:Patch(oUri,ioRequestJson)
+                     :ContentType('application/json;charset=UTF-8')
+                     :AcceptJson()
+                     :Request.
+                     
+        oResp = oClient:Execute(oReq).
+        
+        case oResp:StatusCode:
+            when 200 then 
+            do:
+                if type-of(oResp:Entity, JsonObject) then
+                    assign ioJson = cast(oResp:Entity, JsonObject).
+            end.
+            otherwise
+                undo, throw new Progress.Lang.AppError(oResp:StatusReason, 1).
+        end case.
+    end.    
     otherwise
         undo, throw new Progress.Lang.AppError('Action not supported', 1).
 end case.

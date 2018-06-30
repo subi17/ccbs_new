@@ -99,7 +99,7 @@ END.
 FUNCTION _fCreateFusionMessage RETURNS LOGICAL
  (iiOrderID AS INT,
   icMessageType AS CHAR):
-
+      
    DEF BUFFER Order FOR Order.
    DEF BUFFER CLIType FOR CLIType.
 
@@ -141,6 +141,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
       FusionMessage.OrderType = lcPrefix + " " + lcOrderType
       FusionMessage.UpdateTS = FusionMessage.CreatedTS.
+      
 END.
 
 FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL
@@ -262,6 +263,7 @@ FUNCTION fCreateFusionAddressChangeMessage RETURNS LOGICAL
     OUTPUT ocError AS CHAR):
 
    DEF BUFFER OrderFusion FOR OrderFusion.
+   DEF BUFFER bFusionMessage FOR FusionMessage.
 
    FIND OrderFusion NO-LOCK WHERE
         OrderFusion.Brand = Syst.Var:gcBrand AND
@@ -270,30 +272,24 @@ FUNCTION fCreateFusionAddressChangeMessage RETURNS LOGICAL
       ocError = "ERROR:Order data not found".
       RETURN FALSE.
    END.
-    
-   IF OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_INITIALIZED} THEN DO:
-      ocError = SUBST("ERROR: Incorrect fusion order status: &1",
-                       OrderFusion.FusionStatus).
-      RETURN FALSE.
-   END.
-
+   /*
    IF OrderFusion.FixedNumber = "" OR
       OrderFusion.FixedNumber EQ ? THEN DO:
       ocError = "ERROR:Fixed number is missing".
       RETURN FALSE.
-   END.
-
-   IF CAN-FIND(FIRST FusionMessage NO-LOCK WHERE
-         FusionMessage.OrderID = OrderFusion.OrderID AND
-         FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
-         FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN DO:
+   END. 
+   */
+   IF CAN-FIND(FIRST bFusionMessage NO-LOCK WHERE
+         bFusionMessage.OrderID = OrderFusion.OrderID AND
+         bFusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
+         bFusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN DO:
      ocError = "ERROR:Ongoing message".
      RETURN FALSE.
-   END.
-
+   END. 
+   
    _fCreateFusionMessage(OrderFusion.OrderId,
                          {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}).
-
+   RUN Gwy/masmovil_address_change.p(FusionMessage.MessageSeq).
    RETURN TRUE.
 END.
 

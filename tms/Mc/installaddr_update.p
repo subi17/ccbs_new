@@ -20,4 +20,3 @@ IF lcError NE "" THEN
                           0,
                           "Masmovil message creation failed",
                           lcError).
-

@@ -10,7 +10,10 @@ USING Progress.Json.ObjectModel.*.
 
 &GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
 
-DEF INPUT PARAM piMessageSeq     AS INT        NO-UNDO.
+DEF INPUT PARAM piMessageSeq AS INT NO-UNDO.
+
+DEF VAR lcError AS CHAR NO-UNDO. 
+DEF VAR ldaOrigCancelDate AS DATE NO-UNDO. 
 
 /* Parsing address data to JSON */
 DEF VAR lobjOuterObject          AS JsonObject NO-UNDO.
@@ -24,39 +27,43 @@ DEF VAR lcInstallationObject     AS JsonObject NO-UNDO.
 DEF VAR lcAddressObject          AS JsonObject NO-UNDO.
 DEF VAR loJson                   AS JsonObject NO-UNDO.
    
-DEF VAR lcHost                   AS CHAR       NO-UNDO.
-DEF VAR liPort                   AS INT        NO-UNDO.
-DEF VAR lcUserId                 AS CHAR       NO-UNDO.
-DEF VAR lcpassword               AS CHAR       NO-UNDO.
-DEF VAR lcUriPath                AS CHAR       NO-UNDO.
-DEF VAR lcUriQuery               AS CHAR       NO-UNDO.
-DEF VAR lcUriQueryVal            AS CHAR       NO-UNDO.
-DEF VAR liLogRequest             AS INT        NO-UNDO.
-DEF VAR llLogRequest             AS LOGICAL    NO-UNDO INIT TRUE.
+DEF VAR lcHost        AS CHAR    NO-UNDO.
+DEF VAR liPort        AS INT     NO-UNDO.
+DEF VAR lcUserId      AS CHAR    NO-UNDO.
+DEF VAR lcpassword    AS CHAR    NO-UNDO.
+DEF VAR lcUriPath     AS CHAR    NO-UNDO.
+DEF VAR lcUriQuery    AS CHAR    NO-UNDO.
+DEF VAR lcUriQueryVal AS CHAR    NO-UNDO.
+DEF VAR liLogRequest  AS INT     NO-UNDO.
+DEF VAR llLogRequest  AS LOGICAL NO-UNDO INIT TRUE.
+ DEFINE VARIABLE lhOrdCustomer AS HANDLE NO-UNDO.
 
-DEF VAR lcSalesManId             AS CHAR       NO-UNDO.
-DEF VAR liOrderId                AS INT        NO-UNDO.
-DEF VAR lcAmendamentType         AS CHAR       NO-UNDO.
-DEF VAR lcAmendamentValue        AS CHAR       NO-UNDO.
-DEF VAR lcContractId             AS CHAR       NO-UNDO.
-DEF VAR lcReason                 AS CHAR       NO-UNDO.
-DEF VAR lcCurrentDetails         AS CHAR       NO-UNDO.
+DEF VAR lcSalesManId      AS CHAR NO-UNDO.
+DEF VAR liOrderId         AS INT NO-UNDO.
+DEF VAR lcAmendamentType  AS CHAR NO-UNDO.
+DEF VAR lcAmendamentValue AS CHAR NO-UNDO.
+DEF VAR lcContractId      AS CHAR NO-UNDO.
+DEF VAR lcReason          AS CHAR NO-UNDO.
+DEF VAR lcCurrentDetails  AS CHAR NO-UNDO.
 
-DEF VAR lcResultCode             AS CHAR       NO-UNDO.
-DEF VAR lcResultDesc             AS CHAR       NO-UNDO. 
-DEF VAR lcJsonResult             AS CHAR       NO-UNDO.
+DEF VAR lcResultCode  AS CHAR    NO-UNDO.
+DEF VAR lcResultDesc  AS CHAR    NO-UNDO. 
+DEF VAR lcJsonResult  AS CHAR    NO-UNDO.
 
 /* Update Installation Address */
-DEF VAR llUpdateAL               AS LOGICAL    NO-UNDO.
-DEF VAR lcTableName              AS CHAR       NO-UNDO.
-DEF VAR lcActionID               AS CHAR       NO-UNDO.
-DEF VAR ldCurrentTimeTS          AS DEC        NO-UNDO.
-DEF VAR lcMemo                   AS CHAR       NO-UNDO.
+DEF VAR llUpdateAL      AS LOGICAL NO-UNDO.
+DEF VAR lcTableName     AS CHAR NO-UNDO.
+DEF VAR lcActionID      AS CHAR NO-UNDO.
+DEF VAR ldCurrentTimeTS AS DEC NO-UNDO.
+DEF VAR lcMemo          AS CHAR NO-UNDO.
 
-DEF VAR liWait                   AS INT        NO-UNDO.
-DEF VAR lhOrdCustomer            AS HANDLE     NO-UNDO.
-DEF VAR lcError                  AS CHAR       NO-UNDO. 
-DEF VAR ldaOrigCancelDate        AS DATE       NO-UNDO.
+DEF VAR liWait AS INT NO-UNDO.
+
+DEF BUFFER bMSRequest FOR MSRequest.
+
+output to "/home/srvuddan/a2.txt" .
+export "entered into masmovil_address_change".
+output close.
 
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-WAIT NO-ERROR.
@@ -73,36 +80,48 @@ FIND OrderFusion EXCLUSIVE-LOCK WHERE
      OrderFusion.Brand = Syst.Var:gcBrand AND
      OrderFusion.OrderID = FusionMessage.OrderID
      NO-WAIT NO-ERROR.
-/*     
-IF NOT OrderFusion.FixedNumber > "" THEN
+     
+/*IF NOT OrderFusion.FixedNumber > "" THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
-                             "FixedNumber not assigned").
-*/
-FIND FIRST MSRequest WHERE 
-           MSRequest.MsSeq = FusionMessage.Msseq AND
-           MSRequest.ReqType = {&REQTYPE_INSTALL_ADDRESS_UPDATE} 
+                             "FixedNumber not assigned").*/
+                         
+                             
+output to "/home/srvuddan/a2.txt" append.
+export "after validations".
+output close.
+
+FIND FIRST bMSRequest WHERE 
+           bMSRequest.MsSeq = FusionMessage.Msseq AND
+           bMSRequest.ReqType = {&REQTYPE_INSTALL_ADDRESS_UPDATE} 
            EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-IF AVAIL MSRequest THEN DO: 
+IF AVAIL bMsRequest THEN DO: 
    ASSIGN 
-      lcSalesManId = MSRequest.ReqCParam1
-      liOrderId = MSRequest.ReqIParam1 
-      lcAmendamentType = MSRequest.ReqCParam2 
-      lcAmendamentValue = MSRequest.ReqCParam3 
-      lcCurrentDetails = MSRequest.ReqCParam4 
-      lcContractId = MSRequest.ReqCParam5 
-      lcReason = MSRequest.ReqCParam6.
+      lcSalesManId = bMSRequest.ReqCParam1
+      liOrderId = bMSRequest.ReqIParam1 
+      lcAmendamentType = bMSRequest.ReqCParam2 
+      lcAmendamentValue = bMSRequest.ReqCParam3 
+      lcCurrentDetails = bMSRequest.ReqCParam4 
+      lcContractId = bMSRequest.ReqCParam5 
+      lcReason = bMSRequest.ReqCParam6.
 END.  
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+
    {Func/lib/eventlog.i}
+
+  
    lhOrdCustomer = BUFFER OrderCustomer:HANDLE.
    RUN StarEventInitialize(lhOrdCustomer).
 END.    
 
 Func.Common:mTS2Date(FusionMessage.CreatedTS, OUTPUT ldaOrigCancelDate).
    
+output to "/home/srvuddan/a2.txt" append.
+export "before parsing json".
+output close.
 /* Parsing address data to JSON */
+
 ASSIGN
    lcHost        = fCParam("Masmovil", "Host")   
    liPort        = fIParam("Masmovil", "Port")     
@@ -179,6 +198,14 @@ IF VALID-OBJECT(loJson) THEN
         lcResultCode = loJson:GetCharacter("codigo")
         lcResultDesc = loJson:GetCharacter("_") NO-ERROR.*/
         
+output to "/home/srvuddan/a2.txt" append.
+export lcSalesManId liOrderId lcContractId lcCurrentDetails lcAmendamentType lcAmendamentValue .
+output close.           
+        
+output to "/home/srvuddan/a2.txt" append.
+export "after parsing json".
+output close.        
+        
 assign lcresultcode = "00".
 
 IF lcResultCode NE "00" THEN DO:
@@ -215,34 +242,53 @@ IF lcResultCode NE "00" THEN DO:
                                   "",
                                   "TMS").
 
-   fReqStatus(3,lcResultDesc).
-   RETURN SUBST("&1, &2, &3", "ERROR", lcResultCode, lcResultDesc). 
+  // fReqStatus(3,lcResultDesc).
+  // RETURN SUBST("&1, &2, &3", "ERROR", lcResultCode, lcResultDesc). 
+   
 END.
 
 ELSE DO:
+   output to "/home/srvuddan/a2.txt" append.
+   export "entered else block".
+   output close.       
    /* update installation address */
-   ASSIGN
+  /* ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED}
       OrderFusion.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.UpdateTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
       FusionMessage.ResponseCode = lcResultCode 
-      FusionMessage.AdditionalInfo = lcResultDesc.
+      FusionMessage.AdditionalInfo = lcResultDesc.*/
       
+   output to "/home/srvuddan/a2.txt" append.
+   export "after entered else block".
+   output close. 
    ASSIGN 
       llUpdateAL      = TRUE
       lcTableName     = "install_address_change"
       lcActionID      = "install_address_change_processor" 
       ldCurrentTimeTS = Func.Common:mMakeTS(). 
-   
+   output to "/home/srvuddan/a2.txt" append.
+   export "after assign before actionlog find".
+   output close.    
    FIND FIRST ActionLog NO-LOCK WHERE
               ActionLog.Brand     EQ  Syst.Var:gcBrand AND
               ActionLog.ActionID  EQ  lcActionID       AND
               ActionLog.TableName EQ  lcTableName      NO-ERROR.
    IF AVAIL ActionLog AND
             ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN
+            do: 
+                output to "/home/srvuddan/a2.txt" append.
+                export "if action log".
+                output close.
+                
                 llUpdateAL = FALSE.
+            end.
    ELSE IF NOT AVAIL ActionLog THEN DO:
+     output to "/home/srvuddan/a2.txt" append.
+     export "else if action log".
+     output close.   
+       
    /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
@@ -254,21 +300,48 @@ ELSE DO:
          ActionLog.ActionTS     = ldCurrentTimeTS.
    END.
    ELSE DO:
+       output to "/home/srvuddan/a2.txt" append.
+       export "else action log".
+       output close.
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
          ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE Actionlog.
    END.
-   FIND FIRST OrderCustomer WHERE 
-              OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
-              OrderCustomer.OrderId EQ FusionMessage.OrderID AND
-              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-              EXCLUSIVE-LOCK NO-WAIT NO-ERROR.      
+   
+   output to "/home/srvuddan/a2.txt" append.
+      export "OrderCustomer.OrderId: and FusionMessage.OrderID" FusionMessage.OrderID.
+      
+      output close.  
+  // DO WHILE TRUE:
+      release ordercustomer.
+      FIND FIRST OrderCustomer WHERE 
+                 OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
+                 OrderCustomer.OrderId EQ FusionMessage.OrderID AND
+                 OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+                 EXCLUSIVE-LOCK NO-WAIT NO-ERROR.      
+   /*   IF LOCKED OrderCustomer THEN DO:
+         liWait = liWait + 1.
+         IF liWait > {&WAIT_CONFIG_LOCK} THEN 
+            RETURN "ErrorCode: OrderCustomer is locked and failed to update".
+         PAUSE 1 NO-MESSAGE. 
+         NEXT. 
+      END.*/
+ //  END.
+   output to "/home/srvuddan/a2.txt" append.
+      export "AVAIL(OrderCustomer)" AVAIL(OrderCustomer) Syst.Var:gcBrand FusionMessage.OrderID '1234567' locked(OrderCustomer).
+      
+      output close.
    IF NOT AVAIL OrderCustomer THEN 
       RETURN "ErrorCode: OrderCustomer is not available".
    ELSE DO:
+       
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrdCustomer).
+      
+      output to "/home/srvuddan/a2.txt" append.
+      export "before updating ordercustomer".
+      output close.       
       ASSIGN
          OrderCustomer.AddressId    = ENTRY(13,lcAmendamentValue," ")
          OrderCustomer.Gescal       = ENTRY(12,lcAmendamentValue," ")
@@ -288,18 +361,26 @@ ELSE DO:
          OrderCustomer.Hand         = ENTRY(16,lcAmendamentValue," ")
          OrderCustomer.Address      = OrderCustomer.Street.
          
-      IF OrderCustomer.BuildingNum NE "" THEN 
-         OrderCustomer.Address = OrderCustomer.Address + " " +
-         OrderCustomer.BuildingNum.
+         IF OrderCustomer.BuildingNum NE "" THEN 
+            OrderCustomer.Address = OrderCustomer.Address + " " +
+               OrderCustomer.BuildingNum.
                
+      output to "/home/srvuddan/a2.txt" append.
+    export "data stored in ordercustomer".
+    output close.
       IF llDoEvent THEN 
       RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer, 
                                            {&STAR_EVENT_USER}, 
                                            lcMemo).    
-      fReqStatus(6,"New AddressDetailes Updated to Order"). 
+     // fReqStatus(6,"New AddressDetailes Updated to Order"). 
       
+      output to "/home/srvuddan/a2.txt" append.
+    export "request status set to 5".
+    output close.
+        
    END.      
    RELEASE OrderCustomer.
+   
 END.
 
 CATCH e AS Progress.Lang.Error:
@@ -308,6 +389,7 @@ CATCH e AS Progress.Lang.Error:
 END CATCH.
                              
 FINALLY:
+   DO TRANSACTION :
       FIND FIRST ActionLog WHERE
                  ActionLog.Brand        EQ  Syst.Var:gcBrand  AND
                  ActionLog.ActionID     EQ  lcActionID        AND
@@ -317,5 +399,6 @@ FINALLY:
       IF AVAIL ActionLog THEN 
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
       RELEASE ActionLog.
+   END. 
 END FINALLY.
   

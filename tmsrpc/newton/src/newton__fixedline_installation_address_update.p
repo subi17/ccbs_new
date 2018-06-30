@@ -69,9 +69,9 @@ DEF VAR pcTerritory_owner AS CHAR NO-UNDO.
 DEF VAR pcStreet_type     AS CHAR NO-UNDO.
 DEF VAR pcZip             AS CHAR NO-UNDO.
 
-DEF VAR lcCurrentDetails   AS CHAR NO-UNDO.
+DEF VAR lcCurrentDetails AS CHAR NO-UNDO.
 DEF VAR lcAmendmentValue AS CHAR NO-UNDO.
-DEF VAR lcAmendmentType    AS CHAR NO-UNDO.
+DEF VAR lcAmendmentType  AS CHAR NO-UNDO.
 
 /* Eventlog parameters */
 
@@ -114,25 +114,25 @@ FUNCTION fGetAddressFields RETURNS LOGICAL:
    pcStreet_name = get_string(pcAmendmentStruct, "street_name").
    pcStreet_number = get_string(pcAmendmentStruct, "street_number").
    pcTerritory_owner = get_string(pcAmendmentStruct, "territory_owner").
+   IF LOOKUP("street_type",pcStreet_type) GT 0 THEN
    pcStreet_type = get_string(pcAmendmentStruct, "street_type").
+   
    pcZip = get_string(pcAmendmentStruct, "zip").
     
 END FUNCTION.
 
 ASSIGN 
-   gcAmendmentDetails = "country,bis,block,city,coverage_token,door,floor,
-      gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,
-      street_type,zip".
+   gcAmendmentDetails = "country,bis,block,city,coverage_token,door,floor,gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
 
-IF validate_request(param_toplevel_id, "string,int,struct,string,string,string") EQ ? THEN
+IF validate_request(param_toplevel_id, "string,int,string,string,string,struct") EQ ? THEN
    RETURN.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcReason = get_string(param_toplevel_id, "5").  
-pcContractId = get_string(param_toplevel_id, "4").
-pcAmendmentType = get_string(param_toplevel_id, "3").
-pcAmendmentStruct = get_struct(param_toplevel_id, "2").
+pcAmendmentStruct = get_struct(param_toplevel_id, "5").  
+pcReason = get_string(param_toplevel_id, "4").
+pcContractId = get_string(param_toplevel_id, "3").
+pcAmendmentType = get_string(param_toplevel_id, "2").
 piOrderId = get_int(param_toplevel_id, "1").
 pcSalesManId = get_string(param_toplevel_id, "0").
 scUser = "VISTA_" + pcSalesManId. /* Read from eventlog functions into eventlog.user */
@@ -143,6 +143,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* validate order address struct */
 lcAddressData = validate_request(pcAmendmentStruct,gcAmendmentDetails).
 IF lcAddressData EQ ? THEN RETURN.
+
 fGetAddressFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -176,9 +177,10 @@ IF NOT AVAIL OrderFusion THEN
 IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} OR
    OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_PENDING_CANCELLED} OR
    OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ERROR} OR
-   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_REJECTED} THEN 
+   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_REJECTED} OR
+   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} THEN 
    RETURN appl_err("Order is not in valid state to update").
-   
+
 ASSIGN
    lcAmendmentType = pcAmendmentType
    lcCurrentDetails = OrderCustomer.StreetType + " " + OrderCustomer.Street + " " +
@@ -189,8 +191,8 @@ ASSIGN
    lcAmendmentValue = pcStreet_type + " " + pcStreet_name + " " + pcStreet_number
       + " " + pcFloor + " " + pcDoor + " " + pcLetter + " " + pcStair + " " + pcBlock + " " +
       pcBis + " " + pcZip + " " + pcCity + " " + pcGescal + " " + pcAddressId + " " +  pcCountry + " " +  
-      pcKm + " " +    pcRegion + " " + pcHand.
-   
+      pcKm + " " +    pcRegion + " " + pcHand + " " + pcTerritory_owner.
+
 fUpdateInstallAddressRequest(
                              pcSalesManId,
                              piOrderId,
@@ -203,7 +205,7 @@ fUpdateInstallAddressRequest(
                              ({&REQUEST_SOURCE_NEWTON}),
                              0,
                              OUTPUT ocResult).   
-
+                           
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:

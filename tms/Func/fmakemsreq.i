@@ -658,7 +658,7 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
     INPUT  icSource         AS CHAR,        /* source of request */
     INPUT  iiOrigReq        AS INT,         /* father request  */
     OUTPUT ocResult         AS CHAR):
-
+    
    DEF BUFFER bOrdCustomer FOR OrderCustomer.
    DEF BUFFER bOrder FOR order.
    
@@ -680,7 +680,7 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
       ocResult = SUBST("OrderCustomer for &1 not found", iiOrderId).
       RETURN 0.
    END.
-  /* 
+   /*
    liZip = INT(icZip) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN ocResult = "ZipCode must be numeral".
    IF ocResult > "" THEN RETURN 0.
@@ -696,18 +696,16 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
       RETURN 0.
    END.
    */
-
-   ocResult = fChkRequest(bOrder.MsSeq,
+   ocResult = fChkRequest(bOrder.msseq,
                           {&REQTYPE_INSTALL_ADDRESS_UPDATE},
                           "",
                           "").
-
    IF (ocResult NE "" AND ocResult NE ?) THEN RETURN 0.  
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
       idActStamp = Func.Common:mMakeTS().
-      
+
    fCreateRequest({&REQTYPE_INSTALL_ADDRESS_UPDATE},
                   idActStamp,
                   "",
@@ -726,7 +724,7 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
       bCreaReq.ReqSource  = icSource
       bCreaReq.OrigReq    = iiOrigReq
       liReqCreated        = bCreaReq.MsRequest.
- 
+   
    RELEASE bCreaReq.
    
    RETURN liReqCreated.   
@@ -765,7 +763,7 @@ FUNCTION fUserAccountRequest RETURNS INTEGER
 
    /* activation time is always immediately */
    ldChgStamp = Func.Common:mMakeTS().
-
+   
    fCreateRequest(5,
                   ldChgStamp,
                   icCreator,
@@ -1731,5 +1729,7 @@ FUNCTION fCustomerCategoryChangeRequest RETURNS INTEGER
 
 END FUNCTION. /* FUNCTION fCustomerCategoryChangeRequest*/
 
-&ENDIF            
+&ENDIF     
+
+       
  
