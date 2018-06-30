@@ -129,7 +129,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
       
-   DEFINE PUBLIC PROPERTY isPostPaidOrder AS LOGICAL NO-UNDO
+   DEFINE PUBLIC PROPERTY isPrePaidOrder AS LOGICAL NO-UNDO
       GET.
       SET.
       

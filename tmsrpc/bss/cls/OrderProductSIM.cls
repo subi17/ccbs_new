@@ -39,16 +39,8 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
     DEFINE PUBLIC PROPERTY aoShippingCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO
         GET.
         SET.
-		
-    DEFINE PUBLIC PROPERTY lhAddrHandle AS HANDLE NO-UNDO
-        GET.
-        SET.
         
-    DEFINE PUBLIC PROPERTY PhoneNumber AS CHARACTER NO-UNDO
-       GET.
-       SET.		
-		
-	CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS bss.cls.Order ):
+    CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS bss.cls.Order ):
 		
         SUPER(ioOrder).
 		
@@ -68,6 +60,7 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         DEFINE VARIABLE loShipAddress AS CLASS JsonObject NO-UNDO.
         
         ASSIGN 
+            loAttributes = NEW JsonObject()
             loAttributes = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes").
         
         IF VALID-OBJECT(loAttributes)
@@ -75,24 +68,6 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
             
             IF loAttributes:Has("ICC")
             THEN mCreateDataOrderProductParamData(loAttributes,"ICC","Char").
-            
-            IF loAttributes:Has("number_type")
-            THEN mCreateDataOrderProductParamData(loAttributes,"number_type","Char"). 
-            
-            IF loAttributes:Has("number")
-            THEN DO:
-                ASSIGN 
-                    THIS-OBJECT:PhoneNumber   =  loAttributes:GetCharacter("number").
-                    
-                IF Func.ValidateOrder:misFilledCLI(THIS-OBJECT:PhoneNumber) 
-                THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Number &1 is already assigned to other order. ", THIS-OBJECT:PhoneNumber)).
-                
-                mCreateDataOrderProductParamData(loAttributes,"number","Char").
-                
-            END.     
-            
-            IF loAttributes:Has("old_operator_code")
-            THEN mCreateDataOrderProductParamData(loAttributes,"old_operator_code","Char").
              
         END.
        
@@ -104,7 +79,7 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
                 aoShippingCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
                 loShipAddress              = NEW JsonObject()
                 loShipAddress              = loAttributes:GetJsonObject("shipping_address").
-                    
+                
                 aoShippingCustomer:mCreateRowCustomerData(loShipAddress).
         
         END.

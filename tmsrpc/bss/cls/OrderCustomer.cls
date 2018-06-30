@@ -177,6 +177,70 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY AddressID AS CHARACTER NO-UNDO
       GET.
       SET.
+      
+   DEFINE PUBLIC PROPERTY Profession AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY BuildingNum AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY AddressCompl AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY Latitude AS CHARACTER NO-UNDO
+      GET.
+      SET.
+   
+   DEFINE PUBLIC PROPERTY Longitude AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY Gescal AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY FloorNum AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY StreetType AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY BisDuplicate AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY BlockNum AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY DoorNum AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY Letter AS CHARACTER NO-UNDO
+      GET.
+      SET.
+
+   DEFINE PUBLIC PROPERTY Stair AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY Hand AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY KM AS CHARACTER NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY CoverageToken AS CHARACTER NO-UNDO
+      GET.
+      SET.
 
    DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
 
@@ -378,13 +442,16 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
         
         IF ioOrderCustAddrObj:Has("validation_data")
         THEN DO:
-            ASSIGN ioValidationData  = ioOrderCustAddrObj:GetJsonObject("validation_data").
+            
+            ASSIGN 
+                ioValidationData  = NEW JsonObject() 
+                ioValidationData  = ioOrderCustAddrObj:GetJsonObject("validation_data").
+                
             IF VALID-OBJECT(ioValidationData) THEN                 
             DO:
-                ASSIGN 
-                    THIS-OBJECT:PostOffice  = ioValidationData:GetCharacter("city_code")
+                ASSIGN                    
                     THIS-OBJECT:AddressCodC = ioValidationData:GetCharacter("street_code")
-                    THIS-OBJECT:AddressCodP = THIS-OBJECT:PostOffice 
+                    THIS-OBJECT:AddressCodP = ioValidationData:GetCharacter("city_code") 
                     THIS-OBJECT:AddressCodM = ioValidationData:GetCharacter("municipality_code")
                     .
             END.
@@ -405,11 +472,28 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:AuthCustIdType     = aoDefaultCustomer:AuthCustIdType
             THIS-OBJECT:AuthCustId         = aoDefaultCustomer:AuthCustId
             THIS-OBJECT:BirthDay           = aoDefaultCustomer:BirthDay
+            THIS-OBJECT:Profession         = aoDefaultCustomer:Profession
             THIS-OBJECT:Street             = ioOrderCustAddrObj:GetCharacter("street")
             THIS-OBJECT:Region             = ioOrderCustAddrObj:GetCharacter("region")
             THIS-OBJECT:ZipCode            = ioOrderCustAddrObj:GetCharacter("zip")
             THIS-OBJECT:Country            = ioOrderCustAddrObj:GetCharacter("country")
             THIS-OBJECT:AddressID          = ioOrderCustAddrObj:GetCharacter("address_id")
+            THIS-OBJECT:BuildingNum        = ioOrderCustAddrObj:GetCharacter("building_number")
+            THIS-OBJECT:AddressCompl       = ioOrderCustAddrObj:GetCharacter("additional_address")
+            THIS-OBJECT:Latitude           = ioOrderCustAddrObj:GetCharacter("latitude")
+            THIS-OBJECT:Longitude          = ioOrderCustAddrObj:GetCharacter("longitude")
+            THIS-OBJECT:Gescal             = ioOrderCustAddrObj:GetCharacter("gescal") WHEN ioOrderCustAddrObj:Has("gescal")
+            THIS-OBJECT:FloorNum           = ioOrderCustAddrObj:GetCharacter("floor")
+            THIS-OBJECT:StreetType         = ioOrderCustAddrObj:GetCharacter("street_type")
+            THIS-OBJECT:BisDuplicate       = ioOrderCustAddrObj:GetCharacter("bis_duplicate")
+            THIS-OBJECT:BlockNum           = ioOrderCustAddrObj:GetCharacter("block")
+            THIS-OBJECT:DoorNum            = ioOrderCustAddrObj:GetCharacter("door")
+            THIS-OBJECT:Letter             = ioOrderCustAddrObj:GetCharacter("letter")
+            THIS-OBJECT:Stair              = ioOrderCustAddrObj:GetCharacter("stair")
+            THIS-OBJECT:Hand               = ioOrderCustAddrObj:GetCharacter("hand")
+            THIS-OBJECT:KM                 = ioOrderCustAddrObj:GetCharacter("km")
+            THIS-OBJECT:CoverageToken      = ioOrderCustAddrObj:GetCharacter("coveragetoken") WHEN ioOrderCustAddrObj:Has("coveragetoken")
+            THIS-OBJECT:PostOffice         = ioOrderCustAddrObj:GetCharacter("city")
             THIS-OBJECT:Email              = aoDefaultCustomer:Email
             THIS-OBJECT:MobileNumber       = aoDefaultCustomer:MobileNumber
             THIS-OBJECT:FixedNumber        = aoDefaultCustomer:FixedNumber
@@ -422,8 +506,9 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:OutPostMarketing   = aoDefaultCustomer:OutPostMarketing
             THIS-OBJECT:OperSMSMarketing   = aoDefaultCustomer:OperSMSMarketing
             THIS-OBJECT:OutSMSMarketing    = aoDefaultCustomer:OutSMSMarketing
+            THIS-OBJECT:FoundationDate     = aoDefaultCustomer:FoundationDate
             THIS-OBJECT:OperAllMarketing   = ( aoDefaultCustomer:OperEMailMarketing OR aoDefaultCustomer:OutEMailMarketing OR aoDefaultCustomer:OperPostMarketing  OR
-                                               aoDefaultCustomer:OutPostMarketing  OR aoDefaultCustomer:OperSMSMarketing   OR aoDefaultCustomer:OutSMSMarketing )
+                                               aoDefaultCustomer:OutPostMarketing   OR aoDefaultCustomer:OperSMSMarketing  OR aoDefaultCustomer:OutSMSMarketing )
              .
                       	          
 	END.
@@ -442,6 +527,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.SurName2           = THIS-OBJECT:SurName2
          OrderCustomer.Company            = THIS-OBJECT:Company
          OrderCustomer.Nationality        = THIS-OBJECT:Nationality
+         OrderCustomer.Profession         = THIS-OBJECT:Profession
          OrderCustomer.Language           = THIS-OBJECT:Language
          OrderCustomer.CustIdType         = THIS-OBJECT:CustIdType
          OrderCustomer.CustId             = THIS-OBJECT:CustId
@@ -453,6 +539,21 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.Region             = THIS-OBJECT:Region
          OrderCustomer.ZipCode            = THIS-OBJECT:ZipCode
          OrderCustomer.Country            = THIS-OBJECT:Country
+         OrderCustomer.BuildingNum        = THIS-OBJECT:BuildingNum
+         OrderCustomer.AddressCompl       = THIS-OBJECT:AddressCompl
+         OrderCustomer.Latitude           = THIS-OBJECT:Latitude
+         OrderCustomer.Longitude          = THIS-OBJECT:Longitude
+         OrderCustomer.Gescal             = THIS-OBJECT:Gescal
+         OrderCustomer.Floor              = THIS-OBJECT:FloorNum
+         OrderCustomer.StreetType         = THIS-OBJECT:StreetType
+         OrderCustomer.BisDuplicate       = THIS-OBJECT:BisDuplicate
+         OrderCustomer.Block              = THIS-OBJECT:BlockNum
+         OrderCustomer.Door               = THIS-OBJECT:DoorNum
+         OrderCustomer.Letter             = THIS-OBJECT:Letter
+         OrderCustomer.Stair              = THIS-OBJECT:Stair
+         OrderCustomer.Hand               = THIS-OBJECT:Hand
+         OrderCustomer.KM                 = THIS-OBJECT:KM
+         OrderCustomer.FoundationDate     = THIS-OBJECT:FoundationDate
          OrderCustomer.Email              = THIS-OBJECT:Email
          OrderCustomer.MobileNumber       = THIS-OBJECT:MobileNumber
          OrderCustomer.FixedNumber        = THIS-OBJECT:FixedNumber
@@ -471,12 +572,18 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.AddressCodP        = THIS-OBJECT:AddressCodP
          OrderCustomer.AddressCodM        = THIS-OBJECT:AddressCodM
          .
+         
+       IF OrderCustomer.BuildingNum NE ""  
+       THEN ASSIGN OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.BuildingNum.   
+       
+       IF OrderCustomer.AddressCompl NE ""  
+       THEN OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl. 
 
    END METHOD.
 
    METHOD PUBLIC CHARACTER mGetBankAcctNum():
            
-       IF aoOrder:isPostPaidOrder = NO 
+       IF aoOrder:isPrePaidOrder
        THEN RETURN "".
        
        DEFINE VARIABLE lcTotalCustomerBankData AS CHARACTER NO-UNDO.
@@ -515,6 +622,16 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 
       UNDO, THROW NEW ParamError(SUBSTITUTE("language-unknown|&1", icLanguage)).
 
+   END METHOD.
+   
+   METHOD PUBLIC CHARACTER mCreateHolderData(INPUT ioHolderObj  AS CLASS JsonObject):
+       
+     /*  ASSIGN THIS-OBJECT:AuthCustIdType = ioHolderObj:GetCharacter("id_type").
+       
+       IF THIS-OBJECT:AuthCustIdType = "CIF"
+       THEN ASSIGN THIS-OBJECT:AuthCustId  = ioHolderObj:GetCharacter("company_id").
+       ELSE THIS-OBJECT:AuthCustId   =  ioHolderObj:GetCharacter("person_id").
+    */   
    END METHOD.
 
 

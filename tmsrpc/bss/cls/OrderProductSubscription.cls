@@ -59,6 +59,9 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         GET.
         SET.
        
+    DEFINE PUBLIC PROPERTY aoOrderTopUp AS CLASS bss.cls.OrderTopup NO-UNDO 
+        GET.
+        SET.
    		
 	CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS bss.cls.Order ):
 	    
@@ -83,7 +86,8 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         DEFINE VARIABLE lcOldOperatorCode AS CHARACTER NO-UNDO.
         DEFINE VARIABLE loBillAddrObj     AS CLASS JsonObject NO-UNDO.
         
-        ASSIGN loAttributes                     = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes")
+        ASSIGN loAttributes                     = NEW Progress.Json.ObjectModel.JsonObject()
+               loAttributes                     = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes")
                THIS-OBJECT:aoBillingAcctIndex   = ioItemObject:GetInteger("billing-account-index") WHEN ioItemObject:Has("billing-account-index").
         
         IF VALID-OBJECT(loAttributes)
@@ -92,7 +96,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             ASSIGN
                 THIS-OBJECT:lcNumberType = loAttributes:GetCharacter("number_type") 
                 THIS-OBJECT:AttrCLI      = loAttributes:GetCharacter("number")                
-            .
+                .
                             
             IF LOOKUP(THIS-OBJECT:lcNumberType,"new,mnp,renewal,stc") = 0 
             THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", THIS-OBJECT:lcNumberType)). 
@@ -128,7 +132,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             THEN ASSIGN aoOrder:OrderType = {&ORDER_TYPE_NEW}.
             
             ASSIGN aoOrder:lcCLI            = THIS-OBJECT:AttrCLI
-                   aoOrder:isPostPaidOrder  = Func.ValidateOrder:mIsPostpaidOrder(THIS-OBJECT:ProductID).
+                   aoOrder:isPrePaidOrder   = Func.ValidateOrder:mIsPrepaidOrder(THIS-OBJECT:ProductID).
                    
             IF ioItemObject:Has("billing_account_id")
             THEN DO:
@@ -138,7 +142,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
                 mGetBillingAddressObject(). 
             END.           
             
-            IF aoOrder:isPostPaidOrder = NO 
+            IF aoOrder:isPrePaidOrder 
             AND aoOrder:aoCustomer:isNewCustomer = FALSE
             THEN mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
             
@@ -157,7 +161,15 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             IF aoOrder:aoCustomer:isNewCustomer THEN    
             aoOrderAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
             ELSE aoOrderAggrementCustomer:mCreateRowCustomerData(AddressObj).
+            
+            IF loAttributes:Has("topup")
+            THEN DO:
                 
+                ASSIGN aoOrderTopUp = NEW bss.cls.OrderTopup(aoOrder).                       
+                aoOrderTopUp:mCreateData(loAttributes:GetJsonObject("topup")).                
+                
+            END.
+            
             /*TODO PC:Please check the MULTIHOLDER INFROMATION WITH KIRAN*/
                 
         END.
@@ -173,6 +185,11 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         IF VALID-OBJECT (aoOrderAggrementCustomer)
         THEN DO:
             aoOrderAggrementCustomer:mStoreData().
+        END.
+        
+        IF VALID-OBJECT(aoOrderTopUp)
+        THEN DO:
+            aoOrderTopUp:mStoreData(THIS-OBJECT:OrderProductID).
         END.
 
     END METHOD.
@@ -260,6 +277,8 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         AddressObj:Add("region" , Address.Region).
         AddressObj:Add("zip" , Address.zipCode).
         AddressObj:Add("country" , Address.Country).
+        Addressobj:Add("gescal" , Address.Gescal).
+        Addressobj:Add("coveragetoken" , Address.CoverageToken).
         
         loValidationObj:Add("city_code" , Address.CityCode).
         loValidationObj:Add("street_code" , Address.StreetCode).

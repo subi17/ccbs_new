@@ -84,6 +84,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY Email AS CHARACTER NO-UNDO
         GET.
         SET.
+        
     DEFINE PUBLIC PROPERTY MobileNumber AS CHARACTER NO-UNDO
        GET.
        SET.
@@ -99,8 +100,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY OutEMailMarketing AS LOGICAL NO-UNDO
         GET.
         SET.
-    
-    
+        
     DEFINE PUBLIC PROPERTY OperPostMarketing AS LOGICAL NO-UNDO
         GET.
         SET.
@@ -131,11 +131,19 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
         
     DEFINE PUBLIC PROPERTY AuthCustIdType AS CHARACTER NO-UNDO
         GET.
-        SET.
+        SET(INPUT icCustIDType AS CHARACTER):
+            
+            ASSIGN THIS-OBJECT:AuthCustIdType  = icCustIDType.
+            
+        END SET.
     
     DEFINE PUBLIC PROPERTY AuthCustId AS CHARACTER NO-UNDO
         GET.
-        SET.
+        SET(INPUT icCustID AS CHARACTER):
+            
+            ASSIGN THIS-OBJECT:AuthCustId = icCustID.
+            
+        END SET.
     
     DEFINE PUBLIC PROPERTY AddressIndex AS INTEGER NO-UNDO
        GET.
@@ -179,7 +187,11 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
         
     DEFINE PUBLIC PROPERTY OrderCustBankAcct AS CHARACTER NO-UNDO
        GET.
-       SET.
+       SET(INPUT iiBankAcct AS CHARACTER):
+           
+           ASSIGN THIS-OBJECT:OrderCustBankAcct  =  iiBankAcct.
+           
+       END SET.
        
     DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
         FIELDS custacctobj  AS CLASS Progress.Lang.Object
@@ -208,15 +220,40 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
                (SUBSTITUTE("customer_not_found|&1", iiCustNum)).
 
         ASSIGN
-            THIS-OBJECT:CustNum    = bfCustomer.CustNum
-            THIS-OBJECT:Category   = bfCustomer.Category
-            THIS-OBJECT:CustID     = bfCustomer.orgID
-            THIS-OBJECT:CustIdType = bfCustomer.CustIdType.
+            THIS-OBJECT:CustNum            = bfCustomer.CustNum
+            THIS-OBJECT:Category           = bfCustomer.Category
+            THIS-OBJECT:CustID             = bfCustomer.orgID
+            THIS-OBJECT:CustIdType         = bfCustomer.CustIdType            
+            THIS-OBJECT:CustTitle          = bfCustomer.HonTitle
+            THIS-OBJECT:FirstName          = bfCustomer.FirstName
+            THIS-OBJECT:SurName1           = bfCustomer.CustName
+            THIS-OBJECT:SurName2           = bfCustomer.SurName2
+            THIS-OBJECT:CompanyName        = bfCustomer.CompanyName
+            THIS-OBJECT:Nationality        = bfCustomer.Nationality   
+            THIS-OBJECT:Language           = STRING(bfCustomer.Language)
+            THIS-OBJECT:AuthCustIdType     = bfCustomer.AuthCustIdType
+            THIS-OBJECT:AuthCustId         = bfCustomer.AuthCustId
+            THIS-OBJECT:BirthDay           = bfCustomer.BirthDay
+            THIS-OBJECT:Profession         = bfCustomer.Profession
+            THIS-OBJECT:Email              = bfCustomer.Email
+            THIS-OBJECT:MobileNumber       = bfCustomer.SMSNumber
+            THIS-OBJECT:FixedNumber        = bfCustomer.Phone
+            THIS-OBJECT:OutBankMarketing   = bfCustomer.OutMarkBank
+            THIS-OBJECT:DontSharePersData  = bfCustomer.DontSharePersData
+            THIS-OBJECT:OperEMailMarketing = bfCustomer.DirMarkEmail
+            THIS-OBJECT:OutEMailMarketing  = bfCustomer.OutMarkEmail 
+            THIS-OBJECT:OperPostMarketing  = bfCustomer.DirMarkPost
+            THIS-OBJECT:OutPostMarketing   = bfCustomer.OutMarkPost
+            THIS-OBJECT:OperSMSMarketing   = bfCustomer.DirMarkSMS
+            THIS-OBJECT:OutSMSMarketing    = bfCustomer.OutMarkSMS 
+            THIS-OBJECT:FoundationDate     = bfCustomer.FoundationDate
+            .
      
 	END METHOD.
 
 
    METHOD PUBLIC VOID mFindCustomer (INPUT iiCustAcct AS INTEGER) :
+       
        
        FIND FIRST CustomerAccount 
             WHERE CustomerAccount.AccountID  = iiCustAcct NO-LOCK NO-ERROR .
@@ -227,7 +264,6 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
                
        IF THIS-OBJECT:CustNum <> CustomerAccount.CustNum
        THEN UNDO, THROW NEW ParamError ("Invalid Custnum and AccountID combination.").
-          
        
    END METHOD.
    
@@ -243,7 +279,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            
        DEFINE VARIABLE MarketingData AS CLASS JsonObject NO-UNDO .
        DEFINE VARIABLE ioCustIDObject AS CLASS JsonObject NO-UNDO.
-
+       
        IF ioJsonObject:Has("title")
        THEN DO:
            IF LOOKUP(ioJsonObject:GetCharacter("title"), lcSupportedTitles) EQ 0
@@ -349,7 +385,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
            END.
        END.
-              
+       
        ASSIGN THIS-OBJECT:CustAcctData = TRIM(THIS-OBJECT:CustAcctData, ":").
      
    END METHOD.
@@ -383,6 +419,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            Customer.OutMarkSMS        = THIS-OBJECT:OutSMSMarketing
            Customer.FoundationDate    = THIS-OBJECT:FoundationDate
            Customer.CompanyName       = THIS-OBJECT:CompanyName
+           Customer.Profession        = THIS-OBJECT:Profession
            Customer.RateCust          = Customer.CustNum
            Customer.InvCust           = Customer.CustNum
            Customer.PaymCust          = Customer.CustNum

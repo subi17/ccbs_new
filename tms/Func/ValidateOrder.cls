@@ -60,13 +60,13 @@ CLASS Func.ValidateOrder FINAL:
         
     END METHOD.
     
-    METHOD PUBLIC STATIC LOGICAL mIsPostpaidOrder(INPUT lcCLIType AS CHARACTER) :
+    METHOD PUBLIC STATIC LOGICAL mIsPrepaidOrder(INPUT lcCLIType AS CHARACTER) :
         
         DEFINE BUFFER bfCLIType FOR CLIType.
         
         RETURN (CAN-FIND(FIRST bfCLIType WHERE bfCLIType.Brand    = Syst.Var:gcBrand     
                                            AND bfCLIType.CLIType  = lcCLIType
-                                           AND bfCLIType.PayType  = {&CLITYPE_PAYTYPE_POSTPAID})).
+                                           AND bfCLIType.PayType  = {&CLITYPE_PAYTYPE_PREPAID})).
         
     END METHOD.
     

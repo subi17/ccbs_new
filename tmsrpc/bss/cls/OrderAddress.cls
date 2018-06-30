@@ -35,7 +35,7 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY BuildingNum AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY BuildingNum AS CHARACTER NO-UNDO
        GET.
        SET.
        
@@ -156,7 +156,7 @@ CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:AddrID            = NEXT-VALUE(AddrID)
             THIS-OBJECT:Street            = ioOrderAddress:GetCharacter("street")
             THIS-OBJECT:StreetType        = ioOrderAddress:GetCharacter("street_type")
-            THIS-OBJECT:BuildingNum       = ioOrderAddress:GetInteger("building_number")
+            THIS-OBJECT:BuildingNum       = ioOrderAddress:GetCharacter("building_number")
             THIS-OBJECT:BlockNum          = ioOrderAddress:GetCharacter("block")
             THIS-OBJECT:Floor             = ioOrderAddress:GetCharacter("floor")
             THIS-OBJECT:Stair             = ioOrderAddress:GetCharacter("stair")

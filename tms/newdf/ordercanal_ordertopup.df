@@ -1,0 +1,36 @@
+
+ADD FIELD "DisplayAmount" OF "OrderTopUp" AS decimal
+  DESCRIPTION "DisplayAmount"
+  FORMAT ">>>>9.99"
+  POSITION 7
+  INITIAL "0"
+  LABEL "DispAmt"
+  COLUMN-LABEL "DispAmt"
+  DECIMALS 2
+  ORDER 70
+  MAX-WIDTH 17
+
+ADD FIELD "TopUpType" OF "OrderTopUp" AS integer
+  FORMAT "->>>>>>9"
+  POSITION 8
+  INITIAL "0"
+  LABEL "Type"
+  COLUMN-LABEL "Type"
+  ORDER 80
+  MAX-WIDTH 4
+
+ADD FIELD "OrderProductID" OF "OrderTopUp" AS integer
+  DESCRIPTION "OrderProduct ID"
+  FORMAT "->>>>>>9"
+  POSITION 9
+  INITIAL "0"
+  LABEL "Product ID"
+  COLUMN-LABEL "Product ID"
+  ORDER 60
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000016556

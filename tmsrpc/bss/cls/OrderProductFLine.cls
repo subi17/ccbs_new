@@ -31,11 +31,19 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         INDEX paramnb IS PRIMARY UNIQUE paramnb
         .
 	
-	DEFINE PUBLIC PROPERTY NumberType AS CHARACTER NO-UNDO
+	DEFINE PUBLIC PROPERTY FixNumberType AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY Number AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY FixedNumber AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY MobileNumberType AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY MobileNumber AS CHARACTER NO-UNDO
        GET.
        SET.
        
@@ -44,6 +52,14 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         SET.       
         
     DEFINE PUBLIC PROPERTY aoAggrementCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY aoFixedPOCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY aoMobilePOCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
         GET.
         SET.
 		
@@ -56,6 +72,8 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
 	DESTRUCTOR PUBLIC OrderProductFLine ( ):
 	    
 	    ASSIGN aoAggrementCustomer     =   ?
+               aoFixedPOCustomer       =   ?
+               aoMobilePOCustomer      =   ?
                aoSubscriptionParams    =   ?.
 
 	END DESTRUCTOR.
@@ -71,27 +89,52 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         
         DEFINE VARIABLE loAttributes AS CLASS JsonObject NO-UNDO.
         
-        ASSIGN loAttributes            =  ioItemObject:GetJsonObject("attributes")
-               THIS-OBJECT:NumberType  =  loAttributes:GetCharacter("number_type")
-               THIS-OBJECT:Number      =  loAttributes:GetCharacter("number")
-               aoOrder:OrderType       =  {&ORDER_TYPE_NEW}.
-               
-        IF LOOKUP(THIS-OBJECT:NumberType,"new,mnp,renewal,stc") = 0 
-        THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", THIS-OBJECT:NumberType)).   
+        ASSIGN 
+            loAttributes                 = NEW JsonObject()   
+            loAttributes                 = ioItemObject:GetJsonObject("attributes")
+            THIS-OBJECT:FixNumberType    = loAttributes:GetCharacter("fixedline_number_type")
+            THIS-OBJECT:FixedNumber      = loAttributes:GetCharacter("fixedline_number").
+            
+        ASSIGN 
+            THIS-OBJECT:MobileNumberType = loAttributes:GetCharacter("mobile_number_type") WHEN loAttributes:Has("mobile_number_type")
+            THIS-OBJECT:MobileNumber     = loAttributes:GetCharacter("mobile_number")      WHEN loAttributes:Has("mobile_number").
+            
+        IF LOOKUP(THIS-OBJECT:FixNumberType,"new,mnp,renewal,stc") = 0 
+        THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown fixedline_number_type: ", THIS-OBJECT:FixNumberType)).   
         
-        IF Func.ValidateOrder:misOrderProductExistsToFixedNumber(THIS-OBJECT:Number) 
-        THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Fixed number &1 already exists. ", THIS-OBJECT:Number)). 
-               
-        mCreateDataOrderProductParamData(loAttributes,"number_type","Char").
-        mCreateDataOrderProductParamData(loAttributes,"number","Char").
+        IF Func.ValidateOrder:misOrderProductExistsToFixedNumber(THIS-OBJECT:FixedNumber) 
+        THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Fixed number &1 already exists. ", THIS-OBJECT:FixedNumber)). 
+        
+        IF THIS-OBJECT:MobileNumber > "" AND Func.ValidateOrder:misFilledCLI(THIS-OBJECT:MobileNumber) 
+        THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Mobile Number &1 is already assigned.", THIS-OBJECT:MobileNumber)).
+        
+        IF THIS-OBJECT:FixNumberType  =  "MNP"
+        THEN ASSIGN aoOrder:OrderType  =  {&ORDER_TYPE_MNP}.
+        ELSE IF THIS-OBJECT:FixNumberType  =  "NEW"
+        THEN ASSIGN aoOrder:OrderType  = {&ORDER_TYPE_NEW}.  
+        
+        mCreateDataOrderProductParamData(loAttributes,"fixedline_number_type","Char").
+        mCreateDataOrderProductParamData(loAttributes,"fixedline_number","Char").
         mCreateDataOrderProductParamData(loAttributes,"estimated_speed","Char").
         mCreateDataOrderProductParamData(loAttributes,"serial_number","Char").
         
-        IF loAttributes:Has("old_operator_code")
-        THEN mCreateDataOrderProductParamData(loAttributes,"old_operator_code","Char").
+        IF THIS-OBJECT:MobileNumberType > "" 
+        THEN mCreateDataOrderProductParamData(loAttributes,"mobile_number_type","Char").
         
-        IF loAttributes:Has("old_operator_name")
-        THEN mCreateDataOrderProductParamData(loAttributes,"old_operator_name","Char").
+        IF THIS-OBJECT:MobileNumber > ""
+        THEN mCreateDataOrderProductParamData(loAttributes,"mobile_number","Char").  
+                 
+        IF loAttributes:Has("fixedline_old_operator_code")
+        THEN mCreateDataOrderProductParamData(loAttributes,"fixedline_old_operator_code","Char").
+        
+        IF loAttributes:Has("fixedline_old_operator_name")
+        THEN mCreateDataOrderProductParamData(loAttributes,"fixedline_old_operator_name","Char").
+        
+        IF loAttributes:Has("mobile_old_operator_code")
+        THEN mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_code","Char").
+        
+        IF loAttributes:Has("mobile_old_operator_name")
+        THEN mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_name","Char").
         
         IF loAttributes:Has("mnptime")
         THEN mCreateDataOrderProductParamData(loAttributes,"mnptime","Char").
@@ -100,8 +143,36 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
                aoAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
                
         IF aoOrder:aoCustomer:isNewCustomer THEN 
-        aoAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).        
+        aoAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj). 
         
+        IF loAttributes:Has("fixed_line_holder")
+        THEN DO:
+            
+            ASSIGN aoFixedPOCustomer         =  NEW bss.cls.OrderCustomer(aoOrder)
+                   aoFixedPOCustomer:RowType =  {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}.
+            
+            IF aoOrder:aoCustomer:isNewCustomer  
+            THEN DO:
+                aoFixedPOCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
+                /*aoFixedPOCustomer:mCreateHolderData(loAttributes:GetJsonObject("fixed_line_holder")).*/
+            END.
+            
+        END.
+        
+        IF loAttributes:Has("mobile_line_holder")
+        THEN DO:
+            
+            ASSIGN 
+                aoMobilePOCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
+                aoMobilePOCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}.
+            
+            IF aoOrder:aoCustomer:isNewCustomer  
+            THEN DO:
+                aoMobilePOCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
+                /*aoMobilePOCustomer:mCreateHolderData(loAttributes:GetJsonObject("mobile_line_holder")).*/
+            END.
+            
+        END.
         
     END METHOD.
     
@@ -113,6 +184,12 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         
         IF VALID-OBJECT(aoAggrementCustomer)
         THEN aoAggrementCustomer:mStoreData().
+        
+        IF VALID-OBJECT(aoMobilePOCustomer)
+        THEN aoMobilePOCustomer:mStoreData().
+        
+        IF VALID-OBJECT(aoFixedPOCustomer)
+        THEN aoFixedPOCustomer:mStoreData().
         
         
     END METHOD.
