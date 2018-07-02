@@ -31,6 +31,23 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
       INDEX ordernb IS PRIMARY UNIQUE ordernb
       .
 
+    DEFINE PUBLIC PROPERTY isChildArray AS LOGICAL NO-UNDO
+    GET.
+    SET(INPUT ilParent AS LOGICAL):
+        
+        ASSIGN THIS-OBJECT:isChildArray  =  ilParent.  
+        
+    END SET.
+    
+    DEFINE PUBLIC PROPERTY ParentID AS INTEGER NO-UNDO
+       GET.
+       SET(INPUT iiParentID AS INTEGER):
+           
+           ASSIGN THIS-OBJECT:ParentID  = iiParentID.
+           
+       END.
+       
+
 	CONSTRUCTOR PUBLIC OrderProductFactory():
 	END CONSTRUCTOR.
 
@@ -101,8 +118,10 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
    METHOD PUBLIC VOID mStoreData():
 
       FOR EACH ttOrderProduct:
+         CAST(ttOrderProduct.opobject, bss.cls.OrderProduct):ParentID   =  THIS-OBJECT:ParentID.
          CAST(ttOrderProduct.opobject, bss.cls.OrderProduct):mStoreData().
       END.
+      
 
    END METHOD.
 

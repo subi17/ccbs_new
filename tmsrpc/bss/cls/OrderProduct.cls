@@ -17,6 +17,8 @@ USING Progress.Json.ObjectModel.JsonArray.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -48,6 +50,14 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
       GET.
       SET.
+      
+   DEFINE PUBLIC PROPERTY ParentID AS INTEGER NO-UNDO
+      GET.
+      SET(INPUT iiParentID AS INTEGER):
+          
+          ASSIGN THIS-OBJECT:ParentID    =   iiParentID.
+          
+      END SET.
 
    DEFINE PUBLIC VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
 
@@ -72,7 +82,8 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
          ProductID          = ioItemObject:GetCharacter("product_id")  WHEN ioItemObject:Has("product_id")   
          ProductOfferingID  = ioItemObject:GetCharacter("product_offering_id").
          
-     IF ActionType = "mobile-subscription" 
+     IF ActionType = {&ORDER_PRODUCT_SUBSCRIPTION} OR 
+        ActionType = {&ORDER_PRODUCT_FIXED_LINE} 
      THEN DO:
          
          IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CliType = ProductID)
@@ -87,6 +98,8 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       THEN DO:
          aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioItemObject:GetJsonArray("items"), aoOrder).
+         IF  THIS-OBJECT:ActionType <> {&ORDER_PRODUCT_MAIN}
+         THEN ASSIGN aoOrderProductFactory:isChildArray =  TRUE.
       END.
      
 	END METHOD.
@@ -95,7 +108,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
 
    METHOD PUBLIC VOID mStoreData():
      
-       IF THIS-OBJECT:ActionType <> "main" THEN            
+       IF THIS-OBJECT:ActionType <> {&ORDER_PRODUCT_MAIN} THEN            
        DO:
            CREATE abOrderProduct.
            ASSIGN
@@ -106,13 +119,20 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
                abOrderProduct.ActionType        = THIS-OBJECT:ActionType
                abOrderProduct.ProductID         = THIS-OBJECT:ProductID
                abOrderProduct.ProductOfferingID = THIS-OBJECT:ProductOfferingID
+               abOrderProduct.ParentID          = THIS-OBJECT:ParentID
                .
        END.
      
        mStoreDataForType().
 
        IF VALID-OBJECT(aoOrderProductFactory)
-       THEN aoOrderProductFactory:mStoreData().
+       THEN DO:
+           IF aoOrderProductFactory:isChildArray
+           THEN ASSIGN aoOrderProductFactory:ParentID   =  THIS-OBJECT:OrderProductID.
+           aoOrderProductFactory:mStoreData().
+       END.
+       
+       
 
    END METHOD.
 
@@ -122,8 +142,9 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
+      loJsonObject:Add("parent-id" , THIS-OBJECT:ParentID).
       loJsonObject:Add("order-item-id", THIS-OBJECT:OrderProductID).
-      loJsonObject:Add("order-item-type" , THIS-OBJECT:ActionType).
+      loJsonObject:Add("order-item-type" , THIS-OBJECT:ActionType).      
       ioJsonArray:Add(loJsonObject).
 
       IF VALID-OBJECT(aoOrderProductFactory)
