@@ -4,7 +4,7 @@ import sys
 
 def instruction():
    print "input json file required which exists in rpctest/bssjson/ directory"
-   print "Example: python pc_order_create_pc.py inputorder.json"
+   print "Example: python pc_order_create.py inputorder.json"
    sys.exit()
 
 if len(sys.argv) < 2: 
