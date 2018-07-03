@@ -253,7 +253,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.Brand         = Syst.Var:gcBrand
             Order.OrderId       = NEXT-VALUE(OrderId)
             THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
-            Order.StatusCode    = {&ORDER_STATUS_ONGOING}
+            Order.StatusCode    = (IF THIS-OBJECT:isACCOrder THEN {&ORDER_STATUS_ONGOING} ELSE {&ORDER_STATUS_NEW})
             Order.OrderType     = THIS-OBJECT:OrderType
             Order.Source        = "bssapi"
             Order.CustNum       = aoCustomer:CustNum
