@@ -31,21 +31,13 @@ IF llDoEvent THEN DO:
 
    {Func/lib/eventlog.i}
 
-   DEFINE VARIABLE lhmobileLine AS HANDLE NO-UNDO.
-   lhmobileLine = BUFFER mobileLine:HANDLE.
-   RUN StarEventInitialize(lhmobileLine).
+   DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
+   lhMobSub = BUFFER mobileLine:HANDLE.
+   RUN StarEventInitialize(lhMobSub).
 
-   DEFINE VARIABLE lhfixedLine AS HANDLE NO-UNDO.
-   lhfixedLine = BUFFER fixedLine:HANDLE.
-   RUN StarEventInitialize(lhfixedLine).
-
-   DEFINE VARIABLE lhMLOwner AS HANDLE NO-UNDO.
-   lhMLOwner = BUFFER oldMLOwner:HANDLE.
-   RUN StarEventInitialize(lhMLOwner).
-
-   DEFINE VARIABLE lhFLOwner AS HANDLE NO-UNDO.
-   lhFLOwner = BUFFER oldFLOwner:HANDLE.
-   RUN StarEventInitialize(lhFLOwner).
+   DEFINE VARIABLE lhMSOwner AS HANDLE NO-UNDO.
+   lhMSOwner = BUFFER oldMLOwner:HANDLE.
+   RUN StarEventInitialize(lhMSOwner).
 END.
 
 DEF TEMP-TABLE ttContract NO-UNDO
@@ -169,31 +161,35 @@ DO ON ERROR UNDO , LEAVE :
                    AND oldFLOwner.CLI    = Mobsub.CLI  
                    AND oldFLOwner.TSEND >= Func.Common:mMakeTS()  NO-ERROR.
             
-            IF llDoEvent THEN DO: 
-                RUN StarEventSetOldBuffer(lhMLOwner).
-                RUN StarEventSetOldBuffer(lhFLOwner).
-            END.
-
-            ASSIGN 
-                oldMLOwner.TsEnd       = Func.Common:mMakeTS()
+            IF llDoEvent THEN DO:
+                lhMSOwner = BUFFER oldMLOwner:HANDLE. 
+                RUN StarEventSetOldBuffer(lhMSOwner).
+                oldMLOwner.TsEnd       = Func.Common:mMakeTS().
+                RUN StarEventMakeModifyEvent(lhMSOwner).
+                lhMSOwner = BUFFER oldFLOwner:HANDLE. 
+                RUN StarEventSetOldBuffer(lhMSOwner).
                 oldFLOwner.TsEnd       = Func.Common:mMakeTS().
-
-            IF llDoEvent THEN DO: 
-                RUN StarEventMakeModifyEvent(lhMLOwner).
-                RUN StarEventMakeModifyEvent(lhFLOwner).
-                
-                RUN StarEventSetOldBuffer(lhmobileLine).
-                RUN StarEventSetOldBuffer(lhfixedLine).
+                RUN StarEventMakeModifyEvent(lhMSOwner).
             END.
+            ELSE 
+                ASSIGN 
+                    oldMLOwner.TsEnd       = Func.Common:mMakeTS()
+                    oldFLOwner.TsEnd       = Func.Common:mMakeTS().
 
-            ASSIGN 
-                mobileLine.FixedNumber = fixedline.FixedNumber
+            IF llDoEvent THEN DO:
+                lhMobSub = BUFFER mobileLine:HANDLE. 
+                RUN StarEventSetOldBuffer(lhMobSub).
+                mobileLine.FixedNumber = fixedline.FixedNumber.
+                RUN StarEventMakeModifyEvent(lhMobSub).
+                lhMobSub = BUFFER fixedLine:HANDLE. 
+                RUN StarEventSetOldBuffer(lhMobSub).
                 fixedLine.FixedNumber  = ? .
-
-            IF llDoEvent THEN DO: 
-                RUN StarEventMakeModifyEvent(lhmobileLine).
-                RUN StarEventMakeModifyEvent(lhfixedLine).
+                RUN StarEventMakeModifyEvent(lhMobSub).
             END.
+            ELSE 
+                ASSIGN 
+                    mobileLine.FixedNumber = fixedline.FixedNumber
+                    fixedLine.FixedNumber  = ? .
 
             CREATE MSOwner.
             BUFFER-COPY oldMLOwner TO Msowner
