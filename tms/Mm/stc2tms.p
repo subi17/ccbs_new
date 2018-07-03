@@ -618,6 +618,7 @@ PROCEDURE pUpdateSubscription:
    DEF BUFFER lMLMobSub      FOR MobSub.
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
+   DEF BUFFER bMsRequest     FOR Msrequest.
 
    /* make sure that customer has a billtarget with correct rateplan */
    liBillTarg = CLIType.BillTarget.
@@ -714,8 +715,12 @@ PROCEDURE pUpdateSubscription:
          lcFixedNumber = OrderFusion.FixedNumber.
       END.
    
-   /* YTS-10293 */
-   IF fisConvergenceTariff(MsRequest.reqcparam1) AND
+   /* YTS-10293 */ 
+   IF ( fisConvergenceTariff(MsRequest.reqcparam1) OR 
+        CAN-FIND(FIRST bMsRequest /* 2p3p-merge */
+                 WHERE bMsRequest.MSRequest = MsRequest.OrigRequest
+                   AND bMsRequest.ReqType = {&REQTYPE_2P3P_MERGE}) )
+                                                 AND
       fisConvergenceTariff(MsRequest.reqcparam2) AND
       lcFixedNumber EQ ? THEN
       lcFixedNumber = mobsub.fixednumber.
