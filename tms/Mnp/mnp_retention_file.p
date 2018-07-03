@@ -131,7 +131,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
                   MNPRetentionRule.PenaltyMonthsLeft THEN  NEXT RULE_LOOP.
             END.
          END.
-      END. */
+      END. 
       
       IF MNPRetentionRule.ConsumptionAverage > 0 AND
          MNPRetentionRule.ConsumptionAverage > Segmentation.SegmentCons THEN DO:
@@ -144,7 +144,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
                MobSub.CLI ";F2"
                SKIP.
          LEAVE RULE_LOOP.
-      END.
+      END. */
 
       ocSMSText = MNPRetentionRule.SMSText.
       RETURN TRUE.
