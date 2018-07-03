@@ -4281,6 +4281,16 @@
 1 "" 3 "Samsung Galaxy A6" 0 "G0000405" "1" 19/06/18 31/12/49
 1 "" 4 "Samsung Galaxy A6" 0 "G0000405" "1" 19/06/18 31/12/49
 1 "" 5 "Samsung Galaxy A6" 0 "G0000405" "1" 19/06/18 31/12/49
+1 "" 1 "Honor 10 64GB" 0 "G0000406" "1" 27/06/18 31/12/49
+1 "" 2 "Honor 10 64GB" 0 "G0000406" "1" 27/06/18 31/12/49
+1 "" 3 "Honor 10 64GB" 0 "G0000406" "1" 27/06/18 31/12/49
+1 "" 4 "Honor 10 64GB" 0 "G0000406" "1" 27/06/18 31/12/49
+1 "" 5 "Honor 10 64GB" 0 "G0000406" "1" 27/06/18 31/12/49
+1 "" 1 "Samsung Galaxy A6+" 0 "G0000407" "1" 27/06/18 31/12/49
+1 "" 2 "Samsung Galaxy A6+" 0 "G0000407" "1" 27/06/18 31/12/49
+1 "" 3 "Samsung Galaxy A6+" 0 "G0000407" "1" 27/06/18 31/12/49
+1 "" 4 "Samsung Galaxy A6+" 0 "G0000407" "1" 27/06/18 31/12/49
+1 "" 5 "Samsung Galaxy A6+" 0 "G0000407" "1" 27/06/18 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4671,11 +4681,11 @@
 1 "" 3 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
 1 "" 4 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
 1 "" 5 "Wiko Sunny White" 0 "P012WSUW2" "1" 22/02/17 31/12/49
-1 "" 1 "Wiko Tommy 3 Negro" 0 "P012WT3NC" "1" 19/06/18 31/12/49
+1 "" 1 "Wiko Tommy 3 Negro con carcasa de regalo" 0 "P012WT3NC" "1" 19/06/18 31/12/49
 1 "" 2 "Wiko Tommy 3 Negro" 0 "P012WT3NC" "1" 19/06/18 31/12/49
 1 "" 3 "Wiko Tommy 3 Negro" 0 "P012WT3NC" "1" 19/06/18 31/12/49
 1 "" 4 "Wiko Tommy 3 Negro" 0 "P012WT3NC" "1" 19/06/18 31/12/49
-1 "" 5 "Wiko Tommy 3 Black" 0 "P012WT3NC" "1" 19/06/18 31/12/49
+1 "" 5 "Wiko Tommy 3 Black with cover gift" 0 "P012WT3NC" "1" 19/06/18 31/12/49
 1 "" 1 "Wiko Wim Lite Azul" 0 "P012WWLAC" "1" 27/11/17 31/12/49
 1 "" 2 "Wiko Wim Lite Azul" 0 "P012WWLAC" "1" 27/11/17 31/12/49
 1 "" 3 "Wiko Wim Lite Azul" 0 "P012WWLAC" "1" 27/11/17 31/12/49
@@ -6419,6 +6429,21 @@
 1 "" 3 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57RC" "1" 11/08/17 31/12/49
 1 "" 4 "Samsung Galaxy A5 2017 Rosa" 0 "P034A57RC" "1" 11/08/17 31/12/49
 1 "" 5 "Samsung Galaxy A5 2017 Pink" 0 "P034A57RC" "1" 11/08/17 31/12/49
+1 "" 1 "Samsung Galaxy A6+Dorado" 0 "P034A6PDC" "1" 02/07/18 31/12/49
+1 "" 2 "Samsung Galaxy A6+Dorado" 0 "P034A6PDC" "1" 02/07/18 31/12/49
+1 "" 3 "Samsung Galaxy A6+Dorado" 0 "P034A6PDC" "1" 02/07/18 31/12/49
+1 "" 4 "Samsung Galaxy A6+Dorado" 0 "P034A6PDC" "1" 02/07/18 31/12/49
+1 "" 5 "Samsung Galaxy A6+Gold" 0 "P034A6PDC" "1" 02/07/18 31/12/49
+1 "" 1 "Samsung Galaxy A6+Negro" 0 "P034A6PNC" "1" 02/07/18 31/12/49
+1 "" 2 "Samsung Galaxy A6+Negro" 0 "P034A6PNC" "1" 02/07/18 31/12/49
+1 "" 3 "Samsung Galaxy A6+Negro" 0 "P034A6PNC" "1" 02/07/18 31/12/49
+1 "" 4 "Samsung Galaxy A6+Negro" 0 "P034A6PNC" "1" 02/07/18 31/12/49
+1 "" 5 "Samsung Galaxy A6+Black" 0 "P034A6PNC" "1" 02/07/18 31/12/49
+1 "" 1 "Samsung Galaxy A6+Violeta" 0 "P034A6PVC" "1" 02/07/18 31/12/49
+1 "" 2 "Samsung Galaxy A6+Violeta" 0 "P034A6PVC" "1" 02/07/18 31/12/49
+1 "" 3 "Samsung Galaxy A6+Violeta" 0 "P034A6PVC" "1" 02/07/18 31/12/49
+1 "" 4 "Samsung Galaxy A6+Violeta" 0 "P034A6PVC" "1" 02/07/18 31/12/49
+1 "" 5 "Samsung Galaxy A6+Purple" 0 "P034A6PVC" "1" 02/07/18 31/12/49
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 5 "Samsung SGH B130 White" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G3" "1" 29/10/08 31/12/54
@@ -8894,6 +8919,16 @@
 1 "" 3 "Honor 10 Verde" 0 "P044H10VC" "1" 14/06/18 31/12/49
 1 "" 4 "Honor 10 Verde" 0 "P044H10VC" "1" 14/06/18 31/12/49
 1 "" 5 "Honor 10 Green" 0 "P044H10VC" "1" 14/06/18 31/12/49
+1 "" 1 "Honor 10 64G Azul" 0 "P044H16AC" "1" 02/07/18 31/12/49
+1 "" 2 "Honor 10 64G Azul" 0 "P044H16AC" "1" 02/07/18 31/12/49
+1 "" 3 "Honor 10 64G Azul" 0 "P044H16AC" "1" 02/07/18 31/12/49
+1 "" 4 "Honor 10 64G Azul" 0 "P044H16AC" "1" 02/07/18 31/12/49
+1 "" 5 "Honor 10 64G Blue" 0 "P044H16AC" "1" 02/07/18 31/12/49
+1 "" 1 "Honor 10 64G Negro" 0 "P044H16NC" "1" 02/07/18 31/12/49
+1 "" 2 "Honor 10 64G Negro" 0 "P044H16NC" "1" 02/07/18 31/12/49
+1 "" 3 "Honor 10 64G Negro" 0 "P044H16NC" "1" 02/07/18 31/12/49
+1 "" 4 "Honor 10 64G Negro" 0 "P044H16NC" "1" 02/07/18 31/12/49
+1 "" 5 "Honor 10 64G Black" 0 "P044H16NC" "1" 02/07/18 31/12/49
 1 "" 1 "Honor 10 Azul con auriculares Monster" 0 "P044H1PAC" "1" 24/04/18 31/12/49
 1 "" 2 "Honor 10 Azul con auriculares" 0 "P044H1PAC" "1" 24/04/18 31/12/49
 1 "" 3 "Honor 10 Azul con auriculares" 0 "P044H1PAC" "1" 24/04/18 31/12/49
@@ -15287,7 +15322,7 @@
 32 "" 5 "Hello, is already installed the fixed part of your Fusion Fibra Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "470" "1" 05/02/14 31/12/49
 32 "" 5 "Hello, is already installed the fixed part of your Fusion Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "471" "1" 05/02/14 31/12/49
 32 "" 5 "We have cancelled the tariff change as you asked. You have all the information about our rates in www.yoigo.com" 0 "472" "1" 05/02/14 31/12/49
-32 "" 5 "Tariff change is done. On your next invoice you will see part of month with your old tariff and the rest with the new one. + info of your new tariff yoigo.com" 0 "473" "1" 05/02/14 31/12/49
+32 "" 5 "Ya esta hecho el cambio de tarifa que pediste, ahora tienes #CLITYPE. Tienes toda la info sobre tu tarifa en www.yoigo.com" 0 "473" "1" 05/02/14 31/12/49
 32 "" 5 "Your change to #CLITYPE will be executed the #DATE. If you did not request it, call 622. +info www.yoigo.com" 0 "474" "1" 05/02/14 31/12/49
 32 "" 1 "You have requested the cancellation of Bono 1 GB. From 1st of the next month will not be active." 0 "476" "1" 01/05/14 31/12/49
 32 "" 5 "You have spent more than 40 euros in Premium serv. To continue using these services replies this message with SI. If you do not want, reply NO." 0 "477" "1" 01/09/14 31/12/49
