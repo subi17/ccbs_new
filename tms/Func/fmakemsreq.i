@@ -208,6 +208,8 @@ FUNCTION fCTMergeChangeRequest RETURNS INTEGER
           liReqCreated         = bCreaReq.MsRequest.
 
    RELEASE bCreaReq.
+   
+   RETURN liReqCreated.
             
 
 END FUNCTION.
