@@ -61,6 +61,7 @@ DEFINE VARIABLE piQuarTime       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llYoigoTenant    AS LOG       NO-UNDO INIT FALSE.
 DEFINE VARIABLE llMasmovilTenant AS LOG       NO-UNDO INIT FALSE.
 DEFINE VARIABLE lcFFNums         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNumber    AS CHARACTER NO-UNDO.
 
 DO ON ERROR UNDO , LEAVE :
     
@@ -152,14 +153,14 @@ DO ON ERROR UNDO , LEAVE :
             FIND CURRENT fixedLine  EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
             
             FIND FIRST oldMLOwner EXCLUSIVE-LOCK 
-                 WHERE oldMLOwner.MSSEQ  = Mobsub.MSSeq  
-                   AND oldMLOwner.CLI    = Mobsub.CLI  
-                   AND oldMLOwner.TSEND >= Func.Common:mMakeTS()  NO-ERROR.
+                 WHERE oldMLOwner.MSSEQ  = mobileLine.MSSeq  
+                   AND oldMLOwner.CLI    = mobileLine.CLI  
+                   AND oldMLOwner.TSEND >= Func.Common:mMakeTS() NO-ERROR.
             
             FIND FIRST oldFLOwner EXCLUSIVE-LOCK 
-                 WHERE oldFLOwner.MSSEQ  = Mobsub.MSSeq  
-                   AND oldFLOwner.CLI    = Mobsub.CLI  
-                   AND oldFLOwner.TSEND >= Func.Common:mMakeTS()  NO-ERROR.
+                 WHERE oldFLOwner.MSSEQ  = fixedLine.MSSeq  
+                   AND oldFLOwner.CLI    = fixedLine.CLI  
+                   AND oldFLOwner.TSEND >= Func.Common:mMakeTS() NO-ERROR.
             
             IF llDoEvent THEN DO:
                 lhMSOwner = BUFFER oldMLOwner:HANDLE. 
@@ -177,19 +178,22 @@ DO ON ERROR UNDO , LEAVE :
                     oldFLOwner.TsEnd       = Func.Common:mMakeTS().
 
             IF llDoEvent THEN DO:
-                lhMobSub = BUFFER mobileLine:HANDLE. 
-                RUN StarEventSetOldBuffer(lhMobSub).
-                mobileLine.FixedNumber = fixedline.FixedNumber.
-                RUN StarEventMakeModifyEvent(lhMobSub).
+                lcFixedNumber = fixedLine.FixedNumber. 
                 lhMobSub = BUFFER fixedLine:HANDLE. 
                 RUN StarEventSetOldBuffer(lhMobSub).
                 fixedLine.FixedNumber  = ? .
                 RUN StarEventMakeModifyEvent(lhMobSub).
+
+                lhMobSub = BUFFER mobileLine:HANDLE. 
+                RUN StarEventSetOldBuffer(lhMobSub).
+                mobileLine.FixedNumber = lcFixedNumber.
+                RUN StarEventMakeModifyEvent(lhMobSub).
             END.
             ELSE 
-                ASSIGN 
-                    mobileLine.FixedNumber = fixedline.FixedNumber
-                    fixedLine.FixedNumber  = ? .
+                ASSIGN
+                    lcFixedNumber = fixedLine.FixedNumber  
+                    fixedLine.FixedNumber  = ? 
+                    mobileLine.FixedNumber = lcFixedNumber .
 
             CREATE MSOwner.
             BUFFER-COPY oldMLOwner TO Msowner
