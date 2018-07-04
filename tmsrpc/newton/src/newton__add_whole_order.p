@@ -210,6 +210,7 @@
                  customer_type;string;mandatory;customer type
                  contractid;string;optional;
                  install_address;struct;mandatory;
+                 fixed_line_iua;string;optional;
   @install_address fname;string;optional
                     lname;string;optional;
                     lname2;string;optional;
@@ -454,6 +455,7 @@ DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
 DEF VAR pcDiscountArray AS CHAR NO-UNDO.
 DEF VAR pcDiscountStruct AS CHAR NO-UNDO. 
 DEF VAR lcDiscountFields AS CHAR NO-UNDO. 
+DEF VAR lcFixedLineIUA  AS CHAR NO-UNDO.
 
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
@@ -1349,7 +1351,8 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.FixedCurrOperCode  = lcFixedLineMNPOldOperCode
       OrderFusion.SerialNumber       = lcFixedLineSerialNbr
       OrderFusion.ADSLLinkState      = lcFixedLineAdslLinkState
-      OrderFusion.EstimatedDataSpeed = liEstimatedDataSpeed.
+      OrderFusion.EstimatedDataSpeed = liEstimatedDataSpeed
+      OrderFusion.IUA                = lcFixedLineIUA.
 
    RETURN TRUE.
 
@@ -1962,7 +1965,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,estimated_data_speed,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!,fixed_line_permanency_contract_id").
+      "fixed_line_number_type!,fixed_line_number,fixed_line_iua,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,estimated_data_speed,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!,fixed_line_permanency_contract_id").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1984,7 +1987,8 @@ IF pcFusionStruct > "" THEN DO:
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
          WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0
       lcFixedLinePermanency = get_string(pcFusionStruct, "fixed_line_permanency_contract_id")
-         WHEN LOOKUP("fixed_line_permanency_contract_id", lcFusionStructFields) > 0.
+         WHEN LOOKUP("fixed_line_permanency_contract_id", lcFusionStructFields) > 0
+      lcFixedLineIUA       = get_string(pcFusionStruct,"fixed_line_iua").
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
