@@ -16,6 +16,7 @@
 {Func/nncoit2.i }
 {Func/msisdn_prefix.i}
 {Func/create_eventlog.i}
+{Func/fsubstermreq.i}
 
 Syst.Var:gcBrand = "1".
 
@@ -70,6 +71,26 @@ DO ON ERROR UNDO , LEAVE :
     FIND MsRequest WHERE MSRequest.MsRequest = iiMsRequestId NO-LOCK NO-ERROR.
     IF NOT AVAILABLE MsRequest THEN 
         RETURN "Invalid MsRequest".
+
+    IF fChkSubRequest(iiMsRequestId) AND 
+       CAN-FIND(FIRST subreq WHERE SubReq.OrigRequest = iiMsRequestId 
+              AND subreq.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}) THEN DO:
+        FIND ActionLog WHERE 
+             ActionLog.Brand        = Syst.Var:gcBrand       AND    
+             ActionLog.TableName    = "MsRequest"            AND 
+             ActionLog.KeyValue     = STRING(iiMsRequestId)  AND 
+             ActionLog.ActionID     = "FixedFees" NO-LOCK NO-ERROR.
+        IF AVAILABLE ActionLog THEN DO: 
+            FIND FixedFee WHERE 
+                 FixedFee.FFNum = INTEGER(ActionLog.ActionChar) 
+                 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+            IF AVAILABLE FixedFee THEN 
+                FixedFee.Active = YES.
+            RELEASE FixedFee.
+        END.  
+        fReqStatus( {&REQUEST_STATUS_DONE},"").
+        RETURN. 
+    END.
     
     FIND CLIType WHERE CLIType.Clitype = MSRequest.ReqCParam1 NO-LOCK NO-ERROR.
     IF NOT AVAILABLE CLIType THEN 
@@ -274,29 +295,56 @@ END FINALLY.
 
 PROCEDURE pCreateTermRequest:
     
-  DEFINE VARIABLE ldCurrTS AS DECIMAL NO-UNDO.
-  DEFINE VARIABLE llCreateFee AS LOGICAL NO-UNDO.
-  DEFINE VARIABLE liTermRequest AS INTEGER NO-UNDO.
-  DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
+  DEFINE VARIABLE ldCurrTS           AS DECIMAL   NO-UNDO.
+  DEFINE VARIABLE llCreateFee        AS LOGICAL   NO-UNDO.
+  DEFINE VARIABLE liTermRequest      AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE lcError            AS CHARACTER NO-UNDO.
+  DEFINE VARIABLE liMsisdnStat       AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE liSimStat          AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE liQuarTime         AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE ldeSMSStamp        AS DECIMAL   NO-UNDO. 
+  DEFINE VARIABLE ldaSecSIMTermDate  AS DATE      NO-UNDO.
+  DEFINE VARIABLE ldeSecSIMTermStamp AS DECIMAL   NO-UNDO.
   DEFINE BUFFER subReq FOR MSRequest.
   
   IF CAN-FIND(FIRST subreq WHERE SubReq.OrigRequest = iiMsRequestId 
                 AND subreq.ReqType = {&REQTYPE_CONTRACT_TERMINATION} ) THEN DO:
-      IF fChkSubRequest(iiMsRequestId) THEN DO:
-          FIND ActionLog WHERE 
-               ActionLog.Brand        = Syst.Var:gcBrand       AND    
-               ActionLog.TableName    = "MsRequest"            AND 
-               ActionLog.KeyValue     = STRING(iiMsRequestId)  AND 
-               ActionLog.ActionID     = "FixedFees" NO-LOCK NO-ERROR.
-          IF AVAILABLE ActionLog THEN DO: 
-            FIND FixedFee WHERE 
-                 FixedFee.FFNum = INTEGER(ActionLog.ActionChar) 
-                 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-            IF AVAILABLE FixedFee THEN 
-                FixedFee.Active = YES.
-            RELEASE FixedFee.
-          END.  
-           fReqStatus( {&REQUEST_STATUS_DONE},""). 
+      IF fChkSubRequest(iiMsRequestId) AND 
+         NOT CAN-FIND(FIRST subreq WHERE SubReq.OrigRequest = iiMsRequestId 
+              AND subreq.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}) THEN DO:
+          ASSIGN 
+             ldaSecSIMTermDate  = ADD-INTERVAL(TODAY, 1,"months")
+             ldaSecSIMTermDate  = Func.Common:mLastDayOfMonth(ldaSecSIMTermDate)
+             ldeSecSIMTermStamp = Func.Common:mMake2DT(ldaSecSIMTermDate,86399).
+          fInitialiseValues(
+            {&SUBSCRIPTION_TERM_REASON_MULTISIM},
+            fIsYoigoCLI(fixedline.CLI), 
+            fIsMasmovilCLI(fixedline.CLI),
+            OUTPUT liMsisdnStat,
+            OUTPUT liSimStat,
+            OUTPUT liQuarTime).
+            
+           liTermRequest = fTerminationRequest(
+                           fixedline.Msseq,
+                           ldeSecSIMTermStamp,
+                           liMsisdnStat,
+                           liSimStat,
+                           liQuarTime,
+                           1, /* create fees */
+                           "", /* out oper. */
+                           STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}),
+                           {&REQUEST_SOURCE_MERGE_TRANSFER_FEES},
+                           Syst.Var:katun,
+                           iiMsRequestId, /* orig. request */
+                           {&TERMINATION_TYPE_FULL},
+                           OUTPUT lcError).
+           FIND MsRequest WHERE 
+                MSRequest.MsRequest = iiMsRequestId NO-LOCK NO-ERROR.
+           IF lcError > "" THEN 
+               fReqStatus( {&REQUEST_STATUS_REJECTED}, 
+                           "Subscription termination failed") .
+           ELSE 
+               fReqStatus( {&REQUEST_STATUS_SUB_REQUEST_PENDING}, "") .
       END.
       RETURN.
   END.
