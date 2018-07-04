@@ -27,7 +27,7 @@ DEFINE BUFFER oldFLOwner FOR MSOwner.
 DEFINE BUFFER subReq     FOR MsRequest.
 DEFINE BUFFER mlFFee     FOR fixedFee.
 DEFINE BUFFER flFFee     FOR fixedFee.
-
+  
 FUNCTION fgetCliTypeName RETURNS CHARACTER (INPUT CHARACTER) FORWARD.
 
 IF llDoEvent THEN DO:
@@ -307,9 +307,10 @@ PROCEDURE pCreateTermRequest:
   DEFINE VARIABLE ldaSecSIMTermDate  AS DATE      NO-UNDO.
   DEFINE VARIABLE ldeSecSIMTermStamp AS DECIMAL   NO-UNDO.
   DEFINE VARIABLE lcMemoString       AS CHARACTER NO-UNDO.
-  DEFINE BUFFER subReq FOR MSRequest.
-  DEFINE BUFFER bCliType FOR CLIType.
-  
+  DEFINE BUFFER subReq   FOR MSRequest.
+  DEFINE BUFFER crtDCCLi FOR DCCli.
+  DEFINE BUFFER pstDCCli FOR DCCli.    
+
   IF CAN-FIND(FIRST subreq WHERE SubReq.OrigRequest = iiMsRequestId 
                 AND subreq.ReqType = {&REQTYPE_CONTRACT_TERMINATION} ) THEN DO:
       IF fChkSubRequest(iiMsRequestId) AND 
@@ -352,7 +353,7 @@ PROCEDURE pCreateTermRequest:
                                mobileline.Custnum,
                                "Tariff Change",
                                lcMemoString ).
-                  
+                               
           ASSIGN 
              ldaSecSIMTermDate  = ADD-INTERVAL(TODAY, 1,"months")
              ldaSecSIMTermDate  = Func.Common:mLastDayOfMonth(ldaSecSIMTermDate)
@@ -389,6 +390,17 @@ PROCEDURE pCreateTermRequest:
       END.
       RETURN.
   END.
+  
+ FOR EACH crtDCCLi WHERE 
+          crtDCCLi.Brand = Syst.var:gcBrand AND 
+          crtDCCLi.Msseq = mobileline.MsSeq EXCLUSIVE-LOCK: 
+    FIND FIRST pstDCCli WHERE 
+         pstDCCli.Brand = crtDCCLi.Brand AND
+         pstDCCli.MSSeq = fixedLine.msseq AND 
+         pstDCCli.DCEvent = crtDCCLi.DCEvent NO-LOCK NO-ERROR.
+    IF AVAILABLE pstDCCli THEN   
+         crtDCCLi.ValidTo = pstDCCli.ValidTo.
+ END.  
     
   FOR EACH DCCLI EXCLUSIVE-LOCK 
      WHERE DCCLI.MsSeq = fixedline.MsSeq  
