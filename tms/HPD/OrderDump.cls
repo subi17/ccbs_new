@@ -66,7 +66,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
 	 Notes:   APIBSS-282
 	------------------------------------------------------------------------------*/
 
-	METHOD PUBLIC VOID mDataFromAccesories(  ):
+	METHOD PUBLIC VOID mDataFromAccessories(  ):
       
       ASSIGN lcAccessories = "".
 
@@ -225,7 +225,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
 
       mDataFromOfferItems().
       
-      mDataFromAccesories(). /* APIBSS-282 */
+      mDataFromAccessories(). /* APIBSS-282 */
 
       FIND FIRST lbOrderAccessory NO-LOCK WHERE
          lbOrderAccessory.Brand        = "1"                    AND
