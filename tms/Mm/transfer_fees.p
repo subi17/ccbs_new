@@ -28,6 +28,7 @@ DEFINE BUFFER subReq     FOR MsRequest.
 DEFINE BUFFER mlFFee     FOR fixedFee.
 DEFINE BUFFER flFFee     FOR fixedFee.
 
+FUNCTION fgetCliTypeName RETURNS CHARACTER (INPUT CHARACTER) FORWARD.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -80,7 +81,7 @@ DO ON ERROR UNDO , LEAVE :
              ActionLog.TableName    = "MsRequest"            AND 
              ActionLog.KeyValue     = STRING(iiMsRequestId)  AND 
              ActionLog.ActionID     = "FixedFees" NO-LOCK NO-ERROR.
-        IF AVAILABLE ActionLog THEN DO: 
+        IF AVAILABLE ActionLog THEN DO TRANSACTION: 
             FIND FixedFee WHERE 
                  FixedFee.FFNum = INTEGER(ActionLog.ActionChar) 
                  EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
@@ -305,13 +306,53 @@ PROCEDURE pCreateTermRequest:
   DEFINE VARIABLE ldeSMSStamp        AS DECIMAL   NO-UNDO. 
   DEFINE VARIABLE ldaSecSIMTermDate  AS DATE      NO-UNDO.
   DEFINE VARIABLE ldeSecSIMTermStamp AS DECIMAL   NO-UNDO.
+  DEFINE VARIABLE lcMemoString       AS CHARACTER NO-UNDO.
   DEFINE BUFFER subReq FOR MSRequest.
+  DEFINE BUFFER bCliType FOR CLIType.
   
   IF CAN-FIND(FIRST subreq WHERE SubReq.OrigRequest = iiMsRequestId 
                 AND subreq.ReqType = {&REQTYPE_CONTRACT_TERMINATION} ) THEN DO:
       IF fChkSubRequest(iiMsRequestId) AND 
          NOT CAN-FIND(FIRST subreq WHERE SubReq.OrigRequest = iiMsRequestId 
               AND subreq.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}) THEN DO:
+       
+          FIND FIRST Order WHERE
+            Order.Brand = Syst.var:gcBrand AND  
+            Order.MSSeq = Fixedline.MSSeq NO-LOCK NO-ERROR.
+          IF AVAILABLE Order THEN DO:
+              lcMemoString = " &1: &2 (Order ID: &3) + &4: &5 --> &6 (&7 ) ".
+              lcMemoString = SUBSTITUTE (lcMemoString ,
+                                         fixedline.Cli ,
+                                         fgetCliTypeName ( fixedline.CliType ),
+                                         STRING(Order.OrderId),
+                                         Mobileline.Cli ,
+                                         fgetCliTypeName ( mobileline.CliType ),
+                                         fgetCliTypeName(MSRequest.ReqCParam2 ),
+                                         STRING(TODAY,"99-99-9999")).
+          END.
+          ELSE 
+            ASSIGN 
+              lcMemoString = " &1: &2 + &4: &5 --> &6 (&7 ) "
+              lcMemoString = SUBSTITUTE (lcMemoString ,
+                                         fixedline.Cli ,
+                                         fgetCliTypeName ( fixedline.CliType ),
+                                         '',
+                                         Mobileline.Cli ,
+                                         fgetCliTypeName ( mobileline.CliType ),
+                                         fgetCliTypeName(MSRequest.ReqCParam2 ),
+                                         STRING(TODAY,"99-99-9999")).
+                      
+          Func.Common:mWriteMemo("MobSub",
+                               STRING(fixedline.MsSeq),
+                               fixedline.Custnum,
+                               "Tariff Change",
+                               lcMemoString ).
+          Func.Common:mWriteMemo("MobSub",
+                               STRING(mobileline.MsSeq),
+                               mobileline.Custnum,
+                               "Tariff Change",
+                               lcMemoString ).
+                  
           ASSIGN 
              ldaSecSIMTermDate  = ADD-INTERVAL(TODAY, 1,"months")
              ldaSecSIMTermDate  = Func.Common:mLastDayOfMonth(ldaSecSIMTermDate)
@@ -448,3 +489,9 @@ PROCEDURE pCreateTermRequest:
    END.
       
 END PROCEDURE.     
+
+FUNCTION fgetCliTypeName  RETURNS CHARACTER (INPUT icCliType AS CHARACTER ):
+    FIND CLIType WHERE CLIType.Clitype = icCliType NO-LOCK NO-ERROR.
+    IF AVAILABLE CLIType THEN RETURN CLIType.CliName.
+    RETURN "".
+END.    
