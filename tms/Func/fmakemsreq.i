@@ -121,7 +121,7 @@ FUNCTION fChkTiming RETURNS CHARACTER
 
 END FUNCTION.
 
-FUNCTION fCTMergeChangeRequest RETURNS INTEGER
+FUNCTION fSubscriptionMergeRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,
     INPUT  icNewType      AS CHARACTER,
     INPUT icReqparam3    AS CHARACTER ,

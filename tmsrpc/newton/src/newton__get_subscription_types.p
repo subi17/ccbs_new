@@ -44,7 +44,7 @@ DEFINE VARIABLE liDestDowspeconversion AS INT64 NO-UNDO.
 DEFINE VARIABLE liDestupspeconversion  AS INT64 NO-UNDO.
 DEFINE VARIABLE lcHostname             AS CHAR  NO-UNDO.
 DEFINE VARIABLE llUseApi               AS LOGI  NO-UNDO INIT TRUE.
-DEFINE VARIABLE lcMergeTarget          AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcMergeTargets         AS CHAR  NO-UNDO.
 
 DEFINE TEMP-TABLE ttSpeed
           FIELD Download      AS INT64
@@ -201,8 +201,7 @@ END FUNCTION.
 
 FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
                                             INPUT icTariffBundle AS CHAR,
-                                            INPUT iiStatusCode   AS INT,
-                                            INPUT icMergeTarget  AS CHAR):                                            
+                                            INPUT iiStatusCode   AS INTEGER ):                                            
 
    DEFINE VARIABLE lcArray  AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liInt    AS INTEGER   NO-UNDO.
@@ -221,86 +220,59 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
    
    lcArray = add_array(sub_struct,"merge_target").   
    
-   DO liInt = 1 TO NUM-ENTRIES(icMergeTarget):
-      add_string(lcArray,"",ENTRY(liInt,icMergeTarget)).
+   DO liInt = 1 TO NUM-ENTRIES(lcMergeTargets):
+      add_string(lcArray,"",ENTRY(liInt,lcMergeTargets)).
    END.   
    
 END FUNCTION.
 
-FUNCTION fIsStandAloneFixedorMobileLine RETURNS CHARACTER
+FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
    (INPUT  iiMsSeq AS INTEGER):
 
-   DEFINE VARIABLE lcMsisdn AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcMsisdn AS CHARACTER NO-UNDO.
 
-   FIND FIRST MobSub NO-LOCK
-        WHERE MobSub.MsSeq EQ iiMsSeq NO-ERROR.
-   IF AVAILABLE MobSub THEN DO:
-      FIND FIRST bCliType1 NO-LOCK
-           WHERE bCliType1.Brand      EQ Syst.Var:gcBrand
-             AND bCliType1.CliType    EQ MobSub.CliType NO-ERROR.
-      IF AVAILABLE bCliType1 THEN DO:
-                   
-         ASSIGN
-            lcMsisdn = ''.
+    FIND FIRST bfMobSub NO-LOCK
+         WHERE bfMobSub.MsSeq EQ iiMsSeq NO-ERROR.
          
-         FOR EACH bMobSub NO-LOCK
-            WHERE bMobSub.CustNum EQ MobSub.CustNum:
-                                
-            FIND FIRST bCliType2 NO-LOCK
-                 WHERE bCliType2.Brand   EQ Syst.Var:gcBrand
-                   AND bCliType2.CliType EQ bMobSub.CliType NO-ERROR.
-            IF AVAILABLE bCliType2 THEN DO:                        
-               
-               IF (bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}   AND
-                   bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:
-                                                           
-                  IF NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bMobSub.CLI) THEN DO:                   
-                                       
-                     IF NOT CAN-FIND(FIRST MsRequest NO-LOCK
-                                     WHERE MsRequest.MsSeq   EQ bMobsub.MsSeq
-                                AND (MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR
-                                     MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION})
-                                AND LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0) THEN
-                      
-                        lcMsisdn = lcMsisdn + ','  + bMobSub.CLI.
+    IF NOT AVAILABLE bfMobSub THEN RETURN "".
+     
+    FIND FIRST bCliType1 NO-LOCK
+         WHERE bCliType1.Brand   EQ Syst.Var:gcBrand
+           AND bCliType1.CliType EQ bfMobSub.CliType NO-ERROR.
 
-                  ELSE                      
-                        
-                     IF NOT CAN-FIND(FIRST MsRequest NO-LOCK
-                                     WHERE MsRequest.MsSeq   EQ bMobsub.MsSeq
-                                AND (MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR
-                                     MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION})
-                                AND LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0) THEN
-                                                                               
-                        lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.                      
-                                                  
-                  END. /* IF NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bMobSub.CLI) */
-              
-               END.
-                                             
-               ELSE IF (bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
-                        bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN DO:
-                                                 
-                  IF lcMsisdn = '' THEN 
-                     lcMsisdn = bMobSub.CLI.
-                  
-                  ELSE 
-                     lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
-              
-               END.
-              
-            END. /* IF AVAILABLE bCliType2 */
+    IF NOT AVAILABLE bCliType1 OR 
+       bCliType1.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN RETURN "".
+    
+    FOR EACH bMobSub NO-LOCK
+       WHERE bMobSub.brand   EQ Syst.Var:gcBrand
+         AND bMobSub.CustNum EQ bfMobSub.CustNum:
+        FIND FIRST bCliType2 NO-LOCK
+             WHERE bCliType2.Brand   EQ Syst.Var:gcBrand
+               AND bCliType2.CliType EQ bMobSub.CliType NO-ERROR.
+        IF NOT AVAILABLE bCliType2 OR 
+           bCliType2.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN NEXT.
            
-         END. /* FOR EACH bMobSub */
-
-      END.  /* IF AVAILABLE bCliType1 */
-
-      RETURN TRIM(lcMsisdn,",").
-   
-   END. /* IF AVAILABLE MobSub */
- 
-   RETURN "".
-
+        IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND 
+           bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:
+               
+            IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
+                MsRequest.MsSeq   EQ bMobsub.MsSeq AND
+               (MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR
+                MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION}) AND
+             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0) 
+             THEN
+               IF NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bMobSub.CLI) THEN
+                    lcMsisdn = lcMsisdn + ','  + bMobSub.CLI.
+        END. 
+        ELSE 
+        IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
+           bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
+             lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
+        END.         
+    END.
+    
+    RETURN TRIM(lcMsisdn,",").
+    
 END FUNCTION.
 
 ASSIGN Syst.Var:katun = "Newton".
@@ -360,8 +332,7 @@ DO:
     END.
 END.
 
-IF AVAILABLE MobSub THEN
-   lcMergeTarget = fIsStandAloneFixedorMobileLine(INPUT piMsSeq).
+lcMergeTargets = fGetPossibleMergeMSISDNs(INPUT piMsSeq).
 
 FOR EACH CLIType NO-LOCK WHERE
          CLIType.Brand = Syst.Var:gcBrand AND
@@ -378,7 +349,7 @@ FOR EACH CLIType NO-LOCK WHERE
 
          ASSIGN lcStatusCode = bCLIType.StatusCode.
 
-         fAddCLITypeStruct(CLIType.CLIType,bCLIType.CLIType,lcStatusCode,lcMergeTarget).
+         fAddCLITypeStruct(CLIType.CLIType,bCLIType.CLIType,lcStatusCode).
       END. /* FOR EACH bCLIType WHERE */
    END.   
    ELSE 
@@ -475,7 +446,7 @@ FOR EACH CLIType NO-LOCK WHERE
           END.          
       END. 
 
-      fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode,lcMergeTarget).
+      fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode).
    END. /*END ELSE DO*/
 END. /* FOR EACH CLIType WHERE */
 

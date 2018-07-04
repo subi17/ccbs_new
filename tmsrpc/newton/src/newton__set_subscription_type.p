@@ -225,16 +225,16 @@ IF pcMergeWith > '' AND pcMergeWith NE ? THEN DO:
                 lcFixedNum = bMobSub.fixednumber.      
     END.   
     lcReqParam3 = pcMergeWith + "|" + lcFixedNum .
-    liMergeReq  = fCTMergeChangeRequest( liMgeMsSeq   ,
-                                         pcCliType    , 
-                                         lcReqParam3  , 
-                                         pdActivation ,
-                                         (pdeCharge > 0),
-                                         llSendSMS    ,
-                                         ''           ,
-                                         {&REQUEST_SOURCE_NEWTON}, 
-                                         0, 
-                                         OUTPUT lcINfo ). 
+    liMergeReq  = fSubscriptionMergeRequest( liMgeMsSeq   ,
+                                             pcCliType    , 
+                                             lcReqParam3  , 
+                                             pdActivation ,
+                                           (pdeCharge > 0),
+                                             llSendSMS    ,
+                                             ''           ,
+                                  {&REQUEST_SOURCE_NEWTON}, 
+                                             0            , 
+                                             OUTPUT lcINfo ). 
     IF liMergeReq = 0 THEN 
         RETURN appl_err("Merge Request creation failed: " +  lcInfo).
 END.

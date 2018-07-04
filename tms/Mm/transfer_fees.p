@@ -17,6 +17,8 @@
 {Func/msisdn_prefix.i}
 {Func/create_eventlog.i}
 
+Syst.Var:gcBrand = "1".
+
 DEFINE BUFFER mobileLine FOR MobSub.
 DEFINE BUFFER fixedLine  FOR MobSub.
 DEFINE BUFFER oldMLOwner FOR MSOwner.
@@ -69,7 +71,6 @@ DO ON ERROR UNDO , LEAVE :
     IF NOT AVAILABLE MsRequest THEN 
         RETURN "Invalid MsRequest".
     
-    
     FIND CLIType WHERE CLIType.Clitype = MSRequest.ReqCParam1 NO-LOCK NO-ERROR.
     IF NOT AVAILABLE CLIType THEN 
     DO:
@@ -89,11 +90,11 @@ DO ON ERROR UNDO , LEAVE :
         FIND fixedLine NO-LOCK WHERE 
              fixedLine.Cli = ENTRY(1, MSRequest.reqCparam3 ,"|") NO-ERROR.
     END.
-        ELSE 
-        DO:
-            fReqError("Invalid TariffType").
-            RETURN.
-        END.
+    ELSE 
+    DO:
+        fReqError("Invalid TariffType").
+        RETURN.
+    END.
     
     IF NOT AVAILABLE mobileLine OR NOT AVAILABLE fixedLine THEN 
     DO:
@@ -119,7 +120,7 @@ DO ON ERROR UNDO , LEAVE :
         DO TRANSACTION ON ERROR UNDO , THROW:
             
             FOR EACH flFFee NO-LOCK WHERE 
-                flFFee.Brand = MSRequest.Brand AND
+                flFFee.Brand = Syst.Var:gcBrand AND
                 flFFee.HostTable = 'mobsub' AND 
                 flFFee.KeyValue = STRING(fixedLine.MsSeq) AND 
                 flFFee.BillCode BEGINS "PAYTERM" :
@@ -139,7 +140,7 @@ DO ON ERROR UNDO , LEAVE :
     
             CREATE ActionLog.
             ASSIGN 
-                ActionLog.Brand        = MSRequest.Brand  
+                ActionLog.Brand        = Syst.Var:gcBrand   
                 ActionLog.TableName    = "MsRequest"  
                 ActionLog.KeyValue     = STRING(iiMsRequestId)
                 ActionLog.UserCode     = 'Newton'
@@ -224,8 +225,8 @@ DO ON ERROR UNDO , LEAVE :
                  "").                
             
             FIND Order WHERE 
-                 Order.Brand = fixedline.Brand AND 
-                 Order.MSSeq = fixedline.MsSeq NO-LOCK NO-ERROR.
+                 Order.Brand = Syst.Var:gcBrand AND 
+                 Order.MSSeq = fixedline.MsSeq  NO-LOCK NO-ERROR.
 
             IF NOT AVAILABLE order THEN
                 UNDO, THROW NEW Progress.Lang.AppError 
@@ -233,7 +234,7 @@ DO ON ERROR UNDO , LEAVE :
             
             CREATE ActionLog.
             ASSIGN 
-                ActionLog.Brand        = fixedline.Brand   
+                ActionLog.Brand        = Syst.Var:gcBrand    
                 ActionLog.TableName    = "FixedNumber"  
                 ActionLog.KeyValue     = mobileLine.FixedNumber
                 ActionLog.UserCode     = 'Newton'
@@ -267,6 +268,10 @@ DO ON ERROR UNDO , LEAVE :
         END.
 END.
 
+FINALLY:
+    fCleanEventObjects().	
+END FINALLY.
+
 PROCEDURE pCreateTermRequest:
     
   DEFINE VARIABLE ldCurrTS AS DECIMAL NO-UNDO.
@@ -279,7 +284,7 @@ PROCEDURE pCreateTermRequest:
                 AND subreq.ReqType = {&REQTYPE_CONTRACT_TERMINATION} ) THEN DO:
       IF fChkSubRequest(iiMsRequestId) THEN DO:
           FIND ActionLog WHERE 
-               ActionLog.Brand        = MSRequest.Brand        AND    
+               ActionLog.Brand        = Syst.Var:gcBrand       AND    
                ActionLog.TableName    = "MsRequest"            AND 
                ActionLog.KeyValue     = STRING(iiMsRequestId)  AND 
                ActionLog.ActionID     = "FixedFees" NO-LOCK NO-ERROR.
@@ -301,10 +306,13 @@ PROCEDURE pCreateTermRequest:
        AND DCCLI.ValidTo >= TODAY:
          
       FIND FIRST DayCampaign NO-LOCK 
-           WHERE DayCampaign.Brand = fixedline.brand 
+           WHERE DayCampaign.Brand = Syst.Var:gcBrand  
              AND DayCampaign.DcEvent = DCCLI.DcEvent NO-ERROR.
       
       DCCLI.TermDate = ?.
+      
+      IF CAN-FIND( FIRST ttContract WHERE
+                   ttContract.DCEvent   = DCCLI.DCEvent ) THEN NEXT.
 
       CREATE ttContract.
       ASSIGN
@@ -325,7 +333,7 @@ PROCEDURE pCreateTermRequest:
       WHERE ServiceLimit.SLSeq = MServiceLimit.SLSeq:
 
       FIND FIRST DayCampaign  
-           WHERE DayCampaign.Brand      = fixedline.Brand 
+           WHERE DayCampaign.Brand      = Syst.Var:gcBrand  
              AND DayCampaign.DCEvent    = ServiceLimit.GroupCode  
              AND DayCampaign.ValidFrom <= TODAY  
              AND DayCampaign.ValidTo   >= TODAY NO-LOCK NO-ERROR.
@@ -352,7 +360,7 @@ PROCEDURE pCreateTermRequest:
    FOR EACH ttContract:
 
       FIND FIRST DayCampaign WHERE 
-                 DayCampaign.Brand      = fixedline.Brand    AND 
+                 DayCampaign.Brand      = Syst.Var:gcBrand   AND 
                  DayCampaign.DCEvent    = ttContract.DCEvent AND 
                  DayCampaign.ValidTo   >= TODAY NO-LOCK NO-ERROR.
               
@@ -370,7 +378,7 @@ PROCEDURE pCreateTermRequest:
                           THEN ttContract.ActTS
                           ELSE Func.Common:mSecOffSet(ldCurrTS,60),
                           llCreateFee,             /* create fees */
-                          {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                          {&REQUEST_SOURCE_MERGE_TRANSFER_FEES},
                           "",
                           iiMsRequestId,
                           TRUE,
