@@ -78,6 +78,7 @@ DEFINE VARIABLE lcFixedNum  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liMergeReq  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liSTCMsSeq  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liMgeMsSeq  AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcWarning   AS CHARACTER NO-UNDO.
 DEFINE BUFFER bMsrequest FOR MSRequest.
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -237,6 +238,12 @@ IF pcMergeWith > '' AND pcMergeWith NE ? THEN DO:
                                              OUTPUT lcINfo ). 
     IF liMergeReq = 0 THEN 
         RETURN appl_err("Merge Request creation failed: " +  lcInfo).
+    RUN pGetMergeResponse ( liMgeMsSeq , "Fixed"  , OUTPUT lcWarning  ).
+    IF lcWarning  > "" THEN 
+        add_string(response_toplevel_id, "fixedLineWarning"  , lcWarning  ).
+    RUN pGetMergeResponse ( liSTCMsSeq , "mobile" , OUTPUT lcWarning  ).
+    IF lcWarning  > "" THEN 
+        add_string(response_toplevel_id, "mobileLineWarning"  , lcWarning  ).
 END.
  
 liRequest = fCTChangeRequest(liSTCMsSeq ,
@@ -289,3 +296,63 @@ add_boolean(response_toplevel_id, "", TRUE).
 FINALLY:
    END.
 
+PROCEDURE pGetMergeResponse:
+    DEFINE INPUT  PARAMETER iiMsseq    AS INTEGER   NO-UNDO.
+    DEFINE INPUT  PARAMETER icLine     AS CHARACTER NO-UNDO.
+    DEFINE OUTPUT PARAMETER lcResponse AS CHARACTER NO-UNDO.
+    
+    DEFINE VARIABLE lcPriceList AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE ldePrice    AS DECIMAL NO-UNDO.
+    DEFINE VARIABLE ldeCurrPen  AS DECIMAL NO-UNDO.
+    
+    DEFINE BUFFER bf_MobSub FOR MobSub.
+    
+    FOR EACH DCCli 
+       WHERE DCCli.MSSeq = iiMsSeq NO-LOCK :
+        IF DCCli.DCEvent BEGINS "PAYTERM" AND icLine = "Fixed" THEN DO:
+            lcResponse = "There will be no penalty for installation, because " 
+                         + "the permanence of the fixed line is transferred " 
+                         + "to the new tariff. " .
+            RETURN. 
+        END.
+        FIND DayCampaign WHERE DayCampaign.DCEvent = DCCli.DCEvent 
+        NO-LOCK NO-ERROR.
+        IF AVAILABLE DayCampaign AND 
+           DCCli.DCEvent BEGINS "PAYTERM" AND icLine = "Mobile" THEN DO:
+
+            FIND FIRST bf_MobSub WHERE
+                 bf_MobSub.MsSeq = DCCLI.MsSeq NO-LOCK NO-ERROR.
+   
+            lcPriceList = fFeeModelPriceList(bf_MobSub.Custnum,
+                                    bf_MobSub.BillTarget,
+                                    DayCampaign.TermFeeModel,
+                                    TODAY).
+           FIND FIRST FMItem NO-LOCK  WHERE
+                    FMItem.Brand     = Syst.Var:gcBrand       AND
+                    FMItem.FeeModel  = DayCampaign.TermFeeModel AND
+                    FMItem.PriceList = lcPriceList AND
+                    FMItem.FromDate <= TODAY     AND
+                    FMItem.ToDate   >= TODAY NO-ERROR.
+   
+           IF AVAIL fmitem THEN 
+           ldePrice = fmitem.amount.
+   
+            IF DCCLI.Amount NE ? THEN ldePrice = DCCLI.Amount.
+            ldeCurrPen = fCalculateFactor(DCCLI.ValidFrom,
+                                          DCCLI.RenewalDate,
+                                          DCCLI.ValidTo,
+                                          DCCLI.ValidToOrig,
+                                          TODAY,
+                                          DayCampaign.TermFeeCalc).
+     
+            ldeCurrPen = TRUNCATE(ldeCurrPen * ldePrice,0).
+            lcResponse = "Because of the discount on the purchase of the " + 
+                         "terminal associated with the mobile line, "      + 
+                         "&1 € will be charged on the next invoice. " .
+                         
+            lcResponse = SUBSTITUTE(lcResponse , ldeCurrPen).
+        END.
+    END. 
+    
+    
+END PROCEDURE.
