@@ -186,6 +186,7 @@ CLASS Func.ValidateACC FINAL:
       FOR EACH Order NO-LOCK USE-INDEX MsSeq WHERE
                Order.MsSeq EQ Mobsub.MsSeq AND
                Order.OrderID NE iiCurrentOrderID AND
+               Order.OrderType EQ {&ORDER_TYPE_ACC} AND
             LOOKUP(STRING(Order.StatusCode), {&ORDER_INACTIVE_STATUSES}) = 0:
          RETURN "ERROR/SMS/310|Subscription has a pending request.".
       END.
