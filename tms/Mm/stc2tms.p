@@ -209,28 +209,6 @@ FIND Customer OF Mobsub NO-LOCK.
 IF MsRequest.ReqCParam4 = "" THEN DO:
 
    IF liOrigStatus = 8 THEN DO:
-      
-      IF fIsConvergenceTariff(MobSub.CLIType) AND
-         CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:   
-
-         liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
-         IF liOrderId EQ 0
-            THEN lcResult = "OrderID not found".
-         /* This call makes synchronous termination request to MuleDB */
-         ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
-
-         IF lcResult NE "" THEN DO:  
-            /* "Fixed number termination failed" */
-            Func.Common:mWriteMemo("MobSub",
-                                   STRING(MSrequest.MsSeq),
-                                   MobSub.CustNum,
-                                   "La baja del sevicio fijo ha fallado: ",
-                                   lcResult).
-            fReqError(SUBST("La baja del sevicio fijo ha fallado: &1", lcResult)).
-            RETURN.
-         END.
-      END.
-
       RUN pNetworkAction.
       IF RETURN-VALUE BEGINS "SubRequest" THEN RETURN.
    END.

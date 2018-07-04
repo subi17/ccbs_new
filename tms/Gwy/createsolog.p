@@ -109,7 +109,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
                         INPUT  MsRequest.MsSeq,
                         INPUT  (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
                                 MsRequest.ActStamp ELSE Func.Common:mMakeTS()),
-                        INPUT  MsRequest.ReqCparam3,
+                        INPUt  MsRequest.ReqCparam3,
                         INPUT  "",
                         OUTPUT ldeCurrMonthLimit,
                         OUTPUT ldeConsumedData,
@@ -186,10 +186,7 @@ PROCEDURE pSolog:
    DEF BUFFER bufTermMobsub FOR TermMobsub.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
-   DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
-   DEF VAR liError       AS INT NO-UNDO.
-   DEF VAR lcResult      AS CHAR NO-UNDO.
-   DEF VAR liOrderId     AS INT  NO-UNDO.
+   DEF VAR ldCurrBal AS DECIMAL NO-UNDO. 
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -241,29 +238,6 @@ PROCEDURE pSolog:
    
       IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
           MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN DO:
-
-         IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
-
-            IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
-                  MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
-
-               liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
-               IF liOrderId EQ 0
-                  THEN lcResult = "OrderID not found".
-               /* This call makes synchronous termination request to MuleDB */
-               ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
-               
-               IF lcResult > "" THEN DO:
-                  Func.Common:mWriteMemo("MobSub",
-                              STRING(BufMobsub.MsSeq),
-                              BufMobsub.Custnum,
-                              "La baja del sevicio fijo ha fallado: ", /* Fixed number termination failed" */
-                              lcResult).
-                  fReqError("La baja del sevicio fijo ha fallado: " + lcResult).
-                  RETURN.
-               END.       
-            END.
-         END.
 
          /* Cancel the active/suspended BB service before
             subscription termination or icc change provisioning */
