@@ -99,7 +99,7 @@ END.
 FUNCTION _fCreateFusionMessage RETURNS LOGICAL
  (iiOrderID AS INT,
   icMessageType AS CHAR):
-      
+
    DEF BUFFER Order FOR Order.
    DEF BUFFER CLIType FOR CLIType.
 
@@ -114,9 +114,9 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
         CLIType.CLIType = Order.CLiType.
 
    IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
-      lcPrefix = "Cancelación".
+      lcPrefix = "Cancelacion".
    ELSE IF icMessageType EQ {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} THEN 
-      lcPrefix = "AddressChange".
+      lcPrefix = "AddressChange".   
    ELSE lcPrefix = "Alta".
 
    IF CLIType.FixedLineType EQ 1 THEN
@@ -141,7 +141,6 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
       FusionMessage.OrderType = lcPrefix + " " + lcOrderType
       FusionMessage.UpdateTS = FusionMessage.CreatedTS.
-      
 END.
 
 FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL
@@ -258,8 +257,9 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
    RETURN TRUE.
 END.
 
-FUNCTION fCreateFusionAddressChangeMessage RETURNS LOGICAL
+FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
    (iiOrderID AS INT,
+    icAmendmentType AS CHAR,
     OUTPUT ocError AS CHAR):
 
    DEF BUFFER OrderFusion FOR OrderFusion.
@@ -272,24 +272,33 @@ FUNCTION fCreateFusionAddressChangeMessage RETURNS LOGICAL
       ocError = "ERROR:Order data not found".
       RETURN FALSE.
    END.
-   /*
+   
    IF OrderFusion.FixedNumber = "" OR
       OrderFusion.FixedNumber EQ ? THEN DO:
       ocError = "ERROR:Fixed number is missing".
       RETURN FALSE.
    END. 
-   */
-   IF CAN-FIND(FIRST bFusionMessage NO-LOCK WHERE
-         bFusionMessage.OrderID = OrderFusion.OrderID AND
-         bFusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
-         bFusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN DO:
-     ocError = "ERROR:Ongoing message".
-     RETURN FALSE.
-   END. 
    
-   _fCreateFusionMessage(OrderFusion.OrderId,
-                         {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}).
-   RUN Gwy/masmovil_address_change.p(FusionMessage.MessageSeq).
+   CASE icAmendmentType:
+      WHEN "ChangeInstallationAddress" THEN DO: 
+         IF CAN-FIND(FIRST bFusionMessage NO-LOCK WHERE
+                           bFusionMessage.OrderID = OrderFusion.OrderID AND
+                           bFusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
+                           bFusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN DO:
+             ocError = "ERROR:Ongoing message".
+             RETURN FALSE.
+         END. 
+   
+         _fCreateFusionMessage(OrderFusion.OrderId,
+                               {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}).
+      END.
+      
+      OTHERWISE DO:
+         RETURN FALSE.
+      END.
+    
+   END CASE.                         
+   
    RETURN TRUE.
 END.
 

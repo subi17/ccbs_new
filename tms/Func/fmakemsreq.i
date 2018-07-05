@@ -646,7 +646,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
 END FUNCTION.
 
 /* Installation Address Update */
-FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER 
+FUNCTION fOrderUpdateRequest RETURNS INTEGER 
    (INPUT  icsfid           AS CHAR,
     INPUT  iiOrderId        AS INT,
     INPUT  idActStamp       AS DEC,
@@ -682,7 +682,7 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
    END.
    
    ocResult = fChkRequest(bOrder.msseq,
-                          {&REQTYPE_INSTALL_ADDRESS_UPDATE},
+                          {&REQTYPE_FIXEDLINE_ORDER_UPDATE},
                           "",
                           "").
    IF (ocResult NE "" AND ocResult NE ?) THEN RETURN 0.  
@@ -691,9 +691,9 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
    IF idActStamp = 0 OR idActStamp = ? THEN 
       idActStamp = Func.Common:mMakeTS().
 
-   fCreateRequest({&REQTYPE_INSTALL_ADDRESS_UPDATE},
+   fCreateRequest({&REQTYPE_FIXEDLINE_ORDER_UPDATE},
                   idActStamp,
-                  "",
+                  icsfid,
                   FALSE,    /* create fees */
                   FALSE).   /* sms */
    ASSIGN

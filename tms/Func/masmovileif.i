@@ -29,7 +29,7 @@ FUNCTION fMasXMLGenerate_test RETURNS CHAR
       REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") +
       ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
-         STRING(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
+         string(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
       PUT STREAM sOut "" SKIP.   
       OUTPUT STREAM sOut CLOSE.
       xmlrpc_initialize(FALSE).
@@ -117,7 +117,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER OrderFusion FOR OrderFusion.
    DEF BUFFER CLIType FOR CliType.
 
-   FIND FIRST Order NO-LOCK WHERE 
+   FIND FIRST Order NO-LOCK where 
               Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL Order THEN 
@@ -449,6 +449,8 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
  
 END. /*Function fCreate_FixedLine*/
 
+
+
 FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
    (iiOrderId AS INT,
     OUTPUT ocOrderType AS CHAR,
@@ -630,7 +632,7 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
    DEF BUFFER OrderCustomer FOR OrderCustomer.
    DEF BUFFER OrderFusion FOR OrderFusion.
 
-   FIND FIRST Order NO-LOCK WHERE 
+   FIND FIRST Order NO-LOCK where 
               Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL Order THEN 
