@@ -70,7 +70,7 @@
 "11837" " de Foreign Information Services (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 59 ""
 "11838" "11838 de DELIMAX CONCEPT. S.L.U" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 60 ""
 "11839" " de Movilservicio Urgente (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 61 ""
-"11840" " de Euskaltel" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 62 ""
+"11840" "ADDING. SERVICIOS INTELIGENTES. S.L.U" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 62 ""
 "11841" "11841 de LINOCIO HAGEN (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 63 ""
 "11842" "11842 de INFORMACIÓN TELEFÓNICA (MAS VOZ" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 64 ""
 "11843" "11843 de ATENCIÓN TELEFÓNICA AVANZADA (1" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 65 ""
