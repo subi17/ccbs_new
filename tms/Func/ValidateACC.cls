@@ -530,7 +530,7 @@ CLASS Func.ValidateACC FINAL:
       DEFINE VARIABLE liTemp         AS INTEGER NO-UNDO.
    
       llSRCPRO = mIsPro(icCategory).   
-      IF llSRCPRO
+      IF llSRCPRO AND icCustIdType NE "CIF"
       THEN llSelfEmployed = mIsSelfEmpl(icCategory).
 
       IF NOT Func.ValidateACC:mSubscriptionLimitCheck(icCustId,
