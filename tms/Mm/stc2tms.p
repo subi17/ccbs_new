@@ -1678,8 +1678,7 @@ PROCEDURE pCloseContracts:
          OR
          /* Since, convergent base bundles CONTDSL/CONTFH50/CONTFH300 are reused in fixed only convergent also with different prices.
             Above matrix condition will fail and convergent base bundles are not terminated for prices to change. So, below is introduced. */
-         ((llIsSTCBetweenFixedOnlyAndConvergent OR llIsSTCBetweenConvergent) AND 
-          (LOOKUP(lcContract,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0 OR lcContract BEGINS "FTERM")) 
+         ((llIsSTCBetweenFixedOnlyAndConvergent OR llIsSTCBetweenConvergent) AND LOOKUP(lcContract,{&YOIGO_CONVERGENT_BASE_BUNDLES_LIST}) > 0) 
          OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
       DO:
@@ -1688,8 +1687,8 @@ PROCEDURE pCloseContracts:
             (0=no extend_term_contract
              1=extend_term_contract
              2=exclude_term_penalty)
-          */ 
-         IF AVAILABLE(bOrigRequest) AND (bOrigRequest.ReqIParam5 EQ 2 OR (bOrigRequest.ReqIParam5 EQ 3 AND lcContract BEGINS "FTERM")) AND
+          */
+         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
             CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
                                                      DayCampaign.DCEvent EQ lcContract          AND 
                                                      DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
@@ -1699,9 +1698,8 @@ PROCEDURE pCloseContracts:
 
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
-                                        lcContract,                                           
-                                        (IF bOrigRequest.ReqIParam5 EQ 3 AND lcContract BEGINS "FTERM"
-                                            THEN "recreate" ELSE "term"),                                           
+                                        lcContract,
+                                        "term",
                                         idEndStamp,
                                         llCreateFees,   /* create fee */
                                         icReqSource,
@@ -1713,15 +1711,13 @@ PROCEDURE pCloseContracts:
                                         (IF AVAIL DayCampaign AND DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN liContractID ELSE 0),
                                         "",
                                         OUTPUT lcError).
-                                        
          IF liTerminate = 0 THEN
             Func.Common:mWriteMemo("MobSub",
                        STRING(iiMsSeq),
                        MobSub.CustNum,
                        "Subscription type change",
-                       (IF bOrigRequest.ReqIParam5 EQ 3 AND lcContract BEGINS "FTERM"
-                          THEN "Per.contract recreation request creation failed; "  + lcError 
-                       ELSE "Per.contract termination request creation failed; "  + lcError)).                                         
+                       "Per.contract termination request creation failed; " +
+                          lcError).                
          ELSE DO:
             IF LOOKUP(lcContract,lcBonoContracts) > 0 THEN
                liBonoTerminate = liTerminate.
