@@ -260,7 +260,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
       ELSE lcCReqTime = fChkTiming(bReqSub.CLIType,
                                    "",
                                    ldtCReqDate).
-                                   
+
       IF lcCReqTime > "" THEN DO:
          IF MONTH(ldtCReqDate) = 12 
          THEN ldtCReqDate = DATE(1,1,YEAR(ldtCReqDate) + 1).
@@ -292,7 +292,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                           "",
                           icCreator).
    IF ocResult > "" THEN RETURN 0.                       
-   
+  
    /* PRO */
    IF iiOrderId > 0 THEN DO:
       FIND FIRST Order NO-LOCK WHERE
@@ -341,9 +341,9 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
 
    /* Send right away SMS related to the CLI Type change */
    RUN Mm/requestaction_sms.p(INPUT liReqCreated,
-                           INPUT icNewType,
-                           INPUT icSource).
-  
+                              INPUT icNewType,
+                              INPUT icSource).
+
    RETURN liReqCreated.
              
 END FUNCTION.
@@ -1667,6 +1667,7 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
                   "SubsTypeFrom;SubsTypeTo",
                   icCLIType,
                   OUTPUT lcResult) = 1 THEN DO:
+
       liRequest = fCTChangeRequest(iiMsSeq,
                                    lcResult,
                                    "",    /* lcBundleID */
