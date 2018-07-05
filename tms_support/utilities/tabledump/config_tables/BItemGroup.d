@@ -40,6 +40,7 @@
 "45" "Google Discounts & Charges" "" "" "" "" "" "1" 0 "," 86
 "46" "Convergent Monthly fee" "" "" "" "" "" "1" 1 "," 31
 "47" "Fixed voice" "" "" "" "" "" "1" 1 "," 32
+"48" "Yoicard" "" "" "" "" "" "1" 0 "" 0
 "5" "MMS" "" "" "" "" "" "1" 0 "1002,5" 90
 "51" "Calls Fixed" "" "" "" "" "" "1" 1 "," 20
 "53" "Premium Services Fixed" "" "" "" "" "" "1" 1 "," 30
