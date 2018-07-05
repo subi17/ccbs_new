@@ -1,4 +1,4 @@
-&GLOBAL-DEFINE REQTYPE_INSTALL_ADDRESS_UPDATE 99
+&GLOBAL-DEFINE REQTYPE_FIXEDLINE_ORDER_UPDATE 99
 
 FIND FIRST RequestType WHERE 
            RequestType.Brand = "1" AND 
@@ -12,9 +12,9 @@ DO:
         RequestType.Queue        = 3
         RequestType.ReqType      = 99
         RequestType.InUse        = TRUE
-        RequestType.ReqName      = "Installation Address Update"        
+        RequestType.ReqName      = "Fixedline Order Update"        
         RequestType.Program      = ""      
-        RequestType.UserCode     = "InstAddrUpdate"       
+        RequestType.UserCode     = "FixedLineOrderUpdate"       
         RequestType.LogOn        = FALSE        
         RequestType.LogFile      = ""      
         RequestType.LogEntry     = ""      
@@ -35,7 +35,7 @@ DO:
         RequestStatus.ReqType      = RequestType.ReqType
         RequestStatus.ReqStat      = 0
         RequestStatus.InUse        = TRUE
-        RequestStatus.Program      = "Mc/installaddr_update.p"        
+        RequestStatus.Program      = "Mc/fixedline_order_update.p"        
         RequestStatus.LogOn        = FALSE           
         RequestStatus.LogFile      = ""      
         RequestStatus.LogEntry     = ""      
@@ -74,25 +74,24 @@ function fCreateRequestParam return logical
             RequestParam.DispParam   = icDispParam.
 end function.
 
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ActStamp","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"Brand","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"MsSeq","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"MsRequest","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"CustNum","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqType","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"UserCode","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqStatus","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"CreateFees","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"CreStamp","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"SendSMS","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"CLI","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqCParam1","SalesManId",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqCParam2","Amendment Type",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqCParam6","Change Reason",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqCParam3","Amendment Value",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqCParam4","Current Details",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqCParam5","Contract ID",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqIParam1","Order ID",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"ReqSource","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"OrigRequest","",yes).
-fCreateRequestParam({&REQTYPE_INSTALL_ADDRESS_UPDATE},"OrigRequest","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ActStamp","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"Brand","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"MsSeq","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"MsRequest","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"CustNum","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqType","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"UserCode","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqStatus","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"CreateFees","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"CreStamp","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"SendSMS","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"CLI","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqCParam1","SalesManId",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqCParam2","Amendment Type",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqCParam6","Change Reason",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqCParam3","Amendment Value",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqCParam4","Current Details",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqCParam5","Contract ID",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqIParam1","Order ID",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ReqSource","",yes).
+fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"OrigRequest","",yes).
