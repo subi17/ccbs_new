@@ -95,6 +95,22 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
           ASSIGN THIS-OBJECT:lcCLI = icCLI.
           
       END SET.
+      
+   DEFINE PUBLIC PROPERTY ROIResult AS CHARACTER NO-UNDO
+       GET.
+       SET(INPUT icROIResult AS CHARACTER):
+           
+           ASSIGN THIS-OBJECT:ROIResult  =  icROIResult.
+           
+       END SET.
+
+   DEFINE PUBLIC PROPERTY ROILevel AS CHARACTER NO-UNDO
+       GET.
+       SET(INPUT icLevel AS CHARACTER):
+           
+           ASSIGN THIS-OBJECT:ROILevel   =  icLevel.
+           
+       END SET.      
 
    /* A value for this property is populated in OrderProduct class */
    DEFINE PUBLIC PROPERTY MsSeq AS INTEGER NO-UNDO
@@ -144,6 +160,14 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY isFixedOnly AS LOGICAL NO-UNDO
        GET.
        SET.
+       
+    DEFINE PUBLIC PROPERTY StatusCode AS CHARACTER NO-UNDO
+       GET.
+       SET(INPUT icStatusCode AS CHARACTER):
+           
+           ASSIGN THIS-OBJECT:StatusCode  =  icStatusCode.
+           
+       END SET.
        
    
 	CONSTRUCTOR PUBLIC Order():
@@ -218,6 +242,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:CrStamp      = YEAR(ldaCreateDate) * 10000 +
                                     MONTH(ldaCreateDate) * 100 +
                                     DAY(ldaCreateDate)
+         aoCustomer:isProCustomer = ( INDEX(THIS-OBJECT:OrderChannel,"PRO") > 0 )                        
          .
       
       IF ioJsonObject:Has("items")
@@ -253,7 +278,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.Brand         = Syst.Var:gcBrand
             Order.OrderId       = NEXT-VALUE(OrderId)
             THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */
-            Order.StatusCode    = (IF THIS-OBJECT:isACCOrder THEN {&ORDER_STATUS_ONGOING} ELSE {&ORDER_STATUS_NEW})
+            Order.StatusCode    = THIS-OBJECT:StatusCode
             Order.OrderType     = THIS-OBJECT:OrderType
             Order.Source        = "bssapi"
             Order.CustNum       = aoCustomer:CustNum
@@ -263,6 +288,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.SalesMan      = THIS-OBJECT:Salesman
             Order.OrderChannel  = THIS-OBJECT:OrderChannel
             Order.CrStamp       = THIS-OBJECT:CrStamp
+            Order.OrderDate     = TODAY
             .
             
         IF VALID-OBJECT(OrderInspectionData)

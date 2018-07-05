@@ -71,6 +71,8 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:ROIRuleID         =  ioPaymentObject:GetCharacter("rule_id")         WHEN ioPaymentObject:Has("rule_id")
             THIS-OBJECT:ROIRiskCode       =  ioPaymentObject:GetCharacter("risk_code")       WHEN ioPaymentObject:Has("risk_code")
             THIS-OBJECT:ROIDeliverySecure =  ioPaymentObject:GetLogical("delivery_secure")   WHEN ioPaymentObject:Has("delivery_secure")
+            aoorder:ROIResult             =  THIS-OBJECT:ROIResult
+            aoOrder:ROILevel              =  THIS-OBJECT:ROILevel
             .
         
     END METHOD.

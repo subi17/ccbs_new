@@ -4,7 +4,7 @@
    Purpose     : 
    Syntax      : 
    Description : This class file will store the details of accessory that comes with the order. Ex:Router
-   Author(s)   : kmaddali
+   Author(s)   : Koundinya Maddali
    Created     : Thu Jun 21 18:53:13 IST 2018
    Notes       : 
  ----------------------------------------------------------------------*/

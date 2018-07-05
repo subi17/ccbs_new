@@ -4,7 +4,7 @@
    Purpose     : 
    Syntax      : 
    Description : This will store the product data for the Fixed Line for the Convergent order
-   Author(s)   : kmaddali
+   Author(s)   : Koundinya Maddali
    Created     : Thu Jun 21 12:36:59 IST 2018
    Notes       : 
  ----------------------------------------------------------------------*/
@@ -62,7 +62,31 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
     DEFINE PUBLIC PROPERTY aoMobilePOCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
         GET.
         SET.
-		
+        
+    DEFINE PUBLIC PROPERTY EstimatedSpeed AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY SerialNumber AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY FixedMNPTime AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY FixedCurrOper AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY FixedCurrOperCode AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY FixedLineCustomerType AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
 	CONSTRUCTOR PUBLIC OrderProductFLine ( INPUT ioOrder AS CLASS bss.cls.Order  ):
 	    
 		SUPER (ioOrder).
@@ -102,7 +126,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         IF LOOKUP(THIS-OBJECT:FixNumberType,"new,mnp,renewal,stc") = 0 
         THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown fixedline_number_type: ", THIS-OBJECT:FixNumberType)).   
         
-        IF Func.ValidateOrder:misOrderProductExistsToFixedNumber(THIS-OBJECT:FixedNumber) 
+        IF Func.ValidateOrder:misFilledFixedNumber(THIS-OBJECT:FixedNumber) 
         THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Fixed number &1 already exists. ", THIS-OBJECT:FixedNumber)). 
         
         IF THIS-OBJECT:MobileNumber > "" AND Func.ValidateOrder:misFilledCLI(THIS-OBJECT:MobileNumber) 
@@ -125,10 +149,16 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         THEN mCreateDataOrderProductParamData(loAttributes,"mobile_number","Char").  
                  
         IF loAttributes:Has("fixedline_old_operator_code")
-        THEN mCreateDataOrderProductParamData(loAttributes,"fixedline_old_operator_code","Char").
+        THEN DO:
+            ASSIGN THIS-OBJECT:FixedCurrOperCode = loAttributes:GetCharacter("fixedline_old_operator_code").
+            mCreateDataOrderProductParamData(loAttributes,"fixedline_old_operator_code","Char").
+        END. 
         
         IF loAttributes:Has("fixedline_old_operator_name")
-        THEN mCreateDataOrderProductParamData(loAttributes,"fixedline_old_operator_name","Char").
+        THEN DO:
+            ASSIGN THIS-OBJECT:FixedCurrOper    =  loAttributes:GetCharacter("fixedline_old_operator_name").
+            mCreateDataOrderProductParamData(loAttributes,"fixedline_old_operator_name","Char").
+        END.
         
         IF loAttributes:Has("mobile_old_operator_code")
         THEN mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_code","Char").
@@ -137,7 +167,11 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         THEN mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_name","Char").
         
         IF loAttributes:Has("mnptime")
-        THEN mCreateDataOrderProductParamData(loAttributes,"mnptime","Char").
+        THEN DO:
+            THIS-OBJECT:FixedMNPTime    =   loAttributes:GetCharacter(mnptime).
+            mCreateDataOrderProductParamData(loAttributes,"mnptime","Char").
+        END.
+        
         
         ASSIGN aoAggrementCustomer           =  NEW bss.cls.OrderCustomer(aoOrder)
                aoAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
@@ -174,6 +208,8 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
             
         END.
         
+        ASSIGN aoOrder:StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE}.
+        
     END METHOD.
     
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
@@ -181,6 +217,8 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         FOR EACH ttOrderProductParam:
             CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
         END.        
+        
+        mstoreOrderFusion().
         
         IF VALID-OBJECT(aoAggrementCustomer)
         THEN aoAggrementCustomer:mStoreData().
@@ -220,6 +258,56 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         
         RETURN ( ttOrderProductParam.paramnb + 1 ).
 
+    END METHOD.
+    
+    METHOD PUBLIC VOID mstoreOrderFusion() :
+        
+        DEFINE VARIABLE llROIClose AS LOGICAL NO-UNDO. 
+        DEFINE VARIABLE ldaOrderDate AS DATE NO-UNDO.
+        DEFINE VARIABLE liOrderTime  AS INTEGER  NO-UNDO.
+        DEFINE VARIABLE lcFixedLineAdslLinkState AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lcFixedLineCustomerType AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE ocErrMsg AS CHARACTER NO-UNDO.
+        
+        
+        Func.Common:mSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
+        
+        IF (THIS-OBJECT:FixedLineCustomerType EQ "NONE" OR THIS-OBJECT:FixedLineCustomerType EQ "ADSL")  
+            AND THIS-OBJECT:FixedLineCustomerType = "MNP" 
+        THEN lcFixedLineAdslLinkState = "O".
+        ELSE    lcFixedLineAdslLinkState = "V".
+        
+        llROIClose =  (aoOrder:ROIResult EQ "risk" AND LOOKUP(aoOrder:ROILevel,"7,8") > 0).
+        
+        CREATE OrderFusion.
+        ASSIGN OrderFusion.Brand              =     Syst.Var:gcBrand
+               OrderFusion.OrderID            =     aoOrder:OrderId
+               OrderFusion.FusionStatus       =     {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
+               OrderFusion.OrderDate          =     ldaOrderDate
+               OrderFusion.Salesman           =     aoOrder:Salesman
+               OrderFusion.FixedNumberType    =     THIS-OBJECT:FixNumberType
+               OrderFusion.FixedNumber        =     THIS-OBJECT:FixedNumber
+               OrderFusion.Product            =     THIS-OBJECT:ProductID
+               /*OrderFusion.CustomerType       =     "DECIDE THIS"*/
+               OrderFusion.FixedMNPTime       =     THIS-OBJECT:FixedMNPTime
+               OrderFusion.FixedCurrOper      =     THIS-OBJECT:FixedCurrOper
+               OrderFusion.UpdateTS           =     Func.Common:mMakeTS()
+               OrderFusion.FixedCurrOperCode  =     THIS-OBJECT:FixedCurrOperCode
+               OrderFusion.SerialNumber       =     THIS-OBJECT:SerialNumber
+               OrderFusion.EstimatedDataSpeed =     THIS-OBJECT:EstimatedSpeed
+               OrderFusion.ADSLLinkState      =     THIS-OBJECT:lcFixedLineAdslLinkState
+               .
+               
+        IF aoOrder:StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE}
+        THEN DO:
+            
+            RUN Mc/orderprocessing.p(INPUT OrderFusion.OrderID , 
+                                     INPUT {&ORDER_STATUS_PENDING_FIXED_LINE} ,
+                                     INPUT OrderFusion.FixedNumber,
+                                     OUTPUT ocErrMsg  ).
+                                     
+        END.
+        
     END METHOD.
     
 

@@ -4,7 +4,7 @@
     Purpose     : Order Related Validations
     Syntax      : 
     Description : 
-    Author(s)   : kmaddali
+    Author(s)   : Koundinya Maddali
     Created     : Mon Jun 04 19:18:22 IST 2018
     Notes       : 
   ----------------------------------------------------------------------*/
@@ -108,38 +108,10 @@ CLASS Func.ValidateOrder FINAL:
             THEN RETURN TRUE.
             
         END.
-        
-        IF Func.ValidateOrder:misOrderProductExistsToFixedNumber(lcFixedNumber)
-        THEN RETURN TRUE.
-        
+
         RETURN FALSE.        
         
     END METHOD.
-    
-    METHOD PUBLIC STATIC LOGICAL misOrderProductExistsToFixedNumber (INPUT lcFixedNumber AS CHARACTER) :
-        
-        DEFINE BUFFER bfOrderProduct      FOR OrderProduct.
-        DEFINE BUFFER bfOrderProductParam FOR OrderProductParam.
-        DEFINE BUFFER bfOrder             FOR Order.
-        
-        FOR EACH bfOrderProduct NO-LOCK WHERE bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_FIXED_LINE}
-                                          AND bfOrderProduct.OrderID      >  0 :
-                                              
-            IF CAN-FIND(FIRST bfOrder WHERE bfOrder.Brand   =   Syst.Var:gcBrand
-                                        AND bfOrder.OrderID =   bfOrderProduct.OrderID
-                                        AND LOOKUP(bfOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0) THEN NEXT.
-                                        
-            IF CAN-FIND(FIRST bfOrderProductParam WHERE bfOrderProductParam.OrderProductID = bfOrderProduct.OrderProductID
-                                                    AND bfOrderProductParam.ParamName      = {&ORDER_PRODUCT_PARAM_NUMBER}
-                                                    AND bfOrderProductParam.CharValue      = lcFixedNumber)
-            THEN RETURN TRUE.
-                                              
-        END.
-        
-        RETURN FALSE.
-        
-    END METHOD.
-   
     
     METHOD PUBLIC STATIC LOGICAL misSubscriptionExists(INPUT lcCLI AS CHARACTER) :
         
@@ -171,10 +143,10 @@ CLASS Func.ValidateOrder FINAL:
         DEFINE BUFFER bfCLIType FOR CLIType.
         
         RETURN (CAN-FIND(FIRST bfCLIType NO-LOCK WHERE
-                                bfCLIType.Brand             EQ Syst.Var:gcBrand AND
-                                bfCLIType.CliType           EQ icCLIType        AND 
-                                bfCLIType.FixedLineDownload NE ?                AND 
-                                bfCLIType.FixedLineDownload NE "" )) .
+                               bfCLIType.Brand             EQ Syst.Var:gcBrand AND
+                               bfCLIType.CliType           EQ icCLIType        AND 
+                               bfCLIType.FixedLineDownload NE ?                AND 
+                               bfCLIType.FixedLineDownload NE "" )) .
         
         
     END METHOD.

@@ -193,6 +193,14 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            
        END SET.
        
+    DEFINE PUBLIC PROPERTY isProCustomer AS LOGICAL NO-UNDO
+       GET.
+       SET(INPUT ilispro AS LOGICAL) :
+           
+           ASSIGN THIS-OBJECT:isProCustomer   =  ilispro .
+           
+       END SET.
+       
     DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
         FIELDS custacctobj  AS CLASS Progress.Lang.Object
         FIELDS custacctnum  AS INTEGER
@@ -387,6 +395,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        END.
        
        ASSIGN THIS-OBJECT:CustAcctData = TRIM(THIS-OBJECT:CustAcctData, ":").
+       mAssignCategory().
      
    END METHOD.
 
@@ -427,7 +436,9 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            Customer.AgrCust           = Customer.CustNum
            Customer.Brand             = Syst.Var:gcBrand
            Customer.CreUser           = Syst.Var:katun
-           Customer.CreDate           = TODAY .
+           Customer.CreDate           = TODAY 
+           Customer.Category          = THIS-OBJECT:Category
+           .
            
        IF VALID-OBJECT(aoDefaultCustAddress)
        THEN DO:
@@ -488,5 +499,65 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
         
     END METHOD.
     
+    METHOD PUBLIC VOID mAssignCategory():
+        
+        DEFINE BUFFER bfCustCat FOR CustCat.
+        DEFINE VARIABLE lcSegment AS CHARACTER NO-UNDO.
+
+        IF THIS-OBJECT:isProCustomer THEN 
+        DO:
+            FIND FIRST bfCustCat NO-LOCK WHERE
+                       bfCustCat.brand          =   Syst.Var:gcBrand         AND
+                       bfCustCat.custidtype     =   THIS-OBJECT:CustIdType   AND
+                       bfCustCat.selfemployed   =   THIS-OBJECT:SelfEmployed AND
+                       bfCustCat.pro            =   THIS-OBJECT:isProCustomer NO-ERROR.
+            IF AVAIL bfCustCat THEN 
+            DO:
+                THIS-OBJECT:Category = bfCustCat.category.
+            END.
+        END.
+        ELSE 
+        DO:
+            IF THIS-OBJECT:CustIdType EQ {&CUSTID_COMPANY} THEN 
+            DO:
+                IF THIS-OBJECT:CustId BEGINS "V00" THEN
+                    THIS-OBJECT:Category = "30".  
+                ELSE
+                    THIS-OBJECT:Category = "23".
+            END.
+            ELSE IF THIS-OBJECT:CustIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND THIS-OBJECT:SelfEmployed  
+            THEN ASSIGN THIS-OBJECT:Category = "44".         
+            ELSE IF THIS-OBJECT:CustIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND NOT THIS-OBJECT:SelfEmployed 
+            THEN THIS-OBJECT:Category = "10". 
+            ELSE IF THIS-OBJECT:CustIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND THIS-OBJECT:SelfEmployed 
+            THEN THIS-OBJECT:Category = "45".         
+            ELSE IF THIS-OBJECT:CustIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND NOT THIS-OBJECT:SelfEmployed 
+            THEN THIS-OBJECT:Category = "11". 
+            IF THIS-OBJECT:Category > "" THEN 
+            DO:
+                FIND FIRST bfCustCat NO-LOCK WHERE
+                           bfCustCat.brand    EQ Syst.Var:gcBrand AND
+                           bfCustCat.category EQ THIS-OBJECT:Category NO-ERROR.
+
+                IF AVAIL bfCustCat 
+                THEN lcSegment = bfCustCat.Segment.
+            END.
+            ELSE 
+            DO:
+                FIND FIRST bfCustCat NO-LOCK WHERE
+                           bfCustCat.brand        EQ Syst.Var:gcBrand         AND
+                           bfCustCat.custidtype   EQ THIS-OBJECT:CustIdType   AND
+                           bfCustCat.selfemployed EQ THIS-OBJECT:SelfEmployed AND
+                           bfCustCat.pro          EQ THIS-OBJECT:isProCustomer NO-ERROR.
+                IF AVAIL CustCat THEN 
+                DO:
+                    ASSIGN 
+                        lcSegment = bfCustCat.Segment
+                        THIS-OBJECT:Category = bfCustCat.category.
+                END.
+            END.
+        END.
+        
+    END METHOD.
 
 END CLASS.

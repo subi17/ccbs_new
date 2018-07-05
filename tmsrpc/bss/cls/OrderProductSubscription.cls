@@ -94,8 +94,8 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         THEN DO:
             
             ASSIGN
-                THIS-OBJECT:lcNumberType = loAttributes:GetCharacter("number_type") 
-                THIS-OBJECT:AttrCLI      = loAttributes:GetCharacter("number")                
+                THIS-OBJECT:lcNumberType = loAttributes:GetCharacter("mobile_number_type") 
+                THIS-OBJECT:AttrCLI      = loAttributes:GetCharacter("mobile_number")                
                 .
                             
             IF LOOKUP(THIS-OBJECT:lcNumberType,"new,mnp,renewal,stc") = 0 
@@ -118,8 +118,8 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             IF lcReturnValue > ""
             THEN UNDO, THROW NEW InternalError(lcReturnValue). 
             
-            mCreateDataOrderProductParamData(loAttributes,"number_type","Char").
-            mCreateDataOrderProductParamData(loAttributes,"number","Char").  
+            mCreateDataOrderProductParamData(loAttributes,"mobile_number_type","Char").
+            mCreateDataOrderProductParamData(loAttributes,"mobile_number","Char").  
                                                  
             IF loAttributes:Has("old_operator_code") 
             THEN DO:
@@ -127,9 +127,11 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             END.
             
             IF THIS-OBJECT:lcNumberType = "MNP"
-            THEN ASSIGN aoOrder:OrderType = {&ORDER_TYPE_MNP}.
+            THEN ASSIGN aoOrder:OrderType  = {&ORDER_TYPE_MNP}
+                        aoOrder:StatusCode = {&ORDER_STATUS_MNP}.
             ELSE IF THIS-OBJECT:lcNumberType = "NEW" 
-            THEN ASSIGN aoOrder:OrderType = {&ORDER_TYPE_NEW}.
+            THEN ASSIGN aoOrder:OrderType  = {&ORDER_TYPE_NEW}
+                        aoOrder:StatusCode = {&ORDER_STATUS_NEW}.
             
             ASSIGN aoOrder:lcCLI            = THIS-OBJECT:AttrCLI
                    aoOrder:isPrePaidOrder   = Func.ValidateOrder:mIsPrepaidOrder(THIS-OBJECT:ProductID).
@@ -169,6 +171,8 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
                 aoOrderTopUp:mCreateData(loAttributes:GetJsonObject("topup")).                
                 
             END.
+            
+            
             
             /*TODO PC:Please check the MULTIHOLDER INFROMATION WITH KIRAN*/
                 
