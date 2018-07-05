@@ -121,6 +121,7 @@ DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 {Func/orderfunc.i}
 {Mnp/mnp.i}
 {Func/freacmobsub.i}
+{Func/lib/accesslog.i}
 
 session:system-alert-boxes = true.
 
@@ -230,10 +231,14 @@ DEF VAR liRequestId AS INT NO-UNDO.
 DEF VAR lcDeliveryType AS CHAR NO-UNDO. 
 DEF VAR liDeliveryType AS INT NO-UNDO. 
 DEF VAR lcSIMonlyMNP AS CHAR NO-UNDO.   /* Added since this is used in ordersender.i */
+DEF VAR lcProgram    AS CHAR NO-UNDO.
+DEF VAR llAccess     AS LOG  NO-UNDO.
 
 DEF BUFFER bOldOrder FOR Order.
 DEF BUFFER bSIM FOR SIM.
 DEF BUFFER lbOrder FOR Order.
+
+lcProgram = PROGRAM-NAME(1).
 
 form
     "Title ........:" OrderCustomer.CustTitle                
@@ -1034,6 +1039,8 @@ BROWSE:
               NEXT Browse.
            END.
            
+           RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
+           
            RUN Mc/orderbr.p(lcCustomerId,lcCustIdType,icStatus,OUTPUT oOrderID).
                  
            FIND FIRST Order WHERE
@@ -1054,6 +1061,8 @@ BROWSE:
                          ordercustomer.brand      = lcBrand
               NO-LOCK NO-ERROR.
               IF AVAILABLE OrderCustomer THEN DO:
+                 RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
+                 
                  RUN Mc/orderbr.p(OrderCustomer.CustId,
                              OrderCustomer.CustIdType,icStatus,
                              OUTPUT oOrderID).
@@ -1998,8 +2007,15 @@ PROCEDURE local-update-customer:
    ASSIGN liCustRole   = iiRole
           lcCurrHeader = ac-hdr.
           
+   llAccess = FALSE. 
+      
    CASE iiRole:
-      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN lcNewHeader = " AGREEMENT".
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
+         ASSIGN
+            lcNewHeader = " AGREEMENT"
+            llAccess    = TRUE
+            .      
+      END. 
       WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
          IF Order.InvCustRole NE 2 THEN DO:
             MESSAGE "Invoice customer role is" Order.InvCustRole
@@ -2049,6 +2065,9 @@ PROCEDURE local-update-customer:
       VIEW-AS ALERT-BOX ERROR.
       RETURN.
    END.
+
+   IF llAccess THEN
+      RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderCustomer).
 
