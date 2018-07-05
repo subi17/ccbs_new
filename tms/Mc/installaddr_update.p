@@ -13,7 +13,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE {&REQTYPE_INSTALL_ADDRESS_UPD
 
 fCreateFusionAddressChangeMessage(MsRequest.ReqIParam1,
                                   OUTPUT lcError).
-
+                                  
 IF lcError NE "" THEN 
    Func.Common:mWriteMemo("Order",
                           STRING(MsRequest.ReqIParam1),

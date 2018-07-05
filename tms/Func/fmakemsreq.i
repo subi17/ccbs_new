@@ -680,22 +680,7 @@ FUNCTION fUpdateInstallAddressRequest RETURNS INTEGER
       ocResult = SUBST("OrderCustomer for &1 not found", iiOrderId).
       RETURN 0.
    END.
-   /*
-   liZip = INT(icZip) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN ocResult = "ZipCode must be numeral".
-   IF ocResult > "" THEN RETURN 0.
    
-   liRegion = INT(icRegion) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN ocResult = "Region must be numeral".
-   IF ocResult > "" THEN RETURN 0.
-   
-   IF icRegion NE "00" THEN 
-      FIND FIRST Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
-   IF NOT AVAIL Region THEN DO:
-      ocResult = "Unknown region " + icRegion.
-      RETURN 0.
-   END.
-   */
    ocResult = fChkRequest(bOrder.msseq,
                           {&REQTYPE_INSTALL_ADDRESS_UPDATE},
                           "",

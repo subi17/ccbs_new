@@ -69,9 +69,11 @@ DEF VAR pcTerritory_owner AS CHAR NO-UNDO.
 DEF VAR pcStreet_type     AS CHAR NO-UNDO.
 DEF VAR pcZip             AS CHAR NO-UNDO.
 
+/* local variables */
 DEF VAR lcCurrentDetails AS CHAR NO-UNDO.
 DEF VAR lcAmendmentValue AS CHAR NO-UNDO.
 DEF VAR lcAmendmentType  AS CHAR NO-UNDO.
+DEF VAR lcRegion         AS CHAR NO-UNDO.
 
 /* Eventlog parameters */
 
@@ -124,15 +126,15 @@ END FUNCTION.
 ASSIGN 
    gcAmendmentDetails = "country,bis,block,city,coverage_token,door,floor,gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
 
-IF validate_request(param_toplevel_id, "string,int,string,string,string,struct") EQ ? THEN
+IF validate_request(param_toplevel_id, "string,int,struct,string,string,string") EQ ? THEN
    RETURN.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcAmendmentStruct = get_struct(param_toplevel_id, "5").  
-pcReason = get_string(param_toplevel_id, "4").
-pcContractId = get_string(param_toplevel_id, "3").
-pcAmendmentType = get_string(param_toplevel_id, "2").
+pcReason = get_string(param_toplevel_id, "5").
+pcContractId = get_string(param_toplevel_id, "4").
+pcAmendmentType = get_string(param_toplevel_id, "3").
+pcAmendmentStruct = get_struct(param_toplevel_id, "2").  
 piOrderId = get_int(param_toplevel_id, "1").
 pcSalesManId = get_string(param_toplevel_id, "0").
 scUser = "VISTA_" + pcSalesManId. /* Read from eventlog functions into eventlog.user */
@@ -162,9 +164,6 @@ FIND FIRST OrderCustomer WHERE
            OrderCustomer.OrderId EQ piOrderId        AND
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
            NO-LOCK NO-ERROR.                          
-IF LOCKED OrderCustomer THEN 
-   RETURN appl_err("Installation_address_change_failed due to ordercustomer is locked"). 
-
 IF NOT AVAILABLE OrderCustomer THEN 
    RETURN appl_err("Installation address possible for convergent order only").
    
@@ -174,24 +173,30 @@ FIND FIRST OrderFusion NO-LOCK WHERE
 IF NOT AVAIL OrderFusion THEN
    RETURN appl_err("Fixed line connection is not available for this order").
    
-IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} OR
-   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_PENDING_CANCELLED} OR
-   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ERROR} OR
-   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_REJECTED} OR
-   OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} THEN 
-   RETURN appl_err("Order is not in valid state to update").
+IF AVAIL OrderFusion THEN DO:
+   IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE") > 0 THEN
+      RETURN appl_err("Order is not in valid state to update").
+END.
+
+IF pcRegion EQ "ISLAS BALEARES" THEN lcRegion = "Baleares".
+IF pcRegion EQ "TENERIFE" THEN lcRegion = "Sta.Cruz Tenerife".
+IF pcRegion EQ "LLEIDA" THEN lcRegion = "Lérida".
+
+FIND FIRST Region NO-LOCK WHERE
+           Region.RgName EQ lcRegion NO-ERROR.
+IF NOT AVAIL Region THEN RETURN appl_err("Given Region is Invalid"). 
 
 ASSIGN
    lcAmendmentType = pcAmendmentType
-   lcCurrentDetails = OrderCustomer.StreetType + " " + OrderCustomer.Street + " " +
-      OrderCustomer.BuildingNum + " " + OrderCustomer.Floor + " " + OrderCustomer.Door 
-      + " " + OrderCustomer.Letter + " " + OrderCustomer.Stair + " " + OrderCustomer.Block 
-      + " " + OrderCustomer.BisDuplicate + " " + OrderCustomer.ZipCode + " " + OrderCustomer.PostOffice
-      + " " + OrderCustomer.Gescal
-   lcAmendmentValue = pcStreet_type + " " + pcStreet_name + " " + pcStreet_number
-      + " " + pcFloor + " " + pcDoor + " " + pcLetter + " " + pcStair + " " + pcBlock + " " +
-      pcBis + " " + pcZip + " " + pcCity + " " + pcGescal + " " + pcAddressId + " " +  pcCountry + " " +  
-      pcKm + " " +    pcRegion + " " + pcHand + " " + pcTerritory_owner.
+   lcCurrentDetails = OrderCustomer.StreetType + "|" + OrderCustomer.Street + "|" + ~
+       OrderCustomer.BuildingNum + "|" + OrderCustomer.Floor + "|" + OrderCustomer.Door ~
+      + "|" + OrderCustomer.Letter + "|" + OrderCustomer.Stair + "|" + OrderCustomer.Block ~
+      + "|" + OrderCustomer.BisDuplicate + "|" + OrderCustomer.ZipCode + "|" + OrderCustomer.PostOffice ~
+      + "|" + OrderCustomer.Gescal
+   lcAmendmentValue = pcStreet_type + "|" + pcStreet_name + "|" + pcStreet_number ~
+      + "|" + pcFloor + "|" + pcDoor + "|" + pcLetter + "|" + pcStair + "|" + pcBlock + "|" + ~
+      pcBis + "|" + pcZip + "|" + pcCity + "|" + pcGescal + "|" + pcAddressId + "|" +  pcCountry + "|" +  ~
+      pcKm + "|" +    lcRegion + "|" + pcHand + "|" + pcTerritory_owner.
 
 fUpdateInstallAddressRequest(
                              pcSalesManId,

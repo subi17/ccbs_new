@@ -57,7 +57,7 @@ DEF VAR liWait                   AS INT        NO-UNDO.
 DEF VAR lhOrdCustomer            AS HANDLE     NO-UNDO.
 DEF VAR lcError                  AS CHAR       NO-UNDO. 
 DEF VAR ldaOrigCancelDate        AS DATE       NO-UNDO.
-
+      
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-WAIT NO-ERROR.
      
@@ -73,11 +73,11 @@ FIND OrderFusion EXCLUSIVE-LOCK WHERE
      OrderFusion.Brand = Syst.Var:gcBrand AND
      OrderFusion.OrderID = FusionMessage.OrderID
      NO-WAIT NO-ERROR.
-/*     
+
 IF NOT OrderFusion.FixedNumber > "" THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                              "FixedNumber not assigned").
-*/
+
 FIND FIRST MSRequest WHERE 
            MSRequest.MsSeq = FusionMessage.Msseq AND
            MSRequest.ReqType = {&REQTYPE_INSTALL_ADDRESS_UPDATE} 
@@ -130,15 +130,15 @@ lcCharacteristicsObject3 = NEW JsonObject().
 lcServicesObject:ADD('Characteristics',lcCharacteristicsArray).
 lcCharacteristicsArray:ADD(lcCharacteristicsObject1).
 lcCharacteristicsObject1:ADD('name','AddressId').
-lcCharacteristicsObject1:ADD('value',ENTRY(13,lcAmendamentValue," ")).
+lcCharacteristicsObject1:ADD('value',ENTRY(13,lcAmendamentValue,"|")).
   
 lcCharacteristicsArray:ADD(lcCharacteristicsObject2).
 lcCharacteristicsObject2:ADD('name','TerritoryOwner').
-lcCharacteristicsObject2:ADD('value',ENTRY(18,lcAmendamentValue," ")).
+lcCharacteristicsObject2:ADD('value',ENTRY(18,lcAmendamentValue,"|")).
 
 lcCharacteristicsArray:ADD(lcCharacteristicsObject3).
 lcCharacteristicsObject3:ADD('name','gescal').
-lcCharacteristicsObject3:ADD('value',ENTRY(12,lcAmendamentValue," ")).
+lcCharacteristicsObject3:ADD('value',ENTRY(12,lcAmendamentValue,"|")).
   
 lcServicesObject:ADD('type','FTTH').
    
@@ -147,21 +147,21 @@ lobjOuterObject:ADD('Installation',lcInstallationObject).
 lcAddressObject = NEW JsonObject().
 lcInstallationObject:ADD('Address',lcAddressObject).
   
-lcAddressObject:ADD('country',ENTRY(14,lcAmendamentValue," ")).
-lcAddressObject:ADD('door',ENTRY(5,lcAmendamentValue," ")).
-lcAddressObject:ADD('zipCode',ENTRY(10,lcAmendamentValue," ")).
-lcAddressObject:ADD('streetType',ENTRY(1,lcAmendamentValue," ")).
-lcAddressObject:ADD('km',ENTRY(15,lcAmendamentValue," ")).
-lcAddressObject:ADD('stair',ENTRY(7,lcAmendamentValue," ")).
-lcAddressObject:ADD('town',ENTRY(11,lcAmendamentValue," ")).
-lcAddressObject:ADD('number',ENTRY(3,lcAmendamentValue," ")).
-lcAddressObject:ADD('province',ENTRY(15,lcAmendamentValue," ")).
-lcAddressObject:ADD('street',ENTRY(2,lcAmendamentValue," ")).
-lcAddressObject:ADD('letter',ENTRY(6,lcAmendamentValue," ")).
-lcAddressObject:ADD('bis',ENTRY(9,lcAmendamentValue," ")).
-lcAddressObject:ADD('block',ENTRY(8,lcAmendamentValue," ")).
-lcAddressObject:ADD('floor',ENTRY(4,lcAmendamentValue," ")).
-lcAddressObject:ADD('hand',ENTRY(16,lcAmendamentValue," ")).
+lcAddressObject:ADD('country',ENTRY(14,lcAmendamentValue,"|")).
+lcAddressObject:ADD('door',ENTRY(5,lcAmendamentValue,"|")).
+lcAddressObject:ADD('zipCode',ENTRY(10,lcAmendamentValue,"|")).
+lcAddressObject:ADD('streetType',ENTRY(1,lcAmendamentValue,"|")).
+lcAddressObject:ADD('km',ENTRY(15,lcAmendamentValue,"|")).
+lcAddressObject:ADD('stair',ENTRY(7,lcAmendamentValue,"|")).
+lcAddressObject:ADD('town',ENTRY(11,lcAmendamentValue,"|")).
+lcAddressObject:ADD('number',ENTRY(3,lcAmendamentValue,"|")).
+lcAddressObject:ADD('province',ENTRY(15,lcAmendamentValue,"|")).
+lcAddressObject:ADD('street',ENTRY(2,lcAmendamentValue,"|")).
+lcAddressObject:ADD('letter',ENTRY(6,lcAmendamentValue,"|")).
+lcAddressObject:ADD('bis',ENTRY(9,lcAmendamentValue,"|")).
+lcAddressObject:ADD('block',ENTRY(8,lcAmendamentValue,"|")).
+lcAddressObject:ADD('floor',ENTRY(4,lcAmendamentValue,"|")).
+lcAddressObject:ADD('hand',ENTRY(16,lcAmendamentValue,"|")).
 /*    
 RUN Gwy/http_rest_client.p("put"     ,
                            lcHost    ,
@@ -230,19 +230,19 @@ ELSE DO:
       FusionMessage.AdditionalInfo = lcResultDesc.
       
    ASSIGN 
-      llUpdateAL      = TRUE
+    //  llUpdateAL      = TRUE
       lcTableName     = "install_address_change"
       lcActionID      = "install_address_change_processor" 
       ldCurrentTimeTS = Func.Common:mMakeTS(). 
-   
-   FIND FIRST ActionLog NO-LOCK WHERE
+
+   FIND FIRST ActionLog EXCLUSIVE-LOCK WHERE
               ActionLog.Brand     EQ  Syst.Var:gcBrand AND
               ActionLog.ActionID  EQ  lcActionID       AND
               ActionLog.TableName EQ  lcTableName      NO-ERROR.
-   IF AVAIL ActionLog AND
+  /* IF AVAIL ActionLog AND
             ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN
-                llUpdateAL = FALSE.
-   ELSE IF NOT AVAIL ActionLog THEN DO:
+                llUpdateAL = FALSE.*/
+   IF NOT AVAIL ActionLog THEN DO:
    /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
@@ -260,6 +260,7 @@ ELSE DO:
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE Actionlog.
    END.
+
    FIND FIRST OrderCustomer WHERE 
               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
               OrderCustomer.OrderId EQ FusionMessage.OrderID AND
@@ -268,35 +269,38 @@ ELSE DO:
    IF NOT AVAIL OrderCustomer THEN 
       RETURN "ErrorCode: OrderCustomer is not available".
    ELSE DO:
+       
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrdCustomer).
       ASSIGN
-         OrderCustomer.AddressId    = ENTRY(13,lcAmendamentValue," ")
-         OrderCustomer.Gescal       = ENTRY(12,lcAmendamentValue," ")
-         OrderCustomer.Door         = ENTRY(5,lcAmendamentValue," ")
-         OrderCustomer.ZipCode      = ENTRY(10,lcAmendamentValue," ")
-         OrderCustomer.StreetType   = ENTRY(1,lcAmendamentValue," ")
-         OrderCustomer.Km           = ENTRY(15,lcAmendamentValue," ")
-         OrderCustomer.Stair        = ENTRY(7,lcAmendamentValue," ")
-         OrderCustomer.PostOffice   = ENTRY(11,lcAmendamentValue," ")
-         OrderCustomer.BuildingNum  = ENTRY(3,lcAmendamentValue," ")
-         OrderCustomer.Region       = ENTRY(15,lcAmendamentValue," ")
-         OrderCustomer.Street       = ENTRY(2,lcAmendamentValue," ")
-         OrderCustomer.Letter       = ENTRY(6,lcAmendamentValue," ")
-         OrderCustomer.BisDuplicate = ENTRY(9,lcAmendamentValue," ")
-         OrderCustomer.Block        = ENTRY(8,lcAmendamentValue," ")
-         OrderCustomer.Floor        = ENTRY(4,lcAmendamentValue," ")
-         OrderCustomer.Hand         = ENTRY(16,lcAmendamentValue," ")
+         OrderCustomer.AddressId    = ENTRY(13,lcAmendamentValue,"|")
+         OrderCustomer.Gescal       = ENTRY(12,lcAmendamentValue,"|")
+         OrderCustomer.Door         = ENTRY(5,lcAmendamentValue,"|")
+         OrderCustomer.ZipCode      = ENTRY(10,lcAmendamentValue,"|")
+         OrderCustomer.StreetType   = ENTRY(1,lcAmendamentValue,"|")
+         OrderCustomer.Km           = ENTRY(15,lcAmendamentValue,"|")
+         OrderCustomer.Stair        = ENTRY(7,lcAmendamentValue,"|")
+         OrderCustomer.PostOffice   = ENTRY(11,lcAmendamentValue,"|")
+         OrderCustomer.BuildingNum  = ENTRY(3,lcAmendamentValue,"|")
+         OrderCustomer.Region       = ENTRY(15,lcAmendamentValue,"|")
+         OrderCustomer.Street       = ENTRY(2,lcAmendamentValue,"|")
+         OrderCustomer.Letter       = ENTRY(6,lcAmendamentValue,"|")
+         OrderCustomer.BisDuplicate = ENTRY(9,lcAmendamentValue,"|")
+         OrderCustomer.Block        = ENTRY(8,lcAmendamentValue,"|")
+         OrderCustomer.Floor        = ENTRY(4,lcAmendamentValue,"|")
+         OrderCustomer.Hand         = ENTRY(16,lcAmendamentValue,"|")
          OrderCustomer.Address      = OrderCustomer.Street.
          
       IF OrderCustomer.BuildingNum NE "" THEN 
-         OrderCustomer.Address = OrderCustomer.Address + " " +
+         OrderCustomer.Address = OrderCustomer.Address + "|" +
          OrderCustomer.BuildingNum.
                
       IF llDoEvent THEN 
       RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer, 
                                            {&STAR_EVENT_USER}, 
                                            lcMemo).    
+
       fReqStatus(6,"New AddressDetailes Updated to Order"). 
+      fReqStatus(2,"Ok").
       
    END.      
    RELEASE OrderCustomer.
@@ -318,4 +322,3 @@ FINALLY:
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
       RELEASE ActionLog.
 END FINALLY.
-  

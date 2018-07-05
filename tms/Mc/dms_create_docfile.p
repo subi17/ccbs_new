@@ -1291,7 +1291,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
              OR MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/
-             OR MsRequest.ReqType EQ {&REQTYPE_INSTALL_ADDRESS_UPDATE} /* */
+             OR MsRequest.ReqType EQ {&REQTYPE_INSTALL_ADDRESS_UPDATE} /*99*/
             ) AND
             MsRequest.ReqCparam6 NE "" AND 
             MsRequest.UpdateStamp <= MsRequest.DoneStamp:
@@ -1302,20 +1302,19 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             DEF VAR lcAmendAddress AS CHAR NO-UNDO.
             DEF VAR liCount AS INT NO-UNDO.
             
-            DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam3," "):
+            DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam3,"|"):
                IF liCount < 10 THEN 
                   ASSIGN 
-                     lcAmendAddress = lcAmendAddress + " " + ENTRY(liCount,MsRequest.ReqCParam3," ")
+                     lcAmendAddress = lcAmendAddress + "|" + ENTRY(liCount,MsRequest.ReqCParam3,"|")
                      lcAmendAddress = TRIM(lcAmendAddress).
             END.
             
-            DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam4," "):
+            DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam4,"|"):
                IF liCount < 10 THEN 
                   ASSIGN 
-                     lcCurrAddress = lcCurrAddress + " " + ENTRY(liCount,MsRequest.ReqCParam4," ")
+                     lcCurrAddress = lcCurrAddress + " " + ENTRY(liCount,MsRequest.ReqCParam4,"|")
                      lcCurrAddress = TRIM(lcCurrAddress).
             END.
-            
             ASSIGN        
                lcCaseTypeId = lcInstAddrCaseTypeID
                lcCaseFileRow =
@@ -1337,19 +1336,19 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                   /*Old_Full_Address*/
                   lcCurrAddress                                  + lcDelim +
                   /*Old_ZipCode*/
-                  ENTRY(10,MsRequest.ReqCParam4," ")             + lcDelim +
+                  ENTRY(10,MsRequest.ReqCParam4,"|")             + lcDelim +
                   /*Old_Town*/
-                  ENTRY(11,MsRequest.ReqCParam4," ")             + lcDelim +
+                  ENTRY(11,MsRequest.ReqCParam4,"|")             + lcDelim +
                   /*Old_Gescal*/
-                  ENTRY(12,MsRequest.ReqCParam4," ")             + lcDelim +
+                  ENTRY(12,MsRequest.ReqCParam4,"|")             + lcDelim +
                   /*New_full_address*/
                   lcAmendAddress                                 + lcDelim +
                   /*New_ZipCode*/
-                  ENTRY(10,MsRequest.ReqCParam3," ")             + lcDelim +
+                  ENTRY(10,MsRequest.ReqCParam3,"|")             + lcDelim +
                   /*New_Town*/
-                  ENTRY(11,MsRequest.ReqCParam3," ")             + lcDelim +
+                  ENTRY(11,MsRequest.ReqCParam3,"|")             + lcDelim +
                   /*New_Gescal*/
-                  ENTRY(12,MsRequest.ReqCParam3," ").
+                  ENTRY(12,MsRequest.ReqCParam3,"|").
          END.    
          WHEN {&REQTYPE_ICC_CHANGE} THEN DO:
             lcCaseTypeId = lcICCCaseTypeId.
