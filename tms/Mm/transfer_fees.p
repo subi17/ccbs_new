@@ -489,14 +489,13 @@ PROCEDURE pCreateTermRequest:
 
    FOR EACH ttContract:
 
-      FIND FIRST DayCampaign WHERE 
-                 DayCampaign.Brand      = Syst.Var:gcBrand   AND 
-                 DayCampaign.DCEvent    = ttContract.DCEvent AND 
-                 DayCampaign.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+      FIND FIRST DayCampaign NO-LOCK WHERE 
+                 DayCampaign.Brand   EQ Syst.Var:gcBrand   AND 
+                 DayCampaign.DCEvent EQ ttContract.DCEvent AND 
+                 DayCampaign.ValidTo >= TODAY              NO-ERROR.
               
-      IF NOT AVAIL DayCampaign THEN DO:
+      IF NOT AVAIL DayCampaign THEN
          NEXT.
-      END.
 
       llCreateFee = FALSE.
 
@@ -516,7 +515,6 @@ PROCEDURE pCreateTermRequest:
                                        ttContract.PerContID,
                                        "",
                                        OUTPUT lcError).
-
       DELETE ttContract.
    END.
    
