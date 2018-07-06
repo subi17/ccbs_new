@@ -1988,7 +1988,8 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0
       lcFixedLinePermanency = get_string(pcFusionStruct, "fixed_line_permanency_contract_id")
          WHEN LOOKUP("fixed_line_permanency_contract_id", lcFusionStructFields) > 0
-      lcFixedLineIUA       = get_string(pcFusionStruct,"fixed_line_iua").
+      lcFixedLineIUA       = get_string(pcFusionStruct,"fixed_line_iua")
+         WHEN LOOKUP("fixed_line_iua", lcFusionStructFields) > 0.
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
