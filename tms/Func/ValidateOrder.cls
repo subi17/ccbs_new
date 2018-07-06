@@ -162,5 +162,11 @@ CLASS Func.ValidateOrder FINAL:
         
     END METHOD.
     
+    METHOD PUBLIC STATIC LOGICAL misValidICC(INPUT icICC AS CHARACTER):
+        
+        RETURN (CAN-FIND(FIRST Sim WHERE Sim.ICC = Order.ICC)).
+        
+    END METHOD.    
+    
 
 END CLASS.
