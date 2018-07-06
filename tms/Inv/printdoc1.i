@@ -1381,6 +1381,13 @@ PROCEDURE pGetInvoiceRowData:
             ELSE
                /* Any concept that must be included in the invoice without taxes */
                ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRow.Amt.
+         /* Sum all other consumptions with else branch to OtherConcepts */
+         OTHERWISE IF NOT (InvRow.RowType EQ 4 OR    /* Penalty */
+                           InvRow.RowType EQ 9 OR    /* Installment discounts */
+               ttBillItemAndGroup.BIGroup EQ "44" OR /* Google purchase */
+               ttBillItemAndGroup.BIGroup EQ "45" OR /* Google refund   */
+               ttBillItemAndGroup.BIGroup EQ "33")   /* Installments   */
+            THEN ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRow.Amt.
          END CASE.
 
          FIND FIRST ttRow WHERE
