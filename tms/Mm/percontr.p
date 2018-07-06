@@ -988,9 +988,15 @@ PROCEDURE pContractActivation:
 
       liEndTime = 36000.
    END.
-   ELSE ASSIGN
-      ldtEndDate = fcontract_end_date(INPUT lcDCEvent,INPUT ldtFromDate)
-      liEndTime = 86399.
+   ELSE DO:
+      ASSIGN ldtEndDate = fcontract_end_date(INPUT lcDCEvent,INPUT ldtFromDate)
+             liEndTime = 86399.
+
+      IF lcDCEvent BEGINS "FTERM" THEN
+         ldtEndDate = fGetPermanencyContractEndDateForMerge(MsRequest.MsRequest,
+                                                            ldtFromDate,
+                                                            ldtEndDate).
+   END.                                                            
 
    IF ldtEndDate >= 12/31/2049 THEN ldEndStamp = 99999999.99999.
    ELSE ldEndStamp = Func.Common:mMake2DT(ldtEndDate,liEndTime).

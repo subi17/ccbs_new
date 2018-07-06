@@ -79,3 +79,59 @@ FUNCTION fcontract_end_date RETURNS DATE
 
 END FUNCTION. /* FUNCTION fcontract_end_date RETURNS DATE */
 
+FUNCTION fGetPermanencyContractEndDateForMerge RETURNS DATE
+   (INPUT iiMsRequest AS INT,
+    INPUT idtFromDate AS DATE,
+    INPUT idtEndDate  AS DATE):
+
+   DEFINE BUFFER bContractMsRequest FOR MsRequest.
+   DEFINE BUFFER bSTCMainRequest    FOR MsRequest.
+   DEFINE BUFFER bMergeMainRequest  FOR MsRequest.
+   DEFINE BUFFER bFixedLineDCCLI    FOR DCCLI.
+
+   DEF VAR liDays     AS INT NO-UNDO.
+   DEF VAR ioSeconds  AS INT NO-UNDO.
+   DEF VAR liMonths   AS INT NO-UNDO.
+   DEF VAR odtEndDate AS DATE NO-UNDO.
+
+   FIND FIRST bContractMsRequest NO-LOCK WHERE
+              bContractMsRequest.Brand     EQ Syst.Var:gcBrand AND
+              bContractMsRequest.MsRequest EQ iiMsRequest      NO-ERROR.
+
+   IF NOT AVAIL bContractMsRequest THEN
+      RETURN idtEndDate.
+
+   FIND FIRST bSTCMainRequest NO-LOCK WHERE
+              bSTCMainRequest.Brand     EQ Syst.Var:gcBrand               AND
+              bSTCMainRequest.MsRequest EQ bContractMsRequest.OrigRequest NO-ERROR.
+
+   IF NOT AVAIL bSTCMainRequest THEN
+      RETURN idtEndDate.
+
+   FIND FIRST bMergeMainRequest NO-LOCK WHERE
+              bMergeMainRequest.Brand     EQ Syst.Var:gcBrand            AND
+              bMergeMainRequest.MsRequest EQ bSTCMainRequest.OrigRequest AND
+              bMergeMainRequest.ReqType   EQ {&REQTYPE_2P3P_MERGE}       NO-ERROR.
+
+   IF NOT AVAIL bMergeMainRequest THEN
+      RETURN idtEndDate.
+
+   FOR EACH bFixedLineDCCLI NO-LOCK WHERE
+            bFixedLineDCCLI.MsSeq   EQ bMergeMainRequest.MsSeq AND
+            bFixedLineDCCLI.DCEvent BEGINS "FTERM"             AND
+            bFixedLineDCCLI.ValidTo <= idtFromDate:
+
+      ASSIGN liDays = Func.Common:mTSDuration(Func.Common:mDate2TS(bFixedLineDCCLI.ValidFrom),
+                                              Func.Common:mDate2TS(bFixedLineDCCLI.ValidTo),
+                                              OUTPUT ioSeconds)
+             liMonths = (lidays / 30).
+
+      odtEndDate = ADD-INTERVAL(idtEndDate,-(liMonths),"months").
+
+      RETURN odtEndDate.
+
+   END.
+
+   RETURN idtEndDate.
+
+END FUNCTION.
