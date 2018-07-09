@@ -35,6 +35,7 @@ USING Progress.Json.ObjectModel.*.
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
+{Syst/tmsconst.i}
 Syst.Var:gcBrand = "1".
 {Func/fmakemsreq.i}
  
@@ -124,8 +125,7 @@ FUNCTION fGetAddressFields RETURNS LOGICAL:
 END FUNCTION.
 
 ASSIGN 
-   gcAmendmentDetails = "country,bis,block,city,coverage_token,door,floor, + 
-      gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
+   gcAmendmentDetails = "country,bis,block,city,coverage_token,door,floor,gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
 
 IF validate_request(param_toplevel_id, "string,int,struct,string,string,string") EQ ? THEN
    RETURN.
@@ -177,61 +177,56 @@ IF NOT AVAIL OrderFusion THEN
    
 IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE") > 0 THEN
       RETURN appl_err("Order is not in valid state to update").
+      
 
 CASE pcAmendmentType:
     WHEN "ChangeInstallationAddress" THEN DO:
+
+       IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
+                          FusionMessage.OrderID = OrderFusion.OrderID AND
+                          FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
+                          FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN 
+          RETURN appl_err("Ongoing message, not possible to update order").      
+       
        ASSIGN
           lcAmendmentType = pcAmendmentType
-          lcCurrentDetails = OrderCustomer.StreetType + "||" + 
-                             OrderCustomer.Street + "||" + 
-                             OrderCustomer.BuildingNum + "||" + 
-                             OrderCustomer.Floor + "||" + 
-                             OrderCustomer.Door + "||" + 
-                             OrderCustomer.Letter + "||" + 
-                             OrderCustomer.Stair + "||" + 
-                             OrderCustomer.Block + "||" + 
-                             OrderCustomer.BisDuplicate + "||" + 
-                             OrderCustomer.ZipCode + "||" + 
-                             OrderCustomer.PostOffice + "||" + 
-                             OrderCustomer.Gescal + "||" +
-                             OrderCustomer.AddressId + "||" +
-                             OrderCustomer.Country + "||" +
-                             OrderCustomer.km + "||" +
-                             OrderCustomer.Region + "||" +
-                             OrderCustomer.Hand + "||" +
+          lcCurrentDetails = OrderCustomer.StreetType + "|" + 
+                             OrderCustomer.Street + "|" + 
+                             OrderCustomer.BuildingNum + "|" + 
+                             OrderCustomer.Floor + "|" + 
+                             OrderCustomer.Door + "|" + 
+                             OrderCustomer.Letter + "|" + 
+                             OrderCustomer.Stair + "|" + 
+                             OrderCustomer.Block + "|" + 
+                             OrderCustomer.BisDuplicate + "|" + 
+                             OrderCustomer.ZipCode + "|" + 
+                             OrderCustomer.PostOffice + "|" + 
+                             OrderCustomer.Gescal + "|" +
+                             OrderCustomer.AddressId + "|" +
+                             OrderCustomer.Country + "|" +
+                             OrderCustomer.km + "|" +
+                             OrderCustomer.Region + "|" +
+                             OrderCustomer.Hand + "|" +
                              OrderCustomer.TerritoryOwner
-          lcAmendmentValue = pcStreet_type + "||" + 
-                             pcStreet_name + "||" + 
-                             pcStreet_number + "||" + 
-                             pcFloor + "||" + 
-                             pcDoor + "||" + 
-                             pcLetter + "||" + 
-                             pcStair + "||" + 
-                             pcBlock + "||" + 
-                             pcBis + "||" + 
-                             pcZip + "||" + 
-                             pcCity + "||" + 
-                             pcGescal + "||" + 
-                             pcAddressId + "||" +  
-                             pcCountry + "||" +  
-                             pcKm + "||" +
-                             lcRegion + "||" + 
-                             pcHand + "||" + 
+          lcAmendmentValue = pcStreet_type + "|" + 
+                             pcStreet_name + "|" + 
+                             pcStreet_number + "|" + 
+                             pcFloor + "|" + 
+                             pcDoor + "|" + 
+                             pcLetter + "|" + 
+                             pcStair + "|" + 
+                             pcBlock + "|" + 
+                             pcBis + "|" + 
+                             pcZip + "|" + 
+                             pcCity + "|" + 
+                             pcGescal + "|" + 
+                             pcAddressId + "|" +  
+                             pcCountry + "|" +  
+                             pcKm + "|" +
+                             lcRegion + "|" + 
+                             pcHand + "|" + 
                              pcTerritory_owner.
-        /* Address validations */
-       FIND FIRST Country WHERE
-                  Country.Country = pcCountry 
-                  NO-LOCK NO-ERROR.
-       IF NOT AVAIL Country THEN RETURN appl_err("Given Country is Invalid"). 
-          
-       IF pcRegion EQ "ISLAS BALEARES" THEN lcRegion = "Baleares".
-       IF pcRegion EQ "TENERIFE" THEN lcRegion = "Sta.Cruz Tenerife".
-       IF pcRegion EQ "LLEIDA" THEN lcRegion = "Lérida".
-    
-       FIND FIRST Region WHERE
-                  Region.RgName EQ lcRegion 
-                  NO-LOCK NO-ERROR.
-       IF NOT AVAIL Region THEN RETURN appl_err("Given Region is Invalid"). 
+        
     END. 
        
     OTHERWISE DO:

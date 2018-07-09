@@ -114,7 +114,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
         CLIType.CLIType = Order.CLiType.
 
    IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
-      lcPrefix = "Cancelacion".
+      lcPrefix = "Cancelaci�n".
    ELSE IF icMessageType EQ {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} THEN 
       lcPrefix = "AddressChange".   
    ELSE lcPrefix = "Alta".

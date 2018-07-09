@@ -74,6 +74,30 @@ function fCreateRequestParam return logical
             RequestParam.DispParam   = icDispParam.
 end function.
 
+function fCreateTMSParam return logical
+   (INPUT icCharVal AS CHAR,
+    INPUT icParamCode AS CHAR,
+    INPUT icParamGroup AS CHAR,
+    INPUT icParamName AS CHAR):
+   CREATE TMSParam.
+   ASSIGN
+      TMSParam.Brand = "1"
+      TMSParam.CharVal = icCharVal
+      TMSParam.Online = FALSE
+      TMSParam.ParamCode = icParamCode
+      TMSParam.ParamGroup = icParamGroup
+      TMSParam.ParamName = icParamName
+      TMSParam.ParamType = "C". 
+end function.    
+
+fCreateTMSParam("https://masmovil-test-staging.apigee.net","InflightHost","Masmovil","Host Name").
+fCreateTMSParam("80","InflightPort","Masmovil","Port Number").
+fCreateTMSParam("private/v1/microservices/orders/","InflightUriPath","Masmovil","API Uri Path").
+fCreateTMSParam("","InflightUriQuery","Masmovil","API URI QUERY").
+fCreateTMSParam("","InflightUriQueryValue","Masmovil","API URI QUERY Value").
+fCreateTMSParam("1","InflightLogRequest","Masmovil","Log Request",).
+
+
 fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"ActStamp","",yes).
 fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"Brand","",yes).
 fCreateRequestParam({&REQTYPE_FIXEDLINE_ORDER_UPDATE},"MsSeq","",yes).

@@ -168,7 +168,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
       ELSE lcCReqTime = fChkTiming(bReqSub.CLIType,
                                    "",
                                    ldtCReqDate).
-
+                                   
       IF lcCReqTime > "" THEN DO:
          IF MONTH(ldtCReqDate) = 12 
          THEN ldtCReqDate = DATE(1,1,YEAR(ldtCReqDate) + 1).
@@ -200,7 +200,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                           "",
                           icCreator).
    IF ocResult > "" THEN RETURN 0.                       
-  
+   
    /* PRO */
    IF iiOrderId > 0 THEN DO:
       FIND FIRST Order NO-LOCK WHERE
@@ -249,9 +249,9 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
 
    /* Send right away SMS related to the CLI Type change */
    RUN Mm/requestaction_sms.p(INPUT liReqCreated,
-                              INPUT icNewType,
-                              INPUT icSource).
-
+                           INPUT icNewType,
+                           INPUT icSource).
+  
    RETURN liReqCreated.
              
 END FUNCTION.
@@ -704,8 +704,8 @@ FUNCTION fOrderUpdateRequest RETURNS INTEGER
       bCreaReq.ReqCParam2 = icAmendmentType
       bCreaReq.ReqCParam3 = icAmendmentValue
       bCreaReq.ReqCParam4 = icCurrentDetails
-      bCreaReq.ReqCParam5 = icContractId
-      bCreaReq.ReqCParam6 = icReason
+      bCreaReq.ReqCParam5 = icReason
+      bCreaReq.ReqCParam6 = icContractId
       bCreaReq.ReqSource  = icSource
       bCreaReq.OrigReq    = iiOrigReq
       liReqCreated        = bCreaReq.MsRequest.
@@ -1646,7 +1646,6 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
                   "SubsTypeFrom;SubsTypeTo",
                   icCLIType,
                   OUTPUT lcResult) = 1 THEN DO:
-
       liRequest = fCTChangeRequest(iiMsSeq,
                                    lcResult,
                                    "",    /* lcBundleID */
@@ -1716,6 +1715,3 @@ FUNCTION fCustomerCategoryChangeRequest RETURNS INTEGER
 END FUNCTION. /* FUNCTION fCustomerCategoryChangeRequest*/
 
 &ENDIF     
-
-       
- 

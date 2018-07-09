@@ -2,13 +2,16 @@ import re
 import sys
 from newton_init import *
 from show_results import *
-
+import re
+import sys
+from newton_init import *
+from show_results import *
 
 # Definition
 s = xmlrpclib.ServerProxy(address)
 def instruction():
    print "Missing parameter: orderid "
-   print "Example: python newton_fixedline_installation_address_update.py 5032785"
+   print "Example: python newton_fixedline_order_update.py 5032785"
    sys.exit()
 
 print(sys.argv[0])
@@ -18,8 +21,8 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = int(sys.argv[1])
 
-p=s.newton.fixedline_installation_address_update('selforde',var1, 
-						          {
+p=s.newton.fixedline_order_update('selforde',var1,
+                 {
                                        'city':'madrid',
                                        'coverage_token':'qwer',
                                        'gescal':'123',
@@ -30,7 +33,7 @@ p=s.newton.fixedline_installation_address_update('selforde',var1,
                                        'street_type':'WindyStreet 45',
                                        'zip':'123'
                                   },
-		                       'ChangeInstallationAddress',
+                                       'ChangeInstallationAddress',
                                        'E6541D',
                                        'Relocating')
 

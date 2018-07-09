@@ -15,10 +15,10 @@ CASE MsRequest.ReqCParam2:
     WHEN "ChangeInstallationAddress" THEN DO:
        fCreateFusionUpdateOrderMessage(MsRequest.ReqIParam1,
                                        MsRequest.ReqCParam2,
-                                  OUTPUT lcError).
+                                       OUTPUT lcError).
     END.
     OTHERWISE DO:
-       RETURN "Invalid AmendmentType".
+       fReqStatus(3,"Invalid AmendmentType").
     END.
 END CASE.
 
