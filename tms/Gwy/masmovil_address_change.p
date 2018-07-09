@@ -60,7 +60,7 @@ DEF VAR lcMemo                   AS CHAR       NO-UNDO.
 DEF VAR lcError                  AS CHAR       NO-UNDO. 
 DEF VAR ldaOrigCancelDate        AS DATE       NO-UNDO.
 
-DEF OUTPUT PARAMETER oiStatusCode AS INT NO-UNDO.
+DEF VAR oiStatusCode             AS INT        NO-UNDO.
       
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-WAIT NO-ERROR.
@@ -219,7 +219,9 @@ IF oiStatusCode EQ 200 THEN DO:
                                            lcMemo).    
       
       RELEASE OrderCustomer.
-      fReqStatus(2,""). 
+      fReqStatus(2,"").
+
+   RETURN "". 
 END.
 ELSE DO:
    ASSIGN
