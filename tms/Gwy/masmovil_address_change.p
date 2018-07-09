@@ -1,3 +1,5 @@
+ROUTINE-LEVEL ON ERROR UNDO, THROW.
+
 USING Progress.Json.ObjectModel.*.
 
 {Syst/tmsconst.i}
@@ -55,9 +57,10 @@ DEF VAR lcJsonResult             AS CHAR       NO-UNDO.
 
 /* Update Installation Address */
 DEF VAR lcMemo                   AS CHAR       NO-UNDO.
-
 DEF VAR lcError                  AS CHAR       NO-UNDO. 
 DEF VAR ldaOrigCancelDate        AS DATE       NO-UNDO.
+
+DEF OUTPUT PARAMETER oiStatusCode AS INT NO-UNDO.
       
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-WAIT NO-ERROR.
@@ -84,7 +87,7 @@ FIND FIRST MSRequest EXCLUSIVE-LOCK USE-INDEX updatestamp WHERE
            MSRequest.ReqType = {&REQTYPE_FIXEDLINE_ORDER_UPDATE} AND
            MSRequest.ReqCParam2 = "ChangeInstallationAddress" 
            NO-WAIT NO-ERROR.
-IF AVAIL MSRequest THEN DO: 
+IF AVAIL MSRequest THEN  
    lcAmendamentValue = MSRequest.ReqCParam3. 
 
 Func.Common:mTS2Date(FusionMessage.CreatedTS, OUTPUT ldaOrigCancelDate).
@@ -150,33 +153,42 @@ lcAddressObject:ADD('block',ENTRY(8,lcAmendamentValue,"|")).
 lcAddressObject:ADD('floor',ENTRY(4,lcAmendamentValue,"|")).
 lcAddressObject:ADD('hand',ENTRY(17,lcAmendamentValue,"|")).
 /*
-RUN Gwy/http_rest_client.p("patch"     ,
+RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
                            lcHost    ,
                            liPort    ,     
+                           ""        , /* authorization type */
+                           ""        , /* realm or domain */
                            ""        ,
                            ""        ,
                            lcUriPath ,
                            lcUriQuery,
                            lcUriQueryVal,
-                           lobjOuterObject,
+                           loRequestJson,
+                           OUTPUT oiStatusCode,
+                           OUTPUT ocStatusReason,
                            OUTPUT loJson).
 */
-/* update installation address */
-ASSIGN
-   FusionMessage.UpdateTS = Func.Common:mMakeTS()
-   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
-   FusionMessage.ResponseCode = lcResultCode 
-   FusionMessage.AdditionalInfo = lcResultDesc.
+Assign oiStatusCode = 200.
+ 
+IF oiStatusCode EQ 200 THEN DO:
+   
+   /* update installation address */
+   ASSIGN
+      FusionMessage.UpdateTS = Func.Common:mMakeTS()
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
+      FusionMessage.ResponseCode = lcResultCode 
+      FusionMessage.AdditionalInfo = lcResultDesc.
      
-FIND FIRST OrderCustomer WHERE 
-           OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
-           OrderCustomer.OrderId EQ FusionMessage.OrderID AND
-           OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-           EXCLUSIVE-LOCK NO-WAIT NO-ERROR.      
-IF NOT AVAIL OrderCustomer THEN 
-   RETURN "ErrorCode: OrderCustomer is not available".
-ELSE DO:
+   FIND FIRST OrderCustomer WHERE 
+              OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
+              OrderCustomer.OrderId EQ FusionMessage.OrderID AND
+              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+              EXCLUSIVE-LOCK NO-WAIT NO-ERROR.      
+   IF NOT AVAIL OrderCustomer THEN 
+      RETURN "ErrorCode: OrderCustomer is not available".
+    
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrdCustomer).
+   
    ASSIGN
       OrderCustomer.StreetType   = ENTRY(1,lcAmendamentValue,"|")
       OrderCustomer.Street       = ENTRY(2,lcAmendamentValue,"|")
@@ -205,13 +217,12 @@ ELSE DO:
       RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer, 
                                            {&STAR_EVENT_USER}, 
                                            lcMemo).    
-    RELEASE OrderCustomer.
-    fReqStatus(2,"").
-   END.      
-
-CATCH e AS Progress.Lang.Error:
+      
+      RELEASE OrderCustomer.
+      fReqStatus(2,""). 
+END.
+ELSE DO:
    ASSIGN
-      lcResultDesc = e:GetMessage(1) 
       FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       FusionMessage.ResponseCode = (IF lcResultDesc > "" THEN 
@@ -237,4 +248,4 @@ CATCH e AS Progress.Lang.Error:
                                   "TMS").
 
    fReqStatus(3,lcResultDesc).
-END CATCH.
+END.
