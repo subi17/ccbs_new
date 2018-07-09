@@ -14,11 +14,10 @@ def instruction():
 print(sys.argv[0])
 print(sys.argv[1])
 
-
 if len(sys.argv) < 2: instruction()
 else:
    var1 = int(sys.argv[1])
 
-p=s.newton.fixedline_order_cancellation(var1,'salesman id','')
+p=s.newton.fixedline_order_cancellation(var1,'selforde','')
 
 print_results(p)

@@ -1,26 +1,3 @@
-
-/*------------------------------------------------------------------------
-    File        : newton__fixedline_order_cancellation.p
-    Purpose     : 
-
-    Syntax      :
-
-    Description : cancellation of inflight orders
-
-    Author(s)   : 
-    Created     : Wed Jul 04 11:26:01 IST 2018
-    Notes       :
-  ----------------------------------------------------------------------*/
-
-/* ***************************  Definitions  ************************** */
-
-BLOCK-LEVEL ON ERROR UNDO, THROW.
-
-/* ********************  Preprocessor Definitions  ******************** */
-
-
-/* ***************************  Main Block  *************************** */
-
 /**
  * cancellation of inflight orders (by orderId).
  *
@@ -52,7 +29,6 @@ IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN
    
 piOrderId = get_int(param_toplevel_id, "0").
 pcSalesManId = get_string(param_toplevel_id, "1").
- 
 pcReason = get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.   
