@@ -1,6 +1,7 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Progress.Json.ObjectModel.*.
+USING OpenEdge.Net.HTTP.MethodEnum.
 
 {Syst/tmsconst.i}
 {Func/log.i}
@@ -22,7 +23,7 @@ END.
 DEF INPUT PARAM piMessageSeq     AS INT        NO-UNDO.
 
 /* Parsing address data to JSON */
-DEF VAR lobjOuterObject          AS JsonObject NO-UNDO.
+DEF VAR loInstObject             AS JsonObject NO-UNDO.
 DEF VAR lcServicesArray          AS JsonArray  NO-UNDO.
 DEF VAR lcServicesObject         AS JsonObject NO-UNDO.
 DEF VAR lcCharacteristicsArray   AS JsonArray  NO-UNDO.
@@ -35,32 +36,19 @@ DEF VAR loJson                   AS JsonObject NO-UNDO.
    
 DEF VAR lcHost                   AS CHAR       NO-UNDO.
 DEF VAR liPort                   AS INT        NO-UNDO.
-DEF VAR lcUserId                 AS CHAR       NO-UNDO.
-DEF VAR lcpassword               AS CHAR       NO-UNDO.
 DEF VAR lcUriPath                AS CHAR       NO-UNDO.
 DEF VAR lcUriQuery               AS CHAR       NO-UNDO.
 DEF VAR lcUriQueryVal            AS CHAR       NO-UNDO.
 DEF VAR liLogRequest             AS INT        NO-UNDO.
 DEF VAR llLogRequest             AS LOGICAL    NO-UNDO INIT TRUE.
 
-DEF VAR lcSalesManId             AS CHAR       NO-UNDO.
-DEF VAR liOrderId                AS INT        NO-UNDO.
-DEF VAR lcAmendamentType         AS CHAR       NO-UNDO.
 DEF VAR lcAmendamentValue        AS CHAR       NO-UNDO.
-DEF VAR lcContractId             AS CHAR       NO-UNDO.
-DEF VAR lcReason                 AS CHAR       NO-UNDO.
-DEF VAR lcCurrentDetails         AS CHAR       NO-UNDO.
-
-DEF VAR lcResultCode             AS CHAR       NO-UNDO.
-DEF VAR lcResultDesc             AS CHAR       NO-UNDO. 
-DEF VAR lcJsonResult             AS CHAR       NO-UNDO.
-
-/* Update Installation Address */
-DEF VAR lcMemo                   AS CHAR       NO-UNDO.
-DEF VAR lcError                  AS CHAR       NO-UNDO. 
-DEF VAR ldaOrigCancelDate        AS DATE       NO-UNDO.
 
 DEF VAR oiStatusCode             AS INT        NO-UNDO.
+DEF VAR ocStatusReason           AS CHAR       NO-UNDO.
+/* Update Installation Address */
+DEF VAR ldaOrigCancelDate        AS DATE       NO-UNDO.
+
       
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-WAIT NO-ERROR.
@@ -90,8 +78,6 @@ FIND FIRST MSRequest EXCLUSIVE-LOCK USE-INDEX updatestamp WHERE
 IF AVAIL MSRequest THEN  
    lcAmendamentValue = MSRequest.ReqCParam3. 
 
-Func.Common:mTS2Date(FusionMessage.CreatedTS, OUTPUT ldaOrigCancelDate).
-   
 /* Parsing address data to JSON */
 ASSIGN
    lcHost        = fCParam("Masmovil", "InflightHost")   
@@ -102,13 +88,13 @@ ASSIGN
    liLogRequest  = fIParam("Masmovil", "InflightLogRequest")
    llLogRequest  = LOGICAL(liLogRequest).
 
-lobjOuterObject = NEW JsonObject().
-lobjOuterObject:ADD('orderType','ChangeInstallationAddress').
-lobjOuterObject:ADD('orderID',liOrderId).
-lobjOuterObject:ADD('createdBy','YOIGO').
+loInstObject = NEW JsonObject().
+loInstObject:ADD('orderType','ChangeInstallationAddress').
+loInstObject:ADD('orderID',Order.OrderId).
+loInstObject:ADD('createdBy','YOIGO').
    
 lcServicesArray = NEW JsonArray().
-lobjOuterObject:ADD('Services',lcServicesArray).
+loInstObject:ADD('Services',lcServicesArray).
 lcServicesObject = NEW JsonObject().
 lcServicesArray:ADD(lcServicesObject).
     
@@ -133,7 +119,7 @@ lcCharacteristicsObject3:ADD('value',ENTRY(12,lcAmendamentValue,"|")).
 lcServicesObject:ADD('type','FTTH').
    
 lcInstallationObject = NEW JsonObject().
-lobjOuterObject:ADD('Installation',lcInstallationObject).
+loInstObject:ADD('Installation',lcInstallationObject).
 lcAddressObject = NEW JsonObject().
 lcInstallationObject:ADD('Address',lcAddressObject).
   
@@ -163,21 +149,18 @@ RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
                            lcUriPath ,
                            lcUriQuery,
                            lcUriQueryVal,
-                           loRequestJson,
+                           loInstObject,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,
                            OUTPUT loJson).
-*/
-Assign oiStatusCode = 200.
- 
-IF oiStatusCode EQ 200 THEN DO:
-   
+
+  */
    /* update installation address */
    ASSIGN
       FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
-      FusionMessage.ResponseCode = lcResultCode 
-      FusionMessage.AdditionalInfo = lcResultDesc.
+      FusionMessage.ResponseCode = "200" 
+      FusionMessage.AdditionalInfo = "Success".
      
    FIND FIRST OrderCustomer WHERE 
               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
@@ -216,38 +199,42 @@ IF oiStatusCode EQ 200 THEN DO:
    IF llDoEvent THEN 
       RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer, 
                                            {&STAR_EVENT_USER}, 
-                                           lcMemo).    
+                                           "Installation Address Updated").    
       
       RELEASE OrderCustomer.
       fReqStatus(2,"").
 
-   RETURN "". 
-END.
-ELSE DO:
-   ASSIGN
+CATCH e AS Progress.Lang.Error:
+
+    ASSIGN
       FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
-      FusionMessage.ResponseCode = (IF lcResultDesc > "" THEN 
-                                         lcResultDesc
+      FusionMessage.ResponseCode = (IF ocStatusReason > "" THEN 
+                                         ocStatusReason
                                       ELSE "ERROR").
 
    IF fCanRetryFusionMessage(
       BUFFER FusionMessage,
       "",
-      lcResultCode,
-      lcResultDesc) THEN 
+      STRING(oiStatusCode),
+      ocStatusReason) THEN 
       RETURN "RETRY:" +
-         SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
+         SUBST("&1, &2", oiStatusCode, ocStatusReason).
 
-   Func.Common:mWriteMemoWithType("Order",
+   Func.Common:mWriteMemoWithType("OrderCustomer",
                                   STRING(Order.OrderId),
                                   0,
-                                  "Masmovil order updation failed",
-                                  SUBST("ErrorCode: &1", (IF lcResultDesc > "" THEN
-                                                             lcResultDesc 
+                                  "Installation Address updation failed",
+                                  SUBST("ErrorCode: &1", (IF ocStatusReason > "" THEN
+                                                             ocStatusReason 
                                                           ELSE "ERROR")),
                                   "",
                                   "TMS").
 
-   fReqStatus(3,lcResultDesc).
+   fReqStatus(3,ocStatusReason).
+
+END CATCH.
+
+FINALLY:
+
 END.

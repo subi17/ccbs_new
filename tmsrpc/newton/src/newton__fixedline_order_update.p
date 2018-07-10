@@ -6,7 +6,6 @@
           orderid;int;mandatory;order number to modify 
           OrderDetails;struct;mandatory;details to update
           changeType;string;mandatory;type of change applied
-          contractID;string;mandatory;contractID of particular order
           reason;string;optional;reason for updating details
 
  * @addressDetails country;string;mandatory
@@ -44,7 +43,6 @@ DEF VAR pcSalesManId      AS CHAR NO-UNDO.
 DEF VAR piOrderId         AS INT  NO-UNDO.
 DEF VAR pcAmendmentStruct AS CHAR NO-UNDO.
 DEF VAR pcAmendmentType   AS CHAR NO-UNDO.
-DEF VAR pcContractId      AS CHAR NO-UNDO.
 DEF VAR pcReason          AS CHAR NO-UNDO.
 DEF VAR ocResult          AS CHAR NO-UNDO.
 
@@ -127,7 +125,7 @@ END FUNCTION.
 ASSIGN 
    gcAmendmentDetails = "country,bis,block,city,coverage_token,door,floor,gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
 
-IF validate_request(param_toplevel_id, "string,int,struct,string,string,string") EQ ? THEN
+IF validate_request(param_toplevel_id, "string,int,struct,string,string") EQ ? THEN
    RETURN.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -136,8 +134,7 @@ pcSalesManId = get_string(param_toplevel_id, "0").
 piOrderId = get_int(param_toplevel_id, "1").
 pcAmendmentStruct = get_struct(param_toplevel_id, "2").  
 pcAmendmentType = get_string(param_toplevel_id, "3").
-pcContractId = get_string(param_toplevel_id, "4").
-pcReason = get_string(param_toplevel_id, "5").
+pcReason = get_string(param_toplevel_id, "4").
 
 scUser = "VISTA_" + pcSalesManId. /* Read from eventlog functions into eventlog.user */
 Syst.Var:katun = "VISTA_" + pcSalesManId.
@@ -242,7 +239,7 @@ fOrderUpdateRequest(
                     lcAmendmentType,
                     lcAmendmentValue,
                     lcCurrentDetails,
-                    pcContractId,
+                    Order.ContractId,
                     pcReason,
                     ({&REQUEST_SOURCE_NEWTON}),
                     0,
