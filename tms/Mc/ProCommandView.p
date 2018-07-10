@@ -28,6 +28,10 @@ DEF VAR rtab            AS RECID        NO-UNDO EXTENT 24.
 DEF VAR i               AS INT          NO-UNDO.
 DEF VAR ldtActivationTS AS DATETIME-TZ  NO-UNDO.
 DEF VAR lcCli           LIKE mobsub.cli NO-UNDO.
+DEF VAR lcCommand_Ed    AS LONGCHAR     NO-UNDO 
+   VIEW-AS EDITOR LARGE SIZE 76 BY 4.
+DEF VAR lcResponse_Ed    AS LONGCHAR     NO-UNDO 
+   VIEW-AS EDITOR LARGE SIZE 76 BY 3.
 
 DEF STREAM strProCmd.
 
@@ -43,6 +47,21 @@ FORM
    COLOR VALUE(Syst.Var:cfc)
    TITLE COLOR VALUE(Syst.Var:ctc) "Procommands" + (IF iiMsSeq <> 0 THEN (" for " + STRING(iiMsSeq)) ELSE "")
    FRAME sel.    
+
+FORM
+    "SubscrID    :" ProCommand.msseq          SKIP
+    "Command type:" ProCommand.procommandtype SKIP
+    "MSISDN      :" lcCli  FORMAT "x(11)"     SKIP
+    "Created     :" ProCommand.CreatedTS      SKIP   
+    "Activated   :" ProCommand.ActivationTS   SKIP
+    "Completed   :" ProCommand.CompletedTS    SKIP
+    "Command     :" lcCommand_Ed              SKIP 
+    "Response    :" lcResponse_Ed 
+    WITH  OVERLAY ROW 2 CENTERED 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " Command details " 
+    NO-LABELS FRAME lis.
+    
     
 ASSIGN Syst.Var:cfc = "sel". 
 RUN Syst/ufcolor.p. 
@@ -332,6 +351,36 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
+     DO WITH FRAME lis:
+        RUN local-find-this(FALSE).
+
+        CLEAR FRAME lis NO-PAUSE.
+        PAUSE 0 NO-MESSAGE.
+        
+        DISP
+           ProCommand.msseq
+           ProCommand.procommandtype
+           lcCli
+           ProCommand.CreatedTS   
+           ProCommand.ActivationTS
+           ProCommand.CompletedTS
+           lcCommand_Ed 
+           lcResponse_Ed 
+           WITH FRAME lis.
+   
+        ASSIGN 
+           lcCommand_Ed:READ-ONLY  = TRUE
+           lcCommand_Ed:sensitive  = TRUE
+           lcResponse_Ed:READ-ONLY = TRUE
+           lcResponse_Ed:sensitive = TRUE.
+           
+        WAIT-FOR "F8" OF FRAME lis OR
+                 "F4" OF FRAME lis.
+        
+        HIDE FRAME lis NO-PAUSE.
+     END.
+
      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
@@ -390,7 +439,9 @@ PROCEDURE local-disp-row:
    FIND mobsub WHERE mobsub.msseq = ProCommand.Msseq NO-LOCK NO-ERROR.
    ASSIGN
       ldtActivationTS = DATETIME-TZ(ProCommand.ActivationTS,TIMEZONE)
-      lcCli           = (IF AVAILABLE mobsub THEN mobsub.cli ELSE "").
+      lcCli           = (IF AVAILABLE mobsub THEN mobsub.cli ELSE "")
+      lcCommand_Ed    = ProCommand.CommandLine 
+      lcResponse_Ed   = ProCommand.Response.
    
    DISPLAY
       ProCommand.msseq 
@@ -405,5 +456,3 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 END PROCEDURE.
-
-
