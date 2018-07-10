@@ -386,14 +386,18 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                NEXT  MNP_SUB_LOOP.
             END.                              
             
-            FOR EACH Barring NO-LOCK
+            FOR EACH Barring NO-LOCK USE-INDEX MsSeq
                WHERE Barring.msseq  = MobSub.msseq
                  AND lookup(Barring.BarringCode,lcbarringstatus) > 0
-                 AND Barring.BarringStatus = {&BARR_STATUS_ACTIVE} :
-                 PUT STREAM sExclude UNFORMATTED
-                  MobSub.CLI ";R3"
-                  SKIP.
-               NEXT  MNP_SUB_LOOP.
+                 BREAK BY Barring.BarringCode:
+
+               IF FIRST-OF(Barring.BarringCode) AND
+                  Barring.BarringStatus = {&BARR_STATUS_ACTIVE} THEN DO:
+                  PUT STREAM sExclude UNFORMATTED
+                     MobSub.CLI ";R3"
+                     SKIP.
+                  NEXT MNP_SUB_LOOP.
+               END.
             END.
             
             FIND FIRST Customer NO-LOCK
