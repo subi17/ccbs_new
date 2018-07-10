@@ -101,7 +101,7 @@ ADD FIELD "Creator" OF "ProCommand" AS character
 ADD FIELD "CommandLine" OF "ProCommand" AS clob 
   FORMAT "x(8)"
   INITIAL ?
-  LOB-AREA "Sta_Data_128"
+  LOB-AREA "Sta_Data_64"
   LOB-BYTES 10485760
   LOB-SIZE 10M
   CLOB-CODEPAGE "UTF-8"
