@@ -28,6 +28,10 @@ IF llDoEvent THEN DO:
 
 END.
 
+DEFINE INPUT  PARAMETER icTableName   AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icKeyType     AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icParentValue AS CHARACTER NO-UNDO.
+
 DEF SHARED VAR siirto AS CHAR.
 
 DEF VAR lcTableName   AS CHAR                   NO-UNDO.
@@ -568,25 +572,36 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
 
-   IF order = 1 THEN FIND FIRST TMSRelation NO-LOCK NO-ERROR.
+   IF order = 1 THEN FIND FIRST TMSRelation WHERE (IF icTableName   > "" THEN TMSRelation.TableName   = icTableName   ELSE TRUE) 
+                                              AND (IF icKeyType     > "" THEN TMSRelation.KeyType     = icKeyType     ELSE TRUE)
+                                              AND (IF icParentValue > "" THEN TMSRelation.ParentValue = icParentValue ELSE TRUE) USE-INDEX ParentValue NO-LOCK NO-ERROR.                 
+
 
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
 
-   IF order = 1 THEN FIND LAST TMSRelation NO-LOCK NO-ERROR.
+   IF order = 1 THEN FIND LAST TMSRelation WHERE (IF icTableName   > "" THEN TMSRelation.TableName   = icTableName   ELSE TRUE) 
+                                             AND (IF icKeyType     > "" THEN TMSRelation.KeyType     = icKeyType     ELSE TRUE)
+                                             AND (IF icParentValue > "" THEN TMSRelation.ParentValue = icParentValue ELSE TRUE) USE-INDEX ParentValue NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
 
-   IF order = 1 THEN FIND NEXT TMSRelation NO-LOCK NO-ERROR.
+   IF order = 1 THEN FIND NEXT TMSRelation WHERE (IF icTableName   > "" THEN TMSRelation.TableName   = icTableName   ELSE TRUE) 
+                                             AND (IF icKeyType     > "" THEN TMSRelation.KeyType     = icKeyType     ELSE TRUE)
+                                             AND (IF icParentValue > "" THEN TMSRelation.ParentValue = icParentValue ELSE TRUE) USE-INDEX ParentValue NO-LOCK NO-ERROR.
+
 
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
 
-   IF order = 1 THEN FIND PREV TMSRelation NO-LOCK NO-ERROR.
+   IF order = 1 THEN FIND PREV TMSRelation WHERE (IF icTableName   > "" THEN TMSRelation.TableName   = icTableName   ELSE TRUE) 
+                                             AND (IF icKeyType     > "" THEN TMSRelation.KeyType     = icKeyType     ELSE TRUE)
+                                             AND (IF icParentValue > "" THEN TMSRelation.ParentValue = icParentValue ELSE TRUE) USE-INDEX ParentValue NO-LOCK NO-ERROR.
+
 
 END PROCEDURE.
 
