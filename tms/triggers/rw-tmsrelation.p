@@ -1,0 +1,1 @@
+{triggers/hpdwrite_generic.i TMSRelation TMSRELATION Common TMSRelationID}

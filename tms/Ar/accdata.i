@@ -7,6 +7,7 @@
   MODIFIED .....: 09.09.03/aam brand
                   30.09.04/aam "own use" accounts for defined category
                   19.04.05/aam choose billitem account according to vatusage
+                  24.04.18/skm removed the references of altaccnum and vipaccnum
  --------------------------------------------------------------------------- */
 
 /* 
@@ -35,6 +36,8 @@ FUNCTION GetAccKeys RETURNS LOGIC
      iVatUsage  AS INT,
      iItemCode  AS CHAR,
      iEventDate AS Date).
+     
+    DEFINE BUFFER bfCCRule FOR CCRule.
 
     ASSIGN xAccNum      = 0
            xBillAccount = 0 
@@ -48,20 +51,28 @@ FUNCTION GetAccKeys RETURNS LOGIC
     
     IF AVAILABLE BillItem THEN DO:
 
-        /* different sales account for own use */
-        IF icCategory = lcOwnUse AND lcOwnUse NE "" 
-        THEN xBillAccount = BillItem.AltAccNum.
-        ELSE 
-        CASE iVATUsage:
-        WHEN 0 OR
-        WHEN 1 THEN xBillAccount  = BillItem.AccNum.
-        WHEN 2 THEN xBillAccount  = BillItem.EUConAccNum.
-        WHEN 3 THEN xBillAccount  = BillItem.EUAccNum.
-        WHEN 4 THEN xBillAccount  = BillItem.FSAccNum.
-        END CASE.
-                        
-        xAccNum = xBillAccount.
-    END.
+        FIND FIRST bfCCRule NO-LOCK WHERE 
+                   bfCCRule.Brand      =   BillItem.Brand      AND 
+                  (bfCCRule.Category   =   icCategory  OR
+                   bfCCRule.Category   =   "*" )               AND 
+                   bfCCRule.BillCode   =   BillItem.BillCode   AND
+                   bfCCRule.CLIType    =   ""                  AND
+                   bfCCRule.ValidTo    >=  TODAY USE-INDEX Category  NO-ERROR.
+                   
+        IF AVAILABLE bfCCRule 
+        THEN DO:          
+            /* different sales account for own use */
+            CASE iVATUsage:
+            WHEN 0 OR
+            WHEN 1 THEN xBillAccount  = bfCCRule.AccNum.
+            WHEN 2 THEN xBillAccount  = bfCCRule.EUConAccNum.
+            WHEN 3 THEN xBillAccount  = bfCCRule.EUAccNum.
+            WHEN 4 THEN xBillAccount  = bfCCRule.FSAccNum.
+            END CASE.
+                            
+            xAccNum = xBillAccount.
+        END. /*  IF AVAILABLE bfCCRule*/
+    END. /*  IF AVAILABLE BillIte*/
 
     RETURN TRUE.
 
