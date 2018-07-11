@@ -596,7 +596,7 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
 
    IF gi_xmlrpc_error NE 0 THEN
          RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
-   xmlrpc_initialize(FALSE).
+   
    fMasXMLGenerate_test("getnewResource").
    RUN pRPCMethodCall("masmovil.getNewResource", TRUE).
 
