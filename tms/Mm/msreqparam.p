@@ -184,9 +184,9 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.Var:ufk   = 0
+        Syst.Var:ufk    = 0
         Syst.Var:ufk[8] = 8 
-        Syst.Var:ehto  = 3 
+        Syst.Var:ehto   = 3 
         ufkey = FALSE.
        
         FIND FIRST MsRequestParam NO-LOCK WHERE 
