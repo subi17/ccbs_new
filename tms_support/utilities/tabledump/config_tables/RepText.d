@@ -5053,16 +5053,16 @@
 1 "" 3 "Motorola FlipOutÖ" 0 "P021FLIV2" "1" 28/03/11 31/12/49
 1 "" 4 "Motorola FlipOutÖ" 0 "P021FLIV2" "1" 28/03/11 31/12/49
 1 "" 5 "Motorola FlipOutÖ" 0 "P021FLIV2" "1" 28/03/11 31/12/49
-1 "" 1 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6 Play Azul con funda de regalo" 0 "P021G6PAC" "1" 25/05/18 31/12/49
 1 "" 2 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
 1 "" 3 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
 1 "" 4 "Motorola G6 Play Azul" 0 "P021G6PAC" "1" 25/05/18 31/12/49
-1 "" 5 "Motorola G6 Play Blue" 0 "P021G6PAC" "1" 25/05/18 31/12/49
-1 "" 1 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Play Blue with cover gift" 0 "P021G6PAC" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6 Play Oro con funda de regalo" 0 "P021G6PDC" "1" 25/05/18 31/12/49
 1 "" 2 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
 1 "" 3 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
 1 "" 4 "Motorola G6 Play Oro" 0 "P021G6PDC" "1" 25/05/18 31/12/49
-1 "" 5 "Motorola G6 Play Gold" 0 "P021G6PDC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Play Gold with cover gift" 0 "P021G6PDC" "1" 25/05/18 31/12/49
 1 "" 1 "Motorola Gleam + Blanco" 0 "P021GLEB2" "1" 22/03/12 31/12/49
 1 "" 2 "Motorola Gleam + Blanco" 0 "P021GLEB2" "1" 22/03/12 31/12/49
 1 "" 3 "Motorola Gleam + Blanco" 0 "P021GLEB2" "1" 22/03/12 31/12/49
@@ -5133,16 +5133,16 @@
 1 "" 3 "Motorola Moto G 5a Generación Gris" 0 "P021MG5GC" "1" 03/08/17 31/12/49
 1 "" 4 "Motorola Moto G 5a Generación Gris" 0 "P021MG5GC" "1" 03/08/17 31/12/49
 1 "" 5 "Motorola Moto G 5a Generación Grey" 0 "P021MG5GC" "1" 03/08/17 31/12/49
-1 "" 1 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6 Azul con funda de regalo" 0 "P021MG6AC" "1" 25/05/18 31/12/49
 1 "" 2 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
 1 "" 3 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
 1 "" 4 "Motorola G6 Azul" 0 "P021MG6AC" "1" 25/05/18 31/12/49
-1 "" 5 "Motorola G6 Blue" 0 "P021MG6AC" "1" 25/05/18 31/12/49
-1 "" 1 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Blue with cover gift" 0 "P021MG6AC" "1" 25/05/18 31/12/49
+1 "" 1 "Motorola G6 Plata con funda de regalo" 0 "P021MG6SC" "1" 25/05/18 31/12/49
 1 "" 2 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
 1 "" 3 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
 1 "" 4 "Motorola G6 Plata" 0 "P021MG6SC" "1" 25/05/18 31/12/49
-1 "" 5 "Motorola G6 Silver" 0 "P021MG6SC" "1" 25/05/18 31/12/49
+1 "" 5 "Motorola G6 Silver with cover gift" 0 "P021MG6SC" "1" 25/05/18 31/12/49
 1 "" 1 "Moto E Negro" 0 "P021MOEN2" "1" 27/05/14 31/12/49
 1 "" 2 "Moto E Negro" 0 "P021MOEN2" "1" 27/05/14 31/12/49
 1 "" 3 "Moto E Negro" 0 "P021MOEN2" "1" 27/05/14 31/12/49
