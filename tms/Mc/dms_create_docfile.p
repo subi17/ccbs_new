@@ -1619,12 +1619,6 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    IF NOT AVAIL Order THEN 
       RETURN "6:Order not available" + STRING(iiOrderId).
       
-   FIND FIRST DMS NO-LOCK WHERE
-              DMS.HostId EQ Order.OrderID AND 
-              LOOKUP(DMS.OrderStatus, {&ORDER_STATUS_PENDING_FIXED_LINE}) > 0
-                           NO-ERROR.
-   IF AVAIL DMS THEN lcUpdateDMS = TRUE.   
-
    lcPrevStatus = fGetOrderStatusDMS(Order.ContractID).
    lcCAncellationType = fGetCancellationInfo(Order.MsSeq,
                                              lcPrevStatus,
@@ -1660,7 +1654,6 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
-   IF lcUpdateDMS THEN
    lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
