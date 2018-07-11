@@ -191,28 +191,46 @@ PROCEDURE pCreateBillingItem:
          END.
       END.
 
-      CREATE BillItem.
-      ASSIGN BillItem.Brand       = Syst.Var:gcBrand
-             BillItem.DispMPM     = FALSE
-             BillItem.BillCode    = ttBillItem.BillItem
-             Billitem.BIName      = ttBillItem.BIName
-             BillItem.BIGroup     = ttBillItem.BIGroup
-             BillItem.AccNum      = INTEGER(ttBillItem.AccNum) 
-             BillItem.AltAccNum   = INTEGER(ttBillItem.AccNum)
-             BillItem.VipAccNum   = INTEGER(ttBillItem.AccNum) 
-             BillItem.EUConAccNum = INTEGER(ttBillItem.AccNum)
-             BillItem.EUAccNum    = INTEGER(ttBillItem.AccNum)
-             BillItem.FSAccNum    = INTEGER(ttBillItem.AccNum)
-             BillItem.InvSect     = ttBillItem.InvSect
-             BillItem.TaxClass    = ttBillItem.TaxClass
-             BillItem.SAPRid      = ttBillItem.SAPRid
-             BillItem.CostCentre  = ttBillItem.CostCenter
-             BillItem.ItemType    = ttBillItem.ItemType NO-ERROR.
-             
-      IF ERROR-STATUS:ERROR THEN DO: 
-         fError("Error in creating BillingItem").
-         RETURN "ERROR".        
-      END.   
+      BILLIING-ITEM:
+      DO TRANSACTION ON ERROR UNDO,LEAVE:
+      
+          CREATE BillItem.
+          ASSIGN BillItem.Brand       = Syst.Var:gcBrand
+                 BillItem.DispMPM     = FALSE
+                 BillItem.BillCode    = ttBillItem.BillItem
+                 Billitem.BIName      = ttBillItem.BIName
+                 BillItem.BIGroup     = ttBillItem.BIGroup
+                 BillItem.InvSect     = ttBillItem.InvSect
+                 BillItem.TaxClass    = ttBillItem.TaxClass
+                 BillItem.CostCentre  = ttBillItem.CostCenter
+                 BillItem.ItemType    = ttBillItem.ItemType NO-ERROR.
+                 
+          IF ERROR-STATUS:ERROR THEN DO:               
+              fError("Error in creating BillingItem").
+              RETURN "ERROR".        
+          END.
+          
+          CREATE CCRule.
+          ASSIGN 
+              CCRule.Brand       = BillItem.Brand
+              CCRule.CCRuleID    = NEXT-VALUE(CCRuleSeq)
+              CCRule.Category    = "*"
+              CCRule.BillCode    = BillItem.BillCode
+              CCRule.ValidFrom   = TODAY
+              CCRule.ValidTo     = DATE(12,31,2049) 
+              CCRule.AccNum      = INTEGER(ttBillItem.AccNum)
+              CCRule.EUAccNum    = INTEGER(ttBillItem.AccNum)
+              CCRule.EUConAccNum = INTEGER(ttBillItem.AccNum)
+              CCRule.FSAccNum    = INTEGER(ttBillItem.AccNum)
+              CCRule.CostCentre  = BillItem.CostCentre
+              CCRule.ReportingID = ttBillItem.SAPRid NO-ERROR.    
+              
+          IF ERROR-STATUS:ERROR THEN 
+          DO:              
+              fError("Error in creating Accounting Rule. BillingItem record not created.").
+              RETURN "ERROR".
+          END.
+      END.       
 
    END.    
 

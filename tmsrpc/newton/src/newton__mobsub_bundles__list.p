@@ -14,6 +14,7 @@ Syst.Var:gcBrand = "1".
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
 {Func/fixedlinefunc.i}
+{Func/bundleupsells.i}
 
 DEF VAR lcResultArray         AS CHAR NO-UNDO. 
 DEF VAR pcStruct              AS CHAR NO-UNDO. 
@@ -23,6 +24,7 @@ DEF VAR liCount               AS INT  NO-UNDO.
 DEF VAR lcBundle              AS CHAR NO-UNDO.
 DEF VAR ldCurrentDateTime     AS DECI NO-UNDO.
 DEF VAR llBundleActivated     AS LOGI NO-UNDO INIT FALSE.
+DEF VAR lcBundleUpsells       AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -66,7 +68,8 @@ PROCEDURE pAdd_DataBundle:
     ASSIGN 
         lcBONOContracts = fCParamC("BONO_CONTRACTS")
         lcIPLContracts  = fCParamC("IPL_CONTRACTS")
-        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS").
+        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
+        lcBundleUpsells        = "".
 
     ASSIGN lcActiveBundles = fGetActiveDataBundle(Mobsub.MsSeq,ldCurrentDateTime).
 
@@ -86,11 +89,15 @@ PROCEDURE pAdd_DataBundle:
 
        FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = Syst.Var:gcBrand        AND
                                             DayCampaign.DCEvent = lcActiveBundle NO-ERROR.
-       IF NOT AVAIL DayCampaign OR DayCampaign.BundleUpsell EQ "" THEN 
-          NEXT.
-
-       DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
-          add_string(lcResultArray, "", ENTRY(liUpsellCount,DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
+       IF NOT AVAIL DayCampaign 
+       THEN NEXT.
+                 
+       ASSIGN lcBundleUpsells = fGetDayCampaignUpsells(DayCampaign.DCEvent).
+       
+       IF lcBundleUpsells = "" THEN NEXT.
+       
+       DO liUpsellCount = 1 TO NUM-ENTRIES(lcBundleUpsells):
+          add_string(lcResultArray, "", ENTRY(liUpsellCount,lcBundleUpsells) + "|" + STRING(Mobsub.MsSeq)).
        END.
        
     END.
@@ -106,14 +113,17 @@ PROCEDURE pAdd_DataBundle:
                NEXT.
           
            add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
+           
+            ASSIGN 
+                lcBundleUpsells = fGetDayCampaignUpsells(DayCampaign.DCEvent).
 
-           DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+           DO liUpsellCount = 1 TO NUM-ENTRIES(lcBundleUpsells):
 
-              IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell), lcUpsellList) = 0 THEN 
+              IF LOOKUP(ENTRY(liUpsellCount,lcBundleUpsells), lcUpsellList) = 0 THEN 
               DO:
-                  lcUpsellList = lcUpsellList + (IF lcUpsellList <> "" THEN "," ELSE "") + ENTRY(liUpsellCount, DayCampaign.BundleUpsell).
+                  lcUpsellList = lcUpsellList + (IF lcUpsellList <> "" THEN "," ELSE "") + ENTRY(liUpsellCount, lcBundleUpsells).
 
-                  add_string(lcResultArray,"", ENTRY(liUpsellCount, DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
+                  add_string(lcResultArray,"", ENTRY(liUpsellCount, lcBundleUpsells) + "|" + STRING(Mobsub.MsSeq)).
               END.
            END.
         END.
@@ -158,7 +168,8 @@ PROCEDURE pAdd_DSS:
         llProSubscription     = fIsProSubscription(piMsSeq)
         lcPRODSSUpsellList    = fCParamC("PRO_DSS_FLEX_UPSELL_LIST")
         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-        lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
+        lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
+        lcBundleUpsells       = "".
 
     IF NOT MobSub.PayType THEN
         lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT ldCurrentDateTime).
@@ -172,11 +183,14 @@ PROCEDURE pAdd_DSS:
         /*Find upsells and add all to reponse*/
         FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = Syst.Var:gcBrand       AND
                                              DayCampaign.DCEvent = lcDSSBundleId NO-ERROR.
-        IF AVAIL DayCampaign AND DayCampaign.BundleUpsell > "" THEN 
-        DO:
-            DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+        IF AVAIL DayCampaign THEN 
+        DO:            
+            ASSIGN 
+                lcBundleUpsells = fGetDayCampaignUpsells(DayCampaign.DCEvent).
+            
+            DO liUpsellCount = 1 TO NUM-ENTRIES(lcBundleUpsells):
 
-               lcUpsell = ENTRY(liUpsellCount,DayCampaign.BundleUpsell).
+               lcUpsell = ENTRY(liUpsellCount,lcBundleUpsells).
 
                IF LOOKUP(lcUpsell, lcPRODSSUpsellList) > 0 THEN DO:
                   IF llProSubscription THEN
