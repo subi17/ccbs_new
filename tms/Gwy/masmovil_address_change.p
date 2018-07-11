@@ -33,22 +33,28 @@ DEF VAR lcCharacteristicsObject3 AS JsonObject NO-UNDO.
 DEF VAR lcInstallationObject     AS JsonObject NO-UNDO.
 DEF VAR lcAddressObject          AS JsonObject NO-UNDO.
 DEF VAR loJson                   AS JsonObject NO-UNDO.
-   
-DEF VAR lcHost                   AS CHAR       NO-UNDO.
-DEF VAR liPort                   AS INT        NO-UNDO.
-DEF VAR lcUriPath                AS CHAR       NO-UNDO.
-DEF VAR lcUriQuery               AS CHAR       NO-UNDO.
-DEF VAR lcUriQueryVal            AS CHAR       NO-UNDO.
-DEF VAR liLogRequest             AS INT        NO-UNDO.
-DEF VAR llLogRequest             AS LOGICAL    NO-UNDO INIT TRUE.
 
+DEF VAR lcHost                   AS CHARACTER  NO-UNDO.
+DEF VAR liPort                   AS INTEGER    NO-UNDO.
+DEF VAR lcAuthType               AS CHARACTER  NO-UNDO.
+DEF VAR lcRealm                  AS CHARACTER  NO-UNDO.
+DEF VAR lcUserId                 AS CHARACTER  NO-UNDO.
+DEF VAR lcPassword               AS CHARACTER  NO-UNDO.
+DEF VAR lcUriPath                AS CHARACTER  NO-UNDO.
+DEF VAR lcUriQuery               AS CHARACTER  NO-UNDO.
+DEF VAR lcUriQueryVal            AS CHARACTER  NO-UNDO.
+DEF VAR lcApiName                AS CHAR       NO-UNDO.
+DEF VAR lcApiKey                 AS CHAR       NO-UNDO.
+DEF VAR lcOrderId                AS CHAR       NO-UNDO.
+DEF VAR liLogRequest             AS INTEGER    NO-UNDO.
+DEF VAR llLogRequest             AS LOGICAL    NO-UNDO INIT TRUE.
+DEF VAR oiStatusCode             AS INTEGER    NO-UNDO. 
+DEF VAR ocStatusReason           AS CHARACTER  NO-UNDO. 
+DEF VAR loResponseJson           AS JsonObject NO-UNDO.
+   
 DEF VAR lcAmendamentValue        AS CHAR       NO-UNDO.
 
-DEF VAR oiStatusCode             AS INT        NO-UNDO.
-DEF VAR ocStatusReason           AS CHAR       NO-UNDO.
 /* Update Installation Address */
-DEF VAR ldaOrigCancelDate        AS DATE       NO-UNDO.
-
       
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-WAIT NO-ERROR.
@@ -75,22 +81,25 @@ FIND FIRST MSRequest EXCLUSIVE-LOCK USE-INDEX updatestamp WHERE
            MSRequest.ReqType = {&REQTYPE_FIXEDLINE_ORDER_UPDATE} AND
            MSRequest.ReqCParam2 = "ChangeInstallationAddress" 
            NO-WAIT NO-ERROR.
-IF AVAIL MSRequest THEN  
-   lcAmendamentValue = MSRequest.ReqCParam3. 
+IF AVAIL MSRequest THEN DO: 
+   Assign 
+      lcAmendamentValue = MSRequest.ReqCParam3
+      lcOrderId = "Y" + STRING(Order.OrderId). 
+END.   
 
 /* Parsing address data to JSON */
 ASSIGN
    lcHost        = fCParam("Masmovil", "InflightHost")   
    liPort        = fIParam("Masmovil", "InflightPort")     
    lcUriPath     = fCParam("Masmovil", "InflightUriPath")   
-   lcUriQuery    = fCParam("Masmovil", "InflightUriQuery")  
-   lcUriQueryVal = fCParam("Masmovil", "InflightUriQueryValue")
+   lcApiName     = fCParam("Masmovil", "InflightApiName")
+   lcApiKey      = fCParam("Masmovil", "InflightApiKey")
    liLogRequest  = fIParam("Masmovil", "InflightLogRequest")
    llLogRequest  = LOGICAL(liLogRequest).
 
 loInstObject = NEW JsonObject().
 loInstObject:ADD('orderType','ChangeInstallationAddress').
-loInstObject:ADD('orderID',Order.OrderId).
+loInstObject:ADD('orderID',lcOrderId).
 loInstObject:ADD('createdBy','YOIGO').
    
 lcServicesArray = NEW JsonArray().
@@ -138,23 +147,26 @@ lcAddressObject:ADD('bis',ENTRY(9,lcAmendamentValue,"|")).
 lcAddressObject:ADD('block',ENTRY(8,lcAmendamentValue,"|")).
 lcAddressObject:ADD('floor',ENTRY(4,lcAmendamentValue,"|")).
 lcAddressObject:ADD('hand',ENTRY(17,lcAmendamentValue,"|")).
-/*
-RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
-                           lcHost    ,
-                           liPort    ,     
-                           ""        , /* authorization type */
-                           ""        , /* realm or domain */
-                           ""        ,
-                           ""        ,
-                           lcUriPath ,
+
+RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
+                           lcHost,
+                           liPort,
+                           lcAuthType,
+                           lcRealm,
+                           lcUserId,
+                           lcPassword,
+                           lcUriPath,
                            lcUriQuery,
                            lcUriQueryVal,
+                           lcApiName,
+                           lcApiKey,
+                           lcOrderId,
                            loInstObject,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,
-                           OUTPUT loJson).
-
-  */
+                           OUTPUT loResponseJson). 
+                           
+IF oiStatusCode EQ 200 THEN DO:                           
    /* update installation address */
    ASSIGN
       FusionMessage.UpdateTS = Func.Common:mMakeTS()
@@ -203,7 +215,8 @@ RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
       
       RELEASE OrderCustomer.
       fReqStatus(2,"").
-
+      
+END.
 CATCH e AS Progress.Lang.Error:
 
     ASSIGN
