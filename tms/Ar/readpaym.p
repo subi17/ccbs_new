@@ -455,9 +455,14 @@ FOR FIRST FatGroup NO-LOCK WHERE
           FatGroup.FtGrp = lcSubBalFat,
     FIRST BillItem NO-LOCK WHERE
           BillItem.Brand    = Syst.Var:gcBrand AND
-          BillItem.BillCode = FatGroup.BillCode:
-          
-   liSaldoAcc = BillItem.AccNum.
+          BillItem.BillCode = FatGroup.BillCode,
+    FIRST CCRule NO-LOCK WHERE 
+          CCRule.Brand      =  BillItem.Brand    AND 
+          CCRule.Category   =  "*"               AND
+          CCRule.BillCode   =  BillItem.BillCode AND 
+          CCRule.CLIType    =  ""                AND 
+          CCRule.ValidTo    >= TODAY :
+   liSaldoAcc = CCRule.AccNum.
 END.
 IF lcSubBalGift > "" THEN 
 FOR FIRST FatGroup NO-LOCK WHERE
@@ -465,9 +470,14 @@ FOR FIRST FatGroup NO-LOCK WHERE
           FatGroup.FtGrp = lcSubBalGift,
     FIRST BillItem NO-LOCK WHERE
           BillItem.Brand    = Syst.Var:gcBrand AND
-          BillItem.BillCode = FatGroup.BillCode:
-          
-   liEGiftAcc = BillItem.AccNum.
+          BillItem.BillCode = FatGroup.BillCode,
+    FIRST CCRule NO-LOCK WHERE 
+          CCRule.Brand      =   BillItem.Brand    AND 
+          CCRule.Category   =   "*"               AND   
+          CCRule.BillCode   =   BillItem.BillCode AND 
+          CCRule.CLIType    =   ""                AND 
+          CCRule.ValidTo    >=  TODAY :
+   liEGiftAcc = CCRule.AccNum.
 END.
 
 ASSIGN
