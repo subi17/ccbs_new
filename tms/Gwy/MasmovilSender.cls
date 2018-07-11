@@ -92,6 +92,11 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
                lcReturnValue = RETURN-VALUE.
             END.
 
+            WHEN {&FUSIONMESSAGE_TYPE_CANCEL_APPOINTMENT} THEN DO:
+               RUN Gwy/masmovil_cancel_appointment.p(FusionMessage.MessageSeq).
+               lcReturnValue = RETURN-VALUE.
+            END.
+
             OTHERWISE DO:
                IF LOG-MANAGER:LOGFILE-NAME <> ?
                THEN LOG-MANAGER:WRITE-MESSAGE(
