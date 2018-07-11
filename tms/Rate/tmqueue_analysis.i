@@ -7,6 +7,7 @@
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/istc.i}
+{Func/bundleupsells.i}
    
 DEF VAR lcPMDUBUpsell     AS CHAR NO-UNDO.
 DEF VAR lcIPLData         AS CHAR NO-UNDO. 
@@ -26,7 +27,7 @@ ASSIGN
    lcDSSUpsell     = fCParamC("TMQueueDSSUpsell")
    lcIPLData       = fCParamC("TMQueueIPLData")
    lcBonoData      = fCParamC("TMQueueBonoData").
-
+      
 FUNCTION fGetBDestCount RETURNS DECIMAL (INPUT iiMsSeq       AS INT,
                                      INPUT icBundleId    AS CHAR,
                                      INPUT idActDate     AS DATE):
@@ -74,6 +75,7 @@ FUNCTION fUpsellBundleCountNew RETURN INT
    DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
    DEF VAR lcIPLContracts    AS CHAR NO-UNDO.
    DEF VAR liLoop            AS INT NO-UNDO. 
+   DEF VAR lcBundleUpsell    AS CHAR NO-UNDO.
 
    DEF BUFFER ServiceLimit   FOR ServiceLimit.
    DEF BUFFER MServiceLimit  FOR MServiceLimit.
@@ -131,19 +133,21 @@ FUNCTION fUpsellBundleCountNew RETURN INT
             DayCampaign.DCEvent = bServiceLimit.GroupCode AND
             LOOKUP(STRING(DayCampaign.DCType),
                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
+                       
+      ASSIGN lcBundleUpsell = fGetDayCampaignUpsells(DayCampaign.DCEvent).
       
       CASE lcDataBundleContract:
          WHEN "BONO" THEN DO:
             IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) = 0 THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell + ",UPGRADE_UPSELL".
+            lcUpsellContracts = lcBundleUpsell + ",UPGRADE_UPSELL".
          END.
          WHEN "CONTRD" THEN DO:
             IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) = 0 THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell + ",UPGRADE_UPSELL".
+            lcUpsellContracts = lcBundleUpsell + ",UPGRADE_UPSELL".
          END.
          WHEN "PMDUB" THEN DO:
             IF DayCampaign.DCEvent <> lcDataBundleContract THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell.
+            lcUpsellContracts = lcBundleUpsell.
          END.
          WHEN "BASE_CONTRACT" THEN DO:
             IF NOT (DayCampaign.DCEvent BEGINS "DUB"    OR
@@ -158,7 +162,7 @@ FUNCTION fUpsellBundleCountNew RETURN INT
                     DayCampaign.DCEvent BEGINS "CONTF"  OR
                     DayCampaign.DCEvent BEGINS "CONTD"  OR
                     DayCampaign.DCevent EQ "CONT15") THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell.
+            lcUpsellContracts = lcBundleUpsell.
          END.
          OTHERWISE NEXT.
       END CASE. /* CASE icBundleType: */
