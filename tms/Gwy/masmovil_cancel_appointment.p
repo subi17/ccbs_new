@@ -21,9 +21,6 @@ DEF VAR lcPassword     AS CHARACTER  NO-UNDO.
 DEF VAR lcUriPath      AS CHARACTER  NO-UNDO.
 DEF VAR lcUriQuery     AS CHARACTER  NO-UNDO.
 DEF VAR lcUriQueryVal  AS CHARACTER  NO-UNDO.
-DEF VAR lcApiName      AS CHAR       NO-UNDO.
-DEF VAR lcApiKey       AS CHAR       NO-UNDO.
-DEF VAR lcOrderId      AS CHAR       NO-UNDO.
 DEF VAR liLogRequest   AS INTEGER    NO-UNDO.
 DEF VAR llLogRequest   AS LOGICAL    NO-UNDO INIT TRUE.
 DEF VAR oiStatusCode   AS INTEGER    NO-UNDO. 
@@ -72,9 +69,6 @@ ASSIGN
    lcUriPath     = fCParam("Masmovil","AppointmentUriPath")
    lcUriQuery    = ""
    lcUriQueryVal = ""
-   lcApiName     = ""
-   lcApiKey      = ""
-   lcOrderId     = ""
    liLogRequest  = fIParam("Masmovil","AppointmentLogRequest")
    llLogRequest  = LOGICAL(liLogRequest)
    lcUriPath     = lcUriPath + SUBST("Y&1", Order.OrderID).
@@ -95,9 +89,8 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcUriPath,
                            lcUriQuery,
                            lcUriQueryVal,
-                           lcApiName,
-                           lcApiKey,
-                           lcOrderId,
+                           "",              /* header name */
+                           "",              /* header value */
                            loRequestJson,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,

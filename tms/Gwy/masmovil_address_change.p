@@ -81,11 +81,10 @@ FIND FIRST MSRequest EXCLUSIVE-LOCK USE-INDEX updatestamp WHERE
            MSRequest.ReqType = {&REQTYPE_FIXEDLINE_ORDER_UPDATE} AND
            MSRequest.ReqCParam2 = "ChangeInstallationAddress" 
            NO-WAIT NO-ERROR.
-IF AVAIL MSRequest THEN DO: 
-   Assign 
+IF AVAIL MSRequest THEN 
+   ASSIGN 
       lcAmendamentValue = MSRequest.ReqCParam3
-      lcOrderId = "Y" + STRING(Order.OrderId). 
-END.   
+      lcOrderId = SUBST("Y&1", Order.OrderID).
 
 /* Parsing address data to JSON */
 ASSIGN
@@ -95,8 +94,9 @@ ASSIGN
    lcApiName     = fCParam("Masmovil", "InflightApiName")
    lcApiKey      = fCParam("Masmovil", "InflightApiKey")
    liLogRequest  = fIParam("Masmovil", "InflightLogRequest")
-   llLogRequest  = LOGICAL(liLogRequest).
-
+   llLogRequest  = LOGICAL(liLogRequest)
+   lcUriPath     = lcUriPath + SUBST("Y&1", Order.OrderID).
+   
 loInstObject = NEW JsonObject().
 loInstObject:ADD('orderType','ChangeInstallationAddress').
 loInstObject:ADD('orderID',lcOrderId).
@@ -160,19 +160,46 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcUriQueryVal,
                            lcApiName,
                            lcApiKey,
-                           lcOrderId,
                            loInstObject,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,
                            OUTPUT loResponseJson). 
                            
-IF oiStatusCode EQ 200 THEN DO:                           
-   /* update installation address */
+IF oiStatusCode NE 200 THEN DO:                           
+   ASSIGN
+      FusionMessage.UpdateTS = Func.Common:mMakeTS()
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
+      FusionMessage.ResponseCode = (IF ocStatusReason > "" THEN 
+                                         ocStatusReason
+                                      ELSE "ERROR").
+
+   IF fCanRetryFusionMessage(
+      BUFFER FusionMessage,
+      "",
+      STRING(oiStatusCode),
+      ocStatusReason) THEN 
+      RETURN "RETRY:" +
+         SUBST("&1, &2", oiStatusCode, ocStatusReason).
+
+   Func.Common:mWriteMemoWithType("OrderCustomer",
+                                  STRING(Order.OrderId),
+                                  0,
+                                  "Installation Address updation failed",
+                                  SUBST("ErrorCode: &1", (IF ocStatusReason > "" THEN
+                                                             ocStatusReason 
+                                                          ELSE "ERROR")),
+                                  "",
+                                  "TMS").
+
+   fReqStatus(3,ocStatusReason).
+END.
+ELSE DO: 
+    /* update installation address */
    ASSIGN
       FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
-      FusionMessage.ResponseCode = "200" 
-      FusionMessage.AdditionalInfo = "Success".
+      FusionMessage.ResponseCode = STRING(oiStatusCode) 
+      FusionMessage.AdditionalInfo = ocStatusReason.
      
    FIND FIRST OrderCustomer WHERE 
               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
@@ -216,38 +243,6 @@ IF oiStatusCode EQ 200 THEN DO:
       RELEASE OrderCustomer.
       fReqStatus(2,"").
       
-END.
-CATCH e AS Progress.Lang.Error:
+END.   
 
-    ASSIGN
-      FusionMessage.UpdateTS = Func.Common:mMakeTS()
-      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
-      FusionMessage.ResponseCode = (IF ocStatusReason > "" THEN 
-                                         ocStatusReason
-                                      ELSE "ERROR").
-
-   IF fCanRetryFusionMessage(
-      BUFFER FusionMessage,
-      "",
-      STRING(oiStatusCode),
-      ocStatusReason) THEN 
-      RETURN "RETRY:" +
-         SUBST("&1, &2", oiStatusCode, ocStatusReason).
-
-   Func.Common:mWriteMemoWithType("OrderCustomer",
-                                  STRING(Order.OrderId),
-                                  0,
-                                  "Installation Address updation failed",
-                                  SUBST("ErrorCode: &1", (IF ocStatusReason > "" THEN
-                                                             ocStatusReason 
-                                                          ELSE "ERROR")),
-                                  "",
-                                  "TMS").
-
-   fReqStatus(3,ocStatusReason).
-
-END CATCH.
-
-FINALLY:
-
-END.
+RETURN "".

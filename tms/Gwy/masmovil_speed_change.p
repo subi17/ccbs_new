@@ -23,9 +23,6 @@ DEF VAR lcpassword     AS CHAR       NO-UNDO.
 DEF VAR lcUriPath      AS CHAR       NO-UNDO.
 DEF VAR lcUriQuery     AS CHAR       NO-UNDO.
 DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
-DEF VAR lcApiName      AS CHAR       NO-UNDO.
-DEF VAR lcApiKey       AS CHAR       NO-UNDO.
-DEF VAR lcOrderId      AS CHAR       NO-UNDO.
 DEF VAR liLogRequest   AS INTE       NO-UNDO.
 DEF VAR llLogRequest   AS LOGICAL    NO-UNDO INIT TRUE.
 DEF VAR loRequestJson  AS JsonObject NO-UNDO.
@@ -116,9 +113,8 @@ RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
                            lcUriPath ,
                            lcUriQuery,
                            lcUriQueryVal,
-                           lcApiName,
-                           lcApiKey,
-                           lcOrderId,
+                           ""        ,  /* Header name */      
+                           ""        ,  /* header value */
                            loRequestJson,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,
