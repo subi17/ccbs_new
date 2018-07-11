@@ -55,27 +55,37 @@ put stream sarda lcsep skip.
 for each billitem no-lock where
          billitem.brand = "1"
     BY billitem.bigroup:
+        
+    FIND FIRST CCRule NO-LOCK WHERE 
+               CCRule.Brand     =  BillItem.Brand    AND 
+               CCRule.Category  =  "*"               AND 
+               CCRule.BillCode  =  BillItem.BillCode AND 
+               CCRule.CLIType   =  ""                AND 
+               CCRule.ValidTo   >= TODAY NO-ERROR.
 
-   put stream slog unformatted
-      billitem.billcode chr(9)
-      billitem.biname   chr(9)
-      billitem.bigroup  chr(9)
-      billitem.accnum   chr(9)
-      billitem.invsect  chr(9)
-      billitem.taxclass chr(9)
-      billitem.saprid   chr(9)
-      billitem.CostCentre chr(9).
+    put stream slog unformatted
+        billitem.billcode chr(9)
+        billitem.biname   chr(9)
+        billitem.bigroup  chr(9)
+        (IF AVAILABLE CCRule THEN CCRule.AccNum ELSE 0)   chr(9)
+        billitem.invsect  chr(9)
+        billitem.taxclass chr(9)
+        (IF AVAILABLE CCRule THEN CCRule.ReportingID ELSE "") chr(9)
+        (IF AVAILABLE CCRule THEN CCRule.CostCentre  ELSE "") chr(9)
+       .
 
-   put stream sarda unformatted
-                        lcsep
-      billitem.billcode lcsep
-      billitem.biname   lcsep
-      billitem.bigroup  lcsep
-      billitem.accnum   lcsep
-     (if billitem.invsect = "" then "None" else billitem.invsect) lcsep
-     (if billitem.taxclass = "" then "None" else billitem.taxclass) lcsep
-     (if billitem.saprid = "" then "None" else billitem.saprid) lcsep
-      billitem.CostCentre lcSep.
+    put stream sarda unformatted
+        lcsep
+        billitem.billcode lcsep
+        billitem.biname   lcsep
+        billitem.bigroup  lcsep
+        (IF AVAILABLE CCRule THEN CCRule.AccNum ELSE 0) lcsep
+        billitem.bigroup  lcsep     
+        (if billitem.invsect = "" then "None" else billitem.invsect) lcsep
+        (if billitem.taxclass = "" then "None" else billitem.taxclass) lcsep
+        (IF (AVAILABLE CCRule AND CCRule.ReportingID > "") THEN CCRule.ReportingID ELSE "None") lcsep
+        (IF AVAILABLE CCRule THEN CCRule.CostCentre ELSE "") lcsep
+    .
       
    do i = 1 to 5:
       lctrans = "".
