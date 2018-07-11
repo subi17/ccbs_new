@@ -50,6 +50,7 @@ DEFINE VARIABLE lcResult         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcMainLine    AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
+DEFINE BUFFER bMXItem       FOR MXItem.
 
 lcStructType = validate_request(param_toplevel_id, "int,string,struct,[string]").
 IF lcStructType EQ ? THEN RETURN.
@@ -217,12 +218,23 @@ ELSE
 
 /* YCO-468. Periodical contract for Permanency. Validation. */
 IF lcPerContract <> "" THEN DO:
+   /* Does Periodical contract exist? */
    FIND FIRST DayCampaign NO-LOCK WHERE 
               DayCampaign.Brand   EQ Syst.Var:gcBrand AND 
               DayCampaign.DCEvent EQ lcPerContract
               USE-INDEX DCEvent NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
       RETURN appl_err("Unknown Periodical Contract " + lcPerContract). 
+     
+   /* YTS-13260 - Is Periodical Contract allowed for this subscription type? */    
+   IF NOT CAN-FIND(FIRST MXItem WHERE 
+                         MXItem.MXValue EQ MobSub.CliType  AND  
+                         MXItem.MXName  EQ "SubsTypeTo"    AND 
+                         CAN-FIND(FIRST bMXItem WHERE 
+                                        bMXItem.MxSeq   EQ MXItem.MXSeq  AND 
+                                        bMXItem.MxName  EQ "PerContract" AND 
+                                        bMXItem.MxValue EQ lcPerContract)) THEN                                                                             
+      RETURN appl_err("Periodical Contract Not Allowed: " + lcPerContract). 
 END.
 
 /* ALFMO-14 Additional Line with mobile only ALFMO-5 */
