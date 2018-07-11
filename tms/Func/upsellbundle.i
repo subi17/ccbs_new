@@ -15,6 +15,7 @@
 {Func/fdss.i}
 {Func/fprepaidfee.i}
 {Func/upsellcount.i}
+{Func/bundleupsells.i}
 
 FUNCTION fGetUpSellBasicContract RETURNS CHAR
    (INPUT iiMsSeq       AS INT,
@@ -97,11 +98,11 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST DayCampaign NO-LOCK WHERE
                   DayCampaign.Brand = Syst.Var:gcBrand AND
-                  DayCampaign.DCEvent = bServiceLimit.GroupCode AND
-                  DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
-                  DayCampaign.BundleUpsell NE "SAN1GB_001,SAN5GB_002,DATA200_UPSELL" AND
-                  DayCampaign.BundleUpsell NE "SAN1GB_001,SAN5GB_002" AND
-                  DayCampaign.BundleUpsell > "":
+                  DayCampaign.DCEvent = bServiceLimit.GroupCode :
+                      
+             IF fIsDayCampaignBundleUpsellExists(DayCampaign.DCEvent) = TRUE  OR 
+                fGetDayCampaignUpsells(DayCampaign.DCEvent)           = ""  THEN NEXT. 
+                           
             IF {Func/dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */
