@@ -620,6 +620,30 @@ PROCEDURE pPeriodicalContract:
                                         FALSE,
                                         OUTPUT lcResult).
    END.
+   /* Refresh active contract without penalty */
+   WHEN 7 THEN DO:
+
+      IF NOT CAN-FIND(FIRST DCCLI WHERE
+                            DCCLI.Brand   = Syst.Var:gcBrand AND
+                            DCCLI.DCEvent = ttAction.ActionKey AND
+                            DCCLI.MsSeq   = liMsSeq AND
+                            DCCLI.ValidTo > ldaReqDate) THEN RETURN.
+
+      liRequest = fPCActionRequest(liMsSeq,
+                                   ttAction.ActionKey,
+                                   "recreate",
+                                   idActStamp,
+                                   FALSE,
+                                   icSource,
+                                   "",
+                                   iiMsRequest,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                   "",
+                                   OUTPUT lcResult).
+   END.
   
    OTHERWISE RETURN.
    END CASE.
