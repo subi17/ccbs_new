@@ -125,6 +125,7 @@ DEF VAR lcFlexData500MB            AS CHAR    NO-UNDO.
 DEF VAR lcFlexData5GB              AS CHAR    NO-UNDO. 
 DEF VAR liFlexData500MB            AS INT     NO-UNDO. 
 DEF VAR liFlexData5GB              AS INT     NO-UNDO. 
+DEF VAR lcBundleUpsell             AS CHAR NO-UNDO. 
 
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
@@ -426,9 +427,11 @@ IF NOT MobSub.PayType THEN DO:
              DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = lcDSSBundleId:
       
-      DO liLoop = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+      lcBundleUpsell  =  fGetDayCampaignUpsells(DayCampaign.DCEvent).           
+      
+      DO liLoop = 1 TO NUM-ENTRIES(lcBundleUpsell):
 
-         lcUpsellId = ENTRY(liLoop,DayCampaign.BundleUpsell).
+         lcUpsellId = ENTRY(liLoop,lcBundleUpsell).
 
          liCount = fGetUpSellCount(INPUT lcUpsellId,
                                    INPUT Mobsub.MsSeq,
