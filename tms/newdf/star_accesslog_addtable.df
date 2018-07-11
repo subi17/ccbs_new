@@ -1,5 +1,5 @@
 ADD TABLE "AccessLog"
-  AREA "Sta_Data_64"
+  AREA "EventLog_Data"
   LABEL "AccessLog"
   DESCRIPTION "AccessLog"
   DUMP-NAME "AccessLog"
@@ -61,16 +61,16 @@ ADD FIELD "KeyColumn" OF "AccessLog" AS character
   ORDER 70
 
 ADD INDEX "EventTS" ON "AccessLog"
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "EventTS" DESCENDING
 
 ADD INDEX "Key" ON "AccessLog"
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_1"
   INDEX-FIELD "Key" ASCENDING
 
 ADD INDEX "TableName" ON "AccessLog"
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_1"
   INDEX-FIELD "TableName" DESCENDING
   INDEX-FIELD "EventTS"  DESCENDING
 
