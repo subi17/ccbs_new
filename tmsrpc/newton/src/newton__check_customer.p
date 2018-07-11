@@ -405,14 +405,17 @@ ELSE IF AVAIL Customer AND
         END.
     END.
 END.
-ELSE DO:
-   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
+ELSE 
+DO:
+   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
+   DO:
        IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
           ASSIGN
              llOrderAllowed = FALSE
              lcReason = "PRO migration not possible because of not company or selfemployed"
              lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
-      ELSE DO:
+       ELSE 
+       DO:
          FOR EACH OrderCustomer NO-LOCK WHERE
                   OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
                   OrderCustomer.CustIdType EQ pcIdType   AND
@@ -436,7 +439,7 @@ ELSE DO:
                     LEAVE.    
                 END.
              END.
-             ELSE 
+             ELSE IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN
                 ASSIGN llPROOngoingOrder = TRUE.
          END.
 
@@ -451,10 +454,36 @@ ELSE DO:
                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
              END.
          END.
+       END.
+   END.
+   ELSE 
+   DO: /* Block nonpro order's from non-pro channels when pro order is ongoing */
+      FOR EACH OrderCustomer NO-LOCK WHERE
+               OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
+               OrderCustomer.CustIdType EQ pcIdType   AND
+               OrderCustomer.CustId     EQ pcPersonId AND
+               OrderCustomer.Rowtype    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+         FIRST Order NO-LOCK WHERE
+               Order.Brand EQ Syst.Var:gcBrand AND
+               Order.OrderID = OrderCustomer.OrderID:
+
+          IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+             Order.OrderType NE {&ORDER_TYPE_MNP} AND
+             Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
+
+           IF OrderCustomer.PRO THEN 
+           DO:    
+              IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
+              DO:
+                  llOrderAllowed = FALSE.
+                  lcReason = "Ongoing PRO order".
+                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+                  LEAVE.    
+              END.
+           END.
       END.
    END.
 END.
-
 
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
