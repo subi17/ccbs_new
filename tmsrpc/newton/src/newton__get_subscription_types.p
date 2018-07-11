@@ -8,8 +8,8 @@
                 tariff_bundle;string;mandatory;
                 status_code;int;mandatory;(0=Inactive,1=active,2=retired)
  */
-USING Progress.Json.ObjectModel.JsonArray.
-USING Progress.Json.ObjectModel.JsonObject.
+USING Progress.Json.ObjectModel.*.
+USING OpenEdge.Net.HTTP.MethodEnum.
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
@@ -132,6 +132,8 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
     DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
     DEF VAR loRequestJson  AS JsonObject NO-UNDO.
     DEF VAR loJson         AS JsonObject NO-UNDO.
+    DEF VAR oiStatusCode   AS INT        NO-UNDO. 
+    DEF VAR ocStatusReason AS CHAR       NO-UNDO. 
 
     DEFINE VARIABLE loJsonArray  AS JsonArray         NO-UNDO.
     DEFINE VARIABLE loJsonObject AS JsonObject        NO-UNDO.
@@ -162,7 +164,7 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
     DO:
         ASSIGN lcUriQueryVal = REPLACE(REPLACE(lcUriQueryVal,"#GESCAL",lcGescal)," ","+").
 
-        RUN Gwy/http_rest_client.p("get"     ,
+        RUN Gwy/http_rest_client.p(STRING(MethodEnum:GET),
                                    lcHost    ,
                                    liPort    ,     
                                    ""        ,
@@ -171,6 +173,8 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
                                    lcUriQuery,
                                    lcUriQueryVal,
                                    loRequestJson,
+                                   OUTPUT oiStatusCode,
+                                   OUTPUT ocStatusReason,
                                    OUTPUT loJson).
 
         ASSIGN lcJsonArray = loJson:GetJsonArray('feasibilities').
