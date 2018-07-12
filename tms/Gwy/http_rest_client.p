@@ -120,6 +120,7 @@ CASE icAction:
                         :AddHeader(icHeaderName,icHeaderValue)
                         :AcceptJson()
                         :Request.
+                        
         END.          
         ELSE 
             oReq = RequestBuilder:Patch(oUri, ioRequestJson)
