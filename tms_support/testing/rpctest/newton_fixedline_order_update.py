@@ -21,21 +21,28 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = int(sys.argv[1])
 
-p=s.newton.fixedline_order_update('selforde',var1,
-                 {
-                                       'city':'madrid',
-                                       'coverage_token':'qwer',
-                                       'gescal':'123',
-                                       'region':'TENERIFE',
-                                       'street_name':'WindyStreet 45',
-                                       'street_number':'123',
-                                       'territory_owner':'rpctest',
-                                       'street_type':'WindyStreet 45',
-                                       'zip':'123'
-                                  },
-                                       'ChangeInstallationAddress',
-                                       'E6541D',
-                                       'Relocating')
-
+p=s.newton.fixedline_order_update('srvuddan',var1,
+                                  {          	
+                                   'bis': '',
+                                   'block': '2',
+                                   'gescal': '00332432043241010         0085       ',
+                                   'region': 'MADRID',
+                                   'city': 'Galapagar',
+                                   'street_name': 'Calle del Bosque',
+                                   'street_number': '33',
+                                   'territory_owner': 'MASMOVIL',
+                                   'coverage_token': '19384392-0395-0982-9893-784379230910',
+                                   'hand': 'E',
+                                   'door': '',
+                                   'letter': '',
+                                   'km': '',
+                                   'floor': '002',
+                                   'stair': '',
+  				   'zip': '28260',
+  				   'street_type': 'Calle',
+  			           'country': 'ES'
+				  },
+				  'FixedLineAddress',
+				  'Customers request')
 
 print_results(p)
