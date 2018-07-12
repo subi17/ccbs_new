@@ -2060,7 +2060,9 @@ END.
   
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
-IF fCLITypeIsExtraLine(pcSubType) AND (NOT pcNumberType BEGINS "renewal") THEN DO:
+IF fCLITypeIsExtraLine(pcSubType) AND 
+   ( NOT ( pcNumberType BEGINS "renewal" OR 
+           pcNumberType BEGINS "retention" ) )  THEN DO:
 
    piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
 
