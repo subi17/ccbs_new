@@ -121,6 +121,35 @@ FUNCTION fChkTiming RETURNS CHARACTER
 
 END FUNCTION.
 
+FUNCTION fCreateMsRequestParam RETURNS LOGICAL
+   (INPUT iiMsRequest  AS INT,
+    INPUT icParamName  AS CHAR,
+    INPUT icParamType  AS CHAR,
+    INPUT icParamValue AS CHAR):
+
+   IF NOT CAN-FIND(FIRST MsRequestParam NO-LOCK WHERE
+                         MsRequestParam.MsRequest EQ iiMsRequest  AND
+                         MsRequestParam.ParamName EQ icParamName) THEN DO:
+      CREATE MsRequestParam.
+      ASSIGN MsRequestParam.MsRequest = iiMsRequest
+             MsRequestParam.ParamName = icParamName
+             MsRequestParam.ParamType = icParamType.
+
+      CASE icParamType:
+         WHEN {&CHARVAL} THEN MsRequestParam.CharValue = icParamValue.
+         WHEN {&INTVAL}  THEN MsRequestParam.IntValue  = INT(icParamValue).
+         WHEN {&DECVAL}  THEN MsRequestParam.DecValue  = DEC(icParamValue).
+         WHEN {&DATEVAL} THEN MsRequestParam.DateValue = DATE(icParamValue).
+      END CASE.
+
+      RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 /* CLI type change */
 FUNCTION fCTChangeRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,
