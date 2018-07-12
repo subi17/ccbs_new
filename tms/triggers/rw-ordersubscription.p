@@ -1,0 +1,1 @@
+{triggers/hpdwrite_generic.i OrderSubscription ORDERSUBSCRIPTION Ordercanal OrderId OrderProductID}
