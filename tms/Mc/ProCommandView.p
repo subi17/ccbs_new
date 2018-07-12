@@ -29,14 +29,14 @@ DEF VAR i               AS INT          NO-UNDO.
 DEF VAR ldtActivationTS AS DATETIME-TZ  NO-UNDO.
 DEF VAR lcCli           LIKE mobsub.cli NO-UNDO.
 DEF VAR lcCommand_Ed    AS LONGCHAR     NO-UNDO 
-   VIEW-AS EDITOR LARGE SIZE 76 BY 4.
+   VIEW-AS EDITOR LARGE SIZE 76 BY 6.
 DEF VAR lcResponse_Ed    AS LONGCHAR     NO-UNDO 
    VIEW-AS EDITOR LARGE SIZE 76 BY 3.
 
 DEF STREAM strProCmd.
 
 FORM
-   ProCommand.msseq            COLUMN-LABEL "SubscrID" 
+   ProCommand.msseq            COLUMN-LABEL "SubscrID"
    lcCli                       COLUMN-LABEL "MSISDN" FORMAT "x(11)"
    ProCommand.OrderId          COLUMN-LABEL "Order ID" 
    ProCommand.ProCommandTarget COLUMN-LABEL "Target" FORMAT "X(4)"
@@ -49,13 +49,14 @@ FORM
    FRAME sel.    
 
 FORM
-    "SubscrID    :" ProCommand.msseq          SKIP
-    "Command type:" ProCommand.procommandtype SKIP
-    "MSISDN      :" lcCli  FORMAT "x(11)"     SKIP
-    "Created     :" ProCommand.CreatedTS      SKIP   
-    "Activated   :" ProCommand.ActivationTS   SKIP
-    "Completed   :" ProCommand.CompletedTS    SKIP
-    "Command     :" lcCommand_Ed              SKIP 
+    "SubscrID    :" ProCommand.msseq          
+    "Request Id  :" AT 45 ProCommand.msRequest  SKIP
+    "Command type:" ProCommand.procommandtype   
+    "MSISDN      :" AT 45 lcCli  FORMAT "x(11)" SKIP
+    "Created     :" ProCommand.CreatedTS        SKIP   
+    "Activated   :" ProCommand.ActivationTS     SKIP
+    "Completed   :" ProCommand.CompletedTS      SKIP
+    "Command     :" lcCommand_Ed                SKIP 
     "Response    :" lcResponse_Ed 
     WITH  OVERLAY ROW 2 CENTERED 
     COLOR VALUE(Syst.Var:cfc)
@@ -358,8 +359,13 @@ REPEAT WITH FRAME sel:
         CLEAR FRAME lis NO-PAUSE.
         PAUSE 0 NO-MESSAGE.
         
+        ASSIGN   
+           lcCommand_Ed    = ProCommand.CommandLine 
+           lcResponse_Ed   = ProCommand.Response.
+           
         DISP
            ProCommand.msseq
+           ProCommand.msRequest
            ProCommand.procommandtype
            lcCli
            ProCommand.CreatedTS   
@@ -439,16 +445,14 @@ PROCEDURE local-disp-row:
    FIND mobsub WHERE mobsub.msseq = ProCommand.Msseq NO-LOCK NO-ERROR.
    ASSIGN
       ldtActivationTS = DATETIME-TZ(ProCommand.ActivationTS,TIMEZONE)
-      lcCli           = (IF AVAILABLE mobsub THEN mobsub.cli ELSE "")
-      lcCommand_Ed    = ProCommand.CommandLine 
-      lcResponse_Ed   = ProCommand.Response.
+      lcCli           = (IF AVAILABLE mobsub THEN mobsub.cli ELSE "").
    
    DISPLAY
-      ProCommand.msseq 
+      ProCommand.msseq
       lcCli
       ProCommand.orderid
       ProCommand.ProCommandTarget      
-      ProCommand.ProCommandStatus      
+      ProCommand.ProCommandStatus
       ldtActivationTS
       ProCommand.ProCommandId
       WITH FRAME sel.
