@@ -28,6 +28,16 @@ ADD FIELD "OrderProductID" OF "OrderTopUp" AS integer
   COLUMN-LABEL "Product ID"
   ORDER 60
   MAX-WIDTH 4
+  
+ADD FIELD "MsSeq" OF "OrderTopUp" AS integer 
+  DESCRIPTION "Subscription ID"
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubscrID"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubscrID"
+  ORDER 70
 
 .
 PSC
