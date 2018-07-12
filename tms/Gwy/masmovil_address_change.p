@@ -11,7 +11,6 @@ USING OpenEdge.Net.HTTP.MethodEnum.
 {Func/msreqfunc.i}
 {Func/cparam2.i}
 
-&GLOBAL-DEFINE WAIT_CONFIG_LOCK 20
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
@@ -36,16 +35,11 @@ DEF VAR loJson                   AS JsonObject NO-UNDO.
 
 DEF VAR lcHost                   AS CHARACTER  NO-UNDO.
 DEF VAR liPort                   AS INTEGER    NO-UNDO.
-DEF VAR lcAuthType               AS CHARACTER  NO-UNDO.
-DEF VAR lcRealm                  AS CHARACTER  NO-UNDO.
-DEF VAR lcUserId                 AS CHARACTER  NO-UNDO.
-DEF VAR lcPassword               AS CHARACTER  NO-UNDO.
 DEF VAR lcUriPath                AS CHARACTER  NO-UNDO.
 DEF VAR lcUriQuery               AS CHARACTER  NO-UNDO.
-DEF VAR lcUriQueryVal            AS CHARACTER  NO-UNDO.
-DEF VAR lcApiName                AS CHAR       NO-UNDO.
-DEF VAR lcApiKey                 AS CHAR       NO-UNDO.
-DEF VAR lcOrderId                AS CHAR       NO-UNDO.
+DEF VAR lcUriQueryValue          AS CHARACTER  NO-UNDO.
+DEF VAR lcHeaderName             AS CHAR       NO-UNDO.
+DEF VAR lcHeaderValue            AS CHAR       NO-UNDO.
 DEF VAR liLogRequest             AS INTEGER    NO-UNDO.
 DEF VAR llLogRequest             AS LOGICAL    NO-UNDO INIT TRUE.
 DEF VAR oiStatusCode             AS INTEGER    NO-UNDO. 
@@ -53,6 +47,7 @@ DEF VAR ocStatusReason           AS CHARACTER  NO-UNDO.
 DEF VAR loResponseJson           AS JsonObject NO-UNDO.
    
 DEF VAR lcAmendamentValue        AS CHAR       NO-UNDO.
+DEF VAR lcOrderId                AS CHAR       NO-UNDO.
 
 /* Update Installation Address */
       
@@ -88,14 +83,16 @@ IF AVAIL MSRequest THEN
 
 /* Parsing address data to JSON */
 ASSIGN
-   lcHost        = fCParam("Masmovil", "InflightHost")   
-   liPort        = fIParam("Masmovil", "InflightPort")     
-   lcUriPath     = fCParam("Masmovil", "InflightUriPath")   
-   lcApiName     = fCParam("Masmovil", "InflightApiName")
-   lcApiKey      = fCParam("Masmovil", "InflightApiKey")
-   liLogRequest  = fIParam("Masmovil", "InflightLogRequest")
-   llLogRequest  = LOGICAL(liLogRequest)
-   lcUriPath     = lcUriPath + SUBST("Y&1", Order.OrderID).
+   lcHost          = fCParam("Masmovil", "InflightHost")   
+   liPort          = fIParam("Masmovil", "InflightPort")     
+   lcUriPath       = fCParam("Masmovil", "InflightUriPath")   
+   lcUriQuery      = fCParam("Masmovil", "InflightUriQuery")
+   lcUriQueryValue = fCParam("Masmovil", "InflightUriQueryValue")
+   lcHeaderName    = fCParam("Masmovil", "InflightHeaderName")
+   lcHeaderValue   = fCParam("Masmovil", "InflightHeaderValue")
+   liLogRequest    = fIParam("Masmovil", "InflightLogRequest")
+   llLogRequest    = LOGICAL(liLogRequest)
+   lcUriPath       = lcUriPath + SUBST("Y&1", Order.OrderID).
    
 loInstObject = NEW JsonObject().
 loInstObject:ADD('orderType','ChangeInstallationAddress').
@@ -149,18 +146,18 @@ lcAddressObject:ADD('floor',ENTRY(4,lcAmendamentValue,"|")).
 lcAddressObject:ADD('hand',ENTRY(17,lcAmendamentValue,"|")).
 
 RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
-                           lcHost,
-                           liPort,
-                           lcAuthType,
-                           lcRealm,
-                           lcUserId,
-                           lcPassword,
-                           lcUriPath,
-                           lcUriQuery,
-                           lcUriQueryVal,
-                           lcApiName,
-                           lcApiKey,
-                           loInstObject,
+                           lcHost           ,
+                           liPort           ,
+                           ""               , /* Authorization type */
+                           ""               , /* Realm*/
+                           ""               , /* user id */
+                           ""               , /* password */
+                           lcUriPath        ,
+                           lcUriQuery       , 
+                           lcUriQueryValue  , 
+                           lcHeaderName     ,
+                           lcHeaderValue    ,
+                           loInstObject     ,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,
                            OUTPUT loResponseJson). 
