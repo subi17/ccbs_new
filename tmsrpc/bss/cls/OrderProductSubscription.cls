@@ -59,11 +59,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         GET.
         SET.
        
-    DEFINE PUBLIC PROPERTY aoOrderTopUp AS CLASS bss.cls.OrderTopup NO-UNDO 
-        GET.
-        SET.
-   		
-	CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS bss.cls.Order ):
+    CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS bss.cls.Order ):
 	    
         SUPER(ioOrder).
         
@@ -148,13 +144,6 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             AND aoOrder:aoCustomer:isNewCustomer = FALSE
             THEN mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
             
-            IF ioItemObject:Has("billing_account_index")
-            THEN DO:
-                
-                /*WHAT WAS THE CODE THAT SHOULD BE WRITTEN HERE*/
-                
-            END.
-                
             ASSIGN 
                 aoOrderAggrementCustomer           =  NEW bss.cls.OrderCustomer(aoOrder)
                 aoOrderAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
@@ -164,15 +153,11 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             aoOrderAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
             ELSE aoOrderAggrementCustomer:mCreateRowCustomerData(AddressObj).
             
-            IF loAttributes:Has("topup")
-            THEN DO:
-                
-                ASSIGN aoOrderTopUp = NEW bss.cls.OrderTopup(aoOrder).                       
-                aoOrderTopUp:mCreateData(loAttributes:GetJsonObject("topup")).                
-                
-            END.
+            IF loAttributes:Has("initial_topup_amount")
+            THEN mCreateDataOrderProductParamData(loAttributes,"initial_topup_amount","Dec").
             
-            
+            IF loAttributes:Has("initial_topup_display_amount")
+            THEN mCreateDataOrderProductParamData(loAttributes,"initial_topup_display_amount","Dec").
             
             /*TODO PC:Please check the MULTIHOLDER INFROMATION WITH KIRAN*/
                 
@@ -189,11 +174,6 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         IF VALID-OBJECT (aoOrderAggrementCustomer)
         THEN DO:
             aoOrderAggrementCustomer:mStoreData().
-        END.
-        
-        IF VALID-OBJECT(aoOrderTopUp)
-        THEN DO:
-            aoOrderTopUp:mStoreData(THIS-OBJECT:OrderProductID).
         END.
 
     END METHOD.

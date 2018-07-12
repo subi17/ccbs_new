@@ -218,8 +218,6 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
             CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
         END.        
         
-        mstoreOrderFusion().
-        
         IF VALID-OBJECT(aoAggrementCustomer)
         THEN aoAggrementCustomer:mStoreData().
         
@@ -259,56 +257,6 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         RETURN ( ttOrderProductParam.paramnb + 1 ).
 
     END METHOD.
-    
-    METHOD PUBLIC VOID mstoreOrderFusion() :
-        
-        DEFINE VARIABLE llROIClose AS LOGICAL NO-UNDO. 
-        DEFINE VARIABLE ldaOrderDate AS DATE NO-UNDO.
-        DEFINE VARIABLE liOrderTime  AS INTEGER  NO-UNDO.
-        DEFINE VARIABLE lcFixedLineAdslLinkState AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE lcFixedLineCustomerType AS CHARACTER NO-UNDO.
-        DEFINE VARIABLE ocErrMsg AS CHARACTER NO-UNDO.
-        
-        
-        Func.Common:mSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
-        
-        IF (THIS-OBJECT:FixedLineCustomerType EQ "NONE" OR THIS-OBJECT:FixedLineCustomerType EQ "ADSL")  
-            AND THIS-OBJECT:FixedLineCustomerType = "MNP" 
-        THEN lcFixedLineAdslLinkState = "O".
-        ELSE    lcFixedLineAdslLinkState = "V".
-        
-        llROIClose =  (aoOrder:ROIResult EQ "risk" AND LOOKUP(aoOrder:ROILevel,"7,8") > 0).
-        
-        CREATE OrderFusion.
-        ASSIGN OrderFusion.Brand              =     Syst.Var:gcBrand
-               OrderFusion.OrderID            =     aoOrder:OrderId
-               OrderFusion.FusionStatus       =     {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
-               OrderFusion.OrderDate          =     ldaOrderDate
-               OrderFusion.Salesman           =     aoOrder:Salesman
-               OrderFusion.FixedNumberType    =     THIS-OBJECT:FixNumberType
-               OrderFusion.FixedNumber        =     THIS-OBJECT:FixedNumber
-               OrderFusion.Product            =     THIS-OBJECT:ProductID
-               /*OrderFusion.CustomerType       =     "DECIDE THIS"*/
-               OrderFusion.FixedMNPTime       =     THIS-OBJECT:FixedMNPTime
-               OrderFusion.FixedCurrOper      =     THIS-OBJECT:FixedCurrOper
-               OrderFusion.UpdateTS           =     Func.Common:mMakeTS()
-               OrderFusion.FixedCurrOperCode  =     THIS-OBJECT:FixedCurrOperCode
-               OrderFusion.SerialNumber       =     THIS-OBJECT:SerialNumber
-               OrderFusion.EstimatedDataSpeed =     THIS-OBJECT:EstimatedSpeed
-               OrderFusion.ADSLLinkState      =     THIS-OBJECT:lcFixedLineAdslLinkState
-               .
-               
-        IF aoOrder:StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE}
-        THEN DO:
-            
-            RUN Mc/orderprocessing.p(INPUT OrderFusion.OrderID , 
-                                     INPUT {&ORDER_STATUS_PENDING_FIXED_LINE} ,
-                                     INPUT OrderFusion.FixedNumber,
-                                     OUTPUT ocErrMsg  ).
-                                     
-        END.
-        
-    END METHOD.
-    
+   
 
 END CLASS.
