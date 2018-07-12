@@ -1,0 +1,146 @@
+ADD TABLE "ProCommand"
+  MULTITENANT yes
+  AREA "Sta_Data_256"
+  LABEL "BUS/BPM commands to SAPC"
+  DUMP-NAME "procommand"
+
+ADD FIELD "OrderId" OF "ProCommand" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "CreatedTS" OF "ProCommand" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Creation"
+  MAX-WIDTH 12
+  HELP "Date and time when record is created"
+  ORDER 20
+
+ADD FIELD "ActivationTS" OF "ProCommand" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Activation"
+  MAX-WIDTH 12
+  HELP "Date and time when procommand is sent to BUS/BPM"
+  ORDER 30
+
+ADD FIELD "CompletedTS" OF "ProCommand" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Completed"
+  MAX-WIDTH 12
+  HELP "Date and time when BUS/BPM response is received"
+  ORDER 40
+
+ADD FIELD "ProCommandId" OF "ProCommand" AS int64 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "ProCommand Id"
+  MAX-WIDTH 8
+  HELP "Record Unique identifier"
+  ORDER 50
+
+ADD FIELD "MsRequest" OF "ProCommand" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Request ID"
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique ID for request"
+  ORDER 60
+
+ADD FIELD "MsSeq" OF "ProCommand" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MobSub Sequence"
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubSeq"
+  HELP "Sequence for a subscription"
+  ORDER 70
+  MANDATORY
+
+ADD FIELD "Response" OF "ProCommand" AS character 
+  FORMAT "x(256)"
+  INITIAL ""
+  LABEL "Response"
+  MAX-WIDTH 512
+  HELP "Response"
+  ORDER 80
+
+ADD FIELD "ProCommandStatus" OF "ProCommand" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Status"
+  MAX-WIDTH 4
+  HELP "Status: 0-  New, 1 - Ongoing, 2 - Done"
+  ORDER 90
+
+ADD FIELD "ProCommandTarget" OF "ProCommand" AS character 
+  DESCRIPTION "NB for Northbound, BPM for BPM"
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Target"
+  MAX-WIDTH 16
+  HELP "NB for Northbound, BPM for BPM"
+  ORDER 100
+
+ADD FIELD "Creator" OF "ProCommand" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Creator"
+  MAX-WIDTH 24
+  HELP "Who made this procommand request"
+  ORDER 120
+
+ADD FIELD "CommandLine" OF "ProCommand" AS clob 
+  FORMAT "x(8)"
+  INITIAL ?
+  LOB-AREA "Sta_Data_64"
+  LOB-BYTES 10485760
+  LOB-SIZE 10M
+  CLOB-CODEPAGE "UTF-8"
+  CLOB-COLLATION "BASIC"
+  CLOB-TYPE 2
+  ORDER 130
+
+ADD FIELD "ProCommandType" OF "ProCommand" AS character 
+  DESCRIPTION "Command Type: add_upsell, change_imsi, ..."
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Command Type"
+  MAX-WIDTH 60
+  HELP "Command type"
+  ORDER 110
+
+ADD INDEX "Ix_ProCommandId" ON "ProCommand" 
+  AREA "Sta_Index_64"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ProCommandId" ASCENDING 
+
+ADD INDEX "Ix_MsSeq" ON "ProCommand" 
+  AREA "Sta_Index_64"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ActivationTS" DESCENDING 
+
+ADD INDEX "Ix_OrderId" ON "ProCommand" 
+  AREA "Sta_Index_64"
+  INDEX-FIELD "OrderId" ASCENDING 
+  INDEX-FIELD "ActivationTS" DESCENDING 
+
+ADD INDEX "Ix_Status" ON "ProCommand" 
+  AREA "Sta_Index_64"
+  INDEX-FIELD "ProCommandStatus" ASCENDING 
+  INDEX-FIELD "ActivationTS" ASCENDING 
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000003350
