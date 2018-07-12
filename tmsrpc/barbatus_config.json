@@ -9,7 +9,13 @@
 				"max-procs": "2",
 				"max-load-per-proc": "1",
 				"kill-signal": "10"
-			}],			
+			}],
+            "/bss": [ "bss", {
+                "check-local": "\"disable\"",
+                "min-procs": "2",
+                "max-procs": "2",
+                "kill-signal": "10"
+            }],
 			"server.modules": "( \"mod_fastcgi\", \"mod_status\", \"mod_accesslog\" )",
 			"server.network-backend": "\"writev\""
 		}
