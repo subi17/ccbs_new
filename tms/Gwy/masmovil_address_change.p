@@ -140,7 +140,7 @@ lcAddressObject:ADD('number',ENTRY(3,lcAmendamentValue,"|")).
 lcAddressObject:ADD('province',ENTRY(16,lcAmendamentValue,"|")).
 lcAddressObject:ADD('street',ENTRY(2,lcAmendamentValue,"|")).
 lcAddressObject:ADD('letter',ENTRY(6,lcAmendamentValue,"|")).
-lcAddressObject:ADD('bis',ENTRY(9,lcAmendamentValue,"|")).
+lcAddressObject:ADD('bis_duplicate',ENTRY(9,lcAmendamentValue,"|")).
 lcAddressObject:ADD('block',ENTRY(8,lcAmendamentValue,"|")).
 lcAddressObject:ADD('floor',ENTRY(4,lcAmendamentValue,"|")).
 lcAddressObject:ADD('hand',ENTRY(17,lcAmendamentValue,"|")).

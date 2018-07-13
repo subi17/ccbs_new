@@ -22,27 +22,29 @@ else:
    var1 = int(sys.argv[1])
 
 p=s.newton.fixedline_order_update('srvuddan',var1,
-                                  {          	
+                                  {
                                    'bis': '',
                                    'block': '2',
-                                   'gescal': '00332432043241010         0085       ',
+                                   'gescal': '28000420766400002         002E',
                                    'region': 'MADRID',
                                    'city': 'Galapagar',
                                    'street_name': 'Calle del Bosque',
                                    'street_number': '33',
-                                   'territory_owner': 'MASMOVIL',
+                                   'territory_owner': 'MDMM01',
                                    'coverage_token': '19384392-0395-0982-9893-784379230910',
                                    'hand': 'E',
+                                   'address_id':'28000420766400002         002E',
                                    'door': '',
                                    'letter': '',
                                    'km': '',
                                    'floor': '002',
                                    'stair': '',
-  				   'zip': '28260',
-  				   'street_type': 'Calle',
-  			           'country': 'ES'
-				  },
-				  'FixedLineAddress',
-				  'Customers request')
+                                   'zip': '28260',
+                                   'street_type': 'Calle',
+                                   'country': 'ES'
+                                  },
+                                  'ChangeInstallationAddress',
+                                  'Customers request')
 
 print_results(p)
+

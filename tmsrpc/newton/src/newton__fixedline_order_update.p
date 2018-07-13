@@ -13,6 +13,7 @@
                    block;string;optional
                    city;string;mandatory
                    coverage_token;string;mandatory
+                   address_id,string;mandatory
                    door;string;optional
                    floor;string;optional
                    gescal;string;mandatory
@@ -72,7 +73,6 @@ DEF VAR pcZip             AS CHAR NO-UNDO.
 DEF VAR lcCurrentDetails AS CHAR NO-UNDO.
 DEF VAR lcAmendmentValue AS CHAR NO-UNDO.
 DEF VAR lcAmendmentType  AS CHAR NO-UNDO.
-DEF VAR lcRegion         AS CHAR NO-UNDO.
 
 /* Eventlog parameters */
 
@@ -105,17 +105,17 @@ FUNCTION fGetAddressFields RETURNS LOGICAL:
       pcHand = get_string(pcAmendmentStruct, "hand").
    IF LOOKUP("km",lcAddressData) GT 0 THEN 
       pcKm = get_string(pcAmendmentStruct, "km").
-   IF LOOKUP("letter",pcLetter) GT 0 THEN 
+   IF LOOKUP("letter",lcAddressData) GT 0 THEN 
       pcLetter = get_string(pcAmendmentStruct, "letter").
       
    pcRegion = get_string(pcAmendmentStruct, "region").   
-   IF LOOKUP("stair",pcStair) GT 0 THEN 
+   IF LOOKUP("stair",lcAddressData) GT 0 THEN 
       pcStair = get_string(pcAmendmentStruct, "stair").
    
    pcStreet_name = get_string(pcAmendmentStruct, "street_name").
    pcStreet_number = get_string(pcAmendmentStruct, "street_number").
    pcTerritory_owner = get_string(pcAmendmentStruct, "territory_owner").
-   IF LOOKUP("street_type",pcStreet_type) GT 0 THEN
+   IF LOOKUP("street_type",lcAddressData) GT 0 THEN
    pcStreet_type = get_string(pcAmendmentStruct, "street_type").
    
    pcZip = get_string(pcAmendmentStruct, "zip").
@@ -123,7 +123,7 @@ FUNCTION fGetAddressFields RETURNS LOGICAL:
 END FUNCTION.
 
 ASSIGN 
-   gcAmendmentDetails = "country,bis,block,city,coverage_token,door,floor,gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
+   gcAmendmentDetails = "country,bis,block,city,coverage_token,address_id,door,floor,gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
 
 IF validate_request(param_toplevel_id, "string,int,struct,string,string") EQ ? THEN
    RETURN.
@@ -220,7 +220,7 @@ CASE pcAmendmentType:
                              pcAddressId + "|" +  
                              pcCountry + "|" +  
                              pcKm + "|" +
-                             lcRegion + "|" + 
+                             pcRegion + "|" + 
                              pcHand + "|" + 
                              pcTerritory_owner.
         
