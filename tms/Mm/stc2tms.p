@@ -29,6 +29,10 @@ DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
 {Func/remfees.i}
 
+DEF BUFFER bMergeMobSub FOR MobSub.
+DEF BUFFER bMergeDCCLI  FOR DCCLI.
+DEF BUFFER bMergeOrder  FOR Order.
+
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
@@ -51,6 +55,13 @@ IF llDoEvent THEN DO:
    
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.
+
+   DEFINE VARIABLE lhMergeMobSub AS HANDLE NO-UNDO.
+   lhMergeMobSub = BUFFER bMergeMobSub:HANDLE.
+
+   DEFINE VARIABLE lhMergeDCCLI AS HANDLE NO-UNDO.
+   lhMergeDCCLI = BUFFER bMergeDCCLI:HANDLE.
+
 END.
 
 DEF VAR lcAttrValue        AS CHAR NO-UNDO. 
@@ -1011,6 +1022,13 @@ PROCEDURE pFinalize:
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
    DEF VAR llMigrationNeeded     AS LOG  NO-UNDO.
+   DEF VAR lcParamValue          AS CHAR NO-UNDO.
+   DEF VAR liMSISDNStat          AS INT  NO-UNDO.
+   DEF VAR liSIMStat             AS INT  NO-UNDO.
+   DEF VAR liQuarTime            AS INT  NO-UNDO.
+   DEF VAR llPenalty             AS LOG  NO-UNDO.
+   DEF VAR liTermReq             AS INT  NO-UNDO.
+   DEF VAR ocResult              AS CHAR NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
    DEF BUFFER Order FOR Order.
@@ -1367,7 +1385,117 @@ PROCEDURE pFinalize:
 
    /* request handled succesfully */
    fReqStatus(2,"").
-   
+  
+   MERGEREQUEST:
+   DO:
+      IF fCheckMsRequestParam(MsRequest.MsRequest,
+                              {&MERGE2P3P},
+                              OUTPUT lcParamValue) THEN DO:
+
+         FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+
+         FIND FIRST bMergeMobSub EXCLUSIVE-LOCK WHERE
+                    bMergeMobSub.MsSeq    EQ INT(lcParamValue)     AND
+                   (bMergeMobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
+                    bMergeMobSub.MsStatus EQ {&MSSTATUS_BARRED})   NO-ERROR.
+
+         FIND FIRST bMergeDCCLI EXCLUSIVE-LOCK WHERE
+                    bMergeDCCLI.Brand   EQ Syst.Var:gcBrand  AND
+                    bMergeDCCLI.DCEvent BEGINS "FTERM"       AND
+                    bMergeDCCLI.MsSeq   EQ INT(lcParamValue) AND
+                    bMergeDCCLI.ValidTo GT TODAY             NO-ERROR.
+
+         IF NOT AVAIL bMergeMobSub THEN DO:
+            Func.Common:mWriteMemo("MobSub",
+                                   STRING(MobSub.MsSeq),
+                                   MobSub.Custnum,
+                                   "Merge Subscription Not Available",
+                                   lcError).
+            LEAVE MERGEREQUEST.
+         END.
+
+         FIND bMergeOrder NO-LOCK WHERE
+              bMergeOrder.Brand EQ Syst.Var:gcBrand   AND
+              bMergeOrder.MSSeq EQ bMergeMobSub.MsSeq NO-ERROR.
+
+         IF NOT AVAIL bMergeOrder THEN DO:
+            Func.Common:mWriteMemo("MobSub",
+                                   STRING(bMergeMobSub.MsSeq),
+                                   bMergeMobSub.Custnum,
+                                   "Merge Order Not Available",
+                                   lcError).
+            LEAVE MERGEREQUEST.
+         END.
+
+         IF llDoEvent THEN DO:
+            RUN StarEventSetOldBuffer(lhMobsub).
+            RUN StarEventSetOldBuffer(lhMergeMobsub).
+         END.
+
+         ASSIGN MobSub.FixedNumber       = bMergeMobSub.FixedNumber
+                bMergeMobSub.FixedNumber = ?.
+
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhMobSub).
+            RUN StarEventMakeModifyEvent(lhMergeMobSub).
+         END.
+
+         IF AVAIL bMergeDCCLI THEN DO:
+
+            IF llDoEvent THEN DO:
+               RUN StarEventSetOldBuffer(lhMergeDCCLI).
+            END.
+
+            ASSIGN bMergeDCCLI.MsSeq     = bMergeMobSub.MsSeq
+                   bMergeDCCLI.ValidFrom = TODAY.
+
+            IF llDoEvent THEN DO:
+               RUN StarEventMakeModifyEvent(lhMergeDCCLI).
+            END.
+
+         END.
+
+         CREATE ActionLog.
+         ASSIGN ActionLog.Brand        = Syst.Var:gcBrand
+                ActionLog.TableName    = "MobSub"
+                ActionLog.KeyValue     = STRING(bMergeOrder.OrderID)
+                ActionLog.ActionID     = {&MERGE2P3P}
+                ActionLog.CustNum      = MSRequest.Custnum
+                ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
+                ActionLog.ActionTS     = Func.Common:mMakeTS().
+
+         fInitialiseValues({&SUBSCRIPTION_TERM_REASON_MULTISIM},
+                           fIsYoigoCLI(bMergeMobSub.CLI),
+                           fIsMasmovilCLI(bMergeMobSub.CLI),
+                           OUTPUT liMSISDNStat,
+                           OUTPUT liSIMStat,
+                           OUTPUT liQuarTime).
+
+         llPenalty = fIsPenalty(2, bMergeMobsub.MsSeq).
+
+         liTermReq = fTerminationRequest(bMergeMobSub.MsSeq,
+                                         Func.Common:mMakeTS(),  /* when request should be handled */
+                                         liMSISDNStat,
+                                         liSIMStat,
+                                         liQuarTime,
+                                         INT(llPenalty),
+                                         "",
+                                         STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}),
+                                         {&REQUEST_SOURCE_MERGE_STC},
+                                         "",
+                                         MsRequest.MsRequest,
+                                         {&TERMINATION_TYPE_FULL},
+                                         OUTPUT ocResult).
+         IF liTermReq EQ 0 THEN
+            Func.Common:mWriteMemo("MobSub",
+                                   STRING(bMergeMobSub.MsSeq),
+                                   bMergeMobSub.Custnum,
+                                   "Merge Termination Request failed",
+                                   lcError).
+
+      END.
+   END.
+ 
    IF bOldType.CLIType EQ "CONTM2" OR
       CLIType.CLIType EQ "CONTM2" THEN DO:
       

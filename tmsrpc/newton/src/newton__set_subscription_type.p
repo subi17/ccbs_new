@@ -68,9 +68,13 @@ DEF VAR lcError          AS CHAR NO-UNDO.
 DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR iiRequestFlags   AS INT  NO-UNDO.
+DEF VAR liSTCMsSeq       AS INT  NO-UNDO.
+DEF VAR liMergeMsSeq     AS INT  NO-UNDO.
 
 DEF BUFFER NewCliType   FOR CliType.
 DEF BUFFER bMergeMobSub FOR MobSub.
+DEF BUFFER bMergeMobSub FOR MobSub.
+DEF BUFFER bMobSub      FOR MobSub.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
@@ -203,7 +207,33 @@ ELSE
 IF plExcludeTermPenalty THEN
    iiRequestFlags = 2.   
 
-liRequest = fCTChangeRequest(MobSub.msseq,
+liSTCMsSeq = MobSub.MsSeq.
+
+IF pcMergeWith GT "" AND
+   pcMergeWith NE ?  THEN DO:
+
+    IF MobSub.Fixednumber NE ? AND
+       MobSub.Fixednumber > '' THEN DO:
+
+       liMergeMsSeq = MobSub.MsSeq.
+
+       FIND bMobSub NO-LOCK WHERE
+            bMobSub.CLI EQ pcMergeWith NO-ERROR.
+
+       IF AVAILABLE bMobSub THEN
+          liSTCMsSeq = bMobSub.MsSeq.
+    END.
+    ELSE DO:
+        FIND bMobSub NO-LOCK WHERE
+             bMobSub.CLI EQ pcMergeWith NO-ERROR.
+
+        IF AVAILABLE bMobSub THEN
+           liMergeMsSeq = bMobSub.MsSeq.
+    END.
+
+END.
+
+liRequest = fCTChangeRequest(liSTCMsSeq,
                              pcCliType,
                              pcDataBundleId,
                              pcBankAcc,      /* validation is already done in newton */
@@ -229,8 +259,7 @@ IF pcMergeWith GT "" AND
    pcMergeWith NE ?  THEN DO:
    
    FIND FIRST bMergeMobSub NO-LOCK WHERE 
-              bMergeMobSub.Brand    EQ Syst.Var:gcBrand      AND 
-              bMergeMobSub.CLI      EQ pcMergeWith           AND
+              bMergeMobSub.MsSeq    EQ liMergeMsSeq          AND
              (bMergeMobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
               bMergeMobSub.MsStatus EQ {&MSSTATUS_BARRED})   NO-ERROR. 
 

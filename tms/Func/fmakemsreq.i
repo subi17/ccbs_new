@@ -150,6 +150,31 @@ FUNCTION fCreateMsRequestParam RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fCheckMsRequestParam RETURNS LOGICAL
+   (INPUT iiMsRequest   AS INT,
+    INPUT icParamName   AS CHAR,
+    OUTPUT ocParamValue AS CHAR):
+
+   DEF BUFFER MsRequestParam FOR MsRequestParam.
+
+   FIND FIRST MsRequestParam NO-LOCK WHERE
+              MsRequestParam.MsRequest EQ iiMsRequest AND
+              MsRequestParam.ParamName EQ icParamName NO-ERROR.
+
+   IF NOT AVAIL MsRequestParam THEN
+      RETURN FALSE.
+
+   CASE MsRequestParam.ParamType:
+      WHEN {&CHARVAL} THEN ocParamValue = MsRequestParam.CharValue.
+      WHEN {&INTVAL}  THEN ocParamValue = STRING(MsRequestParam.IntValue).
+      WHEN {&DECVAL}  THEN ocParamValue = STRING(MsRequestParam.DecValue).
+      WHEN {&DATEVAL} THEN ocParamValue = STRING(MsRequestParam.DateValue).
+   END CASE.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 /* CLI type change */
 FUNCTION fCTChangeRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,
