@@ -390,6 +390,7 @@ CLASS Func.ValidateACC FINAL:
 
          IF Order.MultiSimId   NE 0                         AND 
             Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
+            NOT mIsTerminalOrder(Order.OrderId)             AND 
             CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                            OrderAction.Brand    = Syst.Var:gcBrand        AND
                            OrderAction.OrderID  = Order.OrderID           AND
@@ -548,4 +549,49 @@ CLASS Func.ValidateACC FINAL:
 
    END METHOD.
 
+
+   METHOD PUBLIC STATIC LOGICAL mIsTerminalOrder
+      (INPUT liOrderId       AS INTEGER ):
+
+      DEFINE BUFFER bTermOrder FOR Order.
+      DEFINE BUFFER OfferItem  FOR OfferItem.
+      DEFINE BUFFER BillItem   FOR BillItem.
+      DEFINE BUFFER BitemGroup FOR BitemGroup.
+
+      FIND FIRST bTermOrder NO-LOCK WHERE
+                 bTermOrder.Brand   = Syst.Var:gcBrand AND
+                 bTermOrder.OrderId = liOrderId        NO-ERROR.
+
+      IF NOT AVAIL bTermOrder THEN RETURN FALSE.
+
+      /* Prepaid Order */
+      IF bTermOrder.PayType = TRUE THEN RETURN FALSE.
+
+   /* Terminal Financing in direct channel deployment on 09.07.2014 8:00 CET */
+      IF bTermOrder.CrStamp < 20140709.28800 THEN RETURN FALSE.
+
+      /* Check Terminal billcode */
+      FOR EACH OfferItem NO-LOCK WHERE
+               OfferItem.Brand       = Syst.Var:gcBrand   AND
+               OfferItem.Offer       = bTermOrder.Offer   AND
+               OfferItem.BeginStamp <= bTermOrder.CrStamp AND
+               OfferItem.EndStamp   >= bTermOrder.CrStamp AND
+               OfferItem.ItemType    = "BillItem",
+         FIRST BillItem NO-LOCK WHERE
+               BillItem.Brand    = Syst.Var:gcBrand AND
+               BillItem.BillCode = OfferItem.ItemKey,
+         FIRST BitemGroup NO-LOCK WHERE
+               BitemGroup.Brand   = Syst.Var:gcBrand AND
+               BitemGroup.BIGroup = BillItem.BIGroup AND
+               BItemGroup.BIGroup EQ "7":
+
+            /* Exclude discount billing item on terminal */
+            IF BillItem.BillCode BEGINS "CPDISC" THEN NEXT.
+            RETURN TRUE.
+      END.
+
+      RETURN FALSE.
+      
+   END METHOD.
+   
 END CLASS.

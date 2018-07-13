@@ -1727,6 +1727,8 @@ IF pcOfferId NE "" THEN DO:
          case offercriteria.criteriatype:
             when "clitype" then do:
                if offercriteria.includedvalue eq "ALL_VOICE" THEN DO:
+                  lcPostpaidVoiceTariffs = REPLACE(lcPostpaidVoiceTariffs,
+                                                   ",CONT29," , ",") . 
                   if lookup(pcSubType,lcPostpaidVoiceTariffs + "," +
                                       lcPrepaidVoiceTariffs) = 0 then
                   lcErrors = lcErrors + "CLIType " + pcSubType + " not in " + offercriteria.includedvalue + ";".
