@@ -104,7 +104,14 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
 	
     METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( ioItemObject AS CLASS JsonObject ):
         
+        DEFINE VARIABLE lcCLIError     AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE liCustNum      AS INTEGER   NO-UNDO.
+        DEFINE VARIABLE lcMobSubFixNum AS CHARACTER NO-UNDO.
         
+        
+        IF Func.ValidateOrder:misCLITypeExists(THIS-OBJECT:ProductID) = NO 
+        THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Unknown Product ID : &1 ", THIS-OBJECT:ProductID)).
+            
         IF Func.ValidateOrder:mIsConvergentORFixedOnly(THIS-OBJECT:ProductID) = FALSE 
         THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Product &1 is not convergent or fixed only.", THIS-OBJECT:ProductID)). 
         
@@ -121,7 +128,10 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
             
         ASSIGN 
             THIS-OBJECT:MobileNumberType = loAttributes:GetCharacter("mobile_number_type") WHEN loAttributes:Has("mobile_number_type")
-            THIS-OBJECT:MobileNumber     = loAttributes:GetCharacter("mobile_number")      WHEN loAttributes:Has("mobile_number").
+            THIS-OBJECT:MobileNumber     = loAttributes:GetCharacter("mobile_number")      WHEN loAttributes:Has("mobile_number")
+            aoOrder:MobileNumberType     = THIS-OBJECT:MobileNumberType
+            aoOrder:lcCLI                = THIS-OBJECT:MobileNumber WHEN THIS-OBJECT:MobileNumber > ""
+            aoOrder:CLIType              = THIS-OBJECT:ProductID.
             
         IF LOOKUP(THIS-OBJECT:FixNumberType,"new,mnp,renewal,stc") = 0 
         THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown fixedline_number_type: ", THIS-OBJECT:FixNumberType)).   
@@ -129,13 +139,90 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         IF Func.ValidateOrder:misFilledFixedNumber(THIS-OBJECT:FixedNumber) 
         THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Fixed number &1 already exists. ", THIS-OBJECT:FixedNumber)). 
         
-        IF THIS-OBJECT:MobileNumber > "" AND Func.ValidateOrder:misFilledCLI(THIS-OBJECT:MobileNumber) 
-        THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Mobile Number &1 is already assigned.", THIS-OBJECT:MobileNumber)).
+        IF loAttributes:Has("mobile_number_type")
+        AND LOOKUP(THIS-OBJECT:MobileNumberType,"new,mnp,renewal,stc") = 0 
+        THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Unknown mobile_number_type: ", THIS-OBJECT:MobileNumberType)).
         
-        IF THIS-OBJECT:FixNumberType  =  "MNP"
-        THEN ASSIGN aoOrder:OrderType  =  {&ORDER_TYPE_MNP}.
-        ELSE IF THIS-OBJECT:FixNumberType  =  "NEW"
-        THEN ASSIGN aoOrder:OrderType  = {&ORDER_TYPE_NEW}.  
+        IF THIS-OBJECT:MobileNumber > "" 
+        THEN DO:
+            ASSIGN 
+                lcCLIError = Func.ValidateOrder:mCheckMSISDN(THIS-OBJECT:MobileNumber,THIS-OBJECT:MobileNumberType).
+            IF lcCLIError > ""    
+                THEN UNDO , THROW NEW ParamError(lcCLIError).
+        END.
+        
+        IF THIS-OBJECT:MobileNumber > "" AND
+           LOOKUP(THIS-OBJECT:MobileNumberType,"renewal,stc") > 0
+        THEN DO:
+            
+            IF Func.ValidateOrder:misSubscriptionExists(INPUT THIS-OBJECT:MobileNumber) = FALSE 
+            THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with msisdn &1 not found", THIS-OBJECT:MobileNumber)).
+            
+            ASSIGN liCustNum = Func.ValidateOrder:mGetMobSubCustNum(INPUT THIS-OBJECT:MobileNumber).
+            
+            IF  liCustNum = 0
+            THEN UNDO , THROW NEW ParamError("Customer not found for the renewal/stc order.").
+            
+            IF Func.ValidateOrder:misCustomerExists(INPUT aoOrder:aoCustomer:CustId , 
+                                                    INPUT aoOrder:aoCustomer:CustIdType ,
+                                                    INPUT liCustNum) = FALSE 
+            THEN UNDO , THROW NEW ParamError("Customer not found with matching id and id-type.").
+            
+            ASSIGN aoOrder:isRenewalSTCOrder  = TRUE 
+                   aoOrder:MsSeq              = Func.ValidateOrder:mGetMsSeq(THIS-OBJECT:MobileNumber).
+            
+        END.
+        
+        IF LOOKUP(THIS-OBJECT:FixNumberType,"renewal,stc") > 0 AND
+           THIS-OBJECT:FixedNumber  > ""                       AND
+           THIS-OBJECT:MobileNumber > ""                          /*This needs to be non-zero*/
+        THEN DO:
+           /*Mobsub check is already above misSubscriptionExists*/ 
+                   
+            ASSIGN 
+                lcMobSubFixNum = Func.ValidateOrder:mGetSubscriptionFixedNumber(INPUT THIS-OBJECT:MobileNumber).
+                
+            IF lcMobSubFixNum   EQ  "" OR 
+               lcMobSubFixNum   EQ  ?  OR
+               lcMobSubFixNum   NE  THIS-OBJECT:FixedNumber
+            THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with Fixed Number &1 not found", lcFixedLineNumber)).    
+            
+        END.
+        
+        
+        IF THIS-OBJECT:MobileNumber > "" AND  
+           CAN-FIND(FIRST MobSub WHERE MobSub.Brand         =   Syst.Var:gcBrand AND 
+                                       MobSub.FixedNumber   =   THIS-OBJECT:FixedNumber AND 
+                                       MobSub.CLI          <>   THIS-OBJECT:MobileNumber)
+        THEN UNDO , THROW NEW ParamError("Subscription already exists with Fixed Number " + THIS-OBJECT:FixedNumber).
+         
+        IF Func.ValidateOrder:mCheckOngoingFixedOrders(INPUT THIS-OBJECT:FixedNumber ,
+                                                  INPUT THIS-OBJECT:FixNumberType)
+        THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Ongoing order for number &1 " , THIS-OBJECT:FixedNumber)).
+        
+        IF NOT aoOrder:OrderChannel BEGINS "FUSION" 
+        THEN UNDO , THROW NEW ParamError (SUBST("Incorrect fusion order channel &1",aoOrder:OrderChannel)).  
+        
+        IF Func.ValidateOrder:misDuplicateContractExists(INPUT aoOrder:ContractId ,
+                                                         INPUT THIS-OBJECT:MobileNumber )
+        THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Duplicate contract ID &1", aoOrder:ContractId)). 
+        
+        IF THIS-OBJECT:FixNumberType = {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
+           THIS-OBJECT:FixedNumber   = ""
+        THEN UNDO , THROW NEW ParamError("fixed_line_number is mandatory with fixed_line_number_type=MNP").
+        
+        IF THIS-OBJECT:FixNumberType = {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
+           loAttributes:GetCharacter("fixedline_old_operator_code") = ""
+        THEN UNDO , THROW NEW ParamError("fixed_line_mnp_old_operator_code is mandatory with fixed_line_number_type=MNP").
+        
+        IF THIS-OBJECT:MobileNumber > "" AND 
+           Func.ValidateOrder:mIsMigrationCLI(INPUT THIS-OBJECT:MobileNumber)
+        THEN UNDO , THROW  NEW ParamError("Requested number is in migration"). 
+        
+        IF THIS-OBJECT:FixNumberType       =  {&FUSION_FIXED_NUMBER_TYPE_MNP}
+        THEN ASSIGN aoOrder:OrderType      =  {&ORDER_TYPE_MNP}.
+        ELSE IF THIS-OBJECT:FixNumberType  =  {&FUSION_FIXED_NUMBER_TYPE_NEW}
+        THEN ASSIGN aoOrder:OrderType      =  {&ORDER_TYPE_NEW}.  
         
         mCreateDataOrderProductParamData(loAttributes,"fixedline_number_type","Char").
         mCreateDataOrderProductParamData(loAttributes,"fixedline_number","Char").
@@ -175,6 +262,10 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         
         ASSIGN aoAggrementCustomer           =  NEW bss.cls.OrderCustomer(aoOrder)
                aoAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+               
+        /*TO-DO PC : do we need to send the fix number type or mobile number type as input parameter*/
+               
+        aoOrder:aoCustomer:mCheckSubscriptionLimit(INPUT THIS-OBJECT:FixNumberType).
                
         IF aoOrder:aoCustomer:isNewCustomer THEN 
         aoAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj). 

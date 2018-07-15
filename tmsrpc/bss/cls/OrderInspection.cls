@@ -47,6 +47,10 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY ROIDeliverySecure AS LOGICAL  NO-UNDO
        GET.
        SET.
+       
+    DEFINE PUBLIC PROPERTY ROIOrderStatus AS CHARACTER NO-UNDO
+       GET.
+       SET.
 	
     DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
 		
@@ -71,8 +75,7 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:ROIRuleID         =  ioPaymentObject:GetCharacter("rule_id")         WHEN ioPaymentObject:Has("rule_id")
             THIS-OBJECT:ROIRiskCode       =  ioPaymentObject:GetCharacter("risk_code")       WHEN ioPaymentObject:Has("risk_code")
             THIS-OBJECT:ROIDeliverySecure =  ioPaymentObject:GetLogical("delivery_secure")   WHEN ioPaymentObject:Has("delivery_secure")
-            aoorder:ROIResult             =  THIS-OBJECT:ROIResult
-            aoOrder:ROILevel              =  THIS-OBJECT:ROILevel
+            aoOrder:ROIClose              =  (THIS-OBJECT:ROIResult EQ "risk" AND LOOKUP(THIS-OBJECT:ROILevel,"7,8") > 0)
             .
         
     END METHOD.
@@ -82,13 +85,14 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
         FIND FIRST Order WHERE Order.Brand   = Syst.Var:gcBrand 
                            AND Order.OrderID = aoOrder:OrderId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
                            
-       IF LOCKED(Order) THEN 
+       IF LOCKED(Order) THEN  
            UNDO, THROW NEW InternalError("Order: " + STRING(Order.OrderID) + " is locked in OrderInspection.").
                            
         IF NOT AVAILABLE Order THEN 
             UNDO, THROW NEW InternalError("Order: " + STRING(Order.OrderID) + " is not available in OrderInspection.").
          
-        mValidateOrderInspectionRules(Order.OrderID).        
+        mValidateOrderInspectionRules(Order.OrderID).      
+        ASSIGN aoOrder:ROIOrderStatus     =  THIS-OBJECT:ROIOrderStatus.
         
         ASSIGN 
             Order.ROIResult      =   THIS-OBJECT:ROIResult
@@ -102,8 +106,8 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
     METHOD PUBLIC VOID mValidateOrderInspectionRules(INPUT iOrderID AS INTEGER ) :
         
         IF THIS-OBJECT:ROIResult = "risk"                 AND 
-           LOOKUP(THIS-OBJECT:ROILevel,"1,2,3,4,7,8") = 0 THEN
-             UNDO, THROW NEW ParamError(SUBST("Unsupported Real Time Inspection Risk Level: &1", THIS-OBJECT:ROILevel)).
+           LOOKUP(THIS-OBJECT:ROILevel,"1,2,3,4,7,8") = 0 
+        THEN UNDO, THROW NEW ParamError(SUBST("Unsupported Real Time Inspection Risk Level: &1", THIS-OBJECT:ROILevel)).
              
         CASE THIS-OBJECT:ROIResult:
             WHEN "risk" THEN 
@@ -111,28 +115,28 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
                 IF LOOKUP(THIS-OBJECT:ROILevel,"7,8") > 0 THEN 
                 DO:
                     ASSIGN
-                        Order.StatusCode = THIS-OBJECT:ROILevel
+                        THIS-OBJECT:ROIOrderStatus = THIS-OBJECT:ROILevel
                         Order.SendToROI  = {&ROI_HISTORY_TO_SEND} WHEN Order.Ordertype NE {&ORDER_TYPE_STC}.
                         mOrderStamp(iOrderID,"Close",0.0). 
                 END.
-                ELSE Order.StatusCode = STRING(40 + INTEGER(THIS-OBJECT:ROILevel)).
+                ELSE THIS-OBJECT:ROIOrderStatus = STRING(40 + INTEGER(THIS-OBJECT:ROILevel)).
             
-               IF THIS-OBJECT:ROIRuleID NE ''
-               THEN Func.Common:mWriteMemoWithType("Order",
-                                                   STRING(iOrderID),
-                                                   0,
-                                                   "ROI Risk Rule_Id",
-                                                   THIS-OBJECT:ROIRuleID,
-                                                   "",
-                                                   "BSS RPC ROI").
-               IF THIS-OBJECT:ROIDescription NE ''
-               THEN Func.Common:mWriteMemoWithType("Order",
-                                                   STRING(iOrderID),
-                                                   0,
-                                                   "ROI Description",
-                                                   THIS-OBJECT:ROIDescription,
-                                                   "",
-                                                   "BSS RPC ROI").
+                IF THIS-OBJECT:ROIRuleID NE ''
+                THEN Func.Common:mWriteMemoWithType("Order",
+                                                    STRING(iOrderID),
+                                                    0,
+                                                    "ROI Risk Rule_Id",
+                                                    THIS-OBJECT:ROIRuleID,
+                                                    "",
+                                                    "BSS RPC ROI").
+                IF THIS-OBJECT:ROIDescription NE ''
+                THEN Func.Common:mWriteMemoWithType("Order",
+                                                    STRING(iOrderID),
+                                                    0,
+                                                    "ROI Description",
+                                                    THIS-OBJECT:ROIDescription,
+                                                    "",
+                                                    "BSS RPC ROI").
 
             END.
             WHEN "exception"
@@ -156,7 +160,7 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
             WHEN "ParamsException" OR 
             WHEN "inspectionException" THEN 
             DO:
-                Order.StatusCode = "43".
+                THIS-OBJECT:ROIOrderStatus = {&ORDER_STATUS_ROI_LEVEL_3}.
                 IF THIS-OBJECT:ROIDescription NE ''
                 THEN Func.Common:mWriteMemoWithType("Order",
                                                     STRING(iOrderID),
@@ -170,8 +174,8 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
     END METHOD.
     
     METHOD PUBLIC LOGICAL mOrderStamp( INPUT iiOrderID   AS INTEGER,
-                                    INPUT icStampType AS CHARACTER,
-                                    INPUT idStamp     AS DECIMAL) :
+                                       INPUT icStampType AS CHARACTER,
+                                       INPUT idStamp     AS DECIMAL) :
         
         DEF BUFFER bfOrderTimeStamp FOR OrderTimeStamp.
 

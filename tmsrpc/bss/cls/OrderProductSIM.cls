@@ -40,6 +40,10 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         GET.
         SET.
         
+    DEFINE PUBLIC PROPERTY ICC AS CHARACTER NO-UNDO
+       GET.
+       SET.
+        
     CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS bss.cls.Order ):
 		
         SUPER(ioOrder).
@@ -66,9 +70,20 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         IF VALID-OBJECT(loAttributes)
         THEN DO:
             
+            /*ICC attribute will be in the json structure. But, some times icc will be assigned by dextra*/
+            
             IF loAttributes:Has("ICC")
-            THEN mCreateDataOrderProductParamData(loAttributes,"ICC","Char").
-             
+            THEN DO:
+                
+                ASSIGN THIS-OBJECT:ICC  =  loAttributes:GetCharacter("ICC")
+                       aoOrder:lcICC    =  THIS-OBJECT:ICC.
+                
+                IF THIS-OBJECT:ICC > "" AND  
+                   Func.ValidateOrder:misFreeICC(THIS-OBJECT:ICC) = FALSE 
+                THEN UNDO, THROW NEW ParamError(SUBSTITUTE("SIM with ICC &1 not found or not free", THIS-OBJECT:ICC)).
+                
+                mCreateDataOrderProductParamData(loAttributes,"ICC","Char").    
+            END. 
         END.
        
         IF loAttributes:Has("shipping_address")
@@ -114,6 +129,8 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         IF VALID-OBJECT(aoShippingCustomer)
         THEN aoShippingCustomer:mStoreData().
         
+        IF THIS-OBJECT:ICC > ""
+        THEN aoOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
         
     END METHOD.
     
@@ -126,5 +143,6 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         RETURN ( ttOrderProductParam.paramnb + 1 ).
 
     END METHOD.
+    
 
 END CLASS.

@@ -201,6 +201,14 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            
        END SET.
        
+    DEFINE PUBLIC PROPERTY OrderChannel AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY DelType AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
     DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
         FIELDS custacctobj  AS CLASS Progress.Lang.Object
         FIELDS custacctnum  AS INTEGER
@@ -338,6 +346,9 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            .          
        END.
        ELSE UNDO , THROW NEW ParamError ("Customer ID Data does not exist.").
+       
+       IF THIS-OBJECT:CustId = ""
+       THEN UNDO , THROW NEW ParamError ("Expected either person_id or company_id").
        
        IF ioJsonObject:Has("marketing")
        THEN DO:
@@ -557,6 +568,56 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
                 END.
             END.
         END.
+        
+    END METHOD.
+    
+    METHOD PUBLIC VOID mCheckSubscriptionLimit( INPUT lcNumberType AS CHARACTER ) :
+        
+        
+        DEFINE VARIABLE liSubLimit     AS INTEGER NO-UNDO. 
+        DEFINE VARIABLE lisubs         AS INTEGER NO-UNDO.
+        DEFINE VARIABLE liActLimit     AS INTEGER NO-UNDO.
+        DEFINE VARIABLE liActs         AS INTEGER NO-UNDO.
+        DEFINE VARIABLE liCustSubLimit AS LOGICAL NO-UNDO.
+        DEFINE VARIABLE liBypassRules  AS LOGICAL NO-UNDO.
+        DEFINE VARIABLE liMultiSimType AS INTEGER NO-UNDO.
+        
+        DEFINE BUFFER bfpcCustomer FOR Customer.
+        
+        /*TO-DO PC:WHAT IS plBypassRules in the newton_add_Whole_order.p*/
+      
+        IF THIS-OBJECT:isNewCustomer = FALSE
+            AND NOT THIS-OBJECT:OrderChannel BEGINS "migration"
+            AND NOT liBypassRules        
+            AND LOOKUP(lcNumberType,"new,mnp") > 0
+            AND liMultiSimType       <> {&MULTISIMTYPE_SECONDARY}
+        THEN DO:            
+            
+            liCustSubLimit =  Func.ValidateACC:mSubscriptionLimitCheck(INPUT THIS-OBJECT:CustId ,
+                                                                       INPUT THIS-OBJECT:CustIdType,
+                                                                       INPUT Func.ValidateACC:mIsSelfEmpl(THIS-OBJECT:Category),
+                                                                       INPUT Func.ValidateACC:mIsPro(THIS-OBJECT:Category),
+                                                                       1,
+                                                                       OUTPUT liSubLimit,
+                                                                       OUTPUT lisubs,
+                                                                       OUTPUT liActLimit,
+                                                                       OUTPUT liActs).
+                                                                       
+            IF liCustSubLimit = FALSE 
+            THEN UNDO, THROW NEW ParamError("Subscription Limit Error to existing Customer."). 
+            
+            FOR FIRST bfpcCustomer WHERE
+                      bfpcCustomer.Brand      =  Syst.Var:gcBrand       AND
+                      bfpcCustomer.OrgId      =  THIS-OBJECT:CustId     AND
+                      bfpcCustomer.CustIdType =  THIS-OBJECT:CustIdType AND
+                      bfpcCustomer.Roles     <>  "inactive" NO-LOCK:
+                          
+                IF Func.ValidateOrder:mIsBarredSubscriptionExistsToCustomer(bfpcCustomer.Custnum) 
+                THEN UNDO, THROW NEW ParamError("barring").                                                                   
+        
+            END.               
+        
+        END. /*  IF aoOrder:aoCustomer:isNewCustomer = FALSE */
         
     END METHOD.
 

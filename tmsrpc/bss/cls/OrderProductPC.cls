@@ -43,7 +43,7 @@ CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct:
     
     METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( ioItemObject AS CLASS JsonObject ):
         
-        DEFINE VARIABLE loCustAcct        AS CLASS     JsonObject NO-UNDO.
+    /*    DEFINE VARIABLE loCustAcct        AS CLASS     JsonObject NO-UNDO.
         DEFINE VARIABLE loPaymentData     AS CLASS     JsonObject NO-UNDO.
         DEFINE VARIABLE liCustAcctCustNum AS INTEGER   NO-UNDO.
         DEFINE VARIABLE lcReturnValue     AS CHARACTER NO-UNDO.
@@ -51,9 +51,15 @@ CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct:
         DEFINE VARIABLE lisubs            AS INTEGER   NO-UNDO.
         DEFINE VARIABLE liActLimit        AS INTEGER   NO-UNDO.
         DEFINE VARIABLE liActs            AS INTEGER   NO-UNDO.
-        DEFINE VARIABLE liCustSubLimit AS LOGICAL NO-UNDO.
+        DEFINE VARIABLE liCustSubLimit    AS LOGICAL   NO-UNDO.
+        DEFINE VARIABLE liBypassRules     AS LOGICAL NO-UNDO.
+        
+        /*TO-DO PC:WHAT IS plBypassRules in the newton_add_Whole_order.p*/
       
         IF aoOrder:aoCustomer:isNewCustomer = FALSE
+        AND NOT aoOrder:OrderChannel BEGINS "migration"
+        AND NOT liBypassRules
+        
         THEN DO:            
             
             liCustSubLimit =  Func.ValidateACC:mSubscriptionLimitCheck(INPUT aoOrder:aoCustomer:CustId ,
@@ -67,9 +73,17 @@ CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct:
                                                                        OUTPUT liActs).
                                                                        
             IF liCustSubLimit = FALSE 
-            THEN UNDO, THROW NEW InternalError("Subscription Limit Error to existing Customer.").                                                                   
+            THEN UNDO, THROW NEW InternalError("Subscription Limit Error to existing Customer."). 
+            
+            FOR FIRST Customer WHERE
+                      Customer.Brand      = Syst.Var:gcBrand  AND
+                      Customer.OrgId      = aoOrder:aoCustomer:CustId AND
+                      Customer.CustIdType = aoOrder:aoCustomer:CustIdType AND
+                      Customer.Roles NE "inactive" NO-LOCK:
+                IF Func.ValidateOrder:mIsBarredSubscriptionExistsToCustomer(Customer.Custnum) 
+                THEN lcFError = "barring".                                                                  
         
-        END.               
+        END.   */            
         
     END METHOD.
     

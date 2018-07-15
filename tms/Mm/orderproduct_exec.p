@@ -191,6 +191,8 @@ PROCEDURE ipProcessMobileSubscription:
         lcCLIType = Func.OrderProductsData:mGetOrderCLIType(INPUT iiOrderID)
         lcCLI     = Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID).
         
+    RUN ipCreateOrderSubscription.
+        
 END PROCEDURE.
 
 PROCEDURE ipProcessFixedLine:

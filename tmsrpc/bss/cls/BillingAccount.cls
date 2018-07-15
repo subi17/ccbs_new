@@ -17,6 +17,8 @@ USING Progress.Json.ObjectModel.JsonArray.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
@@ -138,13 +140,16 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:DefaultGroup  = TRUE /*TODO-JSON*/
             THIS-OBJECT:BillCycle     = ioBillingAcct:GetInteger("invoice_cycle")
             THIS-OBJECT:InvInterval   = ioBillingAcct:GetInteger("invoice_interval")
-            THIS-OBJECT:DelType       = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type"))
             THIS-OBJECT:InvGroup      = ioBillingAcct:GetCharacter("invoice_group")
             THIS-OBJECT:DurDateOffSet = 0 /*TODO-JSON*/
             THIS-OBJECT:StatusCode    = 0
             THIS-OBJECT:FromDate      = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_from")) WHEN ioBillingAcct:Has("valid_from")
             THIS-OBJECT:ToDate        = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to"))   WHEN ioBillingAcct:Has("valid_to")
             .
+            
+        mValidateInvDeliveryType(ioBillingAcct:GetCharacter("invoice_delivery_type")).
+            
+        THIS-OBJECT:DelType       = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type"))
         
     END METHOD.
     
@@ -196,12 +201,14 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
     METHOD PUBLIC INTEGER mGetTMSCodeValue( INPUT icCodeGroup AS CHARACTER ,
                                             INPUT icFieldName AS CHARACTER , 
                                             INPUT icCodeName AS CHARACTER ) :
+                                                
+       /*TO-DO PC : Please get the confirmation on this TMSCodes and investigate where it has been used in PC*/                                                
         
         FIND FIRST TMSCodes 
                 WHERE TMSCodes.CodeGroup = icCodeGroup
                   AND TMSCodes.FieldName = icFieldName
                   AND TMSCodes.TableName = "Invoice"
-                  AND TMSCodes.CodeName  = icCodeName                  NO-LOCK NO-ERROR.
+                  AND TMSCodes.CodeName  = icCodeName  NO-LOCK NO-ERROR.
                   
         IF NOT AVAILABLE TMSCodes 
         THEN UNDO, THROW NEW ParamError ("TMSCodes record does not exist for the Billing Account.").
@@ -209,6 +216,24 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
         RETURN INTEGER(TMSCodes.CodeValue).
         
     END METHOD .
+    
+    METHOD PUBLIC CHARACTER mValidateInvDeliveryType(INPUT liDeliveryMethod AS CHARACTER) :
+        
+        DEFINE VARIABLE liDelType AS INTEGER NO-UNDO.
+        
+        CASE liDeliveryMethod:
+            
+            WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
+            WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
+            WHEN "SMS"   THEN liDelType = {&INV_DEL_TYPE_ESI}.
+            WHEN "No delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
+            WHEN "" THEN .
+            OTHERWISE 
+            UNDO, THROW NEW ParamError (SUBSTITUTE("Invalid Invoice Delivery Type &1 ." , liDeliveryMethod)). 
+            
+        END CASE.
+                
+    END METHOD.
 
 
 
