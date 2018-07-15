@@ -902,19 +902,32 @@ END FUNCTION.
 FUNCTION fFindFixedLineOrder RETURNS INTEGER
    ( iiMsSeq AS INTEGER ):
 
-   DEFINE BUFFER Order  FOR Order.
-   DEFINE BUFFER MobSub FOR MobSub.
+   DEFINE BUFFER Order      FOR Order.
+   DEFINE BUFFER MobSub     FOR MobSub.
+   DEFINE BUFFER bActionLog FOR ActionLog.
+
+   DEF VAR liMsSeq AS INT NO-UNDO.
 
    FIND FIRST Mobsub NO-LOCK USE-INDEX MsSeq WHERE
               Mobsub.MsSeq       EQ iiMsSeq AND
-              Mobsub.FixedNumber  > ""
-   NO-ERROR.
+              Mobsub.FixedNumber GT ""      NO-ERROR.
 
-   IF NOT AVAILABLE MobSub
-   THEN RETURN 0.
+   IF NOT AVAILABLE MobSub THEN 
+      RETURN 0.
 
-   FOR EACH Order NO-LOCK WHERE Order.MsSeq EQ iiMSSeq
-       BY Order.CrStamp DESC:
+   /* Check if terminated subscription is Merged 3P subscription */
+   FIND FIRST bActionLog NO-LOCK  WHERE
+              bActionLog.Brand     EQ Syst.Var:gcBrand     AND
+              bActionLog.TableName EQ "MobSub"             AND
+              bActionLog.KeyValue  EQ STRING(MobSub.MsSeq) AND
+              bActionLog.ActionID  EQ {&MERGE2P3P}         NO-ERROR.
+
+   IF AVAIL bActionLog THEN
+      liMsSeq = INT(ENTRY(1,bActionLog.ActionChar,CHR(255))).
+   ELSE liMsSeq = iiMsSeq.
+
+   FOR EACH Order NO-LOCK WHERE 
+            Order.MsSeq EQ liMSSeq BY Order.CrStamp DESC:
 
       IF NOT CAN-FIND(FIRST OrderFusion NO-LOCK USE-INDEX OrderId WHERE
                             OrderFusion.Brand        EQ "1"                AND

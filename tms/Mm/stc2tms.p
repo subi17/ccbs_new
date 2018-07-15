@@ -1446,7 +1446,7 @@ PROCEDURE pFinalize:
                RUN StarEventSetOldBuffer(lhMergeDCCLI).
             END.
 
-            ASSIGN bMergeDCCLI.MsSeq     = bMergeMobSub.MsSeq
+            ASSIGN bMergeDCCLI.MsSeq     = MobSub.MsSeq
                    bMergeDCCLI.ValidFrom = TODAY.
 
             IF llDoEvent THEN DO:
@@ -1455,13 +1455,17 @@ PROCEDURE pFinalize:
 
          END.
 
+         /* Create ActionLog KeyValue field with values current  mobsub subcription id */
+         /* and merged subscription order id. This would help in termination and ACC   */
          CREATE ActionLog.
          ASSIGN ActionLog.Brand        = Syst.Var:gcBrand
                 ActionLog.TableName    = "MobSub"
-                ActionLog.KeyValue     = STRING(bMergeOrder.OrderID)
+                ActionLog.KeyValue     = STRING(MobSub.MsSeq)
+                ActionLog.ActionChar   = STRING(bMergeMobSub.MsSeq) + CHR(255) + 
+                                         STRING(bMergeOrder.OrderID)
                 ActionLog.ActionID     = {&MERGE2P3P}
                 ActionLog.CustNum      = MSRequest.Custnum
-                ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
+                ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS} 
                 ActionLog.ActionTS     = Func.Common:mMakeTS().
 
          fInitialiseValues({&SUBSCRIPTION_TERM_REASON_MULTISIM},
