@@ -1446,8 +1446,7 @@ PROCEDURE pFinalize:
                RUN StarEventSetOldBuffer(lhMergeDCCLI).
             END.
 
-            ASSIGN bMergeDCCLI.MsSeq     = MobSub.MsSeq
-                   bMergeDCCLI.ValidFrom = TODAY.
+            bMergeDCCLI.MsSeq = MobSub.MsSeq.
 
             IF llDoEvent THEN DO:
                RUN StarEventMakeModifyEvent(lhMergeDCCLI).
