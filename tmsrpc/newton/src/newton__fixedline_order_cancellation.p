@@ -49,7 +49,7 @@ FIND FIRST OrderCustomer WHERE
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
            NO-LOCK NO-ERROR.     
 IF NOT AVAILABLE OrderCustomer THEN 
-   RETURN appl_err("Installation address possible for convergent order only").
+   RETURN appl_err("Not Valid Order to Cancel").
 
 FIND FIRST OrderFusion WHERE
            OrderFusion.Brand EQ Syst.Var:gcBrand AND
@@ -59,8 +59,8 @@ IF NOT AVAIL OrderFusion THEN
    RETURN appl_err("Fixed line connection is not available for this order").
    
 IF AVAIL OrderFusion THEN DO:
-   IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE") > 0 THEN
-      RETURN appl_err("Order is not in valid state to update").
+   IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
+      RETURN appl_err("Order is not in valid state to cancel").
 END.
 
 IF NOT fIsConvergenceTariff(Order.CLIType) THEN 
