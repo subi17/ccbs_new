@@ -142,6 +142,7 @@ Syst.Var:katun = "VISTA_" + pcSalesManId.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* validate order address struct */
+lcAddressData = validate_request(pcAmendmentStruct,gcAmendmentDetails).
 IF lcAddressData EQ ? THEN RETURN.
 
 fGetAddressFields().
