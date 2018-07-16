@@ -51,7 +51,7 @@ PROCEDURE pCreateDiscount:
       DiscountPlan.DPCurrency     = ""          
       DiscountPlan.BillCode       = ilcDPRule           
       DiscountPlan.ValidFrom      = TODAY              
-      DiscountPlan.ValidTo        = 12/31/2049             
+      DiscountPlan.ValidTo        = 12/31/2018             
       DiscountPlan.DPRuleId       = ilcDPRule             
       DiscountPlan.DPName         = ilcDPName             
       DiscountPlan.DPMemo         = ""               
@@ -68,7 +68,7 @@ PROCEDURE pCreateDiscount:
       DPRate.DPId      = DiscountPlan.DPId 
       DPRate.DiscValue = ildDiscValue
       DPRate.ValidFrom = TODAY 
-      DPRate.ValidTo   = 12/31/2049. 
+      DPRate.ValidTo   = 12/31/2018. 
   
    /* DPSubjects. (CliTypes to assign the discount) */
    DO liCont = 1 TO NUM-ENTRIES(ilcDPSubjectsList):
@@ -77,7 +77,7 @@ PROCEDURE pCreateDiscount:
          DPSubject.DPId       = DiscountPlan.DPId                 
          DPSubject.DPSubject  = ENTRY(liCont, ilcDPSubjectsList)                 
          DPSubject.ValidFrom  = TODAY                  
-         DPSubject.ValidTo    = 12/31/2049. 
+         DPSubject.ValidTo    = 12/31/2018. 
    END.
    
    /* DPTargets. (BillItems to apply the discount) */
@@ -86,7 +86,7 @@ PROCEDURE pCreateDiscount:
       ASSIGN 
          DPTarget.DPId        = DiscountPlan.DPId
          DPTarget.ValidFrom   = TODAY
-         DPTarget.ValidTo     = 12/31/2049
+         DPTarget.ValidTo     = 12/31/2018
          DPTarget.TargetTable = "BillItem"
          DPTarget.TargetKey   = ENTRY(liCont, ilcDPTargetsList)
          DPTarget.Included    = YES.
@@ -102,11 +102,14 @@ END.
 ASSIGN
    lcDPSubjects = 
       "CONTDSLTB59,CONTFHTB59_50,CONTFHTB69_300,CONTFHTB89_1000,CONTFHNBTB69_300"
+/*
    lcDPTargets = 
-      "CONT30MF,"                                          +
+      "CONT35MF,"                                          +
       "CONTDSLMF,CONTFH50MF,CONTFH300MF,CONTFH1000MF,"     + 
       "CONTDSLTB59PRO,CONTFHTB59_50PRO,CONTFHTB69_300PRO," + 
       "CONTFHTB89_1000PRO,CONTFHNBTB69_300PRO".
+*/
+   lcDPTargets = "CONT35MF". 
 
 RUN pCreateDiscount (INPUT "CONT_DISC_TB_20",
                      INPUT "Descuento Final Try&Buy - Convergente",
