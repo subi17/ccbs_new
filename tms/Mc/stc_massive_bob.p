@@ -17,9 +17,9 @@ Syst.Var:gcBrand  = "1".
 {Syst/eventlog.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
 
-DEFINE STREAM sin.
-DEFINE STREAM sout.
 DEFINE VARIABLE lcLine          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep           AS CHARACTER NO-UNDO INIT ";".
 DEFINE VARIABLE liNumOK         AS INTEGER   NO-UNDO. 
@@ -38,25 +38,34 @@ DEFINE VARIABLE lcRootDir       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntries       AS INTEGER   NO-UNDO. 
 
 /* field variables */
-DEFINE VARIABLE lcCustomer      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCustIDType    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCustID        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcMsisdn        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldCLIType    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcNewCLIType    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcBankAccount   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liRequest       AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcSMSText2      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE ldtSTCDate      AS DATE      NO-UNDO.
+DEFINE VARIABLE lcError         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcinfo          AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldeFee          AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE liCreditcheck   AS INTEGER   NO-UNDO.
-DEFINE VARIABLE ldeTimeStamp    AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE lcBONOContracts AS CHARACTER NO-UNDO.
- 
+DEFINE VARIABLE ldtValidSTCDates AS DATE     NO-UNDO EXTENT 2.
 
+DEFINE BUFFER old_CLIType FOR CLIType.
 DEFINE BUFFER new_CLIType FOR CLIType.
-DEFINE VARIABLE not_used AS CHAR.
+
+FUNCTION fSTC RETURNS CHARACTER 
+   (pcCustIDType     AS CHARACTER,
+    pcCustID         AS CHARACTER,
+    pcMsisdn         AS CHARACTER,
+    pcOldCLIType     AS CHARACTER,
+    pcNewCLIType     AS CHARACTER,
+    pcSMSText        AS CHARACTER,
+    pdtSTCDate       AS DATE)
+    FORWARD.
 
 ASSIGN
-   lcRootDir         = fCParam("MassiveSTC","RootDir")
-   lcBONOContracts   = fCParamC("BONO_CONTRACTS")
+   lcRootDir         = fCParam("StcMassiveBob","RootDir")
+   ldtValidSTCDates[1] = TODAY + 1
+   ldtValidSTCDates[2] = Func.Common:mFirstDayOfNextMonth(TODAY)
    .
 
 IF NOT lcRootDir > "" THEN RETURN.
@@ -83,7 +92,7 @@ END FUNCTION.
 FUNCTION fError RETURNS LOGIC
    (icMessage AS CHARACTER):
 
-   fLogLine("ERROR:" + icMessage).
+   fLogLine("KO:" + icMessage).
 END FUNCTION.
 
 /* File reading and parsing */
@@ -119,35 +128,40 @@ REPEAT:
       
       ASSIGN 
          liEntries      = NUM-ENTRIES(lcLine,lcSep)
-         lcCustomer     = TRIM(ENTRY(1,lcLine,lcSep))
-         lcMsisdn       = TRIM(ENTRY(2,lcLine,lcSep))
-         lcOldCLIType   = TRIM(ENTRY(3,lcLine,lcSep))
-         lcNewCLIType   = TRIM(ENTRY(4,lcLine,lcSep))
-         lcSMSText      = TRIM(ENTRY(5,lcLine,lcSep))
-         ldtSTCDate     = TRIM(ENTRY(6,lcLine,lcSep))
+         lcCustIDType   = TRIM(ENTRY(1,lcLine,lcSep))
+         lcCustID       = TRIM(ENTRY(2,lcLine,lcSep))
+         lcMsisdn       = TRIM(ENTRY(3,lcLine,lcSep))
+         lcOldCLIType   = TRIM(ENTRY(4,lcLine,lcSep))
+         lcNewCLIType   = TRIM(ENTRY(5,lcLine,lcSep))
+         lcSMSText2      = TRIM(ENTRY(6,lcLine,lcSep))
+         ldtSTCDate     = DATE(TRIM(ENTRY(7,lcLine,lcSep)))
          NO-ERROR.
 
-      IF ERROR-STATUS:ERROR OR liEntries NE 5 THEN 
+      IF ERROR-STATUS:ERROR OR liEntries NE 7 THEN 
       DO:
-         fError("Incorrect input data format").
+         fError("Incorrect input data format. " + STRING(liEntries) + ";" + STRING(ERROR-STATUS:ERROR) ).
          liNumErr = liNumErr + 1 .
          NEXT.
       END.
 
 
-      RUN pSTC(lcMsisdn,
-               lcOldCLIType,
-               lcNewCLIType,
-               lcSMSText,
-               ldtSTCDate
-              ).
+      lcError =    fSTC(lcCustIDType,
+                        lcCustID,
+                        lcMsisdn,
+                        lcOldCLIType,
+                        lcNewCLIType,
+                        lcSMSText2,
+                        ldtSTCDate
+                        ) NO-ERROR.
 
-      IF RETURN-VALUE BEGINS "ERROR" THEN 
-      DO:
-         fError(ENTRY(2,RETURN-VALUE,":")).
+      IF lcError = "OK" THEN DO:
+         fLogLine("OK").
+         liNumOK = liNumOK + 1.
+      END.
+      ELSE DO:
+         fError(lcError).
          liNumErr = liNumErr + 1 .
       END.
-      ELSE liNumOK = liNumOK + 1 .
    END.
   
    PUT STREAM sLog UNFORMATTED 
@@ -169,119 +183,94 @@ INPUT STREAM sFile CLOSE.
 /*
    Procedure updates subscription level STC.
 */
-PROCEDURE pSTC:
+FUNCTION fSTC RETURN CHARACTER
+   (pcCustIDType     AS CHARACTER,
+    pcCustID         AS CHARACTER,
+    pcMsisdn         AS CHARACTER,
+    pcOldCLIType     AS CHARACTER,
+    pcNewCLIType     AS CHARACTER,
+    pcSMSText        AS CHARACTER,
+    pdtSTCDate       AS DATE
+   ):
 
-   DEFINE INPUT PARAMETER pcMsisdn AS CHARACTER NO-UNDO.
-   lcSMSText
-   DEFINE INPUT PARAMETER pcNewProfile AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liCreditcheck    AS INTEGER   NO-UNDO INIT 1.
+   DEFINE VARIABLE liRequest        AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcPenaltyMsg     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE ldeSTCStamp      AS DECIMAL   NO-UNDO.
 
-   DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE liReq   AS INTEGER   NO-UNDO.
-
+   FIND  Customer  NO-LOCK WHERE
+         Customer.CustIDType  = pcCustIDType AND
+         Customer.OrgId       = pcCustID     NO-ERROR.
+   IF NOT AVAILABLE Customer THEN 
+      RETURN "Customer not found with given CustIDType and OrgId".
+   
    FIND  MobSub NO-LOCK WHERE
          MobSub.CLI = pcMsisdn NO-ERROR.
    IF NOT AVAILABLE MobSub THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:MobSub not found" SKIP.
-      NEXT.
-   END.
+      RETURN "MobSub not found".
 
-   FIND  Customer NO-LOCK WHERE
-         Customer.CustNum = MobSub.CustNum NO-ERROR.
-   IF NOT AVAILABLE Customer THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:customer not found" SKIP.
-      NEXT.
-   END.
+   IF Customer.CustNum <> MobSub.CustNum THEN 
+      RETURN "Customer given doesn't match with Mobile Subscription's Customer".
 
    IF Customer.CustIDType = "CIF" THEN liCreditcheck = 0.
 
-   FIND FIRST  CLIType WHERE
-               CLIType.Clitype = MobSub.CliType  AND
-               CliType.Brand   = Syst.Var:gcBrand NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE CLIType THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Current CliType not found" SKIP.
-      NEXT.
-   END.
+   FIND FIRST  old_CLIType WHERE
+               old_CLIType.Clitype = pcOldCLIType  AND
+               old_CLIType.Brand   = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE old_CLIType THEN 
+      RETURN "Current CliType not found".
    
-   IF CLIType.Clitype <> {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Current CliType not Mobile" SKIP.
-      NEXT.
-   END.
+   IF old_CLIType.TariffType <> {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
+      RETURN "Current CliType not Mobile".
+
+   IF (pcOldCLIType > "" AND pcOldCLIType NE MobSub.CliType) THEN 
+      RETURN "Incorrect Old CLI type: "  + MobSub.CliType .
 
    FIND FIRST  new_CLIType WHERE
-               new_CLIType.Clitype = lcNewCLIType AND
+               new_CLIType.Clitype = pcNewCLIType AND
                new_CLIType.Brand   = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    IF NOT AVAILABLE new_CLIType THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:New CliType not found" SKIP.
-      NEXT.
-   END.
+      RETURN "New CliType not found".
 
-   IF CLIType.TariffType <> {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Current CliType is Not a Mobile Tariff" SKIP.
-      NEXT.
-   END.
-   
    IF new_CLIType.Clitype = MobSub.CliType THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:New CliType is same as current clitype" SKIP.
-      NEXT.
-   END.
+      RETURN "New CliType is same as current clitype".
 
    IF new_CLIType.TariffType <> {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Current CliType is Not a Mobile Tariff" SKIP.
-      NEXT.
-   END.
+      RETURN "New CliType is Not a Mobile Tariff".
 
-   IF (lcOldCLIType > "" AND lcOldCLIType NE MobSub.CliType) THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Incorrect Old CLI type: "  MobSub.CliType SKIP.
-      NEXT.
-   END.
-
-   
    FIND FIRST  MsRequest WHERE
                MsRequest.MsSeq = MobSub.MsSeq AND
                MsRequest.Reqtype = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0 NO-LOCK NO-ERROR.
    IF AVAIL MsRequest THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Already pending STC request to " MsRequest.ReqCparam2 SKIP.
-      NEXT.
-   END.
-
-   FIND FIRST  MsRequest WHERE
-               MsRequest.MsSeq = MobSub.MsSeq AND
-               MsRequest.Reqtype = {&REQTYPE_BUNDLE_CHANGE} AND
-               LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0 AND
-               LOOKUP(MsRequest.ReqCparam2,lcBONOContracts) = 0 NO-LOCK NO-ERROR.
-   IF AVAIL MsRequest THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Already pending Bundle change request " MsRequest.ReqCparam2 SKIP.
-      NEXT.
-   END.
+      RETURN "Already pending STC request to " + MsRequest.ReqCparam2.
 
    IF new_CLIType.PayType = 2 THEN liCreditcheck = 0.
 
+   IF pcSMSText = "" THEN
+      RETURN "SMS text is Blank".
 
+   IF pdtSTCDate = ? OR NOT (pdtSTCDate = ldtValidSTCDates[1] OR pdtSTCDate = ldtValidSTCDates[2]) THEN
+      RETURN "Not a Valid STC Date". 
+
+   lcPenaltyMsg = fCalcPenalty(MobSub.MsSeq, new_CLIType.CliType).
+   IF lcPenaltyMsg <> "" THEN
+      RETURN "STC not done for penalties:" + lcPenaltyMsg.
+   
+   ldeSTCStamp = Func.Common:mDate2TS(pdtSTCDate).
    /* CREATE SubSer */
    liRequest =  fCTChangeRequest(MobSub.MsSeq,
                                  new_CLIType.Clitype,
                                  "",
-                                 lcBankAccount,
-                                 ldeTimeStamp,
+                                 "",/* Bank Account */
+                                 ldeSTCStamp,
                                  liCreditCheck,  /* 0 = Credit check ok */
                                  0, /* 0=no extend_term_contract, 1=extend_term_contract, 2=exclude_term_penalty */
                                  "",
-                                 (ldeFee > 0),
+                                 FALSE, /* (ldeFee > 0) */
                                  FALSE, /* Send SMS */
                                  Syst.Var:katun,
-                                 ldeFee,
+                                 0, /* ldeFee */
                                  {&REQUEST_SOURCE_SCRIPT},
                                  0,
                                  0,    /* Father request id */
@@ -289,10 +278,27 @@ PROCEDURE pSTC:
                                  OUTPUT lcInfo).
 
    IF liRequest = 0 THEN 
-   DO:
-      PUT STREAM sout UNFORMATTED lcline lcSep "ERROR:Request creation failed: " + lcInfo SKIP.
-      NEXT.
+      RETURN "Request creation failed: " + lcInfo.
+   ELSE DO:
+
+      Func.Common:mWriteMemoWithType("Mobsub",
+                                     STRING(MobSub.msseq),
+                                     MobSub.Custnum,
+                                     "Cambio de tarifa masivo",
+                                     old_CLIType.CliName + " --> " + new_CLIType.CliName + " - " + STRING(pdtSTCDate,"99-99-9999"),
+                                     "MobSub",
+                                     "SYSTEM"
+                                    ).
+
+      fMakeSchedSMS2(MobSub.CustNum,
+                     MobSub.CLI,
+                     {&SMSTYPE_STC},
+                     pcSMSText,
+                     ldeSTCStamp,
+                     {&STC_SMS_SENDER},
+                     "").
+
    END.
 
    RETURN "OK".
-END.
+END FUNCTION.
