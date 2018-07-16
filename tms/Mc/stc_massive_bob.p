@@ -199,10 +199,11 @@ FUNCTION fSTC RETURN CHARACTER
    DEFINE VARIABLE ldeSTCStamp      AS DECIMAL   NO-UNDO.
 
    FIND  Customer  NO-LOCK WHERE
-         Customer.CustIDType  = pcCustIDType AND
+         Customer.Brand       = Syst.Var:gcBrand   AND
+         Customer.CustIDType  = pcCustIDType       AND
          Customer.OrgId       = pcCustID     NO-ERROR.
    IF NOT AVAILABLE Customer THEN 
-      RETURN "Customer not found with given CustIDType and OrgId".
+      RETURN "Customer not found with given CustIDType and CustID".
    
    FIND  MobSub NO-LOCK WHERE
          MobSub.CLI = pcMsisdn NO-ERROR.
@@ -238,12 +239,19 @@ FUNCTION fSTC RETURN CHARACTER
    IF new_CLIType.TariffType <> {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
       RETURN "New CliType is Not a Mobile Tariff".
 
-   FIND FIRST  MsRequest WHERE
-               MsRequest.MsSeq = MobSub.MsSeq AND
-               MsRequest.Reqtype = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-               LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0 NO-LOCK NO-ERROR.
-   IF AVAIL MsRequest THEN 
-      RETURN "Already pending STC request to " + MsRequest.ReqCparam2.
+   IF CAN-FIND (FIRST   MsRequest WHERE
+                        MsRequest.MsSeq   = MobSub.MsSeq AND
+                        MsRequest.Reqtype = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                        LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0)
+   THEN
+      RETURN "Already pending STC Request".
+
+   IF CAN-FIND (FIRST   MsRequest WHERE
+                        MsRequest.MsSeq   = MobSub.Msseq AND
+                        MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                        LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0)
+   THEN
+      RETURN "Already pending Termination Request".
 
    IF new_CLIType.PayType = 2 THEN liCreditcheck = 0.
 
