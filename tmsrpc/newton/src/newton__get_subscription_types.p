@@ -7,6 +7,7 @@
  * @clitypes    cli_type;string;mandatory;
                 tariff_bundle;string;mandatory;
                 status_code;int;mandatory;(0=Inactive,1=active,2=retired)
+                merge_target;array;list of MSISDN's;                 
  */
 USING Progress.Json.ObjectModel.*.
 USING OpenEdge.Net.HTTP.MethodEnum.
@@ -43,6 +44,7 @@ DEFINE VARIABLE liDestDowspeconversion AS INT64 NO-UNDO.
 DEFINE VARIABLE liDestupspeconversion  AS INT64 NO-UNDO.
 DEFINE VARIABLE lcHostname             AS CHAR  NO-UNDO.
 DEFINE VARIABLE llUseApi               AS LOGI  NO-UNDO INIT TRUE.
+DEFINE VARIABLE lcMergeTargets         AS CHAR  NO-UNDO.
 
 DEFINE TEMP-TABLE ttSpeed
           FIELD Download      AS INT64
@@ -52,6 +54,9 @@ DEFINE TEMP-TABLE ttSpeed
 DEF BUFFER bCLIType        FOR CLIType.
 DEF BUFFER oldCLIType      FOR CLIType.
 DEF BUFFER bfMobSub        FOR MobSub.
+DEF BUFFER bMobSub         FOR MobSub.
+DEF BUFFER bCliType1       FOR CLIType.
+DEF BUFFER bCliType2       FOR CLIType.
 
 FUNCTION fSpeedConversion RETURNS INT64
     (INPUT icSpeed  AS CHAR):
@@ -200,20 +205,83 @@ END FUNCTION.
 
 FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
                                             INPUT icTariffBundle AS CHAR,
-                                            INPUT iiStatusCode   AS INT):
+                                            INPUT iiStatusCode   AS INTEGER ):                                            
 
+   DEFINE VARIABLE lcArray  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liInt    AS INTEGER   NO-UNDO.
+   
    /* YPR-1720 */
    IF icCLIType EQ "CONT15" AND
       iiStatusCode EQ 2 AND
       ldaCont15PromoEnd NE ? AND
       TODAY <= ldaCont15PromoEnd THEN iiStatusCode = 1.
 
-   sub_struct = add_struct(result_array,"").
+   sub_struct = add_struct(result_array,"").   
 
    add_string(sub_struct,"cli_type",icCLIType).
    add_string(sub_struct,"tariff_bundle",icTariffBundle).
-   add_int(sub_struct,"status_code",iiStatusCode).
+   add_int(sub_struct,"status_code",iiStatusCode).   
    
+   lcArray = add_array(sub_struct,"merge_target").   
+   
+   DO liInt = 1 TO NUM-ENTRIES(lcMergeTargets):
+      add_string(lcArray,"",ENTRY(liInt,lcMergeTargets)).
+   END.   
+   
+END FUNCTION.
+
+FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
+   (INPUT  iiMsSeq AS INTEGER):
+
+    DEFINE VARIABLE lcMsisdn AS CHARACTER NO-UNDO.
+    DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
+
+    lcExtraLineCLITypes = fExtraLineCLITypes().
+
+    FIND FIRST bfMobSub NO-LOCK
+         WHERE bfMobSub.MsSeq EQ iiMsSeq NO-ERROR.
+         
+    IF NOT AVAILABLE bfMobSub THEN RETURN "".
+     
+    FIND FIRST bCliType1 NO-LOCK
+         WHERE bCliType1.Brand   EQ Syst.Var:gcBrand
+           AND bCliType1.CliType EQ bfMobSub.CliType NO-ERROR.
+
+    IF NOT AVAILABLE bCliType1 OR 
+       bCliType1.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN RETURN "".
+    
+    FOR EACH bMobSub NO-LOCK
+       WHERE bMobSub.brand   EQ Syst.Var:gcBrand
+         AND bMobSub.CustNum EQ bfMobSub.CustNum:
+        FIND FIRST bCliType2 NO-LOCK
+             WHERE bCliType2.Brand   EQ Syst.Var:gcBrand
+               AND bCliType2.CliType EQ bMobSub.CliType NO-ERROR.
+        IF NOT AVAILABLE bCliType2 OR 
+           bCliType2.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN NEXT.
+        
+        IF LOOKUP(bMobSub.CliType,lcExtraLineCLITypes) > 0 THEN NEXT.
+
+        IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND 
+           bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:
+               
+            IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
+                MsRequest.MsSeq   EQ bMobsub.MsSeq AND
+               (MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR
+                MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION}) AND
+             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0) 
+             THEN
+               IF NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bMobSub.CLI) THEN
+                    lcMsisdn = lcMsisdn + ','  + bMobSub.CLI.
+        END. 
+        ELSE 
+        IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
+           bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
+             lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
+        END.         
+    END.
+    
+    RETURN TRIM(lcMsisdn,",").
+    
 END FUNCTION.
 
 ASSIGN Syst.Var:katun = "Newton".
@@ -272,6 +340,8 @@ DO:
          END.
     END.
 END.
+
+lcMergeTargets = fGetPossibleMergeMSISDNs(INPUT piMsSeq).
 
 FOR EACH CLIType NO-LOCK WHERE
          CLIType.Brand = Syst.Var:gcBrand AND
