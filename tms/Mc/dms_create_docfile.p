@@ -1307,14 +1307,14 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                   DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam3,"|"):
                      IF liCount < 10 THEN 
                         ASSIGN 
-                           lcAmendAddress = lcAmendAddress + "|" + ENTRY(liCount,MsRequest.ReqCParam3,"|")
-                           lcAmendAddress = TRIM(lcAmendAddress).
+                           lcAmendAddress = lcAmendAddress + ";" + ENTRY(liCount,MsRequest.ReqCParam3,"|")
+                           lcAmendAddress = TRIM(lcAmendAddress,";").
                   END.
                   DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam4,"|"):
                      IF liCount < 10 THEN 
                         ASSIGN 
-                           lcCurrAddress = lcCurrAddress + " " + ENTRY(liCount,MsRequest.ReqCParam4,"|")
-                           lcCurrAddress = TRIM(lcCurrAddress).
+                           lcCurrAddress = lcCurrAddress + ";" + ENTRY(liCount,MsRequest.ReqCParam4,"|")
+                           lcCurrAddress = TRIM(lcCurrAddress,";").
                   END.
                   ASSIGN        
                      lcCaseTypeId = lcInstAddrCaseTypeID

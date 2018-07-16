@@ -142,7 +142,6 @@ Syst.Var:katun = "VISTA_" + pcSalesManId.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* validate order address struct */
-lcAddressData = validate_request(pcAmendmentStruct,gcAmendmentDetails).
 IF lcAddressData EQ ? THEN RETURN.
 
 fGetAddressFields().
@@ -172,7 +171,7 @@ FIND FIRST OrderFusion NO-LOCK WHERE
 IF NOT AVAIL OrderFusion THEN
    RETURN appl_err("Fixed line connection is not available for this order").
    
-IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE") > 0 THEN
+IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
       RETURN appl_err("Order is not in valid state to update").
       
 

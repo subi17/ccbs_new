@@ -699,6 +699,7 @@ FUNCTION fOrderUpdateRequest RETURNS INTEGER
    ASSIGN
       bCreaReq.MsSeq      = bOrder.MsSeq
       bCreaReq.CustNum    = bOrder.CustNum
+      bCreaReq.CLI        = bOrder.CLI
       bCreaReq.ReqCParam1 = icsfid
       bCreaReq.ReqIParam1 = iiOrderId
       bCreaReq.ReqCParam2 = icAmendmentType
