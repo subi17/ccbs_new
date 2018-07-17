@@ -185,10 +185,9 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
             IF lcMobSubFixNum   EQ  "" OR 
                lcMobSubFixNum   EQ  ?  OR
                lcMobSubFixNum   NE  THIS-OBJECT:FixedNumber
-            THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with Fixed Number &1 not found", lcFixedLineNumber)).    
+            THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with Fixed Number &1 not found", THIS-OBJECT:FixedNumber)).    
             
         END.
-        
         
         IF THIS-OBJECT:MobileNumber > "" AND  
            CAN-FIND(FIRST MobSub WHERE MobSub.Brand         =   Syst.Var:gcBrand AND 
@@ -255,7 +254,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         
         IF loAttributes:Has("mnptime")
         THEN DO:
-            THIS-OBJECT:FixedMNPTime    =   loAttributes:GetCharacter(mnptime).
+            THIS-OBJECT:FixedMNPTime    =   loAttributes:GetCharacter("mnptime").
             mCreateDataOrderProductParamData(loAttributes,"mnptime","Char").
         END.
         

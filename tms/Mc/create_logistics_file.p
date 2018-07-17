@@ -66,6 +66,10 @@ DEFINE VARIABLE llDespacharValue   AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcTerminalBillCode AS CHAR      NO-UNDO.  
 DEFINE VARIABLE lhOrder            AS HANDLE    NO-UNDO.
 DEFINE VARIABLE ocTerminalCode     AS CHAR      NO-UNDO.
+DEFINE VARIABLE lcOrderProductCLI  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcOProductCType    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lIsConvergenceType AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcRenewalICC       AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -412,6 +416,9 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeCurrAmt                AS DEC       NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC       NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR      NO-UNDO.
+   DEFINE VARIABLE lcProductCLI              AS CHAR      NO-UNDO.
+   DEFINE VARIABLE lcProductCLIType          AS CHAR      NO-UNDO.
+   DEFINE VARIABLE lcProductICC              AS CHAR      NO-UNDO.
 
    DEFINE BUFFER bufRow         FOR InvRow.
    DEFINE BUFFER bufItem        FOR BillItem.
@@ -429,7 +436,19 @@ FUNCTION fDelivSIM RETURNS LOG
               Order.Brand   = Syst.Var:gcBrand AND 
               Order.OrderId = liOrderId        NO-ERROR.
 
-   IF NOT AVAIL Order THEN RETURN FALSE.            
+   IF NOT AVAIL Order THEN RETURN FALSE.     
+   
+   IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
+   THEN DO:
+       ASSIGN lcProductCLI          =    Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+              lcProductCLIType      =    Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
+              lcProductICC          =    Func.OrderProductsData:mGetOrderICC(Order.OrderID).
+   END.
+   ELSE DO:
+       ASSIGN lcProductCLI          = Order.CLI
+              lcProductCLIType      = Order.CLIType
+              lcProductICC          = Order.ICC.
+   END.
 
    /* skip those in control or already closed */
    IF Order.StatusCode = "4" OR
@@ -688,14 +707,14 @@ FUNCTION fDelivSIM RETURNS LOG
    liRowNum = liRowNum + 1.
 
    /* Get IPL/FLAT Tariff CLIType */
-   IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
-      lcDataBundle = fGetDataBundleInOrderAction(Order.OrderID,Order.CLIType).
+   IF LOOKUP(lcProductCLIType,lcBundleCLITypes) > 0 THEN DO:
+      lcDataBundle = fGetDataBundleInOrderAction(Order.OrderID,lcProductCLIType).
       lcCLIType = fConvBundleToCLIType(lcDataBundle).
-      IF lcCLIType = "" THEN lcCLIType = Order.CLIType.
+      IF lcCLIType = "" THEN lcCLIType = lcProductCLIType.
    END.
-   ELSE lcCLIType = Order.CLIType.
+   ELSE lcCLIType = lcProductCLIType.
    
-   IF Order.CLIType EQ "CONT15" THEN DO:
+   IF lcProductCLIType EQ "CONT15" THEN DO:
       
       IF Order.OrderType EQ 2 THEN DO:
          IF fGetCurrentSpecificBundle(Order.MsSeq, "VOICE") EQ "VOICE100" THEN
@@ -757,7 +776,7 @@ FUNCTION fDelivSIM RETURNS LOG
       before deployment is done - GAP phase 2*/
    FIND FIRST SIM EXCLUSIVE-LOCK WHERE
               SIM.Brand   EQ Syst.Var:gcBrand AND 
-              SIM.ICC     EQ Order.ICC        AND 
+              SIM.ICC     EQ lcProductICC     AND 
               SIM.SimStat EQ {&SIM_SIMSTAT_CHOSEN_TO_ORDER} NO-ERROR NO-WAIT.
 
    CREATE ttOneDelivery.
@@ -775,9 +794,9 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
       ttOneDelivery.CIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "CIF"
       ttOneDelivery.PassPort      = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "PassPort"
-      ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
-      ttOneDelivery.ICCNum        = IF AVAIL SIM THEN SUBSTR(SIM.ICC,7) ELSE SUBSTR(Order.ICC,7)
-      ttOneDelivery.MSISDN        = Order.CLI
+      ttOneDelivery.SubsType      = IF Func.ValidateOrder:mIsFiberType(lcCLIType) THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
+      ttOneDelivery.ICCNum        = IF AVAIL SIM THEN SUBSTR(SIM.ICC,7) ELSE SUBSTR(lcProductICC,7)
+      ttOneDelivery.MSISDN        = lcProductCLI
       ttOneDelivery.TmpMSISDN     = fVoiceBundle(Order.OrderID) /*YPR-6059*/
       ttOneDelivery.MNPState      = STRING(Order.MNPStatus = 0,"0/1")
       ttOneDelivery.VoiceMail     = "633633633"
@@ -832,7 +851,7 @@ FUNCTION fDelivSIM RETURNS LOG
    IF Order.OrderType eq 2 THEN DO:
       /* Overwrite certain expeptional values */
       ASSIGN
-         ttOneDelivery.MobConNum = Order.CLI
+         ttOneDelivery.MobConNum = lcProductCLI
          ttOneDelivery.FixConNum = ContactCustomer.Mobile.
 
       /* If ICC change not requested with Renewal Order */
@@ -1022,7 +1041,7 @@ FUNCTION fDelivSIM RETURNS LOG
                  OrderAction.Brand    = Syst.Var:gcBrand AND
                  OrderAction.OrderId  = Order.OrderId AND
                  OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
-      IF AVAIL OrderAction AND Order.ICC EQ "" THEN DO:
+      IF AVAIL OrderAction AND lcProductICC EQ "" THEN DO:
          lcBillCode = fGetSIMBillItem(OrderAction.ItemKey,Order.PayType).
          FOR FIRST BillItem NO-LOCK WHERE
                    BillItem.Brand    = Syst.Var:gcBrand AND
@@ -1385,7 +1404,9 @@ FUNCTION pLog RETURNS LOG (INPUT pcLogContent AS CHARACTER):
 END.
 
 FUNCTION fDelivDevice RETURNS LOG
-   (INPUT icDevice  AS CHAR):
+   (INPUT icDevice  AS CHAR,
+    INPUT icCLI     AS CHAR,
+    INPUT icCType   AS CHAR):
 
    DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcCustRegi      AS CHARACTER NO-UNDO.
@@ -1514,8 +1535,8 @@ FUNCTION fDelivDevice RETURNS LOG
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
       ttOneDelivery.CIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "CIF"
       ttOneDelivery.PassPort      = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "PassPort"
-      ttOneDelivery.SubsType      = order.clitype
-      ttOneDelivery.MSISDN        = Order.CLI
+      ttOneDelivery.SubsType      = icCType
+      ttOneDelivery.MSISDN        = icCLI
       ttOneDelivery.Company       = AgreeCustomer.Company
       ttOneDelivery.Name          = ContactCustomer.FirstName
       ttOneDelivery.SurName1      = ContactCustomer.SurName1
@@ -1640,10 +1661,24 @@ DEFINE BUFFER bufOrderGroup FOR OrderGroup.
    convergent orders where SIM will be assigned by INSTALLER */
 FOR EACH Order NO-LOCK WHERE
          Order.Brand    = Syst.Var:gcBrand AND
-         Order.CrStamp >= 20171201         AND
-         Order.CLIType BEGINS "CONTFH"     AND
-         Order.ICC      <> "":
-
+         Order.CrStamp >= 20171201         :
+        
+   IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID) THEN 
+   DO:
+       
+       /*TO-DO PC: Check whether can we use the fixedonly method instead of Hard Coding.
+                    Please check mIsFixedOnlyTariff is correct or not.*/  
+       IF NOT Func.OrderProductsData:mGetOrderCLIType(INPUT Order.OrderID) BEGINS "CONTFH" THEN NEXT.
+       
+       IF Func.OrderProductsData:mGetOrderICC(INPUT Order.OrderID) = "" THEN NEXT.
+       
+   END.     
+   ELSE DO:
+       
+       IF NOT Order.CLIType BEGINS "CONTFH" OR Order.ICC  = "" THEN NEXT.
+       
+   END.    
+   
    IF Order.OrderType EQ 2 THEN NEXT.
 
    IF LOOKUP(Order.StatusCode,"7,8,9") > 0 THEN NEXT.
@@ -1695,10 +1730,13 @@ FOR EACH OrderGroup NO-LOCK WHERE
       IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
         NOT (Order.MNPStatus EQ 6 OR
              Order.MNPStatus EQ 7)            THEN NEXT.
-
+             
+      IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
+      THEN ASSIGN lIsConvergenceType  = fIsConvergenceTariff(Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)).
+      ELSE ASSIGN lIsConvergenceType  = fIsConvergenceTariff(Order.CLIType).
       /* For convergent + terminal order, LO info should not be sent
          if fixed line is not yet installed */
-      IF fIsConvergenceTariff(Order.CLIType)         AND
+      IF lIsConvergenceType         AND
          fIsTerminalOrder(Order.OrderId,
                           OUTPUT lcTerminalBillCode) THEN DO:
 
@@ -1752,7 +1790,14 @@ FOR EACH Order NO-LOCK WHERE
    IF AVAIL MobSub THEN DO:
 
       lcICC = MobSub.ICC.
-      IF Order.ICC > "" THEN lcICC = Order.ICC.
+      
+      IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID)
+      THEN DO:
+          ASSIGN lcRenewalICC  =  Func.OrderProductsData:mGetOrderICC(INPUT Order.OrderID).
+      END.
+      ELSE lcRenewalICC = Order.ICC.
+      
+      IF lcRenewalICC > "" THEN lcICC = lcRenewalICC.
              
       FIND xOrder WHERE 
            xOrder.Brand   = Syst.Var:gcBrand AND
@@ -1835,20 +1880,36 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
          FusionMessage.FixedStatusDesc = "Pending fixed line cancellation"
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
-   END.
+    END.
+
+    IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
+    THEN DO:        
+        ASSIGN 
+            lcOrderProductCLI = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+            lcOProductCType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
+    END.
+    ELSE DO:
+        ASSIGN 
+            lcOrderProductCLI = Order.CLI
+            lcOProductCType   = Order.CLIType.
+    END.
 
    FIND FIRST CliType WHERE
-              Clitype.brand EQ Syst.Var:gcBrand AND
-              Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
+              Clitype.brand   EQ Syst.Var:gcBrand AND
+              Clitype.clitype EQ lcOProductCType NO-LOCK NO-ERROR.
+              
    IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
       ASSIGN
          FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
-   END.
-   IF fDelivDevice("Router") THEN ASSIGN
-      FusionMessage.UpdateTS = Func.Common:mMakeTS()
-      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
+    END.
+
+   IF fDelivDevice("Router" , lcOrderProductCLI , lcOProductCType) 
+   THEN ASSIGN
+           FusionMessage.UpdateTS      = Func.Common:mMakeTS()
+           FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
+      
 END.
 
 /* Third Party Device Logistics */
@@ -1866,9 +1927,21 @@ FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_AC
    DO:
       fTPServiceError(BUFFER TPService,"Failed to identify associated order during logistics initiation").
       NEXT.
-   END.
+    END.
    
-   IF fDelivDevice(TPService.ServType) THEN 
+    IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
+    THEN DO:
+        ASSIGN 
+            lcOrderProductCLI = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+            lcOProductCType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
+    END.
+    ELSE DO:
+        ASSIGN 
+            lcOrderProductCLI = Order.CLI
+            lcOProductCType   = Order.CLIType.
+    END.
+   
+   IF fDelivDevice(TPService.ServType , lcOrderProductCLI , lcOProductCType ) THEN 
        fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&STATUS_LOGISTICS_INITIATED}).
 END.
 

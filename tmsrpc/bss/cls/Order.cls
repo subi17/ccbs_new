@@ -327,11 +327,11 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             
         CASE THIS-OBJECT:MobileNumberType:
             
-            WHEN "new"       THEN Order.OrderType = {&ORDER_TYPE_NEW}.
-            WHEN "mnp"       THEN Order.OrderType = {&ORDER_TYPE_MNP}.
-            WHEN "renewal"   THEN Order.OrderType = {&ORDER_TYPE_RENEWAL}.
-            WHEN "stc"       THEN Order.OrderType = {&ORDER_TYPE_STC}.
-            WHEN "migration" THEN Order.OrderType = {&ORDER_TYPE_MNP}.
+            WHEN {&TYPE_NEW}       THEN Order.OrderType = {&ORDER_TYPE_NEW}.
+            WHEN {&TYPE_MNP}       THEN Order.OrderType = {&ORDER_TYPE_MNP}.
+            WHEN {&TYPE_RENEWAL}   THEN Order.OrderType = {&ORDER_TYPE_RENEWAL}.
+            WHEN {&TYPE_STC}       THEN Order.OrderType = {&ORDER_TYPE_STC}.
+            WHEN {&TYPE_MIGRATION} THEN Order.OrderType = {&ORDER_TYPE_MNP}.
             
         END.
             

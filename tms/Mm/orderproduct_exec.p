@@ -48,31 +48,30 @@ DEFINE INPUT  PARAMETER iiOrderID AS INTEGER NO-UNDO.
 
 RELEASE SIM.
 
-DEFINE VARIABLE lcCLI        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcCLIType    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcICC        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcSIMonlyMNP AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE ldeSwitchTS  AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE liMnpStatus  AS INTEGER   NO-UNDO.
-DEFINE VARIABLE ocResult     AS CHAR      NO-UNDO.
-DEFINE VARIABLE lgHoldOrder  AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcCLI             AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCLIType         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcICC             AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNumber     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE ldeSwitchTS       AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE liMnpStatus       AS INTEGER   NO-UNDO.
+DEFINE VARIABLE ocResult          AS CHAR      NO-UNDO.
+DEFINE VARIABLE lgHoldOrder       AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcSubscriptionICC AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER bfOrder FOR Order.
 
-FIND bfOrder WHERE bfOrder.OrderID = iiOrderID EXCLUSIVE-LOCK NO-ERROR.
+FIND bfOrder WHERE bfOrder.OrderID = iiOrderID EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
 
 IF NOT AVAILABLE bfOrder THEN RETURN.
 
-DEFINE BUFFER bfOrderProduct FOR OrderProduct.
+DEFINE BUFFER bfOrderProductParent FOR OrderProduct.
 
 /*Assigning the main variables*/    
 ASSIGN 
-    lcSIMonlyMNP  = TRIM(fCParamC("SIMonlyMNPorder"))
     liMnpStatus  =  INTEGER(Func.OrderProductsData:mGetMobileNumberType(INPUT iiOrderID) = {&TYPE_MNP})     
-    llgMNPSimOnly = lcSIMonlyMNP      EQ "true"   AND
-                    bfOrder.OrderType EQ 1        AND
-                    bfOrder.CrStamp   >= 20150616.40200 AND
-                    liMnpStatus       EQ 1        AND
+    llgMNPSimOnly = bfOrder.OrderType EQ {&ORDER_TYPE_MNP}   AND
+                    bfOrder.CrStamp   >= 20150616.40200      AND
+                    liMnpStatus       EQ 1                   AND
                     LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
                     NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
                                        OrderAccessory.Brand   EQ Syst.Var:gcBrand AND
@@ -92,7 +91,7 @@ FOR EACH OrderProduct NO-LOCK
     IF OrderProduct.ActionType  = {&ORDER_PRODUCT_SIM}
     THEN DO:      
    
-        RUN ipProcessSIM.
+        RUN ipProcessSIM(INPUT OrderProduct.ParentID).
         IF lgHoldOrder = TRUE THEN RETURN.
        
     END. 
@@ -100,18 +99,27 @@ FOR EACH OrderProduct NO-LOCK
     IF LAST-OF(OrderProduct.ParentID) 
     THEN DO:
         
-        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID         =   OrderProduct.OrderID
-                                    AND bfOrderProduct.OrderProductID  =   OrderProduct.ParentID
-                                  NO-LOCK NO-ERROR.
+        FIND FIRST bfOrderProductParent WHERE bfOrderProductParent.OrderID         =   OrderProduct.OrderID
+                                          AND bfOrderProductParent.OrderProductID  =   OrderProduct.ParentID
+                                       NO-LOCK NO-ERROR.
                                
-        IF AVAILABLE bfOrderProduct 
+        IF AVAILABLE bfOrderProductParent 
         THEN DO:
             
-            IF bfOrderProduct.ActionType =  {&ORDER_PRODUCT_SUBSCRIPTION}
+            IF bfOrderProductParent.ActionType =  {&ORDER_PRODUCT_SUBSCRIPTION}
             THEN DO:
-                RUN ipProcessMobileSubscription. 
+                
+                RUN ipProcessMobileSubscription(INPUT bfOrderProductParent.OrderProductID). 
                 IF lgHoldOrder = TRUE THEN RETURN.
+                
             END.
+            ELSE IF bfOrderProductParent.ActionType = {&ORDER_PRODUCT_FIXED_LINE}
+            THEN DO:
+                
+                RUN ipProcessFixedLine(INPUT bfOrderProductParent.OrderProductID).
+                IF lgHoldOrder = TRUE THEN RETURN.
+                
+            END.            
         END.
     END. /* IF LAST-OF(OrderProduct.ParentID): */
 END. /* For each OrderProduct*/
@@ -130,10 +138,15 @@ RUN ipCreateSubscriptionRequest.
 
 PROCEDURE ipProcessSIM:
     
+    DEFINE INPUT  PARAMETER iiSIMParentID AS INTEGER NO-UNDO.
+    
+    DEFINE BUFFER bfParentProduct FOR OrderProduct.
+
     ASSIGN 
-        lcICC = Func.OrderProductsData:mGetOrderICC(INPUT iiOrderID).
+        lcICC               =   Func.OrderProductsData:mGetOrderICC(INPUT iiOrderID)
+        lcSubscriptionICC   =   Func.OrderProductsData:mGetOrderSubscriptionICC(INPUT iiOrderID).
          
-    IF lcICC EQ "" 
+    IF lcICC EQ "" AND lcSubscriptionICC = ""
     THEN DO:
         
         IF LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0
@@ -177,31 +190,53 @@ PROCEDURE ipProcessSIM:
                     fCleanEventObjects().
                 END. 
                 
-                ASSIGN lgHoldOrder  =  TRUE.
+                ASSIGN 
+                    lgHoldOrder = TRUE.
                 
-             END.
+            END.
         END.
     END.
+    
+    FIND FIRST bfParentProduct WHERE bfParentProduct.OrderProductID  =  iiSIMParentID NO-LOCK NO-ERROR.
+    IF NOT AVAILABLE bfParentProduct THEN 
+    DO:
+       
+        RUN ipChangeOrderToErrorStatus.
+        Func.Common:mWriteMemo("Order",
+                               STRING(bfOrder.OrderID),
+                               0,
+                               "OrderSubscription",
+                               "Parent product to sim is not available.").
+    END.
+    ELSE RUN ipCreateOrderSubscriptionData(INPUT bfParentProduct.OrderProductID).
             
 END PROCEDURE.
 
 PROCEDURE ipProcessMobileSubscription:
     
+    DEFINE INPUT  PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
+    
     ASSIGN 
         lcCLIType = Func.OrderProductsData:mGetOrderCLIType(INPUT iiOrderID)
         lcCLI     = Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID).
         
-    RUN ipCreateOrderSubscription.
+    RUN ipCreateOrderSubscriptionData(INPUT iiOrderProductID).
+    
+    IF Func.OrderProductsData:mHasInitialTopup(INPUT iiOrderID) THEN 
+        RUN ipCreateOrderTopup(iiOrderProductID , INPUT {&INITIAL_TOPUP}).
         
 END PROCEDURE.
 
 PROCEDURE ipProcessFixedLine:
     
+    DEFINE INPUT  PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
+    
     ASSIGN 
-        lcCLIType = Func.OrderProductsData:mGetOrderCLIType(INPUT iiOrderID)
-        lcCLI     = Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID).
+        lcCLIType       =  Func.OrderProductsData:mGetOrderCLIType(INPUT iiOrderID)
+        lcCLI           =  Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID)
+        lcFixedNumber   =  Func.OrderProductsData:mGetFixNumber(INPUT iiOrderID).
     
-    
+    RUN ipCreateOrderSubscriptionData(INPUT iiOrderProductID).
 END.    
 
 PROCEDURE ipOrderValidations:
@@ -316,11 +351,58 @@ PROCEDURE ipGetTimeStamp :
     
 END PROCEDURE.   
 
+
+PROCEDURE ipCreateOrderSubscriptionData:
+    
+    DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
+    
+    DEFINE BUFFER bfOrderSubscription FOR OrderSubscription.
+    
+    IF CAN-FIND(FIRST bfOrderSubscription WHERE bfOrderSubscription.OrderID         =  iiOrderID  
+                                            AND bfOrderSubscription.OrderProductID  =  iiOrderProductID )
+    THEN DO:
+        FIND FIRST bfOrderSubscription WHERE bfOrderSubscription.OrderID            = iiOrderID 
+                                         AND bfOrderSubscription.OrderProductID     = iiOrderProductID
+                                         EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+                                         
+        IF LOCKED(bfOrderSubscription) OR 
+            NOT AVAILABLE (bfOrderSubscription) THEN 
+        DO:
+            Func.Common:mWriteMemo("Order",
+                                    STRING(bfOrder.OrderID),
+                                    0,
+                                    "OrderSubscription",
+                                    "OrderSubscription Record is locked.").
+                                    
+             ASSIGN lgHoldOrder = TRUE.
+             RETURN.
+         END. 
+    END.
+    ELSE DO:
+        CREATE bfOrderSubscription.
+    END.
+    
+    ASSIGN bfOrderSubscription.OrderID            =   iiOrderID         WHEN bfOrderSubscription.OrderID        =   0
+           bfOrderSubscription.OrderProductID     =   iiOrderProductID  WHEN bfOrderSubscription.OrderProductID =   0
+           bfOrderSubscription.MSSeq              =   bfOrder.MSSeq     WHEN bfOrderSubscription.MSSeq          =   0
+           bfOrderSubscription.CLIType            =   lcCLIType         WHEN bfOrderSubscription.CLIType        =   ""
+           bfOrderSubscription.CLI                =   lcCLI             WHEN bfOrderSubscription.CLI            =   ""
+           bfOrderSubscription.FixedNumber        =   lcFixedNumber     WHEN bfOrderSubscription.FixedNumber    =   ""
+           bfOrderSubscription.NumberType         =   Func.OrderProductsData:mGetMobileNumberType(INPUT iiOrderID)  WHEN bfOrderSubscription.NumberType = ""
+           bfOrderSubscription.CurrOper           =   Func.OrderProductsData:mGetCurrentOperator(INPUT iiOrderID)   WHEN bfOrderSubscription.CurrOper    = ""
+           bfOrderSubscription.StatusCode         =   bfOrder.StatusCode WHEN bfOrderSubscription.StatusCode  <> ""
+           bfOrderSubscription.CreatedTS          =   bfOrder.crstamp    
+           bfOrderSubscription.UpdatedTS          =   Func.Common:mMakeTS()
+           bfOrderSubscription.ICC                =   lcICC              WHEN bfOrderSubscription.ICC = ""
+           .
+           
+END PROCEDURE.    
+
 PROCEDURE ipCreateSubscriptionRequest :
     
     RUN ipGetTimeStamp.
     
-    IF Order.OrderType = {&ORDER_TYPE_ROLLBACK} 
+    IF bfOrder.OrderType = {&ORDER_TYPE_ROLLBACK} 
     THEN fReactivationRequest(INPUT bfOrder.MsSeq,
                               INPUT bfOrder.OrderId,
                               INPUT ldeSwitchTS,
@@ -358,3 +440,57 @@ PROCEDURE ipCreateSubscriptionRequest :
     IF llOrdStChg THEN fMarkOrderStamp(bfOrder.OrderID,"Change",0.0).                       
     
 END PROCEDURE.    
+
+PROCEDURE ipCreateOrderTopup :
+    
+    DEFINE INPUT  PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
+    DEFINE INPUT  PARAMETER iiTopUpType      AS INTEGER NO-UNDO.
+    
+    DEFINE BUFFER bfOrderTopup FOR OrderTopup.
+    
+     FIND FIRST bfOrderTopup WHERE bfOrderTopup.OrderID           =  iiOrderID 
+                               AND bfOrderTopUp.OrderProductID    =  iiOrderProductID
+                               AND bfOrderTopUp.MSSeq             =  bfOrder.MsSeq
+                               AND bfOrderTopUp.TopupType         =  iiTopUpType
+                               NO-LOCK NO-ERROR.
+     
+     IF NOT AVAILABLE bfOrderTopup
+     THEN DO:
+         CREATE bfOrderTopup.
+     END.
+     ELSE DO:
+         
+         FIND CURRENT bfOrderTopup EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         
+         IF LOCKED(bfOrderTopup) OR NOT AVAILABLE bfOrderTopup THEN 
+         DO:
+             
+             ASSIGN lgHoldOrder = TRUE.
+                 
+             Func.Common:mWriteMemo("Order",
+                                    STRING(bfOrder.OrderID),
+                                    0,
+                                    "Initial Topup",
+                                    "Order Topup updation failed.").
+         END. 
+     END.     
+     
+    ASSIGN bfOrderTopUp.OrderID         =  iiOrderID          WHEN  bfOrderTopUp.OrderID        = 0
+           bfOrderTopUp.OrderProductID  =  iiOrderProductID   WHEN  bfOrderTopUp.OrderProductID = 0   
+           bfOrderTopup.MsSeq           =  bfOrder.MsSeq      WHEN  bfOrderTopup.MsSeq          = 0
+           bfOrderTopup.TopupType       =  iiTopUpType        WHEN  bfOrderTopup.TopupType      = 0   
+           bfOrderTopup.Amount          =  Func.OrderProductsData:mGetTopupAmount(INPUT iiOrderID ,
+                                                                                  INPUT iiOrderProductID,
+                                                                                  INPUT {&ORDER_PRODUCT_PARAM_INITIAL_TOPUP}) 
+                                           WHEN bfOrderTopup.Amount = 0
+          bfOrderTopup.DisplayAmount    =  Func.OrderProductsData:mGetTopupAmount(INPUT iiOrderID ,
+                                                                                  INPUT iiOrderProductID,
+                                                                                  INPUT {&ORDER_PRODUCT_PARAM_INITIAL_TOPUP_DISPLAY}) 
+                                           WHEN bfOrderTopup.Amount = 0   
+         bfOrderTopup.Brand             =  Syst.Var:gcBrand                                         
+        .                                                              
+    
+END PROCEDURE.
+
+
+

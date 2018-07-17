@@ -144,6 +144,8 @@ CLASS Func.ValidateOrder FINAL:
     
     METHOD PUBLIC STATIC LOGICAL mIsFixedOnlyTariff(INPUT icCLIType AS CHARACTER) :
         
+        /* logic is based on the fIsFixedOnly fixedlinefunc.i*/
+        
         DEFINE BUFFER bfpcCLIType FOR CLIType.
         
         RETURN (CAN-FIND(FIRST bfpcCLIType NO-LOCK WHERE
@@ -343,6 +345,16 @@ CLASS Func.ValidateOrder FINAL:
             RETURN bfpcCLIType.PayType.
                                          
         
-    END METHOD.                                                                                                                                                                                                 
+    END METHOD.           
+    
+    METHOD PUBLIC STATIC LOGICAL mIsFiberType(INPUT lcCLIType AS CHARACTER) :
+        
+        DEFINE BUFFER bfpcCLIType FOR CLIType.
+        
+        RETURN (CAN-FIND(FIRST bfpcCLIType WHERE bfpcCLIType.Brand          =   Syst.Var:gcBrand  
+                                             AND bfpcCLIType.CLIType        =   lcCLIType
+                                             AND bfpcCLIType.FixedLineType  =   {&FIXEDLINE_TYPE_FIBER})).
+        
+    END METHOD.       
     
 END CLASS.

@@ -149,7 +149,7 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             
         mValidateInvDeliveryType(ioBillingAcct:GetCharacter("invoice_delivery_type")).
             
-        THIS-OBJECT:DelType       = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type"))
+        THIS-OBJECT:DelType       = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type")).
         
     END METHOD.
     
@@ -186,13 +186,14 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
         
         RETURN THIS-OBJECT:BankAccount.
         
-    END.
+    END METHOD.
 
    METHOD PUBLIC JsonObject mResult ():
 
         DEFINE VARIABLE loBillObj AS CLASS JsonObject NO-UNDO.
+        
         loBillObj = NEW JsonObject().
-        loBillObj:Add("bill-acct-num" , THIS-OBJECT:ITGroupID ).
+        loBillObj:Add("billing-acct-num" , THIS-OBJECT:ITGroupID ).
         
         RETURN loBillObj.
         

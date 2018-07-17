@@ -58,6 +58,9 @@ DEFINE VARIABLE delivery_address AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lhOrder          AS HANDLE    NO-UNDO.
 DEFINE VARIABLE liRequest        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProductCLI     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProductICC     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE llHasProducts    AS LOGICAL NO-UNDO.
 
 DEF VAR lcDeliveryAddress AS CHAR NO-UNDO.
 DEF VAR lcRegion          AS CHAR NO-UNDO.
@@ -71,6 +74,7 @@ DEF VAR liDBCount         AS INT  NO-UNDO.
 DEF VAR lcTenant          AS CHAR NO-UNDO.
 
 DEFINE BUFFER bOrder FOR Order.
+DEFINE BUFFER bfOrderSubscription FOR OrderSubscription.
 
 FUNCTION fCheckIntegrity RETURNS LOGICAL
    (iiErrCode AS INTEGER):
@@ -215,6 +219,23 @@ IF llDoEvent THEN DO:
    {Func/lib/eventlog.i}
 END.
 
+IF CAN-FIND(FIRST OrderProduct WHERE OrderProudct.OrderID  = Order.OrderID) THEN 
+DO:
+    ASSIGN lcProductCLI   =  Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+           lcProductICC   =  Func.OrderProductsData:mGetOrderICC(Order.OrderID)
+           llHasProducts  =  YES.
+END.
+ELSE DO:
+    ASSIGN lcProductCLI     =   Order.CLI
+           lcProductICC     =   Order.ICC.
+END.
+
+IF llHasProducts THEN DO:
+    
+    FIND FIRST OrderSubscription WHERE OrderSubscription.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK NO-ERROR.
+    
+END.
+
 IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    /* YPR-4984, Router delivered to customer */
    IF liLOStatusId EQ 99998 THEN DO:
@@ -322,19 +343,26 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
               MobSub.MsSeq EQ Order.MsSeq AND
               MobSub.ICC   NE ""          NO-ERROR.
 
-   IF Order.ICC  EQ "" AND
+   IF lcProductICC  EQ "" AND
       Order.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
       LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0 THEN DO:
 
       FIND bOrder EXCLUSIVE-LOCK WHERE
            ROWID(bOrder) = ROWID(Order) NO-ERROR.
-
+           
+       IF llHasProducts THEN 
+       DO:
+           FIND FIRST bfOrderSubscription WHERE ROWID(bfOrderSubscription)  =  ROWID(OrderSubscription) EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+       END.
+           
       IF Order.StatusCode NE {&ORDER_STATUS_DELIVERED} THEN DO:
 
-         ASSIGN bOrder.ICC  = lcICC
-                SIM.SimStat = 13
-                SIM.MsSeq   = bOrder.MsSeq.
-
+          ASSIGN 
+              bOrder.ICC              = lcICC
+              SIM.SimStat             = 13
+              SIM.MsSeq               = bOrder.MsSeq
+              bfOrderSubscription.ICC = lcICC WHEN AVAILABLE bfOrderSubscription.
+         
          Func.Common:mWriteMemo("Order",
                                 STRING(bOrder.OrderID),
                                 bOrder.CustNum,
@@ -348,7 +376,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
 
          liRequest = fSubscriptionRequest
                          (INPUT  Order.MSSeq,
-                          INPUT  Order.CLI,
+                          INPUT  lcProductCLI,
                           INPUT  Order.CustNum,
                           INPUT  1,
                           INPUT  "",
@@ -377,10 +405,12 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
          END.
          ELSE DO:
 
-            ASSIGN bOrder.ICC  = lcICC
-                   SIM.SimStat = 13
-                   SIM.MsSeq   = bOrder.MsSeq.
-
+             ASSIGN 
+                 bOrder.ICC              = lcICC
+                 SIM.SimStat             = 13
+                 SIM.MsSeq               = bOrder.MsSeq
+                 bfOrderSubscription.ICC = lcICC  WHEN AVAILABLE bfOrderSubscription.
+                   
             FIND MsRequest WHERE
                  MsRequest.MsRequest = liRequest EXCLUSIVE-LOCK NO-ERROR.
             MsRequest.ReqSource = {&REQUEST_SOURCE_ICC_CHANGE_AUTO}.
@@ -423,7 +453,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
          RETURN.
       END.
    END.
-   ELSE IF Order.ICC  EQ "" AND
+   ELSE IF lcProductICC  EQ "" AND
       Order.OrderType  NE {&ORDER_TYPE_STC}     AND
       Order.OrderType  NE {&ORDER_TYPE_RENEWAL} AND
      (Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
@@ -434,12 +464,19 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
 
       FIND bOrder EXCLUSIVE-LOCK WHERE
            ROWID(bOrder) = ROWID(Order) NO-ERROR.
+           
+       IF llHasProducts 
+       THEN DO:
+          FIND FIRST bfOrderSubscription WHERE ROWID(bfOrderSubscription)  =  ROWID(OrderSubscription) EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+      END.
 
       IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
 
-      ASSIGN bOrder.ICC  = lcICC
-             SIM.SimStat = 4
-             SIM.MsSeq   = bOrder.MsSeq.
+       ASSIGN 
+           bOrder.ICC              = lcICC
+           SIM.SimStat             = 4
+           SIM.MsSeq               = bOrder.MsSeq
+           bfOrderSubscription.ICC = lcICC          WHEN AVAILABLE bfOrderSubscription.
 
       CREATE SimDeliveryhist.
       ASSIGN SimDeliveryHist.OrderID    = bOrder.OrderID
