@@ -11,14 +11,10 @@
 {Func/fixedfee.i}
 {Mm/fbundle.i}
 {Func/fcustpl.i}
+{Func/istc.i}
 
-{Func/fctchange.i}
-{Func/main_add_lines.i}
-{Func/dss_matrix.i}
-{Func/fixedlinefunc.i}
-
-DEF BUFFER NewCLIType      FOR CLIType.
-DEF BUFFER OldCLIType      FOR CLIType.
+DEF BUFFER New2CLIType     FOR CLIType.
+DEF BUFFER Old2CLIType     FOR CLIType.
 
 
 FUNCTION fCalculateFactor RETURNS DEC
@@ -139,10 +135,10 @@ FUNCTION fCalcPenalty RETURNS CHARACTER
       ldeNextMonthTS = Func.Common:mMake2DT(ldaSTCDates[2],0)
       ldeEndTS       = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
    
-   lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
+   lliSTCAllowed = fIsiSTCAllowed(INPUT piMsSeq).
    
-   FIND FIRST NewCLIType WHERE
-              NewCLIType.CLIType = pcNewCLIType NO-LOCK NO-ERROR.
+   FIND FIRST New2CLIType WHERE
+              New2CLIType.CLIType = pcNewCLIType NO-LOCK NO-ERROR.
 
    /* Count possible penalty fee for contract termination */
    CONTRACT_LOOP:
@@ -177,41 +173,26 @@ FUNCTION fCalcPenalty RETURNS CHARACTER
 
       IF ldePeriodFee EQ 0 THEN NEXT.
          
-      IF NewCLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} THEN DO:
+      IF New2CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} THEN DO:
 
          lcOrigCLIType = fGetReferenceTariff(DCCLI.DCEvent,
                                              DCCLI.ValidFrom,
                                              DCCLI.RenewalDate,
                                              MobSub.MsSeq).
          
-         FIND FIRST OldCLIType NO-LOCK WHERE
-                    OldCLIType.CLIType = lcOrigCLIType NO-ERROR.
-         IF NOT AVAILABLE OldCLIType THEN
+         FIND FIRST Old2CLIType NO-LOCK WHERE
+                    Old2CLIType.CLIType = lcOrigCLIType NO-ERROR.
+         IF NOT AVAILABLE Old2CLIType THEN
             RETURN SUBST("Current CLIType entry &1 not found",
                                   lcOrigCLIType).
 
          IF DCCLI.DCEvent BEGINS "TERM" THEN 
          DO:
-            IF fIsConvergentORFixedOnly(NewCLIType.CLIType) OR fIsConvergentORFixedOnly(OldCLIType.CLIType) THEN 
-            DO:
-                ASSIGN 
-                    ldOriginalFee = fGetMobileLineCompareFee(OldCLIType.CLIType, OldCLIType.BaseBundle, DCCLI.ValidFrom)
-                    ldNewFee      = fGetMobileLineCompareFee(NewCLIType.CLIType, NewCLIType.BaseBundle, TODAY).
-
-                IF ldOriginalFee <= ldNewFee THEN
-                    NEXT.
-            END.
-            ELSE
-            DO:
-                IF OldCLIType.CompareFee <= NewCLIType.CompareFee AND
-                   NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
-                        AND NewCLIType.CLIType EQ "CONT8")
-                   THEN NEXT.
-            END.   
+             IF Old2CLIType.CompareFee <= New2CLIType.CompareFee AND
+                NOT (LOOKUP(Old2CLIType.CliType,"CONT7,CONTD9") > 0 
+                     AND New2CLIType.CLIType EQ "CONT8")
+                THEN NEXT.
          END.
-         /* When STCed between convergent tariffs we exclude FTERM and TVTERM from termination */
-         ELSE IF (DCCLI.DCEvent BEGINS "FTERM" OR DCCLI.DCEvent BEGINS "TVTERM") AND
-                 fIsConvergentORFixedOnly(NewCLIType.CLIType) THEN NEXT.
       END.
          
       ldtTo = DATETIME(DCCLI.ValidTo,0).

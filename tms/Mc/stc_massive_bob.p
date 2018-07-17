@@ -19,6 +19,7 @@ Syst.Var:gcBrand  = "1".
 {Func/fmakemsreq.i}
 {Func/fcustpl.i}
 {Func/penaltyfee.i}
+{Func/fmakesms.i}
 
 DEFINE VARIABLE lcLine          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep           AS CHARACTER NO-UNDO INIT ";".
@@ -63,19 +64,17 @@ FUNCTION fSTC RETURNS CHARACTER
     FORWARD.
 
 ASSIGN
-   lcRootDir         = fCParam("StcMassiveBob","RootDir")
-   ldtValidSTCDates[1] = TODAY + 1
-   ldtValidSTCDates[2] = Func.Common:mFirstDayOfNextMonth(TODAY)
+   lcRootDir            = fCParam("StcMassiveBob", "RootDir")
+   lcIncDir             = fCParam("StcMassiveBob", "IncDir")
+   lcProcDir            = fCParam("StcMassiveBob", "IncProcessDir")
+   lcSpoolDir           = fCParam("StcMassiveBob", "OutSpoolDir")
+   lcOutDir             = fCParam("StcMassiveBob", "OutDir")
+   ldtValidSTCDates[1]  = TODAY + 1
+   ldtValidSTCDates[2]  = Func.Common:mFirstDayOfNextMonth(TODAY)
    .
 
-IF NOT lcRootDir > "" THEN RETURN.
-
-ASSIGN
-   lcIncDir   = lcRootDir + "incoming/" 
-   lcProcDir  = lcRootDir + "processed/"
-   lcSpoolDir = lcRootDir + "spool/"
-   lcOutDir   = lcRootDir + "outgoing/"
-   .
+IF NOT (lcRootDir > "" AND lcIncDir > "" AND lcProcDir > "" AND lcSpoolDir > "" AND lcOutDir > "")
+THEN RETURN.
 
 DEFINE STREAM sin.
 DEFINE STREAM sFile.
