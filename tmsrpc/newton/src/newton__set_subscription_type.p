@@ -70,6 +70,7 @@ DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR iiRequestFlags   AS INT  NO-UNDO.
 DEF VAR liSTCMsSeq       AS INT  NO-UNDO.
 DEF VAR liMergeMsSeq     AS INT  NO-UNDO.
+DEF VAR llgMerge         AS LOG  NO-UNDO INIT FALSE.
 
 DEF BUFFER NewCliType   FOR CliType.
 DEF BUFFER bMergeMobSub FOR MobSub.
@@ -146,6 +147,10 @@ IF fCLITypeIsExtraLine(pcCliType)                       AND
    NOT fValidateExtraLineSTC(MobSub.CustNum, pcCliType) THEN 
    RETURN appl_err("Mainline not available for the La Duo").
 
+IF pcMergeWith GT "" AND
+   pcMergeWith NE ?  THEN
+   llgMerge = TRUE.
+
 /* Various validations */
 IF fValidateMobTypeCh(MobSub.Msseq,
                       pcCliType,
@@ -153,7 +158,8 @@ IF fValidateMobTypeCh(MobSub.Msseq,
                       plExtendContract,
                       FALSE, /* bypass stc type check */
                       0, /* stc order id */
-                      {&REQUEST_SOURCE_NEWTON}, 
+                      {&REQUEST_SOURCE_NEWTON},
+                      llgMerge,
                       OUTPUT lcError) EQ FALSE THEN 
    RETURN appl_err(lcError).
 
@@ -208,8 +214,7 @@ IF plExcludeTermPenalty THEN
 
 liSTCMsSeq = MobSub.MsSeq.
 
-IF pcMergeWith GT "" AND
-   pcMergeWith NE ?  THEN DO:
+IF llgMerge THEN DO:
 
     IF MobSub.Fixednumber NE ? AND
        MobSub.Fixednumber > '' THEN DO:
@@ -254,8 +259,7 @@ IF liRequest = 0 THEN DO:
    RETURN appl_err("Request creation failed: " +  lcInfo).
 END.
 
-IF pcMergeWith GT "" AND 
-   pcMergeWith NE ?  THEN DO:
+IF llgMerge THEN DO:
    
    FIND FIRST bMergeMobSub NO-LOCK WHERE 
               bMergeMobSub.MsSeq    EQ liMergeMsSeq          AND
