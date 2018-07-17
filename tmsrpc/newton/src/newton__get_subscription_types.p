@@ -233,8 +233,9 @@ END FUNCTION.
 FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
    (INPUT  iiMsSeq AS INTEGER):
 
-    DEFINE VARIABLE lcMsisdn AS CHARACTER NO-UNDO.
+    DEF VAR lcMsisdn            AS CHAR NO-UNDO.
     DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
+    DEF VAR llgAvail            AS LOG  NO-UNDO INIT FALSE.
 
     lcExtraLineCLITypes = fExtraLineCLITypes().
 
@@ -261,10 +262,26 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
         
         IF LOOKUP(bMobSub.CliType,lcExtraLineCLITypes) > 0 THEN NEXT.
 
-        IF CAN-FIND(FIRST MsRequestParam NO-LOCK WHERE
-                          MsRequestParam.ParamName EQ {&MERGE2P3P}   AND
-                          MsRequestParam.ParamType EQ {&INTVAL}      AND
-                          MsRequestParam.IntValue  EQ bMobSub.MsSeq) THEN NEXT.
+        llgAvail = FALSE.
+
+        MERGEREQUEST:
+        FOR EACH MsRequestParam NO-LOCK WHERE
+                 MsRequestParam.ParamName EQ {&MERGE2P3P} AND
+                 MsRequestParam.ParamType EQ {&INTVAL}    AND
+                 MsRequestParam.IntValue  EQ bMobSub.MsSeq:
+
+            IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                              MsRequest.Brand     EQ Syst.Var:gcBrand                       AND
+                              MsRequest.ReqType   EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}    AND
+                              MsRequest.MsRequest EQ MsRequestParam.MsRequest               AND
+                LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3,19") = 0) THEN
+               llgAvail = TRUE.
+
+            IF llgAvail THEN
+               LEAVE MERGEREQUEST.
+        END.
+
+        IF llgAvail THEN NEXT.
 
         IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND 
            bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:
