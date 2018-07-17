@@ -1,6 +1,6 @@
 ADD TABLE "ProCommand"
   MULTITENANT yes
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_64"
   LABEL "BUS/BPM commands to SAPC"
   DUMP-NAME "procommand"
 
@@ -71,15 +71,15 @@ ADD FIELD "Response" OF "ProCommand" AS character
   LABEL "Response"
   MAX-WIDTH 512
   HELP "Response"
-  ORDER 80
+  ORDER 140
 
 ADD FIELD "ProCommandStatus" OF "ProCommand" AS integer 
   FORMAT ">>9"
   INITIAL "0"
   LABEL "Status"
   MAX-WIDTH 4
-  HELP "Status: 0-  New, 1 - Ongoing, 2 - Done"
-  ORDER 90
+  HELP "Status: 0 -  New, 1 - Ongoing, 2 - Done"
+  ORDER 80
 
 ADD FIELD "ProCommandTarget" OF "ProCommand" AS character 
   DESCRIPTION "NB for Northbound, BPM for BPM"
@@ -88,7 +88,7 @@ ADD FIELD "ProCommandTarget" OF "ProCommand" AS character
   LABEL "Target"
   MAX-WIDTH 16
   HELP "NB for Northbound, BPM for BPM"
-  ORDER 100
+  ORDER 90
 
 ADD FIELD "Creator" OF "ProCommand" AS character 
   FORMAT "x(12)"
@@ -118,6 +118,14 @@ ADD FIELD "ProCommandType" OF "ProCommand" AS character
   HELP "Command type"
   ORDER 110
 
+ADD FIELD "ProCommandTargetURL" OF "ProCommand" AS character 
+  FORMAT "x(70)"
+  INITIAL ""
+  LABEL "Target URL"
+  MAX-WIDTH 140
+  HELP "Target URL"
+  ORDER 100
+
 ADD INDEX "Ix_ProCommandId" ON "ProCommand" 
   AREA "Sta_Index_64"
   UNIQUE
@@ -143,4 +151,4 @@ ADD INDEX "Ix_Status" ON "ProCommand"
 PSC
 cpstream=ISO8859-1
 .
-0000003350
+0000003519
