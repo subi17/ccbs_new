@@ -1303,6 +1303,10 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                   DEF VAR lcCurrAddress AS CHAR NO-UNDO.
                   DEF VAR lcAmendAddress AS CHAR NO-UNDO.
                   DEF VAR liCount AS INT NO-UNDO.
+                  
+                  ASSIGN
+                     lcCurrAddress = ""
+                     lcAmendAddress = "".
                     
                   DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam3,"|"):
                      IF liCount < 10 THEN 
