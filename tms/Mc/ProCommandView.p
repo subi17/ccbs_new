@@ -29,7 +29,7 @@ DEF VAR i               AS INT          NO-UNDO.
 DEF VAR ldtActivationTS AS DATETIME-TZ  NO-UNDO.
 DEF VAR lcCli           LIKE mobsub.cli NO-UNDO.
 DEF VAR lcCommand_Ed    AS LONGCHAR     NO-UNDO 
-   VIEW-AS EDITOR LARGE SIZE 76 BY 5.
+   VIEW-AS EDITOR LARGE SIZE 76 BY 4.
 DEF VAR lcResponse_Ed    AS LONGCHAR     NO-UNDO 
    VIEW-AS EDITOR LARGE SIZE 76 BY 3.
 
@@ -51,14 +51,16 @@ FORM
 FORM
     "SubscrID    :" ProCommand.msseq          
     "Order Id:"     AT 27 ProCommand.Orderid
-    "Request Id  :" AT 50 ProCommand.msRequest  SKIP
+    "Request Id  :" AT 50 ProCommand.msRequest        SKIP
     "Command type:" ProCommand.procommandtype   
-    "MSISDN      :" AT 50 lcCli  FORMAT "x(11)" SKIP
-    "Created     :" ProCommand.CreatedTS        SKIP   
-    "Activated   :" ProCommand.ActivationTS     SKIP
-    "Completed   :" ProCommand.CompletedTS      SKIP
-    "Target      :" ProCommand.ProCommandTarget FORMAT "X(60)" SKIP
-    "Command     :" lcCommand_Ed                SKIP 
+    "MSISDN      :" AT 50 lcCli  FORMAT "x(11)"       SKIP
+    "Created     :" ProCommand.CreatedTS              SKIP   
+    "Activated   :" ProCommand.ActivationTS           SKIP
+    "Completed   :" ProCommand.CompletedTS            SKIP
+    "Target      :" ProCommand.ProCommandTarget    
+    "Status:"       AT 27 ProCommand.ProCommandStatus SKIP 
+    "Target URL  :" ProCommand.ProCommandTargetURL FORMAT "X(60)" SKIP
+    "Command     :" lcCommand_Ed                      SKIP 
     "Response    :" lcResponse_Ed 
     WITH  OVERLAY ROW 2 CENTERED 
     COLOR VALUE(Syst.Var:cfc)
@@ -387,6 +389,8 @@ REPEAT WITH FRAME sel:
            ProCommand.ActivationTS
            ProCommand.CompletedTS
            ProCommand.ProCommandTarget
+           ProCommand.ProCommandTargetURL
+           ProCommand.ProCommandStatus
            lcCommand_Ed 
            lcResponse_Ed 
            WITH FRAME lis.
@@ -402,7 +406,7 @@ REPEAT WITH FRAME sel:
                  "F4" OF FRAME lis OR
                  "F8" OF FRAME lis.
 
-        /* Dialog box to show messages */        
+        /* Dialog box to show messages */         
         IF KEYLABEL(LASTKEY) = "F1" THEN 
            RUN Mc/ProCommandJsonView.p (INPUT "Json command",
                                         INPUT lcCommand_Ed).
@@ -480,7 +484,7 @@ PROCEDURE local-disp-row:
       ProCommand.msseq
       lcCli
       ProCommand.orderid
-      ProCommand.ProCommandTarget      
+      ProCommand.ProCommandTarget
       ProCommand.ProCommandStatus
       ldtActivationTS
       ProCommand.ProCommandId
