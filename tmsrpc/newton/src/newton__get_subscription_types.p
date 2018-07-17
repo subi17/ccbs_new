@@ -261,6 +261,11 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
         
         IF LOOKUP(bMobSub.CliType,lcExtraLineCLITypes) > 0 THEN NEXT.
 
+        IF CAN-FIND(FIRST MsRequestParam NO-LOCK WHERE
+                          MsRequestParam.ParamName EQ {&MERGE2P3P}   AND
+                          MsRequestParam.ParamType EQ {&INTVAL}      AND
+                          MsRequestParam.IntValue  EQ bMobSub.MsSeq) THEN NEXT.
+
         IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND 
            bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:
                
