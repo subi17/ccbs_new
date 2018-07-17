@@ -61,7 +61,7 @@ FIND FIRST OrderFusion WHERE
 IF NOT AVAIL OrderFusion THEN
    RETURN appl_err("Fixed line connection is not available for this order").
 
-IF LOOKUP(OrderFusion.FusionStatus, {&FUSION_ORDER_STATUS_NEW},{&FUSION_ORDER_STATUS_INITIALIZED}) EQ 0 THEN
+IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT") EQ 0 THEN
    RETURN appl_err("Fusion status is not in valid state to cancel").
 
 IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
