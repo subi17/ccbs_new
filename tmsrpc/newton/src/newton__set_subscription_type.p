@@ -73,8 +73,7 @@ DEF VAR liMergeMsSeq     AS INT  NO-UNDO.
 
 DEF BUFFER NewCliType   FOR CliType.
 DEF BUFFER bMergeMobSub FOR MobSub.
-DEF BUFFER bMergeMobSub FOR MobSub.
-DEF BUFFER bMobSub      FOR MobSub.
+DEF BUFFER bChkMobSub   FOR MobSub.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
@@ -217,18 +216,18 @@ IF pcMergeWith GT "" AND
 
        liMergeMsSeq = MobSub.MsSeq.
 
-       FIND bMobSub NO-LOCK WHERE
-            bMobSub.CLI EQ pcMergeWith NO-ERROR.
+       FIND bChkMobSub NO-LOCK WHERE
+            bChkMobSub.CLI EQ pcMergeWith NO-ERROR.
 
-       IF AVAILABLE bMobSub THEN
-          liSTCMsSeq = bMobSub.MsSeq.
+       IF AVAILABLE bChkMobSub THEN
+          liSTCMsSeq = bChkMobSub.MsSeq.
     END.
     ELSE DO:
-        FIND bMobSub NO-LOCK WHERE
-             bMobSub.CLI EQ pcMergeWith NO-ERROR.
+        FIND bChkMobSub NO-LOCK WHERE
+             bChkMobSub.CLI EQ pcMergeWith NO-ERROR.
 
-        IF AVAILABLE bMobSub THEN
-           liMergeMsSeq = bMobSub.MsSeq.
+        IF AVAILABLE bChkMobSub THEN
+           liMergeMsSeq = bChkMobSub.MsSeq.
     END.
 
 END.
