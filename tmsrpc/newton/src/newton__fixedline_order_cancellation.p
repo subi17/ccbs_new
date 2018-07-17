@@ -43,13 +43,16 @@ FIND FIRST Order WHERE
 IF NOT AVAIL Order THEN 
    RETURN appl_err("OrderId is invalid").
 
+IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
+   RETURN appl_err("Order is not in valid state to cancel").   
+
 FIND FIRST OrderCustomer WHERE 
            OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
            OrderCustomer.OrderId EQ piOrderId        AND
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
            NO-LOCK NO-ERROR.     
 IF NOT AVAILABLE OrderCustomer THEN 
-   RETURN appl_err("Not Valid Order to Cancel").
+   RETURN appl_err("Not a fixedline Order to Cancel").
 
 FIND FIRST OrderFusion WHERE
            OrderFusion.Brand EQ Syst.Var:gcBrand AND
@@ -57,12 +60,21 @@ FIND FIRST OrderFusion WHERE
            NO-LOCK NO-ERROR.
 IF NOT AVAIL OrderFusion THEN
    RETURN appl_err("Fixed line connection is not available for this order").
-   
-IF AVAIL OrderFusion THEN DO:
-   IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
-      RETURN appl_err("Order is not in valid state to cancel").
-END.
 
+IF LOOKUP(OrderFusion.FusionStatus, {&FUSION_ORDER_STATUS_NEW},{&FUSION_ORDER_STATUS_INITIALIZED}) EQ 0 THEN
+   RETURN appl_err("Fusion status is not in valid state to cancel").
+
+IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
+      RETURN appl_err("Fixedline Status is not in valid state to cancel").
+
+FIND FIRST CliType WHERE
+           CliType.Brand EQ Syst.Var:gcBrand AND
+           CliType.CliType = Order.CliType AND
+           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} 
+           NO-LOCK NO-ERROR.
+IF AVAIL CliType THEN
+   RETURN appl_err("Invalid TariffType").
+   
 IF NOT fIsConvergenceTariff(Order.CLIType) THEN 
    RETURN appl_err("Only Convergent Orders are allowed for cancellation" ).   
    
