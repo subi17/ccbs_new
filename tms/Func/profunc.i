@@ -283,6 +283,61 @@ FUNCTION fIsSVA RETURNS LOGICAL
    RETURN FALSE.
 END.
 
+/* YCO-712                                                   */
+/* Returns activation status for a subscription's TV service */          
+/* Returned values:                                          */
+/* 0 -> Inactive                                             */
+/* 1 -> Active                                               */
+/* 2 -> Pending activation                                   */
+/* 3 -> Pending deactivation                                 */
+FUNCTION fSubsTVServiceStatus RETURNS INTEGER  
+   (INPUT iiMsSeq   AS INTEGER, 
+    INPUT icDCEvent AS CHARACTER /* TV bundle */ ):
+      
+   DEFINE VARIABLE liServStatus AS INTEGER NO-UNDO.
+   
+   DEFINE BUFFER bTPService_Activation   FOR TPService.
+   DEFINE BUFFER bTPService_Deactivation FOR TPService.    
+      
+   FIND LAST bTPService_Activation NO-LOCK WHERE 
+             bTPService_Activation.MsSeq      EQ iiMsSeq             AND 
+             bTPService_Activation.Operation  EQ {&TYPE_ACTIVATION}  AND 
+             bTPService_Activation.ServType   EQ "Television"        AND 
+             bTPService_Activation.ServStatus > ""                   AND 
+             bTPService_Activation.Product    EQ icDCEvent 
+             USE-INDEX MsSeqTypeStatus NO-ERROR.
+   IF NOT AVAILABLE bTPService_Activation THEN 
+      liServStatus =  0. /* Inactive */
+   ELSE 
+   DO:    
+      IF bTPService_Activation.ServStatus = {&STATUS_HANDLED} THEN 
+         ASSIGN liServStatus = 1.  /* Activation Done */ 
+      ELSE IF LOOKUP(bTPService_Activation.ServStatus, {&STATUS_CANCELED} + "," + {&STATUS_ERROR}) > 0 THEN
+         ASSIGN liServStatus = 0. /* Inactive */         
+      ELSE     
+         ASSIGN liServStatus = 2.  /* Pending activation */
+      FIND LAST bTPService_Deactivation NO-LOCK WHERE 
+                bTPService_Deactivation.MsSeq      EQ iiMsSeq                          AND 
+                bTPService_Deactivation.Operation  EQ {&TYPE_DEACTIVATION}             AND 
+                bTPService_Deactivation.ServType   EQ "Television"                     AND 
+                bTPService_Deactivation.ServStatus > ""                                AND 
+                bTPService_Deactivation.CreatedTS  > bTPService_Activation.CreatedTS   AND 
+                bTPService_Deactivation.Product    EQ icDCEvent 
+                USE-INDEX MsSeqTypeStatus NO-ERROR.
+      IF AVAILABLE bTPService_Deactivation THEN DO:
+         IF bTPService_Deactivation.ServStatus = {&STATUS_HANDLED} THEN 
+            ASSIGN liServStatus = 0. /* 'Inactive' */
+         ELSE IF bTPService_Deactivation.ServStatus = {&STATUS_ERROR} THEN
+            ASSIGN liServStatus = 1. /* Deactivation cancelled, so service is still 'Active' */
+         ELSE 
+            ASSIGN liServStatus = 3. /* Pending deactivation */
+      END.
+   END.         
+      
+   RETURN  liServStatus.  
+      
+END FUNCTION. 
+
 &ENDIF
 
 

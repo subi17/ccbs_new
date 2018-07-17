@@ -255,7 +255,7 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
            DO:
                llValidExtraLine =  fCLITypeIsExtraLine(bf_CliType.CliType).
                IF llValidExtraLine THEN RETURN TRUE.
-               
+                                                      
                ocCliTypeTo = fgetActiveReplacement(icCliType,"STCMappingForActiveTariffs").
 
                IF ocCliTypeTo = "" THEN 
@@ -309,12 +309,34 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    DEFINE VARIABLE llValidMaping AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE lhCustomer    AS HANDLE    NO-UNDO.
    DEFINE VARIABLE llIsExtraLineOrProMigrationAllowed AS LOGICAL NO-UNDO.
+   
+   /* YCO-712 */
+   DEFINE VARIABLE lcTVBundlesList   AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llTVServiceActive AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO. 
 
    FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
    FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
    FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
 
-   llIsExtraLineOrProMigrationAllowed = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
+   /* YCO-712. Creating a list of TV bundles. */
+   FOR EACH DayCampaign NO-LOCK WHERE 
+            DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} :
+      IF lcTVBundlesList = "" THEN 
+         lcTVBundlesList = DayCampaign.DCEvent.
+      ELSE 
+         lcTVBundlesList = lcTVBundlesList + "," + DayCampaign.DCEvent.                                               
+   END.
+   /* Checking active TV bundles for subscription. */
+   llTVServiceActive = FALSE.
+   DO liCount = 1 TO NUM-ENTRIES(lcTVBundlesList):
+      llTVServiceActive = (fSubsTVServiceStatus(iiMsseq, ENTRY(liCount, lcTVBundlesList)) = 1 ).
+      IF llTVServiceActive THEN 
+         LEAVE. 
+   END.
+   
+   llIsExtraLineOrProMigrationAllowed = 
+      fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo) OR llTVServiceActive.
    
    IF lcCliTypeTo <> "" OR llIsExtraLineOrProMigrationAllowed THEN 
    DO:
