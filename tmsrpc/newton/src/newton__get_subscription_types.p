@@ -381,7 +381,7 @@ FOR EACH CLIType NO-LOCK WHERE
               (oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}  AND CliType.FixedLineType = {&FIXED_LINE_TYPE_FIBER})) THEN 
               ASSIGN lcStatusCode = 0.    
           /* Mobile subscrition should be allowed to do STC between only convergent tariffs, but fixed part should remain same */
-          ELSE IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
+          ELSE IF fIsFixedOnly(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
               ASSIGN lcStatusCode = 0.    
           ELSE IF CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
           DO: 
