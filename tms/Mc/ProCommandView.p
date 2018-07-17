@@ -29,7 +29,7 @@ DEF VAR i               AS INT          NO-UNDO.
 DEF VAR ldtActivationTS AS DATETIME-TZ  NO-UNDO.
 DEF VAR lcCli           LIKE mobsub.cli NO-UNDO.
 DEF VAR lcCommand_Ed    AS LONGCHAR     NO-UNDO 
-   VIEW-AS EDITOR LARGE SIZE 76 BY 6.
+   VIEW-AS EDITOR LARGE SIZE 76 BY 5.
 DEF VAR lcResponse_Ed    AS LONGCHAR     NO-UNDO 
    VIEW-AS EDITOR LARGE SIZE 76 BY 3.
 
@@ -50,19 +50,20 @@ FORM
 
 FORM
     "SubscrID    :" ProCommand.msseq          
-    "Request Id  :" AT 45 ProCommand.msRequest  SKIP
+    "Order Id:"     AT 27 ProCommand.Orderid
+    "Request Id  :" AT 50 ProCommand.msRequest  SKIP
     "Command type:" ProCommand.procommandtype   
-    "MSISDN      :" AT 45 lcCli  FORMAT "x(11)" SKIP
+    "MSISDN      :" AT 50 lcCli  FORMAT "x(11)" SKIP
     "Created     :" ProCommand.CreatedTS        SKIP   
     "Activated   :" ProCommand.ActivationTS     SKIP
     "Completed   :" ProCommand.CompletedTS      SKIP
+    "Target      :" ProCommand.ProCommandTarget FORMAT "X(60)" SKIP
     "Command     :" lcCommand_Ed                SKIP 
     "Response    :" lcResponse_Ed 
     WITH  OVERLAY ROW 2 CENTERED 
     COLOR VALUE(Syst.Var:cfc)
     TITLE COLOR VALUE(Syst.Var:ctc) " Command details " 
     NO-LABELS FRAME lis.
-    
     
 ASSIGN Syst.Var:cfc = "sel". 
 RUN Syst/ufcolor.p. 
@@ -353,38 +354,66 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
-     DO WITH FRAME lis:
+     REPEAT WITH FRAME lis:
         RUN local-find-this(FALSE).
 
         CLEAR FRAME lis NO-PAUSE.
         PAUSE 0 NO-MESSAGE.
         
         ASSIGN   
-           lcCommand_Ed    = ProCommand.CommandLine 
-           lcResponse_Ed   = ProCommand.Response.
+           lcCommand_Ed  = ProCommand.CommandLine 
+           lcResponse_Ed = ProCommand.Response.
+        
+        ASSIGN
+           Syst.Var:ufk[1] = 2244 
+           Syst.Var:ufk[2] = 9823 
+           Syst.Var:ufk[3] = 0 
+           Syst.Var:ufk[4] = 0
+           Syst.Var:ufk[5] = 0
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto = 3 
+           ufkey = TRUE.
+        RUN Syst/ufkey.p.
            
         DISP
            ProCommand.msseq
+           ProCommand.OrderId
            ProCommand.msRequest
            ProCommand.procommandtype
            lcCli
            ProCommand.CreatedTS   
            ProCommand.ActivationTS
            ProCommand.CompletedTS
+           ProCommand.ProCommandTarget
            lcCommand_Ed 
            lcResponse_Ed 
            WITH FRAME lis.
    
         ASSIGN 
            lcCommand_Ed:READ-ONLY  = TRUE
-           lcCommand_Ed:sensitive  = TRUE
+           lcCommand_Ed:SENSITIVE  = TRUE
            lcResponse_Ed:READ-ONLY = TRUE
-           lcResponse_Ed:sensitive = TRUE.
+           lcResponse_Ed:SENSITIVE = TRUE.
            
-        WAIT-FOR "F8" OF FRAME lis OR
-                 "F4" OF FRAME lis.
-        
-        HIDE FRAME lis NO-PAUSE.
+        WAIT-FOR "F1" OF FRAME lis OR
+                 "F2" OF FRAME lis OR
+                 "F4" OF FRAME lis OR
+                 "F8" OF FRAME lis.
+
+        /* Dialog box to show messages */        
+        IF KEYLABEL(LASTKEY) = "F1" THEN 
+           RUN Mc/ProCommandJsonView.p (INPUT "Json command",
+                                        INPUT lcCommand_Ed).
+        ELSE IF KEYLABEL(LASTKEY) = "F2" THEN
+           RUN Mc/ProCommandJsonView.p (INPUT "Json response",
+                                        INPUT lcresponse_Ed).
+        ELSE  
+        DO: 
+           HIDE FRAME lis NO-PAUSE.
+           LEAVE.
+        END.
      END.
 
      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
