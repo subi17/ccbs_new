@@ -2067,9 +2067,7 @@ END.
    updating multisimid & multisimidtype for hard association */
 IF fCLITypeIsExtraLine(pcSubType)              AND 
    ( NOT ( pcNumberType BEGINS "renewal" OR 
-           pcNumberType BEGINS "retention" ) ) AND 
-   ( NOT ( pcNumberType BEGINS "new"  AND 
-           liTermOfferItemID > 0 ) )           THEN DO:
+           pcNumberType BEGINS "retention" ) ) THEN DO:
 
    piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
 
