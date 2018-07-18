@@ -588,7 +588,7 @@ CLASS Func.Common FINAL:
       RETURN lcReturnValue.
    END METHOD. 
    
-   /* Get the First day of the next month */
+   /* Get the First day of the next month  */
    METHOD PUBLIC STATIC DATE mFirstDayOfNextMonth
       (INPUT iDate AS DATE).
       
