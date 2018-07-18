@@ -1,6 +1,6 @@
 ADD TABLE "ProCommand"
   MULTITENANT yes
-  AREA "Sta_Data_64"
+  AREA "Sta_Data_32"
   LABEL "BUS/BPM commands to SAPC"
   DUMP-NAME "procommand"
 
@@ -101,7 +101,7 @@ ADD FIELD "Creator" OF "ProCommand" AS character
 ADD FIELD "CommandLine" OF "ProCommand" AS clob 
   FORMAT "x(8)"
   INITIAL ?
-  LOB-AREA "Sta_Data_64"
+  LOB-AREA "Y_Lob"
   LOB-BYTES 10485760
   LOB-SIZE 10M
   CLOB-CODEPAGE "UTF-8"
@@ -127,23 +127,23 @@ ADD FIELD "ProCommandTargetURL" OF "ProCommand" AS character
   ORDER 100
 
 ADD INDEX "Ix_ProCommandId" ON "ProCommand" 
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "ProCommandId" ASCENDING 
 
 ADD INDEX "Ix_MsSeq" ON "ProCommand" 
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_2"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "ActivationTS" DESCENDING 
 
 ADD INDEX "Ix_OrderId" ON "ProCommand" 
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_2"
   INDEX-FIELD "OrderId" ASCENDING 
   INDEX-FIELD "ActivationTS" DESCENDING 
 
 ADD INDEX "Ix_Status" ON "ProCommand" 
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_2"
   INDEX-FIELD "ProCommandStatus" ASCENDING 
   INDEX-FIELD "ActivationTS" ASCENDING 
 
