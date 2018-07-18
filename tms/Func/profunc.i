@@ -326,9 +326,9 @@ FUNCTION fSubsTVServiceStatus RETURNS INTEGER
                 USE-INDEX MsSeqTypeStatus NO-ERROR.
       IF AVAILABLE bTPService_Deactivation THEN DO:
          IF bTPService_Deactivation.ServStatus = {&STATUS_HANDLED} THEN 
-            ASSIGN liServStatus = 0. /* 'Inactive' */
-         ELSE IF bTPService_Deactivation.ServStatus = {&STATUS_ERROR} THEN
-            ASSIGN liServStatus = 1. /* Deactivation cancelled, so service is still 'Active' */
+            ASSIGN liServStatus = 0. /* Inactive */
+         ELSE IF LOOKUP(bTPService_Deactivation.ServStatus, {&STATUS_CANCELED} + "," + {&STATUS_ERROR}) > 0 THEN
+            ASSIGN liServStatus = 1. /* Deactivation error or canceled, so service is still 'Active' */
          ELSE 
             ASSIGN liServStatus = 3. /* Pending deactivation */
       END.
