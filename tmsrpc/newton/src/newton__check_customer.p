@@ -115,6 +115,20 @@ FUNCTION fSetError RETURNS LOG (INPUT icError AS CHARACTER):
       RETURN TRUE .
 END FUNCTION .        
 
+/* YCO-712                              */
+/* Returns TRUE if any subscription of  */
+/* this customer has TV Service active. */      
+FUNCTION fTVService RETURNS LOGICAL ():
+   DEFINE BUFFER bMobSub FOR MobSub.
+   FOR EACH bMobsub NO-LOCK WHERE 
+            bMobsub.Brand   EQ Syst.Var:gcBrand AND 
+            bMobsub.AgrCust EQ Customer.CustNum:
+      IF fIsTVServiceActive(bMobsub.MsSeq) THEN 
+        RETURN TRUE.            
+   END.           
+   RETURN FALSE.
+END FUNCTION.
+
 FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF BUFFER Order FOR Order.
@@ -122,7 +136,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF VAR llOnlyActiveFound AS LOG NO-UNDO.
 
-   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService()) /* YCO-712 */
+      THEN
        fSetError ("PRO migration not possible because of not company or selfemployed") .
    ELSE DO:
       FIND Mobsub WHERE Mobsub.Brand EQ Syst.Var:gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
@@ -159,14 +174,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       LEAVE.        
                    END.
 
-                   /* TV service not allowed for PRO */    
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN 
-                      NEXT.
-                   IF fHasTVService(Mobsub.msseq) THEN 
-                   DO:   
-                      fSetError ("PRO migration not possible because of TV service").
-                      LEAVE.
-                   END.
+                   /* YCO-712. "PRO migration not possible because of TV service" removed. */
 
                 END.
              END.
@@ -335,7 +343,8 @@ ELSE IF AVAIL Customer AND
 
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
-       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService())  /* YCO-712 */
+       THEN
           ASSIGN
              llOrderAllowed = FALSE
              lcReason = "PRO migration not possible because of not company or selfemployed"
@@ -409,7 +418,8 @@ ELSE
 DO:
    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
    DO:
-       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService())  /* YCO-712 */
+       THEN
           ASSIGN
              llOrderAllowed = FALSE
              lcReason = "PRO migration not possible because of not company or selfemployed"

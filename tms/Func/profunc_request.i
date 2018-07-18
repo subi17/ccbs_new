@@ -283,20 +283,6 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
 
 END FUNCTION.   
 
-FUNCTION fIsTVServiceActive RETURNS LOGICAL
-   (iiMsSeq AS INTEGER):
-   
-   DEFINE BUFFER bDayCampaign FOR DayCampaign.
-   
-   FOR EACH bDayCampaign NO-LOCK WHERE
-            bDayCampaign.BundleTarget = {&TELEVISION_BUNDLE}:
-      IF fSubsTVServiceStatus(iiMsSeq, bDayCampaign.DCEvent) EQ 1 /* Active */ THEN 
-         RETURN TRUE.
-   END.
-   
-   RETURN FALSE.
-
-END FUNCTION.
 
 FUNCTION fProMigrationRequest RETURNS INTEGER
    (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
@@ -329,8 +315,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
    
    llIsExtraLineOrProMigrationAllowed = 
-      fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo) OR 
-      fIsTVServiceActive(iiMsSeq).
+      fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
    
    IF lcCliTypeTo <> "" OR llIsExtraLineOrProMigrationAllowed THEN 
    DO:
