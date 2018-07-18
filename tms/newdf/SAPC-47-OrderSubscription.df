@@ -86,21 +86,17 @@ ADD FIELD "UpdatedTS" OF "OrderSubscription" AS datetime-tz
   ORDER 80
 
 ADD INDEX "OrderProductID" ON "OrderSubscription" 
-  AREA "Sta_Data_64"
+  AREA "Dyn_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "OrderProductID" ASCENDING 
 
 ADD INDEX "OrderID" ON "OrderSubscription" 
-  AREA "Sta_Data_64"
-  INDEX-FIELD "OrderID" ASCENDING 
-
-ADD INDEX "Created" ON "OrderSubscription" 
-  AREA "Sta_Index_64"
-  INDEX-FIELD "CreatedTS" ASCENDING 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OrderID" ASCENDING
 
 ADD INDEX "MsSeq" ON "OrderSubscription" 
-  AREA "Sta_Index_64"
+  AREA "Dyn_Index_1"
   INDEX-FIELD "MSSeq" ASCENDING 
   INDEX-FIELD "CreatedTS" ASCENDING 
 
