@@ -12,8 +12,8 @@ class AddTableOrderProduct(Migration):
         t.column('ProductID', 'character', format="x(20)", initial="", max_width=40, label="Product ID", column_label="ProductID", position=5, order=40, help="Product Catalog product ID")
         t.column('ProductOfferingID', 'character', format="x(20)", initial="", max_width=40, label="Product Offering ID", column_label="ProductOfferingID", position=6, order=50, help="Product Catalog product offering ID")
         t.column('ActionType', 'character', format="x(15)", initial="", max_width=30, label="Action Type", column_label="ActionType", position=7, order=60)
-        t.index('OrderProductID', [['OrderProductID']], area="Sta_Index_64", primary=True, unique=True)
-        t.index('OrderID', [['OrderId']], area="Sta_Index_64")
+        t.index('OrderProductID', [['OrderProductID']], area="Dyn_Index_1", primary=True, unique=True)
+        t.index('OrderID', [['OrderId']], area="Dyn_Index_1")
 
     def down(self):
         self.drop_table('OrderProduct')
