@@ -9,6 +9,7 @@ ADD FIELD "OrderId" OF "ProCommand" AS integer
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "OrderId"
+  POSITION 2
   MAX-WIDTH 4
   COLUMN-LABEL "OrderId"
   ORDER 10
@@ -18,6 +19,7 @@ ADD FIELD "CreatedTS" OF "ProCommand" AS datetime-tz
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
   LABEL "Creation"
+  POSITION 3
   MAX-WIDTH 12
   HELP "Date and time when record is created"
   ORDER 20
@@ -26,6 +28,7 @@ ADD FIELD "ActivationTS" OF "ProCommand" AS datetime-tz
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
   LABEL "Activation"
+  POSITION 4
   MAX-WIDTH 12
   HELP "Date and time when procommand is sent to BUS/BPM"
   ORDER 30
@@ -34,6 +37,7 @@ ADD FIELD "CompletedTS" OF "ProCommand" AS datetime-tz
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
   LABEL "Completed"
+  POSITION 5
   MAX-WIDTH 12
   HELP "Date and time when BUS/BPM response is received"
   ORDER 40
@@ -42,6 +46,7 @@ ADD FIELD "ProCommandId" OF "ProCommand" AS int64
   FORMAT ">>>>>>>>>9"
   INITIAL "0"
   LABEL "ProCommand Id"
+  POSITION 6
   MAX-WIDTH 8
   HELP "Record Unique identifier"
   ORDER 50
@@ -50,6 +55,7 @@ ADD FIELD "MsRequest" OF "ProCommand" AS integer
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "Request ID"
+  POSITION 7
   MAX-WIDTH 4
   COLUMN-LABEL "ID"
   HELP "Unique ID for request"
@@ -59,24 +65,18 @@ ADD FIELD "MsSeq" OF "ProCommand" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "MobSub Sequence"
+  POSITION 8
   MAX-WIDTH 4
   COLUMN-LABEL "SubSeq"
   HELP "Sequence for a subscription"
   ORDER 70
   MANDATORY
 
-ADD FIELD "Response" OF "ProCommand" AS character 
-  FORMAT "x(256)"
-  INITIAL ""
-  LABEL "Response"
-  MAX-WIDTH 512
-  HELP "Response"
-  ORDER 140
-
 ADD FIELD "ProCommandStatus" OF "ProCommand" AS integer 
   FORMAT ">>9"
   INITIAL "0"
   LABEL "Status"
+  POSITION 9
   MAX-WIDTH 4
   HELP "Status: 0 -  New, 1 - Ongoing, 2 - Done"
   ORDER 80
@@ -86,14 +86,35 @@ ADD FIELD "ProCommandTarget" OF "ProCommand" AS character
   FORMAT "x(8)"
   INITIAL ""
   LABEL "Target"
+  POSITION 10
   MAX-WIDTH 16
   HELP "NB for Northbound, BPM for BPM"
   ORDER 90
+
+ADD FIELD "ProCommandTargetURL" OF "ProCommand" AS character 
+  FORMAT "x(70)"
+  INITIAL ""
+  LABEL "Target URL"
+  POSITION 11
+  MAX-WIDTH 140
+  HELP "Target URL"
+  ORDER 100
+
+ADD FIELD "ProCommandType" OF "ProCommand" AS character 
+  DESCRIPTION "Command Type: add_upsell, change_imsi, ..."
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Command Type"
+  POSITION 12
+  MAX-WIDTH 60
+  HELP "Command type"
+  ORDER 110
 
 ADD FIELD "Creator" OF "ProCommand" AS character 
   FORMAT "x(12)"
   INITIAL ""
   LABEL "Creator"
+  POSITION 13
   MAX-WIDTH 24
   HELP "Who made this procommand request"
   ORDER 120
@@ -101,6 +122,7 @@ ADD FIELD "Creator" OF "ProCommand" AS character
 ADD FIELD "CommandLine" OF "ProCommand" AS clob 
   FORMAT "x(8)"
   INITIAL ?
+  POSITION 14
   LOB-AREA "Y_Lob"
   LOB-BYTES 10485760
   LOB-SIZE 10M
@@ -109,22 +131,17 @@ ADD FIELD "CommandLine" OF "ProCommand" AS clob
   CLOB-TYPE 2
   ORDER 130
 
-ADD FIELD "ProCommandType" OF "ProCommand" AS character 
-  DESCRIPTION "Command Type: add_upsell, change_imsi, ..."
-  FORMAT "x(30)"
-  INITIAL ""
-  LABEL "Command Type"
-  MAX-WIDTH 60
-  HELP "Command type"
-  ORDER 110
-
-ADD FIELD "ProCommandTargetURL" OF "ProCommand" AS character 
-  FORMAT "x(70)"
-  INITIAL ""
-  LABEL "Target URL"
-  MAX-WIDTH 140
-  HELP "Target URL"
-  ORDER 100
+ADD FIELD "Response" OF "ProCommand" AS clob 
+  FORMAT "x(8)"
+  INITIAL ?
+  POSITION 15
+  LOB-AREA "Y_Lob"
+  LOB-BYTES 10485760
+  LOB-SIZE 10M
+  CLOB-CODEPAGE "UTF-8"
+  CLOB-COLLATION "BASIC"
+  CLOB-TYPE 2
+  ORDER 140
 
 ADD INDEX "Ix_ProCommandId" ON "ProCommand" 
   AREA "Sta_Index_2"
