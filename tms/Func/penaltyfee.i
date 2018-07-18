@@ -12,6 +12,7 @@
 {Mm/fbundle.i}
 {Func/fcustpl.i}
 {Func/istc.i}
+{Func/fixedlinefunc.i}
 
 DEF BUFFER New2CLIType     FOR CLIType.
 DEF BUFFER Old2CLIType     FOR CLIType.
@@ -188,11 +189,27 @@ FUNCTION fCalcPenalty RETURNS CHARACTER
 
          IF DCCLI.DCEvent BEGINS "TERM" THEN 
          DO:
-             IF Old2CLIType.CompareFee <= New2CLIType.CompareFee AND
-                NOT (LOOKUP(Old2CLIType.CliType,"CONT7,CONTD9") > 0 
-                     AND New2CLIType.CLIType EQ "CONT8")
-                THEN NEXT.
+            IF fIsConvergentORFixedOnly(New2CLIType.CLIType) OR fIsConvergentORFixedOnly(Old2CLIType.CLIType) THEN 
+            DO:
+               ASSIGN 
+                  ldOriginalFee = fGetMobileLineCompareFee(Old2CLIType.CLIType, Old2CLIType.BaseBundle, DCCLI.ValidFrom)
+                  ldNewFee      = fGetMobileLineCompareFee(New2CLIType.CLIType, New2CLIType.BaseBundle, TODAY)
+                  .
+
+               IF ldOriginalFee <= ldNewFee THEN
+                    NEXT.
+            END.
+            ELSE
+            DO:
+               IF Old2CLIType.CompareFee <= New2CLIType.CompareFee AND
+                   NOT (LOOKUP(Old2CLIType.CliType,"CONT7,CONTD9") > 0 
+                        AND New2CLIType.CLIType EQ "CONT8")
+               THEN NEXT.
+            END.
          END.
+         /* When STCed between convergent tariffs we exclude FTERM and TVTERM from termination */
+         ELSE IF (DCCLI.DCEvent BEGINS "FTERM" OR DCCLI.DCEvent BEGINS "TVTERM") AND
+                 fIsConvergentORFixedOnly(New2CLIType.CLIType) THEN NEXT.
       END.
          
       ldtTo = DATETIME(DCCLI.ValidTo,0).
