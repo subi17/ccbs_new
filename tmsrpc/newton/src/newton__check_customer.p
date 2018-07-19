@@ -217,14 +217,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       LEAVE.        
                    END.
 
-                   /* TV service not allowed for PRO */    
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN 
-                      NEXT.
-                   IF fHasTVService(Mobsub.msseq) THEN 
-                   DO:   
-                      fSetError ("PRO migration not possible because of TV service").
-                      LEAVE.
-                   END.
+                   /* YCO-712. "PRO migration not possible because of TV service" removed. */
 
                 END.                
              END.             
@@ -239,8 +232,9 @@ FUNCTION fCheckMigration RETURNS LOG ():
          END.         
          ELSE IF Mobsub.paytype THEN
                fSetError ("PRO migration not possible because of prepaid subscription" ).
-         ELSE IF fHasTVService(Mobsub.msseq) THEN
-               fSetError ("PRO migration not possible because of TV service").
+               
+         /* YCO-712. "PRO migration not possible because of TV service" removed. */
+         
          /* Migration not possible for retired or non active convergent */
          ELSE IF fIsConvergenceTariff(Mobsub.clitype) AND
             CAN-FIND(First CliType WHERE

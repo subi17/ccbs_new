@@ -255,7 +255,7 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
            DO:
                llValidExtraLine =  fCLITypeIsExtraLine(bf_CliType.CliType).
                IF llValidExtraLine THEN RETURN TRUE.
-                                                      
+               
                ocCliTypeTo = fgetActiveReplacement(icCliType,"STCMappingForActiveTariffs").
 
                IF ocCliTypeTo = "" THEN 
@@ -313,9 +313,8 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
    FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
    FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
-   
-   llIsExtraLineOrProMigrationAllowed = 
-      fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
+
+   llIsExtraLineOrProMigrationAllowed = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
    
    IF lcCliTypeTo <> "" OR llIsExtraLineOrProMigrationAllowed THEN 
    DO:
@@ -344,27 +343,27 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
       END.
       
       IF lcCliTypeTo <> "" THEN
-      DO:
+      DO TRANSACTION:
          liReqCreated = fCTChangeRequest(iiMsseq,                                    /* The MSSeq of the subscription to where the STC is made */
-                                      lcCliTypeTo,                                /* The CLIType of where to do the STC */
-                                      "",                                         /* lcBundleID */
-                                      "",                                         /* bank code validation is already done */
-                                      Func.Common:mMakeTS(),
-                                      0,                                          /* 0 = Credit check ok */
-                                      0,                                          /* extend contract */
-                                      ""                                          /* pcSalesman */,
-                                      FALSE,                                      /* charge */
-                                      TRUE,                                       /* send sms */
-                                      "",
-                                      0, 
-                                      {&REQUEST_SOURCE_MIGRATION},
-                                      0,
-                                      iiOrig,
-                                      "",                                         /* contract id */
-                                      OUTPUT ocResult).
+                                         lcCliTypeTo,                                /* The CLIType of where to do the STC */
+                                         "",                                         /* lcBundleID */
+                                         "",                                         /* bank code validation is already done */
+                                         Func.Common:mMakeTS(),
+                                         0,                                          /* 0 = Credit check ok */
+                                         0,                                          /* extend contract */
+                                         ""                                          /* pcSalesman */,
+                                         FALSE,                                      /* charge */
+                                         TRUE,                                       /* send sms */
+                                         "",
+                                         0, 
+                                         {&REQUEST_SOURCE_MIGRATION},
+                                         0,
+                                         iiOrig,
+                                         "",                                         /* contract id */
+                                         OUTPUT ocResult).
          IF ocResult > "" THEN 
-            RETURN 0.  
-      END. 
+            RETURN 0. 
+      END. /* DO TRANSACTION*/
    END.
    ELSE 
    DO TRANSACTION:
