@@ -6,7 +6,7 @@
           orderid;int;mandatory;order number to modify 
           OrderDetails;struct;mandatory;details to update
           changeType;string;mandatory;type of change applied
-          reason;string;optional;reason for updating details
+          reason;string;mandatory;reason for updating details
 
  * @addressDetails country;string;mandatory
                    bis;string;optional
@@ -113,17 +113,17 @@ FUNCTION fGetAddressFields RETURNS LOGICAL:
       pcStair = get_string(pcAmendmentStruct, "stair").
    
    pcStreet_name = get_string(pcAmendmentStruct, "street_name").
+   IF LOOKUP("street_number",lcAddressData) GT 0 THEN
    pcStreet_number = get_string(pcAmendmentStruct, "street_number").
-   pcTerritory_owner = get_string(pcAmendmentStruct, "territory_owner").
-   IF LOOKUP("street_type",lcAddressData) GT 0 THEN
-   pcStreet_type = get_string(pcAmendmentStruct, "street_type").
    
+   pcTerritory_owner = get_string(pcAmendmentStruct, "territory_owner").
+   pcStreet_type = get_string(pcAmendmentStruct, "street_type").
    pcZip = get_string(pcAmendmentStruct, "zip").
     
 END FUNCTION.
 
 ASSIGN 
-   gcAmendmentDetails = "country,bis,block,city,coverage_token,address_id,door,floor,gescal,hand,km,letter,region,stair,street_name,street_number,territory_owner,street_type,zip".
+   gcAmendmentDetails = "country,bis,block,city!,coverage_token!,address_id,door,floor,gescal!,hand,km,letter,region!,stair,street_name!,street_number,territory_owner!,street_type!,zip!".
 
 IF validate_request(param_toplevel_id, "string,int,struct,string,string") EQ ? THEN
    RETURN.

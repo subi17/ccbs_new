@@ -4,7 +4,7 @@
  *
  * @input orderid;int;mandatory;order number to cancel
           sfid;string;mandatory;salesforce id of shop or callcenter
-          reason;string;optional;reason for cancellation of order 
+          reason;string;mandatory;reason for cancellation of order 
           
  * @output success;int 0 = successful;otherwise error
  
