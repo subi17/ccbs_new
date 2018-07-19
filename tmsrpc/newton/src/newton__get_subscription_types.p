@@ -169,6 +169,8 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
                                    liPort    ,     
                                    ""        ,
                                    ""        ,
+                                   ""        ,
+                                   ""        ,
                                    lcUriPath ,
                                    lcUriQuery,
                                    lcUriQueryVal,
