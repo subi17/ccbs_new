@@ -74,6 +74,8 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fbankdata.i}
 {Func/msreqfunc.i}
+{Func/customeraccount.i}
+{Func/address.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -606,6 +608,16 @@ IF llCustomerChanged THEN DO:
          END.
       END.
 
+      /* CDS-10 start */
+      IF NOT fUpdateAddress(Customer.CustNum, 
+                            Customer.Address, 
+                            Customer.PostOffice, 
+                            Customer.ZipCode, 
+                            Customer.Region, 
+                            Customer.Country) THEN
+         RETURN appl_err("Customer billing address can not be changed").                            
+      /* CDS-10 end */
+
    END.
         
     /* Added check for BankAccount change, YDR-1811
@@ -623,9 +635,15 @@ IF llCustomerChanged THEN DO:
          IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
             IF customer.BankAcct = lcBankAccount
             THEN llBankAcctChange = FALSE.
-            ELSE llBankAcctChange = TRUE.
-
-            customer.BankAcct = lcBankAccount.
+            ELSE DO: 
+               llBankAcctChange = TRUE.
+               customer.BankAcct = lcBankAccount.                             
+               /* CDS-10 start */
+               IF NOT fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
+                                                   Customer.BankAcct) THEN
+                  RETURN appl_err("Customer bank account can not be changed").                                                                 
+               /* CDS-10 end */
+            END.   
          END.
          ELSE
             UNDO CUST_UPDATE, RETURN appl_err("Incorrect bank account length").
@@ -706,6 +724,12 @@ IF llCustomerChanged THEN DO:
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL}.
           ELSE
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
+
+          /* CDS-10 start */
+          IF NOT fUpdateCustomerAccountDelType(Customer.Custnum, InvoiceTargetGroup.DelType) THEN
+            RETURN appl_err("Customer delivery method can not be changed").           
+          /* CDS-10 end */
+          
 
           RELEASE InvoiceTargetGroup.
        END. /* IF AVAIL InvoiceTargetGroup THEN DO: */

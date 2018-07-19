@@ -30,6 +30,7 @@
 {Func/orderfunc.i}
 {Func/multitenantfunc.i}
 {Func/profunc_request.i}
+{Func/customeraccount.i}
 {Func/digital_signature.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO. 
@@ -1420,7 +1421,14 @@ PROCEDURE pTerminate:
                                
       END.      
    END. 
-   
+      
+   /* CDS-13 start */
+   IF NOT fCloseCustomerAccount(bMobSub.AccountID) THEN DO:
+      fReqError("CustomerAccount not closed").
+      RETURN.      
+   END.   
+   /* CDS-13 end */   
+      
    /* Find Original request */
    FIND FIRST MSRequest WHERE
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.

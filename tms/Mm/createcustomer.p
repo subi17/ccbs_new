@@ -16,6 +16,8 @@
 {Syst/tmsconst.i}
 {Func/order.i}
 {Func/fcustdata.i}
+{Func/customeraccount.i}
+{Func/address.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -32,8 +34,8 @@ DEF VAR new-CustNum  AS I    NO-UNDO.
 DEF VAR lcCustName   AS CH   NO-UNDO.            
 DEF VAR liAgrCust    AS I    NO-UNDO.
 DEF VAR liInvCust    AS I    NO-UNDO.
-DEF VAR llOldCust    AS log  NO-UNDO.
-def var liOldCustNum AS I    NO-UNDO.
+DEF VAR llOldCust    AS LOG  NO-UNDO.
+DEF VAR liOldCustNum AS I    NO-UNDO.
 DEF VAR llCreateCust AS L    NO-UNDO.
 DEF VAR ocOrdCust    AS CHAR NO-UNDO.
 DEF VAR liTarget     AS INT  NO-UNDO.
@@ -45,6 +47,7 @@ DEF VAR lcMemo       AS CHAR NO-UNDO.
 
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
 DEF BUFFER bMobSub FOR MobSub.
+
 
 FIND FIRST Order WHERE
            Order.Brand   = Syst.Var:gcBrand AND
@@ -169,30 +172,6 @@ IF liOldCustnum = 0 THEN DO:
                ") was not retrieved".
       /* separate user data is not mandatory */
       ELSE UNDO, RETURN "".
-   END.
-
-   IF iiRole = 1 AND OrderCustomer.SubQty > 0 THEN DO:
-      
-      FIND FIRST Limit WHERE
-         Limit.CustNum = new-custnum AND
-         Limit.LimitType = {&LIMIT_TYPE_SUBQTY} AND
-         Limit.ToDate >= TODAY EXCLUSIVE-LOCK NO-ERROR.
-     
-      IF NOT AVAIL Limit THEN DO:
-         CREATE Limit.
-         ASSIGN
-            Limit.CustNum = new-custnum
-            Limit.LimitType = {&LIMIT_TYPE_SUBQTY}
-            Limit.ValueType = 1
-            Limit.FromDate  = TODAY
-            Limit.ToDate    = 12/31/2049
-            Limit.DefValue  = FALSE.
-      END.
-      
-      Limit.LimitAmt  = OrderCustomer.SubQty.
-
-      RELEASE Limit.
-
    END.
 
    ASSIGN OICustNum = new-custnum.
@@ -385,6 +364,21 @@ ELSE DO:
                         Customer.Category = OrderCustomer.Category.
                END.
             END.
+
+            /* CDS-8 start */
+            fUpdateCustomerAccountDelType(OrderCustomer.Custnum, OrderCustomer.DelType).
+
+
+            fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
+                                         Customer.BankAcct).
+            
+            fUpdateAddress(Customer.CustNum, 
+                           Customer.Address, 
+                           Customer.PostOffice, 
+                           Customer.ZipCode, 
+                           Customer.Region, 
+                           Customer.Country).
+            /* CDS-8 end */
 
          END. /* IF llUpdateCust THEN DO: */
 

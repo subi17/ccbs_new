@@ -17,7 +17,9 @@
 {Func/femailinvoice.i}
 {Func/profunc.i}
 {Func/custfunc.i}
+{Func/customeraccount.i}
 {Func/log.i}
+{Func/address.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
 
@@ -278,6 +280,9 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    DEF BUFFER AgrCust  FOR Customer.
    DEF BUFFER InvCust  FOR Customer.
    DEF BUFFER UserCust FOR Customer.
+   DEF BUFFER Order    FOR Order.
+   DEF BUFFER OrderCustomer FOR OrderCustomer.
+   DEF BUFFER Limit    FOR Limit.
    DEF BUFFER bUpdOrderCustomer FOR OrderCustomer.
 
    DEF VAR lcCategory AS CHAR NO-UNDO.
@@ -419,6 +424,47 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       IF iiTarget = 1 THEN DO:
          /* new user account */
          create_account(Customer.CustNum,?,?).
+         /* CDS-6 */
+         IF NOT fCreateCustomerAccount(Customer.Custnum) THEN
+            RETURN FALSE.
+         /* CDS-6 */
+
+         IF OrderCustomer.SubQty > 0 THEN DO:
+            
+            FIND FIRST Limit EXCLUSIVE-LOCK WHERE
+                       Limit.CustNum = Customer.Custnum AND
+                       Limit.LimitType = {&LIMIT_TYPE_SUBQTY} AND
+                       Limit.ToDate >= TODAY NO-ERROR.
+           
+            IF NOT AVAIL Limit THEN DO:
+               CREATE Limit.
+               ASSIGN
+                  Limit.CustNum   = Customer.Custnum
+                  Limit.LimitType = {&LIMIT_TYPE_SUBQTY}
+                  Limit.ValueType = 1
+                  Limit.FromDate  = TODAY
+                  Limit.ToDate    = 12/31/2049
+                  Limit.DefValue  = FALSE.
+            END.
+            
+            Limit.LimitAmt  = OrderCustomer.SubQty.
+
+         END.
+
+         /* CDS- */
+         IF NOT fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
+                                      Customer.BankAcct) THEN
+            RETURN FALSE.
+
+         IF NOT fUpdateAddress(Customer.CustNum, 
+                        Customer.Address, 
+                        Customer.PostOffice, 
+                        Customer.ZipCode, 
+                        Customer.Region, 
+                        Customer.Country) THEN
+            RETURN FALSE.
+         /* CDS- */
+
       END.   
          
       ELSE DO:

@@ -33,6 +33,7 @@
 {Func/orderfunc.i}
 {Func/custfunc.i}
 {Func/addline_discount.i}
+{Func/customeraccount.i}
 {Func/profunc.i}
    
 DEF TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
@@ -486,7 +487,7 @@ PROCEDURE pOwnerChange:
          ASSIGN liCreated[liReqCnt] = liDefCust
                 llNewCust           = TRUE.
          RUN Mm/copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
-                       FALSE).
+                       FALSE).                       
       END.
       
       /* update old customer's data if vrk has been succesful */
@@ -592,6 +593,19 @@ PROCEDURE pOwnerChange:
                                OUTPUT lcCategory).
                IF lcCategory > "" THEN bNewCust.Category = lcCategory.
             END.
+
+            /* CDS-12 start */
+            IF NOT fCloseCustomerAccount(MobSub.AccountID) THEN DO:
+               fReqError("CustomerAccount not closed").
+               RETURN.
+            END.          
+            
+            IF NOT fCreateCustomerAccount(liCreated[liReqCnt]) THEN DO:
+               fReqError("CustomerAccount not created").
+               RETURN.
+            END.               
+            fUpdateAccountID(Customer.CustNum).    
+            /* CDS-12 end */ 
 
             FIND FIRST CustomerReport WHERE
                        CustomerReport.Custnum = bNewCust.Custnum

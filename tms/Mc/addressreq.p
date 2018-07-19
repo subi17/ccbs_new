@@ -11,6 +11,7 @@
 {Func/msreqfunc.i}
 {Syst/eventval.i}
 {Func/fcustdata.i}
+{Func/address.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -129,6 +130,18 @@ PROCEDURE pAddressChange:
        CustomerReport.StreetCode = lcStreetCode
        CustomerReport.CityCode = lcCityCode
        CustomerReport.TownCode = lcTownCode.
+   
+      /* CDS-10 start */
+      IF NOT fUpdateAddress(Customer.CustNum, 
+                            Customer.Address, 
+                            Customer.PostOffice, 
+                            Customer.ZipCode, 
+                            Customer.Region, 
+                            Customer.Country) THEN DO:
+         fReqError("Customer billing address can not be changed").
+         RETURN.
+      END.                              
+      /* CDS-10 end */
    
    RELEASE Customer.
    RELEASE CustomerReport.

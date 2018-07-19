@@ -1,0 +1,9 @@
+ADD FIELD "AccountID" OF "MSOwner" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  COLUMN-LABEL "AccountID"
+  HELP "Internal TMS ID"
+  ORDER 370
+  
+

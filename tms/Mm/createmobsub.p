@@ -440,6 +440,11 @@ IF NOT AVAIL mobsub THEN DO:
       MobSub.TariffActDate    = TODAY
       MobSub.TariffActTS      = ldeActivationTS.
 
+
+   /* CDS-8 start */
+   fUpdateAccountID(Customer.CustNum).
+   /* CDS-8 end */
+
    /* Extra line */
    /* In case of extra line discount subcription creation,
       following fields has to be updated */

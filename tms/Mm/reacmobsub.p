@@ -28,6 +28,7 @@
 {Func/fbtc.i}
 {Mc/dpmember.i}
 {Func/add_lines_request.i}
+{Func/customeraccount.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
@@ -950,6 +951,11 @@ DO TRANSACTION:
                  MsRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
          
    END.
+
+
+   /* CDS-14 start */
+   fReopenCustomerAccount(MobSub.AccountID).  
+   /* CDS-14 end */  
 
    /* HPD - Trigger some extra events to Cassandra */
    RUN pTriggerEvents(INPUT MobSub.MsSeq).
