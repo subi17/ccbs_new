@@ -219,7 +219,7 @@ IF llDoEvent THEN DO:
    {Func/lib/eventlog.i}
 END.
 
-IF CAN-FIND(FIRST OrderProduct WHERE OrderProudct.OrderID  = Order.OrderID) THEN 
+IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  = Order.OrderID) THEN 
 DO:
     ASSIGN lcProductCLI   =  Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
            lcProductICC   =  Func.OrderProductsData:mGetOrderICC(Order.OrderID)
@@ -232,7 +232,9 @@ END.
 
 IF llHasProducts THEN DO:
     
-    FIND FIRST OrderSubscription WHERE OrderSubscription.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK NO-ERROR.
+    FOR FIRST OrderSubscription WHERE OrderSubscription.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK :
+        /*Just find the record to further use. Tenant-id does not support  find first*/
+    END.
     
 END.
 
