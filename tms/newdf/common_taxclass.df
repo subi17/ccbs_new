@@ -1,0 +1,36 @@
+ADD FIELD "isActive" OF "TaxClass" AS logical
+  FORMAT "yes/no"
+  POSITION 4
+  INITIAL "no"
+  HELP "Is TaxClass Active or not"
+  LABEL "IsActive"
+  COLUMN-LABEL "IsActive"
+  ORDER 30
+  MAX-WIDTH 1
+
+ADD FIELD "TCType" OF "TaxClass" AS character
+  FORMAT "x(12)"
+  POSITION 5
+  INITIAL ""
+  HELP "Type of TaxClass"
+  LABEL "TCType"
+  COLUMN-LABEL "TCType"
+  ORDER 40
+  MAX-WIDTH 24
+
+ADD FIELD "amount" OF "TaxClass" AS decimal
+  FORMAT "->>,>>9.99"
+  POSITION 6
+  INITIAL "0"
+  HELP "Tax Amount"
+  LABEL "Amount"
+  COLUMN-LABEL "Amount"
+  DECIMALS 2
+  ORDER 50
+  MAX-WIDTH 17
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000000609
