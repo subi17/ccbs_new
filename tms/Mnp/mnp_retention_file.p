@@ -273,8 +273,11 @@ FUNCTION fSendRetentionListEmail RETURNS CHAR
 
    lcEmailConfDir = fCParamC("RepConfDir").
    
-   GetRecipients(lcEmailConfDir + "/mnp_retention_file.email").
-
+   IF icFilename MATCHES "*marktel*" THEN  
+      GetRecipients(lcEmailConfDir + "/mnp_retention_file.email").
+   ELSE
+      GetRecipients(lcEmailConfDir + "/mnp_retention_residential_file.email").
+   
    IF xMailAddr EQ "" THEN RETURN "No address".
 
    xMailAttach = icFileName.
@@ -289,8 +292,7 @@ FUNCTION fSendRetentionListEmail RETURNS CHAR
       /*SendMail(icFileName,""). to content*/
       SendMail(icFileName,icFileName). /*to content and attachmet*/
    END.
-
-
+   
 END.   
              
 FUNCTION fGetOperatorName RETURNS CHAR
@@ -582,8 +584,11 @@ FOR EACH ttMNPRetPlatform NO-LOCK WHERE
                      lcRootDir + "/processed/").
    END.   
    ELSE
+   DO:
+      fSendRetentionListEmail(ttMNPRetPlatform.RetentionFile).
       fMove2TransDir(ttMNPRetPlatform.RetentionFile, "", 
-                     lcRootDir + "/outgoing/").
+                     lcRootDir + "/outgoing/").      
+   END.      
 END.
 
 OUTPUT STREAM sExclude CLOSE.
