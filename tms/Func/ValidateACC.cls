@@ -444,7 +444,14 @@ CLASS Func.ValidateACC FINAL:
                      DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
                      DPMember.ValidTo   >= TODAY AND
                      DPMember.ValidFrom <= DPMember.ValidTo:
-                NEXT subs_count.
+                FIND FIRST Order WHERE 
+                           Order.MsSeq        = MobSub.MsSeq AND 
+                           Order.MultiSimId   GT 0           AND 
+                           Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}  
+                           NO-LOCK NO-ERROR.
+                IF NOT AVAILABLE Order 
+                   OR ( NOT mIsTerminalOrder(Order.OrderId) ) THEN
+                   NEXT subs_count.  
             END. 
          oiSubCount = oiSubCount + 1.
       END.
