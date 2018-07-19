@@ -8,6 +8,16 @@ ADD FIELD "DebtType" OF "BillItem" AS character
   ORDER 400
   MAX-WIDTH 24
 
+ADD FIELD "ProfitType" OF "BillItem" AS character
+  FORMAT "x(12)"
+  POSITION 28
+  INITIAL ""
+  HELP "Profit Type"
+  LABEL "Profit Type"
+  COLUMN-LABEL "Profit Type"
+  ORDER 410
+  MAX-WIDTH 24
+
 .
 PSC
 cpstream=ISO8859-1
