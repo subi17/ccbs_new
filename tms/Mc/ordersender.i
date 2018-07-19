@@ -96,7 +96,7 @@
                END.
                
                IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 AND
-                  Order.CLIType   BEGINS "CONTFH"                         AND 
+                  Func.ValidateOrder:mIsFiberType(Order.CLIType)          AND 
                   Order.ICC       EQ     ""                               AND 
                   Order.OrderType NE     {&ORDER_TYPE_STC}                THEN DO:
 
@@ -253,8 +253,7 @@
             END.    
             
             /* Check if order is MNP SimOnly */
-            llgMNPSimOnly = lcSIMonlyMNP    EQ "true"                              AND
-                            Order.OrderType EQ 1                                   AND
+            llgMNPSimOnly = Order.OrderType EQ 1                                   AND
                             Order.CrStamp   >= 20150616.40200                      AND
                             Order.MNPStatus EQ 1                                   AND
                      LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0        AND

@@ -25,6 +25,12 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
      Notes:
     ------------------------------------------------------------------------------*/
 	
+	DEFINE PRIVATE TEMP-TABLE ttOrderProductParam NO-UNDO
+        FIELD opobject AS CLASS   Progress.Lang.Object
+        FIELD paramnb  AS INTEGER
+        INDEX paramnb IS PRIMARY UNIQUE paramnb
+        .
+    
 	
     DEFINE PUBLIC PROPERTY aoSIMParams AS CLASS bss.cls.OrderProductParam NO-UNDO
         GET.
@@ -33,8 +39,12 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
     DEFINE PUBLIC PROPERTY aoShippingCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO
         GET.
         SET.
-		
-	CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS bss.cls.Order ):
+        
+    DEFINE PUBLIC PROPERTY ICC AS CHARACTER NO-UNDO
+       GET.
+       SET.
+        
+    CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS bss.cls.Order ):
 		
         SUPER(ioOrder).
 		
@@ -54,42 +64,85 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         DEFINE VARIABLE loShipAddress AS CLASS JsonObject NO-UNDO.
         
         ASSIGN 
+            loAttributes = NEW JsonObject()
             loAttributes = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes").
         
         IF VALID-OBJECT(loAttributes)
-        AND loAttributes:Has("ICC") 
         THEN DO:
             
-            aoSIMParams = NEW bss.cls.OrderProductParam(THIS-OBJECT).
-            aoSIMParams:mCreateData(loAttributes,"ICC","Char").
+            /*ICC attribute will be in the json structure. But, some times icc will be assigned by dextra*/
             
+            IF loAttributes:Has("ICC")
+            THEN DO:
+                
+                ASSIGN THIS-OBJECT:ICC  =  loAttributes:GetCharacter("ICC")
+                       aoOrder:lcICC    =  THIS-OBJECT:ICC.
+                
+                IF THIS-OBJECT:ICC > "" AND  
+                   Func.ValidateOrder:misFreeICC(THIS-OBJECT:ICC) = FALSE 
+                THEN UNDO, THROW NEW ParamError(SUBSTITUTE("SIM with ICC &1 not found or not free", THIS-OBJECT:ICC)).
+                
+                mCreateDataOrderProductParamData(loAttributes,"ICC","Char").    
+            END. 
         END.
-        
-        ASSIGN 
-            loShipAddress = ioItemObject:GetJsonObject("shipping-address") WHEN ioItemObject:Has("shipping-address").
-        
-        IF VALID-OBJECT(loShipAddress) 
+       
+        IF loAttributes:Has("shipping_address")
         THEN DO:
             
-            aoShippingCustomer  = NEW bss.cls.OrderCustomer(aoOrder).
             ASSIGN 
-                aoShippingCustomer:RowType          = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
-                aoShippingCustomer:isShipCustomer   = YES
-            .
-            aoShippingCustomer:mCreateData(loShipAddress).
-            
+                aoShippingCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
+                aoShippingCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
+                loShipAddress              = NEW JsonObject()
+                loShipAddress              = loAttributes:GetJsonObject("shipping_address").
+                
+                aoShippingCustomer:mCreateRowCustomerData(loShipAddress).
+        
         END.
         
     END METHOD.
     
+    METHOD PUBLIC VOID mCreateDataOrderProductParamData  (INPUT loAttributes AS CLASS JsonObject ,
+                                                          INPUT Attribute    AS CHARACTER,
+                                                          INPUT AttrType     AS CHARACTER  ):  
+                                                              
+        DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
+       
+        aoSIMParams = NEW bss.cls.OrderProductParam(THIS-OBJECT) .
+        aoSIMParams:mCreateData(loAttributes,Attribute,AttrType).
+       
+        ASSIGN 
+            liNextParamNum = mNextParamNb().
+                                            
+        CREATE ttOrderProductParam.
+        ASSIGN 
+            ttOrderProductParam.opobject = aoSIMParams
+            ttOrderProductParam.paramnb  = liNextParamNum. 
+                  
+    END METHOD.
+    
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
-        IF VALID-OBJECT(aoSIMParams)
-        THEN aoSIMParams:mStoreData().
-
+        FOR EACH ttOrderProductParam:
+            CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
+        END.
+        
         IF VALID-OBJECT(aoShippingCustomer)
         THEN aoShippingCustomer:mStoreData().
         
+        IF THIS-OBJECT:ICC > ""
+        THEN aoOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
+        
     END METHOD.
+    
+    METHOD PUBLIC INTEGER mNextParamNb():
+
+        FIND LAST ttOrderProductParam USE-INDEX paramnb NO-ERROR.
+               
+        IF NOT AVAILABLE ttOrderProductParam THEN RETURN 1.
+        
+        RETURN ( ttOrderProductParam.paramnb + 1 ).
+
+    END METHOD.
+    
 
 END CLASS.

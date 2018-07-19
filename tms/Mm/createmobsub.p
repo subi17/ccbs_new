@@ -87,6 +87,10 @@ DEF VAR llgPriDSSMobSub       AS LOG  NO-UNDO.
 DEF VAR liOngoingOrderId      AS INT  NO-UNDO.
 DEF VAR liExistingOrderId     AS INT  NO-UNDO. 
 DEF VAR liMLMsSeq             AS INT  NO-UNDO. 
+DEF VAR lcProductCLIType      AS CHAR NO-UNDO.
+DEF VAR lcProductCLI          AS CHAR NO-UNDO.
+DEF VAR lcOrderSubICC         AS CHAR NO-UNDO.
+
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -185,6 +189,19 @@ FIND FIRST order WHERE
            Order.MSSeq = MSRequest.MSSeq
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
+IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
+THEN DO:
+    ASSIGN 
+        lcProductCLIType   =   Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
+        lcProductCLI       =   Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+        lcOrderSubICC      =   Func.OrderProductsData:mGetOrderSubscriptionICC(Order.OrderID).
+END.
+ELSE DO:
+    ASSIGN lcProductCLIType  = Order.CLIType
+           lcProductCLI      = Order.CLI
+           lcOrderSubICC     = Order.ICC.    
+END.
+
 RUN check-order(output lcErrorTxt).
 
 IF lcErrorTxt > "" THEN DO:
@@ -200,7 +217,7 @@ IF lcErrorTxt > "" THEN DO:
    END.
 END.
 
-IF fIsConvergenceTariff(Order.CLIType) THEN DO:
+IF fIsConvergenceTariff(lcProductCLIType) THEN DO:
 
    FIND orderfusion NO-LOCK WHERE
         orderfusion.Brand = Syst.Var:gcBrand AND
@@ -239,7 +256,7 @@ ELSE DO:
    END.           
 
    FIND FIRST Mobsub WHERE 
-              Mobsub.CLI = Order.CLI
+              Mobsub.CLI = lcProductCLI
    NO-LOCK NO-ERROR.
 
    IF AVAIL mobsub THEN DO: 
@@ -262,17 +279,17 @@ END.
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
 AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
 Func.Common:mSplitTS(MsRequest.ActStamp,
-         ldReqActDate,
-         liReqActTime).
+                     ldReqActDate,
+                     liReqActTime).
 
 IF ldReqActDate = TODAY THEN
    ASSIGN ldeActivationTS = MSRequest.ActStamp.
 ELSE
    ASSIGN ldeActivationTS = Func.Common:mMake2DT(TODAY,1).
 
-IF Order.CLIType EQ "TARJ5" THEN DO:
+IF lcProductCLIType EQ "TARJ5" THEN DO:
 
-   RUN Gwy/air_update_serviceclass.p(Order.CLI,
+   RUN Gwy/air_update_serviceclass.p(lcProductCLI,
                                  {&SC_TARJ5_NORMAL},
                                  {&SC_TARJ5_PROMOTIONAL},
                                  TODAY + 31,
@@ -286,17 +303,17 @@ END.
 IF NOT AVAIL mobsub THEN DO:
 
    FIND FIRST MSISDNNumber WHERE
-              MSISDNNumber.CLI   = Order.CLI
+              MSISDNNumber.CLI   = lcProductCLI
    EXCLUSIVE-LOCK NO-ERROR.
             
    IF NOT AVAIL msisdnNumber THEN DO:
       CREATE MSISDNNumber.
-      ASSIGN MSISDNNumber.CLI = Order.CLI.
+      ASSIGN MSISDNNumber.CLI = lcProductCLI.
    END.
 
    FIND FIRST MSISDN WHERE 
               MSISDN.Brand    = Syst.Var:gcBrand    AND 
-              MSISDN.CLI      = Order.CLI  AND 
+              MSISDN.CLI      = lcProductCLI        AND 
               MSISDN.ValidTo >= Func.Common:mMakeTS() 
    EXCLUSIVE-LOCK NO-ERROR.
 
@@ -304,7 +321,7 @@ IF NOT AVAIL mobsub THEN DO:
 
       CREATE MSISDN.
       ASSIGN
-         MSISDN.CLI         = order.CLI
+         MSISDN.CLI         = lcProductCLI
          MSISDN.Brand       = Syst.Var:gcBrand
          MSISDN.Stat        = 3.
 
@@ -316,7 +333,6 @@ IF NOT AVAIL mobsub THEN DO:
    ELSE DO:
       
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
-
       MSISDN.Stat        = 3.
    END.
 
@@ -327,13 +343,13 @@ IF NOT AVAIL mobsub THEN DO:
    RUN Mm/createcustomer.p(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
 
    FIND FIRST CLIType WHERE
-              CLIType.CliType = Order.CLIType 
+              CLIType.CliType = lcProductCLIType 
    NO-LOCK NO-ERROR.
 
    IF Msrequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}
    THEN RELEASE IMSI.
    ELSE FIND FIRST imsi NO-LOCK WHERE 
-                   imsi.icc = Order.icc NO-ERROR.
+                   imsi.icc = lcOrderSubICC NO-ERROR.
 
    CREATE MobSub. 
 
@@ -418,10 +434,9 @@ IF NOT AVAIL mobsub THEN DO:
    END.
 
    ASSIGN
-      MobSub.CLI              = Order.CLI
+      MobSub.CLI              = lcProductCLI
       MobSub.FixedNumber      = orderfusion.FixedNumber WHEN AVAIL orderfusion
-      Mobsub.icc              = Order.ICC WHEN MsRequest.ReqType NE 
-                                  {&REQTYPE_FIXED_LINE_CREATE}
+      Mobsub.icc              = lcOrderSubICC WHEN MsRequest.ReqType NE {&REQTYPE_FIXED_LINE_CREATE}
       Mobsub.Brand            = Order.Brand 
       Mobsub.MsStatus         = (IF MsRequest.ReqType EQ 
                                     {&REQTYPE_FIXED_LINE_CREATE} 
@@ -432,7 +447,7 @@ IF NOT AVAIL mobsub THEN DO:
       Mobsub.salesman         = Order.salesman 
       Mobsub.MNPChannel       = 2 
       Mobsub.CreationDate     = TODAY
-      Mobsub.CLIType          = Order.CliType    
+      Mobsub.CLIType          = lcProductCLIType    
       Mobsub.BillTarget       = Clitype.BillTarget
       Mobsub.SimDelStatus     = 2
       Mobsub.Activationdate   = TODAY
@@ -463,7 +478,7 @@ IF NOT AVAIL mobsub THEN DO:
                 MobSub.MultiSimType = Order.MultiSimType.      /* Extraline = 3   */
       ELSE DO:
          
-         liExistingOrderId = fCheckExistingMainLineAvailForExtraLine(Order.CLIType,
+         liExistingOrderId = fCheckExistingMainLineAvailForExtraLine(lcProductCLIType,
                                                                      Customer.CustIdType,
                                                                      Customer.OrgId,
                                                                      OUTPUT liMLMsSeq).
@@ -476,7 +491,7 @@ IF NOT AVAIL mobsub THEN DO:
                    MobSub.MultiSimType = Order.MultiSimType.      /* Extraline = 3   */
          ELSE DO:
 
-            liOngoingOrderId = fCheckOngoingMainLineAvailForExtraLine(Order.CLIType,
+            liOngoingOrderId = fCheckOngoingMainLineAvailForExtraLine(lcProductCLIType,
                                                                       Customer.CustIdType,
                                                                       Customer.OrgId).
             IF liOngoingOrderId > 0 THEN 
@@ -496,7 +511,7 @@ IF NOT AVAIL mobsub THEN DO:
                           lbELOrderAction.Brand    EQ Syst.Var:gcBrand       AND
                           lbELOrderAction.OrderID  EQ Order.OrderID          AND
                           lbELOrderAction.ItemType EQ "ExtraLineDiscount"    AND
-                          lbELOrderAction.ItemKey  EQ Order.CLIType + "DISC" NO-ERROR.
+                          lbELOrderAction.ItemKey  EQ lcProductCLIType + "DISC" NO-ERROR.
       
                IF AVAILABLE lbELOrderAction THEN DO:
                   DELETE lbELOrderAction.
@@ -640,8 +655,8 @@ IF NOT AVAIL mobsub THEN DO:
                                 Customer.Language,
                                 OUTPUT ldeSMSStamp).   
 
-         IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
-            lcBundleId = fGetDataBundleInOrderAction(Order.OrderId,Order.CLIType).
+         IF LOOKUP(MobSub.CLIType,lcBundleCLITypes) > 0 THEN DO:
+            lcBundleId = fGetDataBundleInOrderAction(Order.OrderId,MobSub.CLIType).
             lcReplacedTxt = fConvBundleToBillItem(lcBundleId).
             lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                          "BillItem",
@@ -652,7 +667,7 @@ IF NOT AVAIL mobsub THEN DO:
          ELSE 
             lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                          "CLIType",
-                                         Order.CLIType,
+                                         MobSub.CLIType,
                                          Customer.Language,
                                          TODAY).
 
@@ -707,7 +722,7 @@ END.
 ELSE DO:
    
    FIND FIRST imsi WHERE 
-              imsi.icc = Order.icc
+              imsi.icc = lcOrderSubICC
    NO-LOCK NO-ERROR.
 
    FIND FIRST MSOwner EXCLUSIVE-LOCK WHERE
@@ -745,7 +760,7 @@ ELSE DO:
       MsOwner.imsi      = IMSI.IMSI WHEN AVAIL IMSI
       MsOwner.CLIEvent  = "C"
       Mobsub.MsStatus   = {&MSSTATUS_ACTIVE}
-      Mobsub.Icc        = Order.ICC
+      Mobsub.Icc        = lcOrderSubICC
       Mobsub.imsi       = IMSI.IMSI WHEN AVAIL IMSI.
 
 END.
@@ -760,11 +775,11 @@ FIND FIRST OrderCustomer NO-LOCK WHERE
 IF AVAIL OrderCustomer THEN DO:
    fActionOnAdditionalLines (OrderCustomer.CustIdType,
                              OrderCustomer.CustID,
-                             Order.CLIType,
+                             MobSub.CLIType,
                              FALSE,
                              "RELEASE"). 
 
-   IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+   IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
       
       /* Mainline Associated extraline has to be released when 
          mainline is (Fixed + Mobile line) is delivered */
@@ -1269,27 +1284,30 @@ PROCEDURE check-order:
                    "been checked or is not ok !   "  .
       END.
              
-      IF order.CLI    = "" THEN DO:
+      IF lcProductCLI    = "" THEN DO:
          ocError = "MSISDN empty".
       END.
              
-      DEC(order.cli) NO-ERROR.
+      DEC(lcProductCLI) NO-ERROR.
       IF ERROR-STATUS:ERROR THEN DO:
          ocError =  "MSISDN number of order contains " + 
                     "invalid characters! You must "    +
                     "correct it before continuing!".
       END.
            
-      IF order.clitype = "" THEN DO:
+      IF lcProductCLIType = "" THEN DO:
          ocError =  "CLIType missing !".
       END.
 
       FIND FIRST clitype WHERE
                  clitype.brand = Syst.Var:gcBrand and
-                 clitype.clitype = order.clitype NO-LOCK NO-ERROR.
+                 clitype.clitype = lcProductCLIType NO-LOCK NO-ERROR.
       IF NOT AVAIL clitype THEN DO:
         ocError =  "Invalid CLIType !".
       END.
+      
+      IF lcOrderSubICC = "" THEN 
+          ASSIGN ocError  = "ICC is not assigned to the Order or OrderSubscription.".
 
       IF ocError ne "" THEN RETURN.
       
@@ -1334,7 +1352,7 @@ PROCEDURE pCreateCommission:
          BY CoRule.Priority:
 
             IF CORule.CLIType > "" AND
-               LOOKUP(CLIType.CLIType,CORule.CLIType) = 0 THEN NEXT.
+               LOOKUP(lcProductCLIType,CORule.CLIType) = 0 THEN NEXT.
 
             IF CORule.AllowedDNI > "" AND
                LOOKUP(bRefCust.CustIDType,CORule.AllowedDNI) = 0 THEN NEXT.

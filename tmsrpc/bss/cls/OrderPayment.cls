@@ -44,10 +44,6 @@ CLASS bss.cls.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY PaymentSource AS CHARACTER NO-UNDO
-       GET.
-       SET.
-       
     DEFINE PUBLIC PROPERTY PayerID AS CHARACTER NO-UNDO
        GET.
        SET.
@@ -80,12 +76,11 @@ CLASS bss.cls.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
                 THIS-OBJECT:CCValid        = ioPaymentObject:GetCharacter("ccvalid")        WHEN ioPaymentObject:Has("ccvalid")
                 THIS-OBJECT:AuthNumber     = ioPaymentObject:GetCharacter("authnumber")     WHEN ioPaymentObject:Has("authnumber")
                 THIS-OBJECT:BinNumber      = ioPaymentObject:GetCharacter("binnumber")      WHEN ioPaymentObject:Has("binnumber")
-                THIS-OBJECT:PaymentSource  = ioPaymentObject:GetCharacter("payment-source") WHEN ioPaymentObject:Has("payment-source")
                 THIS-OBJECT:PMethod        = {&ORDERPAYMENT_M_CREDIT_CARD}
                 . 
         ELSE IF THIS-OBJECT:PayMethod = "paypal"
         THEN ASSIGN 
-                 THIS-OBJECT:PayerID  =  ioPaymentObject:GetCharacter("payer-id") WHEN ioPaymentObject:Has("payer-id")
+                 THIS-OBJECT:PayerID  =  ioPaymentObject:GetCharacter("payerid") WHEN ioPaymentObject:Has("payerid")
                  THIS-OBJECT:PMethod  =  {&ORDERPAYMENT_M_PAYPAL}
                  .
             

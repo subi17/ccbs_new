@@ -35,7 +35,7 @@ DEFINE OUTPUT PARAMETER oiOrderQty AS INT     NO-UNDO.
 
 DEFINE VARIABLE ldToday       AS DATE      NO-UNDO.
 DEFINE VARIABLE lcTime        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcStock      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcStock       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeSwitchTS   AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE liLoop        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liPause       AS INTEGER   NO-UNDO.
@@ -57,16 +57,6 @@ DEF BUFFER bSIM FOR SIM.
 
 DEFINE VARIABLE lii           AS INT       NO-UNDO.
 DEFINE VARIABLE lcStatuses    AS CHAR NO-UNDO EXTENT 3 INITIAL ["1","3","30"].
-DEFINE VARIABLE lcSIMonlyMNP  AS CHAR NO-UNDO. 
-
-DEF VAR lcTestCustomer AS CHAR NO-UNDO.
-
-ASSIGN
-   lcTestCustomer = TRIM(fCParamC("OrderTestCustomer"))
-   lcSIMonlyMNP =   TRIM(fCParamC("SIMonlyMNPorder")).
-
-IF lcTestCustomer = ? THEN lcTestCustomer = "".
-
 
 IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
 
@@ -81,17 +71,18 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
       IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(xxOrder))
       THEN NEXT.
 
-      FIND FIRST OrderCustomer OF xxOrder WHERE
-                 OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-      IF AVAILABLE OrderCustomer AND 
-         LOOKUP(OrderCustomer.CustId,lcTestCustomer) > 0 THEN NEXT.
-         
       FIND FIRST Order WHERE 
             RECID(Order) = RECID(xxOrder) EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
             
-      IF LOCKED(Order) THEN NEXT.       
+      IF LOCKED(Order) THEN NEXT.    
       
-      {Mc/ordersender.i LOOP}
+      IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID)
+      THEN DO:
+          RUN Mm/orderproduct_exec.p(INPUT Order.OrderID).
+      END.
+      ELSE DO:
+          {Mc/ordersender.i LOOP}
+      END.   
    
       oiOrderQty = oiOrderQty + 1.
  
@@ -106,8 +97,14 @@ ELSE DO:
    FOR FIRST Order EXCLUSIVE-LOCK WHERE  
              Order.Brand   = Syst.Var:gcBrand  AND
              Order.OrderId = piOrderId:
-
-      {Mc/ordersender.i ORDERLOOP}
+                 
+       IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID)
+       THEN DO:
+           RUN Mm/orderproduct_exec.p(INPUT Order.OrderID).
+       END.
+       ELSE DO:
+           {Mc/ordersender.i ORDERLOOP}
+       END.
    
       oiOrderQty = oiOrderQty + 1.
       
