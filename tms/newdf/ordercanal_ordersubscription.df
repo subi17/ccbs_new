@@ -6,7 +6,7 @@ ADD TABLE "OrderSubscription"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-ordersubscription.p" CRC "?"
   TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-ordersubscription.p" CRC "?"
 
-ADD FIELD "OrderID" OF "OrderSubscription" AS character 
+ADD FIELD "OrderID" OF "OrderSubscription" AS integer 
   DESCRIPTION "Order number"
   FORMAT ">>>>>>>>9"
   INITIAL "0"
