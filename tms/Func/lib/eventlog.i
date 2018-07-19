@@ -102,6 +102,11 @@ FUNCTION getStarEventField RETURNS CHARACTER
 FUNCTION getStarEventKey RETURNS CHARACTER
   ( ihBuffer AS HANDLE )  FORWARD.
 
+FUNCTION fCleanEventObjects RETURNS LOGIC FORWARD.
+
+FUNCTION fCleanEventObject RETURNS LOGICAL
+   ( ihBuffer AS HANDLE ) FORWARD.
+
 
 
 /* *********************** Procedure Settings ************************ */
@@ -172,6 +177,11 @@ PROCEDURE StarEventMakeCreateEvent :
   Parameters:  1. buffer handle
   Notes:       
 ------------------------------------------------------------------------------*/
+    &IF "{&STAR_EVENT_SUPER}" = "YES"
+    &THEN
+    DEFINE INPUT  PARAMETER icUser AS CHARACTER NO-UNDO.
+        &SCOPED-DEFINE STAR_EVENT_USER icUser
+    &ENDIF
 
     DEFINE INPUT  PARAMETER ihBuffer AS HANDLE NO-UNDO.
 
@@ -233,7 +243,12 @@ PROCEDURE StarEventMakeDeleteEvent :
   Parameters:  1. buffer handle
   Notes:       
 ------------------------------------------------------------------------------*/
-
+    &IF "{&STAR_EVENT_SUPER}" = "YES"
+    &THEN
+    DEFINE INPUT  PARAMETER icUser AS CHARACTER NO-UNDO.
+    &SCOPED-DEFINE STAR_EVENT_USER icUser
+    &ENDIF
+    
     DEFINE INPUT  PARAMETER ihBuffer AS HANDLE NO-UNDO.
     
     RUN StarEventMakeDeleteEventWithMemo(ihBuffer, {&STAR_EVENT_USER}, "").
@@ -360,7 +375,12 @@ PROCEDURE StarEventMakeModifyEvent :
   Parameters:  1. Buffer handle
   Notes:       
 ------------------------------------------------------------------------------*/
-
+    &IF "{&STAR_EVENT_SUPER}" = "YES"
+    &THEN
+    DEFINE INPUT  PARAMETER icUser AS CHARACTER NO-UNDO.
+    &SCOPED-DEFINE STAR_EVENT_USER icUser
+    &ENDIF
+    
     DEFINE INPUT  PARAMETER ihBuffer AS HANDLE NO-UNDO.
              
     RUN StarEventMakeModifyEventWithMemo(ihBuffer, {&STAR_EVENT_USER}, "").
@@ -663,5 +683,17 @@ FUNCTION fCleanEventObject RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
+
+PROCEDURE pCleanEventObjects:
+
+   DEF VAR liCleanCnt AS INT NO-UNDO.
+   
+   DO liCleanCnt = 1 TO {&NUM_BUFFERS}:
+   
+      IF VALID-HANDLE(ghEventSource[liCleanCnt]) 
+         THEN DELETE OBJECT ghEventSource[liCleanCnt].
+   END.
+   
+END PROCEDURE.
 
 &ENDIF

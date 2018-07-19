@@ -54,6 +54,9 @@ DEF BUFFER bTaxClass FOR TaxClass.
 form
     TaxClass.TaxClass   
     TaxClass.TCName 
+    TaxClass.isActive
+    TaxClass.TCType
+    TaxClass.amount
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.Var:cfc)   
     TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
@@ -63,6 +66,9 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 form
     TaxClass.TaxClass  COLON 22
     TaxClass.TCName  COLON 22 
+    TaxClass.isActive COLON 22
+    TaxClass.TCType COLON 22
+    TaxClass.amount COLON 22
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(Syst.Var:cfc)
     TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
@@ -379,7 +385,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        COLOR DISPLAY VALUE(Syst.Var:ctc)
-       TaxClass.TaxClass TaxClass.TCName.
+       TaxClass.TaxClass TaxClass.TCName TaxClass.isActive TaxClass.TCType TaxClass.amount.
 
        RUN local-find-NEXT.
        IF AVAILABLE TaxClass THEN Memory = recid(TaxClass).
@@ -401,7 +407,7 @@ REPEAT WITH FRAME sel:
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
        COLOR DISPLAY VALUE(Syst.Var:ccc)
-       TaxClass.TaxClass TaxClass.TCName.
+       TaxClass.TaxClass TaxClass.TCName TaxClass.isActive TaxClass.TCType TaxClass.amount.
 
        IF ok THEN DO:
 
@@ -513,6 +519,9 @@ PROCEDURE local-disp-row:
        DISPLAY 
        TaxClass.TaxClass
        TaxClass.TCName
+       TaxClass.isActive 
+       TaxClass.TCType 
+       TaxClass.amount
        WITH FRAME sel.
 END PROCEDURE.
 
@@ -531,6 +540,9 @@ PROCEDURE local-UPDATE-record:
       DISP 
       TaxClass.TaxClass
       TaxClass.TCName
+      TaxClass.isActive 
+      TaxClass.TCType 
+      TaxClass.amount
       WITH FRAME lis.
       
       IF lcRight = "RW" THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:

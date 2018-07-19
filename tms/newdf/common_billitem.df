@@ -1,0 +1,15 @@
+ADD FIELD "DebtType" OF "BillItem" AS character
+  FORMAT "x(12)"
+  POSITION 27
+  INITIAL ""
+  HELP "Debt type"
+  LABEL "Debt Type"
+  COLUMN-LABEL "DebtType"
+  ORDER 400
+  MAX-WIDTH 24
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000000198
