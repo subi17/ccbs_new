@@ -43,13 +43,7 @@ FIND FIRST Order WHERE
 IF NOT AVAIL Order THEN 
    RETURN appl_err("OrderId is invalid").
 
-IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-   Order.StatusCode NE {&ORDER_STATUS_COMPANY_NEW} OR
-   Order.StatusCode NE {&ORDER_STATUS_COMPANY_MNP} OR 
-   Order.StatusCode NE {&ORDER_STATUS_ROI_LEVEL_1} OR 
-   Order.StatusCode NE {&ORDER_STATUS_ROI_LEVEL_2} OR
-   Order.StatusCode NE {&ORDER_STATUS_ROI_LEVEL_3} OR
-   Order.StatusCode NE {&ORDER_STATUS_MORE_DOC_NEEDED} THEN
+IF LOOKUP(Order.StatusCode, "77,20, 21, 41, 42, 43, 44") EQ 0 THEN
    RETURN appl_err("Order is not in valid state to cancel").   
 
 FIND FIRST OrderCustomer WHERE 
