@@ -91,6 +91,7 @@ END FUNCTION.
 FUNCTION fError RETURNS LOGIC
    (icMessage AS CHARACTER):
 
+   ENTRY(6, lcLine, lcSep) = "" NO-ERROR. /* Remove Sms text in Error Cases */
    fLogLine("KO:" + icMessage).
 END FUNCTION.
 
@@ -132,13 +133,13 @@ REPEAT:
          lcMsisdn       = TRIM(ENTRY(3,lcLine,lcSep))
          lcOldCLIType   = TRIM(ENTRY(4,lcLine,lcSep))
          lcNewCLIType   = TRIM(ENTRY(5,lcLine,lcSep))
-         lcSMSText2      = TRIM(ENTRY(6,lcLine,lcSep))
+         lcSMSText2     = TRIM(ENTRY(6,lcLine,lcSep))
          ldtSTCDate     = DATE(TRIM(ENTRY(7,lcLine,lcSep)))
          NO-ERROR.
 
       IF ERROR-STATUS:ERROR OR liEntries NE 7 THEN 
       DO:
-         fError("Incorrect input data format. " + STRING(liEntries) + ";" + STRING(ERROR-STATUS:ERROR) ).
+         fError("Incorrect input data format. " + STRING(liEntries) + lcSep + STRING(ERROR-STATUS:ERROR) ).
          liNumErr = liNumErr + 1 .
          NEXT.
       END.
