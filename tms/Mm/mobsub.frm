@@ -29,6 +29,7 @@ DEF VAR lcActivated         AS CHAR    NO-UNDO FORMAT "X(32)" .
 DEF VAR lcBillTarget        AS CHAR    NO-UNDO FORMAT "X(12)" .
 DEF VAR lcMultiSIM          AS CHAR    NO-UNDO FORMAT "X(28)". 
 DEF VAR lcClitext           AS CHAR    NO-UNDO FORMAT "X(16)".
+DEF VAR lcProvisioningType  AS CHAR    NO-UNDO FORMAT "X(7)". /* SAPC-46 */
 
 FORM
 "SubscriptionID:"   Mobsub.msseq   "CliType...:" AT 50 lcCliText NO-LABEL  SKIP
@@ -40,7 +41,8 @@ lcPCLB FORMAT "x(47)" "PIN1......:" AT 50 IMSI.PIN1   SKIP
 "Number Inquiry:"   lcNumberInquiry "PIN2......:" AT 50 IMSI.PIN2         SKIP 
 "Agr.Customer..:"    Mobsub.AgrCust  AgrCustomer.CustName FORMAT "X(22)"  lcDSSInfo FORMAT "x(25)" AT 50 SKIP
 "PersID/Comp.ID:"    AgrCustomer.OrgID  lcMNP FORMAT "x(28)" AT 50        SKIP
-"Inv.Customer..:"    Mobsub.InvCust  InvCustomer.CustName FORMAT "X(22)"  SKIP
+"Inv.Customer..:"    Mobsub.InvCust  InvCustomer.CustName FORMAT "X(22)"
+"Provision type:"   AT 50  lcProvisioningType SKIP
 "User .........:"   Mobsub.Custnum  UserCustomer.CustName FORMAT "X(22)" 
    lcMultiSim SKIP
 
