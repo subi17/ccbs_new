@@ -248,6 +248,11 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
          WHERE bCliType1.Brand   EQ Syst.Var:gcBrand
            AND bCliType1.CliType EQ bfMobSub.CliType NO-ERROR.
 
+    IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND
+      (bfMobSub.CLI         NE bfMobSub.FixedNumber         OR
+       bfMobSub.MsStatus    NE {&MSSTATUS_MOBILE_NOT_ACTIVE})  THEN
+       RETURN "".
+
     IF NOT AVAILABLE bCliType1 OR 
        bCliType1.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN RETURN "".
     

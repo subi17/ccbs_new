@@ -151,18 +151,6 @@ IF pcMergeWith GT "" AND
    pcMergeWith NE ?  THEN
    llgMerge = TRUE.
 
-/* Various validations */
-IF fValidateMobTypeCh(MobSub.Msseq,
-                      pcCliType,
-                      pdActivation,
-                      plExtendContract,
-                      FALSE, /* bypass stc type check */
-                      0, /* stc order id */
-                      {&REQUEST_SOURCE_NEWTON},
-                      llgMerge,
-                      OUTPUT lcError) EQ FALSE THEN 
-   RETURN appl_err(lcError).
-
 /* Set the Syst.Var:katun again with original username */
 Syst.Var:katun = "VISTA_" + pcSalesman.
 
@@ -235,7 +223,26 @@ IF llgMerge THEN DO:
            liMergeMsSeq = bChkMobSub.MsSeq.
     END.
 
+    FIND FIRST bMergeMobSub NO-LOCK WHERE
+               bMergeMobSub.MsSeq    EQ liMergeMsSeq                  AND
+               bMergeMobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} NO-ERROR.
+ 
+    IF NOT AVAIL bMergeMobSub THEN
+       RETURN appl_err(SUBST("Convergent subscription &1 is not 2P standalone", STRING(liMergeMsSeq))).
+
 END.
+
+/* Various validations */
+IF fValidateMobTypeCh(liSTCMsSeq,
+                      pcCliType,
+                      pdActivation,
+                      plExtendContract,
+                      FALSE, /* bypass stc type check */
+                      0, /* stc order id */
+                      {&REQUEST_SOURCE_NEWTON},
+                      llgMerge,
+                      OUTPUT lcError) EQ FALSE THEN 
+   RETURN appl_err(lcError).
 
 liRequest = fCTChangeRequest(liSTCMsSeq,
                              pcCliType,
@@ -259,19 +266,11 @@ IF liRequest = 0 THEN DO:
    RETURN appl_err("Request creation failed: " +  lcInfo).
 END.
 
-IF llgMerge THEN DO:
-   
-   FIND FIRST bMergeMobSub NO-LOCK WHERE 
-              bMergeMobSub.MsSeq    EQ liMergeMsSeq          AND
-             (bMergeMobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
-              bMergeMobSub.MsStatus EQ {&MSSTATUS_BARRED})   NO-ERROR. 
-
-   IF AVAIL bMergeMobSub THEN 
-      fCreateMsRequestParam(liRequest,
-                            {&MERGE2P3P},
-                            {&INTVAL},
-                            STRING(bMergeMobSub.MsSeq)).
-END.                         
+IF llgMerge THEN
+   fCreateMsRequestParam(liRequest,
+                         {&MERGE2P3P},
+                         {&INTVAL},
+                         STRING(bMergeMobSub.MsSeq)).
 
 IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
    CREATE Memo.
