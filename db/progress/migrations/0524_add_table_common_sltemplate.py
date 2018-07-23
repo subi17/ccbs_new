@@ -2,7 +2,7 @@ from gearbox.migrations import Migration
 
 class AddTableSLTemplate(Migration):
 
-    database = "rating"
+    database = "common"
 
     def up(self):
         t = self.table('SLTemplate', area="Sta_Data_64", label="Service Limit Template", dump_name="sltemplate", desc="")
