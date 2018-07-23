@@ -214,13 +214,16 @@ FUNCTION fMakeTempTable RETURNS CHAR
                 Also cancellations are filtered by OrderStatus so that only specific
                 orders are allowed to produce cancellations.
                 */
-               lcCancelTypeList =  SUBST("&1,&2,&3,&4,&5,&6",
+               lcCancelTypeList =  SUBST("&1,&2,&3,&4,&5,&6,&7,&8,&9",
                   {&ORDER_STATUS_RENEWAL_STC_COMPANY},
                   {&ORDER_STATUS_MORE_DOC_NEEDED},
                   {&ORDER_STATUS_COMPANY_NEW},
                   {&ORDER_STATUS_COMPANY_MNP},
                   {&ORDER_STATUS_DELIVERED},
-                  {&ORDER_STATUS_PENDING_FIXED_LINE}).
+                  {&ORDER_STATUS_PENDING_FIXED_LINE},
+                  {&ORDER_STATUS_ROI_LEVEL_1},
+                  {&ORDER_STATUS_ROI_LEVEL_2},
+                  {&ORDER_STATUS_ROI_LEVEL_3}).
 
 
                FIND FIRST DMS NO-LOCK WHERE
@@ -414,13 +417,18 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
          ELSE IF bMsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
             odeTime = bMsRequest.CreStamp.
             RETURN "Order Cancellation".
-         END.
+         END. 
       END.
    END. /*DO for msrequest search*/
    IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
       icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
       icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR
-      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN DO:
+      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
+      icStatus EQ {&ORDER_STATUS_ROI_LEVEL_1} OR 
+      icStatus EQ {&ORDER_STATUS_ROI_LEVEL_2} OR 
+      icStatus EQ {&ORDER_STATUS_ROI_LEVEL_3} OR
+      icStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
+      icStatus EQ {&ORDER_STATUS_CLOSED} THEN DO:
       RETURN "User Cancellation".
    END.
    RETURN "".
