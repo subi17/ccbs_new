@@ -878,7 +878,7 @@ FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
             THEN RETURN loRESTError:ReturnValue.
    
          DO lii = 1 TO loRESTError:NumMessages:
-            lcError = lcError + "," + loError:GetMessage(lii).
+            lcError = lcError + "," + loRESTError:GetMessage(lii).
          END.
 
          IF lcError > ""
