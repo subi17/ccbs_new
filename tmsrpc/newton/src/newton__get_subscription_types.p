@@ -251,6 +251,11 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
     IF NOT AVAILABLE bCliType1 OR 
        bCliType1.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN RETURN "".
     
+    IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND
+      (bfMobSub.CLI         NE bfMobSub.FixedNumber         OR
+       bfMobSub.MsStatus    NE {&MSSTATUS_MOBILE_NOT_ACTIVE})  THEN
+       RETURN "".
+    
     FOR EACH bMobSub NO-LOCK
        WHERE bMobSub.brand   EQ Syst.Var:gcBrand
          AND bMobSub.CustNum EQ bfMobSub.CustNum:
@@ -298,7 +303,10 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
         ELSE 
         IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
            bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
-             lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
+             
+             IF bMobSub.CLI      EQ bMobSub.FixedNumber           AND
+                bMobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+                lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
         END.         
     END.
     

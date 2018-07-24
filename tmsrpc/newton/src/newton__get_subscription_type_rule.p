@@ -4,7 +4,6 @@
  * @input       msseq;int;mandatory;subscription id
                 cli_type;string;mandatory;new subscription type
                 tariff_bundle;string;optional;subscription based bundle for new tariff
-                merge_with:string;optional;
  * @output      struct with penalties array and warning array;
  * @penalty_struct 
                 stc_date;datetime;mandatory;
@@ -38,10 +37,9 @@ Syst.Var:gcBrand = "1".
 {Func/fixedlinefunc.i}
 
 /* Input parameters */
-DEF VAR piMsSeq        AS INT  NO-UNDO.
-DEF VAR pcNewCLIType   AS CHAR NO-UNDO.
-DEF VAR pcTariffBundle AS CHAR NO-UNDO.
-DEF VAR pcMergeWith    AS CHAR NO-UNDO.
+DEF VAR piMsSeq            AS INT     NO-UNDO.
+DEF VAR pcNewCLIType       AS CHAR    NO-UNDO.
+DEF VAR pcTariffBundle     AS CHAR    NO-UNDO.
 
 /* Output parameters */
 DEF VAR top_struct         AS CHAR NO-UNDO.
@@ -86,11 +84,6 @@ DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR liFeePeriod       AS INT  NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
-DEF VAR liLineType AS INT NO-UNDO.
-DEF VAR llgMerge   AS LOG NO-UNDO INIT FALSE. 
-DEF VAR llMergePermanency AS LOG NO-UNDO INIT FALSE. 
-DEF VAR llgMergePenalty   AS LOG NO-UNDO INIT FALSE.
-
 /* Additional line mobile only ALFMO-53 */
 DEF VAR llAddline50Disc AS LOGICAL NO-UNDO.
 DEF VAR llAddline20Disc AS LOGICAL NO-UNDO.
@@ -101,19 +94,14 @@ DEF VAR ldeQ25RefiRemain AS DECIMAL NO-UNDO.
 DEF VAR ldOriginalFee AS DECIMAL NO-UNDO.
 DEF VAR ldNewFee      AS DECIMAL NO-UNDO.
 
-DEF BUFFER bCLIType      FOR CLIType.
-DEF BUFFER OldCLIType    FOR CLIType.  
-DEF BUFFER lbMobSub      FOR MobSub.
-DEF BUFFER bMergeMobSub  FOR Mobsub. 
-DEF BUFFER bMergeCLIType FOR CLIType.
-DEF BUFFER bMergeDCCLI   FOR DCCLI.
+DEF BUFFER bCLIType        FOR CLIType.
+DEF BUFFER OldCLIType      FOR CLIType.
+DEF BUFFER lbMobSub        FOR MobSub.
 
-IF validate_request(param_toplevel_id, "int,string,string,string") EQ ? THEN RETURN.
-
-ASSIGN piMsSeq        = get_pos_int(param_toplevel_id,"0")
-       pcNewCLIType   = get_string(param_toplevel_id,"1")
-       pcTariffBundle = get_string(param_toplevel_id,"2")  /* tariff_bundle */
-       pcMergeWith    = get_string(param_toplevel_id,"3").
+IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN RETURN.
+piMsSeq         = get_pos_int(param_toplevel_id,"0").
+pcNewCLIType    = get_string(param_toplevel_id,"1").
+pcTariffBundle  = get_string(param_toplevel_id,"2").  /* tariff_bundle */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -139,39 +127,6 @@ IF LOOKUP(pcNewCLIType,lcBundleCLITypes) > 0 THEN DO:
       RETURN appl_err(SUBST("New CLIType entry &1 not found", pcTariffBundle)).
 END.
 ELSE pcTariffBundle = "".
-
-IF pcMergeWith GT "" AND 
-   pcMergeWith NE ?  THEN DO:
-
-   FIND FIRST bMergeMobSub NO-LOCK WHERE
-              bMergeMobSub.CLI EQ pcMergeWith NO-ERROR.
-   
-   IF AVAIL bMergeMobSub THEN DO:
-      FIND FIRST bMergeCLIType NO-LOCK WHERE 
-                 bMergeCLIType.CLIType EQ bMergeMobSub.CLIType NO-ERROR.
-
-      IF AVAIL bMergeCLIType THEN DO:
-         ASSIGN liLineType = IF fIsFixedOnly(bMergeCLIType.CLIType) THEN 
-                                {&CLITYPE_TARIFFTYPE_FIXEDONLY} 
-                             ELSE {&CLITYPE_TARIFFTYPE_MOBILEONLY}
-                llgMerge   = TRUE.  
-
-         IF liLineType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
-            FIND FIRST bMergeDCCLI EXCLUSIVE-LOCK WHERE
-                       bMergeDCCLI.Brand   EQ Syst.Var:gcBrand   AND
-                       bMergeDCCLI.DCEvent BEGINS "FTERM"        AND
-                       bMergeDCCLI.MsSeq   EQ bMergeMobSub.MsSeq AND
-                       bMergeDCCLI.ValidTo GT TODAY              NO-ERROR.
-            
-            IF AVAIL bMergeDCCLI THEN    
-               llMergePermanency = TRUE.         
-         END.
-
-      END.          
-
-   END.
-
-END.   
 
 ASSIGN
    ldaSTCDates[1] = TODAY + 1
@@ -230,11 +185,6 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
       add_string(warning_array,"","DSS1_TERMINATION").
    IF llDSS2Term THEN
       add_string(warning_array,"","DSS2_TERMINATION").
-
-   IF llgMergePenalty THEN 
-      add_string(warning_array,"","MERGE_MOBILE_PENALTY").
-   IF llMergePermanency THEN 
-      add_string(warning_array,"","MERGE_FIXEDLINE_PERMANENCY").
 
    /* ALFMO-53 */
    IF llAddline50Disc THEN
@@ -591,11 +541,6 @@ IF NOT MobSub.PayType THEN DO:
                    THEN NEXT.
             END.   
          END.
-         ELSE IF (llgMerge                     AND 
-                  fIsFixedOnly(lcOrigCLIType)  AND 
-                  DCCLI.DCEvent BEGINS "FTERM" AND 
-                  liLineType    EQ     {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
-            llMergePermanency = TRUE.         
          /* When STCed between convergent tariffs we exclude FTERM and TVTERM from termination */
          ELSE IF (DCCLI.DCEvent BEGINS "FTERM" OR DCCLI.DCEvent BEGINS "TVTERM") AND
                  fIsConvergentORFixedOnly(CLIType.CLIType) THEN NEXT.
@@ -628,19 +573,6 @@ IF NOT MobSub.PayType THEN DO:
 
 
    END. /* FOR EACH DCCLI NO-LOCK WHERE */
-
-   DO liLoop = 1 TO EXTENT(ldaSTCDates): 
-
-      IF llgMerge                                          AND 
-        (fIsConvergenceTariff(CLIType.CLIType) EQ FALSE OR 
-         fIsConvergenceTariff(lcOrigCLIType)   EQ FALSE)   THEN DO: 
-         
-         IF ldeTotalPenaltyFee[liLoop] > 0 THEN 
-            llgMergePenalty = TRUE.
-
-      END.
-
-   END.   
 
    lcPenaltyCode = TRIM(lcPenaltyCode,"+").
 
