@@ -1029,6 +1029,7 @@ PROCEDURE pFinalize:
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
    DEF VAR llMigrationNeeded     AS LOG  NO-UNDO.
+   
    DEF VAR llgUpdateDSSAccount   AS LOG  NO-UNDO INITIAL TRUE.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
