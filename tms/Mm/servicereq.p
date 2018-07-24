@@ -20,6 +20,7 @@
 {Func/remfees.i}
 {Func/barrfunc.i}
 {Func/fmakesms.i}
+{Func/SAPC.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -127,7 +128,8 @@ PROCEDURE pServCompSolog:
                        OUTPUT liReqCnt).
    
    /* SAPC-44 redirecting new SAPC customers to new logic */
-   IF Customer.AccGrp = 2 THEN  /* SAPC */
+   IF Customer.AccGrp = 2 AND 
+      fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN
    DO:
       /* create procommand */
       RUN Mm/setSAPC.p(MsRequest.MSRequest,
