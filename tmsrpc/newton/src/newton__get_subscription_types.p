@@ -303,7 +303,10 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
         ELSE 
         IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
            bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
-             lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
+             
+             IF bMobSub.CLI      EQ bMobSub.FixedNumber           AND
+                bMobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+                lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
         END.         
     END.
     
