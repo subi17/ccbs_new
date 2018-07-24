@@ -227,16 +227,17 @@ CLASS Func.OrderProductsData FINAL:
         
     END METHOD.          
     
-    METHOD PUBLIC STATIC CHARACTER mGetOrderSubscriptionICC(INPUT iiOrderID AS INTEGER):
+    METHOD PUBLIC STATIC CHARACTER mGetOrderMobileICC(INPUT iiOrderID AS INTEGER):
         
-        DEFINE BUFFER bfpcOrderSubscription FOR OrderSubscription.
+        DEFINE BUFFER bfpcOrderMobile FOR OrderMobile.
         
-        FIND FIRST bfpcOrderSubscription  
-            WHERE  bfpcOrderSubscription.OrderID   =  iiOrderID NO-LOCK NO-ERROR.
+        FIND FIRST bfpcOrderMobile  
+            WHERE  bfpcOrderMobile.Brand     = Syst.Var:gcBrand  
+              AND  bfpcOrderMobile.OrderID   = iiOrderID NO-LOCK NO-ERROR.
             
-        IF NOT AVAILABLE bfpcOrderSubscription THEN RETURN "".
+        IF NOT AVAILABLE bfpcOrderMobile THEN RETURN "".
         
-        RETURN bfpcOrderSubscription.ICC.
+        RETURN bfpcOrderMobile.ICC.
         
     END METHOD.              
     
@@ -283,6 +284,6 @@ CLASS Func.OrderProductsData FINAL:
             
         RETURN 0.                                                                                                       
                                                      
-    END METHOD.                                                                            
-
+    END METHOD.    
+    
 END CLASS.

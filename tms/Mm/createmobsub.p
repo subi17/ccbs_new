@@ -194,7 +194,7 @@ THEN DO:
     ASSIGN 
         lcProductCLIType   =   Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
         lcProductCLI       =   Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
-        lcOrderSubICC      =   Func.OrderProductsData:mGetOrderSubscriptionICC(Order.OrderID).
+        lcOrderSubICC      =   Func.OrderProductsData:mGetOrderMobileICC(Order.OrderID).
 END.
 ELSE DO:
     ASSIGN lcProductCLIType  = Order.CLIType
@@ -1307,7 +1307,7 @@ PROCEDURE check-order:
       END.
       
       IF lcOrderSubICC = "" THEN 
-          ASSIGN ocError  = "ICC is not assigned to the Order or OrderSubscription.".
+          ASSIGN ocError  = "ICC is not assigned.".
 
       IF ocError ne "" THEN RETURN.
       

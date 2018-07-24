@@ -67,9 +67,9 @@ DEFINE VARIABLE lcTerminalBillCode AS CHAR      NO-UNDO.
 DEFINE VARIABLE lhOrder            AS HANDLE    NO-UNDO.
 DEFINE VARIABLE ocTerminalCode     AS CHAR      NO-UNDO.
 DEFINE VARIABLE lcOrderProductCLI  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcOProductCType    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lIsConvergenceType AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcRenewalICC       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcOrderProductCLIType    AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -1406,7 +1406,7 @@ END.
 FUNCTION fDelivDevice RETURNS LOG
    (INPUT icDevice  AS CHAR,
     INPUT icCLI     AS CHAR,
-    INPUT icCType   AS CHAR):
+    INPUT icCLIType   AS CHAR):
 
    DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcCustRegi      AS CHARACTER NO-UNDO.
@@ -1535,7 +1535,7 @@ FUNCTION fDelivDevice RETURNS LOG
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
       ttOneDelivery.CIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "CIF"
       ttOneDelivery.PassPort      = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "PassPort"
-      ttOneDelivery.SubsType      = icCType
+      ttOneDelivery.SubsType      = icCLIType
       ttOneDelivery.MSISDN        = icCLI
       ttOneDelivery.Company       = AgreeCustomer.Company
       ttOneDelivery.Name          = ContactCustomer.FirstName
@@ -1885,18 +1885,18 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
     IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
     THEN DO:        
         ASSIGN 
-            lcOrderProductCLI = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
-            lcOProductCType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
+            lcOrderProductCLI       = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+            lcOrderProductCLIType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
     END.
     ELSE DO:
         ASSIGN 
-            lcOrderProductCLI = Order.CLI
-            lcOProductCType   = Order.CLIType.
+            lcOrderProductCLI       = Order.CLI
+            lcOrderProductCLIType   = Order.CLIType.
     END.
 
    FIND FIRST CliType WHERE
               Clitype.brand   EQ Syst.Var:gcBrand AND
-              Clitype.clitype EQ lcOProductCType NO-LOCK NO-ERROR.
+              Clitype.clitype EQ lcOrderProductCLIType NO-LOCK NO-ERROR.
               
    IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
       ASSIGN
@@ -1905,7 +1905,7 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
       NEXT.   
     END.
 
-   IF fDelivDevice("Router" , lcOrderProductCLI , lcOProductCType) 
+   IF fDelivDevice("Router" , lcOrderProductCLI , lcOrderProductCLIType) 
    THEN ASSIGN
            FusionMessage.UpdateTS      = Func.Common:mMakeTS()
            FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
@@ -1932,16 +1932,16 @@ FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_AC
     IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
     THEN DO:
         ASSIGN 
-            lcOrderProductCLI = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
-            lcOProductCType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
+            lcOrderProductCLI       = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+            lcOrderProductCLIType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
     END.
     ELSE DO:
         ASSIGN 
-            lcOrderProductCLI = Order.CLI
-            lcOProductCType   = Order.CLIType.
+            lcOrderProductCLI       = Order.CLI
+            lcOrderProductCLIType   = Order.CLIType.
     END.
    
-   IF fDelivDevice(TPService.ServType , lcOrderProductCLI , lcOProductCType ) THEN 
+   IF fDelivDevice(TPService.ServType , lcOrderProductCLI , lcOrderProductCLIType ) THEN 
        fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&STATUS_LOGISTICS_INITIATED}).
 END.
 

@@ -1,0 +1,1 @@
+{triggers/hpddelete_generic.i OrderMobile ORDERMOBILE Ordercanal OrderId OrderProductID}

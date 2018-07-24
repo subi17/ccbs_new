@@ -38,6 +38,11 @@ ADD FIELD "MsSeq" OF "OrderTopUp" AS integer
   MAX-WIDTH 4
   COLUMN-LABEL "SubscrID"
   ORDER 70
+  
+ADD INDEX "MsSeq" ON "OrderTopUp" 
+  AREA "Dyn_Index_1"
+  DESCRIPTION "SubscriptionID"
+  INDEX-FIELD "MsSeq" ASCENDING   
 
 .
 PSC

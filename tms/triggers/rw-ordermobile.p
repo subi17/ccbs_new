@@ -1,0 +1,1 @@
+{triggers/hpdwrite_generic.i OrderMobile ORDERMOBILE Ordercanal OrderId OrderProductID}

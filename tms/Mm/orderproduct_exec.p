@@ -1,7 +1,7 @@
 
 /*------------------------------------------------------------------------
     File        : orderproduct_exec.p
-    Purpose     : Order Product Processing (ordersender.i/ordersender.p re-write via order products for product catalogue)
+    Purpose     : Order Product Processing (ordersender.i/ordersender.p re-write via order products for product catalogue project)
 
     Syntax      :
 
@@ -61,7 +61,7 @@ DEFINE VARIABLE liRequestID       AS INTEGER   NO-UNDO.
 
 DEFINE BUFFER bfOrder FOR Order.
 
-FIND bfOrder WHERE bfOrder.OrderID = iiOrderID EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+FIND FIRST bfOrder WHERE bfOrder.OrderID = iiOrderID EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
 
 IF NOT AVAILABLE bfOrder THEN RETURN.
 
@@ -161,7 +161,7 @@ PROCEDURE ipProcessSIM:
 
     ASSIGN 
         lcICC               =   Func.OrderProductsData:mGetOrderICC(INPUT iiOrderID)
-        lcSubscriptionICC   =   Func.OrderProductsData:mGetOrderSubscriptionICC(INPUT iiOrderID).
+        lcSubscriptionICC   =   Func.OrderProductsData:mGetOrderMobileICC(INPUT iiOrderID).
          
     IF lcICC EQ "" AND lcSubscriptionICC = ""
     THEN DO:
@@ -247,10 +247,10 @@ PROCEDURE ipProcessSIM:
         Func.Common:mWriteMemo("Order",
                                STRING(bfOrder.OrderID),
                                0,
-                               "OrderSubscription",
+                               "OrderMobile",
                                "Parent product to sim is not available.").
     END.
-    ELSE RUN ipCreateOrderSubscriptionData(INPUT bfParentProduct.OrderProductID).
+    ELSE RUN ipCreateOrderMobileData(INPUT bfParentProduct.OrderProductID).
             
 END PROCEDURE.
 
@@ -262,7 +262,7 @@ PROCEDURE ipProcessMobileSubscription:
         lcCLIType = Func.OrderProductsData:mGetOrderCLIType(INPUT iiOrderID)
         lcCLI     = Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID).
         
-    RUN ipCreateOrderSubscriptionData(INPUT iiOrderProductID).
+    RUN ipCreateOrderMobileData(INPUT iiOrderProductID).
     
     IF Func.OrderProductsData:mHasInitialTopup(INPUT iiOrderID) THEN 
         RUN ipCreateOrderTopup(iiOrderProductID , INPUT {&INITIAL_TOPUP}).
@@ -278,7 +278,7 @@ PROCEDURE ipProcessFixedLine:
         lcCLI         = Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID)
         lcFixedNumber = Func.OrderProductsData:mGetFixNumber(INPUT iiOrderID).
     
-    RUN ipCreateOrderSubscriptionData(INPUT iiOrderProductID).
+    RUN ipCreateOrderFusionData(INPUT iiOrderProductID).
 END.    
 
 PROCEDURE ipOrderValidations:
@@ -573,49 +573,51 @@ PROCEDURE ipGetTimeStamp :
 END PROCEDURE.   
 
 
-PROCEDURE ipCreateOrderSubscriptionData:
+PROCEDURE ipCreateOrderMobileData:
     
     DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
     
-    DEFINE BUFFER bfOrderSubscription FOR OrderSubscription.
+    DEFINE BUFFER bfOrderMobile FOR OrderMobile.
     
-    IF CAN-FIND(FIRST bfOrderSubscription WHERE bfOrderSubscription.OrderID         =  iiOrderID  
-                                            AND bfOrderSubscription.OrderProductID  =  iiOrderProductID )
+    IF CAN-FIND(FIRST bfOrderMobile WHERE bfOrderMobile.OrderID         =  iiOrderID  
+                                      AND bfOrderMobile.OrderProductID  =  iiOrderProductID )
     THEN DO:
-        FIND FIRST bfOrderSubscription WHERE bfOrderSubscription.OrderID            = iiOrderID 
-                                         AND bfOrderSubscription.OrderProductID     = iiOrderProductID
-                                         EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+        FIND FIRST bfOrderMobile WHERE bfOrderMobile.OrderID            = iiOrderID 
+                                   AND bfOrderMobile.OrderProductID     = iiOrderProductID
+                                   EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
                                          
-        IF LOCKED(bfOrderSubscription) OR 
-            NOT AVAILABLE (bfOrderSubscription) THEN 
+        IF LOCKED(bfOrderMobile) OR 
+            NOT AVAILABLE (bfOrderMobile) THEN 
         DO:
             Func.Common:mWriteMemo("Order",
                                     STRING(bfOrder.OrderID),
                                     0,
-                                    "OrderSubscription",
-                                    "OrderSubscription Record is locked.").
+                                    "OrderMobile",
+                                    "OrderMobile Record is locked.").
                                     
              ASSIGN lgHoldOrder = TRUE.
              RETURN.
          END. 
     END.
     ELSE DO:
-        CREATE bfOrderSubscription.
+        CREATE bfOrderMobile.
     END.
     
-    ASSIGN bfOrderSubscription.OrderID            =   iiOrderID         WHEN bfOrderSubscription.OrderID        =   0
-           bfOrderSubscription.OrderProductID     =   iiOrderProductID  WHEN bfOrderSubscription.OrderProductID =   0
-           bfOrderSubscription.MSSeq              =   bfOrder.MSSeq     WHEN bfOrderSubscription.MSSeq          =   0
-           bfOrderSubscription.CLIType            =   lcCLIType         WHEN bfOrderSubscription.CLIType        =   ""
-           bfOrderSubscription.CLI                =   lcCLI             WHEN bfOrderSubscription.CLI            =   ""
-           bfOrderSubscription.FixedNumber        =   lcFixedNumber     WHEN bfOrderSubscription.FixedNumber    =   ""
-           bfOrderSubscription.NumberType         =   Func.OrderProductsData:mGetMobileNumberType(INPUT iiOrderID)  WHEN bfOrderSubscription.NumberType = ""
-           bfOrderSubscription.CurrOper           =   Func.OrderProductsData:mGetCurrentOperator(INPUT iiOrderID)   WHEN bfOrderSubscription.CurrOper    = ""
-           bfOrderSubscription.StatusCode         =   bfOrder.StatusCode WHEN bfOrderSubscription.StatusCode  <> ""
-           bfOrderSubscription.CreatedTS          =   bfOrder.crstamp    
-           bfOrderSubscription.UpdatedTS          =   Func.Common:mMakeTS()
-           bfOrderSubscription.ICC                =   lcICC              WHEN bfOrderSubscription.ICC = ""
-           .
+    ASSIGN 
+        bfOrderMobile.Brand          = Syst.Var:gcBrand                                              WHEN bfOrderMobile.Brand          =   ""
+        bfOrderMobile.OrderID        = iiOrderID                                                     WHEN bfOrderMobile.OrderID        =   0
+        bfOrderMobile.OrderProductID = iiOrderProductID                                              WHEN bfOrderMobile.OrderProductID =   0
+        bfOrderMobile.MSSeq          = bfOrder.MSSeq                                                 WHEN bfOrderMobile.MSSeq          =   0
+        bfOrderMobile.Product        = lcCLIType                                                     WHEN bfOrderMobile.Product        =   ""
+        bfOrderMobile.CLI            = lcCLI                                                         WHEN bfOrderMobile.CLI            =   ""
+        bfOrderMobile.NumberType     = Func.OrderProductsData:mGetMobileNumberType(INPUT iiOrderID)  WHEN bfOrderMobile.NumberType     =   ""
+        bfOrderMobile.CurrOper       = Func.OrderProductsData:mGetCurrentOperator(INPUT iiOrderID)   WHEN bfOrderMobile.CurrOper       =   ""
+        bfOrderMobile.StatusCode     = bfOrder.StatusCode                                            WHEN bfOrderMobile.StatusCode     <>  ""
+        bfOrderMobile.CreatedTS      = bfOrder.crstamp    
+        bfOrderMobile.UpdatedTS      = Func.Common:mMakeTS()
+        bfOrderMobile.ICC            = lcICC                                                         WHEN bfOrderMobile.ICC            =   ""
+        bfOrderMobile.PayType        = LOGICAL(Func.ValidateOrder:mGetPayType(bfOrderMobile.Product))          
+       .
            
 END PROCEDURE.    
 
