@@ -2,7 +2,7 @@ from gearbox.migrations import Migration
 
 class AddTableSLTemplate(Migration):
 
-    database = "rating"
+    database = "common"
 
     def up(self):
         t = self.table('SLTemplate', area="Sta_Data_64", label="Service Limit Template", dump_name="sltemplate", desc="")
@@ -17,8 +17,8 @@ class AddTableSLTemplate(Migration):
         t.column('Prior', 'integer', format=">>9", initial="0", label="Priority", column_label="Pri", position=14,  help="Relative priority to other rating buckets")
         t.column('FirstMonthLimit', 'character', format="x(12)", max_width=12, label="FirstMonthLimit", column_label="FirstMonthLimit", order=110, help="First month service limit type")
         t.column('LastMonthLimit', 'character', format="x(12)", max_width=12, label="LastMonthLimit", column_label="LastMonthLimit", order=120, help="Last month service limit type")
-        t.column('BDestLimit', 'integer', format=">>9", initial="0", label="B Destination Limit", column_label="BDestLimit", position=,  help="B Destination Limit")
-        t.index('SLCode', ['SLCode'], area="Sta_Index_1")
+        t.column('BDestLimit', 'integer', format=">>9", initial="0", label="B Destination Limit", column_label="BDestLimit", position=15,  help="B Destination Limit")
+        t.index('SLCode', [['SLCode']], area="Sta_Index_64")
 
     def down(self):
         self.drop_table('SLTemplate')
