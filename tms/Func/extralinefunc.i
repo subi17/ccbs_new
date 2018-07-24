@@ -6,6 +6,7 @@
 {Syst/tmsconst.i}
 {Mc/dpmember.i}
 {Func/cparam2.i}
+{Func/profunc.i}
 
 /* Returns comma delimited character list of extraline clitypes (tariffs) */ 
 FUNCTION fExtraLineCLITypes RETURNS CHARACTER:
@@ -123,6 +124,22 @@ FUNCTION fCLITypeIsMainLine RETURNS LOGICAL
                  INT(TMSRelation.RelationType) GT 0)             THEN 
       RETURN TRUE.
   ELSE  
+      RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckProMainlineForExtraLine RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
+
+   IF CAN-FIND(FIRST TMSRelation NO-LOCK WHERE
+                     TMSRelation.TableName   EQ {&ELTABLENAME} AND
+                     TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND
+                     TMSRelation.ParentValue EQ icCLIType      AND
+                     TMSRelation.ChildValue  EQ {&ELPRO})      THEN
+      RETURN TRUE.
+   ELSE
       RETURN FALSE.
 
 END FUNCTION.
@@ -380,6 +397,10 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
           END.      
 
           IF liCount < liELCount THEN DO:
+
+             IF fCheckProMainlineForExtraLine(MobSub.CLIType) AND
+                NOT fIsPro(Customer.Category)                 THEN NEXT.
+
              liMLMsSeq = MobSub.MsSeq.
              RETURN Order.OrderId.  
           END.
@@ -445,8 +466,14 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
           NEXT.  
       END.      
       
-      IF liCount < liELCount THEN
+      IF liCount < liELCount THEN DO:
+         
+         IF fCheckProMainlineForExtraLine(Order.CLIType) AND
+            NOT fIsPro(Customer.Category)                THEN NEXT.
+
          RETURN Order.OrderId.
+
+      END.
 
    END.
 
