@@ -29,8 +29,9 @@ DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
 {Func/remfees.i}
 
-DEF BUFFER bMergeMobSub FOR MobSub.
-DEF BUFFER bMergeDCCLI  FOR DCCLI.
+DEF BUFFER bMergeMobSub   FOR MobSub.
+DEF BUFFER bMergeDCCLI    FOR DCCLI.
+DEF BUFFER bMergedMsOwner FOR MsOwner.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -60,6 +61,9 @@ IF llDoEvent THEN DO:
 
    DEFINE VARIABLE lhMergeDCCLI AS HANDLE NO-UNDO.
    lhMergeDCCLI = BUFFER bMergeDCCLI:HANDLE.
+
+   DEFINE VARIABLE lhMergedMsOwner AS HANDLE NO-UNDO.
+   lhMergedMsOwner = BUFFER bMergedMsOwner:HANDLE.
 
 END.
 
@@ -1409,11 +1413,26 @@ PROCEDURE pFinalize:
                     bMergeDCCLI.MsSeq   EQ INT(lcParamValue) AND
                     bMergeDCCLI.ValidTo GT TODAY             NO-ERROR.
 
+         FIND FIRST bMergedMsOwner EXCLUSIVE-LOCK WHERE
+                    bMergedMsOwner.Brand   EQ Syst.Var:gcBrand      AND
+                    bMergedMsOwner.CLI     EQ MobSub.CLI            AND
+                    bMergedMsOwner.TsEnd   GT Func.Common:mMakeTS() AND
+                    bMergedMsOwner.CLIType EQ MobSub.CLIType        NO-ERROR.
+
          IF NOT AVAIL bMergeMobSub THEN DO:
             Func.Common:mWriteMemo("MobSub",
                                    STRING(MobSub.MsSeq),
                                    MobSub.Custnum,
                                    "Merge Subscription Not Available",
+                                   lcError).
+            LEAVE MERGEREQUEST.
+         END.
+
+         IF NOT AVAIL bMergedMsOwner THEN DO:
+            Func.Common:mWriteMemo("MobSub",
+                                   STRING(MobSub.MsSeq),
+                                   MobSub.Custnum,
+                                   "Merged MsOwner Not Available",
                                    lcError).
             LEAVE MERGEREQUEST.
          END.
@@ -1463,13 +1482,16 @@ PROCEDURE pFinalize:
          IF llDoEvent THEN DO:
             RUN StarEventSetOldBuffer(lhMobsub).
             RUN StarEventSetOldBuffer(lhMergeMobsub).
+            RUN StarEventSetOldBuffer(lhMergedMsOwner).
          END.
 
-         ASSIGN MobSub.FixedNumber       = bMergeMobSub.FixedNumber
-                bMergeMobSub.FixedNumber = ?.
+         ASSIGN MobSub.FixedNumber         = bMergeMobSub.FixedNumber
+                bMergedMsOwner.FixedNumber = bMergeMobSub.FixedNumber           
+                bMergeMobSub.FixedNumber   = ?.
 
          IF llDoEvent THEN DO:
             RUN StarEventMakeModifyEvent(lhMobSub).
+            RUN StarEventMakeModifyEvent(lhMergedMsOwner).
             RUN StarEventMakeModifyEvent(lhMergeMobSub).
          END.
 
