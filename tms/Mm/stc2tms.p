@@ -1011,18 +1011,18 @@ END PROCEDURE.
 
 PROCEDURE pFinalize:
 
-   DEF VAR liChargeReqId   AS INT  NO-UNDO.
-   DEF VAR liFatFromPeriod AS INT  NO-UNDO. 
-   DEF VAR ldtDate         AS DATE NO-UNDO. 
-   DEF VAR liTime          AS INT  NO-UNDO.
-   DEF VAR lcCharValue     AS CHAR NO-UNDO. 
-   DEF VAR liRequest       AS INT  NO-UNDO.
-   DEF VAR liCustnum       AS INT  NO-UNDO. 
-   DEF VAR ldEndStamp      AS DEC  NO-UNDO.
-   DEF VAR ldBegStamp      AS DEC  NO-UNDO.
-   DEF VAR ldeNow          AS DEC  NO-UNDO.
-   DEF VAR lcResult        AS CHAR NO-UNDO.
-
+   DEF VAR liChargeReqId         AS INT  NO-UNDO.
+   DEF VAR liFatFromPeriod       AS INT  NO-UNDO. 
+   DEF VAR ldtDate               AS DATE NO-UNDO. 
+   DEF VAR liTime                AS INT  NO-UNDO.
+   DEF VAR lcCharValue           AS CHAR NO-UNDO. 
+   DEF VAR liRequest             AS INT  NO-UNDO.
+   DEF VAR liCustnum             AS INT  NO-UNDO. 
+   DEF VAR ldEndStamp            AS DEC  NO-UNDO.
+   DEF VAR ldBegStamp            AS DEC  NO-UNDO.
+   DEF VAR ldeNow                AS DEC  NO-UNDO.
+   DEF VAR lcResult              AS CHAR NO-UNDO.
+   DEF VAR llgUpdateDSSAccount   AS LOG  NO-UNDO INITIAL TRUE.
    DEF VAR lcError               AS CHAR NO-UNDO.
    DEF VAR lcMultiLineSubsType   AS CHAR NO-UNDO.
    DEF VAR lcFusionSubsType      AS CHAR NO-UNDO.
@@ -1030,12 +1030,14 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
    DEF VAR llMigrationNeeded     AS LOG  NO-UNDO.
    
-   DEF VAR llgUpdateDSSAccount   AS LOG  NO-UNDO INITIAL TRUE.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
-   DEF BUFFER Order FOR Order.
-   DEF BUFFER bMobsub FOR Mobsub.
-   DEF BUFFER bCustomer FOR Customer.
+   DEF BUFFER Order           FOR Order.
+   DEF BUFFER bMobsub         FOR Mobsub.
+   DEF BUFFER bCustomer       FOR Customer.
+   DEF BUFFER lbELMobSub      FOR MobSub.
+   DEF BUFFER lbCustomer      FOR Customer.
+   
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
