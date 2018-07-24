@@ -1,0 +1,164 @@
+ADD FIELD "StreetType" OF "Address" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "StreetType"
+  POSITION 14
+  MAX-WIDTH 16
+  COLUMN-LABEL "StreetType"
+  HELP "Street Type"
+  ORDER 130  
+  
+DROP FIELD "AddressType" OF "Address"  
+
+ADD FIELD "AddressType" OF "Address" AS integer 
+  FORMAT ">>>9"
+  INITIAL 0
+  LABEL "AddressType"
+  POSITION 15
+  MAX-WIDTH 16
+  COLUMN-LABEL "AddressType"
+  HELP "Address Type"
+  ORDER 140  
+  
+ADD FIELD "BankName" OF "InvoiceTargetGroup" AS CHARACTER
+  FORMAT "X(16)"
+  INITIAL ""
+  LABEL "BankName"
+  POSITION 17
+  MAX-WIDTH 4
+  COLUMN-LABEL "BankName"
+  HELP "Bank Name"
+  ORDER 160  
+
+ADD FIELD "StatusCode" OF "CustomerAccount" AS integer
+  FORMAT ">>99"
+  INITIAL 0
+  LABEL "Status"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Status"
+  HELP "Customer Account Status"
+  ORDER 130
+  
+.
+PSC
+cpstream=ISO8859-1
+.
+0000000609
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
