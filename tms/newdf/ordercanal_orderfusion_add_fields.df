@@ -1,0 +1,46 @@
+ADD FIELD "MsSeq" OF "OrderFusion" AS integer
+  DESCRIPTION "Subscription ID"
+  FORMAT ">>>>>>>9"
+  POSITION 33
+  INITIAL "0"
+  HELP "Subscription ID"
+  LABEL "SubscrID"
+  COLUMN-LABEL "SubscrID"
+  ORDER 320
+  MAX-WIDTH 4
+
+ADD FIELD "CreatedTS" OF "OrderFusion" AS decimal
+  DESCRIPTION "Creation Time"
+  FORMAT "99999999.99999"
+  POSITION 34
+  INITIAL "0"
+  HELP "Creation Time"
+  LABEL "Creation Time"
+  COLUMN-LABEL "Creation Time"
+  DECIMALS 5
+  ORDER 330
+  MAX-WIDTH 20
+
+ADD FIELD "OrderProductID" OF "OrderFusion" AS integer
+  DESCRIPTION "OrderProductID"
+  FORMAT ">>>>>>>>9"
+  POSITION 35
+  INITIAL "0"
+  HELP "OrderProductID"
+  LABEL "ProductID"
+  COLUMN-LABEL "ProductID"
+  ORDER 340
+  MAX-WIDTH 4
+
+ADD INDEX "MsSeq" ON "OrderFusion"
+  AREA "Dyn_Index_1"
+  DESCRIPTION "MsSeq"
+  INDEX-FIELD "MsSeq" ASCENDING
+
+ADD INDEX "OrderProductID" ON "OrderFusion"
+  AREA "Dyn_Index_1"
+  DESCRIPTION "OrderProductID"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "OrderId" ASCENDING
+  INDEX-FIELD "OrderProductID" ASCENDING
+
