@@ -278,7 +278,7 @@ IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
       Memo.CreStamp  = {&nowTS}
       Memo.Brand     = Syst.Var:gcBrand
       Memo.HostTable = "MobSub"
-      Memo.KeyValue  = STRING(MobSub.MsSeq)
+      Memo.KeyValue  = STRING(liSTCMsSeq)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = pcMemoTitle
