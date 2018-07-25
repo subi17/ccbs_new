@@ -29,6 +29,7 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
 
    DEFINE BUFFER lbMobSub      FOR MobSub.
    DEFINE BUFFER bTerMsRequest FOR MsRequest.
+   DEFINE BUFFER bMsRequest    FOR MsRequest.
 
    liRequest = fDSSRequest(iiDSSMsSeq,
                            iiDSSCustNum,
@@ -50,6 +51,14 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
                              (icDSSBundleId + " " + icErrorMsg),
                              ocResult). 
    ELSE DO:
+      /* Link MainRequest Id to current created DSS group request */
+      /* so it can be skipped while processing percontr.p         */
+      IF icDSSReqSource EQ {&REQUEST_SOURCE_STC} THEN DO:
+         FIND FIRST bMsRequest EXCLUSIVE-LOCK WHERE
+                    bMsRequest.MsRequest EQ liRequest NO-ERROR.
+         IF AVAIL bMsRequest THEN
+            bMsRequest.ReqIParam2 = iiDSSMainRequest.
+      END.
 
       fGetDSSMsSeqLimit(iiDSSCustNum,
                         Func.Common:mMakeTS(),

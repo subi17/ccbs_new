@@ -181,9 +181,10 @@ RETURN RETURN-VALUE.
 
 PROCEDURE pSolog:
 
-   DEF BUFFER bufOrder  FOR Order.
-   DEF BUFFER bufMobsub FOR Mobsub.
+   DEF BUFFER bufOrder      FOR Order.
+   DEF BUFFER bufMobsub     FOR Mobsub.
    DEF BUFFER bufTermMobsub FOR TermMobsub.
+   DEF BUFFER bActionLog    FOR ActionLog.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
    DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
@@ -243,9 +244,16 @@ PROCEDURE pSolog:
           MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN DO:
 
          IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
-
-            IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
-                  MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
+           
+            IF (fIsFixedOnly(bufMobsub.CLIType)                  AND
+                MSRequest.ReqCParam6 EQ {&TERMINATION_TYPE_FULL} AND
+                CAN-FIND(FIRST bActionLog NO-LOCK  WHERE
+                               bActionLog.Brand     EQ Syst.Var:gcBrand                     AND
+                               bActionLog.ActionID  EQ {&MERGE2P3P}                         AND
+                               bActionLog.TableName EQ "MobSub"                             AND
+                       ENTRY(1,bActionLog.ActionChar,CHR(255)) EQ STRING(MsRequest.MsSeq))) THEN .
+            ELSE IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
+                     MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
 
                liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
                IF liOrderId EQ 0
