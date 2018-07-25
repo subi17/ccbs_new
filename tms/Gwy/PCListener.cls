@@ -13,7 +13,7 @@ USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 USING Syst.Configuration.
 
-&GLOBAL-DEFINE MQ_BASED NO                
+&GLOBAL-DEFINE MQ_BASED YES                
 
 CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
                      IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
