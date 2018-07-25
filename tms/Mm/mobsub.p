@@ -50,7 +50,7 @@ IF llDoEvent THEN DO:
    END.
 
 END.
-DEF  NEW  shared VAR siirto AS CHAR.  
+DEF NEW SHARED VAR siirto AS CHAR.  
 
 DEF VAR Mobsub        LIKE Mobsub.CLI           NO-UNDO.
 DEF VAR CustNum       LIKE Customer.Custnum       NO-UNDO.
@@ -314,7 +314,8 @@ BROWSE:
         
         ELSE ASSIGN
         Syst.Var:ufk[1]= 559  Syst.Var:ufk[2]= 1740 Syst.Var:ufk[3]= 9852 Syst.Var:ufk[4]= 0
-        Syst.Var:ufk[5]= 0 Syst.Var:ufk[6]= 0
+        Syst.Var:ufk[5]= 9861 /* SAPC-46 */
+        Syst.Var:ufk[6]= 0
         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
         Syst.Var:ehto = 3 ufkey = FALSE.
 
@@ -744,6 +745,23 @@ BROWSE:
           NEXT LOOP.
        END.
      END. 
+     /* SAPC-46  SAPC Commands */     
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND llMore AND 
+       iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
+
+       Syst.Var:cfc = "puyr". 
+       RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. 
+       RUN Syst/ufkey.p. 
+       ufkey = TRUE.
+
+       RUN local-find-this(FALSE).
+       IF AVAILABLE mobsub THEN 
+          RUN Mc/ProCommandView.p(INPUT mobsub.msseq).
+
+       NEXT LOOP.
+     END. 
+     /* SAPC-46 end */      
      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
@@ -1196,6 +1214,19 @@ PROCEDURE local-find-others.
    END.
    ELSE lcMultiSim = "".
    
+   /* Provisioning type - SAPC-46 */
+   IF NOT AVAIL userCustomer THEN 
+      lcProvisioningType = "Unknown". 
+   ELSE 
+   DO:   
+      IF usercustomer.accGrp = 1 THEN
+         lcProvisioningType = "PL".
+      ELSE IF usercustomer.accGrp = 2 THEN
+         lcProvisioningType = "SAPC".
+      ELSE
+         lcProvisioningType = "Unknown".
+   END. 
+      
 END PROCEDURE.
 
 PROCEDURE local-UPDATE-record.
@@ -1245,6 +1276,7 @@ PROCEDURE local-UPDATE-record.
       mobsub.paytype
       lcMNP
       lcMultiSim
+      lcProvisioningType /* SAPC-46 */
    WITH FRAME lis.
      
    IF lcRight NE "RW" OR llupdate = FALSE  THEN RETURN.
