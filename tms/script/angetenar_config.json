@@ -24,7 +24,13 @@
                                     "-logginglevel": "4" }
                 }
         },
-
+    "Gwy.PCListener":
+        {
+            "pc_listener":
+                {
+                    "1": { "-logginglevel": "4" }
+                }
+        },
     "Gwy.MasmovilSender":
         {
             "mms":
