@@ -20,6 +20,7 @@
 {Func/remfees.i}
 {Func/barrfunc.i}
 {Func/fmakesms.i}
+{Func/SAPC.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -126,18 +127,36 @@ PROCEDURE pServCompSolog:
                        OUTPUT ldeReqAmt,
                        OUTPUT liReqCnt).
    
-   /* create solog */
-   RUN Mm/setms.p(MsRequest.MSRequest,
-             TRUE,
-             OUTPUT liReqCnt,
-             OUTPUT lcError).
+   /* SAPC-44 redirecting new SAPC customers to new logic */
+   IF Customer.AccGrp = 2 AND 
+      fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN
+   DO:
+      /* create procommand */
+      RUN Mm/setSAPC.p(MsRequest.MSRequest,
+                       OUTPUT liReqCnt,
+                       OUTPUT lcError).
 
-   /* error occurred */
-   IF liReqCnt < 0 OR lcError BEGINS "ERROR" THEN DO:
-      fReqError("Solog creation failed:" + lcError).
-      RETURN.
+      /* error occurred */
+      IF liReqCnt < 0 OR lcError BEGINS "ERROR" THEN DO:
+          fReqError("ProCommand creation failed:" + lcError).
+          RETURN.
+      END.
    END.
-      
+   ELSE DO:
+      /* create solog */
+      RUN Mm/setms.p(MsRequest.MSRequest,
+                    TRUE,
+                    OUTPUT liReqCnt,
+                    OUTPUT lcError).
+
+      /* error occurred */
+      IF liReqCnt < 0 OR lcError BEGINS "ERROR" THEN DO:
+          fReqError("Solog creation failed:" + lcError).
+          RETURN.
+      END.
+   END.
+   /* SAPC-44 end */
+   
    /* solog was not needed -> direct additional handling */
    IF liReqCnt = 0 THEN liMarkStatus = 6.
    /* if solog was created then mark request to pending state */
