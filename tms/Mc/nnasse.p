@@ -134,6 +134,7 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 &GLOBAL-DEFINE BrTable Customer
 
 {Syst/commali.i}
+{Func/lib/accesslog.i}
 
 {Func/cparam2.i}
 {Syst/eventval.i}
@@ -317,6 +318,8 @@ DEF VAR lcProfession  AS CHAR  NO-UNDO.
 DEF VAR lcMemo        AS CHAR  NO-UNDO.
 DEF VAR lcNWProfile   AS CHAR  NO-UNDO. /* RES-885 */
 DEF VAR lcSAPC        AS CHAR  NO-UNDO. /* SAPC-44 */
+DEF VAR llAccess      AS LOG   NO-UNDO.
+DEF VAR lcProgram     AS CHAR  NO-UNDO.
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
 DEF VAR lcCustAddress LIKE Customer.Address  NO-UNDO.
@@ -324,6 +327,8 @@ DEF VAR lcCustZipCode LIKE Customer.ZipCode NO-UNDO.
 DEF VAR lcCustRegion  LIKE Customer.Region  NO-UNDO.
 DEF VAR lcCustCountry LIKE Customer.Country  NO-UNDO.
 DEF VAR lcCustPostOffice LIKE Customer.PostOffice NO-UNDO.
+
+lcProgram = PROGRAM-NAME(1).
 
 IF iiCustNum > 0 AND NUM-ENTRIES(icType,"¤") > 1 THEN ASSIGN 
    lcChgTitle = ENTRY(2,icType,"¤")
@@ -1408,6 +1413,8 @@ repeat WITH FRAME sel:
 
               IF NOT fRecFound(1) THEN NEXT BROWSE.
 
+              llAccess = TRUE.
+
               NEXT LOOP.
            END.
         END. /* Search col. 1 */
@@ -1505,6 +1512,8 @@ repeat WITH FRAME sel:
 
               IF NOT fRecFound(2) THEN NEXT BROWSE.
 
+              llAccess = TRUE.
+
               NEXT LOOP.
 
            END.
@@ -1526,6 +1535,8 @@ repeat WITH FRAME sel:
 
               IF NOT fRecFound(3) THEN NEXT BROWSE.
 
+              llAccess = FALSE.
+
               NEXT LOOP.
            END.
         END.
@@ -1543,6 +1554,8 @@ repeat WITH FRAME sel:
               {Mc/custfind.i FIRST OrgId "AND Customer.OrgId >= OrgId"}.
 
               IF NOT fRecFound(4) THEN NEXT BROWSE.
+
+              llAccess = TRUE.
 
               NEXT LOOP.
            END.
@@ -1640,7 +1653,10 @@ repeat WITH FRAME sel:
         ASSIGN fr-header = fr-header + " CUSTOMER DATA "  
                Syst.Var:cfc = "kline" 
                ufkey     = TRUE.
- 
+
+        IF llAccess THEN
+           RUN CreateReadAccess("Customer", Syst.Var:katun, Customer.CustNum, lcProgram, "CustNum" ).
+
         Action: 
         repeat WITH FRAME lis:
            PAUSE 0.

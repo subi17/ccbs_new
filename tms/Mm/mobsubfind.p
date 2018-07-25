@@ -13,6 +13,7 @@
 {Mc/lib/tokenchk.i 'Customer'}
 {Syst/eventval.i}
 {Func/cparam2.i}    /* SAPC-44 */
+{Func/lib/accesslog.i}
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
 DEFINE INPUT PARAMETER  icValue    AS C NO-UNDO.
@@ -60,6 +61,9 @@ DEF VAR lcFirstName  AS CHAR                   NO-UNDO.
 DEF VAR lcSurName2   AS CHAR                   NO-UNDO.
 DEF VAR lcCompany    AS CHAR                   NO-UNDO.
 DEF VAR lcSAPC       AS CHAR                   NO-UNDO. /* SAPC-44 */
+DEF VAR lcProgram    AS CHAR                   NO-UNDO.
+
+lcProgram = PROGRAM-NAME(1).
 
 form
     Customer.CustNum     /* COLUMN-LABEL FORMAT */
@@ -362,12 +366,13 @@ BROWSE:
      ELSE IF (LOOKUP(Syst.Var:nap,"2,f2") > 0 OR LOOKUP(Syst.Var:nap, "enter,return") > 0)
           AND lcRight = "RW" THEN DO:  
         RUN local-find-this (FALSE).
+        RUN CreateReadAccess("Customer", Syst.Var:katun, Customer.CustNum, lcProgram, "CustNum" ).
         IF icCriteria      = "ID" OR 
-           icCriteria      = "AGRNAME" THEN 
+           icCriteria      = "AGRNAME" THEN
            RUN Mm/mobsub.p(Customer.CustNum, "AGREEMENT").
         ELSE IF icCriteria = "UserName" THEN
            RUN Mm/mobsub.p(Customer.CustNum, "USER").
-        
+       
         ufkey = true.
                               
      END.
