@@ -255,7 +255,7 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
            DO:
                llValidExtraLine =  fCLITypeIsExtraLine(bf_CliType.CliType).
                IF llValidExtraLine THEN RETURN TRUE.
-               
+                                                      
                ocCliTypeTo = fgetActiveReplacement(icCliType,"STCMappingForActiveTariffs").
 
                IF ocCliTypeTo = "" THEN 
@@ -281,8 +281,7 @@ FUNCTION fCheckSubscriptionTypeAllowedForProMigration RETURNS LOGICAL
    
    RETURN TRUE.
 
-END FUNCTION.   
-
+END FUNCTION.
 
 FUNCTION fProMigrationRequest RETURNS INTEGER
    (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
@@ -313,7 +312,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
    FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.AgrCust NO-LOCK NO-ERROR.
    FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
-
+   
    llIsExtraLineOrProMigrationAllowed = fCheckSubscriptionTypeAllowedForProMigration(bMobSub.CliType, OUTPUT lcCliTypeTo).
    
    IF lcCliTypeTo <> "" OR llIsExtraLineOrProMigrationAllowed THEN 
@@ -619,5 +618,4 @@ FUNCTION fTerminateSVAs RETURNS LOGICAL
 END.
 
 &ENDIF
-
 
