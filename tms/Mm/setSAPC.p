@@ -536,7 +536,8 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
       ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
       ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
       ProCommand.ProCommandtarget    = "NB"
-      ProCommand.ProCommandtargetURL = fChange_API_NB_URL(). /* Northbound-Orders URL */
+      ProCommand.ProCommandtargetURL = fChange_API_NB_URL() /* Northbound-Orders URL */
+      ProCommand.ActivationTS        = ldTime.        /* Activate NOW            */
    
    /* Common Body to Upsell, Add/Modify/Delete dataplan */
    CREATE ttOrder.

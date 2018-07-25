@@ -12,8 +12,8 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
 {Syst/eventval.i}
-{Func/lib/accesslog.i}
 {Func/cparam2.i}    /* SAPC-44 */
+{Func/lib/accesslog.i}
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
 DEFINE INPUT PARAMETER  icValue    AS C NO-UNDO.
@@ -60,8 +60,8 @@ DEF VAR lcSurname1   AS CHAR                   NO-UNDO.
 DEF VAR lcFirstName  AS CHAR                   NO-UNDO.
 DEF VAR lcSurName2   AS CHAR                   NO-UNDO.
 DEF VAR lcCompany    AS CHAR                   NO-UNDO.
-DEF VAR lcProgram    AS CHAR                   NO-UNDO.
 DEF VAR lcSAPC       AS CHAR                   NO-UNDO. /* SAPC-44 */
+DEF VAR lcProgram    AS CHAR                   NO-UNDO.
 
 lcProgram = PROGRAM-NAME(1).
 

@@ -317,8 +317,8 @@ DEF VAR llAddressValidated AS LOG NO-UNDO.
 DEF VAR lcProfession  AS CHAR  NO-UNDO.
 DEF VAR lcMemo        AS CHAR  NO-UNDO.
 DEF VAR lcNWProfile   AS CHAR  NO-UNDO. /* RES-885 */
-DEF VAR llAccess      AS LOG   NO-UNDO.
 DEF VAR lcSAPC        AS CHAR  NO-UNDO. /* SAPC-44 */
+DEF VAR llAccess      AS LOG   NO-UNDO.
 DEF VAR lcProgram     AS CHAR  NO-UNDO.
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
