@@ -1,9 +1,15 @@
+USING Progress.Json.ObjectModel.JsonObject.
+USING Progress.Json.ObjectModel.JsonArray .
+
 {Syst/commali.i}
 {Gwy/provision.i}
 {Func/fmakemsreq.i}
 {Func/dss_matrix.i}
 {Func/msreqfunc.i}
-
+{Func/SAPC.i}
+{Func/SAPC_change_API.i}
+{Func/cparam2.i}
+                    
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
 DEF VAR ldActStamp                 AS DEC  NO-UNDO.
@@ -19,10 +25,27 @@ DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO. 
 DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO. 
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcDSSId AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcDSSId            AS CHARACTER NO-UNDO.
+ 
+/* SAPC */
+DEFINE VARIABLE lcmsisdns          AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE dDataLimit         AS DECIMAL   NO-UNDO.  
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 DEF BUFFER bDSSMobSub  FOR MobSub.
+
+/* SAPC - Create DSS group */
+DEFINE TEMP-TABLE ttDSS
+   FIELD type      AS CHAR  
+   FIELD priority  AS CHAR 
+   FIELD msisdns   AS CHAR.
+
+/* SAPC - Update data limit */
+DEFINE TEMP-TABLE ttDSSDataLimit
+   FIELD offeringName      AS CHAR
+   FIELD roamingLikeAtHome AS CHAR
+   FIELD tariff            AS CHAR.
+
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -55,7 +78,8 @@ END.
  
 IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
     MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) AND
-    MSRequest.ReqIParam5 > 0 THEN DO:
+    MSRequest.ReqIParam5 > 0 THEN 
+DO:
    
   FIND FIRST bbMsRequest NO-LOCK WHERE
              bbMsRequest.MsRequest = MsRequest.ReqIParam5 NO-ERROR.
@@ -109,7 +133,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
                         INPUT  MsRequest.MsSeq,
                         INPUT  (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
                                 MsRequest.ActStamp ELSE Func.Common:mMakeTS()),
-                        INPUT  MsRequest.ReqCparam3,
+                        INPUt  MsRequest.ReqCparam3,
                         INPUT  "",
                         OUTPUT ldeCurrMonthLimit,
                         OUTPUT ldeConsumedData,
@@ -187,10 +211,13 @@ PROCEDURE pSolog:
    DEF BUFFER bActionLog    FOR ActionLog.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
-   DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
-   DEF VAR liError       AS INT NO-UNDO.
-   DEF VAR lcResult      AS CHAR NO-UNDO.
-   DEF VAR liOrderId     AS INT  NO-UNDO.
+   DEF VAR ldCurrBal AS DECIMAL NO-UNDO. 
+
+   /* SAPC */
+   DEFINE VARIABLE cJsonMsg           AS LONGCHAR NO-UNDO.
+   DEFINE VARIABLE cJsonMsg_DAtaLimit AS LONGCHAR NO-UNDO.
+   DEFINE VARIABLE lJsonCreation      AS LOGICAL  NO-UNDO.
+
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -241,10 +268,8 @@ PROCEDURE pSolog:
       lcCli = BufMobsub.CLI.
    
       IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
-          MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN DO:
-
-         IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
-           
+          MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN
+      DO:
             IF (fIsFixedOnly(bufMobsub.CLIType)                  AND
                 MSRequest.ReqCParam6 EQ {&TERMINATION_TYPE_FULL} AND
                 CAN-FIND(FIRST bActionLog NO-LOCK  WHERE
@@ -254,25 +279,6 @@ PROCEDURE pSolog:
                        ENTRY(1,bActionLog.ActionChar,CHR(255)) EQ STRING(MsRequest.MsSeq))) THEN .
             ELSE IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
                      MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
-
-               liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
-               IF liOrderId EQ 0
-                  THEN lcResult = "OrderID not found".
-               /* This call makes synchronous termination request to MuleDB */
-               ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
-               
-               IF lcResult > "" THEN DO:
-                  Func.Common:mWriteMemo("MobSub",
-                              STRING(BufMobsub.MsSeq),
-                              BufMobsub.Custnum,
-                              "La baja del sevicio fijo ha fallado: ", /* Fixed number termination failed" */
-                              lcResult).
-                  fReqError("La baja del sevicio fijo ha fallado: " + lcResult).
-                  RETURN.
-               END.       
-            END.
-         END.
-
          /* Cancel the active/suspended BB service before
             subscription termination or icc change provisioning */
          FOR FIRST SubSer WHERE SubSer.ServCom = "BB"            AND
@@ -340,47 +346,164 @@ PROCEDURE pSolog:
                           "Balance query failed:" + CHR(10) + 
                           RETURN-VALUE).
          END. /* IF MobSub.PayType THEN DO: */
-
       END.
-      
    END.
    
    ldActStamp = MSRequest.ActStamp.
    IF liOffSet NE 0 THEN 
       ldActStamp = Func.Common:mSecOffSet(ldActStamp,liOffSet).
+      
    DO TRANSACTION:
-      CREATE Solog.
-      ASSIGN
-         Solog.Solog = NEXT-VALUE(Solog).
+      
+      /* SAPC-56 redirecting new SAPC customers to new logic */
+      IF Customer.AccGrp = 2 AND 
+         fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN  /* SAPC */
+      DO:
+         /* Additional safety measure (Functionality already check above) */
+         IF MsRequest.ReqType <> {&REQTYPE_DSS} OR
+            MSrequest.ReqCparam1 <> "CREATE"    OR 
+            LOOKUP(MSrequest.ReqCparam3,{&DSS_BUNDLES} ) = 0 THEN
+            RETURN "ERROR: CreateSolog.p only ready for DSS/DSS2 activation in SAPC customers".
+         
+         /* Locating data */
+         FIND FIRST Mobsub WHERE 
+                    Mobsub.MSSeq = MSRequest.MSSeq
+              NO-LOCK NO-ERROR.
+         IF NOT AVAILABLE Mobsub THEN
+         DO:
+            fReqError("Mobile Subscription not found for request " + 
+                       STRING(MSRequest.MSRequest)).
+            RETURN.
+         END.
+         
+         ASSIGN 
+            lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,index(cc,"MSISDNS="))
+            lcmsisdns = REPLACE(lcmsisdns,"MSISDNS=","")
+            lcmsisdns = REPLACE(lcmsisdns,";","|").
+                    
+         /* 1st. Creating ProCommand for creating DSS group */   
+         CREATE ProCommand.
+         ASSIGN
+            ProCommand.MsRequest        = MsRequest.MsRequest
+            ProCommand.ProcommandId     = NEXT-VALUE(Seq_ProCommand_ProCommandId)
+            ProCommand.ProCommandType   = "CREATE_DSS_GROUP"
+            ProCommand.CreatedTS        = NOW 
+            ProCommand.Creator          = Syst.Var:katun    
+            ProCommand.MsSeq            = MobSub.MsSeq   /* Mobile Subscription No. */
+            ProCommand.ProCommandstatus = 0              /* 0 - New                 */
+            ProCommand.ProCommandtarget = fDSS_NB_URL(). /* Northbound DSS URL */
+         
+         /* Json content */
+         CREATE ttDSS.
+         ASSIGN 
+            ttDSS.type     = "POST"  /* Hard-coded. Type of user: POST */  
+            ttDSS.priority = "1000"  /* Hard-coded. For Base tariff = 1000 */
+            ttDSS.msisdns  = lcmsisdns.
+                   
+         /* Getting Json string */
+         lJsonCreation = TEMP-TABLE ttDSS:WRITE-JSON("LONGCHAR",
+                                                     cJsonMsg, 
+                                                     TRUE,    /* Formatted           */
+                                                     "UTF-8", /* Encoding            */
+                                                     FALSE,   /* Omit initial values */
+                                                     TRUE,    /* Omit outer object   */
+                                                     FALSE).  /* Write before image  */
+         IF lJsonCreation = FALSE then
+         DO:
+            fReqError("Json generation failed for request " + 
+                      STRING(MSRequest.MSRequest)).
+            UNDO, RETURN.
+         END.
+         ELSE
+            /* Successful. Saving Json message command */ 
+            ASSIGN
+               Procommand.CommandLine = cJsonMsg.
+         
+         /* 2nd. Creating ProCommand for updating Data limit for DSS group */
+         CREATE ProCommand.
+         ASSIGN
+            ProCommand.MsRequest        = MsRequest.MsRequest
+            ProCommand.ProcommandId     = NEXT-VALUE(Seq_ProCommand_ProCommandId)
+            ProCommand.ProCommandType   = "UPDATE_DSS_GROUP_DATALIMIT"
+            ProCommand.CreatedTS        = NOW 
+            ProCommand.Creator          = Syst.Var:katun    
+            ProCommand.MsSeq            = MobSub.MsSeq  
+            ProCommand.ProCommandstatus = 0               /* 0 - New */
+            ProCommand.ProCommandtarget = fDSS_NB_URL() + /* Northbound DSS URL */
+                                          "/set-accumulated-volume".
+  
+         /* Json content */
+         ASSIGN dDataLimit = fGetDSSDataLimit(MsRequest.MsRequest).
+         IF dDataLimit = 0 THEN
+         DO:
+            fReqError("Json generation (datalimit not found) failed for request " + 
+                      STRING(MSRequest.MSRequest)).
+            UNDO, RETURN.
+         END.
+         
+         CREATE ttDSSDataLimit.
+         ASSIGN 
+            ttDSSDataLimit.offeringName      = MsRequest.ReqCParam3 /* DSS/DSS2/DSS4 */  
+            ttDSSDataLimit.roamingLikeAtHome = STRING(dDataLimit) 
+            ttDSSDataLimit.tariff            = STRING(dDataLimit).
+                
+         /* Getting Json string */
+         lJsonCreation = TEMP-TABLE ttDSSDataLimit:WRITE-JSON("LONGCHAR",
+                                                              cJsonMsg_DataLimit, 
+                                                              TRUE,    /* Formatted           */
+                                                              "UTF-8", /* Encoding            */
+                                                              FALSE,   /* Omit initial values */
+                                                              TRUE,    /* Omit outer object   */
+                                                              FALSE).  /* Write before image  */
+         IF lJsonCreation = FALSE then
+         DO:
+            fReqError("Json generation (datalimit) failed for request " + 
+                      STRING(MSRequest.MSRequest)).
+            UNDO, RETURN.
+         END.
+         ELSE
+            /* Successful. Saving Json message command */ 
+            ASSIGN
+               Procommand.CommandLine = cJsonMsg_DataLimit.
+         
+      END.  /*end of SAPC customer */
+      ELSE 
+      DO: /* Existing logic for Packet Logic */
+         CREATE Solog.
+         ASSIGN
+            Solog.Solog = NEXT-VALUE(Solog).
+   
+         ASSIGN
+            Solog.CreatedTS    = Func.Common:mMakeTS()
+            Solog.MsSeq        = MsreQuest.MsSeq    /* Mobile Subscription No.    */
+            Solog.CLI          = lcCLI              /* MSISDN                     */
+            Solog.Stat         = 0                  /* just created               */
+            Solog.Brand        = MSRequest.Brand
+            Solog.Users        = MSREquest.UserCode
+            Solog.TimeSlotTMS  = ldActStamp
+            Solog.ActivationTS = ldActStamp
+            Solog.MSrequest    = MSRequest.MSRequest.
+   
+         IF MsRequest.ReqCParam1 = "CHANGEICC"      OR
+            MSrequest.ReqCparam1 = "CHANGEMSISDN"   OR
+            MSrequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
+            Solog.CommLine = fMakeCommLine2(Solog.Solog,MsRequest.MSrequest,False).
+         ELSE IF MSrequest.ReqType = {&REQTYPE_DSS} THEN
+            Solog.CommLine = fMakeDSSCommLine(Solog.Solog,MsRequest.MSrequest).
+         ELSE
+            Solog.CommLine = fMakeCommLine(Solog.Solog,MsRequest.ReqCParam1).
+   
+         ASSIGN
+            SoLog.CommLine = TRIM(REPLACE(SoLog.CommLine,",,",","),",").
+   
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+   
+         MsRequest.Solog = Solog.Solog.
 
-      ASSIGN
-         Solog.CreatedTS    = Func.Common:mMakeTS()
-         Solog.MsSeq        = MsreQuest.MsSeq    /* Mobile Subscription No.    */
-         Solog.CLI          = lcCLI              /* MSISDN                     */
-         Solog.Stat         = 0                  /* just created               */
-         Solog.Brand        = MSRequest.Brand
-         Solog.Users        = MSREquest.UserCode
-         Solog.TimeSlotTMS  = ldActStamp
-         Solog.ActivationTS = ldActStamp
-         Solog.MSrequest    = MSRequest.MSRequest.
-
-      IF MsRequest.ReqCParam1 = "CHANGEICC"      OR
-         MSrequest.ReqCparam1 = "CHANGEMSISDN"   OR
-         MSrequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
-         Solog.CommLine = fMakeCommLine2(Solog.Solog,MsRequest.MSrequest,False).
-      ELSE IF MSrequest.ReqType = {&REQTYPE_DSS} THEN
-         Solog.CommLine = fMakeDSSCommLine(Solog.Solog,MsRequest.MSrequest).
-      ELSE
-         Solog.CommLine = fMakeCommLine(Solog.Solog,MsRequest.ReqCParam1).
-
-      ASSIGN
-         SoLog.CommLine = TRIM(REPLACE(SoLog.CommLine,",,",","),",").
-
-      FIND CURRENT MsRequest EXCLUSIVE-LOCK.
-
-      MsRequest.Solog = Solog.Solog.
-
+      END.
+      
       fReqStatus(5,"").
+      
    END.
 
 END PROCEDURE.
