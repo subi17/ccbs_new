@@ -469,7 +469,7 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
       IF liCount < liELCount THEN DO:
          
          IF fCheckProMainlineForExtraLine(Order.CLIType) AND
-            NOT fIsPro(Customer.Category)                THEN NEXT.
+            NOT fIsPro(OrderCustomer.Category) THEN NEXT.
 
          RETURN Order.OrderId.
 
