@@ -17,11 +17,12 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
     DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
     DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
     
-    DEF VAR liElemType AS CHAR NO-UNDO.
+    DEF VAR lcElemType AS CHAR NO-UNDO.
 
     DEF TEMP-TABLE ttSLTemplate NO-UNDO SERIALIZE-NAME "SLTemplate"
         FIELD external_id          AS CHAR
         FIELD usage_type           AS CHAR
+        FIELD traffic_type         AS CHAR
         FIELD destination_type     AS CHAR
         FIELD inside_call_case     AS CHAR
         FIELD unlimited_usage      AS LOG 
@@ -83,7 +84,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         CREATE SLTemplate.
         ASSIGN
             SLTemplate.SLCode            = ttSLTemplate.external_id
-            SLTemplate.elementtype       = liElemType
+            SLTemplate.elementtype       = INT(lcElemType)
             SLTemplate.trafficType       = ttSLTemplate.traffic_type
             SLTemplate.BCC               = INT(ttSLTemplate.inside_call_case)
             SLTemplate.unlimitedUsage    = ttSLTemplate.unlimited_usage
@@ -92,7 +93,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
             SLTemplate.Prior             = ttSLTemplate.priority
             SLTemplate.FirstMonthLimit   = ttSLTemplate.first_month_limit
             SLTemplate.LastMonthLimit    = ttSLTemplate.last_month_limit
-            SLTemplateDataset.BDestLimit = ttSLTemplate.bdestination_limit.
+            SLTemplate.BDestLimit        = ttSLTemplate.bdestination_limit.
             
         FOR EACH ttoriginal_call_case WHERE 
                  ttoriginal_call_case.parent_id = RECID(ttSLTemplate):
@@ -161,23 +162,22 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         loEventLogMaker:make_eventlog("oldbuffer",BUFFER SLTemplate:HANDLE).
     
         ASSIGN 
-            SLTemplate.elementtype       = liElemType
-                                               WHEN ttSLTemplate.usage_type > ""
+            SLTemplate.elementtype       = INT(lcElemType)
+                                               WHEN ttSLTemplate.usage_type > "" 
             SLTemplate.trafficType       = ttSLTemplate.traffic_type
                                                WHEN ttSLTemplate.traffic_type > ""
-            SLTemplate.BCC               = ttSLTemplate.inside_call_case
+            SLTemplate.BCC               = INT(ttSLTemplate.inside_call_case)
                                                WHEN ttSLTemplate.inside_call_case > ""
             SLTemplate.unlimitedUsage    = ttSLTemplate.unlimited_usage
-                                               WHEN ttSLTemplate.unlimited_usage > ""
+                                               WHEN ttSLTemplate.unlimited_usage 
             SLTemplate.InclAmt           = ttSLTemplate.usage_amount
-                                               WHEN ttSLTemplate.usage_amount > 0
             SLTemplate.Prior             = ttSLTemplate.priority 
                                                WHEN ttSLTemplate.priority > 0
             SLTemplate.FirstMonthLimit   = ttSLTemplate.first_month_limit
                                                WHEN ttSLTemplate.first_month_limit > ""
             SLTemplate.LastMonthLimit    = ttSLTemplate.last_month_limit
                                                WHEN ttSLTemplate.last_month_limit > ""
-            SLTemplateDataset.BDestLimit = ttSLTemplate.bdestination_limit
+            SLTemplate.BDestLimit        = ttSLTemplate.bdestination_limit
                                                WHEN ttSLTemplate.bdestination_limit > 0.                             
         
         FOR EACH ttoriginal_call_case WHERE 
@@ -212,18 +212,14 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         IF(ilCreate OR ttSLTemplate.usage_type > "") AND
             LOOKUP(ttSLTemplate.usage_type,"voice,data,sms") = 0 THEN
             RETURN "Invalid Usage TYPE".
-        ELSE liElemType = Func.Common:mTMSCodeValue("SLTemplate",
-                                                 "UsageType",
-                                                 ttSLTemplate.usage_type).
+        ELSE lcElemType = Func.Common:mTMSCodeValue("SLTemplate",
+                                                    "ElementType",
+                                                    ttSLTemplate.usage_type).
    
-        IF(ilCreate OR ttSLTemplate.tarffic_type > "") AND
-            LOOKUP(ttSLTemplate.tarffic_type,"National,International,Roaming") = 0 THEN
+        IF(ilCreate OR ttSLTemplate.traffic_type > "") AND
+            LOOKUP(ttSLTemplate.traffic_type,"National,International,Roaming") = 0 THEN
             RETURN "Invalid Tarffic TYPE".
-      
-        IF(ilCreate OR ttSLTemplate.unlimited_usage > "") AND 
-          (ttSLTemplate.unlimited_usage NE TRUE OR ttSLTemplate.unlimited_usage NE FALSE) THEN
-            RETURN "Invalid Usage VALUE".  
-    
+        
     END METHOD.
     
     METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
