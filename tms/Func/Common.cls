@@ -588,6 +588,14 @@ CLASS Func.Common FINAL:
       RETURN lcReturnValue.
    END METHOD. 
    
+   /* Get the First day of the next month  */
+   METHOD PUBLIC STATIC DATE mFirstDayOfNextMonth
+      (INPUT iDate AS DATE).
+      
+      IF MONTH(iDate) = 12 THEN RETURN DATE(1, 1, YEAR(iDate) + 1).
+      ELSE RETURN DATE(MONTH(iDate) + 1, 1, YEAR(iDate)).
+   END METHOD.
+
    /* Get the last day of the month */
    METHOD PUBLIC STATIC DATE mLastDayOfMonth
       (INPUT iDate AS DATE).
