@@ -83,7 +83,10 @@ DEF TEMP-TABLE ttLine SERIALIZE-NAME "Line"
 /* ************************  Function Prototypes ********************** */
 
 
-FUNCTION Change_API_NB_URL RETURNS CHARACTER 
+FUNCTION fChange_API_NB_URL RETURNS CHARACTER 
+	(  ) FORWARD.
+
+FUNCTION fDSS_NB_URL RETURNS CHARACTER 
 	(  ) FORWARD.
 
 FUNCTION fCreateJSON_for_API_Interface RETURNS LOGICAL 
@@ -94,10 +97,10 @@ FUNCTION fCreateJSON_for_API_Interface RETURNS LOGICAL
 /* ************************  Function Implementations ***************** */
 
 
-FUNCTION Change_API_NB_URL RETURNS CHARACTER 
+FUNCTION fChange_API_NB_URL RETURNS CHARACTER 
 	(  ):
 /*------------------------------------------------------------------------------
- Purpose: Return Change API interface Northboung URL for SAPC 
+ Purpose: Return Change API interface Northbound URL for SAPC 
  Notes:
 ------------------------------------------------------------------------------*/	
 
@@ -116,6 +119,30 @@ FUNCTION Change_API_NB_URL RETURNS CHARACTER
 
    RETURN lcNB_Order_URL.
 		
+END FUNCTION.
+
+FUNCTION fDSS_NB_URL RETURNS CHARACTER 
+	(  ):
+/*------------------------------------------------------------------------------
+ Purpose: Return DSS Northbound URL for SAPC 
+ Notes:
+------------------------------------------------------------------------------*/ 
+
+   DEF VAR lcNB_DSS_URL   AS CHAR NO-UNDO. /* Procommand target */
+   DEF VAR lcNB_Host_URL  AS CHAR NO-UNDO. /* Northbound host   */
+   DEF VAR lcNB_Port_URL  AS CHAR NO-UNDO. /* Northbound port   */
+   
+   ASSIGN 
+      lcNB_DSS_URL  = "http://~{host}:~{port}/groups"
+      lcNB_Host_URL = fCParamC("SAPC_API_INTERFACE_NB_HOST")
+      lcNB_Port_URL = fCParamC("SAPC_API_INTERFACE_NB_PORT").
+
+   ASSIGN
+      lcNB_DSS_URL = REPLACE(lcNB_DSS_URL,"~{host}",lcNB_Host_URL)
+      lcNB_DSS_URL = REPLACE(lcNB_DSS_URL,"~{port}",lcNB_Port_URL).
+
+   RETURN lcNB_DSS_URL.
+      
 END FUNCTION.
 
 FUNCTION fCreateJSON_for_API_Interface RETURNS LOGICAL 

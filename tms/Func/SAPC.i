@@ -27,6 +27,9 @@
 /* ************************  Function Prototypes ********************** */
 
 
+FUNCTION fGetDSSDataLimit RETURNS DECIMAL 
+	(INPUT iiMsRequest LIKE MsRequest.msrequest) FORWARD.
+
 FUNCTION fIsFunctionAvailInSAPC RETURNS LOGICAL 
 	(INPUT iiMsRequest LIKE MsRequest.msrequest) FORWARD.
 
@@ -36,12 +39,99 @@ FUNCTION fIsFunctionAvailInSAPC RETURNS LOGICAL
 /* ************************  Function Implementations ***************** */
 
 
+FUNCTION fGetDSSDataLimit RETURNS DECIMAL 
+	(INPUT iiMsRequest LIKE MsRequest.MsRequest):
+/*------------------------------------------------------------------------------
+ Purpose: Return the data amount for a DSS group so this limit can be sent 
+          to the network
+ Notes:
+------------------------------------------------------------------------------*/	
+   DEF VAR liDSSMsSeq          AS INT   NO-UNDO.
+   DEF VAR ldeCurrentDSSLimit  AS DEC   NO-UNDO.
+   DEF VAR liDSSLimit          AS INT64 NO-UNDO.
+   DEF VAR lcDSSBundleId       AS CHAR  NO-UNDO.
+   
+   DEF BUFFER MsRequest  FOR MsRequest.
+   DEF BUFFER ShaperConf FOR ShaperConf.
+   
+   FIND FIRST MsRequest WHERE 
+              MsRequest.Msrequest = iiMsRequest NO-LOCK NO-ERROR.
+   IF NOT AVAIL MsRequest THEN 
+      RETURN 0.
+
+   /* Find DSS limits */
+   fGetDSSMsSeqLimit(INPUT MsRequest.CustNum,
+                     INPUT (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
+                               MsRequest.ActStamp ELSE Func.Common:mMakeTS()),
+                     OUTPUT liDSSMsSeq,
+                     OUTPUT ldeCurrentDSSLimit,
+                     OUTPUT lcDSSBundleId).
+
+   /* Special behaviour for DSS4 */
+   IF MSRequest.ReqCparam3 EQ {&DSS4} THEN
+   DO: 
+      FIND FIRST ShaperConf NO-LOCK WHERE
+                 ShaperConf.Brand        EQ Syst.Var:gcBrand AND
+                 ShaperConf.ShaperConfID EQ {&DSS4SHAPERID}  NO-ERROR.
+      IF NOT AVAIL ShaperConf THEN
+         RETURN 0.
+   END.
+
+   /* Business logic inherited from fMakeDSSCommLine.
+      It looks like in "MODIFY" DSS group requests, the data in the request 
+      is updated */
+   IF ldeCurrentDSSLimit > 0          AND 
+      MsRequest.ReqCparam1 = "MODIFY" AND
+     (   MsRequest.ReqCparam2 = "" 
+      OR INDEX(MsRequest.ReqCparam2,"LIMIT") > 0) THEN
+   DO:
+   
+      blk:
+      DO TRANSACTION ON ERROR UNDO, RETURN 0
+                     ON STOP UNDO, RETURN 0:
+                        
+         ASSIGN liDSSLimit = (ldeCurrentDSSLimit * 1024 * 1024).
+         
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+
+         IF MSRequest.ReqCparam3 EQ {&DSS4} THEN
+            ASSIGN  
+               MSRequest.ReqCparam2 = "DSS-ACCOUNT="    + STRING(MSRequest.CustNum)        + "," +
+                                      "TEMPLATE="       + ShaperConf.Template              + "," +
+                                      "TARIFF_TYPE="    + ShaperConf.TariffType            + "," +
+                                      "TARIFF="         + MSRequest.ReqCparam3             + "," +
+                                      "LIMIT_UNSHAPED=" + STRING(ShaperConf.LimitUnshaped) + "," +
+                                      "LIMIT_SHAPED="   + STRING(ShaperConf.LimitShaped).
+         ELSE    
+            ASSIGN 
+               MSRequest.ReqCparam2 = "DSS-ACCOUNT=" + STRING(MSRequest.CustNum)  + "," +
+                                      "TEMPLATE=DSS_MONTHLY"                      + "," +
+                                      "TARIFF_TYPE=DSS"                           + "," +
+                                      "TARIFF="          + MsRequest.ReqCparam3   + "," +
+                                      "LIMIT_UNSHAPED="  + STRING(liDSSLimit)     + "," +
+                                      "LIMIT_SHAPED="    + STRING({&PL_LIMIT_SHAPED}).
+
+         RELEASE MSRequest.
+      END. /* blk */
+      
+   END.
+
+   /* Adjusting limit for DSS4. In Mb */
+   IF MSRequest.ReqCparam3 EQ {&DSS4} THEN
+      ASSIGN 
+         ldeCurrentDSSLimit = ((ShaperConf.LimitUnshaped / 1024) / 1024).
+   
+   RETURN ldeCurrentDSSLimit.
+		
+END FUNCTION.
+
 FUNCTION fIsFunctionAvailInSAPC RETURNS LOGICAL 
 	(INPUT iiMsRequest LIKE MsRequest.msrequest):
 /*------------------------------------------------------------------------------
  Purpose: Checks the request can be managed by SAPC logic
  Notes:
 ------------------------------------------------------------------------------*/	
+   DEFINE BUFFER MsRequest  FOR MsRequest. 
    DEFINE BUFFER bMsRequest FOR MsRequest. 
 
    FIND MsRequest WHERE MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.
