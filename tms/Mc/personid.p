@@ -14,6 +14,7 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
 {Syst/eventval.i}
+{Func/cparam2.i}    /* SAPC-44 */
 
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
@@ -59,6 +60,7 @@ DEF VAR liQty        AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 DEF VAR lcLastName   AS CHAR                   NO-UNDO.
 DEF VAR lcFirstName  AS CHAR                   NO-UNDO.
+DEF VAR lcSAPC       AS CHAR                   NO-UNDO. /* SAPC-44 */
 
 form
     Customer.CustNum     /* COLUMN-LABEL FORMAT */
@@ -77,7 +79,9 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
-orders = "  By Code  ,  By Name  ,By 3, By 4".
+ASSIGN 
+   orders = "  By Code  ,  By Name  ,By 3, By 4"
+   lcSAPC = fCParamC("SAPC_ENABLED_NEW_CUSTOMERS"). /* SAPC-44 */
 
 IF icValue ne "ID" THEN DO:
    IF NUM-ENTRIES(icValue,"|") > 1 THEN DO:
@@ -134,7 +138,10 @@ ADD-ROW:
            LEAVE add-row.
            CREATE Customer.
            ASSIGN
-           Customer.CustNum = INPUT FRAME lis Customer.CustNum.
+           Customer.CustNum = INPUT FRAME lis Customer.CustNum
+           
+           /* SAPC-44 - Provisioning path: 1 for PL, 2 for SAPC */
+           Customer.AccGrp  = (IF lcSAPC = "SAPC" THEN 2 ELSE 1).
 
            RUN local-UPDATE-record.
 
