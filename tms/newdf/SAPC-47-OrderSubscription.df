@@ -1,0 +1,107 @@
+ADD TABLE "OrderSubscription"
+  MULTITENANT yes
+  AREA "Sta_Data_64"
+  LABEL "Order Provisioning Status"
+  DUMP-NAME "ordersubscription"
+
+ADD FIELD "OrderId" OF "OrderSubscription" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "OrderProductID" OF "OrderSubscription" AS integer 
+  DESCRIPTION "Order Product internal id (link from OrderProduct table)."
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Order Product Id"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Ord Prod id"
+  HELP "Order Product internal id"
+  ORDER 20
+
+ADD FIELD "MSSeq" OF "OrderSubscription" AS int64 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MobSub Sequence"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Link to MobSub"
+  ORDER 30
+
+ADD FIELD "SubscriptionType" OF "OrderSubscription" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Subscription type"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Subs. Type"
+  HELP "Mob: Mobile/ Fix: Fixed/ Bb: Broadband"
+  ORDER 40
+
+ADD FIELD "CLI" OF "OrderSubscription" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 6
+  MAX-WIDTH 22
+  COLUMN-LABEL "MSISDN No"
+  HELP "MSISDN Subscriber No"
+  ORDER 50
+
+ADD FIELD "ProvisionStatus" OF "OrderSubscription" AS integer 
+  DESCRIPTION "Possible values: 0 - New, 1 - Ongoing, 2 - Done, 3 - Error"
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Prov. Status"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Status"
+  HELP "Provisioning Status: 0-  New, 1 - Ongoing, 2 - Done, 3 - Error"
+  ORDER 60
+
+ADD FIELD "CreatedTS" OF "OrderSubscription" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Creation"
+  POSITION 8
+  MAX-WIDTH 12
+  HELP "Date and time when record is created"
+  ORDER 70
+
+ADD FIELD "UpdatedTS" OF "OrderSubscription" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Updated"
+  POSITION 9
+  MAX-WIDTH 12
+  HELP "Date and time when record was last updated"
+  ORDER 80
+
+ADD INDEX "OrderProductID" ON "OrderSubscription" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "OrderProductID" ASCENDING 
+
+ADD INDEX "OrderID" ON "OrderSubscription" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OrderID" ASCENDING
+
+ADD INDEX "MsSeq" ON "OrderSubscription" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "CreatedTS" ASCENDING 
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000002456
