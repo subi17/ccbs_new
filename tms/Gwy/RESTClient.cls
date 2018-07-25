@@ -558,7 +558,7 @@ CLASS Gwy.RESTClient:
       ( ioMethodEnum   AS CLASS MethodEnum,
         ioObjectEntity AS CLASS Progress.Lang.Object ):
 
-      IF alClientChanged
+      IF alClientChanged OR NOT VALID-OBJECT(aoHTTPClient)
       THEN mInitHTTPClient().
 
       Class.Logger:writeLog(2,
