@@ -1727,6 +1727,11 @@ IF pcOfferId NE "" THEN DO:
          case offercriteria.criteriatype:
             when "clitype" then do:
                if offercriteria.includedvalue eq "ALL_VOICE" THEN DO:
+                  ASSIGN 
+                     lcPostpaidVoiceTariffs = REPLACE(lcPostpaidVoiceTariffs,
+                                                      ",CONT29," , ",")  
+                     lcPostpaidVoiceTariffs = REPLACE(lcPostpaidVoiceTariffs,
+                                                      ",CONT28," , ",") . 
                   if lookup(pcSubType,lcPostpaidVoiceTariffs + "," +
                                       lcPrepaidVoiceTariffs) = 0 then
                   lcErrors = lcErrors + "CLIType " + pcSubType + " not in " + offercriteria.includedvalue + ";".
@@ -2060,7 +2065,9 @@ END.
   
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
-IF fCLITypeIsExtraLine(pcSubType) THEN DO:
+IF fCLITypeIsExtraLine(pcSubType)              AND 
+   ( NOT ( pcNumberType BEGINS "renewal" OR 
+           pcNumberType BEGINS "retention" ) ) THEN DO:
 
    piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
 
