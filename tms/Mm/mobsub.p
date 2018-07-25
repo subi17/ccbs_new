@@ -1214,6 +1214,19 @@ PROCEDURE local-find-others.
    END.
    ELSE lcMultiSim = "".
    
+   /* Provisioning type - SAPC-46 */
+   IF NOT AVAIL userCustomer THEN 
+      lcProvisioningType = "Unknown". 
+   ELSE 
+   DO:   
+      IF usercustomer.accGrp = 1 THEN
+         lcProvisioningType = "PL".
+      ELSE IF usercustomer.accGrp = 2 THEN
+         lcProvisioningType = "SAPC".
+      ELSE
+         lcProvisioningType = "Unknown".
+   END. 
+      
 END PROCEDURE.
 
 PROCEDURE local-UPDATE-record.
@@ -1263,6 +1276,7 @@ PROCEDURE local-UPDATE-record.
       mobsub.paytype
       lcMNP
       lcMultiSim
+      lcProvisioningType /* SAPC-46 */
    WITH FRAME lis.
      
    IF lcRight NE "RW" OR llupdate = FALSE  THEN RETURN.
