@@ -1,0 +1,87 @@
+ADD TABLE "MsRequestParam"
+  AREA "Sta_Data_64"
+  LABEL "Request Parameter"
+  DESCRIPTION "Request parameter"
+  DUMP-NAME "msrequestparam"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-msrequestparam.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-msrequestparam.p" CRC "?"
+
+ADD FIELD "MsRequest" OF "MsRequestParam" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Request ID"
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique ID for request"
+  ORDER 10
+
+ADD FIELD "ParamName" OF "MsRequestParam" AS character
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Parameter Name"
+  MAX-WIDTH 32
+  COLUMN-LABEL "Name"
+  HELP "Parameter name"
+  ORDER 20
+
+ADD FIELD "ParamType" OF "MsRequestParam" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Parameter Type"
+  MAX-WIDTH 24
+  COLUMN-LABEL "Type"
+  HELP "Parameter type"
+  ORDER 30
+
+ADD FIELD "IntValue" OF "MsRequestParam" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Integer Value"
+  MAX-WIDTH 21
+  COLUMN-LABEL "Integer"
+  HELP "Integer value"
+  ORDER 40
+
+ADD FIELD "DecValue" OF "MsRequestParam" AS decimal
+  FORMAT "->>>>>9.999"
+  INITIAL "0"
+  LABEL "Decimal Value"
+  MAX-WIDTH 21
+  COLUMN-LABEL "Decimal"
+  HELP "Decimal value"
+  DECIMALS 6
+  ORDER 50
+
+ADD FIELD "CharValue" OF "MsRequestParam" AS character
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Character Value"
+  MAX-WIDTH 60
+  COLUMN-LABEL "Character"
+  HELP "Character value"
+  ORDER 60
+
+ADD FIELD "DateValue" OF "MsRequestParam" AS date
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Date Value"
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Date value"
+  ORDER 70
+
+ADD FIELD "ParamSet" OF "MsRequestParam" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Parameter Set"
+  MAX-WIDTH 24
+  COLUMN-LABEL "ParamSet"
+  HELP "Parameter Set"
+  ORDER 80
+
+ADD INDEX "ParamName" ON "MsRequestParam"
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsRequest" ASCENDING
+  INDEX-FIELD "ParamName" ASCENDING
