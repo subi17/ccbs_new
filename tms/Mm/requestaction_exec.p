@@ -190,6 +190,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR liFFCount AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO. 
    DEF VAR lcBundleId AS CHAR NO-UNDO. 
+   DEF VAR lcParamValue AS CHAR NO-UNDO.
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -304,6 +305,15 @@ PROCEDURE pPeriodicalContract:
                         OrderAction.ItemType = "FixedPermanency") THEN RETURN.
 
       /*End of FLP temporary change*/
+
+      /* Skip permanency creation request in case of merge stc request */
+      IF bOrigRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+         ttAction.ActionKey   BEGINS "FTERM"                         AND
+         fCheckMsRequestParam(bOrigRequest.MsRequest,
+                              {&MERGE2P3P},
+                              OUTPUT lcParamValue)                   THEN
+         RETURN.
+
 
       /* Temporary check due to ongoing orders created before 5.6.2017
          TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
