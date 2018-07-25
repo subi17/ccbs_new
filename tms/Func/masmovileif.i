@@ -632,11 +632,12 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
 
-   DEF BUFFER Mobsub FOR Mobsub.
-   DEF BUFFER Order FOR Order.
-   DEF BUFFER bOrder FOR Order.
+   DEF BUFFER Mobsub        FOR Mobsub.
+   DEF BUFFER Order         FOR Order.
+   DEF BUFFER bOrder        FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
-   DEF BUFFER OrderFusion FOR OrderFusion.
+   DEF BUFFER OrderFusion   FOR OrderFusion.
+   DEF BUFFER bActionLog    FOR ActionLog.
 
    FIND FIRST Order NO-LOCK where 
               Order.Brand EQ Syst.Var:gcBrand AND
@@ -649,15 +650,6 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
    IF NOT AVAIL MobSub THEN 
       RETURN "ERROR: Active subscription not found".
 
-  /*Use delivery customer information if it is avbailable*/
-   FIND FIRST OrderCustomer NO-LOCK WHERE 
-              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
-              OrderCustomer.OrderId EQ iiOrderid AND 
-              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_ACC}
-              NO-ERROR.
-   IF NOT AVAIL OrderCustomer THEN
-      RETURN "ERROR: ACC customer data not found " + STRING(iiOrderID) .
-   
    FOR EACH OrderFusion NO-LOCK WHERE
             OrderFusion.FixedNumber = Mobsub.FixedNumber,
        EACH bOrder NO-LOCK WHERE
@@ -668,7 +660,40 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
        LEAVE.
    END.
 
-   IF NOT AVAIL bOrder THEN RETURN "ERROR: Work order id not found".
+   IF NOT AVAIL bOrder THEN DO:
+      /* If Order is not available then check if subscription was merged with   */
+      /* 2P subscription, if yes then check for merged 2P subscription Order Id */
+      FIND FIRST bActionLog NO-LOCK  WHERE
+                 bActionLog.Brand     EQ Syst.Var:gcBrand     AND
+                 bActionLog.TableName EQ "MobSub"             AND
+                 bActionLog.KeyValue  EQ STRING(MobSub.MsSeq) AND
+                 bActionLog.ActionID  EQ {&MERGE2P3P}         NO-ERROR.
+
+      IF AVAIL bActionLog THEN DO:
+         FOR EACH OrderFusion NO-LOCK WHERE
+                  OrderFusion.Brand       EQ Syst.Var:gcBrand                             AND
+                  OrderFusion.OrderId     EQ INT(ENTRY(2,bActionLog.ActionChar,CHR(255))) AND
+                  OrderFusion.FixedNumber EQ Mobsub.FixedNumber,
+             EACH bOrder NO-LOCK WHERE
+                  bOrder.Brand      EQ Syst.Var:gcBrand                             AND
+                  bOrder.OrderID    EQ INT(ENTRY(2,bActionLog.ActionChar,CHR(255))) AND
+                  bOrder.MsSeq      EQ INT(ENTRY(1,bActionLog.ActionChar,CHR(255))) AND
+                  bOrder.StatusCode EQ {&ORDER_STATUS_DELIVERED} BY bOrder.CrStamp DESC:
+             LEAVE.
+         END.
+      END.
+
+      IF NOT AVAIL bOrder THEN
+         RETURN "ERROR: Work order id not found".
+   END.
+
+  /*Use delivery customer information if it is avbailable*/
+   FIND FIRST OrderCustomer NO-LOCK WHERE
+              OrderCustomer.Brand   EQ Syst.Var:gcBrand             AND
+              OrderCustomer.OrderId EQ bOrder.OrderId               AND
+              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_ACC} NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN
+      RETURN "ERROR: ACC customer data not found " + STRING(iiOrderID) .
 
    lcContactStruct = add_struct(param_toplevel_id, "").
    /*Order struct*/
