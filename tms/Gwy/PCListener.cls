@@ -96,9 +96,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       loStompClient     = NEW dotr.Stomp.StompClient(loStompConfig).
       loReaderHandler   = THIS-OBJECT.
       loStompClient:SUBSCRIBE(loReaderHandler).
-      /*ATTENTION*/
-      loStompClient:subscribeToQueueACK(lcQueueName,"client-individual").
-      loStompClient:subscribeToQueueACK(lcQueueName).
+      loStompClient:subscribeToQueueACK(lcQueueName,"client-individual").  /* ATTENTION */
       leTooManyErrors:SUBSCRIBE(tooManyErrors). 
    END METHOD.
    
@@ -111,28 +109,23 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    
    METHOD PUBLIC OVERRIDE LOG processOne ():
        
-      &IF NOT {&MQ_BASED} 
-      &THEN  
-      DO:
+      &IF NOT {&MQ_BASED} &THEN  
       processOneFileImport().
-      END.
       &ELSE    
       IF llStopCondition = TRUE
          THEN UNDO, THROW NEW Progress.Lang.AppError (lcStopReason, 550).
       
       IF NOT VALID-OBJECT(loStompConfig) THEN 
-      DO:
          THIS-OBJECT:config().
-      END.
       
       IF NOT VALID-OBJECT(loStompClient) THEN 
-      DO:
          THIS-OBJECT:connect().
-      END.
+
       /* IMPORTANT: This will allow events to be triggered, otherwise 
          READ-RESPONSE wont be triggered and no processing. */
       IF NOT VALID-HANDLE(hpWaitForProcedure) THEN 
           RUN Gwy/waitfor.p PERSISTENT SET hpWaitForProcedure.
+
       RUN runWaitForStatement IN hpWaitForProcedure.    
       &ENDIF
       
@@ -164,10 +157,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
             newJsonMessage(lcHeader , ioStompMessage:Body). /* make proper logic module */     
         END. 
         ELSE 
-        DO:
-            /*header logging*/
-            logMsg(lcHeader, "INFO").
-        END.        
+            logMsg(lcHeader, "INFO").  /*header logging*/       
       
         liConsecutiveErrors = 0.
               
@@ -181,8 +171,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                     lcCorrelationID NE "0" AND
                     lcReplyTo > "" THEN 
                 DO:
-                    &IF {&MQ_BASED}
-                    &THEN
+                    &IF NOT {&MQ_BASED} &THEN
                     CREATE AckMessage.
                     ASSIGN 
                         AckMessage.HostTable         = "MsRequest"
@@ -234,6 +223,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       DEF VAR lcInternalId      AS CHAR NO-UNDO. 
 
       DEF VAR liReplacePosition AS INT NO-UNDO.
+      
       ASSIGN
          lcSource = ""
          lcCorrelationID = ""
@@ -243,17 +233,23 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
           logMsg("Empty Header","WARNING").
           RETURN.
       END.
+      
       IF icMessageBody EQ "" THEN DO:
           logMsg("Empty Body","WARNING").
           RETURN.
       END.
-      DO lii = 1 TO NUM-ENTRIES(icHeader," ") :
+
+      DO lii = 1 TO NUM-ENTRIES(icHeader," "):
+
          lcFieldSet = ENTRY(lii,icHeader," ").
-         IF INDEX(lcFieldSet, ":") = 0 THEN NEXT.
-         ELSE ASSIGN
-            lcField    = TRIM(TRIM(ENTRY(1,lcFieldSet,":")),'"')
-            lcValue    = TRIM(TRIM(ENTRY(2,lcFieldSet,":")),'"')
-            lcValue    = REPLACE(lcValue,CHR(92) + "c",":").
+
+         IF INDEX(lcFieldSet, ":") = 0 THEN 
+             NEXT.
+         ELSE 
+             ASSIGN
+                lcField    = TRIM(TRIM(ENTRY(1,lcFieldSet,":")),'"')
+                lcValue    = TRIM(TRIM(ENTRY(2,lcFieldSet,":")),'"')
+                lcValue    = REPLACE(lcValue,CHR(92) + "c",":").
           
          CASE lcField:
             WHEN "model" THEN
@@ -274,8 +270,6 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                 lcvalue = REPLACE(lcvalue,"/queue/","") .
                 lcReplyTo = lcvalue.            
             END.
-            /*what do we need to do in case of crappy field name*/
-            /*currently not logging it*/
             OTHERWISE DO :
                logMsg("Unknown lcField " + lcField,"WARNING").
             END.
@@ -300,8 +294,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          logMsg(SUBST("JSON body: `&1`", icMessageBody), "DEBUG").
       END.
       
-      /* something to the eventlog */
       IF lcSource = "" THEN lcSource = "PC".
+
       IF lcBrand EQ "" THEN DO:
           logMsg("Empty Brand","ERROR").
           RETURN.
@@ -506,7 +500,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
     &ENDIF 
 
     DESTRUCTOR PUBLIC PCListener():
-    closeSession().
+        closeSession().
     END DESTRUCTOR.
 
 END CLASS.
