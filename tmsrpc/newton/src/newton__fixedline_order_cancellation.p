@@ -42,6 +42,14 @@ FIND FIRST Order WHERE
            NO-LOCK NO-ERROR.
 IF NOT AVAIL Order THEN 
    RETURN appl_err("OrderId is invalid").
+   
+FIND FIRST CliType WHERE
+           CliType.Brand EQ Syst.Var:gcBrand AND
+           CliType.CliType = Order.CliType AND
+           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} 
+           NO-LOCK NO-ERROR.
+IF AVAIL CliType OR NOT fIsConvergenceTariff(Order.CLIType) THEN
+   RETURN appl_err("Not a fixedline Order to Cancel").   
 
 IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    Order.StatusCode NE {&ORDER_STATUS_COMPANY_NEW} AND
@@ -72,17 +80,6 @@ IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT") EQ 0 THEN
 
 IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
       RETURN appl_err("Fixedline Status is not in valid state to cancel").
-
-FIND FIRST CliType WHERE
-           CliType.Brand EQ Syst.Var:gcBrand AND
-           CliType.CliType = Order.CliType AND
-           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} 
-           NO-LOCK NO-ERROR.
-IF AVAIL CliType THEN
-   RETURN appl_err("Invalid TariffType").
-   
-IF NOT fIsConvergenceTariff(Order.CLIType) THEN 
-   RETURN appl_err("Only Convergent Orders are allowed for cancellation" ).   
    
  IF llCloseOrder THEN DO:
    RUN Mc/closeorder.p (INPUT piOrderId, INPUT TRUE).
