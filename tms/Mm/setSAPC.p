@@ -52,7 +52,6 @@ DEF VAR lcProcommandType      AS CHAR  NO-UNDO.
 DEF VAR ldCurrent             AS DEC   NO-UNDO.  /* Actual date and time */ 
 DEF VAR lcParam               AS CHAR  NO-UNDO. 
 DEF VAR lcBaseBundle          AS CHAR  NO-UNDO.  
-DEF VAR ldTime                AS DATETIME-TZ NO-UNDO. 
 DEF VAR cJsonMsg              AS LONGCHAR    NO-UNDO.
 DEF VAR lJsonCreation         AS LOGICAL     NO-UNDO.
 DEF VAR ldaActiveDate         AS DATE        NO-UNDO.
@@ -515,20 +514,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
       END. */      
    END CASE.
 
-   /* Avoding 2 Procommands on the exact same date and time */
-   ldTime = NOW.
-   REPEAT:
-      IF NOT CAN-FIND(FIRST ProCommand WHERE
-                            ProCommand.MsSeq            = MobSub.MsSeq AND
-                            ProCommand.ProCommandstatus = 0            AND
-                            Procommand.ActivationTS     = ldTime) THEN
-         LEAVE.
-
-      ldTime = NOW.
-   END. 
-
    /* Preparing data for Json */
-
    FIND FIRST dayCampaign WHERE
               dayCampaign.Brand   = Syst.Var:gcBrand AND
               dayCampaign.DCEvent = lcEmaDataPlan    AND
@@ -550,7 +536,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
       ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
       ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
       ProCommand.ProCommandtarget    = "NB"
-      ProCommand.ProCommandtargetURL = Change_API_NB_URL() /* Northbound-Orders URL */
+      ProCommand.ProCommandtargetURL = fChange_API_NB_URL() /* Northbound-Orders URL */
       ProCommand.ActivationTS        = ldTime.        /* Activate NOW            */
    
    /* Common Body to Upsell, Add/Modify/Delete dataplan */
