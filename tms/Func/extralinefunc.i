@@ -805,6 +805,9 @@ FUNCTION fELCliTypeAllowedForCustomer RETURNS LOGICAL
                         TMSRelation.ChildValue  EQ icELCliType    AND
                         INT(TMSRelation.RelationType) > 0)
       THEN DO:
+         IF fCheckProMainlineForExtraLine(MobSub.CliType) AND
+            NOT fIsPro(Customer.Category) THEN 
+            NEXT.         
          llAllowedActive = TRUE.      
          LEAVE.                
       END.                                                   
@@ -829,6 +832,9 @@ FUNCTION fELCliTypeAllowedForCustomer RETURNS LOGICAL
                         TMSRelation.ChildValue  EQ icELCliType    AND
                         INT(TMSRelation.RelationType) > 0) 
       THEN DO:
+         IF fCheckProMainlineForExtraLine(Order.CLIType) AND
+            NOT fIsPro(OrderCustomer.Category) THEN 
+            NEXT.         
          llAllowedOnGoing = TRUE.      
          LEAVE.                
       END.       
