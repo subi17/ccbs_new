@@ -155,9 +155,14 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             
             ASSIGN aoOrder:MobileNumberType = THIS-OBJECT:lcNumberType.
                                                  
-            IF loAttributes:Has("old_operator_code") 
+            IF loAttributes:Has("mobile_old_operator_code") 
             THEN DO:
-                mCreateDataOrderProductParamData(loAttributes,"old_operator_code","Char").
+                mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_code","Char").
+            END.
+            
+            IF loAttributes:Has("mobile_old_operator_name") 
+            THEN DO:
+                mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_name","Char").
             END.
             
             IF THIS-OBJECT:lcNumberType = "MNP"
