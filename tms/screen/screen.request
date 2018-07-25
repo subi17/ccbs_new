@@ -1,8 +1,8 @@
 echo "REQUEST HANDLER SCREENS"
 sleep 2
 screen -t Queue1 1 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ1.log -param 1 tenant=yoigo umask=0022
-screen -t Queue2 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ2.log -param 2 tenant=yoigo umask=0022
-screen -t Queue3 3 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ3.log -param 3 tenant=yoigo umask=0022
+screen -t Queue2 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ2.log -logginglevel 4 -mmax 3500 -param 2 tenant=yoigo umask=0022
+screen -t Queue3 3 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ3.log -logginglevel 4 -mmax 3500 -param 3 tenant=yoigo umask=0022
 screen -t Queue4 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ4.log -param 4 tenant=yoigo umask=0022
 screen -t Queue5 5 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ5.log -param 5 tenant=yoigo umask=0022
 screen -t Queue6 6 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ6.log -param 6 tenant=yoigo umask=0022
