@@ -29,7 +29,7 @@ DEF VAR i               AS INT          NO-UNDO.
 DEF VAR ldtActivationTS AS DATETIME-TZ  NO-UNDO.
 DEF VAR lcCli           LIKE mobsub.cli NO-UNDO.
 DEF VAR lcCommand_Ed    AS LONGCHAR     NO-UNDO 
-   VIEW-AS EDITOR LARGE SIZE 76 BY 4.
+   VIEW-AS EDITOR LARGE SIZE 76 BY 3.
 DEF VAR lcResponse_Ed    AS LONGCHAR     NO-UNDO 
    VIEW-AS EDITOR LARGE SIZE 76 BY 3.
 
@@ -55,10 +55,12 @@ FORM
     "Command type:" ProCommand.procommandtype   
     "MSISDN      :" AT 50 lcCli  FORMAT "x(11)"       SKIP
     "Created     :" ProCommand.CreatedTS              SKIP   
+    "Sent        :" ProCommand.SendTS                 SKIP   
     "Activated   :" ProCommand.ActivationTS           SKIP
-    "Completed   :" ProCommand.CompletedTS            SKIP
+    "Response    :" ProCommand.ResponseTS             SKIP
     "Target      :" ProCommand.ProCommandTarget    
-    "Status:"       AT 27 ProCommand.ProCommandStatus SKIP 
+    "Status:"       AT 27 ProCommand.ProCommandStatus  
+    "HTTP method :" AT 50 ProCommand.ProCommandVerb   SKIP 
     "Target URL  :" ProCommand.ProCommandTargetURL FORMAT "X(60)" SKIP
     "Command     :" lcCommand_Ed                      SKIP 
     "Response    :" lcResponse_Ed 
@@ -386,11 +388,13 @@ REPEAT WITH FRAME sel:
            ProCommand.procommandtype
            lcCli
            ProCommand.CreatedTS   
+           ProCommand.SendTS   
            ProCommand.ActivationTS
-           ProCommand.CompletedTS
+           ProCommand.ResponseTS
            ProCommand.ProCommandTarget
            ProCommand.ProCommandTargetURL
            ProCommand.ProCommandStatus
+           ProCommand.ProCommandVerb 
            lcCommand_Ed 
            lcResponse_Ed 
            WITH FRAME lis.
