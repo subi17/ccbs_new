@@ -211,7 +211,10 @@ PROCEDURE pSolog:
    DEF BUFFER bActionLog    FOR ActionLog.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
-   DEF VAR ldCurrBal AS DECIMAL NO-UNDO. 
+   DEF VAR ldCurrBal AS DECIMAL NO-UNDO.
+   DEF VAR liError       AS INT NO-UNDO.
+   DEF VAR lcResult      AS CHAR NO-UNDO.
+   DEF VAR liOrderId     AS INT  NO-UNDO.
 
    /* SAPC */
    DEFINE VARIABLE cJsonMsg           AS LONGCHAR NO-UNDO.
@@ -268,8 +271,10 @@ PROCEDURE pSolog:
       lcCli = BufMobsub.CLI.
    
       IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
-          MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN
-      DO:
+          MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN DO:
+
+         IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
+
             IF (fIsFixedOnly(bufMobsub.CLIType)                  AND
                 MSRequest.ReqCParam6 EQ {&TERMINATION_TYPE_FULL} AND
                 CAN-FIND(FIRST bActionLog NO-LOCK  WHERE
@@ -279,6 +284,25 @@ PROCEDURE pSolog:
                        ENTRY(1,bActionLog.ActionChar,CHR(255)) EQ STRING(MsRequest.MsSeq))) THEN .
             ELSE IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
                      MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
+
+               liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
+               IF liOrderId EQ 0
+                  THEN lcResult = "OrderID not found".
+               /* This call makes synchronous termination request to MuleDB */
+               ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+               
+               IF lcResult > "" THEN DO:
+                  Func.Common:mWriteMemo("MobSub",
+                              STRING(BufMobsub.MsSeq),
+                              BufMobsub.Custnum,
+                              "La baja del sevicio fijo ha fallado: ", /* Fixed number termination failed" */
+                              lcResult).
+                  fReqError("La baja del sevicio fijo ha fallado: " + lcResult).
+                  RETURN.
+               END.       
+            END.
+         END.
+
          /* Cancel the active/suspended BB service before
             subscription termination or icc change provisioning */
          FOR FIRST SubSer WHERE SubSer.ServCom = "BB"            AND
