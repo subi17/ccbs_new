@@ -262,8 +262,20 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
       IF AVAILABLE bMsRequest THEN 
       DO:
          IF bMsRequest.ReqCparam3 MATCHES "*_UPSELL" THEN
-            ASSIGN 
-               lcProcommandType = "ADD_UPSELL".
+         DO:
+            IF bMsRequest.ReqCparam3 BEGINS "DSS" THEN
+            DO:
+               ocError = "ERROR: setSAPC program not ready yet to manage " + 
+                         MsRequest.ReqCparam1 + " request ".
+               /* 
+               ASSIGN 
+                  lcProcommandType = "ADD_DSS_UPSELL".
+               */
+            END.
+            ELSE 
+               ASSIGN 
+                  lcProcommandType = "ADD_UPSELL".
+         END.
          /* Review when this happens !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             Probably it has to behave as an upsell !!!!!!!!!!!!!!!!!!!!!!!!  
          ELSE   
@@ -325,7 +337,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
 
    /* Generating command *********************************************** */
    CASE lcProcommandType:
-      WHEN "ADD_UPSELL" THEN 
+      WHEN "ADD_UPSELL" OR WHEN "ADD_DSS_UPSELL" THEN 
          ASSIGN 
             lcAction     = "Add"
             lcUpsellSize = ENTRY(1,MsRequest.reqcparam2).
@@ -525,19 +537,26 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
       RETURN ocError.
    END.
    
-   
-   CREATE ProCommand.
-   ASSIGN
-      ProCommand.MSrequest           = iiMSrequest
-      ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-      ProCommand.ProCommandType      = lcProcommandType
-      ProCommand.CreatedTS           = NOW 
-      ProCommand.Creator             = Syst.Var:katun    
-      ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
-      ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
-      ProCommand.ProCommandtarget    = "NB"
-      ProCommand.ProCommandtargetURL = fChange_API_NB_URL() /* Northbound-Orders URL */
-      ProCommand.ActivationTS        = ldTime.        /* Activate NOW            */
+   /* 1st command (and only one for not DSS upsells) */
+   IF lcProcommandType = "ADD_DSS_UPSELL" THEN 
+   DO:
+      
+   END.
+   ELSE 
+   DO:
+      CREATE ProCommand.
+      ASSIGN
+         ProCommand.MSrequest           = iiMSrequest
+         ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
+         ProCommand.ProCommandType      = lcProcommandType
+         ProCommand.CreatedTS           = NOW 
+         ProCommand.Creator             = Syst.Var:katun    
+         ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
+         ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
+         ProCommand.ProCommandtarget    = "NB_CH"
+         ProCommand.ProCommandVerb      = "POST"
+         ProCommand.ProCommandtargetURL = "".  /* Not postfix data */
+   END. 
    
    /* Common Body to Upsell, Add/Modify/Delete dataplan */
    CREATE ttOrder.

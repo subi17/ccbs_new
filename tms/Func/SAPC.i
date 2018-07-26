@@ -154,7 +154,12 @@ FUNCTION fIsFunctionAvailInSAPC RETURNS LOGICAL
       IF AVAILABLE bMsRequest THEN 
       DO:
          IF bMsRequest.ReqCparam3 MATCHES "*_UPSELL" THEN
-            RETURN TRUE.
+         DO:
+            IF bMsRequest.ReqCparam3 BEGINS "DSS" THEN
+               RETURN FALSE.
+            ELSE 
+               RETURN TRUE.
+         END.
          ELSE
          IF bMsRequest.ReqType = 8 OR   /* ADD - Per. contract activation */
             bMsRequest.ReqType = 9 THEN /* DELETE - Per. contract termination*/
