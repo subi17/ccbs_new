@@ -33,10 +33,10 @@ ADD FIELD "ActivationTS" OF "ProCommand" AS datetime-tz
   HELP "Date and time when procommand is sent to BUS/BPM"
   ORDER 30
 
-ADD FIELD "CompletedTS" OF "ProCommand" AS datetime-tz 
+ADD FIELD "ResponseTS" OF "ProCommand" AS datetime-tz 
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
-  LABEL "Completed"
+  LABEL "Response"
   POSITION 5
   MAX-WIDTH 12
   HELP "Date and time when BUS/BPM response is received"
@@ -143,6 +143,25 @@ ADD FIELD "Response" OF "ProCommand" AS clob
   CLOB-TYPE 2
   ORDER 140
 
+ADD FIELD "SendTS" OF "ProCommand" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Send"
+  POSITION 16
+  MAX-WIDTH 12
+  HELP "Date and time when command is sent to BUS/BPM"
+  ORDER 150
+
+ADD FIELD "ProCommandVerb" OF "ProCommand" AS character 
+  DESCRIPTION "POST, GET, ..."
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Verb"
+  POSITION 17
+  MAX-WIDTH 16
+  HELP "HTTP method (verb) for the command"
+  ORDER 160
+  
 ADD INDEX "Ix_ProCommandId" ON "ProCommand" 
   AREA "Sta_Index_2"
   UNIQUE
