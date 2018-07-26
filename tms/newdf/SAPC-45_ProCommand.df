@@ -30,7 +30,7 @@ ADD FIELD "ActivationTS" OF "ProCommand" AS datetime-tz
   LABEL "Activation"
   POSITION 4
   MAX-WIDTH 12
-  HELP "Date and time when procommand is sent to BUS/BPM"
+  HELP "Date and time when procommand acknowledged from BUS/BPM"
   ORDER 30
 
 ADD FIELD "ResponseTS" OF "ProCommand" AS datetime-tz 
@@ -78,7 +78,7 @@ ADD FIELD "ProCommandStatus" OF "ProCommand" AS integer
   LABEL "Status"
   POSITION 9
   MAX-WIDTH 4
-  HELP "Status: 0 -  New, 1 - Ongoing, 2 - Done"
+  HELP "Status: 0 - New, 1 - Ongoing, 2 - Done, 3 - Error"
   ORDER 80
 
 ADD FIELD "ProCommandTarget" OF "ProCommand" AS character 
@@ -88,7 +88,7 @@ ADD FIELD "ProCommandTarget" OF "ProCommand" AS character
   LABEL "Target"
   POSITION 10
   MAX-WIDTH 16
-  HELP "NB for Northbound, BPM for BPM"
+  HELP "NB_CH, NB_AS for Northbound Change and After Sales, BPM for BPM"
   ORDER 90
 
 ADD FIELD "ProCommandTargetURL" OF "ProCommand" AS character 
@@ -178,10 +178,11 @@ ADD INDEX "Ix_OrderId" ON "ProCommand"
   INDEX-FIELD "OrderId" ASCENDING 
   INDEX-FIELD "ActivationTS" DESCENDING 
 
-ADD INDEX "Ix_Status" ON "ProCommand" 
+ADD INDEX "Ix_Target" ON "ProCommand"
   AREA "Sta_Index_2"
-  INDEX-FIELD "ProCommandStatus" ASCENDING 
-  INDEX-FIELD "ActivationTS" ASCENDING 
+  INDEX-FIELD "ProCommandTarget" ASCENDING
+  INDEX-FIELD "ProCommandStatus" ASCENDING
+  INDEX-FIELD "CreatedTS" ASCENDING
 
 .
 PSC
