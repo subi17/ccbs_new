@@ -46,8 +46,12 @@ FUNCTION fCreateTMSParam RETURN CHARACTER (INPUT icParamGroup AS CHARACTER , INP
     
 END FUNCTION.
 
-fCreateTMSParam(  INPUT "TOPUP" , INPUT "InitialTopupPrefix" ,  INPUT "Prefix to Initial  TopUp" , INPUT "997"). 
-fCreateTMSParam(  INPUT "TOPUP" , INPUT "CampaignTopupPrefix" , INPUT "Prefix to Campaign TopUp" , INPUT "994").   
+fCreateTMSParam(  INPUT "TOPUP" , INPUT "InitialTopupPrefix",            INPUT "Prefix   to Initial  TopUp",          INPUT "997"). 
+fCreateTMSParam(  INPUT "TOPUP" , INPUT "InitialTopupBillCode",          INPUT "BillCode to Initial  TopUp",          INPUT "TS0000050").
+fCreateTMSParam(  INPUT "TOPUP" , INPUT "InitialTopupDiscountBillCode",  INPUT "BillCode to Initial  TopUp Discount", INPUT "TS0DISC50").
+fCreateTMSParam(  INPUT "TOPUP" , INPUT "CampaignTopupPrefix",           INPUT "Prefix   to Campaign TopUp",          INPUT "994"). 
+fCreateTMSParam(  INPUT "TOPUP" , INPUT "CampaignTopupBillCode",         INPUT "BillCode to Campaign TopUp",          INPUT "CPDISC10").  
+fCreateTMSParam(  INPUT "TOPUP" , INPUT "CampaignTopupDiscountBillCode", INPUT "BillCode to Campaign TopUp Discount", INPUT "CPDISC11").
 
 MESSAGE "TMSParam created successfully."
 VIEW-AS ALERT-BOX.
