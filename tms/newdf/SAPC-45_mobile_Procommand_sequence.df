@@ -1,5 +1,4 @@
 ADD SEQUENCE "Seq_Procommand_ProcommandId"
-  MULTITENANT yes
   INITIAL 0
   INCREMENT 1
   CYCLE-ON-LIMIT no
