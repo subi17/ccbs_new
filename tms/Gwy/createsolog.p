@@ -49,6 +49,10 @@ DEFINE TEMP-TABLE ttDSSDataLimit
    FIELD roamingLikeAtHome AS CHAR
    FIELD tariff            AS CHAR.
 
+DEFINE TEMP-TABLE ttDSS_msisdn
+   FIELD action AS CHAR 
+   FIELD msisdn AS CHAR.
+
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -420,6 +424,7 @@ PROCEDURE pSolog:
                ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
                ProCommand.ProCommandtarget    = "NB_CH"
+               ProCommand.ProCommandVerb      = "PUT"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
             
             /* Json content */
@@ -474,6 +479,7 @@ PROCEDURE pSolog:
                ProCommand.MsSeq               = MobSub.MsSeq  /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = 0             /* 0 - New                 */
                ProCommand.ProCommandtarget    = "NB_CH"
+               ProCommand.ProCommandVerb      = "POST"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
                                                 "/manage-subscription".
             
@@ -481,7 +487,7 @@ PROCEDURE pSolog:
             CREATE ttDSS_msisdn.
             ASSIGN 
                ttDSS_msisdn.action = "Add"  /* Hard-coded when adding to ADD */  
-               ttDSS:msisdn.msisdn = lcmsisdns.
+               ttDSS_msisdn.msisdn = lcmsisdns.
             
             /* Getting Json string */
             oJson_DSS_msisdn = NEW JsonObject().
@@ -524,6 +530,7 @@ PROCEDURE pSolog:
             ProCommand.MsSeq               = MobSub.MsSeq  
             ProCommand.ProCommandstatus    = 0               /* 0 - New */
             ProCommand.ProCommandtarget    = "NB_CH"
+            ProCommand.ProCommandVerb      = "POST"            
             ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
                                              "/set-accumulated-volume".
   
