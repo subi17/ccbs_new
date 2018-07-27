@@ -49,7 +49,7 @@ FIND FIRST CliType WHERE
            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} 
            NO-LOCK NO-ERROR.
 IF AVAIL CliType OR NOT fIsConvergenceTariff(Order.CLIType) THEN
-   RETURN appl_err("Not a fixedline Order to Cancel").   
+   RETURN appl_err("Not a Fixedline Order to Cancel").   
 
 IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    Order.StatusCode NE {&ORDER_STATUS_COMPANY_NEW} AND
@@ -67,14 +67,14 @@ IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
               OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
               NO-LOCK NO-ERROR.     
    IF NOT AVAILABLE OrderCustomer THEN 
-      RETURN appl_err("Not a fixedline Order to Cancel").
+      RETURN appl_err("Not a Fixedline Order to Cancel").
    
    FIND FIRST OrderFusion WHERE
               OrderFusion.Brand EQ Syst.Var:gcBrand AND
               OrderFusion.OrderID EQ piOrderId 
               NO-LOCK NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
-      RETURN appl_err("Fixed line connection is not available for this order").
+      RETURN appl_err("Fixedine connection is not available for this order").
    
    IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT") EQ 0 THEN
       RETURN appl_err("Fusion status is not in valid state to cancel").
