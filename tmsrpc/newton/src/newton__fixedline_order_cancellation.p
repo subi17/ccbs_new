@@ -60,26 +60,28 @@ IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    Order.StatusCode NE {&ORDER_STATUS_MORE_DOC_NEEDED} THEN
    RETURN appl_err("Order is not in valid state to cancel").   
 
-FIND FIRST OrderCustomer WHERE 
-           OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
-           OrderCustomer.OrderId EQ piOrderId        AND
-           OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-           NO-LOCK NO-ERROR.     
-IF NOT AVAILABLE OrderCustomer THEN 
-   RETURN appl_err("Not a fixedline Order to Cancel").
-
-FIND FIRST OrderFusion WHERE
-           OrderFusion.Brand EQ Syst.Var:gcBrand AND
-           OrderFusion.OrderID EQ piOrderId 
-           NO-LOCK NO-ERROR.
-IF NOT AVAIL OrderFusion THEN
-   RETURN appl_err("Fixed line connection is not available for this order").
-
-IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT") EQ 0 THEN
-   RETURN appl_err("Fusion status is not in valid state to cancel").
-
-IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
+IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+   FIND FIRST OrderCustomer WHERE 
+              OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
+              OrderCustomer.OrderId EQ piOrderId        AND
+              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+              NO-LOCK NO-ERROR.     
+   IF NOT AVAILABLE OrderCustomer THEN 
+      RETURN appl_err("Not a fixedline Order to Cancel").
+   
+   FIND FIRST OrderFusion WHERE
+              OrderFusion.Brand EQ Syst.Var:gcBrand AND
+              OrderFusion.OrderID EQ piOrderId 
+              NO-LOCK NO-ERROR.
+   IF NOT AVAIL OrderFusion THEN
+      RETURN appl_err("Fixed line connection is not available for this order").
+   
+   IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT") EQ 0 THEN
+      RETURN appl_err("Fusion status is not in valid state to cancel").
+    
+   IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
       RETURN appl_err("Fixedline Status is not in valid state to cancel").
+END.
    
  IF llCloseOrder THEN DO:
    RUN Mc/closeorder.p (INPUT piOrderId, INPUT TRUE).
