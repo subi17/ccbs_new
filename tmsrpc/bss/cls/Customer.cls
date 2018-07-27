@@ -91,43 +91,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        
     DEFINE PUBLIC PROPERTY FixedNumber AS CHARACTER NO-UNDO
         GET.
-        SET.
-        
-    DEFINE PUBLIC PROPERTY OperEMailMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
-        
-    DEFINE PUBLIC PROPERTY OutEMailMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
-        
-    DEFINE PUBLIC PROPERTY OperPostMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
-        
-    DEFINE PUBLIC PROPERTY OutPostMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
-        
-    DEFINE PUBLIC PROPERTY OperSMSMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
-    
-    DEFINE PUBLIC PROPERTY OutSMSMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
-    
-    DEFINE PUBLIC PROPERTY OutBankMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
-    
-    DEFINE PUBLIC PROPERTY DontSharePersData AS LOGICAL NO-UNDO
-        GET.
-        SET.
-    
-    DEFINE PUBLIC PROPERTY OperAllMarketing AS LOGICAL NO-UNDO
-        GET.
-        SET.
+        SET.        
         
     DEFINE PUBLIC PROPERTY AuthCustIdType AS CHARACTER NO-UNDO
         GET.
@@ -209,6 +173,10 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
+    DEFINE PUBLIC PROPERTY gdpr_consent AS LOGICAL NO-UNDO
+       GET.
+       SET.
+       
     DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
         FIELDS custacctobj  AS CLASS Progress.Lang.Object
         FIELDS custacctnum  AS INTEGER
@@ -254,14 +222,6 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:Email              = bfCustomer.Email
             THIS-OBJECT:MobileNumber       = bfCustomer.SMSNumber
             THIS-OBJECT:FixedNumber        = bfCustomer.Phone
-            THIS-OBJECT:OutBankMarketing   = bfCustomer.OutMarkBank
-            THIS-OBJECT:DontSharePersData  = bfCustomer.DontSharePersData
-            THIS-OBJECT:OperEMailMarketing = bfCustomer.DirMarkEmail
-            THIS-OBJECT:OutEMailMarketing  = bfCustomer.OutMarkEmail 
-            THIS-OBJECT:OperPostMarketing  = bfCustomer.DirMarkPost
-            THIS-OBJECT:OutPostMarketing   = bfCustomer.OutMarkPost
-            THIS-OBJECT:OperSMSMarketing   = bfCustomer.DirMarkSMS
-            THIS-OBJECT:OutSMSMarketing    = bfCustomer.OutMarkSMS 
             THIS-OBJECT:FoundationDate     = bfCustomer.FoundationDate
             .
      
@@ -353,20 +313,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        IF ioJsonObject:Has("marketing")
        THEN DO:
            ASSIGN MarketingData                  = ioJsonObject:GetJsonObject("marketing")
-                  THIS-OBJECT:OperEMailMarketing = MarketingData:GetLogical("email")
-                  THIS-OBJECT:OperPostMarketing  = MarketingData:GetLogical("post")
-                  THIS-OBJECT:OperSMSMarketing   = MarketingData:GetLogical("sms")
-                  THIS-OBJECT:OutBankMarketing   = MarketingData:GetLogical("bank_3rd")
-                  THIS-OBJECT:OutEMailMarketing  = MarketingData:GetLogical("email_3rd")
-                  THIS-OBJECT:OutPostMarketing   = MarketingData:GetLogical("post_3rd")
-                  THIS-OBJECT:OutSMSMarketing    = MarketingData:GetLogical("sms_3rd")
-                  THIS-OBJECT:DontSharePersData  = MarketingData:GetLogical("dont_share_personal_data")
-                  THIS-OBJECT:OperAllMarketing   = THIS-OBJECT:OperEMailMarketing OR
-                                                   THIS-OBJECT:OutEMailMarketing  OR
-                                                   THIS-OBJECT:OperPostMarketing  OR
-                                                   THIS-OBJECT:OutPostMarketing   OR
-                                                   THIS-OBJECT:OperSMSMarketing   OR
-                                                   THIS-OBJECT:OutSMSMarketing
+                  THIS-OBJECT:gdpr_consent       = ioJsonObject:GetLogical("gdpr_consent")
                   .
        END.
        ELSE UNDO, THROW NEW ParamError ("Marketing data does not exist.").
@@ -429,14 +376,6 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            Customer.Email             = THIS-OBJECT:Email
            Customer.SMSNumber         = THIS-OBJECT:MobileNumber
            Customer.Phone             = THIS-OBJECT:FixedNumber
-           Customer.OutMarkBank       = THIS-OBJECT:OutBankMarketing
-           Customer.DontSharePersData = THIS-OBJECT:DontSharePersData
-           Customer.DirMarkEmail      = THIS-OBJECT:OperEMailMarketing
-           Customer.OutMarkEmail      = THIS-OBJECT:OutEMailMarketing
-           Customer.DirMarkPost       = THIS-OBJECT:OperPostMarketing
-           Customer.OutMarkPost       = THIS-OBJECT:OutPostMarketing
-           Customer.DirMarkSMS        = THIS-OBJECT:OperSMSMarketing
-           Customer.OutMarkSMS        = THIS-OBJECT:OutSMSMarketing
            Customer.FoundationDate    = THIS-OBJECT:FoundationDate
            Customer.CompanyName       = THIS-OBJECT:CompanyName
            Customer.Profession        = THIS-OBJECT:Profession
