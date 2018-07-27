@@ -247,6 +247,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
    DO:
       ocError = "ERROR: setSAPC program not ready yet to manage " + 
                  MsRequest.ReqCparam1 + " request ".
+      RETURN ocError.
    END. 
 
                 
@@ -267,6 +268,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
             DO:
                ocError = "ERROR: setSAPC program not ready yet to manage " + 
                          MsRequest.ReqCparam1 + " request ".
+              RETURN ocError.
                /* 
                ASSIGN 
                   lcProcommandType = "ADD_DSS_UPSELL".

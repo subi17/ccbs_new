@@ -76,6 +76,13 @@ PROCEDURE pServCompSolog:
       RETURN.
    END.
 
+   FIND Customer OF MobSub NO-LOCK NO-ERROR. 
+   IF NOT AVAILABLE Customer THEN
+   DO:
+      fReqError("Customer not found").
+      RETURN.
+   END.
+
    Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
