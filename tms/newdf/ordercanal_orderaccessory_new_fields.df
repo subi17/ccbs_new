@@ -1,0 +1,23 @@
+ADD FIELD "OrderProductID" OF "OrderAccessory" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "ProductID"
+  POSITION 19
+  MAX-WIDTH 12
+  COLUMN-LABEL "OrderProductID"
+  HELP "OrderProductID"
+  ORDER 180
+
+ADD FIELD "MsSeq" OF "OrderAccessory" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubscrID"
+  POSITION 20
+  MAX-WIDTH 12
+  COLUMN-LABEL "Subscription ID"
+  HELP "Subscription ID"
+  ORDER 190
+  
+ADD INDEX "MSSeq" ON "OrderAccessory"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "MSSeq" ASCENDING
