@@ -44,7 +44,7 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY ROIDeliverySecure AS LOGICAL  NO-UNDO
+    DEFINE PUBLIC PROPERTY ROIDeliverySecure AS INTEGER  NO-UNDO
        GET.
        SET.
        
@@ -74,7 +74,7 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:ROILevel          =  ioPaymentObject:GetCharacter("level")           WHEN ioPaymentObject:Has("level")
             THIS-OBJECT:ROIRuleID         =  ioPaymentObject:GetCharacter("rule_id")         WHEN ioPaymentObject:Has("rule_id")
             THIS-OBJECT:ROIRiskCode       =  ioPaymentObject:GetCharacter("risk_code")       WHEN ioPaymentObject:Has("risk_code")
-            THIS-OBJECT:ROIDeliverySecure =  ioPaymentObject:GetLogical("delivery_secure")   WHEN ioPaymentObject:Has("delivery_secure")
+            THIS-OBJECT:ROIDeliverySecure =  ioPaymentObject:GetInteger("delivery_secure")   WHEN ioPaymentObject:Has("delivery_secure")
             aoOrder:ROIClose              =  (THIS-OBJECT:ROIResult EQ "risk" AND LOOKUP(THIS-OBJECT:ROILevel,"7,8") > 0)
             .
         
@@ -98,7 +98,7 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
             Order.ROIResult      =   THIS-OBJECT:ROIResult
             Order.ROILevel       =   INTEGER(THIS-OBJECT:ROILevel)  
             Order.RiskCode       =   THIS-OBJECT:ROIRiskCode 
-            Order.DeliverySecure =   INTEGER(THIS-OBJECT:ROIDeliverySecure)
+            Order.DeliverySecure =   THIS-OBJECT:ROIDeliverySecure
             .
            
     END METHOD.

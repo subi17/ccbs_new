@@ -140,8 +140,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                 
             END.            
         END.
-        ELSE UNDO, THROW NEW ParamError("Billing Account Data is not available.").
-        
+
         ASSIGN THIS-OBJECT:BankAccts  = TRIM(THIS-OBJECT:BankAccts , ",").
 	    
 	END METHOD.

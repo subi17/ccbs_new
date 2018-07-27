@@ -90,6 +90,8 @@ DEF VAR liMLMsSeq             AS INT  NO-UNDO.
 DEF VAR lcProductCLIType      AS CHAR NO-UNDO.
 DEF VAR lcProductCLI          AS CHAR NO-UNDO.
 DEF VAR lcOrderSubICC         AS CHAR NO-UNDO.
+DEF VAR lcTopupPrefix         AS CHAR NO-UNDO.
+DEF VAR lcTopupReference      AS CHAR NO-UNDO.
 
 
 DEF BUFFER bInvCust        FOR Customer.
@@ -529,12 +531,8 @@ IF NOT AVAIL mobsub THEN DO:
  
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
 
-   /* Initial TopUp */
-   IF MobSub.PayType = TRUE AND Order.Offer = "" THEN 
-      RUN Mm/topupcamp.p(MobSub.MsSeq, OUTPUT liPPRequest).
-
-   /* additional topup */
-   lcTaxZone = "".
+    /* Topup Requests initial & campaign */
+    lcTaxZone = "".
    FOR EACH OrderTopup OF Order NO-LOCK:
 
       IF lcTaxZone = "" THEN DO:
@@ -542,13 +540,25 @@ IF NOT AVAIL mobsub THEN DO:
          lcTaxZone = fRegionTaxZone(bInvCust.Region).
       END.
          
+      IF OrderTopup.TopupType  = {&INITIAL_TOPUP}
+      THEN DO:          
+          ASSIGN lcTopupPrefix  =  Func.Common:mGetTMSParamCharValue(INPUT "TOPUP" , INPUT "InitialTopupPrefix").  
+      END.
+      ELSE DO:          
+          ASSIGN lcTopupPrefix  =  Func.Common:mGetTMSParamCharValue(INPUT "TOPUP" , INPUT "CampaignTopupPrefix").          
+      END. 
+      
+      ASSIGN lcTopupReference = Func.OrderProductsData:mGetOrderProductOfferingID(INPUT OrderTopup.OrderID , INPUT OrderTopup.OrderProductID).
+      
+      IF lcTopupReference = "" THEN ASSIGN lcTopupReference = "CAMPAIGN".
+         
       fCreateTopUpRequest(MobSub.MsSeq,
                           MobSub.CLI,
                           "RefillTRequest",
                           "WEB Order",
                           "RefillTRequest",
-                          "994",
-                          "Campaign",    /* reference */
+                          lcTopupPrefix,
+                          lcTopupReference,
                           lcTaxZone,
                           0,
                           OrderTopup.Amount * 100,

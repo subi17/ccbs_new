@@ -1199,10 +1199,10 @@ CLASS Func.Common FINAL:
            FIND FIRST bfTMSParam WHERE bfTMSParam.Brand         =   Syst.Var:gcBrand
                                    AND bfTMSParam.ParamCode     =   icParamCode
                                  NO-LOCK NO-ERROR.
-                           
-        IF AVAILABLE bfTMSParam THEN RETURN bfTMSParam.CharVal.
-
-        RETURN "".        
+                       
+       IF NOT AVAILABLE bfTMSParam THEN RETURN "".
+                          
+       RETURN bfTMSParam.CharVal.
        
    END METHOD.
    

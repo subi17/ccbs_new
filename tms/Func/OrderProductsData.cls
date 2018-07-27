@@ -284,6 +284,21 @@ CLASS Func.OrderProductsData FINAL:
             
         RETURN 0.                                                                                                       
                                                      
-    END METHOD.    
+    END METHOD.  
+    
+   METHOD PUBLIC STATIC CHARACTER mGetOrderProductOfferingID (INPUT iiOrderID        AS INTEGER ,
+                                                              INPUT iiOrderProductID AS INTEGER) :
+                                                             
+       DEFINE BUFFER bfpcOrderProduct FOR OrderProduct.
+       
+       FIND FIRST bfpcOrderProduct WHERE bfpcOrderProduct.OrderID           =  iiOrderID
+                                     AND bfpcOrderProduct.OrderProductID    =  iiOrderProductID NO-LOCK NO-ERROR.
+                                     
+       IF NOT AVAILABLE bfpcOrderProduct THEN RETURN "".
+       
+       RETURN bfpcOrderProduct.ProductOfferingID.                                     
+       
+       
+   END METHOD.                                                             
     
 END CLASS.
