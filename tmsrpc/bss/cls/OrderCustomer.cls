@@ -109,43 +109,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY BankCode AS CHARACTER NO-UNDO
       GET.
       SET.
-
-   DEFINE PUBLIC PROPERTY OutBankMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY DontSharePersData AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OperEMailMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OutEMailMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OperAllMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OperPostMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OutPostMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OperSMSMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OutSMSMarketing AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
+   
    DEFINE PUBLIC PROPERTY AddressCodC AS CHARACTER NO-UNDO
       GET.
       SET.
@@ -288,20 +252,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:MobileNumber       = Customer.SMSNumber
          THIS-OBJECT:FixedNumber        = Customer.Phone
          THIS-OBJECT:BankCode           = Customer.BankAcc
-         THIS-OBJECT:OutBankMarketing   = Customer.OutMarkBank
-         THIS-OBJECT:DontSharePersData  = Customer.DontSharePersData
-         THIS-OBJECT:OperEMailMarketing = Customer.DirMarkEmail
-         THIS-OBJECT:OutEMailMarketing  = Customer.OutMarkEmail
-         THIS-OBJECT:OperAllMarketing   = Customer.DirMarkEmail OR
-                                          Customer.OutMarkEmail OR
-                                          Customer.DirMarkPost  OR
-                                          Customer.OutMarkPost  OR
-                                          Customer.DirMarkSMS   OR
-                                          Customer.OutMarkSMS
-         THIS-OBJECT:OperPostMarketing  = Customer.DirMarkPost
-         THIS-OBJECT:OutPostMarketing   = Customer.OutMarkPost
-         THIS-OBJECT:OperSMSMarketing   = Customer.DirMarkSMS
-         THIS-OBJECT:OutSMSMarketing    = Customer.OutMarkSMS
          THIS-OBJECT:Category           = Customer.Category
          THIS-OBJECT:Company            = Customer.CompanyName
          THIS-OBJECT:FoundationDate     = Customer.FoundationDate.
@@ -375,13 +325,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email")
          THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number")
          THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number")
-         THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data")
-         THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email")
-         THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd")
-         THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark_post")
-         THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark_post_3rd")
-         THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark_sms")
-         THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark_sms_3rd")
          THIS-OBJECT:AddressCodC        = ioJsonObject:GetCharacter("city_code")
          THIS-OBJECT:AddressCodP        = ioJsonObject:GetCharacter("street_code")
          THIS-OBJECT:AddressCodM        = ioJsonObject:GetCharacter("municipality_code").
@@ -403,29 +346,15 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:Email              = ioJsonObject:GetCharacter("email") WHEN ioJsonObject:Has("email")
          THIS-OBJECT:MobileNumber       = ioJsonObject:GetCharacter("sms_number") WHEN ioJsonObject:Has("sms_number")
          THIS-OBJECT:FixedNumber        = ioJsonObject:GetCharacter("phone_number") WHEN ioJsonObject:Has("phone_number")
-         THIS-OBJECT:DontSharePersData  = ioJsonObject:GetLogical("mark_dont_share_personal_data") WHEN ioJsonObject:Has("mark_dont_share_personal_data")
-         THIS-OBJECT:OperEMailMarketing = ioJsonObject:GetLogical("mark_email") WHEN ioJsonObject:Has("mark_email")
-         THIS-OBJECT:OutEMailMarketing  = ioJsonObject:GetLogical("mark_email_3rd") WHEN ioJsonObject:Has("mark_email_3rd")
-         THIS-OBJECT:OperPostMarketing  = ioJsonObject:GetLogical("mark_post") WHEN ioJsonObject:Has("mark_post")
-         THIS-OBJECT:OutPostMarketing   = ioJsonObject:GetLogical("mark_post_3rd") WHEN ioJsonObject:Has("mark_post_3rd")
-         THIS-OBJECT:OperSMSMarketing   = ioJsonObject:GetLogical("mark_sms") WHEN ioJsonObject:Has("mark_sms")
-         THIS-OBJECT:OutSMSMarketing    = ioJsonObject:GetLogical("mark_sms_3rd") WHEN ioJsonObject:Has("mark_sms_3rd")
          THIS-OBJECT:AddressCodC        = ioJsonObject:GetCharacter("city_code") WHEN ioJsonObject:Has("city_code")
          THIS-OBJECT:AddressCodP        = ioJsonObject:GetCharacter("street_code") WHEN ioJsonObject:Has("street_code")
          THIS-OBJECT:AddressCodM        = ioJsonObject:GetCharacter("municipality_code") WHEN ioJsonObject:Has("municipality_code").
 
       /* BankCode is not mandatory when the customer is prepaid customer
-         so we need to check the value somewhere else.
-         OutBankMarketing - lets populate only if available */
+         so we need to check the value somewhere else.*/
       ASSIGN
          THIS-OBJECT:BankCode           = REPLACE(ioJsonObject:GetCharacter("bankaccount")," ","") WHEN ioJsonObject:Has("bankaccount")
-         THIS-OBJECT:OutBankMarketing   = ioJsonObject:GetLogical("mark_bank_3rd") WHEN ioJsonObject:Has("mark_bank_3rd")
-         THIS-OBJECT:OperAllMarketing   = THIS-OBJECT:OperEMailMarketing OR
-                                          THIS-OBJECT:OutEMailMarketing  OR
-                                          THIS-OBJECT:OperPostMarketing  OR
-                                          THIS-OBJECT:OutPostMarketing   OR
-                                          THIS-OBJECT:OperSMSMarketing   OR
-                                          THIS-OBJECT:OutSMSMarketing.
+         .
 
       IF THIS-OBJECT:BankCode > "" AND
          NOT Func.BankAccount:mValid(THIS-OBJECT:BankCode)
@@ -498,17 +427,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:MobileNumber       = aoDefaultCustomer:MobileNumber
             THIS-OBJECT:FixedNumber        = aoDefaultCustomer:FixedNumber
             THIS-OBJECT:BankCode           = (IF aoOrder:aoCustomer:isNewCustomer THEN mGetBankAcctNum() ELSE aoOrder:aoCustomer:OrderCustBankAcct) 
-            THIS-OBJECT:OutBankMarketing   = aoDefaultCustomer:OutBankMarketing
-            THIS-OBJECT:DontSharePersData  = aoDefaultCustomer:DontSharePersData
-            THIS-OBJECT:OperEMailMarketing = aoDefaultCustomer:OperEMailMarketing
-            THIS-OBJECT:OutEMailMarketing  = aoDefaultCustomer:OutEMailMarketing
-            THIS-OBJECT:OperPostMarketing  = aoDefaultCustomer:OperPostMarketing
-            THIS-OBJECT:OutPostMarketing   = aoDefaultCustomer:OutPostMarketing
-            THIS-OBJECT:OperSMSMarketing   = aoDefaultCustomer:OperSMSMarketing
-            THIS-OBJECT:OutSMSMarketing    = aoDefaultCustomer:OutSMSMarketing
             THIS-OBJECT:FoundationDate     = aoDefaultCustomer:FoundationDate
-            THIS-OBJECT:OperAllMarketing   = ( aoDefaultCustomer:OperEMailMarketing OR aoDefaultCustomer:OutEMailMarketing OR aoDefaultCustomer:OperPostMarketing  OR
-                                               aoDefaultCustomer:OutPostMarketing   OR aoDefaultCustomer:OperSMSMarketing  OR aoDefaultCustomer:OutSMSMarketing )
              .
                       	          
 	END.
@@ -558,15 +477,6 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.MobileNumber       = THIS-OBJECT:MobileNumber
          OrderCustomer.FixedNumber        = THIS-OBJECT:FixedNumber
          OrderCustomer.BankCode           = THIS-OBJECT:BankCode
-         OrderCustomer.OutBankMarketing   = THIS-OBJECT:OutBankMarketing
-         OrderCustomer.DontSharePersData  = THIS-OBJECT:DontSharePersData
-         OrderCustomer.OperEMailMarketing = THIS-OBJECT:OperEMailMarketing
-         OrderCustomer.OutEMailMarketing  = THIS-OBJECT:OutEMailMarketing
-         OrderCustomer.OperAllMarketing   = THIS-OBJECT:OperAllMarketing
-         OrderCustomer.OperPostMarketing  = THIS-OBJECT:OperPostMarketing
-         OrderCustomer.OutPostMarketing   = THIS-OBJECT:OutPostMarketing
-         OrderCustomer.OperSMSMarketing   = THIS-OBJECT:OperSMSMarketing
-         OrderCustomer.OutSMSMarketing    = THIS-OBJECT:OutSMSMarketing
          OrderCustomer.Address            = THIS-OBJECT:Street
          OrderCustomer.AddressCodC        = THIS-OBJECT:AddressCodC
          OrderCustomer.AddressCodP        = THIS-OBJECT:AddressCodP
