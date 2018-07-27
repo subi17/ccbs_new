@@ -211,7 +211,33 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
 
    DEFINE VARIABLE lcArray  AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liInt    AS INTEGER   NO-UNDO.
-   
+  
+   DEFINE BUFFER lbCLIType FOR CLIType.
+   DEFINE BUFFER lbMobSub  FOR MobSub.
+
+   FIND FIRST lbMobSub NO-LOCK WHERE
+              lbMobSub.MsSeq EQ piMsSeq NO-ERROR.
+
+   IF AVAIL lbMobSub THEN DO:
+
+      FIND FIRST lbCLIType NO-LOCK WHERE
+                 lbCLIType.Brand   EQ Syst.Var:gcBrand AND
+                 lbCLIType.CLIType EQ lbMobSub.CLIType NO-ERROR.
+
+      IF AVAIL lbCLIType                 AND
+         fIsConvergenceTariff(icCLIType) THEN DO:
+
+         IF ((lbCLIType.TariffType  EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}   OR
+              (lbCLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND
+               lbMobSub.FixedNumber NE ""                              AND
+               lbMobSub.MsStatus    EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}))      AND
+            lcMergeTargets          EQ "")                                  THEN
+            RETURN FALSE.
+
+      END.
+
+   END. 
+
    /* YPR-1720 */
    IF icCLIType EQ "CONT15" AND
       iiStatusCode EQ 2 AND
