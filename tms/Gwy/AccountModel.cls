@@ -32,8 +32,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
                                    iModelid AS CHAR, 
                                    iSource AS CHAR,
                                    iCorrelationID AS CHAR,
-                                   iReplyTo AS CHAR):
-                                   
+                                   iReplyTo AS CHAR):                         
       ASSIGN
          lcJson          = iJson
          lcModelId       = iModelid
@@ -46,7 +45,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
     
    METHOD PUBLIC LOG create():
       
-      lcJson = '~{"AccountDataset":~{"Account":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"AccountDataset":~{"Account":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET AccountDataset BIND, lcJson) THEN
          RETURN FALSE.
        
@@ -62,7 +61,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       IF CAN-FIND(FIRST Account WHERE
                         Account.Brand = gcBrand AND 
                         Account.AccNum = liAccount) THEN
-         RETURN loRequestMaker:logError("Account was already exists").
+         RETURN loRequestMaker:logError("Account already exists").
             
       IF ttAccount.account_type > "" THEN 
          ASSIGN lcAccType = Func.Common:mTMSCodeValue("Account",
@@ -70,10 +69,9 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
                                                       ttAccount.account_type).               
       CREATE Account.
       ASSIGN 
-         Account.Brand = gcBrand
+         Account.Brand   = gcBrand
          Account.AccNum  = liAccount
-         Account.AccName = ttAccount.name
-                              WHEN ttAccount.name > ""
+         Account.AccName = ttAccount.name WHEN ttAccount.name > ""
          Account.AccType = INT(lcAccType).       
           
       loEventLogMaker:make_eventlog("create",BUFFER Account:HANDLE).
@@ -83,17 +81,12 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       /* error cases get response via logError, make response for 
          the successful one */
       IF lcCorrelationID > "" THEN
-      loRequestMaker:create_response("Account",
-                                     ttAccount.external_id,
-                                     "OK",
-                                     "").
-      &IF {&MQ_BASED} 
-      &THEN                               
-      loRequestMaker:create_log(
-         SUBSTITUTE("Account create: Id=&1 Ext.Request=&2", 
-         ttAccount.external_id,
-         lcCorrelationID), 
-         "DEBUG").
+         loRequestMaker:create_response("Account",
+                                        ttAccount.external_id,
+                                        "OK",
+                                        "").
+      &IF {&MQ_BASED} &THEN                               
+         loRequestMaker:create_log(SUBSTITUTE("Account created: Id=&1", ttAccount.external_id), "DEBUG").
       &ENDIF    
     
    END METHOD.
@@ -102,30 +95,28 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
        
       DEF VAR liWait AS INT NO-UNDO.
     
-      IF lcModelId = ? THEN 
-         RETURN loRequestMaker:logError('Account id is not given').
+      IF lcModelId = ? OR lcModelId = "" THEN 
+         RETURN loRequestMaker:logError('Account id is missing.').
 
-      lcJson = '~{"AccountDataset":~{"Account":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"AccountDataset":~{"Account":' + lcJson + '~}~}'.
       
       IF loRequestMaker:parser_error(DATASET AccountDataset BIND, lcJson) THEN
          RETURN FALSE.
-   
-      IF lcModelId = "" THEN 
-         RETURN loRequestMaker:logError("Invalid Account id").
             
       liAccount = INT(lcModelId) NO-ERROR.
       IF liAccount = 0 THEN 
-         RETURN loRequestMaker:logError("Invalid account ID").
+         RETURN loRequestMaker:logError("Invalid Account ID").
       
       FIND ttAccount NO-ERROR.
       IF NOT AVAILABLE ttAccount THEN
          RETURN loRequestMaker:logError("Empty Account set").
+
       DO WHILE TRUE:
-         FIND FIRST Account EXCLUSIVE-LOCK WHERE
-                    Account.Brand = gcBrand AND
-                    Account.AccNum = INT(lcModelId)  
-                    NO-ERROR NO-WAIT.
-         IF LOCKED(Account) THEN DO:
+         FIND FIRST Account WHERE
+                    Account.Brand  = gcBrand AND
+                    Account.AccNum = INT(lcModelId) EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+         IF LOCKED(Account) THEN 
+         DO:
             liWait = liWait + 1.
             IF liWait > {&WAIT_CONFIG_LOCK} THEN 
                RETURN loRequestMaker:logError("Account was not available for update").
@@ -141,8 +132,7 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       loEventLogMaker:make_eventlog("oldbuffer",BUFFER Account:HANDLE).
         
       ASSIGN 
-         Account.AccName = ttAccount.name 
-                              WHEN ttAccount.name > ""
+         Account.AccName = ttAccount.name WHEN ttAccount.name > ""
          Account.AccType = INT(lcAccType).       
         
       loEventLogMaker:make_eventlog("modify",BUFFER Account:HANDLE).
@@ -152,19 +142,14 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
       /* error cases get response via logError, make response for 
          the succesful one */
       IF lcCorrelationID > "" THEN
-      loRequestMaker:create_response("Account",
-                                     lcModelId,
-                                     "OK",
-                                     ""). 
-
-      &IF {&MQ_BASED} 
-      &THEN
-      loRequestMaker:create_log(
-         SUBSTITUTE("Account Update: Id=&1 Ext.Request=&2", 
-         lcModelId,
-         lcCorrelationID), 
-         "DEBUG").
+         loRequestMaker:create_response("Account",
+                                        lcModelId,
+                                        "OK",
+                                        ""). 
+      &IF {&MQ_BASED} &THEN
+         loRequestMaker:create_log(SUBSTITUTE("Account Update: Id=&1", lcModelId), "DEBUG").
       &ENDIF
+
    END METHOD.
     
    METHOD PUBLIC LOG makeOtherAction(icAction AS CHAR):
@@ -181,8 +166,11 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
    END METHOD.
     
    DESTRUCTOR PUBLIC AccountModel ():
-      IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
-      IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.
+      IF VALID-OBJECT(loRequestMaker) THEN 
+         DELETE OBJECT loRequestMaker.
+         
+      IF VALID-OBJECT(loEventLogMaker) THEN 
+         DELETE OBJECT loEventLogMaker.
    END DESTRUCTOR.
 
 END CLASS.

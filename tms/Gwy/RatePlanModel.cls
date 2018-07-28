@@ -53,7 +53,7 @@ CLASS Gwy.RatePlanModel IMPLEMENTS Gwy.ModelInterface:
       DEF VAR liText  AS INT  NO-UNDO. 
       DEF VAR lcError AS CHAR NO-UNDO.
      
-      lcJson = '~{"RatePlanDataSet":~{"RatePlan":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"RatePlanDataSet":~{"RatePlan":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET RatePlanDataset BIND, lcJson) THEN
          RETURN FALSE.
       
@@ -126,7 +126,7 @@ CLASS Gwy.RatePlanModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('RatePlan ID not given').
     
-      lcJson = '~{"RatePlanDataSet":~{"RatePlan":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"RatePlanDataSet":~{"RatePlan":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET RatePlanDataset BIND, lcJson) THEN
          RETURN FALSE.
       

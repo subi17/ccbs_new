@@ -45,7 +45,7 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
 
    METHOD PUBLIC LOG create():
  
-      lcJson = '~{"BItemGroupDataSet":~{"BItemGroup":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"BItemGroupDataSet":~{"BItemGroup":' + lcJson + '~}~}'.
         
       IF loRequestMaker:parser_error(DATASET BItemGroupDataset BIND, lcJson) THEN
          RETURN FALSE.
@@ -115,7 +115,7 @@ CLASS Gwy.BItemGroupModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('BItemGroup ID not given').
 
-      lcJson = '~{"BItemGroupDataSet":~{"BItemGroup":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"BItemGroupDataSet":~{"BItemGroup":' + lcJson + '~}~}'.
       
       IF loRequestMaker:parser_error(DATASET BItemGroupDataset BIND, lcJson) THEN
          RETURN FALSE.

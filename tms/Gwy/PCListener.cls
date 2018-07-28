@@ -32,6 +32,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    DEF VAR lcHostName             AS CHAR                     NO-UNDO.
    DEF VAR lcPortNumber           AS CHAR                     NO-UNDO.
    DEF VAR lcQueueName            AS CHAR                     NO-UNDO.
+   DEF VAR lcUserName             AS CHAR                     NO-UNDO.
+   DEF VAR lcPasscode             AS CHAR                     NO-UNDO.
    /*stomp protocol handler objects*/
    DEF VAR loStompConfig          AS dotr.Stomp.StompConfig   NO-UNDO.
    DEF VAR loStompClient          AS dotr.Stomp.StompClient   NO-UNDO.
@@ -71,7 +73,9 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          lcAllScandics        = ENTRY(2, lcUTF8_Scandics_List, "|")
          lcHostName           = Configuration:getc("PC.Queue.ip")
          lcPortNumber         = STRING(Configuration:geti("PC.Queue.port"))
-         lcQueueName          = Configuration:getc("PC.Queue.Name").
+         lcQueueName          = Configuration:getc("PC.Queue.Name")
+         lcUserName           = Configuration:getc("PC.User.Name")
+         lcPasscode           = Configuration:getc("PC.Passcode").
 
       ASSIGN 
          lLogFileName = STRING(YEAR(TODAY),"9999")
@@ -93,7 +97,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    END CONSTRUCTOR.
    
    METHOD PRIVATE VOID connect ():
-      loStompClient     = NEW dotr.Stomp.StompClient(loStompConfig).
+      loStompClient     = NEW dotr.Stomp.StompClient("", lcUserName, lcPasscode).
       loReaderHandler   = THIS-OBJECT.
       loStompClient:SUBSCRIBE(loReaderHandler).
       loStompClient:subscribeToQueueACK(lcQueueName,"client-individual").  /* ATTENTION */
@@ -104,6 +108,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       loStompConfig                     = dotr.Stomp.StompConfig:DEFAULT. 
       loStompConfig:StompServer         = lcHostName.
       loStompConfig:StompPort           = lcPortNumber.
+      loStompConfig:StompHost           = "/".
       loStompConfig:LargeMessageSupport = NO.
    END METHOD.
    
@@ -317,11 +322,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
          WHEN "billing_item_group" THEN DO:
             loLogicModule = NEW Gwy.BItemGroupModel(icMessageBody, lcModelId, lcSource,
                                                     lcCorrelationID, lcReplyTo).
-         END. /*
-         WHEN "compensation" THEN DO:
-            loLogicModule = NEW Gwy.CompensationModel(icMessageBody, lcModelId, lcSource,
-                                                      lcCorrelationID, lcReplyTo).
-         END.  */
+         END.
          WHEN "fee_model" THEN DO:
             loLogicModule = NEW Gwy.FeeModelModel(icMessageBody, lcModelId, lcSource,
                                                   lcCorrelationID, lcReplyTo).

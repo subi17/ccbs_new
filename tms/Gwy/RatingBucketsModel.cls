@@ -59,7 +59,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
 
     METHOD PUBLIC LOG create():
  
-        lcJson = '~{"SLTemplateDataset":~{"SLTemplate":~[' + lcJson + '~]~}~}'.
+        lcJson = '~{"SLTemplateDataset":~{"SLTemplate":' + lcJson + '~}~}'.
         IF loRequestMaker:parser_error(DATASET SLTemplateDataset BIND, lcJson) THEN
             RETURN FALSE.
        

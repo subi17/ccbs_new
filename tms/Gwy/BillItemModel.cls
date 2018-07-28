@@ -51,7 +51,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
 
    METHOD PUBLIC LOG create(): 
  
-      lcJson = '~{"BillItemDataSet":~{"BillItem":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"BillItemDataSet":~{"BillItem":' + lcJson + '~}~}'.
       
       IF loRequestMaker:parser_error(DATASET BillItemDataset BIND, lcJson) THEN
          RETURN FALSE.
@@ -112,13 +112,10 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
                                         ttBillItem.external_id,
                                         "OK",
                                         ""). 
-      &IF {&MQ_BASED} 
-      &THEN
-      loRequestMaker:create_log(SUBSTITUTE("BillItem create: Id=&1 Ext.Request=&2", 
-                                ttBillItem.external_id,
-                                lcCorrelationID), 
-                                "DEBUG").
+      &IF {&MQ_BASED} &THEN
+          loRequestMaker:create_log(SUBSTITUTE("BillItem create: Id=&1", ttBillItem.external_id), "DEBUG").
       &ENDIF
+
     END METHOD.
 
    METHOD PUBLIC LOG update():
@@ -129,7 +126,7 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = "" THEN 
          RETURN loRequestMaker:logError("Invalid BillItem ID").
 
-      lcJson = '~{"BillItemDataSet":~{"BillItem":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"BillItemDataSet":~{"BillItem":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET BillItemDataset BIND, lcJson) THEN
          RETURN FALSE.
    
@@ -171,14 +168,19 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
 
       IF ttBillItem.name > "" THEN 
          BillItem.BIName = ttBillItem.name.
+
       IF ttBillItem.invoice_section > "" THEN 
          BillItem.InvSect = ttBillItem.invoice_section.
+
       IF ttBillItem.billing_item_group > "" THEN    
          BillItem.BIGroup = ttBillItem.billing_item_group.
+
       IF ttBillItem.tax_class > "" THEN    
          BillItem.TaxClass = ttBillItem.tax_class.
+
       IF ttBillItem.debt_type > "" THEN    
          BillItem.DebtType = ttBillItem.debt_type. 
+
       IF ttBillItem.Profit_type > "" THEN    
          BillItem.ProfitType = ttBillItem.profit_type.
    
@@ -199,13 +201,10 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
                                         lcModelid,
                                         "OK",
                                         ""). 
-      &IF {&MQ_BASED} 
-      &THEN 
-      loRequestMaker:create_log(SUBSTITUTE("BillItem update: Id=&1 Ext.Request=&2", 
-                                lcModelid,
-                                lcCorrelationID), 
-                                "DEBUG").
+      &IF {&MQ_BASED} &THEN 
+          loRequestMaker:create_log(SUBSTITUTE("BillItem update: Id=&1", lcModelid), "DEBUG").
       &ENDIF
+
    END METHOD.
 
    METHOD PUBLIC CHAR validate_BillItem (ilCreate AS LOG):
@@ -253,9 +252,12 @@ CLASS Gwy.BillItemModel IMPLEMENTS Gwy.ModelInterface:
    END METHOD.
 
    DESTRUCTOR PUBLIC BillItemModel ():
-      IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
-      IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.
-      IF VALID-OBJECT(loRepTextMaker) THEN DELETE OBJECT loRepTextMaker.
+      IF VALID-OBJECT(loRequestMaker) THEN 
+          DELETE OBJECT loRequestMaker.
+      IF VALID-OBJECT(loEventLogMaker) THEN 
+          DELETE OBJECT loEventLogMaker.
+      IF VALID-OBJECT(loRepTextMaker) THEN 
+          DELETE OBJECT loRepTextMaker.
    END DESTRUCTOR.
 
 END CLASS.

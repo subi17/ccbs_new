@@ -225,7 +225,6 @@ CLASS Gwy.RequestMaker:
       ELSE RETURN FALSE.
    END METHOD.
 
-
    METHOD PUBLIC INT create_charge_request(iServiceID AS CHAR,
                                              iServiceType AS CHAR,
                                              iExternalId AS CHAR,
@@ -317,8 +316,7 @@ CLASS Gwy.RequestMaker:
       icResult    AS CHAR,
       icMessage   AS CHAR):
 
-      &IF {&MQ_BASED} 
-      &THEN 
+      &IF {&MQ_BASED} &THEN 
       CREATE AckMessage.
       ASSIGN 
          AckMessage.HostTable = icTableName
@@ -334,8 +332,7 @@ CLASS Gwy.RequestMaker:
    
    END METHOD.
 
-   METHOD PUBLIC LOG logError ( iError AS CHAR ):
-       MESSAGE iError VIEW-AS ALERT-BOX.
+   METHOD PUBLIC LOG logError(iError AS CHAR ):
       UNDO, THROW NEW Progress.Lang.AppError(iError, 80000).
    END METHOD.
       

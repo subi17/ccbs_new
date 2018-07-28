@@ -74,7 +74,7 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
 
    METHOD PUBLIC LOG create():
  
-      lcJson = '~{"DayCampaignDataSet":~{"DayCampaign":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"DayCampaignDataSet":~{"DayCampaign":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET DayCampaignDataset BIND, lcJson) THEN
          RETURN FALSE.
    
@@ -137,7 +137,7 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('Package ID not given').
     
-      lcJson = '~{"DayCampaignDataSet":~{"DayCampaign":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"DayCampaignDataSet":~{"DayCampaign":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET DayCampaignDataset BIND, lcJson) THEN
          RETURN FALSE.
        
@@ -198,13 +198,8 @@ CLASS Gwy.DayCampaignModel IMPLEMENTS Gwy.ModelInterface:
                                      lcModelId,
                                      "OK",
                                      ""). 
-      &IF {&MQ_BASED} 
-      &THEN    
-      loRequestMaker:create_log(
-         SUBSTITUTE("DayCampaign update: Id=&1 Ext.Request=&2", 
-                    lcModelId,
-                    lcCorrelationID), 
-                    "DEBUG").
+      &IF {&MQ_BASED} &THEN    
+          loRequestMaker:create_log(SUBSTITUTE("DayCampaign update: Id=&1", lcModelId), "DEBUG").
       &ENDIF
           
    END METHOD.

@@ -67,7 +67,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
 
    METHOD PUBLIC LOG create():
 
-      lcJson = '~{"CLITypeDataSet":~{"CLIType":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"CLITypeDataSet":~{"CLIType":' + lcJson + '~}~}'.
 
       IF loRequestMaker:parser_error(DATASET CLITypeDataset BIND, lcJson) THEN
          RETURN FALSE.
@@ -153,7 +153,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('CLIType ID not given').
 
-      lcJson = '~{"CLITypeDataSet":~{"CLIType":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"CLITypeDataSet":~{"CLIType":' + lcJson + '~}~}'.
       
       IF loRequestMaker:parser_error(DATASET CLITypeDataset BIND, lcJson) THEN
          RETURN FALSE.
