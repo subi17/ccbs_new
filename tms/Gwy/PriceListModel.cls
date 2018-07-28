@@ -41,7 +41,7 @@ CLASS Gwy.PriceListModel IMPLEMENTS Gwy.ModelInterface:
 
    METHOD PUBLIC LOG create():
     
-      lcJson = '~{"PriceListDataSet":~{"PriceList":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"PriceListDataSet":~{"PriceList":' + lcJson + '~}~}'.
        
       IF loRequestMaker:parser_error(DATASET PriceListDataset BIND, lcJson) THEN
          RETURN FALSE.
@@ -103,7 +103,7 @@ CLASS Gwy.PriceListModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('PriceList ID not given').
     
-      lcJson = '~{"PriceListDataSet":~{"PriceList":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"PriceListDataSet":~{"PriceList":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET PriceListDataset BIND, lcJson) THEN
          RETURN FALSE.
        

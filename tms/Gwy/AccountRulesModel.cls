@@ -51,7 +51,7 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
 
    METHOD PUBLIC LOG create():
       
-      lcJson = '~{"CCRuleDataSet":~{"CCRule":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"CCRuleDataSet":~{"CCRule":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET CCRuleDataset BIND, lcJson) THEN
          RETURN FALSE.
          
@@ -60,7 +60,8 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
          RETURN loRequestMaker:logError("Empty CCRule set").
     
       lcError = validate_rule(ttCCRule.external_id,TRUE).      
-      IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
+      IF lcError > "" THEN 
+         RETURN loRequestMaker:logError(lcError).
     
       CREATE CCRule.
       ASSIGN 
@@ -74,30 +75,21 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
          CCRule.EUAccNum    = ttCCRule.eu_comp_account
          CCRule.EUConAccNum = ttCCRule.eu_cons_account
          CCRule.FSAccNum    = ttCCRule.foreign_account
-         CCRule.CostCentre  = ttCCRule.cost_center 
-                                 WHEN ttCCRule.cost_center NE ?
-         CCRule.ReportingID = ttCCRule.reporting_id 
-                                 WHEN ttCCRule.reporting_id NE ?.
+         CCRule.CostCentre  = ttCCRule.cost_center  WHEN ttCCRule.cost_center NE ?
+         CCRule.ReportingID = ttCCRule.reporting_id WHEN ttCCRule.reporting_id NE ?.
           
       loEventLogMaker:make_eventlog("create",BUFFER CCRule:HANDLE).
           
       RELEASE CCRule.
     
-      /* error cases get response via logError, make response for 
-         the succesful one */
+      /* error cases get response via logError, make response for the succesful one */
       IF lcCorrelationID > "" THEN
-      loRequestMaker:create_response("CCRule",
-                                     string(liCCRule),
-                                     "OK",
-                                     ""). 
-      &IF {&MQ_BASED} 
-      &THEN
-      loRequestMaker:create_log(
-         SUBSTITUTE("CCRule create: Id=&1,&2 Ext.Request=&3", 
-         liCCRule,
-         ttCCRule.external_id,
-         lcCorrelationID), 
-         "DEBUG").
+        loRequestMaker:create_response("CCRule",
+                                       string(liCCRule),
+                                       "OK",
+                                       ""). 
+      &IF {&MQ_BASED} &THEN
+         loRequestMaker:create_log(SUBSTITUTE("CCRule create: Id=&1,&2", liCCRule, ttCCRule.external_id), "DEBUG").
       &ENDIF  
      
    END METHOD.
@@ -109,21 +101,22 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
       IF liModelId = ? THEN 
          RETURN loRequestMaker:logError('CCRule ID not given').
     
-      lcJson = '~{"CCRuleDataSet":~{"CCRule":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"CCRuleDataSet":~{"CCRule":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET CCRuleDataset BIND, lcJson) THEN
          RETURN FALSE.
+
       FIND ttCCRule NO-ERROR.
       IF NOT AVAILABLE ttCCRule THEN
          RETURN loRequestMaker:logError("Empty CCRule set").
      
-      lcError = validate_rule(liModelId,
-                              FALSE).      
-      IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
+      lcError = validate_rule(liModelId, FALSE).      
+      IF lcError > "" THEN 
+          RETURN loRequestMaker:logError(lcError).
     
       DO WHILE TRUE:
-         FIND FIRST CCRule WHERE 
-                    CCRule.CCRuleID = liCCRule EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-         IF LOCKED(CCRule) THEN DO:
+         FIND FIRST CCRule WHERE CCRule.CCRuleID = liCCRule EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+         IF LOCKED(CCRule) THEN 
+         DO:
             liWait = liWait + 1.
             IF liWait > {&WAIT_CONFIG_LOCK} THEN 
                RETURN loRequestMaker:logError("Rule was not available for update").
@@ -138,14 +131,29 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
           
       loEventLogMaker:make_eventlog("oldbuffer",BUFFER CCRule:HANDLE).
     
-      IF ttCCRule.cc_validfrom NE ? THEN CCRule.ValidFrom = ttCCRule.cc_validfrom.
-      IF ttCCRule.cc_validto NE ? THEN CCRule.ValidTo = ttCCRule.cc_validto.
-      IF ttCCRule.domestic_account > 0 THEN CCRule.AccNum = ttCCRule.domestic_account.
-      IF ttCCRule.eu_comp_account > 0 THEN CCRule.EUAccNum = ttCCRule.eu_comp_account.
-      IF ttCCRule.eu_cons_account > 0 THEN CCRule.EUConAccNum = ttCCRule.eu_cons_account.
-      IF ttCCRule.foreign_account > 0 THEN CCRule.FSAccNum = ttCCRule.foreign_account.
-      IF ttCCRule.cost_center NE ? THEN CCRule.CostCentre = ttCCRule.cost_center.
-      IF ttCCRule.reporting_id NE ? THEN CCRule.ReportingId = ttCCRule.reporting_id.
+      IF ttCCRule.cc_validfrom NE ? THEN 
+          CCRule.ValidFrom = ttCCRule.cc_validfrom.
+
+      IF ttCCRule.cc_validto NE ? THEN 
+          CCRule.ValidTo = ttCCRule.cc_validto.
+
+      IF ttCCRule.domestic_account > 0 THEN 
+          CCRule.AccNum = ttCCRule.domestic_account.
+
+      IF ttCCRule.eu_comp_account > 0 THEN 
+          CCRule.EUAccNum = ttCCRule.eu_comp_account.
+
+      IF ttCCRule.eu_cons_account > 0 THEN 
+          CCRule.EUConAccNum = ttCCRule.eu_cons_account.
+
+      IF ttCCRule.foreign_account > 0 THEN 
+          CCRule.FSAccNum = ttCCRule.foreign_account.
+
+      IF ttCCRule.cost_center NE ? THEN 
+          CCRule.CostCentre = ttCCRule.cost_center.
+
+      IF ttCCRule.reporting_id NE ? THEN 
+          CCRule.ReportingId = ttCCRule.reporting_id.
        
       loEventLogMaker:make_eventlog("modify",BUFFER CCRule:HANDLE).
        
@@ -154,18 +162,12 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
       /* error cases get response via logError, make response for 
          the succesful one */
       IF lcCorrelationID > "" THEN
-      loRequestMaker:create_response("CCRule",
-                                      string(liCCRule),
-                                      "OK",
-                                      ""). 
-      &IF {&MQ_BASED} 
-      &THEN 
-      loRequestMaker:create_log(
-         SUBSTITUTE("CCRule update: Id=&1/&2 Ext.Request=&3", 
-         liCCRule,
-         liModelId,
-         lcCorrelationID), 
-         "DEBUG").
+          loRequestMaker:create_response("CCRule",
+                                         string(liCCRule),
+                                         "OK",
+                                         ""). 
+      &IF {&MQ_BASED} &THEN 
+         loRequestMaker:create_log(SUBSTITUTE("CCRule update: Id=&1/&2", liCCRule, liModelId), "DEBUG").
       &ENDIF   
            
    END METHOD.
@@ -183,21 +185,22 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
 
    END METHOD.
 
-   METHOD PUBLIC CHAR validate_rule(icExternalID AS INT,
+   METHOD PUBLIC CHAR validate_rule(iiExternalID AS INT,
                                     ilCreate AS LOG):
-    
       DEF BUFFER bRule FOR CCRule.
     
-      IF icExternalID EQ 0 THEN 
+      IF iiExternalID EQ 0 THEN 
          RETURN "Invalid rule ID". 
           
-      liCCRule = icExternalID.
+      liCCRule = iiExternalID.
       IF liCCRule > 0 THEN       
-      IF CAN-FIND(FIRST CCRule WHERE 
-                        CCRule.CCRuleId = liCCRule) THEN DO:
-         IF ilCreate THEN RETURN "Rule already exists".
+      IF CAN-FIND(FIRST CCRule WHERE CCRule.CCRuleId = liCCRule) THEN 
+      DO:
+         IF ilCreate THEN 
+             RETURN "Rule already exists".
       END.
-      ELSE IF NOT ilCreate THEN RETURN "Unknown rule".
+      ELSE IF NOT ilCreate THEN 
+          RETURN "Unknown rule".
        
       IF ttCCRule.valid_from > "" THEN 
          ttCCRule.cc_validfrom = loRequestMaker:make_date(
@@ -285,8 +288,10 @@ CLASS Gwy.AccountRulesModel IMPLEMENTS Gwy.ModelInterface:
    END METHOD.
 
    DESTRUCTOR PUBLIC AccountRulesModel ():
-      IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
-      IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.
+      IF VALID-OBJECT(loRequestMaker) THEN 
+          DELETE OBJECT loRequestMaker.
+      IF VALID-OBJECT(loEventLogMaker) THEN 
+          DELETE OBJECT loEventLogMaker.
    END DESTRUCTOR.
 
 END CLASS.

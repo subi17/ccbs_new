@@ -60,7 +60,7 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
 
       DEF VAR lcError AS CHAR NO-UNDO.
  
-      lcJson = '~{"FeeModelDataSet":~{"FeeModel":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"FeeModelDataSet":~{"FeeModel":' + lcJson + '~}~}'.
       
       IF loRequestMaker:parser_error(DATASET FeeModelDataset BIND, lcJson) THEN
          RETURN FALSE.
@@ -124,7 +124,7 @@ CLASS Gwy.FeeModelModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('FeeModel ID not given').
 
-      lcJson = '~{"FeeModelDataSet":~{"FeeModel":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"FeeModelDataSet":~{"FeeModel":' + lcJson + '~}~}'.
       
       IF loRequestMaker:parser_error(DATASET FeeModelDataset BIND, lcJson) THEN
          RETURN FALSE.

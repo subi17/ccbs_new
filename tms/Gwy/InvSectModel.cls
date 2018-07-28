@@ -44,7 +44,7 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
    END CONSTRUCTOR.
 
    METHOD PUBLIC LOG create(): 
-      lcJson = '~{"InvSectDataSet":~{"InvSect":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"InvSectDataSet":~{"InvSect":' + lcJson + '~}~}'.
       
       IF loRequestMaker:parser_error(DATASET InvSectDataset BIND, lcJson) THEN
          RETURN FALSE.
@@ -111,7 +111,7 @@ CLASS Gwy.InvSectModel IMPLEMENTS Gwy.ModelInterface:
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('InvSect ID not given').
 
-      lcJson = '~{"InvSectDataSet":~{"InvSect":~[' + lcJson + '~]~}~}'.
+      lcJson = '~{"InvSectDataSet":~{"InvSect":' + lcJson + '~}~}'.
       IF loRequestMaker:parser_error(DATASET InvSectDataset BIND, lcJson) THEN
          RETURN FALSE.
    
