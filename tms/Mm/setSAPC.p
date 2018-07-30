@@ -341,9 +341,9 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
    CASE lcProcommandType:
       WHEN "ADD_UPSELL" OR WHEN "ADD_DSS_UPSELL" THEN 
          ASSIGN 
-            lcAction     = "Add"
-            lcUpsellSize = ENTRY(1,MsRequest.reqcparam2).
-
+            lcAction      = "Add"
+            lcUpsellSize  = ENTRY(1,MsRequest.reqcparam2)
+            lcEmaDataPlan = bMsRequest.reqcparam3.
       WHEN "DATAPLAN" THEN 
       DO:
          IF AVAIL bMsRequest THEN
