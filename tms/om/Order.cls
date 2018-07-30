@@ -20,7 +20,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 &GLOBAL-DEFINE nowTS (YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY) + TIME / 100000)
 
-CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
+CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -30,7 +30,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoCustomer AS CLASS bss.cls.Customer NO-UNDO
+   DEFINE PUBLIC PROPERTY aoCustomer AS CLASS cm.Customer NO-UNDO
       GET.
       SET.
       
@@ -50,15 +50,15 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
       
-   DEFINE PUBLIC PROPERTY aoOrderInspection AS CLASS bss.cls.OrderInspection NO-UNDO 
+   DEFINE PUBLIC PROPERTY aoOrderInspection AS CLASS om.OrderInspection NO-UNDO 
       GET.
       SET.
       
-   DEFINE PUBLIC PROPERTY aoOrderPayment AS CLASS bss.cls.OrderPayment NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderPayment AS CLASS om.OrderPayment NO-UNDO
       GET.
       SET.  
       
-   DEFINE PUBLIC PROPERTY aoOrderAddress AS CLASS bss.cls.OrderAddress NO-UNDO 
+   DEFINE PUBLIC PROPERTY aoOrderAddress AS CLASS om.OrderAddress NO-UNDO 
       GET.
       SET.
 
@@ -135,7 +135,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:PayType       = MobSub.PayType.
       END SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS pm.OrderProductFactory NO-UNDO
       GET.
       SET.
       
@@ -232,7 +232,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE ldaCreateDate   AS DATE      NO-UNDO.
         DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.
         DEFINE VARIABLE arrayAddrObject AS CLASS     JsonObject           NO-UNDO.
-        DEFINE VARIABLE loAddrObject    AS CLASS     bss.cls.OrderAddress NO-UNDO.
+        DEFINE VARIABLE loAddrObject    AS CLASS     om.OrderAddress      NO-UNDO.
         DEFINE VARIABLE lcMigrationErr  AS CHARACTER NO-UNDO.
               
       ASSIGN
@@ -240,7 +240,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
          loCustAcct           =   ioJsonObject:GetJsonObject("customer")                 WHEN ioJsonObject:Has("customer")
          OrderPaymentData     =   ioJsonObject:GetJsonObject("upfront_payment_method")   WHEN ioJsonObject:Has("upfront_payment_method")
          OrderInspectionData  =   ioJsonObject:GetJsonObject("inspection")               WHEN ioJsonObject:Has("inspection")
-         aoCustomer           =   NEW bss.cls.Customer().
+         aoCustomer           =   NEW cm.Customer().
          
       IF VALID-OBJECT(loAgrCust) 
       THEN DO:          
@@ -282,7 +282,7 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       
       IF ioJsonObject:Has("items")
       THEN DO:
-         aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
+         aoOrderProductFactory = NEW pm.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
       END.
 <<<<<<< HEAD
@@ -303,14 +303,14 @@ CLASS bss.cls.Order IMPLEMENTS bss.cls.IObjectStorage:
       
       IF VALID-OBJECT(OrderInspectionData)
       THEN DO:
-          ASSIGN aoOrderInspection = NEW bss.cls.OrderInspection(THIS-OBJECT).
+          ASSIGN aoOrderInspection = NEW om.OrderInspection(THIS-OBJECT).
           aoOrderInspection:mCreateData(OrderInspectionData).
       END.
       
         
       IF VALID-OBJECT(OrderPaymentData)
       THEN DO:
-          ASSIGN aoOrderPayment  = NEW bss.cls.OrderPayment(THIS-OBJECT).
+          ASSIGN aoOrderPayment  = NEW om.OrderPayment(THIS-OBJECT).
           aoOrderPayment:mCreateData(OrderPaymentData).
       END.      
     

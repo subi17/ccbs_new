@@ -17,7 +17,7 @@ USING Progress.Json.ObjectModel.JsonArray.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS bss.cls.OrderAddress IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS om.OrderAddress IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:

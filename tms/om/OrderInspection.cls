@@ -18,7 +18,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS om.OrderInspection IMPLEMENTS bss.cls.IObjectStorage: 
     /*------------------------------------------------------------------------------
      Purpose:
      Notes:
@@ -52,9 +52,9 @@ CLASS bss.cls.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
 	
-    DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
+    DEFINE PROTECTED VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
 		
-	CONSTRUCTOR PUBLIC OrderInspection ( ioOrder AS CLASS bss.cls.Order  ):
+	CONSTRUCTOR PUBLIC OrderInspection ( ioOrder AS CLASS om.Order  ):
 		
 		ASSIGN aoOrder = ioOrder. 
 		

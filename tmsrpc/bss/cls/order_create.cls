@@ -38,9 +38,9 @@ CLASS bss.cls.order_create INHERITS profcgi.RPC.JSON.Response:
 
       multitenancy.TenantInformation:mSetEffectiveBrand(ioJsonObject:GetCharacter("brand")).
 
-      DEFINE VARIABLE loOrder AS CLASS bss.cls.Order NO-UNDO.
+      DEFINE VARIABLE loOrder AS CLASS om.Order NO-UNDO.
 
-      loOrder = NEW bss.cls.Order().
+      loOrder = NEW om.Order().
       loOrder:mCreateData(ioJsonObject).
 
       DO TRANSACTION ON ERROR UNDO, THROW:

@@ -18,7 +18,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
+CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -28,20 +28,20 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoExecutionDate AS CLASS bss.cls.OrderProductParam NO-UNDO
+   DEFINE PUBLIC PROPERTY aoExecutionDate AS CLASS pm.OrderProductParam NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderCustomer AS CLASS om.OrderCustomer NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoMandate AS CLASS bss.cls.OrderAction NO-UNDO
+   DEFINE PUBLIC PROPERTY aoMandate AS CLASS om.OrderAction NO-UNDO
       GET.
       SET.
 
 	CONSTRUCTOR PUBLIC OrderProductACC
-      ( ioOrder AS CLASS bss.cls.Order ):
+      ( ioOrder AS CLASS om.Order ):
       SUPER(ioOrder).
 	END CONSTRUCTOR.
 
@@ -132,7 +132,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
 
       IF loAttributes:Has("mandate")
       THEN DO:
-         aoMandate = NEW bss.cls.OrderAction(aoOrder).
+         aoMandate = NEW om.OrderAction(aoOrder).
          aoMandate:mCreateData("Mandate", loAttributes:GetCharacter("mandate"), "").
       END.
 
@@ -142,7 +142,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
          aoMemo:mCreateData(loAttributes:GetJsonObject("memo")).
       END.
 
-      aoExecutionDate = NEW bss.cls.OrderProductParam(THIS-OBJECT).
+      aoExecutionDate = NEW pm.OrderProductParam(THIS-OBJECT).
       aoExecutionDate:mCreateData(loAttributes,
                                   "execution-date",
                                   "Date").
@@ -153,7 +153,7 @@ CLASS bss.cls.OrderProductACC INHERITS bss.cls.OrderProduct:
       THEN UNDO, THROW NEW ParamError("customer-id-or-data-required").
 
       ASSIGN
-         aoOrderCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
+         aoOrderCustomer         = NEW om.OrderCustomer(aoOrder)
          aoOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_ACC}
          aoOrder:OrderType       = {&ORDER_TYPE_ACC}
          aoOrder:StatusCode      = {&ORDER_STATUS_ONGOING}.

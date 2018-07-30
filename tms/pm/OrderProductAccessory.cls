@@ -19,7 +19,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductAccessory INHERITS bss.cls.OrderProduct: 
+CLASS pm.OrderProductAccessory INHERITS pm.OrderProduct: 
     /*------------------------------------------------------------------------------
      Purpose:
      Notes:
@@ -31,11 +31,11 @@ CLASS bss.cls.OrderProductAccessory INHERITS bss.cls.OrderProduct:
         INDEX paramnb IS PRIMARY UNIQUE paramnb
         .
 	
-	DEFINE PUBLIC PROPERTY aoShipAddress AS CLASS bss.cls.OrderCustomer NO-UNDO 
+	DEFINE PUBLIC PROPERTY aoShipAddress AS CLASS om.OrderCustomer NO-UNDO 
 	    GET.
 	    SET.
 		
-	CONSTRUCTOR PUBLIC OrderProductAccessory ( INPUT ioOrder AS CLASS bss.cls.Order ):
+	CONSTRUCTOR PUBLIC OrderProductAccessory ( INPUT ioOrder AS CLASS om.Order ):
 	    
 		SUPER (ioorder).
 		
@@ -55,7 +55,7 @@ CLASS bss.cls.OrderProductAccessory INHERITS bss.cls.OrderProduct:
         
         ASSIGN loAttributes             =    ioItemObject:GetJsonObject("attributes")
                loShipAddress            =    loAttributes:GetJsonObject("shipping_address")
-               aoShipAddress            =    NEW bss.cls.OrderCustomer(aoOrder)
+               aoShipAddress            =    NEW om.OrderCustomer(aoOrder)
                aoShipAddress:RowType    =    {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}.
                
         aoShipAddress:mCreateRowCustomerData(loShipAddress).

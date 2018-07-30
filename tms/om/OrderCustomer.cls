@@ -16,7 +16,7 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
+CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -134,7 +134,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
       
-   DEFINE PUBLIC PROPERTY aoDefaultCustomer AS bss.cls.Customer NO-UNDO 
+   DEFINE PUBLIC PROPERTY aoDefaultCustomer AS cm.Customer NO-UNDO 
        GET.
        SET.
        
@@ -206,10 +206,10 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
+   DEFINE PROTECTED VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
 
    CONSTRUCTOR PUBLIC OrderCustomer
-     ( ioOrder AS CLASS bss.cls.Order ):
+     ( ioOrder AS CLASS om.Order ):
       aoOrder = ioOrder.
    END CONSTRUCTOR.
 
@@ -366,7 +366,7 @@ CLASS bss.cls.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
 	    
 	    DEFINE VARIABLE ioValidationData AS CLASS JsonObject NO-UNDO.
 	    
-        aoDefaultCustomer = NEW bss.cls.Customer().
+        aoDefaultCustomer = NEW cm.Customer().
         ASSIGN aoDefaultCustomer = aoOrder:aoCustomer.
         
         IF ioOrderCustAddrObj:Has("validation_data")

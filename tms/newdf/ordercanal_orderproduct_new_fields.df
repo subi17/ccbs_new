@@ -1,0 +1,15 @@
+ADD FIELD "ITGroupID" OF "OrderProduct" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL ""
+  LABEL "Target Group ID"
+  POSITION 8
+  MAX-WIDTH 30
+  COLUMN-LABEL "Target Group ID"
+  ORDER 70
+  
+.
+PSC
+cpstream=1252
+.
+0000001731
+  

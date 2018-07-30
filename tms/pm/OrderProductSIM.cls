@@ -19,7 +19,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct: 
+CLASS pm.OrderProductSIM INHERITS pm.OrderProduct: 
     /*------------------------------------------------------------------------------
      Purpose:
      Notes:
@@ -32,11 +32,11 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         .
     
 	
-    DEFINE PUBLIC PROPERTY aoSIMParams AS CLASS bss.cls.OrderProductParam NO-UNDO
+    DEFINE PUBLIC PROPERTY aoSIMParams AS CLASS pm.OrderProductParam NO-UNDO
         GET.
         SET.
         
-    DEFINE PUBLIC PROPERTY aoShippingCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO
+    DEFINE PUBLIC PROPERTY aoShippingCustomer AS CLASS om.OrderCustomer NO-UNDO
         GET.
         SET.
         
@@ -44,7 +44,7 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
        GET.
        SET.
         
-    CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS bss.cls.Order ):
+    CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS om.Order ):
 		
         SUPER(ioOrder).
 		
@@ -90,7 +90,7 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
         THEN DO:
             
             ASSIGN 
-                aoShippingCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
+                aoShippingCustomer         = NEW om.OrderCustomer(aoOrder)
                 aoShippingCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
                 loShipAddress              = NEW JsonObject()
                 loShipAddress              = loAttributes:GetJsonObject("shipping_address").
@@ -107,7 +107,7 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
                                                               
         DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
        
-        aoSIMParams = NEW bss.cls.OrderProductParam(THIS-OBJECT) .
+        aoSIMParams = NEW pm.OrderProductParam(THIS-OBJECT) .
         aoSIMParams:mCreateData(loAttributes,Attribute,AttrType).
        
         ASSIGN 
@@ -123,7 +123,7 @@ CLASS bss.cls.OrderProductSIM INHERITS bss.cls.OrderProduct:
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
         FOR EACH ttOrderProductParam:
-            CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
+            CAST(ttOrderProductParam.opobject, pm.OrderProductParam):mStoreData().
         END.
         
         IF VALID-OBJECT(aoShippingCustomer)

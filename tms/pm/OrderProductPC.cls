@@ -18,18 +18,18 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductPC INHERITS bss.cls.OrderProduct: 
+CLASS pm.OrderProductPC INHERITS pm.OrderProduct: 
     /*------------------------------------------------------------------------------
      Purpose:
      Notes:
     ------------------------------------------------------------------------------*/
 	
     
-    DEFINE PUBLIC PROPERTY aoOrderCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO
+    DEFINE PUBLIC PROPERTY aoOrderCustomer AS CLASS om.OrderCustomer NO-UNDO
         GET.
         SET.
         
-	CONSTRUCTOR PUBLIC OrderProductPC ( ioOrder AS CLASS bss.cls.Order ):
+	CONSTRUCTOR PUBLIC OrderProductPC ( ioOrder AS CLASS om.Order ):
         SUPER(ioOrder).
     END CONSTRUCTOR.
 		
