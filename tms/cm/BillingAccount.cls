@@ -19,7 +19,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -33,7 +33,7 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET. 
 	
-    DEFINE PUBLIC PROPERTY aoCustAcct AS CLASS bss.cls.CustomerAccount NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoCustAcct AS CLASS cm.CustomerAccount NO-UNDO 
 	   GET.
 	   SET.
 	    
@@ -109,7 +109,7 @@ CLASS bss.cls.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
 		
-	CONSTRUCTOR PUBLIC BillingAccount (ioCustAcct AS CLASS bss.cls.CustomerAccount  ):
+	CONSTRUCTOR PUBLIC BillingAccount (ioCustAcct AS CLASS cm.CustomerAccount  ):
 	    
 		ASSIGN aoCustAcct = ioCustAcct.
 		

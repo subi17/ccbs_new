@@ -31,12 +31,12 @@ CLASS bss.cls.Memo IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS bss.cls.OrderProduct NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS pm.OrderProduct NO-UNDO
       GET.
       SET.
 
    CONSTRUCTOR PUBLIC Memo
-     ( ioOrderProduct AS CLASS bss.cls.OrderProduct ):
+     ( ioOrderProduct AS CLASS pm.OrderProduct ):
       aoOrderProduct = ioOrderProduct.   
    END CONSTRUCTOR.
 

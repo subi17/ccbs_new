@@ -15,7 +15,7 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS bss.cls.OrderAction IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS om.OrderAction IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -33,10 +33,10 @@ CLASS bss.cls.OrderAction IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PROTECTED VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
+   DEFINE PROTECTED VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
    
 	CONSTRUCTOR PUBLIC OrderAction
-     ( ioOrder AS CLASS bss.cls.Order ):
+     ( ioOrder AS CLASS om.Order ):
       aoOrder = ioOrder.
 	END CONSTRUCTOR.
 

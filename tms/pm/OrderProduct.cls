@@ -19,7 +19,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -47,7 +47,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS bss.cls.OrderProductFactory NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS pm.OrderProductFactory NO-UNDO
       GET.
       SET.
       
@@ -59,10 +59,10 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
           
       END SET.
 
-   DEFINE PUBLIC VARIABLE aoOrder AS CLASS bss.cls.Order NO-UNDO.
+   DEFINE PUBLIC VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
 
 	CONSTRUCTOR PUBLIC OrderProduct
-     ( ioOrder AS CLASS bss.cls.Order ):
+     ( ioOrder AS CLASS om.Order ):
       aoOrder = ioOrder.	
 	END CONSTRUCTOR.
 
@@ -96,7 +96,7 @@ CLASS bss.cls.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
 
       IF ioItemObject:Has("items")
       THEN DO:
-         aoOrderProductFactory = NEW bss.cls.OrderProductFactory().
+         aoOrderProductFactory = NEW pm.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioItemObject:GetJsonArray("items"), aoOrder).
          IF  THIS-OBJECT:ActionType <> {&ORDER_PRODUCT_MAIN}
          THEN ASSIGN aoOrderProductFactory:isChildArray =  TRUE.

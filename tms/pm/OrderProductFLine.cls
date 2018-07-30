@@ -19,7 +19,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct: 
+CLASS pm.OrderProductFLine INHERITS pm.OrderProduct: 
     /*------------------------------------------------------------------------------
      Purpose:
      Notes:
@@ -47,19 +47,19 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aoSubscriptionParams AS CLASS bss.cls.OrderProductParam NO-UNDO
+    DEFINE PUBLIC PROPERTY aoSubscriptionParams AS CLASS pm.OrderProductParam NO-UNDO
         GET.
         SET.       
         
-    DEFINE PUBLIC PROPERTY aoAggrementCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoAggrementCustomer AS CLASS om.OrderCustomer NO-UNDO 
         GET.
         SET.
         
-    DEFINE PUBLIC PROPERTY aoFixedPOCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoFixedPOCustomer AS CLASS om.OrderCustomer NO-UNDO 
         GET.
         SET.
         
-    DEFINE PUBLIC PROPERTY aoMobilePOCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoMobilePOCustomer AS CLASS om.OrderCustomer NO-UNDO 
         GET.
         SET.
         
@@ -87,7 +87,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
        GET.
        SET.
        
-	CONSTRUCTOR PUBLIC OrderProductFLine ( INPUT ioOrder AS CLASS bss.cls.Order  ):
+	CONSTRUCTOR PUBLIC OrderProductFLine ( INPUT ioOrder AS CLASS om.Order  ):
 	    
 		SUPER (ioOrder).
 		
@@ -259,7 +259,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         END.
         
         
-        ASSIGN aoAggrementCustomer           =  NEW bss.cls.OrderCustomer(aoOrder)
+        ASSIGN aoAggrementCustomer           =  NEW om.OrderCustomer(aoOrder)
                aoAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
                
         /*TO-DO PC : do we need to send the fix number type or mobile number type as input parameter*/
@@ -272,7 +272,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         IF loAttributes:Has("fixed_line_holder")
         THEN DO:
             
-            ASSIGN aoFixedPOCustomer         =  NEW bss.cls.OrderCustomer(aoOrder)
+            ASSIGN aoFixedPOCustomer         =  NEW om.OrderCustomer(aoOrder)
                    aoFixedPOCustomer:RowType =  {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}.
             
             IF aoOrder:aoCustomer:isNewCustomer  
@@ -287,7 +287,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
         THEN DO:
             
             ASSIGN 
-                aoMobilePOCustomer         = NEW bss.cls.OrderCustomer(aoOrder)
+                aoMobilePOCustomer         = NEW om.OrderCustomer(aoOrder)
                 aoMobilePOCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}.
             
             IF aoOrder:aoCustomer:isNewCustomer  
@@ -305,7 +305,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
         FOR EACH ttOrderProductParam:
-            CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
+            CAST(ttOrderProductParam.opobject, pm.OrderProductParam):mStoreData().
         END.        
         
         IF VALID-OBJECT(aoAggrementCustomer)
@@ -326,7 +326,7 @@ CLASS bss.cls.OrderProductFLine INHERITS bss.cls.OrderProduct:
                                                               
         DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
        
-        aoSubscriptionParams = NEW bss.cls.OrderProductParam(THIS-OBJECT) .
+        aoSubscriptionParams = NEW pm.OrderProductParam(THIS-OBJECT) .
         aoSubscriptionParams:mCreateData(loAttributes,Attribute,AttrType).
        
         ASSIGN liNextParamNum = mNextParamNb().

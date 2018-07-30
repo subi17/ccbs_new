@@ -17,7 +17,7 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS bss.cls.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS pm.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -47,12 +47,12 @@ CLASS bss.cls.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS bss.cls.OrderProduct NO-UNDO
+   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS pm.OrderProduct NO-UNDO
       GET.
       SET.
 
    CONSTRUCTOR PUBLIC OrderProductParam
-     ( ioOrderProduct AS CLASS bss.cls.OrderProduct ):
+     ( ioOrderProduct AS CLASS pm.OrderProduct ):
       aoOrderProduct = ioOrderProduct.   
    END CONSTRUCTOR.
 

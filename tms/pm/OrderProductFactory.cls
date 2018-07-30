@@ -19,7 +19,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage: 
+CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage: 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -78,27 +78,27 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
 
 	METHOD PUBLIC VOID mCreateData
 	  ( ioItemsArray AS CLASS JsonArray,
-	    ioOrder      AS CLASS bss.cls.Order ):
+	    ioOrder      AS CLASS om.Order ):
 
       DEFINE VARIABLE lii AS INTEGER NO-UNDO.
       DEFINE VARIABLE loItemObject AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loOrderProduct AS CLASS bss.cls.OrderProduct NO-UNDO.
+      DEFINE VARIABLE loOrderProduct AS CLASS pm.OrderProduct NO-UNDO.
 
       DO lii = 1 TO ioItemsArray:Length:
          loItemObject = ioItemsArray:GetJsonObject(lii).
          CASE loItemObject:GetCharacter("type"):
             WHEN {&ORDER_PRODUCT_ACC}
-            THEN loOrderProduct = NEW bss.cls.OrderProductACC(ioOrder).
+            THEN loOrderProduct = NEW pm.OrderProductACC(ioOrder).
             WHEN {&ORDER_PRODUCT_MAIN}
-            THEN loOrderProduct = NEW bss.cls.OrderProductPC(ioOrder).
+            THEN loOrderProduct = NEW pm.OrderProductPC(ioOrder).
             WHEN {&ORDER_PRODUCT_SUBSCRIPTION}
-            THEN loOrderProduct = NEW bss.cls.OrderProductSubscription(ioOrder).
+            THEN loOrderProduct = NEW pm.OrderProductSubscription(ioOrder).
             WHEN {&ORDER_PRODUCT_SIM}
-            THEN loOrderProduct = NEW bss.cls.OrderProductSIM(ioOrder).
+            THEN loOrderProduct = NEW pm.OrderProductSIM(ioOrder).
             WHEN {&ORDER_PRODUCT_FIXED_LINE}
-            THEN loOrderProduct = NEW bss.cls.OrderProductFLine(ioOrder).
+            THEN loOrderProduct = NEW pm.OrderProductFLine(ioOrder).
             WHEN {&ORDER_PRODUCT_ACCESSORY}
-            THEN loOrderProduct = NEW bss.cls.OrderProductAccessory(ioOrder).
+            THEN loOrderProduct = NEW pm.OrderProductAccessory(ioOrder).
             OTHERWISE
             UNDO, THROW
               NEW ParamError(SUBSTITUTE("Invalid items type '&1'",
@@ -118,8 +118,8 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
    METHOD PUBLIC VOID mStoreData():
 
       FOR EACH ttOrderProduct:
-         CAST(ttOrderProduct.opobject, bss.cls.OrderProduct):ParentID   =  THIS-OBJECT:ParentID.
-         CAST(ttOrderProduct.opobject, bss.cls.OrderProduct):mStoreData().
+         CAST(ttOrderProduct.opobject, pm.OrderProduct):ParentID   =  THIS-OBJECT:ParentID.
+         CAST(ttOrderProduct.opobject, pm.OrderProduct):mStoreData().
       END.
       
 
@@ -133,7 +133,7 @@ CLASS bss.cls.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
       loJsonArray = NEW JsonArray().
 
       FOR EACH ttOrderProduct:
-         CAST(ttOrderProduct.opobject, bss.cls.OrderProduct):mResult(loJsonArray).
+         CAST(ttOrderProduct.opobject, pm.OrderProduct):mResult(loJsonArray).
       END.
 
       ioJsonObject:Add("items", loJsonArray).

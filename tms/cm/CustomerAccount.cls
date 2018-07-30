@@ -19,13 +19,13 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage : 
+CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage : 
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
 	------------------------------------------------------------------------------*/
 	
-	DEFINE PUBLIC PROPERTY ioCustomerObj AS CLASS bss.cls.Customer NO-UNDO 
+	DEFINE PUBLIC PROPERTY ioCustomerObj AS CLASS cm.Customer NO-UNDO 
 	    GET.
 	    SET.
 	    
@@ -65,7 +65,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aoBillAddrObj AS CLASS bss.cls.OrderAddress NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoBillAddrObj AS CLASS om.OrderAddress NO-UNDO 
         GET.
         SET.    
         
@@ -78,7 +78,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         FIELDS BillAcctNum  AS INTEGER
         INDEX BillAcctNum IS PRIMARY UNIQUE BillAcctNum.
 		
-	CONSTRUCTOR PUBLIC CustomerAccount ( INPUT aoCustomer AS CLASS bss.cls.Customer ):
+	CONSTRUCTOR PUBLIC CustomerAccount ( INPUT aoCustomer AS CLASS cm.Customer ):
 		
 		ASSIGN ioCustomerObj = aoCustomer.
 		
@@ -93,7 +93,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	
 	METHOD PUBLIC VOID mCreateData(INPUT ioCustAcctObject AS CLASS JsonObject):
 	    
-	    DEFINE VARIABLE aoBillingAcct AS CLASS bss.cls.BillingAccount NO-UNDO.
+	    DEFINE VARIABLE aoBillingAcct AS CLASS cm.BillingAccount NO-UNDO.
 	    DEFINE VARIABLE BillAcctArray AS CLASS JsonArray NO-UNDO.
 	    DEFINE VARIABLE BillAcctObj   AS CLASS JsonObject NO-UNDO.
 	    DEFINE VARIABLE liBillAcctCnt AS INTEGER NO-UNDO.
@@ -112,7 +112,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         IF ioCustAcctObject:Has("billing_address")
         THEN DO:
             
-            aoBillAddrObj = NEW bss.cls.OrderAddress().
+            aoBillAddrObj = NEW om.OrderAddress().
             aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
             ASSIGN aoBillAddrObj:KeyValue  = THIS-OBJECT:CustNum
                    aoBillAddrObj:AddrType  = {&ADDR_BILLING}. 
@@ -128,7 +128,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                 
                 ASSIGN  
                     BillAcctObj   = BillAcctArray:GetJsonObject(liBillAcctCnt)
-                    aoBillingAcct = NEW bss.cls.BillingAccount(THIS-OBJECT).
+                    aoBillingAcct = NEW cm.BillingAccount(THIS-OBJECT).
                            
                 aoBillingAcct:mCreateData(BillAcctObj).
                 
@@ -163,7 +163,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
              ASSIGN THIS-OBJECT:BillAddrID = aoBillAddrObj:AddrRegisterID.	         
 	     END.
 	     FOR EACH ttBillingAcct :
-             CAST(ttBillingAcct.BillAcctObj, bss.cls.BillingAccount):mStoreData().
+             CAST(ttBillingAcct.BillAcctObj, cm.BillingAccount):mStoreData().
 	     END.
 	    
 	END METHOD.
@@ -194,7 +194,7 @@ CLASS bss.cls.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                
         FOR EACH ttBillingAcct:
             
-            loBillAcctobj = CAST(ttBillingAcct.BillAcctObj, bss.cls.BillingAccount):mResult().
+            loBillAcctobj = CAST(ttBillingAcct.BillAcctObj, cm.BillingAccount):mResult().
             loBillAcctArray:Add(loBillAcctobj).
             
         END.

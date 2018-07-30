@@ -19,7 +19,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
+CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 	/*------------------------------------------------------------------------------
 	 Purpose:
 	 Notes:
@@ -121,7 +121,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aOCustAcct AS CLASS bss.cls.CustomerAccount NO-UNDO 
+    DEFINE PUBLIC PROPERTY aOCustAcct AS CLASS cm.CustomerAccount NO-UNDO 
         GET.
         SET.   
         
@@ -129,7 +129,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aoDefaultCustAddress AS bss.cls.OrderAddress NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoDefaultCustAddress AS om.OrderAddress NO-UNDO 
         GET.
         SET.
     
@@ -323,7 +323,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            
            ASSIGN
                THIS-OBJECT:DefaultAddressObj = ioJsonObject:GetJsonObject("default_billing_address")
-               aoDefaultCustAddress          = NEW bss.cls.OrderAddress()
+               aoDefaultCustAddress          = NEW om.OrderAddress()
                aoDefaultCustAddress:KeyValue = THIS-OBJECT:CustNum
                aoDefaultCustAddress:AddrType = {&ADDR_DEFAULT_BILLING}
                .
@@ -339,7 +339,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
            DO liCustAcctCnt  = 1 TO CustAccounts:LENGTH :
                
                ASSIGN CustAcctObj = CustAccounts:GetJsonObject(liCustAcctCnt)
-                      aOCustAcct = NEW bss.cls.CustomerAccount(THIS-OBJECT).
+                      aOCustAcct = NEW cm.CustomerAccount(THIS-OBJECT).
                       
                aOCustAcct:mCreateData(CustAcctObj).
                
@@ -398,7 +398,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
        END.
            
        FOR EACH ttCustAccts :
-           CAST(ttCustAccts.custacctobj,bss.cls.CustomerAccount):mStoreData().
+           CAST(ttCustAccts.custacctobj,cm.CustomerAccount):mStoreData().
        END.
       
    END METHOD.
@@ -436,7 +436,7 @@ CLASS bss.cls.Customer IMPLEMENTS bss.cls.IObjectStorage:
                ioCustArray      = NEW JsonArray().
                
         FOR EACH ttCustAccts :
-            ioCustAcctObject = CAST(ttCustAccts.custacctobj,bss.cls.CustomerAccount):mResult().
+            ioCustAcctObject = CAST(ttCustAccts.custacctobj,cm.CustomerAccount):mResult().
             ioCustArray:Add(ioCustAcctObject).
         END.      
         

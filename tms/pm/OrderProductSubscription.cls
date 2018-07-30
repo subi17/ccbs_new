@@ -19,7 +19,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct: 
+CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct: 
     /*------------------------------------------------------------------------------
      Purpose:
      Notes:
@@ -31,7 +31,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         INDEX paramnb IS PRIMARY UNIQUE paramnb
         .
 	
-    DEFINE PUBLIC PROPERTY aoSubscriptionParams AS CLASS bss.cls.OrderProductParam NO-UNDO
+    DEFINE PUBLIC PROPERTY aoSubscriptionParams AS CLASS pm.OrderProductParam NO-UNDO
         GET.
         SET.
         
@@ -51,7 +51,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aoOrderAggrementCustomer AS CLASS bss.cls.OrderCustomer NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoOrderAggrementCustomer AS CLASS om.OrderCustomer NO-UNDO 
         GET.
         SET. 
         
@@ -59,7 +59,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
         GET.
         SET.
        
-    CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS bss.cls.Order ):
+    CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS om.Order ):
 	    
         SUPER(ioOrder).
         
@@ -186,7 +186,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
             THEN mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
             
             ASSIGN 
-                aoOrderAggrementCustomer           =  NEW bss.cls.OrderCustomer(aoOrder)
+                aoOrderAggrementCustomer           =  NEW om.OrderCustomer(aoOrder)
                 aoOrderAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                .
                
@@ -211,7 +211,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
         FOR EACH ttOrderProductParam:
-            CAST(ttOrderProductParam.opobject, bss.cls.OrderProductParam):mStoreData().
+            CAST(ttOrderProductParam.opobject, pm.OrderProductParam):mStoreData().
         END.
         
         IF VALID-OBJECT (aoOrderAggrementCustomer)
@@ -227,7 +227,7 @@ CLASS bss.cls.OrderProductSubscription INHERITS bss.cls.OrderProduct:
                                                               
         DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
        
-        aoSubscriptionParams = NEW bss.cls.OrderProductParam(THIS-OBJECT) .
+        aoSubscriptionParams = NEW pm.OrderProductParam(THIS-OBJECT) .
         aoSubscriptionParams:mCreateData(loAttributes,
                                          Attribute,
                                          AttrType).
