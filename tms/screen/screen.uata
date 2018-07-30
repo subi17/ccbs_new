@@ -1,17 +1,17 @@
 echo "-- UAT Screens --"
 echo $REQRUNDATE
 sleep 1
-screen 1 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 1 $REQRUNDATE -clientlog /scratch/log/requester/requ1.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 2 $REQRUNDATE -clientlog /scratch/log/requester/requ2.log -logthreshold 1048576 -logentrytypes "Temp-tables" -logginglevel 4
-screen 3 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 3 $REQRUNDATE -clientlog /scratch/log/requester/requ3.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 4 $REQRUNDATE -clientlog /scratch/log/requester/requ4.log -logthreshold 1048576 -logginglevel 4 -logentrytypes DB.Connects,4GLTrace:4
-screen 5 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 5 $REQRUNDATE -clientlog /scratch/log/requester/requ5.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 6 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 6 $REQRUNDATE -clientlog /scratch/log/requester/requ6.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 7 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 7 $REQRUNDATE -clientlog /scratch/log/requester/requ7.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 8 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 8 $REQRUNDATE -clientlog /scratch/log/requester/requ8.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 9 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 9 $REQRUNDATE -clientlog /scratch/log/requester/requ9.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 10 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 10 $REQRUNDATE -clientlog /scratch/log/requester/requ10.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
-screen 11 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 11 $REQRUNDATE -clientlog /scratch/log/requester/requ11.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 1 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 1 $REQRUNDATE -clientlog /scratch/log/requester/requ1.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 2 $REQRUNDATE -clientlog /scratch/log/requester/requ2.log -logthreshold 1048576 -logentrytypes "Temp-tables" -logginglevel 4
+#screen 3 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 3 $REQRUNDATE -clientlog /scratch/log/requester/requ3.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 4 $REQRUNDATE -clientlog /scratch/log/requester/requ4.log -logthreshold 1048576 -logginglevel 4 -logentrytypes DB.Connects,4GLTrace:4
+#screen 5 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 5 $REQRUNDATE -clientlog /scratch/log/requester/requ5.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 6 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 6 $REQRUNDATE -clientlog /scratch/log/requester/requ6.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 7 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 7 $REQRUNDATE -clientlog /scratch/log/requester/requ7.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 8 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 8 $REQRUNDATE -clientlog /scratch/log/requester/requ8.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 9 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 9 $REQRUNDATE -clientlog /scratch/log/requester/requ9.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 10 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 10 $REQRUNDATE -clientlog /scratch/log/requester/requ10.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+#screen 11 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 11 $REQRUNDATE -clientlog /scratch/log/requester/requ11.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
 
 screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun all tenant=super -clientlog /scratch/log/requester/orderrun.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
 
