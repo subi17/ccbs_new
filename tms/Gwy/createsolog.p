@@ -388,21 +388,29 @@ PROCEDURE pSolog:
       
    DO TRANSACTION:
       
+      /* Locating data */
+      FIND FIRST Mobsub WHERE 
+                 Mobsub.MSSeq = MSRequest.MSSeq
+                 NO-LOCK NO-ERROR.
+      IF NOT AVAILABLE Mobsub THEN
+      DO:
+         fReqError("Mobile Subscription not found for request " + 
+                    STRING(MSRequest.MSRequest)).
+         RETURN.
+      END.
+         
+      FIND Customer OF MobSub NO-LOCK NO-ERROR. 
+      IF NOT AVAILABLE Customer THEN
+      DO:
+         fReqError("Customer not found for " + mobsub.cli).
+         RETURN.
+      END.
+      
+      
       /* SAPC-56 redirecting new SAPC customers to new logic */
       IF Customer.AccGrp = 2 AND 
          fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN  /* SAPC */
       DO:
-         /* Locating data */
-         FIND FIRST Mobsub WHERE 
-                    Mobsub.MSSeq = MSRequest.MSSeq
-              NO-LOCK NO-ERROR.
-         IF NOT AVAILABLE Mobsub THEN
-         DO:
-            fReqError("Mobile Subscription not found for request " + 
-                       STRING(MSRequest.MSRequest)).
-            RETURN.
-         END.
-         
          IF MSrequest.ReqCparam1 = "CREATE" THEN /* Creating DSS group */
          DO:
             ASSIGN 
