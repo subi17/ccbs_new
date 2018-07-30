@@ -156,6 +156,12 @@ FUNCTION fIsFunctionAvailInSAPC RETURNS LOGICAL
       LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0 THEN
       RETURN TRUE.
 
+   /* Checking "delete DSS group" request */
+   IF MsRequest.ReqType = {&REQTYPE_DSS} AND
+      MsRequest.ReqCparam1 = "DELETE"       AND 
+      LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0 THEN
+      RETURN TRUE.
+
    /* Checking create upsell or add/delete dataplan */
    IF MsRequest.ReqCParam1 = "SHAPER" AND
       MsRequest.OrigRequest > 0 THEN 
