@@ -23,7 +23,6 @@ https://luna.starnet.fi/display/XFERA/SMSC+specifications
 {Func/cparam2.i}
 {Gwy/charset.i}
 {Func/smsc_messager.i}
-{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcUser      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcPWD       AS CHARACTER NO-UNDO.
@@ -31,10 +30,6 @@ DEFINE VARIABLE lcHost      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcPort      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcURL       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lhSocket    AS HANDLE    NO-UNDO.
-DEFINE VARIABLE lcFile      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDelimiter AS CHARACTER NO-UNDO INIT "|".
-
-DEFINE STREAM sout.
 
 DEF TEMP-TABLE ttPriority NO-UNDO
    FIELD CreditType AS INT
@@ -243,15 +238,6 @@ PROCEDURE pCallAlarm:
          ttPriority.ActInterval = TMSCodes.ConfigValue.
    END.
 
-   ASSIGN
-      lcFile = fCParam("MNP", "MNPPortInRejSMS")
-      lcFile = REPLACE(lcFile, "#TENANT", CAPS(Syst.Parameters:Tenant))
-      lcFile = REPLACE(lcFile, "#DATE",   Func.Common:mDateFmt(TODAY,"yyyymmdd"))
-      NO-ERROR.
-
-   IF lcFile > "" THEN
-      OUTPUT STREAM sout TO VALUE(lcFile) APPEND. 
-
    SMS_LOOP:
    FOR EACH CallAlarm NO-LOCK WHERE
             CallAlarm.Brand     = "1" AND
@@ -329,32 +315,6 @@ PROCEDURE pCallAlarm:
                ENTRY(5,lcResponse,"/") = "A" THEN bufAlarm.DeliStat = 3.
             ELSE bufAlarm.DeliStat = 2.
 
-            IF lcFile > "" AND CallAlarm.CreditType = {&SMSTYPE_MNP} THEN
-               FOR EACH MnpSub NO-LOCK
-                  WHERE MnpSub.CLI = CallAlarm.CLI,
-                   EACH MnpProcess NO-LOCK
-                  WHERE MNPProcess.Brand      = Syst.Var:gcBrand
-                    AND MnpProcess.MnpSeq     = MnpSub.MnpSeq
-                    AND MNPProcess.MNPType    = {&MNP_TYPE_IN}
-                    AND MNPProcess.StatusCode = {&MNP_ST_AREC}
-                    AND LOOKUP(MnpProcess.StatusReason,"AREC ENUME,RECH_BNUME,AREC EXIST,RECH_IDENT,RECH_ICCID") > 0
-                     BY MNPProcess.UpdateTS DESCENDING:
-   
-                  FIND FIRST MNPDetails NO-LOCK
-                       WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
-   
-                  PUT STREAM sout UNFORMATTED
-                     MNPSub.CLI                                                  lcDelimiter
-                     IF AVAILABLE MNPDetails THEN MNPDetails.DonorCode ELSE ""   lcDelimiter
-                     MNPProcess.PortRequest                                      lcDelimiter
-                     MNPProcess.StatusReason                                     lcDelimiter
-                     TODAY                                                       lcDelimiter
-                     STRING(TIME,"HH:MM:SS")
-                     SKIP.
-   
-                  LEAVE.
-               END.
-
             OUTPUT TO VALUE(lcLogFile) APPEND.
             PUT UNFORMATTED Func.Common:mTS2HMS(Func.Common:mMakeTS()) " " CallAlarm.CLI ": " lcResponse CHR(10).
             OUTPUT CLOSE.
@@ -371,9 +331,6 @@ PROCEDURE pCallAlarm:
       IF liMax >= 1000 THEN LEAVE SMS_LOOP.
       
    END.
-
-   IF lcFile > "" THEN
-      OUTPUT STREAM sout CLOSE.
 
 END PROCEDURE.
 
