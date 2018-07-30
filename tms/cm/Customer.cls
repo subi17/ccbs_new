@@ -145,6 +145,10 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
+    DEFINE PUBLIC PROPERTY BillAcctIDData AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
     DEFINE PUBLIC PROPERTY DefaultAddressObj AS CLASS JsonObject NO-UNDO 
         GET.
         SET.   
@@ -347,12 +351,19 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                ASSIGN ttCustAccts.custacctobj = aOCustAcct
                       ttCustAccts.custacctnum = mGetNextCustAcctNum().
                       
-               ASSIGN THIS-OBJECT:CustAcctData = THIS-OBJECT:CustAcctData + ":" + aOCustAcct:mGetCustomerAcctBankData().
+               ASSIGN THIS-OBJECT:CustAcctData     = THIS-OBJECT:CustAcctData     + "|" + aOCustAcct:mGetCustomerAcctBankData()
+                      THIS-OBJECT:BillAcctIDData   = THIS-OBJECT:BillAcctIDData   + "|" + aOCustAcct:mGetBillAcctIDData().
+               
+                /*Example for the CustAcctData format
+                 CustacctID1;Bankacct1,Bankacct2|CustacctID2;Bankacct3,Bankacct4|etc.... 
+                 custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */
 
            END.
        END.
        
-       ASSIGN THIS-OBJECT:CustAcctData = TRIM(THIS-OBJECT:CustAcctData, ":").
+       ASSIGN THIS-OBJECT:CustAcctData     = TRIM(THIS-OBJECT:CustAcctData, "|")
+              THIS-OBJECT:BillAcctIDData   = TRIM(THIS-OBJECT:BillAcctIDData, "|").
+              
        mAssignCategory().
      
    END METHOD.
@@ -559,5 +570,33 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         END. /*  IF aoOrder:aoCustomer:isNewCustomer = FALSE */
         
     END METHOD.
+    
+    METHOD PUBLIC INTEGER mGetBillingAcctID(INPUT liBillAcctIndex AS INTEGER) :
+        
+        IF THIS-OBJECT:BillAcctIDData = "" THEN 
+            UNDO , THROW NEW ParamError("Billing Account data is not assigned.").
+            
+        /*custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */    
+        
+        DEFINE VARIABLE lcTotalBillAcctData AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lcBillAcctList      AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lcBillAcct          AS CHARACTER NO-UNDO.
+        
+        ASSIGN lcTotalBillAcctData  =  ENTRY(1 , THIS-OBJECT:BillAcctIDData , "|")
+               lcBillAcctList       =  ENTRY(2 , lcTotalBillAcctData        , ";").
+               
+        IF NUM-ENTRIES(lcBillAcctList) < liBillAcctIndex THEN 
+            UNDO , THROW NEW ParamError("Invalid billing account index.").
+        
+        ASSIGN lcBillAcct  =  ENTRY(liBillAcctIndex , lcBillAcctList).
+        
+        INTEGER(lcBillAcct) NO-ERROR.
+        
+        IF ERROR-STATUS:ERROR THEN 
+            UNDO , THROW NEW ParamError("Billing Account type cast error").
+            
+        RETURN INTEGER(lcBillAcct).
+        
+    END.
 
 END CLASS.

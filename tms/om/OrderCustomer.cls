@@ -503,7 +503,7 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
        
        ASSIGN 
            lcTotalCustomerBankData = aoOrder:aoCustomer:CustAcctData
-           lcCustAcctData          = ENTRY(1,lcTotalCustomerBankData,":")
+           lcCustAcctData          = ENTRY(1,lcTotalCustomerBankData,"|")
            lcBankAcctData          = ENTRY(2,lcCustAcctData,";")
            lcBankAcctNum           = ENTRY(1,lcBankAcctData,",")
            .

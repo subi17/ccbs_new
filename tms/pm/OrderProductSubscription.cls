@@ -35,19 +35,11 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         GET.
         SET.
         
-    DEFINE PUBLIC PROPERTY aoBillingAcctIndex AS INTEGER NO-UNDO
-       GET.
-       SET.
-       
     DEFINE PUBLIC PROPERTY AttrCLI AS CHARACTER NO-UNDO
        GET.
        SET.
        
     DEFINE PUBLIC PROPERTY lcNumberType AS CHARACTER NO-UNDO
-       GET.
-       SET.
-       
-    DEFINE PUBLIC PROPERTY liBillAcctID AS INTEGER NO-UNDO
        GET.
        SET.
        
@@ -85,7 +77,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         
         ASSIGN loAttributes                     = NEW Progress.Json.ObjectModel.JsonObject()
                loAttributes                     = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes")
-               THIS-OBJECT:aoBillingAcctIndex   = ioItemObject:GetInteger("billing-account-index") WHEN ioItemObject:Has("billing-account-index").
+               .
         
         IF VALID-OBJECT(loAttributes)
         THEN DO:
@@ -171,15 +163,11 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             ELSE IF THIS-OBJECT:lcNumberType = "NEW" 
             THEN ASSIGN aoOrder:OrderType  = {&ORDER_TYPE_NEW}
                         aoOrder:StatusCode = {&ORDER_STATUS_NEW}.
-            
                  
             IF ioItemObject:Has("billing_account_id")
             THEN DO:
-                /*This will be executed in case of existing customer.*/
-                ASSIGN THIS-OBJECT:liBillAcctID  =  ioItemObject:GetInteger("billing_account_id").
-                mIsBillingAccountExists(). 
                 mGetBillingAddressObject(). 
-            END.           
+            END.       
             
             IF aoOrder:isPrePaidOrder 
             AND aoOrder:aoCustomer:isNewCustomer = FALSE
@@ -228,9 +216,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
        
         aoSubscriptionParams = NEW pm.OrderProductParam(THIS-OBJECT) .
-        aoSubscriptionParams:mCreateData(loAttributes,
-                                         Attribute,
-                                         AttrType).
+        aoSubscriptionParams:mCreateData(loAttributes,Attribute,AttrType).
        
         ASSIGN liNextParamNum =  mNextParamNb().
                                             
@@ -250,23 +236,6 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         
         RETURN ( ttOrderProductParam.paramnb + 1 ).
 
-    END METHOD.
-    
-    METHOD PUBLIC VOID mIsBillingAccountExists() :
-        
-        FIND FIRST InvoiceTargetGroup NO-LOCK WHERE 
-                   InvoiceTargetGroup.ITGroupID    =   THIS-OBJECT:liBillAcctID 
-                   NO-ERROR.
-                   
-        IF NOT AVAILABLE InvoiceTargetGroup
-        THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Billing Account &1 does not exist.", THIS-OBJECT:liBillAcctID)). 
-        
-        IF InvoiceTargetGroup.AccountID  <>  aoOrder:CustAcctNum 
-        THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Billing Account &1 does not associated to the entered customer account &2 .", 
-                                                    THIS-OBJECT:liBillAcctID , aoOrder:CustAcctNum )). 
-                                                    
-        ASSIGN aoOrder:aoCustomer:OrderCustBankAcct  =  InvoiceTargetGroup.BankAccount.
-                             
     END METHOD.
     
     METHOD PUBLIC VOID mGetBillingAddressObject() :

@@ -51,6 +51,10 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
       
+   DEFINE PUBLIC PROPERTY ITGroupID AS INTEGER NO-UNDO
+      GET.
+      SET.
+      
    DEFINE PUBLIC PROPERTY ParentID AS INTEGER NO-UNDO
       GET.
       SET(INPUT iiParentID AS INTEGER):
@@ -58,6 +62,10 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
           ASSIGN THIS-OBJECT:ParentID    =   iiParentID.
           
       END SET.
+      
+   DEFINE PUBLIC PROPERTY BillAcctIndex AS INTEGER NO-UNDO
+       GET.
+       SET.
 
    DEFINE PUBLIC VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
 
@@ -82,18 +90,39 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
          ProductID          = ioItemObject:GetCharacter("product_id")  WHEN ioItemObject:Has("product_id")   
          ProductOfferingID  = ioItemObject:GetCharacter("product_offering_id").
          
-     IF ActionType = {&ORDER_PRODUCT_SUBSCRIPTION} OR 
-        ActionType = {&ORDER_PRODUCT_FIXED_LINE} 
-     THEN DO:
-         
-         IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CliType = ProductID)
-         THEN UNDO, THROW NEW ParamError
-               (SUBSTITUTE("Unknown Product: ", ProductID)).
+      IF ActionType = {&ORDER_PRODUCT_SUBSCRIPTION} OR 
+         ActionType = {&ORDER_PRODUCT_FIXED_LINE} 
+      THEN DO:
+          
+          IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CliType = ProductID)
+          THEN UNDO, THROW NEW ParamError (SUBSTITUTE("Unknown Product: ", ProductID)).
              
-     END.
+      END.
+     
+      IF ioItemObject:Has("billing_account_id")
+      THEN DO:
+          /*This will be executed in case of existing customer.*/
+          ASSIGN THIS-OBJECT:ITGroupID = ioItemObject:GetInteger("billing_account_id").
+          mIsBillingAccountExists().
+         
+      END.       
+      ELSE IF ioItemObject:Has("billing_account_index")
+      THEN DO:    
+          ASSIGN 
+              THIS-OBJECT:BillAcctIndex = ioItemObject:GetInteger("billing-account-index")                 
+              THIS-OBJECT:ITGroupID     = aoOrder:aoCustomer:mGetBillingAcctID(THIS-OBJECT:BillAcctIndex).
+             
+      END. 
+      ELSE DO:
+          
+          IF THIS-OBJECT:ActionType = {&ORDER_PRODUCT_SUBSCRIPTION} OR 
+             THIS-OBJECT:ActionType = {&ORDER_PRODUCT_FIXED_LINE}   OR 
+             THIS-OBJECT:ActionType = {&ORDER_PRODUCT_ACCESSORY}  
+          THEN UNDO , THROW  NEW ParamError("Billing Account information missing."). 
+      END. 
 
       mCreateDataForType(ioItemObject).
-
+      
       IF ioItemObject:Has("items")
       THEN DO:
          aoOrderProductFactory = NEW pm.OrderProductFactory().
@@ -120,6 +149,7 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
                abOrderProduct.ProductID         = THIS-OBJECT:ProductID
                abOrderProduct.ProductOfferingID = THIS-OBJECT:ProductOfferingID
                abOrderProduct.ParentID          = THIS-OBJECT:ParentID
+               abOrderProduct.ITGroupID         = THIS-OBJECT:ITGroupID
                .
        END.
      
@@ -131,10 +161,26 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
            THEN ASSIGN aoOrderProductFactory:ParentID   =  THIS-OBJECT:OrderProductID.
            aoOrderProductFactory:mStoreData().
        END.
-       
-       
 
    END METHOD.
+   
+METHOD PUBLIC VOID mIsBillingAccountExists() :
+        
+    FIND FIRST InvoiceTargetGroup NO-LOCK WHERE 
+        InvoiceTargetGroup.ITGroupID    =   THIS-OBJECT:ITGroupID 
+        NO-ERROR.
+                   
+    IF NOT AVAILABLE InvoiceTargetGroup
+        THEN UNDO, THROW NEW ParamError(SUBSTITUTE("Billing Account &1 does not exist.", THIS-OBJECT:ITGroupID)). 
+        
+    IF InvoiceTargetGroup.AccountID  <>  aoOrder:CustAcctNum 
+        THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Billing Account &1 does not associated to the entered customer account &2 .", 
+                                                     THIS-OBJECT:ITGroupID , aoOrder:CustAcctNum )). 
+                                                    
+    ASSIGN 
+        aoOrder:aoCustomer:OrderCustBankAcct = InvoiceTargetGroup.BankAccount.
+                             
+END METHOD.
 
    METHOD PUBLIC VOID mResult
       (ioJsonArray AS CLASS JsonArray):

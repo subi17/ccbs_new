@@ -187,6 +187,12 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
         RETURN THIS-OBJECT:BankAccount.
         
     END METHOD.
+    
+    METHOD PUBLIC CHARACTER mGetBillingAcctID() :
+        
+        RETURN STRING(THIS-OBJECT:ITGroupID).
+        
+    END METHOD.
 
    METHOD PUBLIC JsonObject mResult ():
 

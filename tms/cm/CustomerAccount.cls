@@ -45,10 +45,6 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY BillingAddressIndex AS INTEGER NO-UNDO
-       GET.
-       SET.
-       
     DEFINE PUBLIC PROPERTY AccountID AS INTEGER NO-UNDO
        GET.
        SET.
@@ -70,6 +66,10 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         SET.    
         
     DEFINE PUBLIC PROPERTY BankAccts AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY BillingAcctIDs AS CHARACTER NO-UNDO
        GET.
        SET.
        
@@ -136,12 +136,14 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                 ASSIGN ttBillingAcct.BillAcctObj = aoBillingAcct
                        ttBillingAcct.BillAcctNum = mNextBillAcctNum().
                        
-                ASSIGN THIS-OBJECT:BankAccts  =  THIS-OBJECT:BankAccts + "," + aoBillingAcct:mGetBankAcct().
+                ASSIGN THIS-OBJECT:BankAccts       =  THIS-OBJECT:BankAccts       + "," + aoBillingAcct:mGetBankAcct()
+                       THIS-OBJECT:BillingAcctIDs  =  THIS-OBJECT:BillingAcctIDs  + "," + aoBillingAcct:mGetBillingAcctID().
                 
             END.            
         END.
 
-        ASSIGN THIS-OBJECT:BankAccts  = TRIM(THIS-OBJECT:BankAccts , ",").
+        ASSIGN THIS-OBJECT:BankAccts        = TRIM(THIS-OBJECT:BankAccts      , ",")
+               THIS-OBJECT:BillingAcctIDs   = TRIM(THIS-OBJECT:BillingAcctIDs , ",").
 	    
 	END METHOD.
 	
@@ -171,6 +173,12 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	METHOD PUBLIC CHARACTER mGetCustomerAcctBankData() :
 	    
 	    RETURN (STRING(THIS-OBJECT:AccountID) + ";" + THIS-OBJECT:BankAccts ).
+	    
+	END METHOD.
+	
+	METHOD PUBLIC CHARACTER mGetBillAcctIDData():
+	    
+	    RETURN (STRING(THIS-OBJECT:AccountID) + ";" + THIS-OBJECT:BillingAcctIDs).
 	    
 	END METHOD.
 	
