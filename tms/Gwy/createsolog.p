@@ -225,7 +225,7 @@ PROCEDURE pSolog:
 
    /* SAPC */
    DEFINE VARIABLE cJsonMsg           AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE cJsonMsg_DAtaLimit AS LONGCHAR NO-UNDO.
+   DEFINE VARIABLE cJsonMsg_DataLimit AS LONGCHAR NO-UNDO.
    DEFINE VARIABLE lJsonCreation      AS LOGICAL  NO-UNDO.
 
 
@@ -461,19 +461,24 @@ PROCEDURE pSolog:
                ASSIGN
                   Procommand.CommandLine = cJsonMsg.
          END. 
-         ELSE 
-         DO:
+         ELSE
+         IF MSrequest.ReqCparam1 = "ADD"    OR   /* Adding msisdn to DSS */
+            MSrequest.ReqCparam1 = "REMOVE" THEN /* Removin msisdn from DSS */    
+         DO:  
             ASSIGN 
                lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(cc,"MSISDN="))
                lcmsisdns = REPLACE(lcmsisdns,"MSISDN=","")
                lcmsisdns = SUBSTRING(lcmsisdns,1,INDEX(lcmsisdns,",") - 1).
                        
-            /* 1st. Creating ProCommand for Adding msisdn to DSS group */   
+            /* 1st. Creating ProCommand for Adding/removing msisdn to DSS group */   
             CREATE ProCommand.
             ASSIGN
                ProCommand.MsRequest           = MsRequest.MsRequest
                ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-               ProCommand.ProCommandType      = "ADD_TO_DSS_GROUP"
+               ProCommand.ProCommandType      = (IF MSrequest.ReqCparam1 = "ADD" THEN 
+                                                    "ADD_TO_DSS_GROUP"
+                                                 ELSE 
+                                                    "REMOVE_FROM_DSS_GROUP")
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MobSub.MsSeq  /* Mobile Subscription No. */
@@ -486,7 +491,10 @@ PROCEDURE pSolog:
             /* Json content */
             CREATE ttDSS_msisdn.
             ASSIGN 
-               ttDSS_msisdn.action = "Add"  /* Hard-coded when adding to ADD */  
+               ttDSS_msisdn.action = (IF MSrequest.ReqCparam1 = "ADD" THEN
+                                         "add"  /* Hard-coded when adding to DSS */
+                                      ELSE   
+                                         "remove") /* Hard-coded when removing from DSS */
                ttDSS_msisdn.msisdn = lcmsisdns.
             
             /* Getting Json string */
