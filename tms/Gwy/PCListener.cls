@@ -9,6 +9,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 /* lang, stomp adpter, logic  libs*/ 
 USING Progress.Lang.*.
+USING Progress.Json.ObjectModel.JsonObject.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 USING Syst.Configuration.
@@ -50,8 +51,11 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    DEF VAR llStopCondition        AS LOG                      NO-UNDO INIT NO.
    DEF VAR lcStopReason           AS CHAR                     NO-UNDO.
    /* message header fields */
-   DEF VAR lcSource AS CHAR NO-UNDO. 
-   DEF VAR lcReplyTo AS CHAR NO-UNDO.
+   DEF VAR lcModel         AS CHAR NO-UNDO.
+   DEF VAR lcModelId       AS CHAR NO-UNDO.
+   DEF VAR lcAction        AS CHAR NO-UNDO.
+   DEF VAR lcSource        AS CHAR NO-UNDO. 
+   DEF VAR lcReplyTo       AS CHAR NO-UNDO.
    DEF VAR lcCorrelationID AS CHAR NO-UNDO. 
    
    DEF VAR lcHeader     AS CHAR NO-UNDO.
@@ -143,6 +147,9 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
         DEF VAR liCnt    AS INT  NO-UNDO.
       
         ASSIGN
+            lcAction        = ""
+            lcModel         = ""
+            lcModelId       = ""
             lcSource        = ""
             lcCorrelationID = ""
             lcReplyTo       = "".
@@ -169,28 +176,25 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
         CATCH e AS Progress.Lang.Error:
             DO liCnt = 1 TO e:NumMessages:
                 logMsg(e:GetMessage(liCnt), "ERROR").    
-
-                /* for RequestMaker:logError exceptions */
-                IF e:GetMessageNum(liCnt) EQ 80000 AND
-                    lcCorrelationID > "" AND
-                    lcCorrelationID NE "0" AND
-                    lcReplyTo > "" THEN 
+                
+                IF lcCorrelationID > "" AND
+                   lcCorrelationID NE "0" AND
+                   lcReplyTo > "" THEN 
                 DO:
-                    &IF NOT {&MQ_BASED} &THEN
+                    &IF {&MQ_BASED} &THEN
                     CREATE AckMessage.
                     ASSIGN 
-                        AckMessage.HostTable         = "MsRequest"
-                        AckMessage.KeyValue          = ""
+                        AckMessage.HostTable         = lcModel
+                        AckMessage.KeyValue          = lcModelId
                         AckMessage.AckTarget         = lcCorrelationId
                         AckMessage.QueueName         = lcReplyTo
                         AckMessage.Created           = NOW
                         AckMessage.AckStatus         = 0
-                        AckMessage.AckResult         = "Error"
+                        AckMessage.AckResult         = lcAction
                         AckMessage.ResultDescription = e:GetMessage(liCnt).
                     RELEASE AckMessage.
                     &ENDIF
                 END. 
-
             END.
 
             IF e:getclass():TypeName NE "Progress.Lang.AppError" THEN
@@ -212,10 +216,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
    METHOD PUBLIC VOID newJsonMessage (icHeader      AS LONGCHAR, 
                                       icMessageBody AS LONGCHAR):
       /* dotr Header formt */
-      /*Cm integration params*/ 
-      DEF VAR lcModel         AS CHAR                     NO-UNDO.
-      DEF VAR lcModelId       AS CHAR                     NO-UNDO.
-      DEF VAR lcAction        AS CHAR                     NO-UNDO.
+      /*Cm integration params*/
       DEF VAR lcFeeId         AS CHAR                     NO-UNDO.
       /*json parsing varaibles*/
       DEF VAR lcFieldSet      AS CHAR                     NO-UNDO.
@@ -227,10 +228,14 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       DEF VAR loLogicModule     AS CLASS Gwy.ModelInterface NO-UNDO.
       DEF VAR lcInternalId      AS CHAR NO-UNDO. 
 
-      DEF VAR liReplacePosition AS INT NO-UNDO.
-      
+      DEF VAR liReplacePosition AS INT        NO-UNDO.
+      DEF VAR lobjBodyJson      AS JsonObject NO-UNDO.
+      DEF VAR lc
       ASSIGN
-         lcSource = ""
+         lcAction  = ""
+         lcModel   = ""
+         lcModelId = "" 
+         lcSource  = ""
          lcCorrelationID = ""
          lcReplyTo = "".
 
@@ -276,7 +281,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                 lcReplyTo = lcvalue.            
             END.
             OTHERWISE DO :
-               logMsg("Unknown lcField " + lcField,"WARNING").
+               logMsg("Unknown attribute in header " + lcField,"WARNING").
             END.
          END CASE.
       END.
@@ -290,9 +295,9 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       END.
 
       IF LOG-MANAGER:LOGGING-LEVEL GE 3 THEN DO:
-         logMsg(SUBST("JSON head: `Model=&1 ModelId=&2 Action=&3 " +
-                      "Feeid=&4 Source=&5 correlation-id=&6 Reply-To=&7`",
-                      lcModel, lcModelid, lcAction, lcFeeid, lcSource,
+         logMsg(SUBST("JSON head: `Brand=&1 Model=&2 ModelId=&3 Action=&4 " +
+                      "Feeid=&5 Source=&6 correlation-id=&7 Reply-To=&8`",
+                      lcBrand, lcModel, lcModelid, lcAction, lcFeeid, lcSource,
                       lcCorrelationID, lcReplyTo),
                 "DEBUG").
          /*Note: lModelid is blank for new contract or customer */
