@@ -144,6 +144,24 @@ FUNCTION fIsFunctionAvailInSAPC RETURNS LOGICAL
       LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0 THEN
       RETURN TRUE.
    
+   /* Checking "adding MSISDN to DSS group" request */
+   IF MsRequest.ReqType = {&REQTYPE_DSS} AND
+      MsRequest.ReqCparam1 = "ADD"       AND 
+      LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0 THEN
+      RETURN TRUE.
+
+   /* Checking "removing MSISDN to DSS group" request */
+   IF MsRequest.ReqType = {&REQTYPE_DSS} AND
+      MsRequest.ReqCparam1 = "REMOVE"       AND 
+      LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0 THEN
+      RETURN TRUE.
+
+   /* Checking "delete DSS group" request */
+   IF MsRequest.ReqType = {&REQTYPE_DSS} AND
+      MsRequest.ReqCparam1 = "DELETE"       AND 
+      LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0 THEN
+      RETURN TRUE.
+
    /* Checking create upsell or add/delete dataplan */
    IF MsRequest.ReqCParam1 = "SHAPER" AND
       MsRequest.OrigRequest > 0 THEN 
@@ -154,12 +172,7 @@ FUNCTION fIsFunctionAvailInSAPC RETURNS LOGICAL
       IF AVAILABLE bMsRequest THEN 
       DO:
          IF bMsRequest.ReqCparam3 MATCHES "*_UPSELL" THEN
-         DO:
-            IF bMsRequest.ReqCparam3 BEGINS "DSS" THEN
-               RETURN FALSE.
-            ELSE 
-               RETURN TRUE.
-         END.
+            RETURN TRUE.
          ELSE
          IF bMsRequest.ReqType = 8 OR   /* ADD - Per. contract activation */
             bMsRequest.ReqType = 9 THEN /* DELETE - Per. contract termination*/

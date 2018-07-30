@@ -225,7 +225,7 @@ PROCEDURE pSolog:
 
    /* SAPC */
    DEFINE VARIABLE cJsonMsg           AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE cJsonMsg_DAtaLimit AS LONGCHAR NO-UNDO.
+   DEFINE VARIABLE cJsonMsg_DataLimit AS LONGCHAR NO-UNDO.
    DEFINE VARIABLE lJsonCreation      AS LOGICAL  NO-UNDO.
 
 
@@ -388,21 +388,29 @@ PROCEDURE pSolog:
       
    DO TRANSACTION:
       
+      /* Locating data */
+      FIND FIRST Mobsub WHERE 
+                 Mobsub.MSSeq = MSRequest.MSSeq
+                 NO-LOCK NO-ERROR.
+      IF NOT AVAILABLE Mobsub THEN
+      DO:
+         fReqError("Mobile Subscription not found for request " + 
+                    STRING(MSRequest.MSRequest)).
+         RETURN.
+      END.
+         
+      FIND Customer OF MobSub NO-LOCK NO-ERROR. 
+      IF NOT AVAILABLE Customer THEN
+      DO:
+         fReqError("Customer not found for " + mobsub.cli).
+         RETURN.
+      END.
+      
+      
       /* SAPC-56 redirecting new SAPC customers to new logic */
       IF Customer.AccGrp = 2 AND 
          fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN  /* SAPC */
       DO:
-         /* Locating data */
-         FIND FIRST Mobsub WHERE 
-                    Mobsub.MSSeq = MSRequest.MSSeq
-              NO-LOCK NO-ERROR.
-         IF NOT AVAILABLE Mobsub THEN
-         DO:
-            fReqError("Mobile Subscription not found for request " + 
-                       STRING(MSRequest.MSRequest)).
-            RETURN.
-         END.
-         
          IF MSrequest.ReqCparam1 = "CREATE" THEN /* Creating DSS group */
          DO:
             ASSIGN 
@@ -461,19 +469,24 @@ PROCEDURE pSolog:
                ASSIGN
                   Procommand.CommandLine = cJsonMsg.
          END. 
-         ELSE 
-         DO:
+         ELSE
+         IF MSrequest.ReqCparam1 = "ADD"    OR   /* Adding msisdn to DSS */
+            MSrequest.ReqCparam1 = "REMOVE" THEN /* Removing msisdn from DSS */    
+         DO:  
             ASSIGN 
                lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(cc,"MSISDN="))
                lcmsisdns = REPLACE(lcmsisdns,"MSISDN=","")
                lcmsisdns = SUBSTRING(lcmsisdns,1,INDEX(lcmsisdns,",") - 1).
                        
-            /* 1st. Creating ProCommand for Adding msisdn to DSS group */   
+            /* 1st. Creating ProCommand for Adding/removing msisdn to DSS group */   
             CREATE ProCommand.
             ASSIGN
                ProCommand.MsRequest           = MsRequest.MsRequest
                ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-               ProCommand.ProCommandType      = "ADD_TO_DSS_GROUP"
+               ProCommand.ProCommandType      = (IF MSrequest.ReqCparam1 = "ADD" THEN 
+                                                    "ADD_TO_DSS_GROUP"
+                                                 ELSE 
+                                                    "REMOVE_FROM_DSS_GROUP")
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MobSub.MsSeq  /* Mobile Subscription No. */
@@ -486,7 +499,10 @@ PROCEDURE pSolog:
             /* Json content */
             CREATE ttDSS_msisdn.
             ASSIGN 
-               ttDSS_msisdn.action = "Add"  /* Hard-coded when adding to ADD */  
+               ttDSS_msisdn.action = (IF MSrequest.ReqCparam1 = "ADD" THEN
+                                         "add"  /* Hard-coded when adding to DSS */
+                                      ELSE   
+                                         "remove") /* Hard-coded when removing from DSS */
                ttDSS_msisdn.msisdn = lcmsisdns.
             
             /* Getting Json string */
@@ -516,66 +532,84 @@ PROCEDURE pSolog:
                   Procommand.CommandLine = cJsonMsg.
             
          END.
-         
-         /* 2nd. Creating ProCommand for updating Data limit for DSS group 
-                 This command is needed when creating a DSS group or 
-                 adding a msisdn to the DSS group */
-         CREATE ProCommand.
-         ASSIGN
-            ProCommand.MsRequest           = MsRequest.MsRequest
-            ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-            ProCommand.ProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
-            ProCommand.CreatedTS           = NOW 
-            ProCommand.Creator             = Syst.Var:katun    
-            ProCommand.MsSeq               = MobSub.MsSeq  
-            ProCommand.ProCommandstatus    = 0               /* 0 - New */
-            ProCommand.ProCommandtarget    = "NB_CH"
-            ProCommand.ProCommandVerb      = "POST"            
-            ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
-                                             "/set-accumulated-volume".
-  
-         /* Json content */
-         ASSIGN dDataLimit = fGetDSSDataLimit(MsRequest.MsRequest).
-         IF dDataLimit = 0 THEN
-         DO:
-            fReqError("Json generation (datalimit not found) failed for request " + 
-                      STRING(MSRequest.MSRequest)).
-            UNDO, RETURN.
-         END.
-         
-         CREATE ttDSSDataLimit.
-         ASSIGN 
-            ttDSSDataLimit.offeringName      = MsRequest.ReqCParam3 /* DSS/DSS2/DSS4 */  
-            ttDSSDataLimit.roamingLikeAtHome = STRING(dDataLimit) 
-            ttDSSDataLimit.tariff            = STRING(dDataLimit).
-
-         /* Getting Json string */
-         oJson_DataLimit = NEW JsonObject().
-         oJson_DataLimit:add("offeringName", ttDSSDataLimit.offeringName).
-         oJson_DataLimit:add("roamingLikeAtHome", ttDSSDataLimit.roamingLikeAtHome).
-         oJson_DataLimit:add("tariff", ttDSSDataLimit.tariff).
-         lJsonCreation = oJson_DataLimit:WRITE(cJsonMsg_DataLimit,TRUE).
-                
-         /* 
-         lJsonCreation = TEMP-TABLE ttDSSDataLimit:WRITE-JSON("LONGCHAR",
-                                                              cJsonMsg_DataLimit, 
-                                                              TRUE,    /* Formatted           */
-                                                              "UTF-8", /* Encoding            */
-                                                              FALSE,   /* Omit initial values */
-                                                              TRUE,    /* Omit outer object   */
-                                                              FALSE).  /* Write before image  */
-         */
-         IF lJsonCreation = FALSE then
-         DO:
-            fReqError("Json generation (datalimit) failed for request " + 
-                      STRING(MSRequest.MSRequest)).
-            UNDO, RETURN.
-         END.
-         ELSE
-            /* Successful. Saving Json message command */ 
+         ELSE IF MSrequest.ReqCparam1 = "DELETE" THEN /* Delete DSS group */    
+         DO:                         
+            /* Creating ProCommand for Deleting DSS group */   
+            CREATE ProCommand.
             ASSIGN
-               Procommand.CommandLine = cJsonMsg_DataLimit.
+               ProCommand.MsRequest           = MsRequest.MsRequest
+               ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
+               ProCommand.ProCommandType      = "TERMINATE_DSS_GROUP"
+               ProCommand.CreatedTS           = NOW 
+               ProCommand.Creator             = Syst.Var:katun    
+               ProCommand.MsSeq               = MobSub.MsSeq  /* Mobile Subscription No. */
+               ProCommand.ProCommandstatus    = 0             /* 0 - New                 */
+               ProCommand.ProCommandtarget    = "NB_CH"
+               ProCommand.ProCommandVerb      = "DELETE"
+               ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
+         END.
          
+         IF MSrequest.ReqCparam1 NE "DELETE" THEN /* Adding/Removing msisdn to DSS */
+         DO:
+            /* 2nd. Creating ProCommand for updating Data limit for DSS group 
+                    This command is needed when creating a DSS group or 
+                    adding a msisdn to the DSS group */
+            CREATE ProCommand.
+            ASSIGN
+               ProCommand.MsRequest           = MsRequest.MsRequest
+               ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
+               ProCommand.ProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
+               ProCommand.CreatedTS           = NOW 
+               ProCommand.Creator             = Syst.Var:katun    
+               ProCommand.MsSeq               = MobSub.MsSeq  
+               ProCommand.ProCommandstatus    = 0               /* 0 - New */
+               ProCommand.ProCommandtarget    = "NB_CH"
+               ProCommand.ProCommandVerb      = "POST"            
+               ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
+                                                "/set-accumulated-volume".
+     
+            /* Json content */
+            ASSIGN dDataLimit = fGetDSSDataLimit(MsRequest.MsRequest).
+            IF dDataLimit = 0 THEN
+            DO:
+               fReqError("Json generation (datalimit not found) failed for request " + 
+                         STRING(MSRequest.MSRequest)).
+               UNDO, RETURN.
+            END.
+            
+            CREATE ttDSSDataLimit.
+            ASSIGN 
+               ttDSSDataLimit.offeringName      = MsRequest.ReqCParam3 /* DSS/DSS2/DSS4 */  
+               ttDSSDataLimit.roamingLikeAtHome = STRING(dDataLimit) 
+               ttDSSDataLimit.tariff            = STRING(dDataLimit).
+   
+            /* Getting Json string */
+            oJson_DataLimit = NEW JsonObject().
+            oJson_DataLimit:add("offeringName", ttDSSDataLimit.offeringName).
+            oJson_DataLimit:add("roamingLikeAtHome", ttDSSDataLimit.roamingLikeAtHome).
+            oJson_DataLimit:add("tariff", ttDSSDataLimit.tariff).
+            lJsonCreation = oJson_DataLimit:WRITE(cJsonMsg_DataLimit,TRUE).
+                   
+            /* 
+            lJsonCreation = TEMP-TABLE ttDSSDataLimit:WRITE-JSON("LONGCHAR",
+                                                                 cJsonMsg_DataLimit, 
+                                                                 TRUE,    /* Formatted           */
+                                                                 "UTF-8", /* Encoding            */
+                                                                 FALSE,   /* Omit initial values */
+                                                                 TRUE,    /* Omit outer object   */
+                                                                 FALSE).  /* Write before image  */
+            */
+            IF lJsonCreation = FALSE then
+            DO:
+               fReqError("Json generation (datalimit) failed for request " + 
+                         STRING(MSRequest.MSRequest)).
+               UNDO, RETURN.
+            END.
+            ELSE
+               /* Successful. Saving Json message command */ 
+               ASSIGN
+                  Procommand.CommandLine = cJsonMsg_DataLimit.
+         END.            
       END.  /*end of SAPC customer */
       ELSE 
       DO: /* Existing logic for Packet Logic */
