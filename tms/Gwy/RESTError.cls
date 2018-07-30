@@ -81,4 +81,23 @@ CLASS Gwy.RESTError INHERITS AppError:
                             "ERROR").
    END METHOD.
 
+
+   METHOD PUBLIC LONGCHAR mGetErrorData
+      (icMessage AS CHARACTER,
+       iiMesNum  AS INTEGER):
+
+      DEFINE VARIABLE lcReturnValue AS LONGCHAR NO-UNDO.
+      DEFINE VARIABLE lii           AS INTEGER  NO-UNDO.
+
+      IF THIS-OBJECT:ReturnValue > ""
+      THEN lcReturnValue = CHR(10) + ReturnValue.
+
+      DO lii = 1 TO THIS-OBJECT:NumMessages:
+         lcReturnValue = lcReturnValue + CHR(10) + THIS-OBJECT:GetMessage(lii).
+      END.
+
+      RETURN SUBSTRING(lcReturnValue,2).
+
+   END METHOD.
+
 END CLASS.
