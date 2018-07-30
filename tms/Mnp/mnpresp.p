@@ -887,7 +887,7 @@ PROCEDURE pHandleQueue:
                   CallAlarm.Brand = Syst.Var:gcBrand AND
                   CallAlarm.CLI = Order.CLI AND
                   CallAlarm.DeliStat = 1 AND
-                  CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
+                  CallAlarm.CreditType = {&SMSTYPE_MNP} EXCLUSIVE-LOCK:
              CallAlarm.DeliStat = 4. /* CANCELLED */
          END.
                   

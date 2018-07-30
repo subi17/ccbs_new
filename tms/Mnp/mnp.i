@@ -166,7 +166,7 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
          CallAlarm.DeliPara   = "1"
          CallAlarm.DeliMsg    = lcAlarmMess
          CallAlarm.Limit      = 0
-         CallAlarm.CreditType = 12
+         CallAlarm.CreditType = {&SMSTYPE_MNP}
          CallAlarm.Orig       = pcSender
          CallAlarm.Brand      = Syst.Var:gcBrand.
       
