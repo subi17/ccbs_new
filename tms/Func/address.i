@@ -25,7 +25,7 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
       RETURN FALSE.
    END.
-   IF Address.AddressType = "Billing" THEN DO:     
+   IF Address.AddressType = {&BILLING_ADDRESS} THEN DO:     
       ASSIGN
          Address.Address = icAddress
          Address.City = icPostOffice
