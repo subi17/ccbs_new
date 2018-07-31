@@ -166,9 +166,8 @@ IF oiStatusCode NE 200 THEN DO:
    ASSIGN
       FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
-      FusionMessage.ResponseCode = (IF ocStatusReason > "" THEN 
-                                         ocStatusReason
-                                      ELSE "ERROR").
+      FusionMessage.ResponseCode = STRING(oiStatusCode)
+      FusionMessage.AdditionalInfo = ocStatusReason.
 
    IF fCanRetryFusionMessage(
       BUFFER FusionMessage,
@@ -191,17 +190,29 @@ IF oiStatusCode NE 200 THEN DO:
    fReqStatus(3,ocStatusReason).
 END.
 ELSE DO: 
-    /* update installation address */
+   /* update installation address */
    ASSIGN
       FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
       FusionMessage.ResponseCode = STRING(oiStatusCode) 
       FusionMessage.AdditionalInfo = ocStatusReason.
      
+   RUN pUpdateAddress(FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
+   RUN pUpdateAddress(FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}).  
+
+   fReqStatus(2,"").
+      
+END.   
+
+PROCEDURE pUpdateAddress:
+    
+   DEF INPUT PARAMETER iiOrderID AS INT NO-UNDO.
+   DEF INPUT PARAMETER iiRowType AS INT NO-UNDO. 
+    
    FIND FIRST OrderCustomer WHERE 
               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
-              OrderCustomer.OrderId EQ FusionMessage.OrderID AND
-              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+              OrderCustomer.OrderId EQ iiOrderID AND
+              OrderCustomer.RowType EQ iiRowType 
               EXCLUSIVE-LOCK NO-WAIT NO-ERROR.      
    IF NOT AVAIL OrderCustomer THEN 
       RETURN "ErrorCode: OrderCustomer is not available".
@@ -238,8 +249,7 @@ ELSE DO:
                                            "Installation Address Updated").    
       
       RELEASE OrderCustomer.
-      fReqStatus(2,"").
       
-END.   
+END PROCEDURE.
 
 RETURN "".
