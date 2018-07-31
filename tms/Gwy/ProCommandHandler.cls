@@ -9,14 +9,7 @@ USING PROGRESS.Json.ObjectModel.*.
 USING Gwy.ParamRESTClient.
 USING Gwy.RESTError.
 
-&GLOBAL-DEFINE PROCOMMANDSTATUS_NEW 0
-&GLOBAL-DEFINE PROCOMMANDSTATUS_ONGOING 1
-&GLOBAL-DEFINE PROCOMMANDSTATUS_DONE 2
-&GLOBAL-DEFINE PROCOMMANDSTATUS_200_ERROR 3
-&GLOBAL-DEFINE PROCOMMANDSTATUS_400_ERROR 4
-&GLOBAL-DEFINE PROCOMMANDSTATUS_500_ERROR 5
-&GLOBAL-DEFINE PROCOMMANDSTATUS_NOT_SUPPORTED_HTTP_STATUS_ERROR 6
-&GLOBAL-DEFINE PROCOMMANDSTATUS_INTERNAL_ERROR 8
+{Syst/tmsconst.i}
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -34,6 +27,7 @@ CLASS Gwy.ProCommandHandler FINAL:
       FIELD ProCommandType   AS CHARACTER
       FIELD ProcessAmt       AS INT64
       FIELD FailedAmt        AS INT64
+      FIELD LockedAmt        AS INT64
       FIELD LastUpdated AS DATETIME-TZ
       INDEX ProCommandTarget IS PRIMARY UNIQUE ProCommandTarget ProCommandType.
 
@@ -180,6 +174,7 @@ CLASS Gwy.ProCommandHandler FINAL:
       ASSIGN
          ttStatistic.ProcessAmt  = ttStatistic.ProcessAmt + iiProcessed
          ttStatistic.FailedAmt   = ttStatistic.FailedAmt  + iiFailed
+         ttStatistic.LockedAmt   = ttStatistic.LockedAmt  + ABSOLUTE(1 - iiProcessed)
          ttStatistic.LastUpdated = NOW.
          
    END METHOD.
@@ -189,6 +184,9 @@ CLASS Gwy.ProCommandHandler FINAL:
 
       IF NOT ioJsonObject:Has("result")
       THEN UNDO, THROW NEW RESTError("Response data doesn't have result information").
+
+      IF ioJsonObject:GetType("result") NE JsonDataType:STRING
+      THEN UNDO, THROW NEW RESTError("Response data result is not string").
 
       IF NOT ioJsonObject:GetCharacter("result") EQ "OK"
       THEN UNDO, THROW NEW RESTError(200, "OK", ioJsonObject).
@@ -206,8 +204,10 @@ CLASS Gwy.ProCommandHandler FINAL:
       DEFINE VARIABLE ldtSendTS      AS DATETIME-TZ         NO-UNDO.
       DEFINE VARIABLE ldtResponseTS  AS DATETIME-TZ         NO-UNDO.
       DEFINE VARIABLE lcTemp         AS LONGCHAR            NO-UNDO.
+      DEFINE VARIABLE llRequestNotAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
 
       DEFINE BUFFER ProCommand FOR ProCommand.
+      DEFINE BUFFER MsRequest  FOR MsRequest.
 
       FIND ProCommand EXCLUSIVE-LOCK WHERE
            ProCommand.ProCommandId = iiProCommandId NO-ERROR NO-WAIT.
@@ -215,7 +215,25 @@ CLASS Gwy.ProCommandHandler FINAL:
       IF NOT AVAILABLE ProCommand
       THEN RETURN.
 
+      IF ProCommand.MsRequest > 0
+      THEN DO:
+         FIND MsRequest EXCLUSIVE-LOCK WHERE
+              MsRequest.MsRequest = ProCommand.MsRequest NO-ERROR NO-WAIT.
+
+         IF NOT AVAILABLE MsRequest
+         THEN DO:
+            IF LOCKED MsRequest
+            THEN RETURN.
+            ELSE llRequestNotAvailable = TRUE.
+         END.
+      END.
+
       DO ON ERROR UNDO, THROW:
+
+         IF llRequestNotAvailable
+         THEN UNDO, THROW NEW RESTError
+               (SUBSTITUTE("MsRequest id &1 doesn't exists",
+                           ProCommand.MsRequest)).
 
          IF LOOKUP(ProCommand.ProCommandVerb,ValidRESTMethods) EQ 0
          THEN UNDO, THROW NEW RESTError
@@ -294,7 +312,7 @@ CLASS Gwy.ProCommandHandler FINAL:
                OTHERWISE DO:
                   IF loRESTError:HTTPStatus EQ 0
                   THEN DO:
-                     IF ProCommand.SendTS EQ ?
+                     IF ldtSendTS EQ ?
                      THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_INTERNAL_ERROR}. /* Internal error */
                      ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_200_ERROR}.
                   END.
@@ -326,6 +344,16 @@ CLASS Gwy.ProCommandHandler FINAL:
             ASSIGN
                ProCommand.SendTS     = ldtSendTS
                ProCommand.ResponseTS = ldtResponseTS.
+
+            IF AVAILABLE MsRequest
+            THEN CASE ProCommand.ProCommandStatus:
+                    WHEN {&PROCOMMANDSTATUS_NEW} OR WHEN {&PROCOMMANDSTATUS_ONGOING}
+                    THEN .
+                    WHEN {&PROCOMMANDSTATUS_DONE}
+                    THEN MsRequest.ReqStatus = {&REQUEST_STATUS_HLR_DONE}.
+                    OTHERWISE MsRequest.ReqStatus = {&REQUEST_STATUS_REJECTED}.
+            END CASE.
+
          END FINALLY.
       END.
 
@@ -428,11 +456,12 @@ CLASS Gwy.ProCommandHandler FINAL:
          IF ttStatistic.LastUpdated < idttzLastCheck
          THEN NEXT.
 
-         lcc = lcc + ", " + SUBSTITUTE("&1/&2: P&3, F&4",
+         lcc = lcc + ", " + SUBSTITUTE("&1/&2: P&3, F&4, L&5",
                                        ttStatistic.ProCommandTarget,
                                        ttStatistic.ProCommandType,
                                        ttStatistic.ProcessAmt,
-                                       ttStatistic.FailedAmt).
+                                       ttStatistic.FailedAmt,
+                                       ttStatistic.LockedAmt).
 
          IF LENGTH(lcc) > 130
          THEN DO:
