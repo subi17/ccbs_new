@@ -129,10 +129,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aoDefaultCustAddress AS om.OrderAddress NO-UNDO 
-        GET.
-        SET.
-    
     DEFINE PUBLIC PROPERTY DefaultAddrID AS CHARACTER NO-UNDO
        GET.
        SET.
@@ -151,7 +147,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        
     DEFINE PUBLIC PROPERTY DefaultAddressObj AS CLASS JsonObject NO-UNDO 
         GET.
-        SET.   
+        SET. 
         
     DEFINE PUBLIC PROPERTY OrderCustBankAcct AS CHARACTER NO-UNDO
        GET.
@@ -191,7 +187,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
 	DESTRUCTOR PUBLIC Customer():
 	    ASSIGN aOCustAcct            = ?
-               aoDefaultCustAddress  = ?
                DefaultAddressObj     = ?.
 	           
 	END DESTRUCTOR.
@@ -322,19 +317,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        END.
        ELSE UNDO, THROW NEW ParamError ("Marketing data does not exist.").
        
-       IF ioJsonObject:Has("default_billing_address")
-       THEN DO:
-           
-           ASSIGN
-               THIS-OBJECT:DefaultAddressObj = ioJsonObject:GetJsonObject("default_billing_address")
-               aoDefaultCustAddress          = NEW om.OrderAddress()
-               aoDefaultCustAddress:KeyValue = THIS-OBJECT:CustNum
-               aoDefaultCustAddress:AddrType = {&ADDR_DEFAULT_BILLING}
-               .
-           aoDefaultCustAddress:mCreateData(THIS-OBJECT:DefaultAddressObj).
-           
-       END.
-       
        IF ioJsonObject:Has("customer_accounts")
        THEN DO:
            
@@ -401,13 +383,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
            Customer.Category          = THIS-OBJECT:Category
            .
            
-       IF VALID-OBJECT(aoDefaultCustAddress)
-       THEN DO:
-           aoDefaultCustAddress:mStoreData().
-           ASSIGN THIS-OBJECT:DefaultAddrID = aoDefaultCustAddress:AddrRegisterID.
-           
-       END.
-           
        FOR EACH ttCustAccts :
            CAST(ttCustAccts.custacctobj,cm.CustomerAccount):mStoreData().
        END.
@@ -452,7 +427,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         END.      
         
         ioCustObj:Add("cust-num" , THIS-OBJECT:CustNum).
-        ioCustObj:Add("default-billing-address-id" , THIS-OBJECT:DefaultAddrID).
         IF TEMP-TABLE ttCustAccts:HAS-RECORDS 
         THEN ioCustObj:Add("customer-accounts" , ioCustArray).
         
@@ -598,5 +572,12 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         RETURN INTEGER(lcBillAcct).
         
     END.
+    
+    METHOD PUBLIC VOID mAssignDefaultAddressObj (INPUT ioAddrObject AS JsonObject):
+        
+         ASSIGN THIS-OBJECT:DefaultAddressObj  = NEW JsonObject()
+                THIS-OBJECT:DefaultAddressObj  = ioAddrObject.
+        
+    END METHOD.
 
 END CLASS.

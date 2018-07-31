@@ -97,7 +97,6 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	    DEFINE VARIABLE BillAcctArray AS CLASS JsonArray NO-UNDO.
 	    DEFINE VARIABLE BillAcctObj   AS CLASS JsonObject NO-UNDO.
 	    DEFINE VARIABLE liBillAcctCnt AS INTEGER NO-UNDO.
-	    DEFINE VARIABLE loBillAddress AS CLASS JsonObject NO-UNDO.
 	    
         ASSIGN 
             THIS-OBJECT:DefaultAcct = ioCustAcctObject:GetLogical("default_account")
@@ -109,14 +108,22 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             THIS-OBJECT:StatusCode  =  0 /*0=pending, 1=active*/
             .
             
+        /*We expect only one customer account in the JSON and that customer account should the default customer account*/    
+        IF THIS-OBJECT:DefaultAcct = FALSE 
+        THEN UNDO , THROW NEW ParamError ("Dafault customer account should exist when creating a new customer.").  
+            
         IF ioCustAcctObject:Has("billing_address")
         THEN DO:
             
             aoBillAddrObj = NEW om.OrderAddress().
             aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
             ASSIGN aoBillAddrObj:KeyValue  = THIS-OBJECT:CustNum
-                   aoBillAddrObj:AddrType  = {&ADDR_BILLING}. 
-                          
+                   aoBillAddrObj:AddrType  = {&BILLING_ADDRESS}. 
+                   
+            IF THIS-OBJECT:DefaultAcct = TRUE 
+            THEN DO:                
+                ioCustomerObj:mAssignDefaultAddressObj(ioCustAcctObject:GetJsonObject("billing_address")).                
+            END.                          
         END.
         
         IF ioCustAcctObject:Has("billing_accounts")

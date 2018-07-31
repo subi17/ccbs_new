@@ -244,7 +244,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         
         FIND FIRST Address WHERE Address.HostTable    =  "Customer"
                              AND Address.KeyValue     =  STRING(aoOrder:aoCustomer:CustNum)
-                             AND Address.AddressType  =  {&ADDR_DEFAULT_BILLING} NO-LOCK NO-ERROR.
+                             AND Address.AddressType  =  {&BILLING_ADDRESS} NO-LOCK NO-ERROR.
 
         IF NOT AVAILABLE Address 
         THEN UNDO,THROW NEW ParamError("Default Billing Address Not Found.").
