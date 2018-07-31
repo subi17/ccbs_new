@@ -1058,7 +1058,6 @@
 &GLOBAL-DEFINE DC_BUNDLETARGET_MOBILE "mobile,fixedline,Broadband,entertainment,sva,banking"
 
 /*Address.AddressType*/
-&GLOBAL-DEFINE ADDR_DEFAULT_BILLING 1
-&GLOBAL-DEFINE ADDR_BILLING         2
+&GLOBAL-DEFINE BILLING_ADDRESS            1
 
 &ENDIF

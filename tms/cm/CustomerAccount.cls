@@ -45,10 +45,6 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY BillingAddressIndex AS INTEGER NO-UNDO
-       GET.
-       SET.
-       
     DEFINE PUBLIC PROPERTY AccountID AS INTEGER NO-UNDO
        GET.
        SET.
@@ -70,6 +66,10 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         SET.    
         
     DEFINE PUBLIC PROPERTY BankAccts AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY BillingAcctIDs AS CHARACTER NO-UNDO
        GET.
        SET.
        
@@ -97,7 +97,6 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	    DEFINE VARIABLE BillAcctArray AS CLASS JsonArray NO-UNDO.
 	    DEFINE VARIABLE BillAcctObj   AS CLASS JsonObject NO-UNDO.
 	    DEFINE VARIABLE liBillAcctCnt AS INTEGER NO-UNDO.
-	    DEFINE VARIABLE loBillAddress AS CLASS JsonObject NO-UNDO.
 	    
         ASSIGN 
             THIS-OBJECT:DefaultAcct = ioCustAcctObject:GetLogical("default_account")
@@ -109,14 +108,22 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             THIS-OBJECT:StatusCode  =  0 /*0=pending, 1=active*/
             .
             
+        /*We expect only one customer account in the JSON and that customer account should the default customer account*/    
+        IF THIS-OBJECT:DefaultAcct = FALSE 
+        THEN UNDO , THROW NEW ParamError ("Dafault customer account should exist when creating a new customer.").  
+            
         IF ioCustAcctObject:Has("billing_address")
         THEN DO:
             
             aoBillAddrObj = NEW om.OrderAddress().
             aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
             ASSIGN aoBillAddrObj:KeyValue  = THIS-OBJECT:CustNum
-                   aoBillAddrObj:AddrType  = {&ADDR_BILLING}. 
-                          
+                   aoBillAddrObj:AddrType  = {&BILLING_ADDRESS}. 
+                   
+            IF THIS-OBJECT:DefaultAcct = TRUE 
+            THEN DO:                
+                ioCustomerObj:mAssignDefaultAddressObj(ioCustAcctObject:GetJsonObject("billing_address")).                
+            END.                          
         END.
         
         IF ioCustAcctObject:Has("billing_accounts")
@@ -136,12 +143,14 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                 ASSIGN ttBillingAcct.BillAcctObj = aoBillingAcct
                        ttBillingAcct.BillAcctNum = mNextBillAcctNum().
                        
-                ASSIGN THIS-OBJECT:BankAccts  =  THIS-OBJECT:BankAccts + "," + aoBillingAcct:mGetBankAcct().
+                ASSIGN THIS-OBJECT:BankAccts       =  THIS-OBJECT:BankAccts       + "," + aoBillingAcct:mGetBankAcct()
+                       THIS-OBJECT:BillingAcctIDs  =  THIS-OBJECT:BillingAcctIDs  + "," + aoBillingAcct:mGetBillingAcctID().
                 
             END.            
         END.
 
-        ASSIGN THIS-OBJECT:BankAccts  = TRIM(THIS-OBJECT:BankAccts , ",").
+        ASSIGN THIS-OBJECT:BankAccts        = TRIM(THIS-OBJECT:BankAccts      , ",")
+               THIS-OBJECT:BillingAcctIDs   = TRIM(THIS-OBJECT:BillingAcctIDs , ",").
 	    
 	END METHOD.
 	
@@ -171,6 +180,12 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	METHOD PUBLIC CHARACTER mGetCustomerAcctBankData() :
 	    
 	    RETURN (STRING(THIS-OBJECT:AccountID) + ";" + THIS-OBJECT:BankAccts ).
+	    
+	END METHOD.
+	
+	METHOD PUBLIC CHARACTER mGetBillAcctIDData():
+	    
+	    RETURN (STRING(THIS-OBJECT:AccountID) + ";" + THIS-OBJECT:BillingAcctIDs).
 	    
 	END METHOD.
 	
