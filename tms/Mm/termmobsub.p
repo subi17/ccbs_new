@@ -274,7 +274,7 @@ BROWSE:
             Syst.Var:ufk[2] = 9852 
             Syst.Var:ufk[3] =  0
             Syst.Var:ufk[4] =  0 
-            Syst.Var:ufk[5] =  0
+            Syst.Var:ufk[5] =  9861 /* SAPC-46 */
             Syst.Var:ufk[6] =  0
             Syst.Var:ufk[7] =  0
             Syst.Var:ufk[8] =  8.
@@ -630,6 +630,23 @@ BROWSE:
            NEXT LOOP.
         END.
      END. 
+     /* SAPC-46  SAPC Commands */     
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND llMore AND 
+       iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
+
+       Syst.Var:cfc = "puyr". 
+       RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. 
+       RUN Syst/ufkey.p. 
+       ufkey = TRUE.
+
+       RUN local-find-this(FALSE).
+       IF AVAILABLE termmobsub THEN 
+          RUN Mc/ProCommandView.p(INPUT termmobsub.msseq).
+
+       NEXT LOOP.
+     END. 
+     /* SAPC-46 end */      
      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
