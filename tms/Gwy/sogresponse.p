@@ -450,34 +450,6 @@ PROCEDURE pSoLog:
 
                END.
             END.
-            ELSE IF AVAIL(MSRequest) AND
-               MsRequest.ReqCParam1 EQ "SHAPER" AND
-               MsRequest.ReqCParam2 EQ "HSPA_ROAM_EU" THEN DO:
-               
-               FIND FIRST Customer WHERE
-                          Customer.CustNum = MsRequest.CustNum
-               NO-LOCK NO-ERROR.
-            
-               IF AVAIL Customer THEN liLang = INT(Customer.Language).
-               ELSE                   liLang = 1.
-               
-               lcAlarmMess = fGetSMSTxt(
-                  (IF INDEX(lcInfo,"ERROR: 90003") > 0
-                   THEN "HSPARoamEUErrorUsage"
-                   ELSE "HSPARoamEUErrorGeneral"), 
-                  TODAY, liLang, OUTPUT ldeSMSTime).
-
-               IF lcAlarmMess > "" THEN DO:
-                  fMakeSchedSMS2(MSRequest.CustNum,
-                                 MsRequest.CLI,
-                                 {&SMSTYPE_CONTRACT_ACTIVATION},
-                                 lcAlarmMess,
-                                 ldeSMSTime,
-                                 "0034633800800",
-                                 "").
-                  RELEASE callalarm.
-               END.
-            END.
          END.
            
          IF AVAIL MSREquest THEN DO:
@@ -498,31 +470,8 @@ PROCEDURE pSoLog:
                                     ELSE "") +
                             " Request already handled, response discarded: " + 
                                    REPLACE(lcResponse,CHR(10),"").
-               ELSE DO:
-                   /* YPT-135 */
-                  IF lcStatus NE "OK" AND
-                     INDEX(lcInfo,"ERROR: 90003") > 0 AND
-                     MsRequest.ReqCParam1 EQ "SHAPER" AND
-                     MsRequest.ReqCParam2 EQ "HSPA_ROAM_EU" AND
-                     MsRequest.OrigRequest > 0 AND
-                     MsRequest.Mandatory EQ 1 THEN DO:
-
-                     FIND bOrigRequest NO-LOCK WHERE
-                          bOrigRequest.MsRequest = MsRequest.OrigRequest
-                     NO-ERROR.
-                     IF AVAIL bOrigRequest AND
-                              bOrigRequest.ReqType = 8 AND
-                LOOKUP(STRING(bOrigRequest.ReqStatus),"3,7") > 0 THEN DO:
-                        fReqStatus(9, REPLACE(lcResponse,CHR(10),"") ).
-                        FIND Msrequest NO-LOCK WHERE
-                             Msrequest.Msrequest = bOrigRequest.MsRequest.
-                        fReqStatus(9, "SubRequest 1 failed").
-                     END.
-                     ELSE fReqStatus(3, REPLACE(lcResponse,CHR(10),"") ).
-                  END.
-                  ELSE fReqStatus(IF lcStatus = "OK" THEN 6 ELSE 3,
-                                  REPLACE(lcResponse,CHR(10),"") ).
-               END.
+               ELSE fReqStatus(IF lcStatus = "OK" THEN 6 ELSE 3,
+                               REPLACE(lcResponse,CHR(10),"") ).
             END.              
          END.        
 
