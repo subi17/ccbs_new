@@ -388,24 +388,45 @@ PROCEDURE pSolog:
       
    DO TRANSACTION:
       
-      /* Locating data */
+      /* Locating data: subscription and customer */
       FIND FIRST Mobsub WHERE 
                  Mobsub.MSSeq = MSRequest.MSSeq
                  NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE Mobsub THEN
+      IF AVAILABLE Mobsub THEN
       DO:
-         fReqError("Mobile Subscription not found for request " + 
-                    STRING(MSRequest.MSRequest)).
-         RETURN.
+         FIND Customer OF MobSub NO-LOCK NO-ERROR. 
+         IF NOT AVAILABLE Customer THEN
+         DO:
+            fReqError("Customer not found for " + mobsub.cli).
+            RETURN.
+         END.
       END.
-         
-      FIND Customer OF MobSub NO-LOCK NO-ERROR. 
-      IF NOT AVAILABLE Customer THEN
+      ELSE 
       DO:
-         fReqError("Customer not found for " + mobsub.cli).
-         RETURN.
+         /* In case when we reach this point subscription is in TermMobsub */
+         FIND FIRST TermMobsub WHERE 
+                    TermMobsub.MSSeq = MSRequest.MSSeq
+                    NO-LOCK NO-ERROR.
+         IF AVAILABLE TermMobsub THEN
+         DO:
+            FIND Customer OF TermMobSub NO-LOCK NO-ERROR. 
+            IF NOT AVAILABLE Customer THEN
+            DO:
+               fReqError("Customer not found for " + termmobsub.cli).
+               RETURN.
+            END.
+         END.
+         ELSE
+         DO:
+            fReqError("Mobile Subscription not found for request " + 
+                      STRING(MSRequest.MSRequest)).
+            RETURN.
+         END.
       END.
-      
+
+      /* Code to be removed and fixed with the real "group" */
+      DEF VAR lcdummygrp AS CHAR NO-UNDO INITIAL "dummygrp-".
+      lcdummygrp = lcdummygrp + STRING(TIME).
       
       /* SAPC-56 redirecting new SAPC customers to new logic */
       IF Customer.AccGrp = 2 AND 
@@ -414,14 +435,11 @@ PROCEDURE pSolog:
          IF MSrequest.ReqCparam1 = "CREATE" THEN /* Creating DSS group */
          DO:
             ASSIGN 
-               lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(cc,"MSISDNS="))
+               lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDNS="))
                lcmsisdns = REPLACE(lcmsisdns,"MSISDNS=","")
                lcmsisdns = REPLACE(lcmsisdns,";","|").
                        
-            /* 1st. Creating ProCommand for creating DSS group */   
-            DEF VAR lcdummygrp AS CHAR NO-UNDO INITIAL "dummygrp-".
-            lcdummygrp = lcdummygrp + STRING(TIME).
-             
+            /* 1st. Creating ProCommand for creating DSS group */       
             CREATE ProCommand.
             ASSIGN
                ProCommand.MsRequest           = MsRequest.MsRequest
@@ -429,7 +447,7 @@ PROCEDURE pSolog:
                ProCommand.ProCommandType      = "CREATE_DSS_GROUP"
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
+               ProCommand.MsSeq               = MsRequest.MsSeq   /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
                ProCommand.ProCommandtarget    = "NB_CH"
                ProCommand.ProCommandVerb      = "PUT"
@@ -474,7 +492,7 @@ PROCEDURE pSolog:
             MSrequest.ReqCparam1 = "REMOVE" THEN /* Removing msisdn from DSS */    
          DO:  
             ASSIGN 
-               lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(cc,"MSISDN="))
+               lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDN="))
                lcmsisdns = REPLACE(lcmsisdns,"MSISDN=","")
                lcmsisdns = SUBSTRING(lcmsisdns,1,INDEX(lcmsisdns,",") - 1).
                        
@@ -489,7 +507,7 @@ PROCEDURE pSolog:
                                                     "REMOVE_FROM_DSS_GROUP")
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MobSub.MsSeq  /* Mobile Subscription No. */
+               ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = 0             /* 0 - New                 */
                ProCommand.ProCommandtarget    = "NB_CH"
                ProCommand.ProCommandVerb      = "POST"
@@ -542,7 +560,7 @@ PROCEDURE pSolog:
                ProCommand.ProCommandType      = "TERMINATE_DSS_GROUP"
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MobSub.MsSeq  /* Mobile Subscription No. */
+               ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = 0             /* 0 - New                 */
                ProCommand.ProCommandtarget    = "NB_CH"
                ProCommand.ProCommandVerb      = "DELETE"
@@ -561,7 +579,7 @@ PROCEDURE pSolog:
                ProCommand.ProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MobSub.MsSeq  
+               ProCommand.MsSeq               = MsRequest.MsSeq  
                ProCommand.ProCommandstatus    = 0               /* 0 - New */
                ProCommand.ProCommandtarget    = "NB_CH"
                ProCommand.ProCommandVerb      = "POST"            
