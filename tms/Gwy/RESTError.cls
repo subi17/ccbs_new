@@ -82,9 +82,7 @@ CLASS Gwy.RESTError INHERITS AppError:
    END METHOD.
 
 
-   METHOD PUBLIC LONGCHAR mGetErrorData
-      (icMessage AS CHARACTER,
-       iiMesNum  AS INTEGER):
+   METHOD PUBLIC LONGCHAR mGetErrorData():
 
       DEFINE VARIABLE lcReturnValue AS LONGCHAR NO-UNDO.
       DEFINE VARIABLE lii           AS INTEGER  NO-UNDO.

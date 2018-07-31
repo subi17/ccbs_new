@@ -150,6 +150,10 @@ CLASS Gwy.RESTClient:
       GET.
       PRIVATE SET.
 
+   DEFINE PUBLIC PROPERTY aiResponseHTTPStatus AS INTEGER NO-UNDO
+      GET.
+      PRIVATE SET.
+
    CONSTRUCTOR PUBLIC RESTClient():
    END CONSTRUCTOR.
 
@@ -510,23 +514,24 @@ CLASS Gwy.RESTClient:
 
       DEFINE VARIABLE loResponse AS CLASS IHttpResponse NO-UNDO.
       ASSIGN
-         loResponse     = aoHTTPClient:Execute(ioRequest)
-         aoResultObject = loResponse:Entity
-         lcStatusReason = loResponse:StatusReason.
+         loResponse           = aoHTTPClient:Execute(ioRequest)
+         aoResultObject       = loResponse:Entity
+         aiResponseHTTPStatus = loResponse:StatusCode
+         lcStatusReason       = loResponse:StatusReason.
 
       IF NOT lcStatusReason > ""
-      THEN lcStatusReason = StatusCodeHelper:GetMessage(loResponse:StatusCode).
+      THEN lcStatusReason = StatusCodeHelper:GetMessage(aiResponseHTTPStatus).
 
       IF loResponse:StatusCode >= 400
-      THEN UNDO, THROW NEW RESTError(loResponse:StatusCode, lcStatusReason, aoResultObject).
+      THEN UNDO, THROW NEW RESTError(aiResponseHTTPStatus, lcStatusReason, aoResultObject).
 
       Class.Logger:writeLog(2,
                             SUBSTITUTE("&1 &2",
-                                       loResponse:StatusCode,
+                                       aiResponseHTTPStatus,
                                        lcStatusReason),
                             "INFO").
 
-      CASE loResponse:StatusCode:
+      CASE aiResponseHTTPStatus:
          WHEN INTEGER(StatusCodeEnum:OK)
          THEN.
          OTHERWISE
