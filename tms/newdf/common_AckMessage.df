@@ -1,0 +1,100 @@
+ADD TABLE "AckMessage"
+  AREA "Sta_Data_64"
+  LABEL "Ack Message"
+  DESCRIPTION "Ack messages"
+  DUMP-NAME "ackmessage"
+
+ADD FIELD "HostTable" OF "AckMessage" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Host Table"
+  MAX-WIDTH 32
+  COLUMN-LABEL "Table"
+  HELP "Host table"
+  ORDER 10
+
+ADD FIELD "KeyValue" OF "AckMessage" AS character 
+  FORMAT "X(16)"
+  INITIAL ""
+  LABEL "Key Value"
+  MAX-WIDTH 32
+  COLUMN-LABEL "Key"
+  HELP "Key value of the record"
+  ORDER 20
+
+ADD FIELD "QueueName" OF "AckMessage" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Queue"
+  MAX-WIDTH 40
+  HELP "Response queue name"
+  ORDER 30
+
+ADD FIELD "Created" OF "AckMessage" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Created"
+  MAX-WIDTH 8
+  HELP "Response created"
+  ORDER 40
+
+ADD FIELD "AckStatus" OF "AckMessage" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Status"
+  MAX-WIDTH 4
+  HELP "Response status"
+  ORDER 50
+
+ADD FIELD "AckTarget" OF "AckMessage" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Response Target"
+  MAX-WIDTH 32
+  COLUMN-LABEL "Target"
+  HELP "Response target (external request ID)"
+  ORDER 60
+
+ADD FIELD "AckResult" OF "AckMessage" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Result"
+  MAX-WIDTH 16
+  HELP "Response result"
+  ORDER 70
+
+ADD FIELD "ResultDescription" OF "AckMessage" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Result Description"
+  MAX-WIDTH 60
+  COLUMN-LABEL "Description"
+  HELP "Result description (error message)"
+  ORDER 80
+
+ADD FIELD "AddInfo" OF "AckMessage" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Additional Info"
+  MAX-WIDTH 60
+  COLUMN-LABEL "Info"
+  HELP "Additional info"
+  ORDER 90
+
+ADD INDEX "HostTable" ON "AckMessage" 
+  AREA "Sta_Index_64"
+  PRIMARY
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "Created" DESCENDING 
+
+ADD INDEX "AckStatus" ON "AckMessage" 
+  AREA "Sta_Index_64"
+  INDEX-FIELD "AckStatus" ASCENDING 
+  INDEX-FIELD "Created" ASCENDING 
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000002109
