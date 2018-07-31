@@ -27,12 +27,19 @@ DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO.
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcDSSId            AS CHARACTER NO-UNDO.
  
-/* SAPC */
-DEFINE VARIABLE lcmsisdns          AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE dDataLimit         AS DECIMAL   NO-UNDO.  
+/* SAPC 
+   Note: Deleting ProCommands in case of error. 
+         I would prefer to undo the transaction but the business logic 
+         seems to prefer logging and updating the request */
+DEFINE VARIABLE lcmsisdns          AS CHARACTER  NO-UNDO. 
+DEFINE VARIABLE lcDatalimit        AS CHARACTER  NO-UNDO. 
+DEFINE VARIABLE dDataLimit         AS DECIMAL    NO-UNDO.  
 DEFINE VARIABLE oJson_DSS          AS JsonObject NO-UNDO.
 DEFINE VARIABLE oJson_DSS_msisdn   AS JsonObject NO-UNDO.
 DEFINE VARIABLE oJson_DataLimit    AS JsonObject NO-UNDO.
+DEFINE BUFFER ProCommand  FOR ProCommand.
+DEFINE BUFFER bProCommand FOR ProCommand.
+
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 DEF BUFFER bDSSMobSub  FOR MobSub.
@@ -435,9 +442,11 @@ PROCEDURE pSolog:
          IF MSrequest.ReqCparam1 = "CREATE" THEN /* Creating DSS group */
          DO:
             ASSIGN 
-               lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDNS="))
-               lcmsisdns = REPLACE(lcmsisdns,"MSISDNS=","")
-               lcmsisdns = REPLACE(lcmsisdns,";","|").
+               lcmsisdns   = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDNS="))
+               lcmsisdns   = REPLACE(lcmsisdns,"MSISDNS=","")
+               lcmsisdns   = REPLACE(lcmsisdns,";","|")
+               lcDataLimit = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"LIMIT_UNSHAPED="))
+               lcDataLimit = REPLACE(lcDataLimit,"LIMIT_UNSHAPED=","").
                        
             /* 1st. Creating ProCommand for creating DSS group */       
             CREATE ProCommand.
@@ -480,7 +489,8 @@ PROCEDURE pSolog:
             DO:
                fReqError("Json generation failed for request " + 
                          STRING(MSRequest.MSRequest)).
-               UNDO, RETURN.
+               DELETE ProCommand.
+               RETURN.
             END.
             ELSE
                /* Successful. Saving Json message command */ 
@@ -542,13 +552,13 @@ PROCEDURE pSolog:
             DO:
                fReqError("Json generation failed for request " + 
                          STRING(MSRequest.MSRequest)).
-               UNDO, RETURN.
+               DELETE ProCommand. 
+               RETURN.
             END.
             ELSE
                /* Successful. Saving Json message command */ 
                ASSIGN
                   Procommand.CommandLine = cJsonMsg.
-            
          END.
          ELSE IF MSrequest.ReqCparam1 = "DELETE" THEN /* Delete DSS group */    
          DO:                         
@@ -572,34 +582,34 @@ PROCEDURE pSolog:
             /* 2nd. Creating ProCommand for updating Data limit for DSS group 
                     This command is needed when creating a DSS group or 
                     adding a msisdn to the DSS group */
-            CREATE ProCommand.
+            CREATE bProCommand.
             ASSIGN
-               ProCommand.MsRequest           = MsRequest.MsRequest
-               ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-               ProCommand.ProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
-               ProCommand.CreatedTS           = NOW 
-               ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MsRequest.MsSeq  
-               ProCommand.ProCommandstatus    = 0               /* 0 - New */
-               ProCommand.ProCommandtarget    = "NB_CH"
-               ProCommand.ProCommandVerb      = "POST"            
-               ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
-                                                "/set-accumulated-volume".
-     
+               bProCommand.MsRequest           = MsRequest.MsRequest
+               bProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
+               bProCommand.ProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
+               bProCommand.CreatedTS           = NOW 
+               bProCommand.Creator             = Syst.Var:katun    
+               bProCommand.MsSeq               = MsRequest.MsSeq  
+               bProCommand.ProCommandstatus    = 0               /* 0 - New */
+               bProCommand.ProCommandtarget    = "NB_CH"
+               bProCommand.ProCommandVerb      = "POST"            
+               bProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
+                                                 "/set-accumulated-volume".
             /* Json content */
+            /*
             ASSIGN dDataLimit = fGetDSSDataLimit(MsRequest.MsRequest).
             IF dDataLimit = 0 THEN
             DO:
                fReqError("Json generation (datalimit not found) failed for request " + 
                          STRING(MSRequest.MSRequest)).
                UNDO, RETURN.
-            END.
+            END.*/
             
             CREATE ttDSSDataLimit.
             ASSIGN 
                ttDSSDataLimit.offeringName      = MsRequest.ReqCParam3 /* DSS/DSS2/DSS4 */  
-               ttDSSDataLimit.roamingLikeAtHome = STRING(dDataLimit) 
-               ttDSSDataLimit.tariff            = STRING(dDataLimit).
+               ttDSSDataLimit.roamingLikeAtHome = lcDataLimit 
+               ttDSSDataLimit.tariff            = lcDataLimit.
    
             /* Getting Json string */
             oJson_DataLimit = NEW JsonObject().
@@ -621,12 +631,14 @@ PROCEDURE pSolog:
             DO:
                fReqError("Json generation (datalimit) failed for request " + 
                          STRING(MSRequest.MSRequest)).
-               UNDO, RETURN.
+               DELETE ProCommand.
+               DELETE bProCommand.
+               RETURN.
             END.
             ELSE
                /* Successful. Saving Json message command */ 
                ASSIGN
-                  Procommand.CommandLine = cJsonMsg_DataLimit.
+                  bProcommand.CommandLine = cJsonMsg_DataLimit.
          END.            
       END.  /*end of SAPC customer */
       ELSE 
