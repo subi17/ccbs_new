@@ -35,7 +35,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
       FIELD ct_line_type       AS INT 
       FIELD ct_fixed_line_type AS INT.
       
-   DEF TEMP-TABLE ttMatrix NO-UNDO SERIALIZE-NAME "related-items"
+   DEF TEMP-TABLE ttMatrix NO-UNDO SERIALIZE-NAME "related_items"
       FIELD parent_id  AS RECID 
       FIELD bundle_id  AS char
       FIELD valid_from AS DATE 
@@ -54,7 +54,6 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
                                    iSource  AS CHAR,
                                    iCorrelationID AS CHAR,
                                    iReplyTo AS CHAR):
-
       ASSIGN
          lcJson          = iJson
          lcModelid       = iModelid
@@ -113,10 +112,10 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
       loEventLogMaker:make_eventlog("create",BUFFER CLIType:HANDLE).
       
       /* copy default service packages */
-      &IF {&COPY_SERVICE_PACKAGE} > "" 
-      &THEN 
-      copy_service_package(CLIType.CLIType,TODAY).
+      &IF {&COPY_SERVICE_PACKAGE} > "" &THEN 
+          copy_service_package(CLIType.CLIType,TODAY).
       &ENDIF
+
       pMatrix(CliType.CliType,CliType.BaseBundle,"PERCONTR").
       
       lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
