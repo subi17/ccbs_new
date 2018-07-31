@@ -8,6 +8,15 @@ USING Progress.Lang.*.
 USING PROGRESS.Json.ObjectModel.*.
 USING Gwy.ParamRESTClient.
 
+&GLOBAL-DEFINE PROCOMMANDSTATUS_NEW 0
+&GLOBAL-DEFINE PROCOMMANDSTATUS_ONGOING 1
+&GLOBAL-DEFINE PROCOMMANDSTATUS_DONE 2
+&GLOBAL-DEFINE PROCOMMANDSTATUS_200_ERROR 3
+&GLOBAL-DEFINE PROCOMMANDSTATUS_400_ERROR 4
+&GLOBAL-DEFINE PROCOMMANDSTATUS_500_ERROR 5
+&GLOBAL-DEFINE PROCOMMANDSTATUS_NOT_SUPPORTED_HTTP_STATUS_ERROR 6
+&GLOBAL-DEFINE PROCOMMANDSTATUS_INTERNAL_ERROR 8
+
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.ProCommandHandler FINAL:
@@ -26,6 +35,16 @@ CLASS Gwy.ProCommandHandler FINAL:
       FIELD FailedAmt        AS INT64
       FIELD LastUpdated AS DATETIME-TZ
       INDEX ProCommandTarget IS PRIMARY UNIQUE ProCommandTarget ProCommandType.
+
+   DEFINE PRIVATE PROPERTY ValidRESTMethods AS CHARACTER NO-UNDO
+      GET:
+         RETURN "POST,GET,PATCH".
+      END GET.
+
+   DEFINE PRIVATE PROPERTY ValidTargets     AS CHARACTER NO-UNDO
+      GET:
+         RETURN "NB_AS,NB_CH,BPM".
+      END GET.
 
    DEFINE PRIVATE VARIABLE aoRESTClient        AS CLASS ParamRESTClient NO-UNDO.
 
@@ -164,12 +183,26 @@ CLASS Gwy.ProCommandHandler FINAL:
          
    END METHOD.
 
+   METHOD PRIVATE VOID mVerifyStatusOK
+      ( ioJsonObject AS JsonObject ):
 
-   METHOD PRIVATE VOID mSendProCommand
+      IF NOT ioJsonObject:Has("result")
+      THEN UNDO, THROW NEW RESTError("Response data doesn't have result information").
+
+      IF NOT ioJsonObject:GetCharacter("result") EQ "OK"
+      THEN UNDO, THROW NEW RESTError(200, "OK", ioJsonObject).
+
+   END METHOD.
+
+
+   METHOD PRIVATE VOID mSendProCommmand
       (iiProCommandId AS INT64,
        icURI AS CHARACTER):
 
-      DEFINE VARIABLE lmpJsonData AS MEMPTR NO-UNDO.
+      DEFINE VARIABLE lmpJsonData    AS MEMPTR              NO-UNDO.
+      DEFINE VARIABLE loReqJsonData  AS CLASS JsonConstruct NO-UNDO.
+      DEFINE VARIABLE lcReturnValue  AS LONGCHAR            NO-UNDO.
+      DEFINE VARIABLE lii            AS INTEGER             NO-UNDO.
 
       DEFINE BUFFER ProCommand FOR ProCommand.
 
@@ -179,41 +212,106 @@ CLASS Gwy.ProCommandHandler FINAL:
       IF NOT AVAILABLE ProCommand
       THEN RETURN.
 
-      aoRESTClient:mSetURIPath(icURI).
+      IF LOOKUP(ProCommand.ProCommandVerb,ValidRESTMethods) EQ 0
+      THEN UNDO, THROW RESTError
+            (SUBSTITUTE("Invalid rest method &1 defined to ProCommandVerb",
+                        ProCommand.ProCommandVerb)).
+
+      IF LOOKUP(ProCommand.ProCommandTarget,ValidTargets) EQ 0
+      THEN UNDO, THROW RESTError
+            (SUBSTITUTE("Invalid ProCommandTarget &1",
+                        ProCommand.ProCommandTarget)).
 
       COPY-LOB FROM OBJECT ProCommand.CommandLine TO OBJECT lmpJsonData NO-CONVERT. 
 
+      IF GET-SIZE(lmpJsonData) > 0
+      THEN loReqJsonData = aoOMParser:Parse(lmpJsonData).
+
+      aoRESTClient:mSetURIPath(icURI).
+
+      /* After this line it is sure that the ProCommand record itself is valid
+         (otherwise error would have been thrown) */
+
       ProCommand.SendTS = NOW.
 
-      aoRESTClient:mPOST(aoOMParser:Parse(lmpJsonData)).
+      CASE ProCommand.ProCommandVerb:
+         WHEN "POST"
+         THEN aoRESTClient:mPOST(loReqJsonData).  /* loReqJsonData EQ ? is supported. */
+         WHEN "PATCH"
+         THEN aoRESTClient:mPATCH(loReqJsonData). /* loReqJsonData EQ ? is supported. */
+         WHEN "GET"
+         THEN aoRESTClient:mGET().
+      END.
 
-      SET-SIZE(lmpJsonData) = 0.
+      ASSIGN
+         ProCommand.ResponseTS = NOW
+         SET-SIZE(lmpJsonData) = 0.
 
-      /* Logic to get the status from aoRESTClient:aoResultObject is needed... */
-      IF TYPE-OF(aoRESTClient:aoResultObject, Progress.Json.ObjectModel.JsonConstruct)
-      THEN CAST(aoRESTClient:aoResultObject, Progress.Json.ObjectModel.JsonConstruct):Write(lmpJsonData, YES).
+      IF VALID-OBJECT(aoRESTClient:aoResultObject) AND
+         TYPE-OF(aoRESTClient:aoResultObject, JsonObject)
+      THEN DO:
+         CAST(aoRESTClient:aoResultObject, JsonConstruct):Write(lmpJsonData, YES).
+         COPY-LOB FROM OBJECT lmpJsonData TO OBJECT ProCommand.Response NO-CONVERT.
 
-      COPY-LOB FROM OBJECT lmpJsonData TO OBJECT ProCommand.Response NO-CONVERT.
+         mVerifyStatusOK(CAST(aoRESTClient:aoResultObject, JsonObject)).
+      END.
+      ELSE UNDO, THROW NEW RESTError("Result body is empty or not Json object").
+
+      ProCommand.ActivationTS = ProCommand.ResponseTS.
 
       CASE ProCommand.ProCommandTarget:
          WHEN "BPM"
-         THEN ProCommand.ProCommandStatus = 1.
+         THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_ONGOING}.
          WHEN "NB_AO" OR WHEN "NB_CH"
-         THEN ProCommand.ProCommandStatus = 2.
-         OTHERWISE ProCommand.ProCommandStatus = 3.
+         THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_DONE}.
       END CASE.
 
-      CATCH loJsonError AS Progress.Json.JsonError:
-         ProCommand.ProCommandStatus = 3.
+      CATCH loRESTError AS RESTError:
+
+         IF loRESTError:ErrorText > ""
+         THEN COPY-LOB FROM OBJECT loRESTError:ErrorText TO OBJECT ProCommand.Response NO-CONVERT.
+         ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response NO-CONVERT.
+
+         CASE loRESTError:HTTPStatus:
+            WHEN 400 /* 400 Bad Request */
+            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_400_ERROR}.
+            WHEN 500 /* 500 Internal server error */
+            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_500_ERROR}.
+            WHEN 200 /* 200 OK */
+            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_200_ERROR}.
+            OTHERWISE DO:
+               IF loRESTError:HTTPStatus EQ 0
+               THEN DO:
+                  IF ProCommand.SendTS EQ ?
+                  THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_INTERNAL_ERROR}. /* Internal error */
+                  ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_200_ERROR}.
+               END.
+               ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_NOT_SUPPORTED_HTTP_STATUS}.
+            END.
+         END CASE.
+
       END CATCH.
 
-      /* Better error handling is needed */
-      CATCH loRESTError AS Gwy.RESTError:
-         ProCommand.ProCommandStatus = 3.
+      CATCH loError AS Error:
+
+         ProCommand.ProCommandStatus = {&INTERNAL_ERROR}. /* Internal error */
+
+         IF TYPE-OF(loError, AppError) AND
+            CAST(loError,AppError):ReturnValue > ""
+         THEN lcReturnValue = CHR(10) + CAST(loError,AppError):ReturnValue.
+
+         DO lii = 1 TO loError:NumMessages:
+            lcReturnValue = lcReturnValue + CHR(10) + loError:GetMessage(lii).
+         END.
+
+         COPY-LOB FROM OBJECT SUBSTRING(lcReturnValue,2) TO OBJECT ProCommand.Response NO-CONVERT.
+
       END CATCH.
 
       FINALLY:
          SET-SIZE(lmpJsonData) = 0.
+         IF VALID-OBJECT(loReqJsonData)
+         THEN DELETE OBJECT loReqJsonData.
       END FINALLY.
 
    END METHOD.
@@ -254,7 +352,7 @@ CLASS Gwy.ProCommandHandler FINAL:
          FOR
             EACH ProCommand NO-LOCK WHERE
                  ProCommand.ProCommandTarget = ttProcess.ProcommandTarget AND
-                 ProCommand.ProCommandStatus = 0
+                 ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_NEW}
             BY ProCommand.CreStamp:
 
             /* there is a possibility that another process has just started
@@ -271,7 +369,7 @@ CLASS Gwy.ProCommandHandler FINAL:
             mUpdateStatistic(ttProcess.ProcommandTarget,
                              ProCommand.ProCommandType,
                              INTEGER(ProCommand.ProCommandStatus > 0),
-                             INTEGER(ProCommand.ProCommandStatus EQ 3)).
+                             INTEGER(ProCommand.ProCommandStatus > 2)).
 
             liMTIME = MTIME.
 
