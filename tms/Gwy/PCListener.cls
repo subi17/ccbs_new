@@ -279,8 +279,10 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                 lcvalue = REPLACE(lcvalue,"/queue/","") .
                 lcReplyTo = lcvalue.            
             END.
-            OTHERWISE DO :
-               logMsg("Unknown attribute in header " + lcField,"WARNING").
+            OTHERWISE 
+            DO:
+               IF LOOKUP(lcField, "subscription,destination,message-id,redelivered,persistent,content-length") = 0 THEN 
+                   logMsg("Unknown attribute in header " + lcField,"WARNING").
             END.
          END CASE.
       END.
