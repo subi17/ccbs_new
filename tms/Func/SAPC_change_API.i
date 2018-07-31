@@ -109,9 +109,9 @@ FUNCTION fChange_API_NB_URL RETURNS CHARACTER
    DEF VAR lcNB_Port_URL  AS CHAR NO-UNDO. /* Northbound port   */
    
    ASSIGN 
-      lcNB_Order_URL = fCParamC("SAPC_API_INTERFACE_NB_ORDERS_URL")
-      lcNB_Host_URL  = fCParamC("SAPC_API_INTERFACE_NB_HOST")
-      lcNB_Port_URL  = fCParamC("SAPC_API_INTERFACE_NB_PORT").
+      lcNB_Order_URL = fCParam("SAPC","NB_ORDERS_URL")
+      lcNB_Host_URL  = fCParam("SAPC","Host")
+      lcNB_Port_URL  = fCParam("SAPC","Port").
 
    ASSIGN
       lcNB_Order_URL = REPLACE(lcNB_Order_URL,"~{host}",lcNB_Host_URL)
@@ -134,8 +134,8 @@ FUNCTION fDSS_NB_URL RETURNS CHARACTER
    
    ASSIGN 
       lcNB_DSS_URL  = "http://~{host}:~{port}/groups"
-      lcNB_Host_URL = fCParamC("SAPC_API_INTERFACE_NB_HOST")
-      lcNB_Port_URL = fCParamC("SAPC_API_INTERFACE_NB_PORT").
+      lcNB_Host_URL = fCParam("SAPC", "Host")
+      lcNB_Port_URL = fCParam("SAPC", "Port").
 
    ASSIGN
       lcNB_DSS_URL = REPLACE(lcNB_DSS_URL,"~{host}",lcNB_Host_URL)

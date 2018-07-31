@@ -115,7 +115,7 @@ CLASS Gwy.ProCommandDaemon INHERITS gearbox.daemons.Daemon:
       THEN DO:
          ASSIGN
             liPauseTotal = 0
-            llWait = objReqHandler:mProcess().
+            llWait = aoProCommandHandler:mProcess().
          IF NOT llWait
          THEN liWaitTime = 0.
       END.

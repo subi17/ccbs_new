@@ -7,6 +7,7 @@
 USING Progress.Lang.*.
 USING PROGRESS.Json.ObjectModel.*.
 USING Gwy.ParamRESTClient.
+USING Gwy.RESTError.
 
 &GLOBAL-DEFINE PROCOMMANDSTATUS_NEW 0
 &GLOBAL-DEFINE PROCOMMANDSTATUS_ONGOING 1
@@ -194,8 +195,7 @@ CLASS Gwy.ProCommandHandler FINAL:
 
    END METHOD.
 
-
-   METHOD PRIVATE VOID mSendProCommmand
+   METHOD PRIVATE VOID mSendProCommand
       (iiProCommandId AS INT64,
        icURI AS CHARACTER):
 
@@ -203,6 +203,9 @@ CLASS Gwy.ProCommandHandler FINAL:
       DEFINE VARIABLE loReqJsonData  AS CLASS JsonConstruct NO-UNDO.
       DEFINE VARIABLE lcReturnValue  AS LONGCHAR            NO-UNDO.
       DEFINE VARIABLE lii            AS INTEGER             NO-UNDO.
+      DEFINE VARIABLE ldtSendTS      AS DATETIME-TZ         NO-UNDO.
+      DEFINE VARIABLE ldtResponseTS  AS DATETIME-TZ         NO-UNDO.
+      DEFINE VARIABLE lcTemp         AS LONGCHAR            NO-UNDO.
 
       DEFINE BUFFER ProCommand FOR ProCommand.
 
@@ -212,101 +215,119 @@ CLASS Gwy.ProCommandHandler FINAL:
       IF NOT AVAILABLE ProCommand
       THEN RETURN.
 
-      IF LOOKUP(ProCommand.ProCommandVerb,ValidRESTMethods) EQ 0
-      THEN UNDO, THROW RESTError
-            (SUBSTITUTE("Invalid rest method &1 defined to ProCommandVerb",
-                        ProCommand.ProCommandVerb)).
+      DO ON ERROR UNDO, THROW:
 
-      IF LOOKUP(ProCommand.ProCommandTarget,ValidTargets) EQ 0
-      THEN UNDO, THROW RESTError
-            (SUBSTITUTE("Invalid ProCommandTarget &1",
-                        ProCommand.ProCommandTarget)).
+         IF LOOKUP(ProCommand.ProCommandVerb,ValidRESTMethods) EQ 0
+         THEN UNDO, THROW NEW RESTError
+               (SUBSTITUTE("Invalid rest method &1 defined to ProCommandVerb",
+                           ProCommand.ProCommandVerb)).
 
-      COPY-LOB FROM OBJECT ProCommand.CommandLine TO OBJECT lmpJsonData NO-CONVERT. 
+         IF LOOKUP(ProCommand.ProCommandTarget,ValidTargets) EQ 0
+         THEN UNDO, THROW NEW RESTError
+               (SUBSTITUTE("Invalid ProCommandTarget &1",
+                           ProCommand.ProCommandTarget)).
 
-      IF GET-SIZE(lmpJsonData) > 0
-      THEN loReqJsonData = aoOMParser:Parse(lmpJsonData).
+         COPY-LOB FROM OBJECT ProCommand.CommandLine TO OBJECT lmpJsonData NO-CONVERT.
 
-      aoRESTClient:mSetURIPath(icURI).
+         IF GET-SIZE(lmpJsonData) > 0
+         THEN loReqJsonData = aoOMParser:Parse(lmpJsonData).
 
-      /* After this line it is sure that the ProCommand record itself is valid
-         (otherwise error would have been thrown) */
+         aoRESTClient:mSetURIPath(icURI).
 
-      ProCommand.SendTS = NOW.
+         /* After this line it is sure that the ProCommand record itself is valid
+            (otherwise error would have been thrown) */
 
-      CASE ProCommand.ProCommandVerb:
-         WHEN "POST"
-         THEN aoRESTClient:mPOST(loReqJsonData).  /* loReqJsonData EQ ? is supported. */
-         WHEN "PATCH"
-         THEN aoRESTClient:mPATCH(loReqJsonData). /* loReqJsonData EQ ? is supported. */
-         WHEN "GET"
-         THEN aoRESTClient:mGET().
-      END.
+         ldtSendTS = NOW.
 
-      ASSIGN
-         ProCommand.ResponseTS = NOW
-         SET-SIZE(lmpJsonData) = 0.
-
-      IF VALID-OBJECT(aoRESTClient:aoResultObject) AND
-         TYPE-OF(aoRESTClient:aoResultObject, JsonObject)
-      THEN DO:
-         CAST(aoRESTClient:aoResultObject, JsonConstruct):Write(lmpJsonData, YES).
-         COPY-LOB FROM OBJECT lmpJsonData TO OBJECT ProCommand.Response NO-CONVERT.
-
-         mVerifyStatusOK(CAST(aoRESTClient:aoResultObject, JsonObject)).
-      END.
-      ELSE UNDO, THROW NEW RESTError("Result body is empty or not Json object").
-
-      ProCommand.ActivationTS = ProCommand.ResponseTS.
-
-      CASE ProCommand.ProCommandTarget:
-         WHEN "BPM"
-         THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_ONGOING}.
-         WHEN "NB_AO" OR WHEN "NB_CH"
-         THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_DONE}.
-      END CASE.
-
-      CATCH loRESTError AS RESTError:
-
-         IF loRESTError:ErrorText > ""
-         THEN COPY-LOB FROM OBJECT loRESTError:ErrorText TO OBJECT ProCommand.Response NO-CONVERT.
-         ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response NO-CONVERT.
-
-         CASE loRESTError:HTTPStatus:
-            WHEN 400 /* 400 Bad Request */
-            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_400_ERROR}.
-            WHEN 500 /* 500 Internal server error */
-            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_500_ERROR}.
-            WHEN 200 /* 200 OK */
-            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_200_ERROR}.
-            OTHERWISE DO:
-               IF loRESTError:HTTPStatus EQ 0
-               THEN DO:
-                  IF ProCommand.SendTS EQ ?
-                  THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_INTERNAL_ERROR}. /* Internal error */
-                  ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_200_ERROR}.
-               END.
-               ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_NOT_SUPPORTED_HTTP_STATUS}.
-            END.
-         END CASE.
-
-      END CATCH.
-
-      CATCH loError AS Error:
-
-         ProCommand.ProCommandStatus = {&INTERNAL_ERROR}. /* Internal error */
-
-         IF TYPE-OF(loError, AppError) AND
-            CAST(loError,AppError):ReturnValue > ""
-         THEN lcReturnValue = CHR(10) + CAST(loError,AppError):ReturnValue.
-
-         DO lii = 1 TO loError:NumMessages:
-            lcReturnValue = lcReturnValue + CHR(10) + loError:GetMessage(lii).
+         CASE ProCommand.ProCommandVerb:
+            WHEN "POST"
+            THEN aoRESTClient:mPOST(loReqJsonData).  /* loReqJsonData EQ ? is supported. */
+            WHEN "PATCH"
+            THEN aoRESTClient:mPATCH(loReqJsonData). /* loReqJsonData EQ ? is supported. */
+            WHEN "GET"
+            THEN aoRESTClient:mGET().
          END.
 
-         COPY-LOB FROM OBJECT SUBSTRING(lcReturnValue,2) TO OBJECT ProCommand.Response NO-CONVERT.
+         ASSIGN
+            ldtResponseTS         = NOW
+            SET-SIZE(lmpJsonData) = 0.
 
-      END CATCH.
+         IF NOT VALID-OBJECT(aoRESTClient:aoResultObject) OR
+            NOT TYPE-OF(aoRESTClient:aoResultObject, JsonObject)
+         THEN UNDO, THROW NEW RESTError("Result body is empty or not Json object").
+
+         DO ON ERROR UNDO, THROW:
+            CAST(aoRESTClient:aoResultObject, JsonConstruct):Write(lmpJsonData, YES).
+            COPY-LOB FROM OBJECT lmpJsonData TO OBJECT ProCommand.Response NO-CONVERT.
+            CATCH loWriteError AS Progress.Lang.Error:
+               UNDO, THROW NEW RESTError("Cannot store json response to database clob field").
+            END CATCH.
+         END.
+
+         mVerifyStatusOK(CAST(aoRESTClient:aoResultObject, JsonObject)).
+
+         /* After this line it is sure that no errors occurred
+            (note SendTS and ResponseTS will be set in finally block) */
+
+         ProCommand.ActivationTS = ldtResponseTS.
+
+         CASE ProCommand.ProCommandTarget:
+            WHEN "BPM"
+            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_ONGOING}.
+            WHEN "NB_AO" OR WHEN "NB_CH"
+            THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_DONE}.
+         END CASE.
+
+         CATCH loRESTError AS RESTError:
+
+            IF loRESTError:ErrorMessage > ""
+            THEN COPY-LOB FROM OBJECT loRESTError:ErrorMessage TO OBJECT ProCommand.Response NO-CONVERT.
+            ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response NO-CONVERT.
+
+            CASE loRESTError:HTTPStatus:
+               WHEN 400 /* 400 Bad Request */
+               THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_400_ERROR}.
+               WHEN 500 /* 500 Internal server error */
+               THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_500_ERROR}.
+               WHEN 200 /* 200 OK */
+               THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_200_ERROR}.
+               OTHERWISE DO:
+                  IF loRESTError:HTTPStatus EQ 0
+                  THEN DO:
+                     IF ProCommand.SendTS EQ ?
+                     THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_INTERNAL_ERROR}. /* Internal error */
+                     ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_200_ERROR}.
+                  END.
+                  ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_NOT_SUPPORTED_HTTP_STATUS_ERROR}.
+               END.
+            END CASE.
+
+         END CATCH.
+
+         CATCH loError AS Error:
+
+            ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_INTERNAL_ERROR}. /* Internal error */
+
+            IF TYPE-OF(loError, AppError) AND
+               CAST(loError,AppError):ReturnValue > ""
+            THEN lcTemp = CHR(10) + CAST(loError,AppError):ReturnValue.
+
+            DO lii = 1 TO loError:NumMessages:
+               lcTemp = lcTemp + CHR(10) + loError:GetMessage(lii).
+            END.
+
+            lcTemp = SUBSTRING(lcTemp,2).
+
+            COPY-LOB FROM OBJECT lcTemp TO OBJECT ProCommand.Response NO-CONVERT.
+
+         END CATCH.
+
+         FINALLY:
+            ASSIGN
+               ProCommand.SendTS     = ldtSendTS
+               ProCommand.ResponseTS = ldtResponseTS.
+         END FINALLY.
+      END.
 
       FINALLY:
          SET-SIZE(lmpJsonData) = 0.
@@ -353,7 +374,7 @@ CLASS Gwy.ProCommandHandler FINAL:
             EACH ProCommand NO-LOCK WHERE
                  ProCommand.ProCommandTarget = ttProcess.ProcommandTarget AND
                  ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_NEW}
-            BY ProCommand.CreStamp:
+            BY ProCommand.CreatedTS:
 
             /* there is a possibility that another process has just started
                handling this same request */
@@ -361,7 +382,7 @@ CLASS Gwy.ProCommandHandler FINAL:
             
             DO TRANSACTION:
                mSendProCommand(ProCommand.ProCommandId,
-                               SUBSTITUTE(&1&2,
+                               SUBSTITUTE("&1&2",
                                           ttProcess.ProCommandURIPrefix,
                                           ProCommand.ProCommandTargetURL)).
             END.
