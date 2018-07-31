@@ -4,6 +4,8 @@
 /* address.i    12.04.18/ker 
 */
 
+{Syst/tmsconst.i}
+
 FUNCTION fUpdateAddress RETURNS LOGICAL
    (INPUT iiCustNum AS INT,
     INPUT icAddress AS CHAR,
