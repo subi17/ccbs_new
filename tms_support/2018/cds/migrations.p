@@ -16,7 +16,7 @@ PROCEDURE pMigrateBillingAddressToAddress:
          Address.AddressID = liaddrID
          Address.HostTable = "Customer"
          Address.KeyValue = STRING(bCustomer.CustNum)
-         Address.AddressType = "Billing"
+         Address.AddressType = {&BILLING_ADDRESS}
          Address.Address = bCustomer.Address
          Address.City = bCustomer.PostOffice
          Address.ZipCode = bCustomer.ZipCode
