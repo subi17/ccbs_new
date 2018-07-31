@@ -89,15 +89,11 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY isACCOrder AS LOGICAL NO-UNDO
       GET.
       SET.
-<<<<<<< HEAD
-
-=======
       
    DEFINE PUBLIC PROPERTY liCustNum AS INTEGER NO-UNDO
       GET.
       SET.
       
->>>>>>> origin/pc-order-management
    DEFINE PUBLIC PROPERTY lcCLI AS CHARACTER NO-UNDO
       GET.
       SET(icCLI AS CHARACTER):
@@ -203,10 +199,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-	CONSTRUCTOR PUBLIC Order():
-	END CONSTRUCTOR.
+    CONSTRUCTOR PUBLIC Order(): 
+    END CONSTRUCTOR.
 
-	DESTRUCTOR PUBLIC Order():
+    DESTRUCTOR PUBLIC Order():
 
       IF VALID-OBJECT(aoCustomer)
       THEN DELETE OBJECT aoCustomer.
@@ -223,9 +219,9 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             aoOrderAddress      = ?
             .
 
-	END DESTRUCTOR.
+    END DESTRUCTOR.
 
-	METHOD PUBLIC VOID mCreateData
+    METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
         DEFINE VARIABLE loAgrCust       AS CLASS     JsonObject           NO-UNDO.
@@ -285,10 +281,6 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
          aoOrderProductFactory = NEW pm.OrderProductFactory().
          aoOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
       END.
-<<<<<<< HEAD
-      ELSE UNDO, THROW NEW ParamError("order-items-are-mandatory").
-
-=======
       ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
       
       RUN Mc/ordervalidations.p PERSISTENT SET lhOrderValidations.  /* This is for the complicated business logic */
@@ -314,8 +306,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
           aoOrderPayment:mCreateData(OrderPaymentData).
       END.      
     
->>>>>>> origin/pc-order-management
-	END METHOD.
+    END METHOD.
 
     METHOD PUBLIC VOID mStoreData():
         
