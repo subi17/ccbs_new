@@ -229,8 +229,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       DEF VAR lcInternalId      AS CHAR NO-UNDO. 
 
       DEF VAR liReplacePosition AS INT        NO-UNDO.
-      DEF VAR lobjBodyJson      AS JsonObject NO-UNDO.
-      DEF VAR lc
+      
       ASSIGN
          lcAction  = ""
          lcModel   = ""
