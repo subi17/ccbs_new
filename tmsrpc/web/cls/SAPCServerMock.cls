@@ -28,10 +28,25 @@ CLASS web.cls.SAPCServerMock INHERITS profcgi.REST.DefaultWebHandler:
       ( Req  AS CLASS Request,
         Resp AS CLASS Response ):
 
+      DEFINE VARIABLE llMockKO AS LOGICAL NO-UNDO.
+
+      DO ON ERROR UNDO, THROW:
+         llMockKO = Syst.Parameters:geti("MockNOK", "SAPC") NE 0.
+         CATCH loError AS Progress.Lang.Error:
+            llMockKO = FALSE.
+         END CATCH.
+      END.
+
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
-      loJsonObject:Add("result", "OK").
+      loJsonObject:Add("result", IF llMockKO THEN "KO" ELSE "OK").
+
+      IF llMockKO
+      THEN DO:
+         loJsonObject:Add("errorCode", "99999").
+         loJsonObject:Add("errorDescription", "Mock error").
+      END.
 
       /* Note! Resp will delete the object stored to the Entity eventually
                AND the object is needed after this method has finished.
