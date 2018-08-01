@@ -76,5 +76,12 @@
                     "11": { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
                             "-logginglevel": "4" }
                 }
+        },
+    "Gwy.ProCommandDaemon":
+        {
+            "pcommand":
+                {
+                    "All": { "-logginglevel": "4" }
+                }
         }
 }

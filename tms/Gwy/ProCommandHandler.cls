@@ -43,7 +43,8 @@ CLASS Gwy.ProCommandHandler FINAL:
 
    DEFINE PRIVATE VARIABLE aoRESTClient        AS CLASS ParamRESTClient NO-UNDO.
 
-   DEFINE PRIVATE VARIABLE aiMaxTime       AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiRoundTime     AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acURIPrefix     AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE acTenants       AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE acCurrentTenant AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE ahQuery         AS HANDLE    NO-UNDO.
@@ -54,19 +55,31 @@ CLASS Gwy.ProCommandHandler FINAL:
    CONSTRUCTOR PUBLIC ProCommandHandler
       (icProcommandTargets AS CHARACTER):
 
-      mInitProcess(icProcommandTargets).
-
       DO ON ERROR UNDO, THROW:
 
-         aiMaxTime = Syst.Parameters:geti("ReqHandler.MaxTime", "ReqHandler").
+         aiRoundTime = Syst.Parameters:geti("RoundTime", "SAPC").
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
-            /* If no parameter set then assume max time is 5000 (milliseconds) */
-            aiMaxTime = 5000.
+            /* If no parameter set then assume round time is 5000 (milliseconds) */
+            aiRoundTime = 5000.
          END CATCH.
 
       END.
+
+      DO ON ERROR UNDO, THROW:
+
+         acURIPrefix = Syst.Parameters:getc("URIPrefix", "SAPC").
+
+         /* Handler code for any error condition. */
+         CATCH anyErrorObject AS Progress.Lang.Error:
+            /* If no parameter set then there is no URIPrefix */
+            acURIPrefix = "".
+         END CATCH.
+
+      END.
+
+      mInitProcess(icProcommandTargets).
 
       aoRESTClient = NEW ParamRESTClient("SAPC").
 
@@ -140,11 +153,14 @@ CLASS Gwy.ProCommandHandler FINAL:
 
             CASE ttProcess.ProCommandTarget:
                WHEN "NB_AS"
-               THEN ttProcess.ProCommandURIPrefix = "/northbound-common/post-sales/ema". 
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/northbound-common/post-sales/ema",
+                                                               acURIPrefix).
                WHEN "NB_CH"
-               THEN ttProcess.ProCommandURIPrefix = "/northbound-tms/sync/orders".
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/northbound-tms/sync/orders",
+                                                               acURIPrefix).
                WHEN "BPM"
-               THEN ttProcess.ProCommandURIPrefix = "/crm-integration-tms/Order".
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/crm-integration-tms/Order",
+                                                               acURIPrefix).
             END CASE. 
          END.
       END.
@@ -193,7 +209,11 @@ CLASS Gwy.ProCommandHandler FINAL:
 
    END METHOD.
 
-   METHOD PRIVATE VOID mSendProCommand
+   /* Return value:
+         TRUE  => No connection to the server, please wait.
+         FALSE => no need to wait
+   */
+   METHOD PRIVATE LOGICAL mSendProCommand
       (iiProCommandId AS INT64,
        icURI AS CHARACTER):
 
@@ -213,7 +233,7 @@ CLASS Gwy.ProCommandHandler FINAL:
            ProCommand.ProCommandId = iiProCommandId NO-ERROR NO-WAIT.
 
       IF NOT AVAILABLE ProCommand
-      THEN RETURN.
+      THEN RETURN FALSE.
 
       IF ProCommand.MsRequest > 0
       THEN DO:
@@ -223,7 +243,7 @@ CLASS Gwy.ProCommandHandler FINAL:
          IF NOT AVAILABLE MsRequest
          THEN DO:
             IF LOCKED MsRequest
-            THEN RETURN.
+            THEN RETURN FALSE.
             ELSE llRequestNotAvailable = TRUE.
          END.
       END.
@@ -271,8 +291,8 @@ CLASS Gwy.ProCommandHandler FINAL:
             ldtResponseTS         = NOW
             SET-SIZE(lmpJsonData) = 0.
 
-         IF NOT VALID-OBJECT(aoRESTClient:aoResultObject) OR
-            NOT TYPE-OF(aoRESTClient:aoResultObject, JsonObject)
+         IF (NOT VALID-OBJECT(aoRESTClient:aoResultObject)) OR
+            (NOT TYPE-OF(aoRESTClient:aoResultObject, JsonObject))
          THEN UNDO, THROW NEW RESTError("Result body is empty or not Json object").
 
          DO ON ERROR UNDO, THROW:
@@ -299,9 +319,13 @@ CLASS Gwy.ProCommandHandler FINAL:
 
          CATCH loRESTError AS RESTError:
 
+            /* Connection failure for host <host_name> port <port> transport <transport_name>. (9407) */
+            IF loRESTError:GetMessageNum(1) EQ 9407
+            THEN RETURN TRUE.
+
             IF loRESTError:ErrorMessage > ""
-            THEN COPY-LOB FROM OBJECT loRESTError:ErrorMessage TO OBJECT ProCommand.Response NO-CONVERT.
-            ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response NO-CONVERT.
+            THEN COPY-LOB FROM OBJECT loRESTError:ErrorMessage TO OBJECT ProCommand.Response.
+            ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response.
 
             CASE loRESTError:HTTPStatus:
                WHEN 400 /* 400 Bad Request */
@@ -337,7 +361,7 @@ CLASS Gwy.ProCommandHandler FINAL:
 
             lcTemp = SUBSTRING(lcTemp,2).
 
-            COPY-LOB FROM OBJECT lcTemp TO OBJECT ProCommand.Response NO-CONVERT.
+            COPY-LOB FROM OBJECT lcTemp TO OBJECT ProCommand.Response.
 
          END CATCH.
 
@@ -357,6 +381,8 @@ CLASS Gwy.ProCommandHandler FINAL:
 
          END FINALLY.
       END.
+
+      RETURN FALSE.
 
       FINALLY:
          SET-SIZE(lmpJsonData) = 0.
@@ -410,10 +436,14 @@ CLASS Gwy.ProCommandHandler FINAL:
             IF ProCommand.ProCommandStatus NE 0 THEN NEXT.
             
             DO TRANSACTION:
-               mSendProCommand(ProCommand.ProCommandId,
-                               SUBSTITUTE("&1&2",
+               IF mSendProCommand(ProCommand.ProCommandId,
+                                  SUBSTITUTE("&1&2",
                                           ttProcess.ProCommandURIPrefix,
-                                          ProCommand.ProCommandTargetURL)).
+                                          ProCommand.ProCommandTargetURL))
+               THEN DO:
+                  LOG-MANAGER:WRITE-MESSAGE("Cannot connect to the host. Waiting...", "ERROR").
+                  RETURN TRUE.
+               END.
             END.
 
             mUpdateStatistic(ttProcess.ProcommandTarget,
@@ -423,15 +453,15 @@ CLASS Gwy.ProCommandHandler FINAL:
 
             liMTIME = MTIME.
 
-            /* Maximum processing time per one round is aiMaxTime.
+            /* Maximum processing time per one round is aiRoundTime.
                No separate wait in the calling side is needed when
                the maximum time is reached.
                In order to handle situation when day is changed
                two possible scenarios must be handled */
             IF ( liStartTime > liMTIME AND
-                 liStartTime < 86400000 + liMTIME - aiMaxTime ) OR
+                 liStartTime < 86400000 + liMTIME - aiRoundTime ) OR
                ( liStartTime <= liMTIME AND
-                 liStartTime < liMTIME - aiMaxTime )
+                 liStartTime < liMTIME - aiRoundTime )
             THEN RETURN FALSE.
          END.
       END.

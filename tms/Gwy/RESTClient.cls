@@ -538,7 +538,7 @@ CLASS Gwy.RESTClient:
             Class.Logger:writeLog(1,
                                   SUBSTITUTE("There is no special logic for " +
                                              "the HTTP status code &1",
-                                             loResponse:StatusCode),
+                                             aiResponseHTTPStatus),
                                   "WARNING").
       END.
 
