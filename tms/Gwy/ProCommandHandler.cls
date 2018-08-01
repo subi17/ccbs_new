@@ -43,7 +43,8 @@ CLASS Gwy.ProCommandHandler FINAL:
 
    DEFINE PRIVATE VARIABLE aoRESTClient        AS CLASS ParamRESTClient NO-UNDO.
 
-   DEFINE PRIVATE VARIABLE aiMaxTime       AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiRoundTime     AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acURIPrefix     AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE acTenants       AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE acCurrentTenant AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE ahQuery         AS HANDLE    NO-UNDO.
@@ -54,19 +55,31 @@ CLASS Gwy.ProCommandHandler FINAL:
    CONSTRUCTOR PUBLIC ProCommandHandler
       (icProcommandTargets AS CHARACTER):
 
-      mInitProcess(icProcommandTargets).
-
       DO ON ERROR UNDO, THROW:
 
-         aiMaxTime = Syst.Parameters:geti("ReqHandler.MaxTime", "ReqHandler").
+         aiRoundTime = Syst.Parameters:geti("RoundTime", "SAPC").
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
-            /* If no parameter set then assume max time is 5000 (milliseconds) */
-            aiMaxTime = 5000.
+            /* If no parameter set then assume round time is 5000 (milliseconds) */
+            aiRoundTime = 5000.
          END CATCH.
 
       END.
+
+      DO ON ERROR UNDO, THROW:
+
+         acURIPrefix = Syst.Parameters:getc("URIPrefix", "SAPC").
+
+         /* Handler code for any error condition. */
+         CATCH anyErrorObject AS Progress.Lang.Error:
+            /* If no parameter set then there is no URIPrefix */
+            acURIPrefix = "".
+         END CATCH.
+
+      END.
+
+      mInitProcess(icProcommandTargets).
 
       aoRESTClient = NEW ParamRESTClient("SAPC").
 
@@ -140,11 +153,14 @@ CLASS Gwy.ProCommandHandler FINAL:
 
             CASE ttProcess.ProCommandTarget:
                WHEN "NB_AS"
-               THEN ttProcess.ProCommandURIPrefix = "/northbound-common/post-sales/ema". 
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/northbound-common/post-sales/ema",
+                                                               acURIPrefix).
                WHEN "NB_CH"
-               THEN ttProcess.ProCommandURIPrefix = "/northbound-tms/sync/orders".
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/northbound-tms/sync/orders",
+                                                               acURIPrefix).
                WHEN "BPM"
-               THEN ttProcess.ProCommandURIPrefix = "/crm-integration-tms/Order".
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/crm-integration-tms/Order",
+                                                               acURIPrefix).
             END CASE. 
          END.
       END.
@@ -275,8 +291,8 @@ CLASS Gwy.ProCommandHandler FINAL:
             ldtResponseTS         = NOW
             SET-SIZE(lmpJsonData) = 0.
 
-         IF NOT VALID-OBJECT(aoRESTClient:aoResultObject) OR
-            NOT TYPE-OF(aoRESTClient:aoResultObject, JsonObject)
+         IF (NOT VALID-OBJECT(aoRESTClient:aoResultObject)) OR
+            (NOT TYPE-OF(aoRESTClient:aoResultObject, JsonObject))
          THEN UNDO, THROW NEW RESTError("Result body is empty or not Json object").
 
          DO ON ERROR UNDO, THROW:
@@ -437,15 +453,15 @@ CLASS Gwy.ProCommandHandler FINAL:
 
             liMTIME = MTIME.
 
-            /* Maximum processing time per one round is aiMaxTime.
+            /* Maximum processing time per one round is aiRoundTime.
                No separate wait in the calling side is needed when
                the maximum time is reached.
                In order to handle situation when day is changed
                two possible scenarios must be handled */
             IF ( liStartTime > liMTIME AND
-                 liStartTime < 86400000 + liMTIME - aiMaxTime ) OR
+                 liStartTime < 86400000 + liMTIME - aiRoundTime ) OR
                ( liStartTime <= liMTIME AND
-                 liStartTime < liMTIME - aiMaxTime )
+                 liStartTime < liMTIME - aiRoundTime )
             THEN RETURN FALSE.
          END.
       END.
