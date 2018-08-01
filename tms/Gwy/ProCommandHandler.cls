@@ -245,10 +245,11 @@ CLASS Gwy.ProCommandHandler FINAL:
                (SUBSTITUTE("Invalid ProCommandTarget &1",
                            ProCommand.ProCommandTarget)).
 
-         COPY-LOB FROM OBJECT ProCommand.CommandLine TO OBJECT lmpJsonData NO-CONVERT.
-
-         IF GET-SIZE(lmpJsonData) > 0
-         THEN loReqJsonData = aoOMParser:Parse(lmpJsonData).
+         IF ProCommand.CommandLine NE ?
+         THEN DO:
+            COPY-LOB FROM OBJECT ProCommand.CommandLine TO OBJECT lmpJsonData NO-CONVERT.
+            loReqJsonData = aoOMParser:Parse(lmpJsonData).
+         END.
 
          aoRESTClient:mSetURIPath(icURI).
 
