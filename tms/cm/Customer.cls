@@ -252,7 +252,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        DEFINE VARIABLE lcSupportedTitles AS CHARACTER INITIAL
            "Sr.,Mr.,Sr,Mr,Mrs.,Sra.,Mrs,Sra" NO-UNDO.
            
-       DEFINE VARIABLE MarketingData AS CLASS JsonObject NO-UNDO .
+       DEFINE VARIABLE ioMarketingObj AS CLASS JsonObject NO-UNDO .
        DEFINE VARIABLE ioCustIDObject AS CLASS JsonObject NO-UNDO.
        
        IF ioJsonObject:Has("title")
@@ -311,9 +311,10 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        
        IF ioJsonObject:Has("marketing")
        THEN DO:
-           ASSIGN MarketingData                  = ioJsonObject:GetJsonObject("marketing")
-                  THIS-OBJECT:gdpr_consent       = ioJsonObject:GetLogical("gdpr_consent")
-                  .
+           ASSIGN 
+               ioMarketingObj                 = ioJsonObject:GetJsonObject("marketing")
+               THIS-OBJECT:gdpr_consent       = ioMarketingObj:GetLogical("gdpr_consent")
+               .
        END.
        ELSE UNDO, THROW NEW ParamError ("Marketing data does not exist.").
        
