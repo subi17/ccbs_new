@@ -300,8 +300,8 @@ CLASS Gwy.ProCommandHandler FINAL:
          CATCH loRESTError AS RESTError:
 
             IF loRESTError:ErrorMessage > ""
-            THEN COPY-LOB FROM OBJECT loRESTError:ErrorMessage TO OBJECT ProCommand.Response NO-CONVERT.
-            ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response NO-CONVERT.
+            THEN COPY-LOB FROM OBJECT loRESTError:ErrorMessage TO OBJECT ProCommand.Response.
+            ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response.
 
             CASE loRESTError:HTTPStatus:
                WHEN 400 /* 400 Bad Request */
@@ -337,7 +337,7 @@ CLASS Gwy.ProCommandHandler FINAL:
 
             lcTemp = SUBSTRING(lcTemp,2).
 
-            COPY-LOB FROM OBJECT lcTemp TO OBJECT ProCommand.Response NO-CONVERT.
+            COPY-LOB FROM OBJECT lcTemp TO OBJECT ProCommand.Response.
 
          END CATCH.
 
