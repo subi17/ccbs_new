@@ -193,7 +193,11 @@ CLASS Gwy.ProCommandHandler FINAL:
 
    END METHOD.
 
-   METHOD PRIVATE VOID mSendProCommand
+   /* Return value:
+         TRUE  => No connection to the server, please wait.
+         FALSE => no need to wait
+   */
+   METHOD PRIVATE LOGICAL mSendProCommand
       (iiProCommandId AS INT64,
        icURI AS CHARACTER):
 
@@ -213,7 +217,7 @@ CLASS Gwy.ProCommandHandler FINAL:
            ProCommand.ProCommandId = iiProCommandId NO-ERROR NO-WAIT.
 
       IF NOT AVAILABLE ProCommand
-      THEN RETURN.
+      THEN RETURN FALSE.
 
       IF ProCommand.MsRequest > 0
       THEN DO:
@@ -223,7 +227,7 @@ CLASS Gwy.ProCommandHandler FINAL:
          IF NOT AVAILABLE MsRequest
          THEN DO:
             IF LOCKED MsRequest
-            THEN RETURN.
+            THEN RETURN FALSE.
             ELSE llRequestNotAvailable = TRUE.
          END.
       END.
@@ -299,6 +303,10 @@ CLASS Gwy.ProCommandHandler FINAL:
 
          CATCH loRESTError AS RESTError:
 
+            /* Connection failure for host <host_name> port <port> transport <transport_name>. (9407) */
+            IF loRESTError:GetMessageNum(1) EQ 9407
+            THEN RETURN TRUE.
+
             IF loRESTError:ErrorMessage > ""
             THEN COPY-LOB FROM OBJECT loRESTError:ErrorMessage TO OBJECT ProCommand.Response.
             ELSE COPY-LOB FROM OBJECT loRESTError:mGetErrorData() TO OBJECT ProCommand.Response.
@@ -358,6 +366,8 @@ CLASS Gwy.ProCommandHandler FINAL:
          END FINALLY.
       END.
 
+      RETURN FALSE.
+
       FINALLY:
          SET-SIZE(lmpJsonData) = 0.
          IF VALID-OBJECT(loReqJsonData)
@@ -410,10 +420,14 @@ CLASS Gwy.ProCommandHandler FINAL:
             IF ProCommand.ProCommandStatus NE 0 THEN NEXT.
             
             DO TRANSACTION:
-               mSendProCommand(ProCommand.ProCommandId,
-                               SUBSTITUTE("&1&2",
+               IF mSendProCommand(ProCommand.ProCommandId,
+                                  SUBSTITUTE("&1&2",
                                           ttProcess.ProCommandURIPrefix,
-                                          ProCommand.ProCommandTargetURL)).
+                                          ProCommand.ProCommandTargetURL))
+               THEN DO:
+                  LOG-MANAGER:WRITE-MESSAGE("Cannot connect to the host. Waiting...", "ERROR").
+                  RETURN TRUE.
+               END.
             END.
 
             mUpdateStatistic(ttProcess.ProcommandTarget,
