@@ -1127,8 +1127,10 @@ PROCEDURE pFinalize:
                  OUTPUT lcCharValue).
 
    /* default counter limits */
-   IF MobSub.PayType = FALSE THEN 
+   IF MobSub.PayType = FALSE THEN DO:
       fTMRLimit2Subscription(MobSub.MsSeq).
+      fSetSpecialTTFLimit(MobSub.Custnum).
+   END.
 
    /* commission termination */
    IF llOldPayType NE MobSub.PayType THEN 

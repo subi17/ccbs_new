@@ -603,6 +603,8 @@ IF NOT AVAIL mobsub THEN DO:
                           MobSub.CustNum,
                           "Invoice target creation failed",
                           lcError).
+
+      fSetSpecialTTFLimit(MobSub.Custnum).
    END.
 
    IF MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} THEN
