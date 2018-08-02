@@ -119,8 +119,13 @@ FUNCTION fCreateUpsell RETURNS INT
     INPUT ideActStamp AS DEC,
     OUTPUT ocError AS CHAR):
 
-   DEF VAR liRequest AS INTEGER NO-UNDO.
+   DEF VAR liRequest       AS INTEGER NO-UNDO.
+   DEF VAR liDiscCreDelay  AS INTEGER NO-UNDO.
    
+   liDiscCreDelay = Syst.Parameters:geti("DiscCreDelay", "Discount").
+   /* def = 0 current functinality without delay. For YCO-757 def value is 432000 */
+   ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).  
+
    liRequest = fPCActionRequest(iiMsSeq,
                                 icDCEvent,
                                 "act",
