@@ -169,9 +169,9 @@ ADD INDEX "Ix_OrderId" ON "ProCommand"
   INDEX-FIELD "OrderId" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
-ADD INDEX "Ix_MsRequestId" ON "ProCommand" 
+ADD INDEX "Ix_MsRequest" ON "ProCommand" 
   AREA "Sta_Index_2"
-  INDEX-FIELD "MsRequestId" ASCENDING 
+  INDEX-FIELD "MsRequest" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "Ix_Target" ON "ProCommand"
