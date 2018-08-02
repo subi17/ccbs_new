@@ -24,7 +24,7 @@ class AddTableProCommand(Migration):
         t.index('Ix_ProCommandId', [['ProCommandId']], area="Sta_Index_2", primary=True, unique=True)
         t.index('Ix_MsSeq', [['MsSeq'], ['CreatedTS', 'DESC']], area="Sta_Index_2")
         t.index('Ix_OrderId', [['OrderId'], ['CreatedTS', 'DESC']], area="Sta_Index_2")
-        t.index('Ix_MsRequest', [['MsRequestId'], ['CreatedTS', 'DESC']], area="Sta_Index_2")
+        t.index('Ix_MsRequest', [['MsRequest'], ['CreatedTS', 'DESC']], area="Sta_Index_2")
         t.index('Ix_Target', [['ProCommandTarget'], ['ProCommandStatus'], ['CreatedTS']], area="Sta_Index_2")
 
     def down(self):
