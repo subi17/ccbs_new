@@ -51,6 +51,8 @@ DEFINE VARIABLE lcMainLine    AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE liDiscCreDelay  AS INTEGER NO-UNDO.
 DEFINE VARIABLE ldActStamp      AS DECIMAL NO-UNDO.
+DEFINE VARIABLE lcList          AS CHAR NO-UNDO. /* list From Cparam */
+DEFINE VARIABLE i               AS INT NO-UNDO.
 
 DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
 DEFINE BUFFER bMXItem       FOR MXItem.
@@ -309,10 +311,16 @@ THEN RETURN appl_err(lcError).
 
 /* YCO-468. Assign permanency when lcPerContract <> "" */
 IF lcPerContract <> "" THEN DO:
-   
-   liDiscCreDelay = Syst.Parameters:geti("DiscCreDelay", "Discount").
-   /* def = 0 current functinality without delay. For YCO-757 def value is 432000 */
-   ldActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).   
+
+   lcList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+   DO i = 1 TO NUM-ENTRIES(lcList, ","):
+      IF lcPerContract MATCHES ENTRY(i, lcList, ",") THEN DO:
+         liDiscCreDelay = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+         /* def = 0 current functinality without delay. For YCO-757 def value is 432000 */
+         ldActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).
+      END.
+      ELSE ldActStamp = 0.
+   END. 
       
    liResult = fPCActionRequest(
                         Mobsub.MsSeq,             /* subscription */

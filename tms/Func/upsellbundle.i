@@ -121,10 +121,18 @@ FUNCTION fCreateUpsell RETURNS INT
 
    DEF VAR liRequest       AS INTEGER NO-UNDO.
    DEF VAR liDiscCreDelay  AS INTEGER NO-UNDO.
+   DEF VAR lcList          AS CHAR NO-UNDO. /* list From Cparam */
+   DEF VAR i               AS INT NO-UNDO.   
    
-   liDiscCreDelay = Syst.Parameters:geti("DiscCreDelay", "Discount").
-   /* def = 0 current functinality without delay. For YCO-757 def value is 432000 */
-   ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).  
+   lcList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+   DO i = 1 TO NUM-ENTRIES(lcList, ","):
+      IF icDCEvent MATCHES ENTRY(i, lcList, ",") THEN DO:
+         liDiscCreDelay = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+         /* def = 0 current functinality without delay. For YCO-757 def value is 432000 */
+         ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).
+      END.
+      ELSE ideActStamp = 0.
+   END.    
 
    liRequest = fPCActionRequest(iiMsSeq,
                                 icDCEvent,
