@@ -1,0 +1,61 @@
+ADD TABLE "ProCommandResp"
+  MULTITENANT yes
+  AREA "Sta_Data_32"
+  LABEL "BUS/BPM commands to SAPC response history"
+  DUMP-NAME "procommandresp"
+
+ADD FIELD "ProCommandId" OF "ProCommandResp" AS int64 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "ProCommand Id"
+  POSITION 2
+  MAX-WIDTH 8
+  HELP "ProCommandId"
+  ORDER 10
+
+ADD FIELD "ProCommandStatus" OF "ProCommandResp" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Status"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP ""Status: 0 - New, 10 - Waiting accept notify, 20 - Accepted notify, 30 - Done, 80... - Errors""
+  ORDER 20
+
+ADD FIELD "ResponseTS" OF "ProCommandResp" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Response"
+  POSITION 4
+  MAX-WIDTH 12
+  HELP "Date and time when BUS/BPM response is received"
+  ORDER 30
+
+ADD FIELD "Response" OF "ProCommandResp" AS clob 
+  FORMAT "x(8)"
+  INITIAL ?
+  POSITION 5
+  LOB-AREA "Y_Lob"
+  LOB-BYTES 10485760
+  LOB-SIZE 10M
+  CLOB-CODEPAGE "UTF-8"
+  CLOB-COLLATION "BASIC"
+  CLOB-TYPE 2
+  ORDER 40
+
+ADD INDEX "Ix_ProCommandId" ON "ProCommandResp" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "ProCommandId" ASCENDING 
+  INDEX-FIELD "ResponseTS" DESCENDING 
+
+ADD INDEX "Ix_ProCommandStatus" ON "ProCommandResp" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "ProCommandStatus" ASCENDING 
+  INDEX-FIELD "ProCommandId" ASCENDING 
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000003519
