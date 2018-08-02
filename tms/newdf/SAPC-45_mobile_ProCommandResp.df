@@ -13,13 +13,13 @@ ADD FIELD "ProCommandId" OF "ProCommandResp" AS int64
   HELP "ProCommandId"
   ORDER 10
 
-ADD FIELD "ProCommandStatus" OF "ProCommandResp" AS integer 
+ADD FIELD "ProCommandStatus" OF "ProCommandResp" AS integer
   FORMAT ">>9"
   INITIAL "0"
   LABEL "Status"
   POSITION 3
   MAX-WIDTH 4
-  HELP ""Status: 0 - New, 10 - Waiting accept notify, 20 - Accepted notify, 30 - Done, 80... - Errors""
+  HELP "Status: 0 - New, 10 - Waiting accept notify, 20 - Accepted notify, 30 - Done, 80... - Errors"
   ORDER 20
 
 ADD FIELD "ResponseTS" OF "ProCommandResp" AS datetime-tz 
