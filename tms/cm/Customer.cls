@@ -311,7 +311,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        
    END METHOD.
    
-  METHOD PUBLIC VOID mGetLatestCustNum():
+  METHOD PUBLIC INTEGER mGetLatestCustNum():
 
       DEFINE VARIABLE liCustNum AS INTEGER NO-UNDO.
 
