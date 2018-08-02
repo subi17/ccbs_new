@@ -496,18 +496,8 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
        IF aoOrder:isPrePaidOrder
        THEN RETURN "".
        
-       DEFINE VARIABLE lcTotalCustomerBankData AS CHARACTER NO-UNDO.
-       DEFINE VARIABLE lcCustAcctData          AS CHARACTER NO-UNDO.
-       DEFINE VARIABLE lcBankAcctData          AS CHARACTER NO-UNDO.
-       DEFINE VARIABLE lcBankAcctNum           AS CHARACTER NO-UNDO.
-       
-       ASSIGN 
-           lcTotalCustomerBankData = aoOrder:aoCustomer:CustAcctData
-           lcCustAcctData          = ENTRY(1,lcTotalCustomerBankData,"|")
-           lcBankAcctData          = ENTRY(2,lcCustAcctData,";")
-           lcBankAcctNum           = ENTRY(1,lcBankAcctData,",")
-           .
-       RETURN lcBankAcctNum.    
+       RETURN aoOrder:aoCustomer:bankCode.
+         
    END.
 
    METHOD PRIVATE CHARACTER mGetCountry
