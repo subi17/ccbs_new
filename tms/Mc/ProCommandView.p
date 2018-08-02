@@ -26,7 +26,7 @@ DEF VAR pr-procommand   AS INT          NO-UNDO.
 DEF VAR ufkey           AS LOG          NO-UNDO INITIAL TRUE.
 DEF VAR rtab            AS RECID        NO-UNDO EXTENT 24.
 DEF VAR i               AS INT          NO-UNDO.
-DEF VAR ldtActivationTS AS DATETIME-TZ  NO-UNDO.
+DEF VAR ldtResultTS AS DATETIME-TZ  NO-UNDO.
 DEF VAR lcCli           LIKE mobsub.cli NO-UNDO.
 DEF VAR lcCommand_Ed    AS LONGCHAR     NO-UNDO 
    VIEW-AS EDITOR LARGE SIZE 76 BY 3.
@@ -41,7 +41,7 @@ FORM
    ProCommand.OrderId          COLUMN-LABEL "Order ID" 
    ProCommand.ProCommandTarget COLUMN-LABEL "Target" FORMAT "X(4)"
    ProCommand.ProCommandStatus COLUMN-LABEL "Sts" FORMAT ">>9"
-   ldtActivationTS             COLUMN-LABEL "Updated" FORMAT "99/99/99 HH:MM:SS" 
+   ldtResultTS             COLUMN-LABEL "Updated" FORMAT "99/99/99 HH:MM:SS" 
    ProCommand.ProCommandId     COLUMN-LABEL "Command ID"
    WITH ROW FrmRow WIDTH 80 OVERLAY FrmDown DOWN
    COLOR VALUE(Syst.Var:cfc)
@@ -56,7 +56,6 @@ FORM
     "MSISDN      :" AT 50 lcCli  FORMAT "x(11)"       SKIP
     "Created     :" ProCommand.CreatedTS              SKIP   
     "Sent        :" ProCommand.SendTS                 SKIP   
-    "Activated   :" ProCommand.ActivationTS           SKIP
     "Response    :" ProCommand.ResponseTS             SKIP
     "Target      :" ProCommand.ProCommandTarget    
     "Status:"       AT 27 ProCommand.ProCommandStatus  
@@ -389,7 +388,6 @@ REPEAT WITH FRAME sel:
            lcCli
            ProCommand.CreatedTS   
            ProCommand.SendTS   
-           ProCommand.ActivationTS
            ProCommand.ResponseTS
            ProCommand.ProCommandTarget
            ProCommand.ProCommandTargetURL
@@ -481,7 +479,7 @@ PROCEDURE local-disp-row:
    /* set values */
    FIND mobsub WHERE mobsub.msseq = ProCommand.Msseq NO-LOCK NO-ERROR.
    ASSIGN
-      ldtActivationTS = DATETIME-TZ(ProCommand.ActivationTS,TIMEZONE)
+      ldtResultTS     = DATETIME-TZ(ProCommand.ResutltTS,TIMEZONE)
       lcCli           = (IF AVAILABLE mobsub THEN mobsub.cli ELSE "").
    
    DISPLAY
@@ -490,7 +488,7 @@ PROCEDURE local-disp-row:
       ProCommand.orderid
       ProCommand.ProCommandTarget
       ProCommand.ProCommandStatus
-      ldtActivationTS
+      ldtResultTS
       ProCommand.ProCommandId
       WITH FRAME sel.
 END PROCEDURE.

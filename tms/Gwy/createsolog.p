@@ -457,7 +457,7 @@ PROCEDURE pSolog:
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MsRequest.MsSeq   /* Mobile Subscription No. */
-               ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
+               ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
                ProCommand.ProCommandtarget    = "NB_CH"
                ProCommand.ProCommandVerb      = "PUT"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
@@ -518,7 +518,7 @@ PROCEDURE pSolog:
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
-               ProCommand.ProCommandstatus    = 0             /* 0 - New                 */
+               ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
                ProCommand.ProCommandtarget    = "NB_CH"
                ProCommand.ProCommandVerb      = "POST"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
@@ -571,7 +571,7 @@ PROCEDURE pSolog:
                ProCommand.CreatedTS           = NOW 
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
-               ProCommand.ProCommandstatus    = 0             /* 0 - New                 */
+               ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
                ProCommand.ProCommandtarget    = "NB_CH"
                ProCommand.ProCommandVerb      = "DELETE"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
@@ -590,7 +590,7 @@ PROCEDURE pSolog:
                bProCommand.CreatedTS           = NOW 
                bProCommand.Creator             = Syst.Var:katun    
                bProCommand.MsSeq               = MsRequest.MsSeq  
-               bProCommand.ProCommandstatus    = 0               /* 0 - New */
+               bProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
                bProCommand.ProCommandtarget    = "NB_CH"
                bProCommand.ProCommandVerb      = "POST"            
                bProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 

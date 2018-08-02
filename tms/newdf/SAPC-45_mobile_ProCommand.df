@@ -24,15 +24,6 @@ ADD FIELD "CreatedTS" OF "ProCommand" AS datetime-tz
   HELP "Date and time when record is created"
   ORDER 20
 
-ADD FIELD "ActivationTS" OF "ProCommand" AS datetime-tz 
-  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
-  INITIAL ?
-  LABEL "Activation"
-  POSITION 4
-  MAX-WIDTH 12
-  HELP "Date and time when procommand acknowledged from BUS/BPM"
-  ORDER 30
-
 ADD FIELD "ResponseTS" OF "ProCommand" AS datetime-tz 
   FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
   INITIAL ?
@@ -171,12 +162,17 @@ ADD INDEX "Ix_ProCommandId" ON "ProCommand"
 ADD INDEX "Ix_MsSeq" ON "ProCommand" 
   AREA "Sta_Index_2"
   INDEX-FIELD "MsSeq" ASCENDING 
-  INDEX-FIELD "ActivationTS" DESCENDING 
+  INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "Ix_OrderId" ON "ProCommand" 
   AREA "Sta_Index_2"
   INDEX-FIELD "OrderId" ASCENDING 
-  INDEX-FIELD "ActivationTS" DESCENDING 
+  INDEX-FIELD "CreatedTS" DESCENDING 
+
+ADD INDEX "Ix_MsRequestId" ON "ProCommand" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MsRequestId" ASCENDING 
+  INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "Ix_Target" ON "ProCommand"
   AREA "Sta_Index_2"

@@ -554,7 +554,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
          ProCommand.CreatedTS           = NOW 
          ProCommand.Creator             = Syst.Var:katun    
          ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
-         ProCommand.ProCommandstatus    = 0              /* 0 - New                 */
+         ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
          ProCommand.ProCommandtarget    = "NB_CH"
          ProCommand.ProCommandVerb      = "POST"
          ProCommand.ProCommandtargetURL = "".  /* Not postfix data */
