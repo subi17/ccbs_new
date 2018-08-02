@@ -173,12 +173,6 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	    
 	END METHOD.
 	
-	METHOD PUBLIC CHARACTER mGetCustomerAcctBankData() :
-	    
-	    RETURN (STRING(THIS-OBJECT:AccountID) + ";" + THIS-OBJECT:BankAccts ).
-	    
-	END METHOD.
-	
 	METHOD PUBLIC CHARACTER mGetBillAcctIDData():
 	    
 	    RETURN (STRING(THIS-OBJECT:AccountID) + ";" + THIS-OBJECT:BillingAcctIDs).
