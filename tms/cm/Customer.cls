@@ -389,7 +389,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        ASSIGN 
            liCustnum                  = mGetLatestCustNum()
            THIS-OBJECT:isNewCustomer  = TRUE
-           THIS-OBJECT:CustTitle      = ioJsonObject:GetCharacter("title").
+           THIS-OBJECT:CustTitle      = ioJsonObject:GetCharacter("title")
            THIS-OBJECT:FirstName      = ioJsonObject:GetCharacter("fname")
            THIS-OBJECT:SurName1       = ioJsonObject:GetCharacter("lname")
            THIS-OBJECT:SurName2       = ioJsonObject:GetCharacter("lname2")
