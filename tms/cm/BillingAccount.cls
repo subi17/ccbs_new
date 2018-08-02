@@ -122,9 +122,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
 	END DESTRUCTOR.
 	
     METHOD PUBLIC VOID mCreateData (ioBillingAcct AS CLASS JsonObject) :
-        
-        DEFINE VARIABLE ioInvoiceShipAddress AS JsonObject NO-UNDO.
-        
+  
         ASSIGN 
             THIS-OBJECT:ITGroupID     = NEXT-VALUE(ITGroupID)
             THIS-OBJECT:AccountID     = aoCustAcct:AccountID
@@ -155,7 +153,16 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
     
     METHOD PUBLIC VOID mStoreData() :
         
-        CREATE InvoiceTargetGroup.
+        FIND FIRST InvoiceTargetGroup WHERE 
+                   InvoiceTargetGroup.Brand      =  Syst.Var:gcBrand  AND 
+                   InvoiceTargetGroup.ITGroupID  =  THIS-OBJECT:ITGroupID EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+                   
+        IF LOCKED(InvoiceTargetGroup) THEN 
+            UNDO, THROW NEW ParamError ("Billing Accout is locked.").
+            
+        IF NOT AVAILABLE InvoiceTargetGroup 
+        THEN CREATE InvoiceTargetGroup.     
+        
         ASSIGN 
             InvoiceTargetGroup.Brand         = Syst.Var:gcBrand
             InvoiceTargetGroup.ITGroupID     = THIS-OBJECT:ITGroupID
@@ -180,12 +187,6 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             InvoiceTargetGroup.ToDate        = THIS-OBJECT:ToDate
             .
             
-    END METHOD.
-    
-    METHOD PUBLIC CHARACTER mGetBankAcct():
-        
-        RETURN THIS-OBJECT:BankAccount.
-        
     END METHOD.
     
     METHOD PUBLIC CHARACTER mGetBillingAcctID() :
@@ -241,7 +242,45 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
         END CASE.
                 
     END METHOD.
-
-
+    
+    
+    METHOD PUBLIC VOID mUpdateBillAcctData (INPUT iiBillAcctID AS INTEGER , INPUT ioBillingAcct AS JsonObject) :
+        
+        FIND FIRST InvoiceTargetGroup WHERE InvoiceTargetGroup.ITGroupID  = iiBillAcctID NO-LOCK NO-ERROR.
+        
+        IF NOT AVAILABLE  InvoiceTargetGroup THEN 
+            UNDO, THROW NEW ParamError ("Billing account is unavailable to update.").
+        
+        ASSIGN 
+            THIS-OBJECT:ITGroupID     = iiBillAcctID
+            THIS-OBJECT:AccountID     = aoCustAcct:AccountID
+            THIS-OBJECT:CustAcctName  = aoCustAcct:AcctName
+            THIS-OBJECT:Currency      = (IF ioBillingAcct:Has("currency") THEN  ioBillingAcct:GetCharacter("currency") ELSE InvoiceTargetGroup.Currency )
+            THIS-OBJECT:BankAccount   = (IF ioBillingAcct:Has("bank_account") THEN  ioBillingAcct:GetCharacter("bank_account") ELSE InvoiceTargetGroup.BankAccount )
+            THIS-OBJECT:BankName      = (IF ioBillingAcct:Has("bank_name") THEN  ioBillingAcct:GetCharacter("bank_name") ELSE InvoiceTargetGroup.BankName )
+            THIS-OBJECT:PaymentMethod = (IF ioBillingAcct:Has("invoice_charge_type") THEN mGetTMSCodeValue("AccRec" , "ChargeType" , ioBillingAcct:GetCharacter("invoice_charge_type"))
+                                         ELSE InvoiceTargetGroup.PaymentMethod )    
+            THIS-OBJECT:MandateID     = (IF ioBillingAcct:Has("mandate_id") THEN ioBillingAcct:GetCharacter("mandate_id") ELSE InvoiceTargetGroup.MandateID )
+            THIS-OBJECT:MandateDate   = (IF ioBillingAcct:Has("mandate_date") THEN Func.Common:mGetDate(ioBillingAcct:GetCharacter("mandate_date")) ELSE InvoiceTargetGroup.MandateDate)
+            THIS-OBJECT:CustNum       = aoCustAcct:CustNum
+            THIS-OBJECT:AgrCust       = THIS-OBJECT:CustNum /*TODO-JSON*/
+            THIS-OBJECT:DefaultGroup  = TRUE /*TODO-JSON*/
+            THIS-OBJECT:BillCycle     = (IF ioBillingAcct:Has("invoice_cycle") THEN ioBillingAcct:GetInteger("invoice_cycle") ELSE InvoiceTargetGroup.BillCycle )
+            THIS-OBJECT:InvInterval   = (IF ioBillingAcct:Has("invoice_interval") THEN ioBillingAcct:GetInteger("invoice_interval") ELSE InvoiceTargetGroup.InvInterval)
+            THIS-OBJECT:InvGroup      = (IF ioBillingAcct:Has("invoice_group") THEN ioBillingAcct:GetCharacter("invoice_group") ELSE InvoiceTargetGroup.InvGroup)
+            THIS-OBJECT:DurDateOffSet = 0 /*TODO-JSON*/
+            THIS-OBJECT:StatusCode    = 0
+            THIS-OBJECT:FromDate      = (IF ioBillingAcct:Has("valid_from") THEN Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_from")) ELSE InvoiceTargetGroup.FromDate) 
+            THIS-OBJECT:ToDate        = (IF ioBillingAcct:Has("valid_to")  THEN Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to")) ELSE InvoiceTargetGroup.ToDate)
+            .
+         
+        IF ioBillingAcct:Has("invoice_delivery_type") THEN
+        DO:
+            mValidateInvDeliveryType(ioBillingAcct:GetCharacter("invoice_delivery_type")).
+            THIS-OBJECT:DelType = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type")).
+        END.     
+        ELSE THIS-OBJECT:DelType = InvoiceTargetGroup.DelType.
+        
+    END METHOD.
 
 END CLASS.

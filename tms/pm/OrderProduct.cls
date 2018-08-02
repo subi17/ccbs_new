@@ -109,16 +109,9 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       ELSE IF ioItemObject:Has("billing_account_index")
       THEN DO:    
           ASSIGN 
-              THIS-OBJECT:BillAcctIndex = ioItemObject:GetInteger("billing-account-index")                 
+              THIS-OBJECT:BillAcctIndex = ioItemObject:GetInteger("billing_account_index")                 
               THIS-OBJECT:ITGroupID     = aoOrder:aoCustomer:mGetBillingAcctID(THIS-OBJECT:BillAcctIndex).
              
-      END. 
-      ELSE DO:
-          
-          IF THIS-OBJECT:ActionType = {&ORDER_PRODUCT_SUBSCRIPTION} OR 
-             THIS-OBJECT:ActionType = {&ORDER_PRODUCT_FIXED_LINE}   OR 
-             THIS-OBJECT:ActionType = {&ORDER_PRODUCT_ACCESSORY}  
-          THEN UNDO , THROW  NEW ParamError("Billing Account information missing."). 
       END. 
 
       mCreateDataForType(ioItemObject).

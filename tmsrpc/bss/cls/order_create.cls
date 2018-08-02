@@ -1,31 +1,3 @@
-/*
-   {
-     "contractid": "123456",
-     "channel": "customer-care",
-     "salesman": "user123",
-     "created-at": "2018-04-01",
-     "agreement-customer": {
-       "custnum": 1234567
-     },
-     "items": [
-       {
-         "type": "acc",
-         "product-offering-id": "ACC0",
-         "product-id": "ACC",
-         "attributes": {
-           "memo": {
-             "title": "Agreement customer change",
-             "content": "Customer request"
-           },
-           "subscription-id": 12345,
-           "execution-date": "2018-04-01",
-           "custnum": 74387482
-         }
-       }
-     ]
-   }
-*/
-
 USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.JsonObject.
 
@@ -36,22 +8,24 @@ CLASS bss.cls.order_create INHERITS profcgi.RPC.JSON.Response:
    METHOD PUBLIC OVERRIDE VOID mHandle
       ( ioJsonObject AS CLASS JsonObject ):
 
-      multitenancy.TenantInformation:mSetEffectiveBrand(ioJsonObject:GetCharacter("brand")).
-
       DEFINE VARIABLE loOrder AS CLASS om.Order NO-UNDO.
 
+      multitenancy.TenantInformation:mSetEffectiveBrand(ioJsonObject:GetCharacter("brand")).
+
       loOrder = NEW om.Order().
+
       loOrder:mCreateData(ioJsonObject).
 
-      DO TRANSACTION ON ERROR UNDO, THROW:
+      DO TRANSACTION 
+      ON ERROR UNDO, THROW:
          loOrder:mStoreData().
       END.
 
       mSendResult(loOrder:mResult()).
 
       FINALLY:
-         IF VALID-OBJECT(loOrder)
-         THEN DELETE OBJECT loOrder.
+         IF VALID-OBJECT(loOrder) THEN 
+            DELETE OBJECT loOrder.
       END FINALLY.
       
    END METHOD.
