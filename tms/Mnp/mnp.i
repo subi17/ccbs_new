@@ -163,7 +163,7 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
          CallAlarm.CLI        = pcCLI
          CallAlarm.DeliStat   = 1
          CallAlarm.Delitype   = 1
-         CallAlarm.DeliPara   = "1"
+         CallAlarm.DeliPara   = pcFormReq /* Previously "1" ; unused field */
          CallAlarm.DeliMsg    = lcAlarmMess
          CallAlarm.Limit      = 0
          CallAlarm.CreditType = {&SMSTYPE_MNP}
