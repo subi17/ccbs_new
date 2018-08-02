@@ -64,10 +64,6 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
     DEFINE PUBLIC PROPERTY aoBillAddrObj AS CLASS om.OrderAddress NO-UNDO 
         GET.
         SET.    
-        
-    DEFINE PUBLIC PROPERTY BankAccts AS CHARACTER NO-UNDO
-       GET.
-       SET.
        
     DEFINE PUBLIC PROPERTY BillingAcctIDs AS CHARACTER NO-UNDO
        GET.
@@ -98,59 +94,52 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	    DEFINE VARIABLE BillAcctObj   AS CLASS JsonObject NO-UNDO.
 	    DEFINE VARIABLE liBillAcctCnt AS INTEGER NO-UNDO.
 	    
-        ASSIGN 
-            THIS-OBJECT:DefaultAcct = ioCustAcctObject:GetLogical("default_account")
-            THIS-OBJECT:AcctName    = ioCustAcctObject:GetCharacter("account_name")
-            THIS-OBJECT:ValidFrom   =  DATETIME-TZ(TODAY)
-            THIS-OBJECT:ValiTo      =  DATETIME-TZ(DATE(12,31,2049))
-            THIS-OBJECT:AccountID   =  NEXT-VALUE (accountid)  
-            THIS-OBJECT:CustNum     =  ioCustomerObj:CustNum
-            THIS-OBJECT:StatusCode  =  0 /*0=pending, 1=active*/
-            .
-            
-        /*We expect only one customer account in the JSON and that customer account should the default customer account*/    
-        IF THIS-OBJECT:DefaultAcct = FALSE 
-        THEN UNDO , THROW NEW ParamError ("Default customer account should be created when creating a new customer.").  
-            
-        IF ioCustAcctObject:Has("billing_address")
-        THEN DO:
-            
-            aoBillAddrObj = NEW om.OrderAddress().
-            aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
-            ASSIGN aoBillAddrObj:KeyValue  = THIS-OBJECT:CustNum
-                   aoBillAddrObj:AddrType  = {&BILLING_ADDRESS}. 
-                   
-            IF THIS-OBJECT:DefaultAcct = TRUE 
-            THEN DO:                
-                ioCustomerObj:mAssignDefaultAddressObj(ioCustAcctObject:GetJsonObject("billing_address")).                
-            END.                          
-        END.
-        
-        IF ioCustAcctObject:Has("billing_accounts")
-        THEN DO:
-            
-            ASSIGN BillAcctArray = ioCustAcctObject:GetJsonArray("billing_accounts").
-            
-            DO liBillAcctCnt = 1 TO BillAcctArray:LENGTH :
-                
-                ASSIGN  
-                    BillAcctObj   = BillAcctArray:GetJsonObject(liBillAcctCnt)
-                    aoBillingAcct = NEW cm.BillingAccount(THIS-OBJECT).
-                           
-                aoBillingAcct:mCreateData(BillAcctObj).
-                
-                CREATE ttBillingAcct.
-                ASSIGN ttBillingAcct.BillAcctObj = aoBillingAcct
-                       ttBillingAcct.BillAcctNum = mNextBillAcctNum().
-                       
-                ASSIGN THIS-OBJECT:BankAccts       =  THIS-OBJECT:BankAccts       + "," + aoBillingAcct:mGetBankAcct()
-                       THIS-OBJECT:BillingAcctIDs  =  THIS-OBJECT:BillingAcctIDs  + "," + aoBillingAcct:mGetBillingAcctID().
-                
-            END.            
-        END.
+      ASSIGN 
+          THIS-OBJECT:DefaultAcct = ioCustAcctObject:GetLogical("default_account")
+          THIS-OBJECT:AcctName    = ioCustAcctObject:GetCharacter("account_name")
+          THIS-OBJECT:ValidFrom   =  DATETIME-TZ(TODAY)
+          THIS-OBJECT:ValiTo      =  DATETIME-TZ(DATE(12,31,2049))
+          THIS-OBJECT:AccountID   =  NEXT-VALUE (accountid)  
+          THIS-OBJECT:CustNum     =  ioCustomerObj:CustNum
+          THIS-OBJECT:StatusCode  =  0. /*0=pending, 1=active*/
+          
+      IF ioCustAcctObject:Has("billing_address") THEN 
+      DO:    
+          aoBillAddrObj = NEW om.OrderAddress().
 
-        ASSIGN THIS-OBJECT:BankAccts        = TRIM(THIS-OBJECT:BankAccts      , ",")
-               THIS-OBJECT:BillingAcctIDs   = TRIM(THIS-OBJECT:BillingAcctIDs , ",").
+          aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
+
+          ASSIGN aoBillAddrObj:KeyValue  = THIS-OBJECT:CustNum
+                 aoBillAddrObj:AddrType  = {&BILLING_ADDRESS}. 
+                 
+          IF THIS-OBJECT:DefaultAcct = TRUE THEN 
+              ioCustomerObj:mAssignDefaultAddressObj(ioCustAcctObject:GetJsonObject("billing_address")).
+      END.
+      
+      IF ioCustAcctObject:Has("billing_accounts") THEN 
+      DO:
+          ASSIGN BillAcctArray = ioCustAcctObject:GetJsonArray("billing_accounts").
+          
+          DO liBillAcctCnt = 1 TO BillAcctArray:LENGTH :
+              
+              ASSIGN BillAcctObj = BillAcctArray:GetJsonObject(liBillAcctCnt).
+
+              IF liBillAcctCnt = 1 THEN
+                 ioCustomerObj:bankCode = BillAcctObj:GetCharacter("bank_account").
+
+              aoBillingAcct = NEW cm.BillingAccount(THIS-OBJECT).
+
+              aoBillingAcct:mCreateData(BillAcctObj).
+              
+              CREATE ttBillingAcct.
+              ASSIGN ttBillingAcct.BillAcctObj = aoBillingAcct
+                     ttBillingAcct.BillAcctNum = mNextBillAcctNum().
+                     
+              ASSIGN THIS-OBJECT:BillingAcctIDs  =  THIS-OBJECT:BillingAcctIDs  + "," + aoBillingAcct:mGetBillingAcctID().
+          END.            
+      END.
+
+      ASSIGN THIS-OBJECT:BillingAcctIDs   = TRIM(THIS-OBJECT:BillingAcctIDs , ",").
 	    
 	END METHOD.
 	

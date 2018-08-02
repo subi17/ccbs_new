@@ -122,9 +122,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
 	END DESTRUCTOR.
 	
     METHOD PUBLIC VOID mCreateData (ioBillingAcct AS CLASS JsonObject) :
-        
-        DEFINE VARIABLE ioInvoiceShipAddress AS JsonObject NO-UNDO.
-        
+  
         ASSIGN 
             THIS-OBJECT:ITGroupID     = NEXT-VALUE(ITGroupID)
             THIS-OBJECT:AccountID     = aoCustAcct:AccountID
@@ -189,12 +187,6 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             InvoiceTargetGroup.ToDate        = THIS-OBJECT:ToDate
             .
             
-    END METHOD.
-    
-    METHOD PUBLIC CHARACTER mGetBankAcct():
-        
-        RETURN THIS-OBJECT:BankAccount.
-        
     END METHOD.
     
     METHOD PUBLIC CHARACTER mGetBillingAcctID() :

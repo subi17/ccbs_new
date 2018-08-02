@@ -14,6 +14,7 @@ USING profcgi.RPC.JSON.InternalError.
 USING profcgi.RPC.JSON.ParamError.
 USING Progress.Json.ObjectModel.JsonObject.
 USING Progress.Json.ObjectModel.JsonArray.
+
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
@@ -26,7 +27,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 	 Notes:
 	------------------------------------------------------------------------------*/
 	
-   DEFINE PUBLIC PROPERTY OrderId AS INTEGER NO-UNDO
+   DEFINE PUBLIC PROPERTY orderId AS INTEGER NO-UNDO
       GET.
       SET.
 
@@ -227,39 +228,33 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE lcMigrationErr  AS CHARACTER NO-UNDO.
               
       ASSIGN
-         loAgrCust            =   ioJsonObject:GetJsonObject("agreement-customer")       WHEN ioJsonObject:Has("agreement-customer")
-         loCustAcct           =   ioJsonObject:GetJsonObject("customer")                 WHEN ioJsonObject:Has("customer")
-         OrderPaymentData     =   ioJsonObject:GetJsonObject("upfront_payment_method")   WHEN ioJsonObject:Has("upfront_payment_method")
-         OrderInspectionData  =   ioJsonObject:GetJsonObject("inspection")               WHEN ioJsonObject:Has("inspection")
-         aoCustomer           =   NEW cm.Customer().
-         
-      ASSIGN
-          ldaCreateDate            = Func.Common:mGetDate(ioJsonObject:GetCharacter("created-at"))
-          THIS-OBJECT:ContractId   = ioJsonObject:GetCharacter("contractid") 
-          THIS-OBJECT:Salesman     = ioJsonObject:GetCharacter("salesman")
-          THIS-OBJECT:OrderChannel = ioJsonObject:GetCharacter("channel")
-          THIS-OBJECT:CrStamp      = YEAR(ldaCreateDate) * 10000 + MONTH(ldaCreateDate) * 100 + DAY(ldaCreateDate)
-          aoCustomer:isProCustomer = ( INDEX(THIS-OBJECT:OrderChannel,"PRO") > 0 )     
-          aoCustomer:OrderChannel  = THIS-OBJECT:OrderChannel                   
-          .
-         
-      IF VALID-OBJECT(loAgrCust) 
-      THEN DO:          
-          IF loAgrCust:Has("custnum")
-          THEN aoCustomer:mFindData(loAgrCust:GetInteger("custnum")).
-          ELSE aoCustomer:mCreateData(loAgrCust).
+         loAgrCust  = ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
+         loCustAcct = ioJsonObject:GetJsonObject("customer")           WHEN ioJsonObject:Has("customer")
+         aoCustomer = NEW cm.Customer().
+
+      IF VALID-OBJECT(loAgrCust) THEN 
+      DO:          
+          IF loAgrCust:Has("custnum") THEN 
+              aoCustomer:mFindData(loAgrCust:GetInteger("custnum")).
+          ELSE 
+              aoCustomer:mCreateData(loAgrCust).
           
           ASSIGN THIS-OBJECT:isACCOrder = TRUE.
       END. 
-      ELSE IF VALID-OBJECT(loCustAcct)
-      THEN DO:
-          
-          IF loCustAcct:Has("custnum")
-          THEN DO:              
+      ELSE IF VALID-OBJECT(loCustAcct) THEN 
+      DO:
+          ASSIGN 
+             OrderPaymentData    =   ioJsonObject:GetJsonObject("upfront_payment_method") WHEN ioJsonObject:Has("upfront_payment_method")
+             OrderInspectionData =   ioJsonObject:GetJsonObject("inspection")             WHEN ioJsonObject:Has("inspection").
+        
+          IF loCustAcct:Has("custnum") THEN 
+          DO:    
               THIS-OBJECT:liCustNum   =  loCustAcct:GetInteger("custnum").
+
               aoCustomer:mFindData(THIS-OBJECT:liCustNum).
-              IF loCustAcct:Has("account_id")
-              THEN DO:              
+
+              IF loCustAcct:Has("account_id") THEN 
+              DO:              
                   ASSIGN 
                       THIS-OBJECT:CustAcctNum = loCustAcct:GetInteger("account_id").
                   aoCustomer:mFindCustomerAcct(THIS-OBJECT:CustAcctNum).                  
@@ -311,7 +306,6 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         ASSIGN
             Order.Brand         = Syst.Var:gcBrand
             Order.OrderId       = NEXT-VALUE(OrderId)
-            THIS-OBJECT:OrderId = Order.OrderId /* The OrderProducts needs this */            
             Order.Source        = "bssapi"
             Order.CustNum       = aoCustomer:CustNum
             Order.MsSeq         = (IF (THIS-OBJECT:isACCOrder OR THIS-OBJECT:isRenewalSTCOrder) THEN THIS-OBJECT:MsSeq ELSE NEXT-VALUE(MobSub))
@@ -321,7 +315,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.SalesMan      = THIS-OBJECT:Salesman
             Order.OrderChannel  = THIS-OBJECT:OrderChannel
             Order.CrStamp       = THIS-OBJECT:CrStamp
-            .
+            THIS-OBJECT:orderId = Order.OrderId.
             
         CASE THIS-OBJECT:MobileNumberType:
             
@@ -373,12 +367,12 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                              LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9") = 0
                              EXCLUSIVE-LOCK NO-ERROR.
                          IF AVAIL MsRequest THEN
-                             MsRequest.ReqIParam2 = THIS-OBJECT:OrderId.
+                             MsRequest.ReqIParam2 = THIS-OBJECT:orderId.
                          ELSE 
                          DO:
                              THIS-OBJECT:StatusCode = {&ORDER_STATUS_IN_CONTROL}.
                              Func.Common:mWriteMemoWithType("Order",
-                                                            STRING(THIS-OBJECT:OrderId),
+                                                            STRING(THIS-OBJECT:orderId),
                                                             0,
                                                             "STC request was not found",
                                                             "",
@@ -443,7 +437,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 
                 IF RETURN-VALUE > ""
                 THEN Func.Common:mWriteMemoWithType("Order",
-                                                    STRING(THIS-OBJECT:OrderId),
+                                                    STRING(THIS-OBJECT:orderId),
                                                     0,
                                                     "Automatic order closing failed",
                                                     SUBST("Failed to close pending order. " + 
@@ -465,7 +459,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
       DEFINE VARIABLE loAddrArray  AS CLASS JsonArray NO-UNDO.
       
       loJsonObject = NEW JsonObject().
-      loJsonObject:Add("order-id", THIS-OBJECT:OrderId).
+      loJsonObject:Add("order-id", THIS-OBJECT:orderId).
       
       IF aoCustomer:isNewCustomer 
       THEN DO:
@@ -515,7 +509,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
        mMakeMSISDNHistoryTimeStamp(RECID(bfpcMSISDN) , Func.Common:mMakeTS()).
        
        ASSIGN bfpcMSISDN.statuscode     = 2
-              bfpcMSISDN.orderid        = THIS-OBJECT:OrderId.
+              bfpcMSISDN.orderid        = THIS-OBJECT:orderId.
        
    END METHOD.
    
@@ -629,7 +623,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                                                     
            IF liRequest = 0
            THEN Func.Common:mWriteMemoWithType("Order",
-                                               STRING(THIS-OBJECT:OrderId),
+                                               STRING(THIS-OBJECT:orderId),
                                                0,
                                                "ICC change request creation failed",
                                                SUBST("Orderid: &1", Order.orderid),
