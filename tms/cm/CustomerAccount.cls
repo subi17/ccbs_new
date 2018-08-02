@@ -286,16 +286,12 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                     ttBillingAcct.BillAcctObj = aoBillingAcct
                     ttBillingAcct.BillAcctNum = mNextBillAcctNum().
                        
-                ASSIGN 
-                    THIS-OBJECT:BankAccts      = THIS-OBJECT:BankAccts       + "," + aoBillingAcct:mGetBankAcct()
-                    THIS-OBJECT:BillingAcctIDs = THIS-OBJECT:BillingAcctIDs  + "," + aoBillingAcct:mGetBillingAcctID().
+                ASSIGN THIS-OBJECT:BillingAcctIDs = THIS-OBJECT:BillingAcctIDs  + "," + aoBillingAcct:mGetBillingAcctID().
                     
             END.            
         END.
 
-        ASSIGN 
-            THIS-OBJECT:BankAccts      = TRIM(THIS-OBJECT:BankAccts      , ",")
-            THIS-OBJECT:BillingAcctIDs = TRIM(THIS-OBJECT:BillingAcctIDs , ",").
+        ASSIGN THIS-OBJECT:BillingAcctIDs = TRIM(THIS-OBJECT:BillingAcctIDs, ",").
         
     END METHOD.	
 	

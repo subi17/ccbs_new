@@ -766,9 +766,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                     ttCustAccts.custacctobj = aOCustAcct
                     ttCustAccts.custacctnum = mGetNextCustAcctNum().
                       
-                ASSIGN 
-                    THIS-OBJECT:CustAcctData   = THIS-OBJECT:CustAcctData     + "|" + aOCustAcct:mGetCustomerAcctBankData()
-                    THIS-OBJECT:BillAcctIDData = THIS-OBJECT:BillAcctIDData   + "|" + aOCustAcct:mGetBillAcctIDData().
+                ASSIGN THIS-OBJECT:BillAcctIDData = THIS-OBJECT:BillAcctIDData   + "|" + aOCustAcct:mGetBillAcctIDData().
                
             /*Example for the CustAcctData format
              CustacctID1;Bankacct1,Bankacct2|CustacctID2;Bankacct3,Bankacct4|etc.... 
