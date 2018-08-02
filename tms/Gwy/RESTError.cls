@@ -51,13 +51,13 @@ CLASS Gwy.RESTError INHERITS AppError:
         icHTTPStatusName AS CHARACTER,
         ioObject AS CLASS Progress.Lang.Object ):
 
-      Class.Logger:writeLog(1,
-                            SUBSTITUTE("&1 &2",
-                                       iiHTTPStatus,
-                                       icHTTPStatusName),
-                            "ERROR").
-      
-      HTTPStatus = iiHTTPStatus.
+      ASSIGN
+         THIS-OBJECT:ReturnValue = SUBSTITUTE("&1 &2",
+                                              iiHTTPStatus,
+                                              icHTTPStatusName)
+         HTTPStatus = iiHTTPStatus.
+
+      Class.Logger:writeLog(1, THIS-OBJECT:ReturnValue, "ERROR").
       
       IF NOT VALID-OBJECT(ioObject)
       THEN RETURN.
