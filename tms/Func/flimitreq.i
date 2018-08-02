@@ -259,7 +259,8 @@ FUNCTION fCreateLimitHistory RETURNS LOGICAL
 END.
 
 FUNCTION fSetSpecialTTFLimit RETURNS INT (
-   INPUT iiCustnum AS INT):
+   INPUT iiCustnum AS INT,
+   INPUT icCLiType AS CHAR):
    
    DEF VAR ldeLimits AS DEC NO-UNDO EXTENT 2.
    DEF VAR liLimitID AS INT NO-UNDO. 
@@ -268,10 +269,7 @@ FUNCTION fSetSpecialTTFLimit RETURNS INT (
 
    DEF BUFFER Limit FOR Limit.
 
-   IF NOT CAN-FIND(
-      FIRST MobSub NO-LOCK WHERE
-            MobSub.Custnum = iiCustnum AND
-            LOOKUP(MobSub.CLIType,"CONTFH109_300,CONTFH129_1000") > 0)
+   IF LOOKUP(icCLiType,"CONTFH109_300,CONTFH129_1000") EQ 0
       THEN RETURN 0.
          
    /* Only update if TTF has default limits */

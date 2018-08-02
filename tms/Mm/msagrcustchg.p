@@ -855,7 +855,8 @@ PROCEDURE pOwnerChange:
        Msrequest.MsRequest,
        MsRequest.ActStamp).
    
-   fSetSpecialTTFLimit(liNewOwner).
+   fSetSpecialTTFLimit(liNewOwner,
+                       MobSub.CLIType).
 
    RUN pFinalize(MsRequest.ActStamp, 
                  MsRequest.MsSeq,

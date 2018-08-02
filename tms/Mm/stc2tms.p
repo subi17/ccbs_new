@@ -1129,7 +1129,8 @@ PROCEDURE pFinalize:
    /* default counter limits */
    IF MobSub.PayType = FALSE THEN DO:
       fTMRLimit2Subscription(MobSub.MsSeq).
-      fSetSpecialTTFLimit(MobSub.Custnum).
+      fSetSpecialTTFLimit(MobSub.Custnum,
+                          MobSub.CLIType).
    END.
 
    /* commission termination */
