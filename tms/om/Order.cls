@@ -233,6 +233,16 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
          OrderInspectionData  =   ioJsonObject:GetJsonObject("inspection")               WHEN ioJsonObject:Has("inspection")
          aoCustomer           =   NEW cm.Customer().
          
+      ASSIGN
+          ldaCreateDate            = Func.Common:mGetDate(ioJsonObject:GetCharacter("created-at"))
+          THIS-OBJECT:ContractId   = ioJsonObject:GetCharacter("contractid") 
+          THIS-OBJECT:Salesman     = ioJsonObject:GetCharacter("salesman")
+          THIS-OBJECT:OrderChannel = ioJsonObject:GetCharacter("channel")
+          THIS-OBJECT:CrStamp      = YEAR(ldaCreateDate) * 10000 + MONTH(ldaCreateDate) * 100 + DAY(ldaCreateDate)
+          aoCustomer:isProCustomer = ( INDEX(THIS-OBJECT:OrderChannel,"PRO") > 0 )     
+          aoCustomer:OrderChannel  = THIS-OBJECT:OrderChannel                   
+          .
+         
       IF VALID-OBJECT(loAgrCust) 
       THEN DO:          
           IF loAgrCust:Has("custnum")
@@ -245,31 +255,19 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
       THEN DO:
           
           IF loCustAcct:Has("custnum")
-          THEN DO:
-              
+          THEN DO:              
               THIS-OBJECT:liCustNum   =  loCustAcct:GetInteger("custnum").
               aoCustomer:mFindData(THIS-OBJECT:liCustNum).
               IF loCustAcct:Has("account_id")
               THEN DO:              
                   ASSIGN 
                       THIS-OBJECT:CustAcctNum = loCustAcct:GetInteger("account_id").
-                  aoCustomer:mFindCustomer(THIS-OBJECT:CustAcctNum).                  
-              END.              
+                  aoCustomer:mFindCustomerAcct(THIS-OBJECT:CustAcctNum).                  
+              END.       
+              aoCustomer:mUpdateCustomerData(INPUT loCustAcct).       
           END.          
-          ELSE aoCustomer:mCreateData(loCustAcct).
-      END.      
-
-      ASSIGN
-         ldaCreateDate            = Func.Common:mGetDate(ioJsonObject:GetCharacter("created-at"))
-         THIS-OBJECT:ContractId   = ioJsonObject:GetCharacter("contractid") 
-         THIS-OBJECT:Salesman     = ioJsonObject:GetCharacter("salesman")
-         THIS-OBJECT:OrderChannel = ioJsonObject:GetCharacter("channel")
-         THIS-OBJECT:CrStamp      = YEAR(ldaCreateDate) * 10000 +
-                                    MONTH(ldaCreateDate) * 100 +
-                                    DAY(ldaCreateDate)
-         aoCustomer:isProCustomer = ( INDEX(THIS-OBJECT:OrderChannel,"PRO") > 0 )     
-         aoCustomer:OrderChannel  = THIS-OBJECT:OrderChannel                   
-         .
+          ELSE aoCustomer:mCreateData(INPUT loCustAcct).
+      END.            
       
       IF ioJsonObject:Has("items")
       THEN DO:
@@ -305,8 +303,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 
     METHOD PUBLIC VOID mStoreData():
         
-        /* If there is a new customer data we need to create it first */
-        IF aoCustomer:isNewCustomer THEN
+        IF aoCustomer:isNewCustomer OR 
+           aoCustomer:isCustomerUpdate THEN
         aoCustomer:mStoreData().
         
         CREATE Order.

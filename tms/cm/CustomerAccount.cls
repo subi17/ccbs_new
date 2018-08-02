@@ -57,7 +57,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY BillAddrID AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY BillAddrID AS INTEGER NO-UNDO
        GET.
        SET.
        
@@ -110,7 +110,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             
         /*We expect only one customer account in the JSON and that customer account should the default customer account*/    
         IF THIS-OBJECT:DefaultAcct = FALSE 
-        THEN UNDO , THROW NEW ParamError ("Dafault customer account should exist when creating a new customer.").  
+        THEN UNDO , THROW NEW ParamError ("Default customer account should be created when creating a new customer.").  
             
         IF ioCustAcctObject:Has("billing_address")
         THEN DO:
@@ -156,7 +156,14 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	
 	METHOD PUBLIC VOID mStoreData():
 	    
-	    CREATE CustomerAccount.
+	    FIND FIRST CustomerAccount WHERE CustomerAccount.AccountID = THIS-OBJECT:AccountID EXCLUSIVE-LOCK  NO-WAIT NO-ERROR.
+	    
+	    IF LOCKED CustomerAccount THEN 
+            UNDO, THROW NEW ParamError("Customer Account record is locked.").
+	    
+	    IF NOT AVAILABLE CustomerAccount THEN                                     
+    	    CREATE CustomerAccount.
+    	    
 	    ASSIGN Customeraccount.AccountID   = THIS-OBJECT:AccountID
 	           CustomerAccount.CustNum     = THIS-OBJECT:CustNum
 	           CustomerAccount.DefaultAcc  = THIS-OBJECT:DefaultAcct
@@ -169,7 +176,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	     IF VALID-OBJECT(aoBillAddrObj)
 	     THEN DO:
              aoBillAddrObj:mStoreData().
-             ASSIGN THIS-OBJECT:BillAddrID = aoBillAddrObj:AddrRegisterID.	         
+             ASSIGN THIS-OBJECT:BillAddrID = aoBillAddrObj:AddrID.	         
 	     END.
 	     FOR EACH ttBillingAcct :
              CAST(ttBillingAcct.BillAcctObj, cm.BillingAccount):mStoreData().
@@ -222,6 +229,113 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         RETURN loCustAcctObj.
 
     END METHOD.
+    
+    METHOD PUBLIC VOID mUpdateCustAcctData( INPUT iiCustAcctNum AS INTEGER , INPUT ioCustAcctObj  AS JsonObject ) :
+        
+        DEFINE BUFFER bfCustAcct FOR CustomerAccount.
+        
+        DEFINE VARIABLE liBillAcctID AS INTEGER NO-UNDO.
+        
+        DEFINE VARIABLE aoBillingAcct AS CLASS cm.BillingAccount NO-UNDO.
+        DEFINE VARIABLE BillAcctArray AS CLASS   JsonArray  NO-UNDO.
+        DEFINE VARIABLE BillAcctObj   AS CLASS   JsonObject NO-UNDO.
+        DEFINE VARIABLE liBillAcctCnt AS INTEGER NO-UNDO.
+        
+        FIND FIRST bfCustAcct WHERE bfCustAcct.AccountID  = iiCustAcctNum NO-LOCK NO-ERROR .
+        
+        IF NOT AVAILABLE bfCustAcct THEN 
+            UNDO, THROW NEW ParamError(SUBSTITUTE("Account_not_found|&1", iiCustAcctNum)).
+             
+        ASSIGN 
+            THIS-OBJECT:DefaultAcct = (IF ioCustAcctObj:Has("default_account") THEN ioCustAcctObj:GetLogical("default_account")   ELSE bfCustAcct.DefaultAcc )   
+            THIS-OBJECT:AcctName    = (IF ioCustAcctObj:Has("account_name")    THEN ioCustAcctObj:GetCharacter("account_name") ELSE bfCustAcct.AccountName)
+            THIS-OBJECT:ValidFrom   = bfCustAcct.FromDate
+            THIS-OBJECT:ValiTo      = bfCustAcct.ToDate
+            THIS-OBJECT:AccountID   = bfCustAcct.AccountID  
+            THIS-OBJECT:CustNum     = bfCustAcct.CustNum
+            THIS-OBJECT:StatusCode  = bfCustAcct.StatusCode /*0=pending, 1=active*/
+            .
+            
+        IF ioCustAcctObj:Has("billing_address")
+        THEN DO:
+                        
+            mGetBillingAddressID().  /* We will get the Billing Address ID for updation*/
+            
+            aoBillAddrObj = NEW om.OrderAddress().            
+            ASSIGN 
+                aoBillAddrObj:KeyValue = THIS-OBJECT:CustNum
+                aoBillAddrObj:AddrType = {&BILLING_ADDRESS}
+                .
+                   
+            IF THIS-OBJECT:DefaultAcct = TRUE 
+            THEN DO:                
+                ioCustomerObj:mAssignDefaultAddressObj(ioCustAcctObj:GetJsonObject("billing_address")).                
+            END.                  
+            
+            aoBillAddrObj:mUpdateAddressData(INPUT THIS-OBJECT:BillAddrID , INPUT ioCustAcctObj:GetJsonObject("billing_address")).           
+                            
+        END.        
+        
+        IF ioCustAcctObj:Has("billing_accounts")
+        THEN DO:
+            
+            ASSIGN 
+                BillAcctArray = ioCustAcctObj:GetJsonArray("billing_accounts").
+            
+            DO liBillAcctCnt = 1 TO BillAcctArray:LENGTH :
+                                
+                ASSIGN  
+                    BillAcctObj   = BillAcctArray:GetJsonObject(liBillAcctCnt)
+                    aoBillingAcct = NEW cm.BillingAccount(THIS-OBJECT).                    
+                    
+                ASSIGN liBillAcctID = mGetBillingAcctID(). /*We will get the Billing Account ID here.*/
+                           
+                aoBillingAcct:mUpdateBillAcctData( INPUT liBillAcctID , INPUT BillAcctObj).
+                
+                CREATE ttBillingAcct.
+                ASSIGN 
+                    ttBillingAcct.BillAcctObj = aoBillingAcct
+                    ttBillingAcct.BillAcctNum = mNextBillAcctNum().
+                       
+                ASSIGN 
+                    THIS-OBJECT:BankAccts      = THIS-OBJECT:BankAccts       + "," + aoBillingAcct:mGetBankAcct()
+                    THIS-OBJECT:BillingAcctIDs = THIS-OBJECT:BillingAcctIDs  + "," + aoBillingAcct:mGetBillingAcctID().
+                    
+            END.            
+        END.
+
+        ASSIGN 
+            THIS-OBJECT:BankAccts      = TRIM(THIS-OBJECT:BankAccts      , ",")
+            THIS-OBJECT:BillingAcctIDs = TRIM(THIS-OBJECT:BillingAcctIDs , ",").
+        
+    END METHOD.	
 	
+	METHOD PUBLIC VOID mGetBillingAddressID() :
+	    
+	    DEFINE BUFFER bfAddress FOR Address.
+	    
+	    FIND FIRST bfAddress WHERE bfAddress.KeyValue     =  STRING(THIS-OBJECT:CustNum) 
+	                           AND bfAddress.HostTable    =  "CUSTOMER"
+	                           AND bfAddress.AddressType  =  {&BILLING_ADDRESS} NO-LOCK NO-ERROR.
+	                           
+	    IF NOT AVAILABLE bfAddress THEN  
+            UNDO, THROW NEW ParamError("Billing Address not found to update.").
+            
+         ASSIGN THIS-OBJECT:BillAddrID  =  bfAddress.AddressID.	                                   
+	    
+	END METHOD.	
+	
+	METHOD PUBLIC INTEGER mGetBillingAcctID():	    
+	    
+	    FIND FIRST InvoiceTargetGroup WHERE InvoiceTargetGroup.Brand        =  Syst.Var:gcBrand
+	                                    AND InvoiceTargetGroup.AccountID    =  THIS-OBJECT:AccountID
+	                                    AND InvoiceTargetGroup.CustAccName  =  THIS-OBJECT:AcctName NO-LOCK NO-ERROR.
+	                                    
+        IF NOT AVAILABLE InvoiceTargetGroup THEN 
+            UNDO, THROW NEW ParamError("Billing Account not found to update.").	    
+            
+        RETURN (InvoiceTargetGroup.ITGroupID).                                
+	    
+	END METHOD.
     
 END CLASS.
