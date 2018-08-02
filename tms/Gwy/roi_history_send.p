@@ -479,7 +479,6 @@ PROCEDURE pSendROIHistory:
       RETURN.
    END.
  
-   xmlrpc_initialize(FALSE).
    fwriexml_ROI_test("ROIHistoryInterface.store_order"). 
    RUN pRPCMethodCall("ROIHistoryInterface.store_order", TRUE). 
 

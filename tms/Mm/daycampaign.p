@@ -60,7 +60,6 @@ DEF VAR lcModifyFee   AS CHAR NO-UNDO.
 DEF VAR lcTermFee     AS CHAR NO-UNDO.
 DEF VAR lcEffective   AS CHAR NO-UNDO.
 DEF VAR lcTermFeeCalc AS CHAR NO-UNDO.
-DEF VAR llFirstMonthCalc AS LOG  NO-UNDO.
 DEF VAR lcStatus      AS CHAR NO-UNDO.
 DEF VAR lcBundleType  AS CHAR NO-UNDO.
 
@@ -120,10 +119,7 @@ form
       DayCampaign.DurUnit LABEL "Unit" 
       lcDurUnit NO-LABEL FORMAT "X(15)" SKIP
    DayCampaign.WeekDay       COLON 23 
-      lcWeekday NO-LABEL  SKIP
-   DayCampaign.BundleUpsell  COLON 23 LABEL "Upsell"
-      FORMAT "x(256)" VIEW-AS FILL-IN SIZE 30 BY 1
-      HELP "Upsell corresponding to that Bundle" SKIP
+      lcWeekday NO-LABEL  SKIP   
 WITH OVERLAY ROW 1 centered
    COLOR value(Syst.Var:cfc)
    TITLE COLOR value(Syst.Var:ctc)
@@ -140,11 +136,6 @@ FORM
    DayCampaign.TermFeeCalc COLON 23 FORMAT "9" 
       lcTermFeeCalc NO-LABEL FORMAT "X(30)" 
    SKIP(1)   
-   llFirstMonthCalc COLON 23
-      FORMAT "Relative/Full"
-      LABEL "1. month service limit"
-      HELP "First month calculation method, (F)ull or (R)elative"
-   SKIP(1)
 WITH OVERLAY ROW 5 CENTERED   
    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH SIDE-LABELS FRAME fFees.
@@ -816,8 +807,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          lcCalcMethod 
          ccn.ccnname        WHEN AVAIL ccn
          bBillItem.BIName   WHEN AVAIL bBillItem
-         "" WHEN NOT AVAIL bBillItem @ bBillItem.BIName 
-         DayCampaign.BundleUpsell
+         "" WHEN NOT AVAIL bBillItem @ bBillItem.BIName
       WITH FRAME lis.
       
       fDispUnit(DayCampaign.InclUnit).
@@ -834,6 +824,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          Syst.Var:ufk    = 0
          Syst.Var:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.Var:gcHelpParam = ""
          Syst.Var:ufk[2] = 295
+         Syst.Var:ufk[3] = 9858
          Syst.Var:ufk[4] = 253
          Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
@@ -845,7 +836,9 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       END.   
 
       ELSE IF Syst.Var:toimi = 2 THEN RUN pFeeData(FALSE).
-
+      
+      ELSE IF Syst.Var:toimi = 3 THEN RUN Mc/tmsrelation.p({&DCTABLENAME},{&DCKEYTYPE},DayCampaign.DCEvent).
+      
       ELSE IF Syst.Var:toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
       
       ELSE IF Syst.Var:toimi = 8 THEN LEAVE MaintMenu.
@@ -897,7 +890,6 @@ PROCEDURE pUpdate:
          DayCampaign.DurMonth
          DayCampaign.DurUnit
          DayCampaign.WeekDay
-         DayCampaign.BundleUpsell
          WHEN LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0
       WITH FRAME lis EDITING: 
       
@@ -1205,7 +1197,7 @@ PROCEDURE pFeeData:
          lcFee       = fFeeModel(DayCampaign.FeeModel)
          lcModifyFee = fFeeModel(DayCampaign.ModifyFeeModel)
          lcTermFee   = fFeeModel(DayCampaign.TermFeeModel)
-         llFirstMonthCalc = (DayCampaign.FirstMonthCalc = 1).
+         .
       
       PAUSE 0.
       DISP 
@@ -1216,7 +1208,6 @@ PROCEDURE pFeeData:
          lcModifyfee
          lcTermFee
          DayCampaign.TermFeeCalc
-         llFirstMonthCalc
       WITH FRAME fFees.
       
       fTermFeeCalc(DayCampaign.TermFeeCalc).
@@ -1244,7 +1235,6 @@ PROCEDURE pFeeData:
             DayCampaign.ModifyFeeModel
             DayCampaign.TermFeeModel
             DayCampaign.TermFeeCalc
-            llFirstMonthCalc
          WITH FRAME fFees EDITING: 
       
             READKEY.
@@ -1329,7 +1319,6 @@ PROCEDURE pFeeData:
                     
          END. /* editing */
          
-         DayCampaign.FirstMonthCalc = INTEGER(llFirstMonthCalc).   
          LEAVE.
      END.
      
@@ -1340,5 +1329,4 @@ PROCEDURE pFeeData:
   HIDE FRAME fFees NO-PAUSE.  
    
 END PROCEDURE.
-
 

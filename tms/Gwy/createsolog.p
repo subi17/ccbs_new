@@ -109,7 +109,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
                         INPUT  MsRequest.MsSeq,
                         INPUT  (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
                                 MsRequest.ActStamp ELSE Func.Common:mMakeTS()),
-                        INPUt  MsRequest.ReqCparam3,
+                        INPUT  MsRequest.ReqCparam3,
                         INPUT  "",
                         OUTPUT ldeCurrMonthLimit,
                         OUTPUT ldeConsumedData,
@@ -181,12 +181,16 @@ RETURN RETURN-VALUE.
 
 PROCEDURE pSolog:
 
-   DEF BUFFER bufOrder  FOR Order.
-   DEF BUFFER bufMobsub FOR Mobsub.
+   DEF BUFFER bufOrder      FOR Order.
+   DEF BUFFER bufMobsub     FOR Mobsub.
    DEF BUFFER bufTermMobsub FOR TermMobsub.
+   DEF BUFFER bActionLog    FOR ActionLog.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
-   DEF VAR ldCurrBal AS DECIMAL NO-UNDO. 
+   DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
+   DEF VAR liError       AS INT NO-UNDO.
+   DEF VAR lcResult      AS CHAR NO-UNDO.
+   DEF VAR liOrderId     AS INT  NO-UNDO.
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -238,6 +242,36 @@ PROCEDURE pSolog:
    
       IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
           MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN DO:
+
+         IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
+           
+            IF (fIsFixedOnly(bufMobsub.CLIType)                  AND
+                MSRequest.ReqCParam6 EQ {&TERMINATION_TYPE_FULL} AND
+                CAN-FIND(FIRST bActionLog NO-LOCK  WHERE
+                               bActionLog.Brand     EQ Syst.Var:gcBrand                     AND
+                               bActionLog.ActionID  EQ {&MERGE2P3P}                         AND
+                               bActionLog.TableName EQ "MobSub"                             AND
+                       ENTRY(1,bActionLog.ActionChar,CHR(255)) EQ STRING(MsRequest.MsSeq))) THEN .
+            ELSE IF (fHasConvergenceTariff(MSRequest.MSSeq) AND
+                     MSRequest.ReqCParam6 = {&TERMINATION_TYPE_FULL}) THEN DO:
+
+               liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
+               IF liOrderId EQ 0
+                  THEN lcResult = "OrderID not found".
+               /* This call makes synchronous termination request to MuleDB */
+               ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+               
+               IF lcResult > "" THEN DO:
+                  Func.Common:mWriteMemo("MobSub",
+                              STRING(BufMobsub.MsSeq),
+                              BufMobsub.Custnum,
+                              "La baja del sevicio fijo ha fallado: ", /* Fixed number termination failed" */
+                              lcResult).
+                  fReqError("La baja del sevicio fijo ha fallado: " + lcResult).
+                  RETURN.
+               END.       
+            END.
+         END.
 
          /* Cancel the active/suspended BB service before
             subscription termination or icc change provisioning */
