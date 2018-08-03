@@ -458,7 +458,7 @@ PROCEDURE pSolog:
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MsRequest.MsSeq   /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               ProCommand.ProCommandtarget    = "NB_CH"
+               ProCommand.ProCommandtarget    = "NB_AS"
                ProCommand.ProCommandVerb      = "PUT"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
             
@@ -519,7 +519,7 @@ PROCEDURE pSolog:
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               ProCommand.ProCommandtarget    = "NB_CH"
+               ProCommand.ProCommandtarget    = "NB_AS"
                ProCommand.ProCommandVerb      = "POST"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
                                                 "/manage-subscription".
@@ -572,7 +572,7 @@ PROCEDURE pSolog:
                ProCommand.Creator             = Syst.Var:katun    
                ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
                ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               ProCommand.ProCommandtarget    = "NB_CH"
+               ProCommand.ProCommandtarget    = "NB_AS"
                ProCommand.ProCommandVerb      = "DELETE"
                ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
          END.
@@ -591,7 +591,7 @@ PROCEDURE pSolog:
                bProCommand.Creator             = Syst.Var:katun    
                bProCommand.MsSeq               = MsRequest.MsSeq  
                bProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               bProCommand.ProCommandtarget    = "NB_CH"
+               bProCommand.ProCommandtarget    = "NB_AS"
                bProCommand.ProCommandVerb      = "POST"            
                bProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
                                                  "/set-accumulated-volume".

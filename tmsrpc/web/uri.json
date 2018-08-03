@@ -1,7 +1,7 @@
 [
+    { "web.cls.SAPCServerMock": "/api/northbound-tms/1/sync/orders" },
+    { "web.cls.SAPCServerMock": "/api/northbound-common/post-sales/ema/1" },
     { "web.cls.SAPCServerMock": "/crm-integration-tms/Order" },
-    { "web.cls.SAPCServerMock": "/northbound-tms/sync/orders" },
-    { "web.cls.SAPCServerMock": "/northbound-common/post-sales/ema" },
     { "web.cls.ProMessageNotify": "/promessage/{messageid}" },
     { "profcgi.REST.DefaultWebHandler": "" }
 ]
