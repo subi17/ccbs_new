@@ -44,6 +44,9 @@ DEF VAR lcLine              AS CHAR NO-UNDO. /* Read line of the current file. *
 DEF VAR lcPerContractBobLog AS CHAR NO-UNDO. /* Log file for Periodical Contract Bob Tool executions */
 DEF VAR liRequestStatus     AS INT  NO-UNDO. /* Returned code from action request. */                    
 DEF VAR lcResult            AS CHAR NO-UNDO. /* Info about requested action result. */
+DEF VAR liDelaySeconds      AS INT  NO-UNDO. /* Delay, in seconds, for the creation of the periodical contract (from cParam) */ 
+DEF VAR lcListPerContDelay  AS CHAR NO-UNDO. /* List of periodical contract to apply delay (from Cparam) */
+DEF VAR ldActStamp          AS DEC  NO-UNDO. /* Delay to add in this periodical contract */
 
 /* Getting directories from CParams */
 ASSIGN
@@ -52,6 +55,9 @@ ASSIGN
    lcOutgoingDirectory  = fCParamC("PerContractBobOutgoingDir")
    lcProcessedDirectory = fCParamC("PerContractBobProcessedDir")
    lcLogsDirectory      = fCParamC("PerContractBobLogsDir") NO-ERROR.
+
+/* List of periodical contracts that need delay (from cParam) */   
+lcListPerContDelay = Syst.Parameters:getc("DelayedPermanencies", "Discount").
 
 /* Log file for PerContractBob executions */
 lcPerContractBobLog = lcLogsDirectory + 
@@ -174,11 +180,19 @@ REPEAT:
          NEXT.         
       END.          
           
+      /* YCO-757. Delay for permanency */
+      IF LOOKUP(lcPerContract, lcListPerContDelay) > 0 THEN DO:
+         liDelaySeconds = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+         /* def = 0 current functionality without delay. For YCO-757 def value is 432000 */
+         ldActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDelaySeconds).
+      END.   
+      ELSE ldActStamp = 0.                  
+          
       liRequestStatus = fPCActionRequest(
                            Mobsub.MsSeq,             /* subscription                              */
                            DayCampaign.DCEvent,      /* periodical contract                       */
                            "act",                    /* act,term,canc,iterm,cont                  */
-                           0,                        /* when request should be handled, 0 --> Now */
+                           ldActStamp,               /* when request should be handled, 0 --> Now */
                            TRUE,                     /* fees                                      */
                            {&REQUEST_SOURCE_SCRIPT}, /* where created                             */
                            "",                       /* creator                                   */

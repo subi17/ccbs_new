@@ -312,14 +312,12 @@ THEN RETURN appl_err(lcError).
 /* YCO-468. Assign permanency when lcPerContract <> "" */
 IF lcPerContract <> "" THEN DO:
 
+   /* YCO-757. Delay for permanency */
    lcList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
-   DO i = 1 TO NUM-ENTRIES(lcList, ","):
-      IF lcPerContract MATCHES ENTRY(i, lcList, ",") THEN DO:
-         liDiscCreDelay = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
-         /* def = 0 current functinality without delay. For YCO-757 def value is 432000 */
-         ldActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).
-      END.
-      ELSE ldActStamp = 0.
+   IF LOOKUP(lcPerContract, lcList) > 0 THEN DO:
+      liDiscCreDelay = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+      /* def = 0 current functionality without delay. For YCO-757 def value is 432000 */
+      ldActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).
    END. 
       
    liResult = fPCActionRequest(
