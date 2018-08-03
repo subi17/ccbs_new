@@ -153,10 +153,10 @@ CLASS Gwy.ProCommandHandler FINAL:
 
             CASE ttProcess.ProCommandTarget:
                WHEN "NB_AS"
-               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/northbound-common/post-sales/ema",
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/northbound-common/post-sales/ema/1",
                                                                acURIPrefix).
                WHEN "NB_CH"
-               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/northbound-tms/sync/orders",
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/api/northbound-tms/1/sync/orders",
                                                                acURIPrefix).
                WHEN "BPM"
                THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/crm-integration-tms/Order",
