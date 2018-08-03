@@ -590,7 +590,28 @@ PROCEDURE pInvoice2XML:
                              - ttInvoice.GBDiscValue)).  
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
-     
+
+      /* Total fractura line */
+      IF ttInvoice.InstallmentAmt > 0 OR
+         ttInvoice.GBValue > 0 OR
+         ttInvoice.AgileTV > 0 OR
+         ttInvoice.OtherConcepts > 0 THEN DO:
+         lhXML:START-ELEMENT("AdditionalDetail").
+         lhXML:START-ELEMENT("AdditionalAmount").
+         lhXML:INSERT-ATTRIBUTE("Header","TotalAmountExclInstallment").
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(
+                                Invoice.InvAmt
+                                - ttInvoice.InstallmentAmt
+                                - ttInvoice.PenaltyAmt
+                                - ttInvoice.InstallmentDiscAmt
+                                - ttInvoice.GBValue
+                                - ttInvoice.GBDiscValue
+                                - ttInvoice.AgileTV
+                                - ttInvoice.OtherConcepts)).
+         lhXML:END-ELEMENT("AdditionalAmount").
+         lhXML:END-ELEMENT("AdditionalDetail").
+      END.
+ 
       IF ttInvoice.PenaltyAmt > 0 THEN DO:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
@@ -612,7 +633,7 @@ PROCEDURE pInvoice2XML:
          lhXML:END-ELEMENT("AdditionalDetail").
       END.
 
-      IF ttInvoice.OtherConcepts > 0 THEN DO:
+      /* IF ttInvoice.OtherConcepts > 0 THEN DO:
        /* If needed, any concept that must be included in the invoice without taxes. */
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
@@ -620,7 +641,7 @@ PROCEDURE pInvoice2XML:
          lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.OtherConcepts)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
-      END.
+      END.*/
        /* YDR-2848 end */
       
       lhXML:WRITE-DATA-ELEMENT("TotalAmount",fDispXMLDecimal(Invoice.InvAmt)).

@@ -911,7 +911,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
       ASSIGN ttSub.CLI         = SubInvoice.CLI
              ttSub.FixedNumber = SubInvoice.FixedNumber
              ttSub.MsSeq       = SubInvoice.MsSeq. 
-      
+
       /*NEBACO-7*/
       /*Find IUA for the subscription*/
       IF ttSub.FixedNumber NE "" AND ttSub.FixedNumber NE ? THEN DO:
@@ -1186,10 +1186,13 @@ PROCEDURE pGetSubInvoiceHeaderData:
              ttSub.Bundles = ttSub.Bundles + ttRow.RowAmtExclVat.
  
           /* YDR-2848 The sum of outgoings that aren.t included in the 
-             tariff fee: SMS, MMS, international calls, AgileTV etc. */
-          IF ttRow.RowCode BEGINS "55" OR
-             (ttRow.RowGroup EQ "1" AND
-              ttRow.RowName BEGINS "CALLS") THEN
+             tariff fee: SMS, MMS, international calls, AgileTV etc.
+Comment from ticket:
+Yoigo is requesting to merge the "billing groups" "Llamadas desde Fijo", "Servicio Premium Fijo" and "Llamadas desde Móvil" in only one, and this amount will be the amount of "Otros Consumos".  It means all the "billing groups" that NOT are "Tarifa" nor "Internet desde el móvil" will be accumulated and this amount will be shown in "Otros consumos". */
+          IF (ttRow.RowCode BEGINS "55" OR
+              ttRow.RowGroup EQ "1" OR
+              ttRow.RowGroup EQ "51" OR
+              ttRow.RowGroup EQ "53") AND ttRow.RowCode EQ "" THEN /* RowCode checked to avoid duplicate summing. */
              ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
 
          /* YDR-2848 Subscription level TOTAL sum */
