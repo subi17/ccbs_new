@@ -125,15 +125,13 @@ FUNCTION fCreateUpsell RETURNS INT
    DEF VAR i               AS INT NO-UNDO.    
 
    /* YCO-757. Delay for permanency */
-   IF (ideActStamp = 0 OR ideActStamp = ?) THEN DO: /* Only if the delay was not previously updated. */
-      lcList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
-      IF LOOKUP(icDCEvent, lcList) > 0 THEN DO:
-         liDiscCreDelay = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
-         /* def = 0 current functionality without delay. For YCO-757 def value is 432000 */
-         ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).
-      END.    
-   END.   
-
+   lcList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+   IF LOOKUP(icDCEvent, lcList) > 0 THEN DO:
+      liDiscCreDelay = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+      /* def = 0 current functionality without delay. For YCO-757 def value is 432000 */
+      ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).
+   END.    
+ 
    liRequest = fPCActionRequest(iiMsSeq,
                                 icDCEvent,
                                 "act",
