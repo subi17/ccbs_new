@@ -258,14 +258,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
    
-   IF OrderFusion.IUA NE "" THEN DO:
-       fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "IUA",                   /*param name*/
-                         OrderFusion.IUA,         /*param value*/
-                         "").                     /*old value*/
-      
-   END.
-
    /*Mandatory in portability*/
    IF OrderFusion.FixedNumberType NE "new" THEN DO:
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
@@ -413,7 +405,12 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                          "DHCP", /*param value*/
                          "").                         /*old value*/
 /* YDR-2532 */
-
+      IF OrderFusion.IUA NE "" THEN DO:
+         fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "IUA",                   /*param name*/
+                         OrderFusion.IUA,         /*param value*/
+                         "").                     /*old value*/      
+      END. /* NEBACO-105 */
    END.
 
    IF LENGTH(OrderCustomer.Gescal) < 37 THEN
