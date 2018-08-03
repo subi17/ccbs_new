@@ -31,42 +31,43 @@ CLASS pm.OrderProductAccessory INHERITS pm.OrderProduct:
         INDEX paramnb IS PRIMARY UNIQUE paramnb
         .
 	
-	DEFINE PUBLIC PROPERTY aoShipAddress AS CLASS om.OrderCustomer NO-UNDO 
+	DEFINE PUBLIC PROPERTY objInstallationOrderCustomer AS CLASS om.OrderCustomer NO-UNDO 
 	    GET.
 	    SET.
 		
-	CONSTRUCTOR PUBLIC OrderProductAccessory ( INPUT ioOrder AS CLASS om.Order ):
+	CONSTRUCTOR PUBLIC OrderProductAccessory ( INPUT iObjOrder AS CLASS om.Order ):
 	    
-		SUPER (ioorder).
+		SUPER (iObjOrder).
 		
 	END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC OrderProductAccessory ( ):
 	    
-	    ASSIGN aoShipAddress = ?.
+	    IF VALID-OBJECT(objInstallationOrderCustomer) THEN 
+	        DELETE OBJECT objInstallationOrderCustomer. 
 
 	END DESTRUCTOR.
 	
-    METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( ioItemObject AS CLASS JsonObject ):
+    METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( ioAccessoryStruct AS CLASS JsonObject ):
         
         DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
         DEFINE VARIABLE loShipAddress AS CLASS JsonObject NO-UNDO.
         
         
-        ASSIGN loAttributes             =    ioItemObject:GetJsonObject("attributes")
-               loShipAddress            =    loAttributes:GetJsonObject("shipping_address")
-               aoShipAddress            =    NEW om.OrderCustomer(aoOrder)
-               aoShipAddress:RowType    =    {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}.
+        ASSIGN loAttributes                         = ioAccessoryStruct:GetJsonObject("attributes")
+               loShipAddress                        = loAttributes:GetJsonObject("shipping_address")
+               objInstallationOrderCustomer         = NEW om.OrderCustomer(objOrder)
+               objInstallationOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}.
                
-        aoShipAddress:mCreateRowCustomerData(loShipAddress).
+        objInstallationOrderCustomer:mCreateRowCustomerData(loShipAddress).
         
         
     END METHOD.
     
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
-        IF VALID-OBJECT (aoShipAddress)
-        THEN aoShipAddress:mStoreData().
+        IF VALID-OBJECT (objInstallationOrderCustomer)
+        THEN objInstallationOrderCustomer:mStoreData().
         
     END METHOD.
 

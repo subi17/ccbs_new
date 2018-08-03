@@ -30,42 +30,37 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         FIELD paramnb  AS INTEGER
         INDEX paramnb IS PRIMARY UNIQUE paramnb
         .
-	
-    DEFINE PUBLIC PROPERTY aoSubscriptionParams AS CLASS pm.OrderProductParam NO-UNDO
-        GET.
-        SET.
         
-    DEFINE PUBLIC PROPERTY AttrCLI AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY attrCli AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY lcNumberType AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY mobileNumberType AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aoOrderAggrementCustomer AS CLASS om.OrderCustomer NO-UNDO 
+    DEFINE PUBLIC PROPERTY ObjAggrementCustomer AS CLASS om.OrderCustomer NO-UNDO 
         GET.
         SET. 
+        
+    DEFINE PUBLIC PROPERTY objSubscriptionParams AS CLASS pm.OrderProductParam NO-UNDO
+        GET.
+        SET.
         
     DEFINE PUBLIC PROPERTY AddressObj AS CLASS JsonObject  NO-UNDO
         GET.
         SET.
        
-    CONSTRUCTOR PUBLIC OrderProductSubscription ( ioOrder AS CLASS om.Order ):
+    CONSTRUCTOR PUBLIC OrderProductSubscription ( iObjOrder AS CLASS om.Order ):
 	    
-        SUPER(ioOrder).
+        SUPER(iObjOrder).
         
-        IF aoOrder:isFixedOnly 
-        THEN UNDO,THROW NEW ParamError ("Fixed Only Tariff should not have mobile subscription.").
+        IF objOrder:isFixedOnly THEN 
+            UNDO,THROW NEW ParamError ("Fixed Only Tariff should not have mobile subscription.").
 		
 	END CONSTRUCTOR.
 
-	DESTRUCTOR PUBLIC OrderProductSubscription ( ):
-	    
-	    ASSIGN aoSubscriptionParams      = ?
-               aoOrderAggrementCustomer  = ?.
-
-	END DESTRUCTOR.
+	
 	
 	METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( ioItemObject AS CLASS JsonObject ):
             
@@ -75,120 +70,120 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         DEFINE VARIABLE loBillAddrObj     AS CLASS     JsonObject NO-UNDO.
         DEFINE VARIABLE liCustNum         AS INTEGER   NO-UNDO.
         
-        ASSIGN loAttributes                     = NEW Progress.Json.ObjectModel.JsonObject()
-               loAttributes                     = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes")
+        ASSIGN loAttributes = NEW Progress.Json.ObjectModel.JsonObject()
+               loAttributes = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes")
                .
         
-        IF VALID-OBJECT(loAttributes)
-        THEN DO:
+        IF VALID-OBJECT(loAttributes) THEN
+        DO:
             
             ASSIGN
-                THIS-OBJECT:lcNumberType = loAttributes:GetCharacter("mobile_number_type") 
-                THIS-OBJECT:AttrCLI      = loAttributes:GetCharacter("mobile_number")                
+                THIS-OBJECT:mobileNumberType = loAttributes:GetCharacter("mobile_number_type") 
+                THIS-OBJECT:attrCli      = loAttributes:GetCharacter("mobile_number")                
                 .
                             
-            IF LOOKUP(THIS-OBJECT:lcNumberType,"new,mnp,renewal,stc") = 0 
-            THEN UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", THIS-OBJECT:lcNumberType)). 
+            IF LOOKUP(THIS-OBJECT:mobileNumberType,"new,mnp,renewal,stc") = 0 THEN
+                UNDO,THROW NEW ParamError (SUBSTITUTE("Unknown number_type: ", THIS-OBJECT:mobileNumberType)). 
             
-            IF THIS-OBJECT:lcNumberType = "mnp" AND 
-                CAN-FIND(FIRST Order WHERE Order.CLI = THIS-OBJECT:AttrCLI AND 
-                              (Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING} OR /*60*/
-                               Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING}))
-            THEN UNDO, THROW NEW ParamError ("Requested number is in migration").
+            IF THIS-OBJECT:mobileNumberType = "mnp" AND 
+                CAN-FIND(FIRST Order WHERE Order.CLI = THIS-OBJECT:attrCli AND 
+                              (Order.statusCode EQ {&ORDER_STATUS_MIGRATION_PENDING} OR /*60*/
+                               Order.statusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING})) THEN
+                UNDO, THROW NEW ParamError ("Requested number is in migration").
             
-            IF Func.ValidateOrder:misCLITypeExists(THIS-OBJECT:ProductID) = NO 
-            THEN UNDO , THROW NEW ParamError (SUBSTITUTE("Unknown Product ID : &1 ", THIS-OBJECT:ProductID)).
+            IF Func.ValidateOrder:misCLITypeExists(THIS-OBJECT:ProductID) = NO THEN
+                UNDO , THROW NEW ParamError (SUBSTITUTE("Unknown Product ID : &1 ", THIS-OBJECT:ProductID)).
                      
-            lcReturnValue = Func.ValidateOrder:mCheckMSISDN(THIS-OBJECT:AttrCLI,THIS-OBJECT:lcNumberType). 
+            lcReturnValue = Func.ValidateOrder:mCheckMSISDN(THIS-OBJECT:attrCli,THIS-OBJECT:mobileNumberType). 
             
-            IF lcReturnValue > ""
-            THEN UNDO, THROW NEW ParamError(lcReturnValue). 
+            IF lcReturnValue > "" THEN
+                UNDO, THROW NEW ParamError(lcReturnValue). 
             
             ASSIGN 
-                aoOrder:lcCLI          = THIS-OBJECT:AttrCLI
-                aoOrder:isPrePaidOrder = Func.ValidateOrder:mIsPrepaidOrder(THIS-OBJECT:ProductID)
-                aoOrder:CLIType        = THIS-OBJECT:ProductID.
+                objOrder:lcCLI          = THIS-OBJECT:attrCli
+                objOrder:isPrePaidOrder = Func.ValidateOrder:mIsPrepaidOrder(THIS-OBJECT:ProductID)
+                objOrder:cliType        = THIS-OBJECT:ProductID.
                 
-            IF aoOrder:isPrePaidOrder AND INDEX(aoOrder:OrderChannel,"PRO") > 0
-            THEN UNDO , THROW NEW ParamError("Prepaid subscriptions are not allowed for PRO customer(s)").
+            IF objOrder:isPrePaidOrder AND INDEX(objOrder:orderChannel,"PRO") > 0 THEN
+                UNDO , THROW NEW ParamError("Prepaid subscriptions are not allowed for PRO customer(s)").
                   
-            IF LOOKUP(THIS-OBJECT:lcNumberType,"renewal,stc") > 0
-            THEN DO:
+            IF LOOKUP(THIS-OBJECT:mobileNumberType,"renewal,stc") > 0 THEN
+            DO:
             
-                IF Func.ValidateOrder:misSubscriptionExists(INPUT THIS-OBJECT:AttrCLI) = FALSE 
-                    THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with msisdn &1 not found", THIS-OBJECT:AttrCLI)).
+                IF Func.ValidateOrder:misSubscriptionExists(INPUT THIS-OBJECT:attrCli) = FALSE 
+                    THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with msisdn &1 not found", THIS-OBJECT:attrCli)).
             
                 ASSIGN 
-                    liCustNum = Func.ValidateOrder:mGetMobSubCustNum(INPUT THIS-OBJECT:AttrCLI).
+                    liCustNum = Func.ValidateOrder:mGetMobSubCustNum(INPUT THIS-OBJECT:attrCli).
             
-                IF liCustNum = 0
-                THEN UNDO , THROW NEW ParamError("Customer not found for the renewal/stc order.").
+                IF liCustNum = 0 THEN
+                    UNDO , THROW NEW ParamError("Customer not found for the renewal/stc order.").
             
-                IF Func.ValidateOrder:misCustomerExists(INPUT aoOrder:aoCustomer:CustId , 
-                                                        INPUT aoOrder:aoCustomer:CustIdType ,
-                                                        INPUT liCustNum) = FALSE 
-               THEN UNDO , THROW NEW ParamError("Customer not found with matching id and id-type.").
+                IF Func.ValidateOrder:misCustomerExists(INPUT objOrder:objCustomer:CustId , 
+                                                        INPUT objOrder:objCustomer:CustIdType ,
+                                                        INPUT liCustNum) = FALSE THEN
+                    UNDO , THROW NEW ParamError("Customer not found with matching id and id-type.").
                
                 ASSIGN 
-                    aoOrder:isRenewalSTCOrder = TRUE
-                    aoOrder:MsSeq             = Func.ValidateOrder:mGetMsSeq(THIS-OBJECT:AttrCLI).
+                    objOrder:isRenewalSTCOrder = TRUE
+                    objOrder:MsSeq             = Func.ValidateOrder:mGetMsSeq(THIS-OBJECT:attrCli).
             
             END.
             
-            IF Func.ValidateOrder:misDuplicateContractExists(INPUT aoOrder:ContractId ,
-                                                             INPUT THIS-OBJECT:AttrCLI )
-            THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Duplicate contract ID &1", aoOrder:ContractId)).   
+            IF Func.ValidateOrder:misDuplicateContractExists(INPUT objOrder:ContractId ,
+                                                             INPUT THIS-OBJECT:attrCli ) THEN
+                UNDO , THROW NEW ParamError(SUBSTITUTE("Duplicate contract ID &1", objOrder:ContractId)).   
             
-            IF Func.ValidateOrder:mIsMigrationCLI(INPUT THIS-OBJECT:AttrCLI)
-            THEN UNDO , THROW  NEW ParamError("Requested number is in migration").                                                         
+            IF Func.ValidateOrder:mIsMigrationCLI(INPUT THIS-OBJECT:attrCli) THEN
+                UNDO , THROW  NEW ParamError("Requested number is in migration").                                                         
             
             mCreateDataOrderProductParamData(loAttributes,"mobile_number_type","Char").
             mCreateDataOrderProductParamData(loAttributes,"mobile_number","Char").  
             
-            ASSIGN aoOrder:MobileNumberType = THIS-OBJECT:lcNumberType.
+            ASSIGN objOrder:mobileNumberType = THIS-OBJECT:mobileNumberType.
                                                  
-            IF loAttributes:Has("mobile_old_operator_code") 
-            THEN DO:
+            IF loAttributes:Has("mobile_old_operator_code") THEN
+            DO:
                 mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_code","Char").
             END.
             
-            IF loAttributes:Has("mobile_old_operator_name") 
-            THEN DO:
+            IF loAttributes:Has("mobile_old_operator_name") THEN
+            DO:
                 mCreateDataOrderProductParamData(loAttributes,"mobile_old_operator_name","Char").
             END.
             
-            IF THIS-OBJECT:lcNumberType = "MNP"
-            THEN ASSIGN aoOrder:OrderType  = {&ORDER_TYPE_MNP}
-                        aoOrder:StatusCode = {&ORDER_STATUS_MNP}.
-            ELSE IF THIS-OBJECT:lcNumberType = "NEW" 
-            THEN ASSIGN aoOrder:OrderType  = {&ORDER_TYPE_NEW}
-                        aoOrder:StatusCode = {&ORDER_STATUS_NEW}.
+            IF THIS-OBJECT:mobileNumberType = "MNP" THEN
+                ASSIGN objOrder:orderType  = {&ORDER_TYPE_MNP}
+                       objOrder:statusCode = {&ORDER_STATUS_MNP}.
+            ELSE IF THIS-OBJECT:mobileNumberType = "NEW" THEN
+                ASSIGN objOrder:orderType  = {&ORDER_TYPE_NEW}
+                       objOrder:statusCode = {&ORDER_STATUS_NEW}.
                  
-            IF ioItemObject:Has("billing_account_id")
-            THEN DO:
+            IF ioItemObject:Has("billing_account_id") THEN
+            DO:
                 mGetBillingAddressObject(). 
             END.       
             
-            IF aoOrder:isPrePaidOrder 
-            AND aoOrder:aoCustomer:isNewCustomer = FALSE
-            THEN mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
+            IF objOrder:isPrePaidOrder 
+            AND objOrder:objCustomer:isNewCustomer = FALSE THEN
+                mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
             
             ASSIGN 
-                aoOrderAggrementCustomer           =  NEW om.OrderCustomer(aoOrder)
-                aoOrderAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+                ObjAggrementCustomer           =  NEW om.OrderCustomer(objOrder)
+                ObjAggrementCustomer:RowType   =  {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                .
                
-            aoOrder:aoCustomer:mCheckSubscriptionLimit(INPUT THIS-OBJECT:lcNumberType).
+            objOrder:objCustomer:mCheckSubscriptionLimit(INPUT THIS-OBJECT:mobileNumberType).
                
-            IF aoOrder:aoCustomer:isNewCustomer THEN    
-            aoOrderAggrementCustomer:mCreateRowCustomerData(aoOrder:aoCustomer:DefaultAddressObj).
-            ELSE aoOrderAggrementCustomer:mCreateRowCustomerData(AddressObj).
+            IF objOrder:objCustomer:isNewCustomer THEN    
+            ObjAggrementCustomer:mCreateRowCustomerData(objOrder:objCustomer:DefaultAddressObj).
+            ELSE ObjAggrementCustomer:mCreateRowCustomerData(AddressObj).
             
-            IF loAttributes:Has("initial_topup_amount")
-            THEN mCreateDataOrderProductParamData(loAttributes,"initial_topup_amount","Dec").
+            IF loAttributes:Has("initial_topup_amount") THEN
+                mCreateDataOrderProductParamData(loAttributes,"initial_topup_amount","Dec").
             
-            IF loAttributes:Has("initial_topup_display_amount")
-            THEN mCreateDataOrderProductParamData(loAttributes,"initial_topup_display_amount","Dec").
+            IF loAttributes:Has("initial_topup_display_amount") THEN
+                mCreateDataOrderProductParamData(loAttributes,"initial_topup_display_amount","Dec").
             
             /*TODO PC:Please check the MULTIHOLDER INFROMATION WITH KIRAN*/
                 
@@ -202,9 +197,9 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             CAST(ttOrderProductParam.opobject, pm.OrderProductParam):mStoreData().
         END.
         
-        IF VALID-OBJECT (aoOrderAggrementCustomer)
+        IF VALID-OBJECT (ObjAggrementCustomer)
         THEN DO:
-            aoOrderAggrementCustomer:mStoreData().
+            ObjAggrementCustomer:mStoreData().
         END.
 
     END METHOD.
@@ -215,14 +210,14 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
                                                               
         DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
        
-        aoSubscriptionParams = NEW pm.OrderProductParam(THIS-OBJECT) .
-        aoSubscriptionParams:mCreateData(loAttributes,Attribute,AttrType).
+        objSubscriptionParams = NEW pm.OrderProductParam(THIS-OBJECT) .
+        objSubscriptionParams:mCreateData(loAttributes,Attribute,AttrType).
        
         ASSIGN liNextParamNum =  mNextParamNb().
                                             
         CREATE ttOrderProductParam.
         ASSIGN 
-            ttOrderProductParam.opobject     = aoSubscriptionParams.
+            ttOrderProductParam.opobject     = objSubscriptionParams.
             ttOrderProductParam.paramnb      = liNextParamNum. 
                   
     END METHOD.
@@ -243,7 +238,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         DEFINE VARIABLE loValidationObj AS CLASS JsonObject NO-UNDO.
         
         FIND FIRST Address WHERE Address.HostTable    =  "Customer"
-                             AND Address.KeyValue     =  STRING(aoOrder:aoCustomer:CustNum)
+                             AND Address.KeyValue     =  STRING(objOrder:objCustomer:CustNum)
                              AND Address.AddressType  =  {&BILLING_ADDRESS} NO-LOCK NO-ERROR.
 
         IF NOT AVAILABLE Address 
@@ -283,5 +278,15 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         AddressObj:Add("validation_data" , loValidationObj).
         
     END METHOD.
+    
+    DESTRUCTOR PUBLIC OrderProductSubscription ( ):
+        
+        IF VALID-OBJECT (objSubscriptionParams) THEN 
+            DELETE OBJECT objSubscriptionParams.
+            
+        IF VALID-OBJECT (ObjAggrementCustomer) THEN 
+            DELETE OBJECT ObjAggrementCustomer.
+
+    END DESTRUCTOR.
     
 END CLASS.

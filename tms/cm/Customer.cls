@@ -165,7 +165,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
            
        END SET.
        
-    DEFINE PUBLIC PROPERTY OrderChannel AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY orderChannel AS CHARACTER NO-UNDO
        GET.
        SET.
        
@@ -259,7 +259,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
   END METHOD.  
 
-	METHOD PUBLIC VOID mFindData
+	METHOD PUBLIC VOID mFindCustomer
 	  (iiCustNum AS INTEGER):
 
       DEFINE BUFFER bfCustomer FOR Customer.
@@ -613,7 +613,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         /*TO-DO PC:WHAT IS plBypassRules in the newton_add_Whole_order.p*/
       
         IF THIS-OBJECT:isNewCustomer = FALSE
-            AND NOT THIS-OBJECT:OrderChannel BEGINS "migration"
+            AND NOT THIS-OBJECT:orderChannel BEGINS "migration"
             AND NOT liBypassRules        
             AND LOOKUP(lcNumberType,"new,mnp") > 0
             AND liMultiSimType       <> {&MULTISIMTYPE_SECONDARY}
@@ -643,7 +643,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         
             END.               
         
-        END. /*  IF aoOrder:aoCustomer:isNewCustomer = FALSE */
+        END. /*  IF aoOrder:objCustomer:isNewCustomer = FALSE */
         
     END METHOD.
     

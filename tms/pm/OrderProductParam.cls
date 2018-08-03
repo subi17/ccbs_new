@@ -23,42 +23,39 @@ CLASS pm.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
 	 Notes:
 	------------------------------------------------------------------------------*/
 
-   DEFINE PUBLIC PROPERTY CharValue AS CHARACTER NO-UNDO
+   DEFINE PUBLIC PROPERTY charValue AS CHARACTER NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY DateValue AS DATE NO-UNDO
+   DEFINE PUBLIC PROPERTY dateValue AS DATE NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY DecValue AS DECIMAL NO-UNDO
+   DEFINE PUBLIC PROPERTY decValue AS DECIMAL NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY IntValue AS INTEGER NO-UNDO
+   DEFINE PUBLIC PROPERTY intValue AS INTEGER NO-UNDO
       GET.
       SET.      
 
-   DEFINE PUBLIC PROPERTY ParamName AS CHARACTER NO-UNDO
+   DEFINE PUBLIC PROPERTY paramName AS CHARACTER NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY ValueType AS CHARACTER NO-UNDO
+   DEFINE PUBLIC PROPERTY valueType AS CHARACTER NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS pm.OrderProduct NO-UNDO
+   DEFINE PUBLIC PROPERTY objOrderProduct AS CLASS pm.OrderProduct NO-UNDO
       GET.
       SET.
 
-   CONSTRUCTOR PUBLIC OrderProductParam
-     ( ioOrderProduct AS CLASS pm.OrderProduct ):
-      aoOrderProduct = ioOrderProduct.   
+   CONSTRUCTOR PUBLIC OrderProductParam ( iObjOrderProduct AS CLASS pm.OrderProduct ):
+      ASSIGN objOrderProduct = iObjOrderProduct.   
    END CONSTRUCTOR.
 
-	DESTRUCTOR PUBLIC OrderProductParam():
-	   aoOrderProduct = ?.
-	END DESTRUCTOR.
+	
 
    METHOD PUBLIC VOID mCreateData
      ( ioJsonObject AS CLASS JsonObject ):
@@ -73,10 +70,10 @@ CLASS pm.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
         icDataType     AS CHARACTER ):
 
       CASE icDataType:
-         WHEN "Char" THEN CharValue = ioJsonObject:GetCharacter(icPropertyName).
-         WHEN "Date" THEN DateValue = ioJsonObject:GetDate(icPropertyName).
-         WHEN "Int"  THEN IntValue  = ioJsonObject:GetInteger(icPropertyName).
-         WHEN "Dec"  THEN DecValue  = ioJsonObject:GetDecimal(icPropertyName).
+         WHEN "Char" THEN THIS-OBJECT:charValue = ioJsonObject:GetCharacter(icPropertyName).
+         WHEN "Date" THEN THIS-OBJECT:dateValue = ioJsonObject:GetDate(icPropertyName).
+         WHEN "Int"  THEN THIS-OBJECT:intValue  = ioJsonObject:GetInteger(icPropertyName).
+         WHEN "Dec"  THEN THIS-OBJECT:decValue  = ioJsonObject:GetDecimal(icPropertyName).
          OTHERWISE UNDO, THROW NEW InternalError
                                  (SUBSTITUTE("Called mCreateOrderProductParam " +
                                              "with unsupported datatype '&1'",
@@ -84,8 +81,8 @@ CLASS pm.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
       END CASE.
 
       ASSIGN
-         ParamName = icPropertyName
-         ValueType = icDataType.
+         THIS-OBJECT:paramName = icPropertyName
+         THIS-OBJECT:valueType = icDataType.
 
 	END METHOD.
 
@@ -93,15 +90,22 @@ CLASS pm.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
 
       CREATE OrderProductParam.
       ASSIGN
-         OrderProductParam.CharValue      = THIS-OBJECT:CharValue
-         OrderProductParam.DateValue      = THIS-OBJECT:DateValue
-         OrderProductParam.DecValue       = THIS-OBJECT:DecValue
-         OrderProductParam.IntValue       = THIS-OBJECT:IntValue
-         OrderProductParam.OrderProductID = aoOrderProduct:OrderProductID
-         OrderProductParam.OrderID        = aoOrderProduct:OrderID
-         OrderProductParam.ParamName      = THIS-OBJECT:ParamName
-         OrderProductParam.ValueType      = THIS-OBJECT:ValueType.
+         OrderProductParam.CharValue      = THIS-OBJECT:charValue
+         OrderProductParam.DateValue      = THIS-OBJECT:dateValue
+         OrderProductParam.DecValue       = THIS-OBJECT:decValue
+         OrderProductParam.IntValue       = THIS-OBJECT:intValue
+         OrderProductParam.OrderProductID = objOrderProduct:OrderProductID
+         OrderProductParam.OrderID        = objOrderProduct:OrderID
+         OrderProductParam.ParamName      = THIS-OBJECT:paramName
+         OrderProductParam.ValueType      = THIS-OBJECT:valueType.
 
    END METHOD.
+   
+   DESTRUCTOR PUBLIC OrderProductParam():
+       
+       IF VALID-OBJECT (objOrderProduct) THEN 
+           DELETE OBJECT objOrderProduct.
+           
+   END DESTRUCTOR.
 
 END CLASS.

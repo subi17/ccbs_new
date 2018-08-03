@@ -30,13 +30,12 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
         FIELD paramnb  AS INTEGER
         INDEX paramnb IS PRIMARY UNIQUE paramnb
         .
-    
 	
-    DEFINE PUBLIC PROPERTY aoSIMParams AS CLASS pm.OrderProductParam NO-UNDO
+    DEFINE PUBLIC PROPERTY objSimParams AS CLASS pm.OrderProductParam NO-UNDO
         GET.
         SET.
         
-    DEFINE PUBLIC PROPERTY aoShippingCustomer AS CLASS om.OrderCustomer NO-UNDO
+    DEFINE PUBLIC PROPERTY objShipCustomer AS CLASS om.OrderCustomer NO-UNDO
         GET.
         SET.
         
@@ -44,39 +43,30 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
        GET.
        SET.
         
-    CONSTRUCTOR PUBLIC OrderProductSIM ( ioOrder AS CLASS om.Order ):
+    CONSTRUCTOR PUBLIC OrderProductSIM ( iObjOrder AS CLASS om.Order ):
 		
-        SUPER(ioOrder).
+        SUPER(iObjOrder).
 		
 	END CONSTRUCTOR.
 	
-	DESTRUCTOR PUBLIC OrderProductSIM ( ):
-	    
-	    ASSIGN 
-            aoSIMParams        = ?
-            aoShippingCustomer = ? . 
-
-	END DESTRUCTOR.
-	
-    METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( ioItemObject AS CLASS JsonObject ):
+    METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( objSimProductStruct AS CLASS JsonObject ):
         
         DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
         DEFINE VARIABLE loShipAddress AS CLASS JsonObject NO-UNDO.
         
         ASSIGN 
             loAttributes = NEW JsonObject()
-            loAttributes = ioItemObject:GetJsonObject("attributes") WHEN ioItemObject:Has("attributes").
+            loAttributes = objSimProductStruct:GetJsonObject("attributes") WHEN objSimProductStruct:Has("attributes").
         
         IF VALID-OBJECT(loAttributes)
         THEN DO:
             
-            /*ICC attribute will be in the json structure. But, some times icc will be assigned by dextra*/
-            
+            /*ICC attribute will be in the json structure. But, some times icc will be assigned by dextra*/            
             IF loAttributes:Has("ICC")
             THEN DO:
                 
                 ASSIGN THIS-OBJECT:ICC  =  loAttributes:GetCharacter("ICC")
-                       aoOrder:lcICC    =  THIS-OBJECT:ICC.
+                       objOrder:lcICC    =  THIS-OBJECT:ICC.
                 
                 IF THIS-OBJECT:ICC > "" AND  
                    Func.ValidateOrder:misFreeICC(THIS-OBJECT:ICC) = FALSE 
@@ -90,12 +80,12 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
         THEN DO:
             
             ASSIGN 
-                aoShippingCustomer         = NEW om.OrderCustomer(aoOrder)
-                aoShippingCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
-                loShipAddress              = NEW JsonObject()
-                loShipAddress              = loAttributes:GetJsonObject("shipping_address").
+                objShipCustomer         = NEW om.OrderCustomer(objOrder)
+                objShipCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
+                loShipAddress           = NEW JsonObject()
+                loShipAddress           = loAttributes:GetJsonObject("shipping_address").
                 
-                aoShippingCustomer:mCreateRowCustomerData(loShipAddress).
+                objShipCustomer:mCreateRowCustomerData(loShipAddress).
         
         END.
         
@@ -107,15 +97,15 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
                                                               
         DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
        
-        aoSIMParams = NEW pm.OrderProductParam(THIS-OBJECT) .
-        aoSIMParams:mCreateData(loAttributes,Attribute,AttrType).
+        objSimParams = NEW pm.OrderProductParam(THIS-OBJECT) .
+        objSimParams:mCreateData(loAttributes,Attribute,AttrType).
        
         ASSIGN 
             liNextParamNum = mNextParamNb().
                                             
         CREATE ttOrderProductParam.
         ASSIGN 
-            ttOrderProductParam.opobject = aoSIMParams
+            ttOrderProductParam.opobject = objSimParams
             ttOrderProductParam.paramnb  = liNextParamNum. 
                   
     END METHOD.
@@ -126,11 +116,11 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
             CAST(ttOrderProductParam.opobject, pm.OrderProductParam):mStoreData().
         END.
         
-        IF VALID-OBJECT(aoShippingCustomer)
-        THEN aoShippingCustomer:mStoreData().
+        IF VALID-OBJECT(objShipCustomer)
+        THEN objShipCustomer:mStoreData().
         
         IF THIS-OBJECT:ICC > ""
-        THEN aoOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
+        THEN objOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
         
     END METHOD.
     
@@ -143,6 +133,16 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
         RETURN ( ttOrderProductParam.paramnb + 1 ).
 
     END METHOD.
+    
+    DESTRUCTOR PUBLIC OrderProductSIM ( ):
+        
+        IF VALID-OBJECT (objSimParams) THEN 
+            DELETE OBJECT objSimParams.
+            
+        IF VALID-OBJECT(objShipCustomer) THEN 
+            DELETE OBJECT objShipCustomer.
+
+    END DESTRUCTOR.
     
 
 END CLASS.

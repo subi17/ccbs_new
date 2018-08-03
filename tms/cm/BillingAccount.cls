@@ -97,7 +97,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.   
        
-    DEFINE PUBLIC PROPERTY StatusCode AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY statusCode AS INTEGER NO-UNDO
        GET.
        SET.
        
@@ -140,7 +140,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:InvInterval   = ioBillingAcct:GetInteger("invoice_interval")
             THIS-OBJECT:InvGroup      = ioBillingAcct:GetCharacter("invoice_group")
             THIS-OBJECT:DurDateOffSet = 0 /*TODO-JSON*/
-            THIS-OBJECT:StatusCode    = 0
+            THIS-OBJECT:statusCode    = 0
             THIS-OBJECT:FromDate      = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_from")) WHEN ioBillingAcct:Has("valid_from")
             THIS-OBJECT:ToDate        = Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to"))   WHEN ioBillingAcct:Has("valid_to")
             .
@@ -182,7 +182,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             InvoiceTargetGroup.DelType       = THIS-OBJECT:DelType
             InvoiceTargetGroup.InvGroup      = THIS-OBJECT:InvGroup
             InvoiceTargetGroup.DueDateOffSet = THIS-OBJECT:DurDateOffSet
-            InvoiceTargetGroup.StatusCode    = THIS-OBJECT:StatusCode
+            InvoiceTargetGroup.StatusCode    = THIS-OBJECT:statusCode
             InvoiceTargetGroup.FromDate      = THIS-OBJECT:FromDate
             InvoiceTargetGroup.ToDate        = THIS-OBJECT:ToDate
             .
@@ -269,7 +269,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:InvInterval   = (IF ioBillingAcct:Has("invoice_interval") THEN ioBillingAcct:GetInteger("invoice_interval") ELSE InvoiceTargetGroup.InvInterval)
             THIS-OBJECT:InvGroup      = (IF ioBillingAcct:Has("invoice_group") THEN ioBillingAcct:GetCharacter("invoice_group") ELSE InvoiceTargetGroup.InvGroup)
             THIS-OBJECT:DurDateOffSet = 0 /*TODO-JSON*/
-            THIS-OBJECT:StatusCode    = 0
+            THIS-OBJECT:statusCode    = 0
             THIS-OBJECT:FromDate      = (IF ioBillingAcct:Has("valid_from") THEN Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_from")) ELSE InvoiceTargetGroup.FromDate) 
             THIS-OBJECT:ToDate        = (IF ioBillingAcct:Has("valid_to")  THEN Func.Common:mGetDate(ioBillingAcct:GetCharacter("valid_to")) ELSE InvoiceTargetGroup.ToDate)
             .

@@ -57,7 +57,7 @@ CLASS bss.cls.Memo IMPLEMENTS bss.cls.IObjectStorage:
 
       Func.Common:mWriteMemo("OrderProduct",
                              STRING(aoOrderProduct:OrderProductId),
-                             aoOrderProduct:aoOrder:aoCustomer:CustNum,
+                             aoOrderProduct:objOrder:objCustomer:CustNum,
                              THIS-OBJECT:MemoTitle,
                              THIS-OBJECT:MemoText).
 

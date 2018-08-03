@@ -20,51 +20,35 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 {Syst/tmsconst.i}
 
 CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage: 
-	/*------------------------------------------------------------------------------
-	 Purpose:
-	 Notes:
-	------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------
+     Purpose:
+     Notes:
+    ------------------------------------------------------------------------------*/
    
-   DEFINE PRIVATE TEMP-TABLE ttOrderProduct NO-UNDO
-      FIELD opobject AS CLASS Progress.Lang.Object
-      FIELD ordernb  AS INTEGER
-      INDEX ordernb IS PRIMARY UNIQUE ordernb
-      .
+    DEFINE PRIVATE TEMP-TABLE ttOrderProduct NO-UNDO
+        FIELD opobject AS CLASS   Progress.Lang.Object
+        FIELD ordernb  AS INTEGER
+        INDEX ordernb IS PRIMARY UNIQUE ordernb
+        .
 
     DEFINE PUBLIC PROPERTY isChildArray AS LOGICAL NO-UNDO
-    GET.
-    SET(INPUT ilParent AS LOGICAL):
-        
-        ASSIGN THIS-OBJECT:isChildArray  =  ilParent.  
-        
-    END SET.
+        GET.
+        SET.
     
     DEFINE PUBLIC PROPERTY ParentID AS INTEGER NO-UNDO
-       GET.
-       SET(INPUT iiParentID AS INTEGER):
-           
-           ASSIGN THIS-OBJECT:ParentID  = iiParentID.
-           
-       END.
+        GET.
+        SET.
+
+    CONSTRUCTOR PUBLIC OrderProductFactory():
+    END CONSTRUCTOR.
+
+    METHOD PUBLIC VOID mCreateData( ioJsonObject AS CLASS JsonObject ):
        
-
-	CONSTRUCTOR PUBLIC OrderProductFactory():
-	END CONSTRUCTOR.
-
-	DESTRUCTOR PUBLIC OrderProductFactory():
-      FOR EACH ttOrderProduct:
-         IF VALID-OBJECT(ttOrderProduct.opobject)
-         THEN DELETE OBJECT ttOrderProduct.opobject.
-         DELETE ttOrderProduct.
-      END.
-	END DESTRUCTOR.
-
-   METHOD PUBLIC VOID mCreateData
-     ( ioJsonObject AS CLASS JsonObject ):
-      UNDO, THROW NEW InternalError("OrderProductFactory doesn't support " +
-                                    "mCreateData method with JsonObject " +
-                                    "parameter").
-   END METHOD.
+        UNDO, THROW NEW InternalError("OrderProductFactory doesn't support " +
+                                      "mCreateData method with JsonObject " +
+                                      "parameter").
+                                        
+    END METHOD.
 
    METHOD PRIVATE INTEGER mNextOrderNb():
 
@@ -120,13 +104,11 @@ CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
       FOR EACH ttOrderProduct:
          CAST(ttOrderProduct.opobject, pm.OrderProduct):ParentID   =  THIS-OBJECT:ParentID.
          CAST(ttOrderProduct.opobject, pm.OrderProduct):mStoreData().
-      END.
-      
+      END.      
 
    END METHOD.
 
-   METHOD PUBLIC VOID mResult
-      (ioJsonObject AS CLASS JsonObject):
+   METHOD PUBLIC VOID mResult(ioJsonObject AS CLASS JsonObject):
 
       DEFINE VARIABLE loJsonArray AS CLASS JsonArray NO-UNDO.
 
@@ -139,5 +121,15 @@ CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
       ioJsonObject:Add("items", loJsonArray).
 
    END METHOD.
+   
+    DESTRUCTOR PUBLIC OrderProductFactory():
+        
+        FOR EACH ttOrderProduct:
+            IF VALID-OBJECT(ttOrderProduct.opobject) THEN
+                DELETE OBJECT ttOrderProduct.opobject.
+            DELETE ttOrderProduct.
+        END.
+        
+    END DESTRUCTOR.
 
 END CLASS.

@@ -53,7 +53,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY StatusCode  AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY statusCode  AS INTEGER NO-UNDO
        GET.
        SET.
        
@@ -61,7 +61,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY aoBillAddrObj AS CLASS om.OrderAddress NO-UNDO 
+    DEFINE PUBLIC PROPERTY aoBillAddrObj AS CLASS om.Address NO-UNDO 
         GET.
         SET.    
        
@@ -74,9 +74,9 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         FIELDS BillAcctNum  AS INTEGER
         INDEX BillAcctNum IS PRIMARY UNIQUE BillAcctNum.
 		
-	CONSTRUCTOR PUBLIC CustomerAccount ( INPUT aoCustomer AS CLASS cm.Customer ):
+	CONSTRUCTOR PUBLIC CustomerAccount ( INPUT objCustomer AS CLASS cm.Customer ):
 		
-		ASSIGN ioCustomerObj = aoCustomer.
+		ASSIGN ioCustomerObj = objCustomer.
 		
 	END CONSTRUCTOR.
 
@@ -101,11 +101,11 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
           THIS-OBJECT:ValiTo      =  DATETIME-TZ(DATE(12,31,2049))
           THIS-OBJECT:AccountID   =  NEXT-VALUE (accountid)  
           THIS-OBJECT:CustNum     =  ioCustomerObj:CustNum
-          THIS-OBJECT:StatusCode  =  0. /*0=pending, 1=active*/
+          THIS-OBJECT:statusCode  =  0. /*0=pending, 1=active*/
           
       IF ioCustAcctObject:Has("billing_address") THEN 
       DO:    
-          aoBillAddrObj = NEW om.OrderAddress().
+          aoBillAddrObj = NEW om.Address().
 
           aoBillAddrObj:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
 
@@ -159,7 +159,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	           CustomerAccount.AccountName = THIS-OBJECT:AcctName
 	           CustomerAccount.FromDate    = THIS-OBJECT:ValidFrom
 	           CustomerAccount.ToDate      = THIS-OBJECT:ValiTo
-	           CustomerAccount.StatusCode  = THIS-OBJECT:StatusCode
+	           CustomerAccount.StatusCode  = THIS-OBJECT:statusCode
 	     .
 	   
 	     IF VALID-OBJECT(aoBillAddrObj)
@@ -236,7 +236,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             THIS-OBJECT:ValiTo      = bfCustAcct.ToDate
             THIS-OBJECT:AccountID   = bfCustAcct.AccountID  
             THIS-OBJECT:CustNum     = bfCustAcct.CustNum
-            THIS-OBJECT:StatusCode  = bfCustAcct.StatusCode /*0=pending, 1=active*/
+            THIS-OBJECT:statusCode  = bfCustAcct.StatusCode /*0=pending, 1=active*/
             .
             
         IF ioCustAcctObj:Has("billing_address")
@@ -244,7 +244,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                         
             mGetBillingAddressID().  /* We will get the Billing Address ID for updation*/
             
-            aoBillAddrObj = NEW om.OrderAddress().            
+            aoBillAddrObj = NEW om.Address().            
             ASSIGN 
                 aoBillAddrObj:KeyValue = THIS-OBJECT:CustNum
                 aoBillAddrObj:AddrType = {&BILLING_ADDRESS}

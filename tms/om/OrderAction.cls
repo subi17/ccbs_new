@@ -33,15 +33,20 @@ CLASS om.OrderAction IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PROTECTED VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
+   DEFINE PROTECTED VARIABLE objOrder AS CLASS om.Order NO-UNDO.
    
 	CONSTRUCTOR PUBLIC OrderAction
-     ( ioOrder AS CLASS om.Order ):
-      aoOrder = ioOrder.
+     ( iObjOrder AS CLASS om.Order ):
+         
+      ASSIGN objOrder = iObjOrder.
+      
 	END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC OrderAction ( ):
-      aoOrder = ?.
+	    
+	    IF VALID-OBJECT (objOrder) THEN 
+	        DELETE OBJECT objOrder.
+	        
 	END DESTRUCTOR.
 
    METHOD PUBLIC VOID mCreateData
@@ -57,9 +62,9 @@ CLASS om.OrderAction IMPLEMENTS bss.cls.IObjectStorage:
 	   icItemParam AS CHARACTER):
 
       ASSIGN
-         ItemType  = icItemType
-         ItemKey   = icItemKey
-         ItemParam = icItemParam.
+         THIS-OBJECT:ItemType  = icItemType
+         THIS-OBJECT:ItemKey   = icItemKey
+         THIS-OBJECT:ItemParam = icItemParam.
 
 	END METHOD.
 
@@ -68,7 +73,7 @@ CLASS om.OrderAction IMPLEMENTS bss.cls.IObjectStorage:
       CREATE OrderAction.
       ASSIGN
          OrderAction.Brand     = Syst.Var:gcBrand
-         OrderAction.OrderId   = aoOrder:OrderId
+         OrderAction.OrderId   = objOrder:OrderId
          OrderAction.ItemType  = THIS-OBJECT:ItemType
          OrderAction.ItemKey   = THIS-OBJECT:ItemKey
          OrderAction.ItemParam = THIS-OBJECT:ItemParam.

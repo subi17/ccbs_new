@@ -24,31 +24,31 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
 	 Notes:
 	------------------------------------------------------------------------------*/
 	
-	DEFINE PUBLIC PROPERTY PayMethod   AS CHARACTER NO-UNDO
+	DEFINE PUBLIC PROPERTY payMethod   AS CHARACTER NO-UNDO
 	   GET.
 	   SET.
 	   
-	DEFINE PUBLIC PROPERTY CCReference AS CHARACTER NO-UNDO
+	DEFINE PUBLIC PROPERTY ccReference AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY CCValid     AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY ccValid     AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY AuthNumber  AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY authNumber  AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY BinNumber   AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY binNumber   AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY PayerID AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY payerID AS CHARACTER NO-UNDO
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY PMethod AS INTEGER NO-UNDO
+    DEFINE PUBLIC PROPERTY payMethodID AS INTEGER NO-UNDO
        GET.
        SET.
           
@@ -66,22 +66,22 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
 
 	END DESTRUCTOR.
 	
-	METHOD PUBLIC VOID mCreateData (ioPaymentObject AS CLASS JsonObject) :	    
+	METHOD PUBLIC VOID mCreateData (iObjPaymentStruct AS CLASS JsonObject) :	    
 	   
-	    ASSIGN THIS-OBJECT:PayMethod  = ioPaymentObject:GetCharacter("method")  WHEN ioPaymentObject:Has("method").
+	    ASSIGN THIS-OBJECT:payMethod  = iObjPaymentStruct:GetCharacter("method")  WHEN iObjPaymentStruct:Has("method").
 	    
-        IF THIS-OBJECT:PayMethod = "creditcard"  
+        IF THIS-OBJECT:payMethod = "creditcard"  
         THEN ASSIGN 
-                THIS-OBJECT:CCReference    = ioPaymentObject:GetCharacter("ccreference")    WHEN ioPaymentObject:Has("ccreference")
-                THIS-OBJECT:CCValid        = ioPaymentObject:GetCharacter("ccvalid")        WHEN ioPaymentObject:Has("ccvalid")
-                THIS-OBJECT:AuthNumber     = ioPaymentObject:GetCharacter("authnumber")     WHEN ioPaymentObject:Has("authnumber")
-                THIS-OBJECT:BinNumber      = ioPaymentObject:GetCharacter("binnumber")      WHEN ioPaymentObject:Has("binnumber")
-                THIS-OBJECT:PMethod        = {&ORDERPAYMENT_M_CREDIT_CARD}
+                THIS-OBJECT:ccReference    = iObjPaymentStruct:GetCharacter("ccreference")    WHEN iObjPaymentStruct:Has("ccreference")
+                THIS-OBJECT:ccValid        = iObjPaymentStruct:GetCharacter("ccvalid")        WHEN iObjPaymentStruct:Has("ccvalid")
+                THIS-OBJECT:authNumber     = iObjPaymentStruct:GetCharacter("authnumber")     WHEN iObjPaymentStruct:Has("authnumber")
+                THIS-OBJECT:binNumber      = iObjPaymentStruct:GetCharacter("binnumber")      WHEN iObjPaymentStruct:Has("binnumber")
+                THIS-OBJECT:payMethodID      = {&ORDERPAYMENT_M_CREDIT_CARD}
                 . 
-        ELSE IF THIS-OBJECT:PayMethod = "paypal"
+        ELSE IF THIS-OBJECT:payMethod = "paypal"
         THEN ASSIGN 
-                 THIS-OBJECT:PayerID  =  ioPaymentObject:GetCharacter("payerid") WHEN ioPaymentObject:Has("payerid")
-                 THIS-OBJECT:PMethod  =  {&ORDERPAYMENT_M_PAYPAL}
+                 THIS-OBJECT:payerID  =  iObjPaymentStruct:GetCharacter("payerid") WHEN iObjPaymentStruct:Has("payerid")
+                 THIS-OBJECT:payMethodID  =  {&ORDERPAYMENT_M_PAYPAL}
                  .
             
 	END.
@@ -92,12 +92,12 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
         ASSIGN
             OrderPayment.Brand       = Syst.Var:gcBrand
             OrderPayment.OrderId     = aoOrder:OrderId
-            OrderPayment.Method      = THIS-OBJECT:PMethod  
-            OrderPayment.CCReference = THIS-OBJECT:CCReference
-            OrderPayment.CCValid     = THIS-OBJECT:CCValid  
-            OrderPayment.AuthNumber  = THIS-OBJECT:AuthNumber
-            OrderPayment.BinNumber   = THIS-OBJECT:BinNumber
-            OrderPayment.CCNumber    = THIS-OBJECT:PayerID
+            OrderPayment.Method      = THIS-OBJECT:payMethodID  
+            OrderPayment.CCReference = THIS-OBJECT:ccReference
+            OrderPayment.CCValid     = THIS-OBJECT:ccValid  
+            OrderPayment.AuthNumber  = THIS-OBJECT:authNumber
+            OrderPayment.BinNumber   = THIS-OBJECT:binNumber
+            OrderPayment.CCNumber    = THIS-OBJECT:payerID
             .	    
 	       
 	END METHOD.
