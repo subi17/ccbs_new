@@ -127,7 +127,8 @@ METHOD PUBLIC CHAR update_reptext
                  RepText.FromDate = lhText::rt_validfrom 
          NO-LOCK NO-ERROR.
 
-      IF AVAILABLE RepText THEN DO: 
+      IF AVAILABLE RepText THEN 
+      DO: 
          ASSIGN 
             liWait = 0
             lrText = RECID(RepText).
@@ -135,9 +136,9 @@ METHOD PUBLIC CHAR update_reptext
          DO WHILE TRUE:
              /* 'find current' doesn't work with this, it doesn't get the record 
                 when it's released, so use recid find  */
-            FIND FIRST RepText WHERE RECID(RepText) = lrText
-               EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-            IF LOCKED(RepText) THEN DO:
+            FIND FIRST RepText WHERE RECID(RepText) = lrText EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+            IF LOCKED(RepText) THEN 
+            DO:
                liWait = liWait + 1.
                /* some texts and the main table may have already been updated but 
                   the entire update can be resent */
@@ -150,15 +151,17 @@ METHOD PUBLIC CHAR update_reptext
          END.
 
          loEventLogMaker:make_eventlog("oldbuffer",BUFFER RepText:HANDLE).
+
          ASSIGN 
             RepText.ToDate  = lhText::rt_validto
             RepText.RepText = lhText::comm_name.
-         loEventLogMaker:make_eventlog("modify",BUFFER RepText:HANDLE).   
+
+         loEventLogMaker:make_eventlog("modify",BUFFER RepText:HANDLE).
+
          RELEASE RepText.
       END.
-
-      /* new entry */
-      ELSE DO:
+      ELSE 
+      DO:
          CREATE RepText.
          ASSIGN
             RepText.Brand    = gcBrand 
