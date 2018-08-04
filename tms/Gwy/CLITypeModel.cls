@@ -14,7 +14,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
    DEF VAR loRepTextMaker  AS Gwy.RepTextMaker  NO-UNDO.
-    
+
    DEF TEMP-TABLE ttCLIType NO-UNDO SERIALIZE-NAME "CLIType"
       FIELD external_id        AS CHAR 
       FIELD name               AS CHAR 
@@ -68,6 +68,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
    METHOD PUBLIC LOG create():
 
       DEF VAR liRequestType AS INTE NO-UNDO.
+      DEF VAR lcFeeModel    AS CHAR NO-UNDO.
 
       lcJson = '~{"CLITypeDataSet":~{"CLIType":' + lcJson + '~}~}'.
 
@@ -116,7 +117,12 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
       &ENDIF
 
       FOR EACH ttMatrix:
-          
+
+          ASSIGN 
+              lcFeeModel  = ttMatrix.id
+              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"_MF","")
+              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"MF" ,"").
+              
           Func.Common:mUpdateMatrix(CliType.CliType,ttMatrix.id,"PERCONTR").
           
           IF LOOKUP(ttMatrix.id_type,"MF,FF") > 0 THEN
@@ -126,6 +132,8 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
                                      ELSE 
                                        {&REQTYPE_FIXED_LINE_CREATE}).
 
+             mCreateRecurringFeeDayCampaign(CliType.CliType, CLIType.CLIName, lcFeeModel, CLIType.PayType).
+             
              Func.Common:mUpdateRequestAction(CliType.CliType,
                                               liRequestType,
                                               "DayCampaign",
@@ -394,6 +402,36 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
  
    END METHOD.
 
+   METHOD PUBLIC VOID mCreateRecurringFeeDayCampaign
+      (icBundleId   AS CHAR,
+       icBundleName AS CHAR,
+       icFeeModel   AS CHAR,
+       iiPayType    AS INTE):
+
+      FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = icBundleId NO-LOCK NO-ERROR.
+      IF NOT AVAIL DayCampaign THEN 
+      DO:
+         CREATE DayCampaign.
+         ASSIGN 
+            DayCampaign.Brand          = gcBrand
+            DayCampaign.DCEvent        = icBundleId
+            DayCampaign.DCName         = icBundleName
+            DayCampaign.ValidFrom      = TODAY
+            DayCampaign.ValidTo        = DATE(12,31,2049)
+            DayCampaign.DCType         = {&DCTYPE_RECURRING_CHARGE}
+            DayCampaign.BundleTarget   = 0
+            DayCampaign.PayType        = iiPayType
+            DayCampaign.InstanceLimit  = 1
+            DayCampaign.Effective      = 1
+            DayCampaign.FeeModel       = icFeeModel.
+
+         loEventLogMaker:make_eventlog("create",BUFFER DayCampaign:HANDLE).  
+      END.  
+
+      RETURN "".
+
+   END METHOD.
+      
    METHOD PUBLIC LOG copy_service_package
         (icCLIType AS CHAR,
         idaValidFrom AS DATE):
