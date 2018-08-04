@@ -445,7 +445,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
           DayCampaign.PayType  = iiPayType
           DayCampaign.FeeModel = icFeeModel.
 
-      RETURN "".
+      RELEASE DayCampaign.    
 
    END METHOD.
       

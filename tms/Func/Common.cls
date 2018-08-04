@@ -1074,9 +1074,10 @@ CLASS Func.Common FINAL:
       RETURN mWriteMemoWithType(icHostTable,icKeyValue,iiCustNum,icTitle,icText,"", Syst.Var:katun).
    END METHOD.
 
-   METHOD PUBLIC STATIC CHAR mUpdateMatrix(icCLIType        AS CHAR,
-                                           icAllowedBundles AS CHAR,
-                                           icType           AS CHAR):
+   METHOD PUBLIC STATIC CHAR mUpdateMatrix
+      (icCLIType        AS CHAR,
+       icAllowedBundles AS CHAR,
+       icType           AS CHAR):
 
       DEF VAR liPrior  AS INT  NO-UNDO.
       DEF VAR liMXSeq  AS INT  NO-UNDO.
@@ -1084,6 +1085,7 @@ CLASS Func.Common FINAL:
       DEF VAR lcMXName AS CHAR NO-UNDO.  
 
       DEF BUFFER bf_Matrix FOR Matrix.
+      DEF BUFFER Matrix    FOR Matrix.
 
       FIND LAST bf_Matrix NO-LOCK WHERE bf_Matrix.mxkey = icType NO-ERROR.
       IF AVAILABLE bf_Matrix THEN 
