@@ -37,7 +37,8 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
       
    DEF TEMP-TABLE ttMatrix NO-UNDO SERIALIZE-NAME "related_items"
       FIELD parent_id  AS RECID 
-      FIELD bundle_id  AS char
+      FIELD id         AS CHAR SERIALIZE-NAME "fee_id"
+      FIELD id_type    AS CHAR SERIALIZE-NAME "fee_type"    
       FIELD valid_from AS DATE 
       FIELD valid_to   AS DATE.
        
@@ -65,6 +66,8 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
    END CONSTRUCTOR.
 
    METHOD PUBLIC LOG create():
+
+      DEF VAR liRequestType AS INTE NO-UNDO.
 
       lcJson = '~{"CLITypeDataSet":~{"CLIType":' + lcJson + '~}~}'.
 
@@ -98,16 +101,12 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
          CLIType.PricePlan         = ttCLIType.rateplan
          CLIType.StatusCode        = ttCLIType.ct_stc_status
          CLIType.WebStatusCode     = ttCLIType.ct_web_status   
-         CLIType.ServiceClass      = ttCLIType.service_class
-                                        WHEN ttCLIType.service_class > ""
-         CLIType.FixedLineDownload = ttCLIType.download_speed
-                                        WHEN ttCLIType.download_speed > ""
-         CLIType.FixedLineUpload   = ttCLIType.upload_speed
-                                        WHEN ttCLIType.upload_speed > ""
+         CLIType.ServiceClass      = ttCLIType.service_class WHEN ttCLIType.service_class > ""
+         CLIType.FixedLineDownload = ttCLIType.download_speed WHEN ttCLIType.download_speed > ""
+         CLIType.FixedLineUpload   = ttCLIType.upload_speed WHEN ttCLIType.upload_speed > ""
          CLIType.TariffType        = ttCLIType.ct_tariff_type
          CLIType.LineType          = ttCLIType.ct_line_type
-         CLIType.FixedLineType     = ttCLIType.ct_fixed_line_type
-                                        WHEN ttCLIType.ct_fixed_line_type GE 0 .  
+         CLIType.FixedLineType     = ttCLIType.ct_fixed_line_type WHEN ttCLIType.ct_fixed_line_type GE 0.  
                          
       loEventLogMaker:make_eventlog("create",BUFFER CLIType:HANDLE).
       
@@ -116,7 +115,24 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
           copy_service_package(CLIType.CLIType,TODAY).
       &ENDIF
 
-      pMatrix(CliType.CliType,CliType.BaseBundle,"PERCONTR").
+      FOR EACH ttMatrix:
+          
+          Func.Common:mUpdateMatrix(CliType.CliType,ttMatrix.id,"PERCONTR").
+          
+          IF LOOKUP(ttMatrix.id_type,"MF,FF") > 0 THEN
+          DO:
+             ASSIGN liRequestType = (IF ttMatrix.id_type = "MF" THEN 
+                                       {&REQTYPE_SUBSCRIPTION_CREATE} 
+                                     ELSE 
+                                       {&REQTYPE_FIXED_LINE_CREATE}).
+
+             Func.Common:mUpdateRequestAction(CliType.CliType,
+                                              liRequestType,
+                                              "DayCampaign",
+                                              ttMatrix.id,
+                                              1). /* CREATE */
+          END.  
+      END.
       
       lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
                                               9,
@@ -225,7 +241,25 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
       &THEN 
       copy_service_package(CLIType.CLIType,TODAY).
       &ENDIF
-      pMatrix(CliType.CliType,CliType.BaseBundle,"PERCONTR").
+
+      FOR EACH ttMatrix:
+          
+          Func.Common:mUpdateMatrix(CliType.CliType,ttMatrix.id,"PERCONTR").
+          
+          IF LOOKUP(ttMatrix.id_type,"MF,FF") > 0 THEN
+          DO:
+             ASSIGN liRequestType = (IF ttMatrix.id_type = "MF" THEN 
+                                       {&REQTYPE_SUBSCRIPTION_CREATE} 
+                                     ELSE 
+                                       {&REQTYPE_FIXED_LINE_CREATE}).
+
+             Func.Common:mUpdateRequestAction(CliType.CliType,
+                                              liRequestType,
+                                              "DayCampaign",
+                                              ttMatrix.id,
+                                              1). /* CREATE */
+          END.  
+      END.
             
       lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
                                               9,
@@ -385,7 +419,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
                CTServPac.CLIType  = icCLIType
                CTServPac.ServPac  = ENTRY(liPack,{&COPY_SERVICE_PACKAGE})
                CTServPac.FromDate = idaValidFrom
-               CTServPac.ToDate   = 12/31/2049
+               CTServPac.ToDate   = DATE(12,31,2049)
                CTServPac.ServType = 3. 
       
             loEventLogMaker:make_eventlog("create",BUFFER CTServPac:HANDLE).
@@ -443,79 +477,7 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
       END.
      
    END METHOD.
-    
-   METHOD PUBLIC CHAR pMatrix(icCLIType AS CHAR,
-                              icAllowedBundles AS CHAR,
-                              icType AS CHAR):
-
-      DEF VAR liPrior AS INT NO-UNDO.
-      DEF VAR liMXSeq AS INT NO-UNDO.
-      DEF VAR liCount AS INT NO-UNDO.
         
-      DEF BUFFER bf_Matrix FOR Matrix.
-
-      FIND LAST bf_Matrix NO-LOCK WHERE 
-                bf_Matrix.mxkey = icType  NO-ERROR.
-      IF AVAILABLE bf_Matrix THEN 
-         liPrior = (bf_Matrix.Prior + 1).
-      ELSE 
-         liPrior = 1.
-            
-      FOR EACH bf_Matrix NO-LOCK BY bf_Matrix.MXSeq DESCENDING:
-          liMXSeq =  bf_Matrix.MXSeq + 1.
-      END.
-
-      FIND FIRST Matrix WHERE 
-                 Matrix.Brand = gcBrand AND 
-                 Matrix.MXKey = icType AND 
-                 Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
-      IF NOT AVAIL Matrix THEN DO:
-         CREATE Matrix.
-         ASSIGN
-            Matrix.Brand  = gcBrand
-            Matrix.MXSeq  = liMXSeq
-            Matrix.mxkey  = icType
-            Matrix.mxname = icCLIType
-            Matrix.prior  = liPrior
-            Matrix.mxres  = 1.
-       
-         CREATE MXItem.
-         ASSIGN
-            MXItem.MxSeq   = Matrix.MXSeq
-            MXItem.MxValue = icCLIType
-            MXItem.MxName  = "SubsTypeTo".   
-      END.
-      
-      DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
-         ON ERROR UNDO, THROW:
-      
-         IF icType = "PERCONTR" AND 
-         LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
-            NEXT.
-          
-         FIND FIRST MxItem WHERE 
-                    MxItem.MxSeq   = Matrix.MXSeq AND 
-                    MxItem.MxName  = (IF icType = "PERCONTR" THEN 
-                                         "PerContract" 
-                                      ELSE "SubsTypeFrom") AND 
-                    MxItem.MxValue = ENTRY(liCount,icAllowedBundles) 
-                    NO-LOCK NO-ERROR.
-         IF NOT AVAIL MxItem THEN DO:      
-            CREATE MXItem.
-            ASSIGN
-               MXItem.MxSeq   = Matrix.MXSeq
-               MXItem.MxValue = ENTRY(liCount,icAllowedBundles)
-               MXItem.MxName  = (IF icType = "PERCONTR" THEN 
-                                    "PerContract" 
-                                 ELSE "SubsTypeFrom").   
-         END.      
-
-      END.
-
-      RETURN "".
-
-   END METHOD.
-    
    DESTRUCTOR PUBLIC CLITypeModel ():
       IF VALID-OBJECT(loRequestMaker) THEN DELETE OBJECT loRequestMaker.
       IF VALID-OBJECT(loEventLogMaker) THEN DELETE OBJECT loEventLogMaker.

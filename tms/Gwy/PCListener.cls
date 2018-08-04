@@ -104,7 +104,7 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       loStompClient     = NEW dotr.Stomp.StompClient("", lcUserName, lcPasscode).
       loReaderHandler   = THIS-OBJECT.
       loStompClient:SUBSCRIBE(loReaderHandler).
-      loStompClient:subscribeToQueueACK(lcQueueName,"client-individual").  /* ATTENTION */
+      loStompClient:subscribeToQueueACK(lcQueueName,"client-individual").
       leTooManyErrors:SUBSCRIBE(tooManyErrors). 
    END METHOD.
    

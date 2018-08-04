@@ -1074,6 +1074,119 @@ CLASS Func.Common FINAL:
       RETURN mWriteMemoWithType(icHostTable,icKeyValue,iiCustNum,icTitle,icText,"", Syst.Var:katun).
    END METHOD.
 
+   METHOD PUBLIC STATIC CHAR mUpdateMatrix(icCLIType        AS CHAR,
+                                           icAllowedBundles AS CHAR,
+                                           icType           AS CHAR):
+
+      DEF VAR liPrior  AS INT  NO-UNDO.
+      DEF VAR liMXSeq  AS INT  NO-UNDO.
+      DEF VAR liCount  AS INT  NO-UNDO.
+      DEF VAR lcMXName AS CHAR NO-UNDO.  
+
+      DEF BUFFER bf_Matrix FOR Matrix.
+
+      FIND LAST bf_Matrix NO-LOCK WHERE bf_Matrix.mxkey = icType NO-ERROR.
+      IF AVAILABLE bf_Matrix THEN 
+         liPrior = bf_Matrix.Prior + 1.
+      ELSE 
+         liPrior = 1.
+            
+      FOR EACH bf_Matrix NO-LOCK BY bf_Matrix.MXSeq DESCENDING:
+          liMXSeq =  bf_Matrix.MXSeq + 1.
+          LEAVE.
+      END.
+
+      FIND FIRST Matrix WHERE 
+                 Matrix.Brand  = gcBrand   AND 
+                 Matrix.MXKey  = icType    AND 
+                 Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
+      IF NOT AVAIL Matrix THEN 
+      DO:
+         CREATE Matrix.
+         ASSIGN
+            Matrix.Brand  = gcBrand
+            Matrix.MXSeq  = liMXSeq
+            Matrix.mxkey  = icType
+            Matrix.mxname = icCLIType
+            Matrix.prior  = liPrior
+            Matrix.mxres  = 1.
+       
+         CREATE MXItem.
+         ASSIGN
+            MXItem.MxSeq   = Matrix.MXSeq
+            MXItem.MxValue = icCLIType
+            MXItem.MxName  = "SubsTypeTo".   
+      END.
+      
+      DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
+         ON ERROR UNDO, THROW:
+         
+         ASSIGN lcMXName = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeFrom").
+
+         FIND FIRST MxItem WHERE MxItem.MxSeq   = Matrix.MXSeq AND 
+                                 MxItem.MxName  = lcMXName     AND 
+                                 MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
+         IF NOT AVAIL MxItem THEN 
+         DO:      
+            CREATE MXItem.
+            ASSIGN
+               MXItem.MxSeq   = Matrix.MXSeq
+               MXItem.MxValue = ENTRY(liCount,icAllowedBundles)
+               MXItem.MxName  = lcMXName.   
+         END.      
+
+      END.
+
+      RETURN "".
+
+   END METHOD.
+   
+   METHOD PRIVATE STATIC INTE fGetNextRequestActionSequence 
+      ():
+      DEFINE BUFFER bf_RequestAction FOR RequestAction.
+
+      FIND LAST bf_RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+      IF AVAILABLE bf_RequestAction THEN 
+         RETURN (bf_RequestAction.RequestActionID + 1).
+      ELSE 
+         RETURN 1.
+
+   END METHOD.
+
+   METHOD PUBLIC STATIC CHAR mUpdateRequestAction
+      (icCliType     AS CHAR,
+       iiRequestType AS INTE,
+       icActionType  AS CHAR,
+       icActionKey   AS CHAR,
+       iiAction      AS INTE):
+
+      FIND FIRST RequestAction WHERE RequestAction.Brand      = Syst.Var:gcBrand AND
+                                     RequestAction.ReqType    = iiRequestType    AND
+                                     RequestAction.CliType    = icCliType        AND
+                                     RequestAction.ActionType = icActionType     AND
+                                     RequestAction.ActionKey  = icActionKey      AND
+                                     RequestAction.Action     = iiAction         AND
+                                     RequestAction.ValidFrom <= TODAY            AND
+                                     RequestAction.ValidTo   >= TODAY            NO-LOCK NO-ERROR.
+      IF NOT AVAIL RequestAction THEN
+      DO:
+         CREATE RequestAction.
+         ASSIGN     
+            RequestAction.Brand           = Syst.Var:gcBrand
+            RequestAction.RequestActionID = fGetNextRequestActionSequence()
+            RequestAction.ReqType         = iiRequestType
+            RequestAction.CLIType         = icCliType
+            RequestAction.PayType         = 0
+            RequestAction.Action          = iiAction
+            RequestAction.ActionKey       = icActionKey
+            RequestAction.ActionType      = icActionType           
+            RequestAction.ValidFrom       = TODAY
+            RequestAction.ValidTo         = DATE(12,31,2049). 
+      END.
+
+      RETURN "".
+
+   END METHOD.
    
    METHOD PUBLIC STATIC LOGICAL mReplaceSMS
      (INPUT icCustName AS CHARACTER, /* Customer.CustName */
