@@ -120,11 +120,9 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
 
           ASSIGN 
               lcFeeModel  = ttMatrix.id
-              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"_MF","")
-              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"MF" ,"").
+              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"_MF")
+              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"MF").
               
-          Func.Common:mUpdateMatrix(CliType.CliType,ttMatrix.id,"PERCONTR").
-          
           IF LOOKUP(ttMatrix.id_type,"MF,FF") > 0 THEN
           DO:
              ASSIGN liRequestType = (IF ttMatrix.id_type = "MF" THEN 
@@ -132,14 +130,19 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
                                      ELSE 
                                        {&REQTYPE_FIXED_LINE_CREATE}).
 
-             mCreateRecurringFeeDayCampaign(CliType.CliType, CLIType.CLIName, lcFeeModel, CLIType.PayType).
+             mCreateRecurringFeeDayCampaign(CliType.CliType, 
+                                            CLIType.CLIName, 
+                                            lcFeeModel, 
+                                            CLIType.PayType).
              
              Func.Common:mUpdateRequestAction(CliType.CliType,
                                               liRequestType,
                                               "DayCampaign",
                                               ttMatrix.id,
                                               1). /* CREATE */
-          END.  
+          END.
+
+          Func.Common:mUpdateMatrix(CliType.CliType,ttMatrix.id,"PERCONTR").  
       END.
       
       lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
@@ -171,8 +174,10 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
 
    METHOD PUBLIC LOG update():
 
-      DEF VAR liWait AS INT NO-UNDO.
-   
+      DEF VAR liWait        AS INT  NO-UNDO.
+      DEF VAR liRequestType AS INTE NO-UNDO.
+      DEF VAR lcFeeModel    AS CHAR NO-UNDO.
+
       IF lcModelid = ? THEN 
          RETURN loRequestMaker:logError('CLIType ID not given').
 
@@ -252,8 +257,11 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
 
       FOR EACH ttMatrix:
           
-          Func.Common:mUpdateMatrix(CliType.CliType,ttMatrix.id,"PERCONTR").
-          
+          ASSIGN 
+              lcFeeModel  = ttMatrix.id
+              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"_MF")
+              ttMatrix.id = RIGHT-TRIM(ttMatrix.id,"MF").
+
           IF LOOKUP(ttMatrix.id_type,"MF,FF") > 0 THEN
           DO:
              ASSIGN liRequestType = (IF ttMatrix.id_type = "MF" THEN 
@@ -261,12 +269,19 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
                                      ELSE 
                                        {&REQTYPE_FIXED_LINE_CREATE}).
 
+             mCreateRecurringFeeDayCampaign(CliType.CliType, 
+                                            CLIType.CLIName, 
+                                            lcFeeModel, 
+                                            CLIType.PayType).
+
              Func.Common:mUpdateRequestAction(CliType.CliType,
                                               liRequestType,
                                               "DayCampaign",
                                               ttMatrix.id,
                                               1). /* CREATE */
-          END.  
+          END. 
+
+          Func.Common:mUpdateMatrix(CliType.CliType,ttMatrix.id,"PERCONTR"). 
       END.
             
       lcError = loRepTextMaker:update_reptext(TABLE ttRepText BIND,
@@ -408,25 +423,27 @@ CLASS Gwy.CLITypeModel IMPLEMENTS Gwy.ModelInterface:
        icFeeModel   AS CHAR,
        iiPayType    AS INTE):
 
-      FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = icBundleId NO-LOCK NO-ERROR.
+      FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = icBundleId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
       IF NOT AVAIL DayCampaign THEN 
       DO:
          CREATE DayCampaign.
          ASSIGN 
             DayCampaign.Brand          = gcBrand
             DayCampaign.DCEvent        = icBundleId
-            DayCampaign.DCName         = icBundleName
             DayCampaign.ValidFrom      = TODAY
             DayCampaign.ValidTo        = DATE(12,31,2049)
-            DayCampaign.DCType         = {&DCTYPE_RECURRING_CHARGE}
             DayCampaign.BundleTarget   = 0
-            DayCampaign.PayType        = iiPayType
             DayCampaign.InstanceLimit  = 1
             DayCampaign.Effective      = 1
-            DayCampaign.FeeModel       = icFeeModel.
+            DayCampaign.DCType         = {&DCTYPE_RECURRING_CHARGE}.
 
-         loEventLogMaker:make_eventlog("create",BUFFER DayCampaign:HANDLE).  
-      END.  
+         loEventLogMaker:make_eventlog("create",BUFFER DayCampaign:HANDLE).     
+      END.
+      
+      ASSIGN      
+          DayCampaign.DCName   = icBundleName
+          DayCampaign.PayType  = iiPayType
+          DayCampaign.FeeModel = icFeeModel.
 
       RETURN "".
 

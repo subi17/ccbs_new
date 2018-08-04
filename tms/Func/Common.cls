@@ -1,4 +1,4 @@
- 
+
  /*------------------------------------------------------------------------
     File        : Common
     Purpose     : 
@@ -1097,14 +1097,14 @@ CLASS Func.Common FINAL:
       END.
 
       FIND FIRST Matrix WHERE 
-                 Matrix.Brand  = gcBrand   AND 
-                 Matrix.MXKey  = icType    AND 
-                 Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
+                 Matrix.Brand  = Syst.Var:gcBrand AND 
+                 Matrix.MXKey  = icType           AND 
+                 Matrix.MxName = icCLIType        NO-LOCK NO-ERROR.
       IF NOT AVAIL Matrix THEN 
       DO:
          CREATE Matrix.
          ASSIGN
-            Matrix.Brand  = gcBrand
+            Matrix.Brand  = Syst.Var:gcBrand
             Matrix.MXSeq  = liMXSeq
             Matrix.mxkey  = icType
             Matrix.mxname = icCLIType
