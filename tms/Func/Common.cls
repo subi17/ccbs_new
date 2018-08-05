@@ -1086,6 +1086,7 @@ CLASS Func.Common FINAL:
 
       DEF BUFFER bf_Matrix FOR Matrix.
       DEF BUFFER Matrix    FOR Matrix.
+      DEF BUFFER MXItem    FOR MXItem.
 
       FIND LAST bf_Matrix NO-LOCK WHERE bf_Matrix.mxkey = icType NO-ERROR.
       IF AVAILABLE bf_Matrix THEN 
