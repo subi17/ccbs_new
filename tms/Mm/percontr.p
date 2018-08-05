@@ -901,16 +901,8 @@ PROCEDURE pContractActivation:
       END.
 
       /* immediately */
-      OTHERWISE DO:
-         /* YCO-757 Periodical Contracts with aplication date delayed */
-         lcDelayedPerContList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
-         IF LOOKUP(lcDCEvent, lcDelayedPerContList) > 0 THEN DO:
-            liDelayedDays = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
-            ldtFromDate = ldtActDate + liDelayedDays.
-         END.   
-         ELSE    
-            ldtFromDate = ldtActDate.
-      END.   
+      OTHERWISE ldtFromDate = ldtActDate.
+
       END CASE.
       
    END.
@@ -1005,6 +997,15 @@ PROCEDURE pContractActivation:
 
    IF ldtEndDate >= 12/31/2049 THEN ldEndStamp = 99999999.99999.
    ELSE ldEndStamp = Func.Common:mMake2DT(ldtEndDate,liEndTime).
+        
+   /* YCO-757 Periodical Contracts with aplication date delayed.                */
+   /* For this Periodical Contracts, delay FromDate, but it must keep EndDate.  */ 
+   lcDelayedPerContList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+   IF LOOKUP(lcDCEvent, lcDelayedPerContList) > 0 THEN DO:
+      liDelayedDays = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+      IF ldtFromDate < (ldtActDate + liDelayedDays) THEN 
+         ldtFromDate = (ldtActDate + liDelayedDays). 
+   END.   
 
    ldBegStamp = Func.Common:mMake2DT(ldtFromDate,
                          IF ldtFromDate = ldtActDate
