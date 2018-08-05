@@ -1163,6 +1163,8 @@ CLASS Func.Common FINAL:
        icActionKey   AS CHAR,
        iiAction      AS INTE):
 
+      DEF BUFFER RequestAction FOR RequestAction.
+
       FIND FIRST RequestAction WHERE RequestAction.Brand      = Syst.Var:gcBrand AND
                                      RequestAction.ReqType    = iiRequestType    AND
                                      RequestAction.CliType    = icCliType        AND
