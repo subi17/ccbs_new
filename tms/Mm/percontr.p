@@ -495,6 +495,8 @@ PROCEDURE pContractActivation:
    DEF VAR lcExtraOfferId             AS CHAR NO-UNDO.
    DEF VAR liDiscReq                  AS INTE NO-UNDO.
    DEF VAR lcErrMsg                   AS CHAR NO-UNDO.
+   DEF VAR lcDelayedPerContList       AS CHAR NO-UNDO.
+   DEF VAR liDelayedDays              AS INT  NO-UNDO.
 
    /* DSS related variables */
    DEF VAR lcResult         AS CHAR NO-UNDO.
@@ -899,7 +901,16 @@ PROCEDURE pContractActivation:
       END.
 
       /* immediately */
-      OTHERWISE ldtFromDate = ldtActDate.
+      OTHERWISE DO:
+         /* YCO-757 Periodical Contracts with aplication date delayed */
+         lcDelayedPerContList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+         IF LOOKUP(lcDCEvent, lcDelayedPerContList) > 0 THEN DO:
+            liDelayedDays = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+            ldtFromDate = ldtActDate + liDelayedDays.
+         END.   
+         ELSE    
+            ldtFromDate = ldtActDate.
+      END.   
       END CASE.
       
    END.
