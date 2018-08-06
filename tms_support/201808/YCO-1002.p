@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------
-YCO-1002. Adding more ClyTypes allowed for discount RETDISC_CONV
+YCO-1002. Adding more ClyTypes allowed for discount RETDISC_CONV.
+Updating Matrix for Periodical contracts DTERM 
+(related to RETDISC_CONV discount). 
 /tms_support/201808/YCO-1002.p
 --------------------------------------------------------------*/
 
@@ -56,4 +58,45 @@ DO liCount = 1 TO NUM-ENTRIES(lcDPTargets):
          DPTarget.Included    = YES.
    END.           
 END.   
+
+/* Penalty related to the discount */
+ DO liCount = 1 TO NUM-ENTRIES(lcDPSubjects):
+    
+    /* Matrix must exist */
+    /* (Previously I've checked that all the CliTypes have Matrix record). */
+    FIND Matrix NO-LOCK WHERE 
+         Matrix.Brand  EQ Syst.Var:gcBrand AND 
+         Matrix.MXKey  EQ "PERCONTR" AND 
+         Matrix.MXName EQ ENTRY(liCount, lcDPSubjects) NO-ERROR.
+    IF NOT AVAILABLE Matrix THEN 
+      NEXT.
+    
+    /* DTERM12-120*/
+    FIND FIRST MXItem NO-LOCK WHERE
+               MXItem.MXSeq   EQ Matrix.MXSeq  AND 
+               MXItem.MXName  EQ "Percontract" AND
+               MXItem.MXValue EQ "DTERM12-120" NO-ERROR.
+    IF NOT AVAILABLE MXItem THEN DO:
+       CREATE MXItem.
+       ASSIGN
+          MXItem.MXSeq   = Matrix.MXSeq   
+          MXItem.MXName  = "Percontract" 
+          MXItem.MXValue = "DTERM12-120".  
+    END. 
+    
+    /* DTERM24-240 */
+    FIND FIRST MXItem NO-LOCK WHERE
+               MXItem.MXSeq   EQ Matrix.MXSeq  AND 
+               MXItem.MXName  EQ "Percontract" AND
+               MXItem.MXValue EQ "DTERM24-240" NO-ERROR.
+    IF NOT AVAILABLE MXItem THEN DO:
+       CREATE MXItem.
+       ASSIGN
+          MXItem.MXSeq   = Matrix.MXSeq   
+          MXItem.MXName  = "Percontract" 
+          MXItem.MXValue = "DTERM24-240".  
+    END.
+    
+    RELEASE Matrix.              
+ END.
        
