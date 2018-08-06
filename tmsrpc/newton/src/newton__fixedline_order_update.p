@@ -68,11 +68,14 @@ DEF VAR pcStreet_number   AS CHAR NO-UNDO.
 DEF VAR pcTerritory_owner AS CHAR NO-UNDO.
 DEF VAR pcStreet_type     AS CHAR NO-UNDO.
 DEF VAR pcZip             AS CHAR NO-UNDO.
+DEF VAR pcFixedNumber     AS CHAR NO-UNDO.
+
 
 /* local variables */
 DEF VAR lcCurrentDetails AS CHAR NO-UNDO.
 DEF VAR lcAmendmentValue AS CHAR NO-UNDO.
 DEF VAR lcAmendmentType  AS CHAR NO-UNDO.
+DEF VAR lcFixedNumber    AS CHAR NO-UNDO.
 
 /* Eventlog parameters */
 
@@ -122,6 +125,12 @@ FUNCTION fGetAddressFields RETURNS LOGICAL:
     
 END FUNCTION.
 
+FUNCTION fGetFixedNumber RETURNS LOGICAL:
+   IF LOOKUP("fixednumber",lcFixedNumber) GT 0 THEN
+      pcFixedNumber = get_string(pcAmendmentStruct, "fixednumber").
+END FUNCTION.
+
+
 ASSIGN 
    gcAmendmentDetails = "country,bis,block,city!,coverage_token!,address_id,door,floor,gescal!,hand,km,letter,region!,stair,street_name!,street_number,territory_owner!,street_type!,zip!".
 
@@ -141,12 +150,26 @@ Syst.Var:katun = "VISTA_" + pcSalesManId.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-/* validate order address struct */
-lcAddressData = validate_request(pcAmendmentStruct,gcAmendmentDetails).
-IF lcAddressData EQ ? THEN RETURN.
+CASE pcAmendmentType:
+    WHEN "ChangeInstallationAddress" THEN DO:
+    /* validate order address struct */
+       ASSIGN
+          lcAddressData = validate_request(pcAmendmentStruct,gcAmendmentDetails).
+       IF lcAddressData EQ ? THEN RETURN.
+       fGetAddressFields().
+    END.
+    WHEN "ChangePhoneNumber" THEN DO:
+        /* validate fixed Number value */
+        ASSIGN
+            lcFixedNumber = validate_request(pcAmendmentStruct,"fixednumber").
+        IF lcFixedNumber EQ ? THEN RETURN.
+        fGetFixedNumber().
+    END.
+    OTHERWISE RETURN  appl_err(" AmendmentType is not available"). 
+END CASE.
 
-fGetAddressFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
 
 /* Busines logic validations */
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
@@ -158,7 +181,8 @@ FIND FIRST Order WHERE
 IF NOT AVAIL Order THEN 
    RETURN appl_err("OrderId is invalid").
    
-IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
+IF pcAmendmentType EQ "ChangeInstallationAddress" AND 
+   Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
    RETURN appl_err("Order is not in valid state to update").   
    
 FIND FIRST OrderCustomer WHERE 
@@ -191,7 +215,9 @@ IF AVAIL CliType THEN
             
 IF NOT fIsConvergenceTariff(Order.CLIType) THEN 
    RETURN appl_err("Only Convergent Orders are allowed for address update" ).   
-      
+
+IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
+   RETURN appl_err("Fixednumber is incomplete or wrong" ).
 
 CASE pcAmendmentType:
     WHEN "ChangeInstallationAddress" THEN DO:
@@ -242,6 +268,20 @@ CASE pcAmendmentType:
                              pcTerritory_owner.
         
     END. 
+    WHEN "ChangePhoneNumber" THEN DO:
+        
+       IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
+           FusionMessage.OrderID = OrderFusion.OrderID AND
+           FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} AND
+           FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}) THEN 
+          RETURN appl_err("Ongoing message, not possible to update order").      
+       
+       ASSIGN
+          lcAmendmentType = pcAmendmentType
+          lcCurrentDetails = OrderCustomer.FixedNumber
+          lcAmendmentValue = pcFixedNumber.
+
+    END.
        
     OTHERWISE DO:
        RETURN appl_err("Invalid AmendmentType").

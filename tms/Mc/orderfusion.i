@@ -117,7 +117,10 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       lcPrefix = "Cancelaci�n".
    ELSE IF icMessageType EQ {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} THEN 
       lcPrefix = "AddressChange".   
-   ELSE lcPrefix = "Alta".
+   ELSE IF icMessageType EQ {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} THEN 
+      lcPrefix = "FixedLineChange".   
+   ELSE 
+      lcPrefix = "Alta".
 
    IF CLIType.FixedLineType EQ 1 THEN
       lcOrderType = "xDSL".

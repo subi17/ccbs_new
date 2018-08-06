@@ -1263,6 +1263,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    (idStartTS AS DECIMAL,
     idEndTS AS DECIMAL):
    DEF VAR lcInstAddrCaseTypeID AS CHAR NO-UNDO.     
+   DEF VAR lcFixedNumCaseTypeID AS CHAR NO-UNDO.
    DEF VAR lcACCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcSTCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO. 
@@ -1284,6 +1285,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
 
    ASSIGN
       lcInstAddrCaseTypeID = '4e'
+      lcFixedNumCaseTypeID = '4f'
       lcICCCaseTypeID   = '4d'
       lcACCCaseTypeID   = '4c'
       lcSTCCaseTypeID   = '4b'
@@ -1362,6 +1364,26 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                         ENTRY(11,MsRequest.ReqCParam3,"|")             + lcDelim +
                         /*New_Gescal*/
                         ENTRY(12,MsRequest.ReqCParam3,"|").
+               END.
+               WHEN "ChangePhoneNumber" THEN DO:
+                  ASSIGN
+                     lcCaseTypeId = lcFixedNumCaseTypeID
+                     lcCaseFileRow =
+                        lcCaseTypeId                                   + lcDelim +
+                        /*Contract_ID*/
+                        MsRequest.ReqCParam6                           + lcDelim +
+                        /*OrderId*/
+                        STRING(MsRequest.ReqIParam1)                   + lcDelim +
+                        /*MSISDN*/
+                        STRING(MsRequest.CLI)                          + lcDelim +
+                        /*Change_Request_date*/
+                        fPrintDate(MsRequest.CreStamp)                 + lcDelim +
+                        /*Change Reason*/
+                        MsRequest.ReqCParam5                           + lcDelim +
+                        /*Old_Fixed_Number*/
+                        MsRequest.ReqCParam4                           + lcDelim +
+                        /*New_Fixed_Number*/
+                        MsRequest.ReqCParam3.
                END.
             END CASE. /* CASE MsRequest.ReqCParam2 */ 
          END.         

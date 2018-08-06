@@ -17,6 +17,12 @@ CASE MsRequest.ReqCParam2:
                                        MsRequest.ReqCParam2,
                                        OUTPUT lcError).
     END.
+    WHEN "ChangePhoneNumber" THEN DO:
+       fCreateFusionUpdateOrderMessage(MsRequest.ReqIParam1,
+                                       MsRequest.ReqCParam2,
+                                       OUTPUT lcError).
+    END.
+
     OTHERWISE DO:
        fReqStatus(3,"Invalid AmendmentType").
     END.
