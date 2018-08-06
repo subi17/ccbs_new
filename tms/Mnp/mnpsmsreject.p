@@ -47,8 +47,8 @@ OUTPUT STREAM sdump TO value (icFile).
 ERROR_LOOP:
 FOR EACH CallAlarm NO-LOCK
    WHERE CallAlarm.Brand      = Syst.Var:gcBrand
-     AND CallAlarm.DeliStat  >= {&SMS_DELISTATUS_SENT}
-     AND CallAlarm.DeliStat  <= {&SMS_DELISTATUS_RECEIVED}
+     AND CallAlarm.DeliStat  >= 2
+     AND CallAlarm.DeliStat  <= 3
      AND CallAlarm.CreditType = {&SMSTYPE_MNP}
      AND CallAlarm.DeliStamp  > idLastDump
      :
