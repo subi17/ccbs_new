@@ -223,9 +223,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
       
         FIND FIRST bfCustomer NO-LOCK WHERE bfCustomer.CustNum = iiCustNum NO-ERROR.
 
-        IF NOT AVAILABLE bfCustomer
-            THEN UNDO, THROW NEW ParamError
-                (SUBSTITUTE("customer_not_found|&1", iiCustNum)).
+        IF NOT AVAILABLE bfCustomer THEN
+             UNDO, THROW NEW ParamError(SUBSTITUTE("customer_not_found|&1", iiCustNum)).
 
         /* this is useful for the rowtype_aggrement for existing customer who does not have any customer update information*/
 
@@ -258,11 +257,11 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        FIND FIRST CustomerAccount 
             WHERE CustomerAccount.AccountID  = iiCustAcct NO-LOCK NO-ERROR .
             
-       IF NOT AVAILABLE CustomerAccount
-       THEN  UNDO, THROW NEW ParamError(SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
+       IF NOT AVAILABLE CustomerAccount THEN  
+           UNDO, THROW NEW ParamError(SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
                
-       IF THIS-OBJECT:custNum <> CustomerAccount.CustNum
-       THEN UNDO, THROW NEW ParamError ("Invalid Custnum and AccountID combination.").
+       IF THIS-OBJECT:custNum <> CustomerAccount.CustNum THEN 
+           UNDO, THROW NEW ParamError ("Invalid Custnum and AccountID combination.").
        
        ASSIGN THIS-OBJECT:custAcctId  =  iiCustAcct.
        
@@ -468,8 +467,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
     METHOD PUBLIC INTEGER mGetNextCustAcctNum():
         
         FIND LAST ttCustAccts USE-INDEX custacctnum NO-ERROR.
-        IF NOT AVAILABLE ttCustAccts
-        THEN RETURN 1.
+        IF NOT AVAILABLE ttCustAccts THEN 
+            RETURN 1.
         ELSE RETURN ( ttCustAccts.custacctnum + 1 ). 
          
     END METHOD.
@@ -490,8 +489,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         END.      
         
         ioCustObj:Add("cust-num" , THIS-OBJECT:custNum).
-        IF TEMP-TABLE ttCustAccts:HAS-RECORDS 
-        THEN ioCustObj:Add("customer-accounts" , ioCustArray).
+        IF TEMP-TABLE ttCustAccts:HAS-RECORDS THEN 
+            ioCustObj:Add("customer-accounts" , ioCustArray).
         
         RETURN ioCustObj.
         
@@ -523,22 +522,22 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                 ELSE
                     THIS-OBJECT:category = "23".
             END.
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND THIS-OBJECT:selfEmployed  
-            THEN ASSIGN THIS-OBJECT:category = "44".         
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND NOT THIS-OBJECT:selfEmployed 
-            THEN THIS-OBJECT:category = "10". 
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND THIS-OBJECT:selfEmployed 
-            THEN THIS-OBJECT:category = "45".         
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND NOT THIS-OBJECT:selfEmployed 
-            THEN THIS-OBJECT:category = "11". 
+            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND THIS-OBJECT:selfEmployed THEN 
+                ASSIGN THIS-OBJECT:category = "44".         
+            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND NOT THIS-OBJECT:selfEmployed THEN 
+                ASSIGN THIS-OBJECT:category = "10". 
+            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND THIS-OBJECT:selfEmployed THEN 
+                ASSIGN THIS-OBJECT:category = "45".         
+            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND NOT THIS-OBJECT:selfEmployed THEN 
+                ASSIGN THIS-OBJECT:category = "11". 
             IF THIS-OBJECT:category > "" THEN 
             DO:
                 FIND FIRST bfCustCat NO-LOCK WHERE
                            bfCustCat.brand    EQ Syst.Var:gcBrand AND
                            bfCustCat.category EQ THIS-OBJECT:category NO-ERROR.
 
-                IF AVAIL bfCustCat 
-                THEN lcSegment = bfCustCat.Segment.
+                IF AVAIL bfCustCat THEN 
+                    ASSIGN lcSegment = bfCustCat.Segment.
             END.
             ELSE 
             DO:
@@ -550,7 +549,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                 IF AVAIL CustCat THEN 
                 DO:
                     ASSIGN 
-                        lcSegment = bfCustCat.Segment
+                        lcSegment            = bfCustCat.Segment
                         THIS-OBJECT:category = bfCustCat.category.
                 END.
             END.
@@ -577,8 +576,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
             AND NOT THIS-OBJECT:orderChannel BEGINS "migration"
             AND NOT liBypassRules        
             AND LOOKUP(lcNumberType,"new,mnp") > 0
-            AND liMultiSimType       <> {&MULTISIMTYPE_SECONDARY}
-        THEN DO:            
+            AND liMultiSimType       <> {&MULTISIMTYPE_SECONDARY} THEN 
+        DO:            
             
             liCustSubLimit =  Func.ValidateACC:mSubscriptionLimitCheck(INPUT THIS-OBJECT:custId ,
                                                                        INPUT THIS-OBJECT:custIdType,
@@ -590,8 +589,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                                                                        OUTPUT liActLimit,
                                                                        OUTPUT liActs).
                                                                        
-            IF liCustSubLimit = FALSE 
-            THEN UNDO, THROW NEW ParamError("Subscription Limit Error to existing Customer."). 
+            IF liCustSubLimit = FALSE THEN 
+                UNDO, THROW NEW ParamError("Subscription Limit Error to existing Customer."). 
             
             FOR FIRST bfpcCustomer WHERE
                       bfpcCustomer.Brand      =  Syst.Var:gcBrand       AND
@@ -599,11 +598,9 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                       bfpcCustomer.CustIdType =  THIS-OBJECT:custIdType AND
                       bfpcCustomer.Roles     <>  "inactive" NO-LOCK:
                           
-                IF Func.ValidateOrder:mIsBarredSubscriptionExistsToCustomer(bfpcCustomer.Custnum) 
-                THEN UNDO, THROW NEW ParamError("barring").                                                                   
-        
-            END.               
-        
+                IF Func.ValidateOrder:mIsBarredSubscriptionExistsToCustomer(bfpcCustomer.Custnum) THEN 
+                    UNDO, THROW NEW ParamError("barring").      
+            END.                       
         END. /*  IF aoOrder:objCustomer:isNewCustomer = FALSE */
         
     END METHOD.
@@ -667,11 +664,11 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         
         IF ioCustObj:Has("title") THEN 
         DO:
-            IF LOOKUP(ioCustObj:GetCharacter("title"), lcSupportedTitles) EQ 0
-            THEN UNDO, THROW NEW ParamError(SUBSTITUTE("unsupported_person_title|&1",ioCustObj:GetCharacter("title"))).
-            THIS-OBJECT:custTitle = ioCustObj:GetCharacter("title").
+            IF LOOKUP(ioCustObj:GetCharacter("title"), lcSupportedTitles) EQ 0 THEN 
+                UNDO, THROW NEW ParamError(SUBSTITUTE("unsupported_person_title|&1",ioCustObj:GetCharacter("title"))).
+            ASSIGN THIS-OBJECT:custTitle = ioCustObj:GetCharacter("title").
         END.
-        ELSE THIS-OBJECT:custTitle  =  bfcustomer.HonTitle.        
+        ELSE ASSIGN THIS-OBJECT:custTitle  =  bfcustomer.HonTitle.        
         
         ASSIGN 
             THIS-OBJECT:firstName     = (IF ioCustObj:Has("fname")  THEN ioCustObj:GetCharacter("fname")  ELSE bfCustomer.FirstName )
@@ -687,8 +684,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:fixedNumber   = (IF ioCustObj:Has("phone_number") THEN ioCustObj:GetCharacter("phone_number") ELSE bfCustomer.Phone)            
         .    
         
-        IF ioCustObj:Has("residential")
-        THEN DO:
+        IF ioCustObj:Has("residential") THEN 
+        DO:
             ioCustIDObject  = NEW JsonObject().
             ioCustIDObject  = ioCustObj:GetJsonObject("residential").
             ASSIGN 
@@ -696,8 +693,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                 THIS-OBJECT:custId     = (IF ioCustIDObject:Has("person_id") THEN ioCustIDObject:GetCharacter("person_id") ELSE bfCustomer.OrgId ) 
                 .
         END.
-        ELSE IF ioCustObj:Has("company")
-        THEN DO:
+        ELSE IF ioCustObj:Has("company") THEN 
+        DO:
             ASSIGN 
                 ioCustIDObject             = NEW JsonObject()
                 ioCustIDObject             = ioCustObj:GetJsonObject("company")    

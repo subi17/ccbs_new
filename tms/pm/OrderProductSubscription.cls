@@ -110,8 +110,8 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             IF LOOKUP(THIS-OBJECT:mobileNumberType,"renewal,stc") > 0 THEN
             DO:
             
-                IF Func.ValidateOrder:misSubscriptionExists(INPUT THIS-OBJECT:attrCli) = FALSE 
-                    THEN UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with msisdn &1 not found", THIS-OBJECT:attrCli)).
+                IF Func.ValidateOrder:misSubscriptionExists(INPUT THIS-OBJECT:attrCli) = FALSE THEN 
+                    UNDO , THROW NEW ParamError(SUBSTITUTE("Mobsub with msisdn &1 not found", THIS-OBJECT:attrCli)).
             
                 ASSIGN 
                     liCustNum = Func.ValidateOrder:mGetMobSubCustNum(INPUT THIS-OBJECT:attrCli).
@@ -130,8 +130,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             
             END.
             
-            IF Func.ValidateOrder:misDuplicateContractExists(INPUT objOrder:ContractId ,
-                                                             INPUT THIS-OBJECT:attrCli ) THEN
+            IF Func.ValidateOrder:misDuplicateContractExists(INPUT objOrder:ContractId , INPUT THIS-OBJECT:attrCli ) THEN
                 UNDO , THROW NEW ParamError(SUBSTITUTE("Duplicate contract ID &1", objOrder:ContractId)).   
             
             IF Func.ValidateOrder:mIsMigrationCLI(INPUT THIS-OBJECT:attrCli) THEN
@@ -164,8 +163,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
                 mGetBillingAddressObject(). 
             END.       
             
-            IF objOrder:isPrePaidOrder 
-            AND objOrder:objCustomer:isNewCustomer = FALSE THEN
+            IF objOrder:isPrePaidOrder AND objOrder:objCustomer:isNewCustomer = FALSE THEN
                 mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
             
             ASSIGN 
@@ -226,8 +224,8 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
 
         FIND LAST ttOrderProductParam USE-INDEX paramnb NO-ERROR.
                
-        IF NOT AVAILABLE ttOrderProductParam
-        THEN RETURN 1.
+        IF NOT AVAILABLE ttOrderProductParam THEN 
+            RETURN 1.
         
         RETURN ( ttOrderProductParam.paramnb + 1 ).
 
@@ -241,8 +239,8 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
                              AND Address.KeyValue     =  STRING(objOrder:objCustomer:CustNum)
                              AND Address.AddressType  =  {&BILLING_ADDRESS} NO-LOCK NO-ERROR.
 
-        IF NOT AVAILABLE Address 
-        THEN UNDO,THROW NEW ParamError("Default Billing Address Not Found.").
+        IF NOT AVAILABLE Address THEN 
+            UNDO,THROW NEW ParamError("Default Billing Address Not Found.").
         
         ASSIGN            
             loValidationObj          = NEW JsonObject()

@@ -157,8 +157,8 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	           CustomerAccount.StatusCode  = THIS-OBJECT:statusCode
 	     .
 	   
-	     IF VALID-OBJECT(objBillingAddress)
-	     THEN DO:
+	     IF VALID-OBJECT(objBillingAddress) THEN 
+	     DO:
              objBillingAddress:mStoreData().
              ASSIGN THIS-OBJECT:billAddrId = objBillingAddress:AddrID.	         
 	     END.
@@ -234,8 +234,8 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             THIS-OBJECT:statusCode  = bfCustAcct.StatusCode /*0=pending, 1=active*/
             .
             
-        IF ioCustAcctObj:Has("billing_address")
-        THEN DO:
+        IF ioCustAcctObj:Has("billing_address") THEN 
+        DO:
                         
             mGetBillingAddressID().  /* We will get the Billing Address ID for updation*/
             
@@ -245,8 +245,8 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                 objBillingAddress:AddrType = {&BILLING_ADDRESS}
                 .
                    
-            IF THIS-OBJECT:defaultAcct = TRUE 
-            THEN DO:                
+            IF THIS-OBJECT:defaultAcct = TRUE THEN 
+            DO:                
                 objCustomer:mAssignDefaultAddressObj(ioCustAcctObj:GetJsonObject("billing_address")).                
             END.                  
             
@@ -254,8 +254,8 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                             
         END.        
         
-        IF ioCustAcctObj:Has("billing_accounts")
-        THEN DO:
+        IF ioCustAcctObj:Has("billing_accounts") THEN 
+        DO:
             
             ASSIGN 
                 BillAcctArray = ioCustAcctObj:GetJsonArray("billing_accounts").

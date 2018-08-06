@@ -271,8 +271,8 @@ CLASS pm.OrderProductFLine INHERITS pm.OrderProduct:
         IF objOrder:objCustomer:isNewCustomer THEN 
             objAggrementCustomer:mCreateRowCustomerData(objOrder:objCustomer:DefaultAddressObj). 
         
-        IF loAttributes:Has("fixed_line_holder")
-        THEN DO:
+        IF loAttributes:Has("fixed_line_holder") THEN 
+        DO:
             
             ASSIGN aoFixedPOCustomer         =  NEW om.OrderCustomer(objOrder)
                    aoFixedPOCustomer:RowType =  {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}.
@@ -291,8 +291,8 @@ CLASS pm.OrderProductFLine INHERITS pm.OrderProduct:
                 aoMobilePOCustomer         = NEW om.OrderCustomer(objOrder)
                 aoMobilePOCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}.
             
-            IF objOrder:objCustomer:isNewCustomer  
-            THEN DO:
+            IF objOrder:objCustomer:isNewCustomer  THEN 
+            DO:
                 aoMobilePOCustomer:mCreateRowCustomerData(objOrder:objCustomer:DefaultAddressObj).
                 /*aoMobilePOCustomer:mCreateHolderData(loAttributes:GetJsonObject("mobile_line_holder")).*/
             END.
@@ -309,15 +309,14 @@ CLASS pm.OrderProductFLine INHERITS pm.OrderProduct:
             CAST(ttOrderProductParam.opobject, pm.OrderProductParam):mStoreData().
         END.        
         
-        IF VALID-OBJECT(objAggrementCustomer)
-        THEN objAggrementCustomer:mStoreData().
+        IF VALID-OBJECT(objAggrementCustomer) THEN 
+            objAggrementCustomer:mStoreData().
         
-        IF VALID-OBJECT(aoMobilePOCustomer)
-        THEN aoMobilePOCustomer:mStoreData().
+        IF VALID-OBJECT(aoMobilePOCustomer) THEN 
+            aoMobilePOCustomer:mStoreData().
         
-        IF VALID-OBJECT(aoFixedPOCustomer)
-        THEN aoFixedPOCustomer:mStoreData().
-        
+        IF VALID-OBJECT(aoFixedPOCustomer) THEN 
+            aoFixedPOCustomer:mStoreData().
         
     END METHOD.
     

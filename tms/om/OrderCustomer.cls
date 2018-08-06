@@ -513,8 +513,8 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
        
      /*  ASSIGN THIS-OBJECT:authCustIdType = ioHolderObj:GetCharacter("id_type").
        
-       IF THIS-OBJECT:authCustIdType = "CIF"
-       THEN ASSIGN THIS-OBJECT:authCustId  = ioHolderObj:GetCharacter("company_id").
+       IF THIS-OBJECT:authCustIdType = "CIF" THEN 
+            ASSIGN THIS-OBJECT:authCustId  = ioHolderObj:GetCharacter("company_id").
        ELSE THIS-OBJECT:authCustId   =  ioHolderObj:GetCharacter("person_id").
     */   
    END METHOD.

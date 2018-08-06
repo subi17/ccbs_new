@@ -53,8 +53,8 @@ CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
    METHOD PRIVATE INTEGER mNextOrderNb():
 
       FIND LAST ttOrderProduct USE-INDEX ordernb.
-      IF NOT AVAILABLE ttOrderProduct
-      THEN RETURN 1.
+      IF NOT AVAILABLE ttOrderProduct THEN 
+          RETURN 1.
 
       RETURN ttOrderProduct.ordernb + 1.
 
@@ -71,18 +71,18 @@ CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
       DO lii = 1 TO ioItemsArray:Length:
          loItemObject = ioItemsArray:GetJsonObject(lii).
          CASE loItemObject:GetCharacter("type"):
-            WHEN {&ORDER_PRODUCT_ACC}
-            THEN loOrderProduct = NEW pm.OrderProductACC(ioOrder).
-            WHEN {&ORDER_PRODUCT_MAIN}
-            THEN loOrderProduct = NEW pm.OrderProductPC(ioOrder).
-            WHEN {&ORDER_PRODUCT_SUBSCRIPTION}
-            THEN loOrderProduct = NEW pm.OrderProductSubscription(ioOrder).
-            WHEN {&ORDER_PRODUCT_SIM}
-            THEN loOrderProduct = NEW pm.OrderProductSIM(ioOrder).
-            WHEN {&ORDER_PRODUCT_FIXED_LINE}
-            THEN loOrderProduct = NEW pm.OrderProductFLine(ioOrder).
-            WHEN {&ORDER_PRODUCT_ACCESSORY}
-            THEN loOrderProduct = NEW pm.OrderProductAccessory(ioOrder).
+            WHEN {&ORDER_PRODUCT_ACC} THEN 
+                ASSIGN loOrderProduct = NEW pm.OrderProductACC(ioOrder).
+            WHEN {&ORDER_PRODUCT_MAIN} THEN 
+                ASSIGN loOrderProduct = NEW pm.OrderProductPC(ioOrder).
+            WHEN {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
+                ASSIGN loOrderProduct = NEW pm.OrderProductSubscription(ioOrder).
+            WHEN {&ORDER_PRODUCT_SIM} THEN 
+                ASSIGN loOrderProduct = NEW pm.OrderProductSIM(ioOrder).
+            WHEN {&ORDER_PRODUCT_FIXED_LINE} THEN 
+                ASSIGN loOrderProduct = NEW pm.OrderProductFLine(ioOrder).
+            WHEN {&ORDER_PRODUCT_ACCESSORY} THEN 
+                ASSIGN loOrderProduct = NEW pm.OrderProductAccessory(ioOrder).
             OTHERWISE
             UNDO, THROW
               NEW ParamError(SUBSTITUTE("Invalid items type '&1'",

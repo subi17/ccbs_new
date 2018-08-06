@@ -70,16 +70,16 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
 	   
 	    ASSIGN THIS-OBJECT:payMethod  = iObjPaymentStruct:GetCharacter("method")  WHEN iObjPaymentStruct:Has("method").
 	    
-        IF THIS-OBJECT:payMethod = "creditcard"  
-        THEN ASSIGN 
+        IF THIS-OBJECT:payMethod = "creditcard"  THEN 
+            ASSIGN 
                 THIS-OBJECT:ccReference    = iObjPaymentStruct:GetCharacter("ccreference")    WHEN iObjPaymentStruct:Has("ccreference")
                 THIS-OBJECT:ccValid        = iObjPaymentStruct:GetCharacter("ccvalid")        WHEN iObjPaymentStruct:Has("ccvalid")
                 THIS-OBJECT:authNumber     = iObjPaymentStruct:GetCharacter("authnumber")     WHEN iObjPaymentStruct:Has("authnumber")
                 THIS-OBJECT:binNumber      = iObjPaymentStruct:GetCharacter("binnumber")      WHEN iObjPaymentStruct:Has("binnumber")
                 THIS-OBJECT:payMethodID      = {&ORDERPAYMENT_M_CREDIT_CARD}
                 . 
-        ELSE IF THIS-OBJECT:payMethod = "paypal"
-        THEN ASSIGN 
+        ELSE IF THIS-OBJECT:payMethod = "paypal" THEN 
+            ASSIGN 
                  THIS-OBJECT:payerID  =  iObjPaymentStruct:GetCharacter("payerid") WHEN iObjPaymentStruct:Has("payerid")
                  THIS-OBJECT:payMethodID  =  {&ORDERPAYMENT_M_PAYPAL}
                  .

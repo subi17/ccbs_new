@@ -214,8 +214,8 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
                   AND TMSCodes.TableName = "Invoice"
                   AND TMSCodes.CodeName  = icCodeName  NO-LOCK NO-ERROR.
                   
-        IF NOT AVAILABLE TMSCodes 
-        THEN UNDO, THROW NEW ParamError ("TMSCodes record does not exist for the Billing Account.").
+        IF NOT AVAILABLE TMSCodes THEN 
+            UNDO, THROW NEW ParamError ("TMSCodes record does not exist for the Billing Account.").
         
         RETURN INTEGER(TMSCodes.CodeValue).
         

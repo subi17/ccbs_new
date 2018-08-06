@@ -99,9 +99,8 @@ CLASS om.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
     
     METHOD PUBLIC VOID mValidateOrderInspectionRules(INPUT iOrderID AS INTEGER ) :
         
-        IF THIS-OBJECT:roiResult = "risk"                 AND 
-           LOOKUP(THIS-OBJECT:roiLevel,"1,2,3,4,7,8") = 0 
-        THEN UNDO, THROW NEW ParamError(SUBST("Unsupported Real Time Inspection Risk Level: &1", THIS-OBJECT:roiLevel)).
+        IF THIS-OBJECT:roiResult = "risk" AND LOOKUP(THIS-OBJECT:roiLevel,"1,2,3,4,7,8") = 0 THEN 
+            UNDO, THROW NEW ParamError(SUBST("Unsupported Real Time Inspection Risk Level: &1", THIS-OBJECT:roiLevel)).
              
         CASE THIS-OBJECT:roiResult:
             WHEN "risk" THEN 
@@ -115,16 +114,16 @@ CLASS om.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
                 END.
                 ELSE THIS-OBJECT:roiOrderStatus = STRING(40 + INTEGER(THIS-OBJECT:roiLevel)).
             
-                IF THIS-OBJECT:roiRuleId NE ''
-                THEN Func.Common:mWriteMemoWithType("Order",
+                IF THIS-OBJECT:roiRuleId NE '' THEN 
+                    Func.Common:mWriteMemoWithType("Order",
                                                     STRING(iOrderID),
                                                     0,
                                                     "ROI Risk Rule_Id",
                                                     THIS-OBJECT:roiRuleId,
                                                     "",
                                                     "BSS RPC ROI").
-                IF THIS-OBJECT:roiDescription NE ''
-                THEN Func.Common:mWriteMemoWithType("Order",
+                IF THIS-OBJECT:roiDescription NE '' THEN 
+                    Func.Common:mWriteMemoWithType("Order",
                                                     STRING(iOrderID),
                                                     0,
                                                     "ROI Description",
@@ -133,16 +132,16 @@ CLASS om.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
                                                     "BSS RPC ROI").
 
             END.
-            WHEN "exception"
-            THEN Func.Common:mWriteMemoWithType("Order",
+            WHEN "exception" THEN 
+                Func.Common:mWriteMemoWithType("Order",
                                                 STRING(iOrderID),
                                                 0,
                                                 "ROI Description",
                                                 THIS-OBJECT:roiDescription,
                                                 "",     
                                                 "BSS RPC ROI").
-            WHEN "unexpected response"
-            THEN Func.Common:mWriteMemoWithType("Order",
+            WHEN "unexpected response" THEN 
+                Func.Common:mWriteMemoWithType("Order",
                                                 STRING(iOrderID),
                                                 0,
                                                 "ROI Unexpected Response",
@@ -154,9 +153,9 @@ CLASS om.OrderInspection IMPLEMENTS bss.cls.IObjectStorage:
             WHEN "ParamsException" OR 
             WHEN "inspectionException" THEN 
             DO:
-                THIS-OBJECT:roiOrderStatus = {&ORDER_STATUS_ROI_LEVEL_3}.
-                IF THIS-OBJECT:roiDescription NE ''
-                THEN Func.Common:mWriteMemoWithType("Order",
+                ASSIGN THIS-OBJECT:roiOrderStatus = {&ORDER_STATUS_ROI_LEVEL_3}.
+                IF THIS-OBJECT:roiDescription NE '' THEN 
+                    Func.Common:mWriteMemoWithType("Order",
                                                     STRING(iOrderID),
                                                     0,
                                                     "ROI Description",
