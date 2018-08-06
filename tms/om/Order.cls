@@ -267,7 +267,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.SalesMan         = THIS-OBJECT:salesMan
             Order.OrderChannel     = THIS-OBJECT:orderChannel
             Order.CrStamp          = THIS-OBJECT:crStamp
-            THIS-OBJECT:orderId    = Order.OrderId.
+            THIS-OBJECT:orderId    = Order.OrderId
+            Order.MNPStatus        = (INTEGER(THIS-OBJECT:mobileNumberType = {&TYPE_MNP})).
             
         CASE THIS-OBJECT:mobileNumberType:
             
