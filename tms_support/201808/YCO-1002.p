@@ -1,7 +1,7 @@
-/*---------------------------------------------------
-YCO-1002. Adding more ClyTypes allowed for discount
+/*--------------------------------------------------------------
+YCO-1002. Adding more ClyTypes allowed for discount RETDISC_CONV
 /tms_support/201808/YCO-1002.p
-----------------------------------------------------*/
+--------------------------------------------------------------*/
 
 DEFINE VARIABLE lcDPSubjects AS CHARACTER NO-UNDO.  
 DEFINE VARIABLE lcDPTargets  AS CHARACTER NO-UNDO.
@@ -49,8 +49,8 @@ DO liCount = 1 TO NUM-ENTRIES(lcDPTargets):
       CREATE DPTarget.
       ASSIGN 
          DPTarget.DPId        = DiscountPlan.DPId
-         DPTarget.ValidFrom   = TODAY
-         DPTarget.ValidTo     = 05/24/2018
+         DPTarget.ValidFrom   = 05/24/2018
+         DPTarget.ValidTo     = 12/31/2049
          DPTarget.TargetTable = "BillItem"
          DPTarget.TargetKey   = ENTRY(liCount, lcDPTargets)
          DPTarget.Included    = YES.
