@@ -89,6 +89,8 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcUriPath,
                            lcUriQuery,
                            lcUriQueryVal,
+                           "",              /* header name */
+                           "",              /* header value */
                            loRequestJson,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,

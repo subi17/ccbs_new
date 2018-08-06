@@ -10,6 +10,9 @@ block-level ON ERROR UNDO, THROW.
 USING OpenEdge.Net.HTTP.*.
 USING OpenEdge.Net.URI.
 USING Progress.Json.ObjectModel.JsonObject.
+USING OpenEdge.Net.HTTP.IHttpClientLibrary.
+USING OpenEdge.Net.HTTP.Lib.ClientLibraryBuilder.
+
 
 DEFINE INPUT PARAMETER icAction        AS CHARACTER  NO-UNDO.
 DEFINE INPUT PARAMETER icHost          AS CHARACTER  NO-UNDO.
@@ -21,18 +24,22 @@ DEFINE INPUT PARAMETER icpassword      AS CHARACTER  NO-UNDO.
 DEFINE INPUT PARAMETER icUriPath       AS CHARACTER  NO-UNDO.
 DEFINE INPUT PARAMETER icUriQuery      AS CHARACTER  NO-UNDO.
 DEFINE INPUT PARAMETER icUriQueryVal   AS CHARACTER  NO-UNDO.
+DEFINE INPUT PARAMETER icHeaderName    AS CHARACTER  NO-UNDO.
+DEFINE INPUT PARAMETER icHeaderValue   AS CHARACTER  NO-UNDO.
 DEFINE INPUT PARAMETER ioRequestJson   AS JsonObject NO-UNDO.
 DEFINE OUTPUT PARAMETER oiStatusCode   AS INTEGER    NO-UNDO.
 DEFINE OUTPUT PARAMETER ocStatusReason AS CHARACTER  NO-UNDO.
 DEFINE OUTPUT PARAMETER ioJson         AS JsonObject NO-UNDO.
 
 /* ***************************  Main Block  *************************** */
+DEFINE VARIABLE oLib     AS IHttpClientLibrary NO-UNDO.
 DEFINE VARIABLE oClient  AS IHttpClient   NO-UNDO.
 DEFINE VARIABLE oUri     AS URI           NO-UNDO.
 DEFINE VARIABLE oReq     AS IHttpRequest  NO-UNDO.
 DEFINE VARIABLE oResp    AS IHttpResponse NO-UNDO.
 DEFINE VARIABLE oCreds   AS Credentials   NO-UNDO.
 DEFINE VARIABLE lcUserId AS CHARACTER     NO-UNDO.
+
 
 oClient = ClientBuilder:Build():Client.
 
@@ -79,7 +86,7 @@ CASE icAction:
         END CASE.
     END. /*  MethodEnum:GET */
     WHEN STRING(MethodEnum:PATCH) THEN 
-    do:
+    DO:
         IF icAuthType = STRING(AuthenticationMethodEnum:Basic) AND 
            VALID-OBJECT(oCreds) THEN
             oReq = RequestBuilder:Patch(oUri, ioRequestJson)
@@ -93,7 +100,28 @@ CASE icAction:
                     :UsingCredentials(oCreds)
                     :ContentType('application/json')
                     :AcceptJson()
-                    :Request.    
+                    :Request. 
+        ELSE IF icAuthType EQ "" AND 
+                icHeaderValue NE "" THEN DO:
+            oLib = ClientLibraryBuilder:Build()
+                     :sslVerifyHost(NO)
+                     :Library.  
+            oClient = ClientBuilder:Build()
+                       :UsingLibrary(oLib)
+                       :Client.
+            oUri = NEW URI('https', ichost, iiport).
+            oUri:Path = icUripath.
+            
+            IF icUriQuery NE "" THEN
+               oUri:AddQuery(icUriQuery, icUriQueryVal).
+               
+            oReq = RequestBuilder:Patch(oUri, ioRequestJson)
+                        :ContentType('application/json')
+                        :AddHeader(icHeaderName,icHeaderValue)
+                        :AcceptJson()
+                        :Request.
+                        
+        END.          
         ELSE 
             oReq = RequestBuilder:Patch(oUri, ioRequestJson)
                         :ContentType('application/json')
@@ -107,6 +135,9 @@ CASE icAction:
             IF TYPE-OF(oResp:Entity, JsonObject) THEN
                 ASSIGN ioJson         = CAST(oResp:Entity, JsonObject)
                        oiStatusCode   = oResp:StatusCode
+                       ocStatusReason = oResp:StatusReason.
+            ELSE 
+                ASSIGN oiStatusCode   = oResp:StatusCode
                        ocStatusReason = oResp:StatusReason.
         END.
         ELSE 

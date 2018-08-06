@@ -18,7 +18,7 @@ DEF BUFFER bReqSub   FOR MobSub.
 DEF BUFFER bCreaReq  FOR MsRequest.
 
 /*  customer based request types */
-&SCOPED-DEFINE REQ_CUST_REQUESTS "5,6,7,11,12,22,23,83,84,86"
+&SCOPED-DEFINE REQ_CUST_REQUESTS "5,6,7,11,12,22,23,83,84,86,99"
 /* types that can be issued to a closed or non-existing subscription */
 &SCOPED-DEFINE REQ_CLOSED_SUBS "8,9,13,14,20,87"
  

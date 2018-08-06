@@ -113,6 +113,8 @@ RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
                            lcUriPath ,
                            lcUriQuery,
                            lcUriQueryVal,
+                           ""        ,  /* Header name */      
+                           ""        ,  /* header value */
                            loRequestJson,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,

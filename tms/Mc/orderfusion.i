@@ -114,7 +114,9 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
         CLIType.CLIType = Order.CLiType.
 
    IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
-      lcPrefix = "Cancelación".
+      lcPrefix = "Cancelaciï¿½n".
+   ELSE IF icMessageType EQ {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} THEN 
+      lcPrefix = "AddressChange".   
    ELSE lcPrefix = "Alta".
 
    IF CLIType.FixedLineType EQ 1 THEN
@@ -252,6 +254,51 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
    _fCreateFusionMessage(OrderFusion.OrderId,
                          {&FUSIONMESSAGE_TYPE_CANCEL_ORDER}).
 
+   RETURN TRUE.
+END.
+
+FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
+   (iiOrderID AS INT,
+    icAmendmentType AS CHAR,
+    OUTPUT ocError AS CHAR):
+
+   DEF BUFFER OrderFusion FOR OrderFusion.
+   DEF BUFFER bFusionMessage FOR FusionMessage.
+
+   FIND OrderFusion NO-LOCK WHERE
+        OrderFusion.Brand = Syst.Var:gcBrand AND
+        OrderFusion.OrderID = iiOrderId NO-ERROR.
+   IF NOT AVAIL OrderFusion THEN DO:
+      ocError = "ERROR:Order data not found".
+      RETURN FALSE.
+   END.
+   
+   IF OrderFusion.FixedNumber = "" OR
+      OrderFusion.FixedNumber EQ ? THEN DO:
+      ocError = "ERROR:Fixed number is missing".
+      RETURN FALSE.
+   END. 
+   
+   CASE icAmendmentType:
+      WHEN "ChangeInstallationAddress" THEN DO: 
+         IF CAN-FIND(FIRST bFusionMessage NO-LOCK WHERE
+                           bFusionMessage.OrderID = OrderFusion.OrderID AND
+                           bFusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
+                           bFusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN DO:
+             ocError = "ERROR:Ongoing message".
+             RETURN FALSE.
+         END. 
+   
+         _fCreateFusionMessage(OrderFusion.OrderId,
+                               {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}).
+      END.
+      
+      OTHERWISE DO:
+         RETURN FALSE.
+      END.
+    
+   END CASE.                         
+   
    RETURN TRUE.
 END.
 

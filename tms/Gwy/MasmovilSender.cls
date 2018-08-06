@@ -91,6 +91,11 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
                RUN Gwy/masmovil_cancel_order.p(FusionMessage.MessageSeq). 
                lcReturnValue = RETURN-VALUE.
             END.
+            
+            WHEN {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} THEN DO:
+               RUN Gwy/masmovil_address_change.p(FusionMessage.MessageSeq). 
+               lcReturnValue = RETURN-VALUE.
+            END.
 
             WHEN {&FUSIONMESSAGE_TYPE_CANCEL_APPOINTMENT} THEN DO:
                RUN Gwy/masmovil_cancel_appointment.p(FusionMessage.MessageSeq).

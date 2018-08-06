@@ -222,7 +222,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
       ELSE lcCReqTime = fChkTiming(bReqSub.CLIType,
                                    "",
                                    ldtCReqDate).
-
+                                   
       IF lcCReqTime > "" THEN DO:
          IF MONTH(ldtCReqDate) = 12 
          THEN ldtCReqDate = DATE(1,1,YEAR(ldtCReqDate) + 1).
@@ -254,7 +254,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                           "",
                           icCreator).
    IF ocResult > "" THEN RETURN 0.                       
-  
+   
    /* PRO */
    IF iiOrderId > 0 THEN DO:
       FIND FIRST Order NO-LOCK WHERE
@@ -303,9 +303,9 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
 
    /* Send right away SMS related to the CLI Type change */
    RUN Mm/requestaction_sms.p(INPUT liReqCreated,
-                              INPUT icNewType,
-                              INPUT icSource).
-
+                           INPUT icNewType,
+                           INPUT icSource).
+  
    RETURN liReqCreated.
              
 END FUNCTION.
@@ -699,6 +699,78 @@ FUNCTION fAddressRequest RETURNS INTEGER
      
 END FUNCTION.
 
+/* Installation Address Update */
+FUNCTION fOrderUpdateRequest RETURNS INTEGER 
+   (INPUT  icsfid           AS CHAR,
+    INPUT  iiOrderId        AS INT,
+    INPUT  idActStamp       AS DEC,
+    INPUT  icAmendmentType  AS CHAR,
+    INPUT  icAmendmentValue AS CHAR,
+    INPUT  icCurrentDetails AS CHAR,
+    INPUT  icContractId     AS CHAR,
+    INPUT  icReason         AS CHAR,
+    INPUT  icSource         AS CHAR,        /* source of request */
+    INPUT  iiOrigReq        AS INT,         /* father request  */
+    OUTPUT ocResult         AS CHAR):
+    
+   DEF BUFFER bOrdCustomer FOR OrderCustomer.
+   DEF BUFFER bOrder FOR order.
+   
+   FIND FIRST bOrder WHERE
+              bOrder.Brand EQ Syst.Var:gcBrand AND
+              bOrder.OrderId EQ iiOrderId 
+              NO-LOCK NO-ERROR.
+   IF NOT AVAIL bOrder THEN DO: 
+      ocResult = SUBST("Order for &1 not found", iiOrderId).
+      RETURN 0.
+   END.
+              
+   FIND FIRST bOrdCustomer WHERE 
+              bOrdCustomer.Brand   EQ Syst.Var:gcBrand AND
+              bOrdCustomer.OrderId EQ iiOrderId AND 
+              bOrdCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+              NO-LOCK NO-ERROR.
+   IF NOT AVAIL bOrdCustomer THEN DO: 
+      ocResult = SUBST("OrderCustomer for &1 not found", iiOrderId).
+      RETURN 0.
+   END.
+   
+   ocResult = fChkRequest(bOrder.msseq,
+                          {&REQTYPE_FIXEDLINE_ORDER_UPDATE},
+                          "",
+                          "").
+   IF (ocResult NE "" AND ocResult NE ?) THEN RETURN 0.  
+   
+   /* set activation time */
+   IF idActStamp = 0 OR idActStamp = ? THEN 
+      idActStamp = Func.Common:mMakeTS().
+
+   fCreateRequest({&REQTYPE_FIXEDLINE_ORDER_UPDATE},
+                  idActStamp,
+                  icsfid,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms */
+   ASSIGN
+      bCreaReq.MsSeq      = bOrder.MsSeq
+      bCreaReq.CustNum    = bOrder.CustNum
+      bCreaReq.cli        = bOrder.cli
+      bCreaReq.ReqCParam1 = icsfid
+      bCreaReq.ReqIParam1 = iiOrderId
+      bCreaReq.ReqCParam2 = icAmendmentType
+      bCreaReq.ReqCParam3 = icAmendmentValue
+      bCreaReq.ReqCParam4 = icCurrentDetails
+      bCreaReq.ReqCParam5 = icReason
+      bCreaReq.ReqCParam6 = icContractId
+      bCreaReq.ReqSource  = icSource
+      bCreaReq.OrigReq    = iiOrigReq
+      liReqCreated        = bCreaReq.MsRequest.
+   
+   RELEASE bCreaReq.
+   
+   RETURN liReqCreated.   
+
+END FUNCTION.
+
 /* changes to user account */
 FUNCTION fUserAccountRequest RETURNS INTEGER
    (INPUT  iiCustNum  AS INT,    /* whose account is changed */
@@ -731,7 +803,7 @@ FUNCTION fUserAccountRequest RETURNS INTEGER
 
    /* activation time is always immediately */
    ldChgStamp = Func.Common:mMakeTS().
-
+   
    fCreateRequest(5,
                   ldChgStamp,
                   icCreator,
@@ -1629,7 +1701,6 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
                   "SubsTypeFrom;SubsTypeTo",
                   icCLIType,
                   OUTPUT lcResult) = 1 THEN DO:
-
       liRequest = fCTChangeRequest(iiMsSeq,
                                    lcResult,
                                    "",    /* lcBundleID */
@@ -1698,5 +1769,4 @@ FUNCTION fCustomerCategoryChangeRequest RETURNS INTEGER
 
 END FUNCTION. /* FUNCTION fCustomerCategoryChangeRequest*/
 
-&ENDIF            
- 
+&ENDIF     
