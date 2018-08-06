@@ -174,12 +174,24 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                           MobSub.MsSeq = bfOrder.MsSeq NO-ERROR.
                IF AVAILABLE MobSub THEN DO:
                   IF MobSub.CLIType  EQ bfOrder.CLIType             AND
-                     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
-                     liRequest = fConvFixedSTCReq(bfOrder.CLIType,
-                                                  bfOrder.MsSeq,
-                                                  Func.Common:mMake2DT(TODAY + 1,0),
-                                                  {&REQUEST_SOURCE_ORDER_CANCELLATION},
-                                                  0).
+                     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN DO:
+                     FIND FIRST OldCliType WHERE
+                        OldCliType.Brand   = Syst.Var:gcBrand AND
+                        OldCliType.CliType = MobSub.CLIType NO-LOCK NO-ERROR.
+                     IF LOOKUP(OldCliType.BaseBundle, "CONT30,CONT32,CONT35") > 0 THEN
+                        liRequest = fConvMobileSTCReq(MobSub.CLIType,
+                                     MobSub.MsSeq,
+                                     IF llOutport THEN Func.Common:mMake2DT(TODAY + 5,0)
+                                     ELSE Func.Common:mMake2DT(TODAY + 1,0),
+                                     {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                                     MsRequest.MsRequest).                                   
+                     ELSE:                        
+                        liRequest = fConvFixedSTCReq(bfOrder.CLIType,
+                                                     bfOrder.MsSeq,
+                                                     Func.Common:mMake2DT(TODAY + 1,0),
+                                                     {&REQUEST_SOURCE_ORDER_CANCELLATION},
+                                                     0).
+                  END.                                                  
                END.
 
                IF (bfOrder.OrderType EQ {&ORDER_TYPE_NEW} OR 

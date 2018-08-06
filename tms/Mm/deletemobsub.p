@@ -1110,14 +1110,25 @@ PROCEDURE pTerminate:
          Mobsub.icc = ""
          Mobsub.imsi = ""
          MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
-      
-      /* YDR-2495 Auto STC for Convergent After Mobile Line Termination to Fixed Line  */
-      liRequest = fConvFixedSTCReq(MobSub.CLIType,
-                                   MobSub.MsSeq,
-                                   IF llOutport THEN Func.Common:mMake2DT(TODAY + 5,0)
-                                   ELSE Func.Common:mMake2DT(TODAY + 1,0),
-                                   {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                                   MsRequest.MsRequest).
+
+      FIND FIRST OldCliType WHERE
+                 OldCliType.Brand   = Syst.Var:gcBrand AND
+                 OldCliType.CliType = MobSub.CLIType NO-LOCK NO-ERROR.
+      IF LOOKUP(OldCliType.BaseBundle, "CONT30,CONT32,CONT35") > 0 THEN
+         liRequest = fConvMobileSTCReq(MobSub.CLIType,
+                                      MobSub.MsSeq,
+                                      IF llOutport THEN Func.Common:mMake2DT(TODAY + 5,0)
+                                      ELSE Func.Common:mMake2DT(TODAY + 1,0),
+                                      {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                                      MsRequest.MsRequest).                                   
+      ELSE:      
+         /* YDR-2495 Auto STC for Convergent After Mobile Line Termination to Fixed Line  */
+         liRequest = fConvFixedSTCReq(MobSub.CLIType,
+                                      MobSub.MsSeq,
+                                      IF llOutport THEN Func.Common:mMake2DT(TODAY + 5,0)
+                                      ELSE Func.Common:mMake2DT(TODAY + 1,0),
+                                      {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                                      MsRequest.MsRequest).
    END.      
    ELSE DO: 
       FIND FIRST TermMobsub WHERE 
