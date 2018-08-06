@@ -246,7 +246,7 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
             RETURN FALSE.
          ELSE IF lbCLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
                  lcMergeTargets       GT ""                               AND
-          LOOKUP(lcFixedLineType,STRING(libCLIType.FixedLineType)) EQ 0   THEN
+          LOOKUP(STRING(libCLIType.FixedLineType),lcFixedLineType) EQ 0   THEN
             RETURN FALSE.
 
       END.
@@ -353,7 +353,7 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
 
                 IF lcFixedLineType EQ "" THEN
                    lcFixedLineType = STRING(bCliType2.FixedLineType).
-                ELSE IF LOOKUP(lcFixedLineType,STRING(bCliType2.FixedLineType)) EQ 0 THEN
+                ELSE IF LOOKUP(STRING(bCliType2.FixedLineType),lcFixedLineType) EQ 0 THEN
                    lcFixedLineType = lcFixedLineType + "," + STRING(bCliType2.FixedLineType).
 
              END.
