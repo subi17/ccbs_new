@@ -950,9 +950,7 @@ PROCEDURE pUpdateSubscription:
                                         TRUE).                        
       END.
    END.
-   ELSE IF (NOT fCLITypeIsMainLine(CLIType.CliType)   AND
-            NOT fCLITypeIsExtraLine(CLIType.CliType))    OR
-                fCLITypeIsMainLine(CLIType.CliType)      THEN DO:
+   ELSE IF fCLITypeIsMainLine(CLIType.CliType) THEN DO:
 
       fUpdateDSSAccount(MobSub.MsSeq,
                         {&REQUEST_SOURCE_STC},
@@ -985,18 +983,13 @@ PROCEDURE pUpdateSubscription:
 
       /* Check for available extralines of the customer and     */
       /* then reassign them to new mainline and create discount */
-      IF fCLITypeIsMainLine(CLIType.CliType) THEN DO:
-
-         IF CAN-FIND(FIRST ttExtraLines NO-LOCK) THEN
-            IF fReassigningExtralines(MobSub.MsSeq,
-                                      {&REQUEST_SOURCE_STC},
-                                      MsRequest.MsRequest) THEN
-               fCheckAndAssignOrphanExtraline(MobSub.MsSeq,
-                                              MobSub.CustNum,
-                                              MobSub.CLIType).
-
-      END. /* IF fCLITypeIsMainLine(CLIType.CliType) */
-
+      IF CAN-FIND(FIRST ttExtraLines NO-LOCK) THEN
+         IF fReassigningExtralines(MobSub.MsSeq,
+                                   {&REQUEST_SOURCE_STC},
+                                   MsRequest.MsRequest) THEN
+            fCheckAndAssignOrphanExtraline(MobSub.MsSeq,
+                                           MobSub.CustNum,
+                                           MobSub.CLIType).
    END.
 
    /* ADDLINE-324 Additional Line Discounts
