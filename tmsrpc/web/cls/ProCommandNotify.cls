@@ -257,13 +257,22 @@ CLASS web.cls.ProCommandNotify INHERITS profcgi.REST.DefaultWebHandler:
             WHEN "INPROGRESS"
             THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_ACCEPTED_NOTIFY}.
             WHEN "FAILED"
-            THEN ASSIGN
-                    ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_REJECTED_NOTIFY}
-                    MsRequest.ReqStatus         = {&REQUEST_STATUS_REJECTED}.
+            THEN DO:
+               ASSIGN
+                  ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_REJECTED_NOTIFY}
+                  MsRequest.ReqStatus         = {&REQUEST_STATUS_REJECTED}
+                  MsRequest.DoneStamp         = Func.Common:mMakeTS().
+
+               IF MsRequest.OrigRequest > 0 AND
+                  MsRequest.Mandatory   > 0
+               THEN Func.MsReqFunc:mRejectOrigReq(MsRequest.OrigRequest,
+                                                  MsRequest.ReqType).
+            END.
             WHEN "COMPLETED"
             THEN ASSIGN
                     ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_DONE}
-                    MsRequest.ReqStatus         = {&REQUEST_STATUS_HLR_DONE}.
+                    MsRequest.ReqStatus         = {&REQUEST_STATUS_HLR_DONE}
+                    MsRequest.UpdateStamp       = Func.Common:mMakeTS().
          END.
       END.
 
