@@ -11,6 +11,8 @@
 
 USING Progress.Lang.*.
 
+{Syst/tmsconst.i}
+
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Func.MsReqFunc: 
@@ -41,7 +43,7 @@ CLASS Func.MsReqFunc:
          
          ASSIGN
             MsRequest.UpdateStamp = Func.Common:mMakeTS()
-            MsRequest.ReqStatus   = 3
+            MsRequest.ReqStatus   = {&REQUEST_STATUS_REJECTED}
             MsRequest.Memo        = MsRequest.Memo + 
                                       (IF MsRequest.Memo > ""
                                        THEN ", " 
