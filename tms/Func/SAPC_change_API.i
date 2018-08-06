@@ -89,8 +89,8 @@ FUNCTION fChange_API_NB_URL RETURNS CHARACTER
 FUNCTION fDSS_NB_URL RETURNS CHARACTER 
 	(  ) FORWARD.
 
-FUNCTION fCreateJSON_for_API_Interface RETURNS LOGICAL 
-	(OUTPUT cJsonMsg AS LONGCHAR) FORWARD.
+FUNCTION fCreateJSON_for_API_Interface RETURNS JsonObject 
+	( ) FORWARD.
 
 /* ***************************  Main Block  *************************** */
 
@@ -145,41 +145,25 @@ FUNCTION fDSS_NB_URL RETURNS CHARACTER
       
 END FUNCTION.
 
-FUNCTION fCreateJSON_for_API_Interface RETURNS LOGICAL 
-	(OUTPUT cJsonMsg AS LONGCHAR):
+FUNCTION fCreateJSON_for_API_Interface RETURNS JsonObject 
+	():
 /*------------------------------------------------------------------------------
  Purpose: Return a logical indicating whether the execution was succesful 
           Return JSON message for the Change API Interface
           Message is built with information from the Temp-tables received 
  Notes:
 ------------------------------------------------------------------------------*/	
-   DEFINE VARIABLE lResult        AS LOGICAL    NO-UNDO INITIAL FALSE.
-   DEFINE VARIABLE oJson_Order    AS JsonObject NO-UNDO.
    DEFINE VARIABLE oJson_line     AS JsonObject NO-UNDO.
-   DEFINE VARIABLE oJson_OutServ  AS JsonObject NO-UNDO.
-   DEFINE VARIABLE oJson_InServ   AS JsonObject NO-UNDO.
-   DEFINE VARIABLE oJson_Charact  AS JsonObject NO-UNDO.
+   
+   DEFINE VARIABLE loJsonObject   AS JsonObject NO-UNDO.
+   DEFINE VARIABLE loJsonArray    AS JsonArray  NO-UNDO.
 
-   DEFINE VARIABLE aJson_OutServ  AS JsonArray  NO-UNDO.
-   DEFINE VARIABLE aJson_InServ   AS JsonArray  NO-UNDO.
-   DEFINE VARIABLE aJson_Charact  AS JsonArray  NO-UNDO.
-
-   blk:
-   DO ON ERROR UNDO blk, LEAVE blk
-      ON STOP UNDO blk, LEAVE blk:
+   DO ON ERROR UNDO, THROW:
          
-      /* Create JsonObjects */
-      oJson_Order   = NEW JsonObject().  /* root object */
-      oJson_Line    = NEW JsonObject().
-      oJson_Inserv  = NEW JsonObject().
-      oJson_Outserv = NEW JsonObject().
-      oJson_Charact = NEW JsonObject().
+      loJsonObject = NEW JsonObject().
+      oJson_Line   = NEW JsonObject().
+      loJsonArray  = NEW JsonArray().
 
-      /* Create JsonArrays  */
-      aJson_OutServ = NEW JsonArray().
-      aJson_InServ  = NEW JsonArray().
-      aJson_Charact = NEW JsonArray().
-      
       /* Reading data */
       FIND FIRST ttOrder          NO-LOCK.
       FIND FIRST ttOutService     NO-LOCK.
@@ -188,60 +172,67 @@ FUNCTION fCreateJSON_for_API_Interface RETURNS LOGICAL
       FIND FIRST ttCharacteristic NO-LOCK.
 
       /* Characteristics objects */
-      oJson_Charact:add("value",ttCharacteristic.valueamt).
-      oJson_Charact:add("name",ttCharacteristic.name).
+      loJsonObject:add("value",ttCharacteristic.valueamt).
+      loJsonObject:add("name",ttCharacteristic.name).
       
       /* Adding characteristic object to characteristics array */
-      aJson_Charact:add(oJson_Charact).
+      loJsonArray:add(loJsonObject).
+
+      loJsonObject = NEW JsonObject().
       
       /* Inner services object */
-      oJson_InServ:add("type",ttInService.type).
-      oJson_InServ:add("serviceName",ttInService.serviceName).
-      oJson_InServ:add("quantity",ttInService.quantity).
-      oJson_Inserv:add("action",ttInService.action).
+      loJsonObject:add("type",ttInService.type).
+      loJsonObject:add("serviceName",ttInService.serviceName).
+      loJsonObject:add("quantity",ttInService.quantity).
+      loJsonObject:add("action",ttInService.action).
 
       /* Adding characteristic array to Inner Services object */
-      oJson_InServ:add("Characteristics",aJson_Charact).
+      loJsonObject:add("Characteristics",loJsonArray).
+
+      loJsonArray = NEW JsonArray().
       
       /* Adding Inner Services object to Inner Services array */
-      aJson_Inserv:add(oJson_Inserv).
+      loJsonArray:add(loJsonObject).
 
       /* Line Object */ 
       oJson_Line:add("phoneNumber", ttLine.phonenumber).
 
+      loJsonObject = NEW JsonObject().
+
       /* Outer services object */
-      oJson_OutServ:add("type",ttOutService.type).
-      oJson_OutServ:add("serviceId",ttOutService.serviceId).
-      oJson_OutServ:add("quantity",ttOutService.quantity).
-      oJson_Outserv:add("action",ttOutService.action).
+      loJsonObject:add("type",ttOutService.type).
+      loJsonObject:add("serviceId",ttOutService.serviceId).
+      loJsonObject:add("quantity",ttOutService.quantity).
+      loJsonObject:add("action",ttOutService.action).
       
       /* Adding Line Object to outer Services object */
-      oJson_Outserv:add("Line",oJson_Line).
+      loJsonObject:add("Line",oJson_Line).
 
       /* Adding Inner Services array to outer Services object */
-      oJson_Outserv:add("Services",aJson_InServ).
+      loJsonObject:add("Services",loJsonArray).
+
+      loJsonArray = NEW JsonArray().
 
       /* Adding Outer Services object to outer Services array */
-      aJson_OutServ:add(oJson_OutServ).
+      loJsonArray:add(loJsonObject).
+
+      loJsonObject = NEW JsonObject().
 
       /* Order (root) object */
-      oJson_Order:add("orderId", ttOrder.orderid).
-      oJson_Order:add("orderType", ttOrder.ordertype).
-      oJson_Order:add("sellChannel", ttOrder.sellChannel).
-      oJson_Order:add("sellDate", ttOrder.sellDate).
-      oJson_Order:add("seller", ttOrder.seller).
-      oJson_Order:add("createdBy", ttOrder.createdBy).
-      oJson_Order:add("createdDate", ttOrder.createdDate).
+      loJsonObject:add("orderId", ttOrder.orderid).
+      loJsonObject:add("orderType", ttOrder.ordertype).
+      loJsonObject:add("sellChannel", ttOrder.sellChannel).
+      loJsonObject:add("sellDate", ttOrder.sellDate).
+      loJsonObject:add("seller", ttOrder.seller).
+      loJsonObject:add("createdBy", ttOrder.createdBy).
+      loJsonObject:add("createdDate", ttOrder.createdDate).
 
       /* Adding outer Service array to Order (root) object */
-      oJson_Order:Add("Services", aJson_OutServ).
-
-      /* Write Json message. Default encoding: UTF-8. */
-      lResult = oJson_Order:WRITE(cJsonMsg,TRUE).
+      loJsonObject:Add("Services", loJsonArray).
        
    END.
    
-   RETURN lResult.
+   RETURN loJsonObject.
 		
 END FUNCTION.
 

@@ -333,8 +333,11 @@ CLASS Gwy.ProCommandHandler FINAL:
          THEN UNDO, THROW NEW AppError("Result body is not json object",
                                        {&PROCOMMANDSTATUS_INVALID_RESPONSE_BODY}).
 
+         IF NOT CAST(aoRESTClient:aoResultObject, JsonConstruct):Write(lmpJsonData, YES)
+         THEN UNDO, THROW NEW AppError("Cannot parse json from result body",
+                                     {&PROCOMMANDSTATUS_INTERNAL_PROBLEM}).
+
          DO ON ERROR UNDO, THROW:
-            CAST(aoRESTClient:aoResultObject, JsonConstruct):Write(lmpJsonData, YES).
             COPY-LOB FROM OBJECT lmpJsonData TO OBJECT ProCommand.Response NO-CONVERT.
             CATCH loError AS Progress.Lang.Error:
                UNDO, THROW NEW AppError("Cannot store json response to database clob field",
@@ -425,9 +428,13 @@ CLASS Gwy.ProCommandHandler FINAL:
                WHEN {&PROCOMMANDSTATUS_WAITING_ACCEPT_NOTIFY}
                THEN .
                WHEN {&PROCOMMANDSTATUS_DONE}
-               THEN ASSIGN
-                       MsRequest.ReqStatus   = {&REQUEST_STATUS_HLR_DONE}
-                       MsRequest.UpdateStamp = Func.Common:mMakeTS().
+               THEN DO:
+                  IF Func.MsReqFunc:mAllProCommandOK(MsRequest.MsRequest,
+                                                     ROWID(ProCommand))
+                  THEN ASSIGN
+                          MsRequest.ReqStatus   = {&REQUEST_STATUS_HLR_DONE}
+                          MsRequest.UpdateStamp = Func.Common:mMakeTS().
+               END.
                OTHERWISE DO:
                   ASSIGN
                      MsRequest.ReqStatus = {&REQUEST_STATUS_REJECTED}

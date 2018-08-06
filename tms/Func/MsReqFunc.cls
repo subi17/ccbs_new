@@ -54,4 +54,22 @@ CLASS Func.MsReqFunc:
 
    END METHOD.
 
+   METHOD PUBLIC STATIC LOGICAL mAllProCommandOK
+      ( liMsRequest AS INTEGER,
+        lrowid      AS ROWID ):
+
+      DEFINE BUFFER ProCommand FOR ProCommand.
+
+      FOR EACH ProCommand NO-LOCK USE-INDEX Ix_MsRequest WHERE
+               ProCommand.MsRequest = liMsRequest AND
+               ProCommand.ProCommandStatus NE {&PROCOMMANDSTATUS_DONE} AND
+               ROWID(ProCommand) NE lrowid:
+         RETURN FALSE.
+      END.
+
+      RETURN TRUE.
+
+   END METHOD.
+
+
 END CLASS.
