@@ -52,17 +52,17 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
           
-    DEFINE PROTECTED VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
+    DEFINE PROTECTED VARIABLE objOrder AS CLASS om.Order NO-UNDO.
     	
 	CONSTRUCTOR PUBLIC OrderPayment ( ioOrder AS CLASS om.Order  ):
 		
-		ASSIGN aoOrder = ioOrder.
+		ASSIGN objOrder = ioOrder.
 		
 	END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC OrderPayment ( ):
 	    
-	    ASSIGN aoOrder = ?.
+	    ASSIGN objOrder = ?.
 
 	END DESTRUCTOR.
 	
@@ -91,7 +91,7 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
 	    CREATE OrderPayment.
         ASSIGN
             OrderPayment.Brand       = Syst.Var:gcBrand
-            OrderPayment.OrderId     = aoOrder:OrderId
+            OrderPayment.OrderId     = objOrder:OrderId
             OrderPayment.Method      = THIS-OBJECT:payMethodID  
             OrderPayment.CCReference = THIS-OBJECT:ccReference
             OrderPayment.CCValid     = THIS-OBJECT:ccValid  
