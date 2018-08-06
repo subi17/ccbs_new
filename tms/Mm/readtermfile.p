@@ -303,8 +303,10 @@ REPEAT:
       END.
 
       IF fIsConvergenceTariff(lcCLIType) AND 
-         NOT CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = MobSub.MsSeq)
-      THEN DO.
+         NOT CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = MobSub.MsSeq) AND
+         MobSub.MSStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND /* YTS-13493 */
+         MobSub.MSStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}
+      THEN DO:
          IF lcTerminationType EQ "MOBILE" THEN DO:
             liRequest = fTerminationRequest(MobSub.MSSeq,
                                             ldKillStamp,
