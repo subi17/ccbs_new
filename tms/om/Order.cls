@@ -191,7 +191,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             objCustomer       = NEW cm.Customer().
 
         ASSIGN
-            ldaCreateDate             = Func.Common:mGetDate(ioJsonObject:GetCharacter("created-at"))
+            ldaCreateDate             = Func.Common:mGetDate(ioJsonObject:GetCharacter("created_at"))
             THIS-OBJECT:ContractId    = ioJsonObject:GetCharacter("contractid") 
             THIS-OBJECT:salesMan      = ioJsonObject:GetCharacter("salesman")
             THIS-OBJECT:orderChannel  = ioJsonObject:GetCharacter("channel")

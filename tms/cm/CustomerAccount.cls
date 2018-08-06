@@ -74,9 +74,9 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
         FIELDS BillAcctNum  AS INTEGER
         INDEX BillAcctNum IS PRIMARY UNIQUE BillAcctNum.
 		
-	CONSTRUCTOR PUBLIC CustomerAccount ( INPUT objCustomer AS CLASS cm.Customer ):
+	CONSTRUCTOR PUBLIC CustomerAccount ( INPUT iobjCustomer AS CLASS cm.Customer ):
 		
-		ASSIGN objCustomer = objCustomer.
+		ASSIGN objCustomer = iobjCustomer.
 		
 	END CONSTRUCTOR.
 
