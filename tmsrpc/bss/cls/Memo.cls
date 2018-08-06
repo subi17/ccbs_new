@@ -31,36 +31,39 @@ CLASS bss.cls.Memo IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY aoOrderProduct AS CLASS pm.OrderProduct NO-UNDO
+   DEFINE PUBLIC PROPERTY objOrderProduct AS CLASS pm.OrderProduct NO-UNDO
       GET.
       SET.
 
-   CONSTRUCTOR PUBLIC Memo
-     ( ioOrderProduct AS CLASS pm.OrderProduct ):
-      aoOrderProduct = ioOrderProduct.   
-   END CONSTRUCTOR.
-
-	DESTRUCTOR PUBLIC Memo():
-	   aoOrderProduct = ?.
-	END DESTRUCTOR.
+    CONSTRUCTOR PUBLIC Memo
+        ( ioOrderProduct AS CLASS pm.OrderProduct ):
+        objOrderProduct = ioOrderProduct.   
+    END CONSTRUCTOR.	
 	
-	METHOD PUBLIC VOID mCreateData
-	  (ioJsonObject AS CLASS JsonObject):
+    METHOD PUBLIC VOID mCreateData
+        (ioJsonObject AS CLASS JsonObject):
 
-      ASSIGN
-         MemoTitle = ioJsonObject:GetCharacter("title")
-         MemoText  = ioJsonObject:GetCharacter("content").
+        ASSIGN
+            MemoTitle = ioJsonObject:GetCharacter("title")
+            MemoText  = ioJsonObject:GetCharacter("content").
 
-	END METHOD.
+    END METHOD.
 
-   METHOD PUBLIC VOID mStoreData():
+    METHOD PUBLIC VOID mStoreData():
 
-      Func.Common:mWriteMemo("OrderProduct",
-                             STRING(aoOrderProduct:OrderProductId),
-                             aoOrderProduct:objOrder:objCustomer:CustNum,
-                             THIS-OBJECT:MemoTitle,
-                             THIS-OBJECT:MemoText).
+        Func.Common:mWriteMemo("OrderProduct",
+                               STRING(objOrderProduct:OrderProductId),
+                               objOrderProduct:objOrder:objCustomer:CustNum,
+                               THIS-OBJECT:MemoTitle,
+                               THIS-OBJECT:MemoText).
 
-   END METHOD.
+    END METHOD.
+   
+    DESTRUCTOR PUBLIC Memo():
+       
+        IF VALID-OBJECT(objOrderProduct) THEN 
+            DELETE OBJECT objOrderProduct.
+       
+    END DESTRUCTOR.
 
 END CLASS.

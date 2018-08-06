@@ -76,8 +76,8 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
             END. 
         END.
        
-        IF loAttributes:Has("shipping_address")
-        THEN DO:
+        IF loAttributes:Has("shipping_address") THEN 
+        DO:
             
             ASSIGN 
                 objShipCustomer         = NEW om.OrderCustomer(objOrder)
@@ -116,11 +116,11 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
             CAST(ttOrderProductParam.opobject, pm.OrderProductParam):mStoreData().
         END.
         
-        IF VALID-OBJECT(objShipCustomer)
-        THEN objShipCustomer:mStoreData().
+        IF VALID-OBJECT(objShipCustomer) THEN 
+            objShipCustomer:mStoreData().
         
-        IF THIS-OBJECT:ICC > ""
-        THEN objOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
+        IF THIS-OBJECT:ICC > "" THEN 
+            objOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
         
     END METHOD.
     

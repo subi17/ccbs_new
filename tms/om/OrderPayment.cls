@@ -52,17 +52,17 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
           
-    DEFINE PROTECTED VARIABLE aoOrder AS CLASS om.Order NO-UNDO.
+    DEFINE PROTECTED VARIABLE objOrder AS CLASS om.Order NO-UNDO.
     	
 	CONSTRUCTOR PUBLIC OrderPayment ( ioOrder AS CLASS om.Order  ):
 		
-		ASSIGN aoOrder = ioOrder.
+		ASSIGN objOrder = ioOrder.
 		
 	END CONSTRUCTOR.
 
 	DESTRUCTOR PUBLIC OrderPayment ( ):
 	    
-	    ASSIGN aoOrder = ?.
+	    ASSIGN objOrder = ?.
 
 	END DESTRUCTOR.
 	
@@ -70,16 +70,16 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
 	   
 	    ASSIGN THIS-OBJECT:payMethod  = iObjPaymentStruct:GetCharacter("method")  WHEN iObjPaymentStruct:Has("method").
 	    
-        IF THIS-OBJECT:payMethod = "creditcard"  
-        THEN ASSIGN 
+        IF THIS-OBJECT:payMethod = "creditcard"  THEN 
+            ASSIGN 
                 THIS-OBJECT:ccReference    = iObjPaymentStruct:GetCharacter("ccreference")    WHEN iObjPaymentStruct:Has("ccreference")
                 THIS-OBJECT:ccValid        = iObjPaymentStruct:GetCharacter("ccvalid")        WHEN iObjPaymentStruct:Has("ccvalid")
                 THIS-OBJECT:authNumber     = iObjPaymentStruct:GetCharacter("authnumber")     WHEN iObjPaymentStruct:Has("authnumber")
                 THIS-OBJECT:binNumber      = iObjPaymentStruct:GetCharacter("binnumber")      WHEN iObjPaymentStruct:Has("binnumber")
                 THIS-OBJECT:payMethodID      = {&ORDERPAYMENT_M_CREDIT_CARD}
                 . 
-        ELSE IF THIS-OBJECT:payMethod = "paypal"
-        THEN ASSIGN 
+        ELSE IF THIS-OBJECT:payMethod = "paypal" THEN 
+            ASSIGN 
                  THIS-OBJECT:payerID  =  iObjPaymentStruct:GetCharacter("payerid") WHEN iObjPaymentStruct:Has("payerid")
                  THIS-OBJECT:payMethodID  =  {&ORDERPAYMENT_M_PAYPAL}
                  .
@@ -91,7 +91,7 @@ CLASS om.OrderPayment IMPLEMENTS bss.cls.IObjectStorage:
 	    CREATE OrderPayment.
         ASSIGN
             OrderPayment.Brand       = Syst.Var:gcBrand
-            OrderPayment.OrderId     = aoOrder:OrderId
+            OrderPayment.OrderId     = objOrder:OrderId
             OrderPayment.Method      = THIS-OBJECT:payMethodID  
             OrderPayment.CCReference = THIS-OBJECT:ccReference
             OrderPayment.CCValid     = THIS-OBJECT:ccValid  

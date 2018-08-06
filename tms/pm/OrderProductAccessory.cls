@@ -66,8 +66,8 @@ CLASS pm.OrderProductAccessory INHERITS pm.OrderProduct:
     
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
-        IF VALID-OBJECT (objInstallationOrderCustomer)
-        THEN objInstallationOrderCustomer:mStoreData().
+        IF VALID-OBJECT (objInstallationOrderCustomer) THEN 
+            objInstallationOrderCustomer:mStoreData().
         
     END METHOD.
 

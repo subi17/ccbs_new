@@ -173,9 +173,8 @@ CLASS om.Address IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:coverageToken     = iObjAddressStruct:GetCharacter("coveragetoken") WHEN iObjAddressStruct:Has("coveragetoken")            
         .
 	    
-	    IF iObjAddressStruct:Has("validation_data") 
-	    THEN DO:
-	        
+	    IF iObjAddressStruct:Has("validation_data")THEN 
+	    DO:
 	        
 	        ASSIGN objAddrValidationStruct      =   NEW JsonObject()
 	               objAddrValidationStruct      =   iObjAddressStruct:GetJsonObject("validation_data")
@@ -228,8 +227,8 @@ CLASS om.Address IMPLEMENTS bss.cls.IObjectStorage:
             Address.CoverageToken     = THIS-OBJECT:coverageToken
             Address.AddressRegisterID = THIS-OBJECT:addrRegisterID
             .    
-         IF NOT CAN-FIND(FIRST CustomerReport WHERE CustomerReport.CustNum = INTEGER(Address.KeyValue))
-         THEN DO:
+         IF NOT CAN-FIND(FIRST CustomerReport WHERE CustomerReport.CustNum = INTEGER(Address.KeyValue))THEN 
+         DO:
              
              CREATE CustomerReport.
              ASSIGN 
@@ -309,9 +308,8 @@ CLASS om.Address IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:coverageToken     = (IF iObjBillAddrStruct:Has("coveragetoken") THEN iObjBillAddrStruct:GetCharacter("coveragetoken") ELSE bfAddress.CoverageToken )            
             .
         
-        IF iObjBillAddrStruct:Has("validation_data") 
-        AND AVAILABLE CustomerReport
-        THEN DO:
+        IF iObjBillAddrStruct:Has("validation_data") AND AVAILABLE CustomerReport THEN 
+        DO:
             ASSIGN 
                 objAddrValidationStruct      = NEW JsonObject()
                 objAddrValidationStruct      = iObjBillAddrStruct:GetJsonObject("validation_data")
