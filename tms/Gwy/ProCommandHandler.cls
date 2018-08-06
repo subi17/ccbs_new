@@ -419,13 +419,25 @@ CLASS Gwy.ProCommandHandler FINAL:
                ProCommand.ResponseTS = ldtResponseTS.
 
             IF AVAILABLE MsRequest
-            THEN CASE ProCommand.ProCommandStatus:
-                    WHEN {&PROCOMMANDSTATUS_NEW} OR
-                    WHEN {&PROCOMMANDSTATUS_WAITING_ACCEPT_NOTIFY}
-                    THEN .
-                    WHEN {&PROCOMMANDSTATUS_DONE}
-                    THEN MsRequest.ReqStatus = {&REQUEST_STATUS_HLR_DONE}.
-                    OTHERWISE MsRequest.ReqStatus = {&REQUEST_STATUS_REJECTED}.
+            THEN
+            CASE ProCommand.ProCommandStatus:
+               WHEN {&PROCOMMANDSTATUS_NEW} OR
+               WHEN {&PROCOMMANDSTATUS_WAITING_ACCEPT_NOTIFY}
+               THEN .
+               WHEN {&PROCOMMANDSTATUS_DONE}
+               THEN ASSIGN
+                       MsRequest.ReqStatus   = {&REQUEST_STATUS_HLR_DONE}
+                       MsRequest.UpdateStamp = Func.Common:mMakeTS().
+               OTHERWISE DO:
+                  ASSIGN
+                     MsRequest.ReqStatus = {&REQUEST_STATUS_REJECTED}
+                     MsRequest.DoneStamp = Func.Common:mMakeTS().
+
+                  IF MsRequest.OrigRequest > 0 AND
+                     MsRequest.Mandatory   > 0
+                  THEN Func.MsReqFunc:mRejectOrigReq(MsRequest.OrigRequest,
+                                                     MsRequest.ReqType).
+               END.
             END CASE.
 
          END FINALLY.
