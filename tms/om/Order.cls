@@ -22,307 +22,267 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 &GLOBAL-DEFINE nowTS (YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY) + TIME / 100000)
 
 CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
-	/*------------------------------------------------------------------------------
-	 Purpose:
-	 Notes:
-	------------------------------------------------------------------------------*/
-	
-   DEFINE PUBLIC PROPERTY orderId AS INTEGER NO-UNDO
-      GET.
-      SET.
+    /*------------------------------------------------------------------------------
+     Purpose:
+     Notes:
+    ------------------------------------------------------------------------------*/
 
-   DEFINE PUBLIC PROPERTY aoCustomer AS CLASS cm.Customer NO-UNDO
-      GET.
-      SET.
+    DEFINE PUBLIC PROPERTY objCustomer AS CLASS cm.Customer NO-UNDO
+        GET.
+        SET.
+       
+    DEFINE PUBLIC PROPERTY objOrderInspection AS CLASS om.OrderInspection NO-UNDO 
+        GET.
+        SET.
       
-   DEFINE PUBLIC PROPERTY OrderPaymentData AS CLASS JsonObject NO-UNDO
-       GET.
-       SET.    
+    DEFINE PUBLIC PROPERTY objOrderPayment AS CLASS om.OrderPayment NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY objOrderProductFactory AS CLASS pm.OrderProductFactory NO-UNDO
+        GET.
+        SET.  
+        
+    DEFINE PUBLIC PROPERTY ObjPaymentStruct AS CLASS JsonObject NO-UNDO
+        GET.
+        SET.    
     
-   DEFINE PUBLIC PROPERTY OrderInspectionData AS CLASS JsonObject NO-UNDO
-       GET.
-       SET.
+    DEFINE PUBLIC PROPERTY ObjInspectionStruct AS CLASS JsonObject NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY ObjCustomerStruct AS CLASS JsonObject NO-UNDO
+        GET.
+        SET.
+       
+    DEFINE PUBLIC PROPERTY orderId AS INTEGER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY custAcctNum AS INTEGER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY orderType AS INTEGER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY mobSubCustNum AS INTEGER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY finalMsSeq AS INTEGER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY crStamp AS DECIMAL NO-UNDO
+        GET.
+        SET.        
 
-   DEFINE PUBLIC PROPERTY ContractId AS CHARACTER NO-UNDO
-      GET.
-      SET.
-      
-   DEFINE PUBLIC PROPERTY loCustAcct AS CLASS JsonObject NO-UNDO
-      GET.
-      SET.
-      
-   DEFINE PUBLIC PROPERTY aoOrderInspection AS CLASS om.OrderInspection NO-UNDO 
-      GET.
-      SET.
-      
-   DEFINE PUBLIC PROPERTY aoOrderPayment AS CLASS om.OrderPayment NO-UNDO
-      GET.
-      SET.  
-      
-   DEFINE PUBLIC PROPERTY aoOrderAddress AS CLASS om.OrderAddress NO-UNDO 
-      GET.
-      SET.
+    DEFINE PUBLIC PROPERTY contractId AS CHARACTER NO-UNDO
+        GET.
+        SET.
 
-   DEFINE PUBLIC PROPERTY Salesman AS CHARACTER NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY OrderChannel AS CHARACTER NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY CrStamp AS DECIMAL NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY CLI AS CHARACTER NO-UNDO
-      GET.
-      SET.
-
-   DEFINE PUBLIC PROPERTY MobSubCustNum AS INTEGER NO-UNDO
-      GET.
-      SET.
+    DEFINE PUBLIC PROPERTY salesMan AS CHARACTER NO-UNDO
+        GET.
+        SET.
 
    DEFINE PUBLIC PROPERTY PayType AS LOGICAL NO-UNDO
       GET.
       SET.
 
-   DEFINE PUBLIC PROPERTY isACCOrder AS LOGICAL NO-UNDO
-      GET.
-      SET.
-      
    DEFINE PUBLIC PROPERTY liCustNum AS INTEGER NO-UNDO
       GET.
       SET.
       
-   DEFINE PUBLIC PROPERTY lcCLI AS CHARACTER NO-UNDO
-      GET.
-      SET(icCLI AS CHARACTER):
-          
-          ASSIGN THIS-OBJECT:lcCLI = icCLI.
-          
-      END SET.
-      
-   DEFINE PUBLIC PROPERTY ROIClose AS LOGICAL NO-UNDO
-      GET.
-      SET(INPUT llClose AS LOGICAL) :
-          
-          ASSIGN THIS-OBJECT:ROIClose   =   llClose .
-          
-      END SET.
-   /* A value for this property is populated in OrderProduct class */
-   DEFINE PUBLIC PROPERTY MsSeq AS INTEGER NO-UNDO
-      GET.
-      SET(iiMSSeq AS INTEGER):
-         DEFINE BUFFER MobSub FOR MobSub.
-         FIND MobSub NO-LOCK WHERE MobSub.MSSeq = iiMSSeq NO-ERROR.
-         IF NOT AVAILABLE MobSub
-         THEN DO:
-            IF CAN-FIND(TermMobSub NO-LOCK WHERE TermMobSub.MSSeq = iiMSSeq)
-            THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("subscription-not-active|&1", iiMSSeq)).
-
-            UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("subscription-not-found|&1", iiMSSeq)).
-         END.
-         ASSIGN
-            THIS-OBJECT:MsSeq         = iiMSSeq
-            THIS-OBJECT:CLI           = MobSub.CLI
-            THIS-OBJECT:MobSubCustNum = MobSub.CustNum
-            THIS-OBJECT:PayType       = MobSub.PayType.
-      END SET.
-
    DEFINE PUBLIC PROPERTY aoOrderProductFactory AS CLASS pm.OrderProductFactory NO-UNDO
       GET.
       SET.
+    
+   DEFINE PUBLIC PROPERTY orderChannel AS CHARACTER NO-UNDO
+        GET.
+        SET.
+   
+    DEFINE PUBLIC PROPERTY CLI AS CHARACTER NO-UNDO
+        GET.
+        SET.
       
-   DEFINE PUBLIC PROPERTY loAddrArray AS CLASS JsonArray NO-UNDO 
-       GET.
-       SET.
+    DEFINE PUBLIC PROPERTY lcCLI AS CHARACTER NO-UNDO
+        GET.
+        SET.
        
-   DEFINE PUBLIC PROPERTY CustAcctNum AS INTEGER NO-UNDO
-      GET.
-      SET.
-      
-   DEFINE PUBLIC PROPERTY isPrePaidOrder AS LOGICAL NO-UNDO
-      GET.
-      SET.
-      
-   DEFINE PUBLIC PROPERTY OrderType AS INTEGER NO-UNDO
-      GET.
-      SET (iiType AS INTEGER):
-          
-          ASSIGN THIS-OBJECT:OrderType  = iiType.
-          
-      END SET.
-      
-    DEFINE PUBLIC PROPERTY isFixedOnly AS LOGICAL NO-UNDO
-       GET.
-       SET.
-       
-    DEFINE PUBLIC PROPERTY StatusCode AS CHARACTER NO-UNDO
-       GET.
-       SET(INPUT icStatusCode AS CHARACTER):
-           
-           ASSIGN THIS-OBJECT:StatusCode  =  icStatusCode.
-           
-       END SET.
-       
-    DEFINE PUBLIC PROPERTY lhOrderValidations AS HANDLE NO-UNDO 
-       GET.
-       SET.
-       
-    DEFINE PUBLIC PROPERTY MobileNumberType AS CHARACTER NO-UNDO
-       GET.
-       SET(INPUT icMType AS CHARACTER) :
-           
-           ASSIGN THIS-OBJECT:MobileNumberType  =  icMType.
-           
-       END SET.
-       
-    DEFINE PUBLIC PROPERTY isRenewalSTCOrder AS LOGICAL NO-UNDO
-       GET.
-       SET.
-       
-    DEFINE PUBLIC PROPERTY ROIOrderStatus AS CHARACTER NO-UNDO
-       GET.
-       SET.
-       
-    DEFINE PUBLIC PROPERTY CLIType AS CHARACTER NO-UNDO
-       GET.
-       SET.
+    DEFINE PUBLIC PROPERTY statusCode AS CHARACTER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY mobileNumberType AS CHARACTER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY roiOrderStatus AS CHARACTER NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY cliType AS CHARACTER NO-UNDO
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY lcICC AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
+      
+    DEFINE PUBLIC PROPERTY roiClose AS LOGICAL NO-UNDO
+        GET.
+        SET.
+      
+    DEFINE PUBLIC PROPERTY isACCOrder AS LOGICAL NO-UNDO
+        GET.
+        SET.   
+        
+    DEFINE PUBLIC PROPERTY isPrePaidOrder AS LOGICAL NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY isFixedOnly AS LOGICAL NO-UNDO
+        GET.
+        SET.
+        
+    DEFINE PUBLIC PROPERTY isRenewalSTCOrder AS LOGICAL NO-UNDO
+        GET.
+        SET.
+      
+    /* A value for this property is populated in OrderProduct class */
+    DEFINE PUBLIC PROPERTY msSeq AS INTEGER NO-UNDO
+        GET.
+        SET(iiMSSeq AS INTEGER):
+            DEFINE BUFFER MobSub FOR MobSub.
+            FIND MobSub NO-LOCK WHERE MobSub.MSSeq = iiMSSeq NO-ERROR.
+            IF NOT AVAILABLE MobSub THEN
+            DO:
+                IF CAN-FIND(TermMobSub NO-LOCK WHERE TermMobSub.MSSeq = iiMSSeq) THEN 
+                    UNDO, THROW NEW ParamError(SUBSTITUTE("subscription_not_active|&1", iiMSSeq)).
+
+                UNDO, THROW NEW ParamError(SUBSTITUTE("subscription_not_found|&1", iiMSSeq)).
+            END.
+            ASSIGN
+                THIS-OBJECT:msSeq         = iiMSSeq
+                THIS-OBJECT:CLI           = MobSub.CLI
+                THIS-OBJECT:mobSubCustNum = MobSub.CustNum.
+        END SET.
        
-    DEFINE PUBLIC PROPERTY FinalMsSeq AS INTEGER NO-UNDO
-       GET.
-       SET.
+    DEFINE PUBLIC PROPERTY lhOrderValidations AS HANDLE NO-UNDO 
+        GET.
+        SET.
        
     CONSTRUCTOR PUBLIC Order(): 
     END CONSTRUCTOR.
 
-    DESTRUCTOR PUBLIC Order():
-
-      IF VALID-OBJECT(aoCustomer)
-      THEN DELETE OBJECT aoCustomer.
-
-      IF VALID-OBJECT(aoOrderProductFactory)
-      THEN DELETE OBJECT aoOrderProductFactory.
-      
-        ASSIGN 
-            OrderPaymentData    = ?
-            OrderInspectionData = ?
-            loCustAcct          = ?
-            aoOrderInspection   = ?
-            aoOrderPayment      = ?
-            aoOrderAddress      = ?
-            .
-
-    END DESTRUCTOR.
-
-    METHOD PUBLIC VOID mCreateData
+	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
 
-        DEFINE VARIABLE loAgrCust       AS CLASS     JsonObject           NO-UNDO.
-        DEFINE VARIABLE ldaCreateDate   AS DATE      NO-UNDO.
-        DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.
-        DEFINE VARIABLE arrayAddrObject AS CLASS     JsonObject           NO-UNDO.
-        DEFINE VARIABLE loAddrObject    AS CLASS     om.OrderAddress      NO-UNDO.
-        DEFINE VARIABLE lcMigrationErr  AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE loAgrCust      AS CLASS     JsonObject NO-UNDO.
+        DEFINE VARIABLE ldaCreateDate  AS DATE      NO-UNDO.
+        DEFINE VARIABLE liCount        AS INTEGER   NO-UNDO.
+        DEFINE VARIABLE lcMigrationErr AS CHARACTER NO-UNDO.
               
-      ASSIGN
-         loAgrCust  = ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
-         loCustAcct = ioJsonObject:GetJsonObject("customer")           WHEN ioJsonObject:Has("customer")
-         aoCustomer = NEW cm.Customer().
+        ASSIGN
+            loAgrCust         = ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
+            ObjCustomerStruct = ioJsonObject:GetJsonObject("customer")           WHEN ioJsonObject:Has("customer")
+            objCustomer       = NEW cm.Customer().
+
+        ASSIGN
+            ldaCreateDate             = Func.Common:mGetDate(ioJsonObject:GetCharacter("created-at"))
+            THIS-OBJECT:ContractId    = ioJsonObject:GetCharacter("contractid") 
+            THIS-OBJECT:salesMan      = ioJsonObject:GetCharacter("salesman")
+            THIS-OBJECT:orderChannel  = ioJsonObject:GetCharacter("channel")
+            THIS-OBJECT:crStamp       = YEAR(ldaCreateDate) * 10000 + MONTH(ldaCreateDate) * 100 + DAY(ldaCreateDate)
+            objCustomer:isProCustomer = ( INDEX(THIS-OBJECT:orderChannel,"PRO") > 0 )     
+            objCustomer:orderChannel  = THIS-OBJECT:orderChannel                   
+            .
 
       IF VALID-OBJECT(loAgrCust) THEN 
       DO:          
           IF loAgrCust:Has("custnum") THEN 
-              aoCustomer:mFindData(loAgrCust:GetInteger("custnum")).
+              objCustomer:mFindCustomer(loAgrCust:GetInteger("custnum")).
           ELSE 
-              aoCustomer:mCreateData(loAgrCust).
+              objCustomer:mCreateData(loAgrCust).
           
           ASSIGN THIS-OBJECT:isACCOrder = TRUE.
       END. 
-      ELSE IF VALID-OBJECT(loCustAcct) THEN 
+      ELSE IF VALID-OBJECT(ObjCustomerStruct) THEN 
       DO:
           ASSIGN 
-             OrderPaymentData    =   ioJsonObject:GetJsonObject("upfront_payment_method") WHEN ioJsonObject:Has("upfront_payment_method")
-             OrderInspectionData =   ioJsonObject:GetJsonObject("inspection")             WHEN ioJsonObject:Has("inspection").
+             ObjPaymentStruct    =   ioJsonObject:GetJsonObject("upfront_payment_method") WHEN ioJsonObject:Has("upfront_payment_method")
+             ObjInspectionStruct =   ioJsonObject:GetJsonObject("inspection")             WHEN ioJsonObject:Has("inspection").
         
-          IF loCustAcct:Has("custnum") THEN 
-          DO:    
-              THIS-OBJECT:liCustNum   =  loCustAcct:GetInteger("custnum").
+          IF ObjCustomerStruct:Has("custnum") THEN 
+          DO:               
+              objCustomer:mFindCustomer(ObjCustomerStruct:GetInteger("custnum")).
 
-              aoCustomer:mFindData(THIS-OBJECT:liCustNum).
-
-              IF loCustAcct:Has("account_id") THEN 
+              IF ObjCustomerStruct:Has("account_id") THEN 
               DO:              
                   ASSIGN 
-                      THIS-OBJECT:CustAcctNum = loCustAcct:GetInteger("account_id").
-                  aoCustomer:mFindCustomerAcct(THIS-OBJECT:CustAcctNum).                  
+                      THIS-OBJECT:custAcctNum = ObjCustomerStruct:GetInteger("account_id").
+                  objCustomer:mFindCustomerAcct(THIS-OBJECT:custAcctNum).                  
               END.       
-              aoCustomer:mUpdateCustomerData(INPUT loCustAcct).       
+              objCustomer:mUpdateCustomerData(INPUT ObjCustomerStruct).       
           END.          
-          ELSE aoCustomer:mCreateData(INPUT loCustAcct).
+          ELSE objCustomer:mCreateData(INPUT ObjCustomerStruct).
       END.            
       
-      IF ioJsonObject:Has("items")
-      THEN DO:
-         aoOrderProductFactory = NEW pm.OrderProductFactory().
-         aoOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
+      IF ioJsonObject:Has("items") THEN
+      DO:
+         objOrderProductFactory = NEW pm.OrderProductFactory().
+         objOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
       END.
       ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
       
       RUN Mc/ordervalidations.p PERSISTENT SET lhOrderValidations.  /* This is for the complicated business logic */
       
-      IF THIS-OBJECT:OrderChannel BEGINS "migration"
-      AND THIS-OBJECT:isACCOrder  = FALSE
-      THEN DO:
-          ASSIGN lcMigrationErr =  DYNAMIC-FUNCTION("fMigrationCheckCustomer" IN THIS-OBJECT:lhOrderValidations , INPUT Syst.Var:gcBrand , INPUT aoCustomer:CustId).
-          IF lcMigrationErr > ""
-          THEN UNDO , THROW NEW ParamError("Migration data validation error:" + lcMigrationErr).
+      IF THIS-OBJECT:orderChannel BEGINS "migration"
+          AND THIS-OBJECT:isACCOrder  = FALSE THEN 
+      DO:
+          ASSIGN lcMigrationErr =  DYNAMIC-FUNCTION("fMigrationCheckCustomer" IN THIS-OBJECT:lhOrderValidations , INPUT Syst.Var:gcBrand , INPUT objCustomer:CustId).
+          IF lcMigrationErr > "" THEN
+              UNDO , THROW NEW ParamError("Migration data validation error:" + lcMigrationErr).
       END.
       
-      IF VALID-OBJECT(OrderInspectionData)
-      THEN DO:
-          ASSIGN aoOrderInspection = NEW om.OrderInspection(THIS-OBJECT).
-          aoOrderInspection:mCreateData(OrderInspectionData).
+      IF VALID-OBJECT(ObjInspectionStruct) THEN
+      DO:
+          ASSIGN objOrderInspection = NEW om.OrderInspection(THIS-OBJECT).
+          objOrderInspection:mCreateData(ObjInspectionStruct).
       END.
-      
         
-      IF VALID-OBJECT(OrderPaymentData)
-      THEN DO:
-          ASSIGN aoOrderPayment  = NEW om.OrderPayment(THIS-OBJECT).
-          aoOrderPayment:mCreateData(OrderPaymentData).
+      IF VALID-OBJECT(ObjPaymentStruct) THEN
+      DO:
+          ASSIGN objOrderPayment  = NEW om.OrderPayment(THIS-OBJECT).
+          objOrderPayment:mCreateData(ObjPaymentStruct).
       END.      
     
     END METHOD.
 
     METHOD PUBLIC VOID mStoreData():
         
-        IF aoCustomer:isNewCustomer OR 
-           aoCustomer:isCustomerUpdate THEN
-        aoCustomer:mStoreData().
+        IF objCustomer:isNewCustomer OR objCustomer:isCustomerUpdate THEN
+            objCustomer:mStoreData().
         
         CREATE Order.
         ASSIGN
-            Order.Brand         = Syst.Var:gcBrand
-            Order.OrderId       = NEXT-VALUE(OrderId)
-            Order.Source        = "bssapi"
-            Order.CustNum       = aoCustomer:CustNum
-            Order.MsSeq         = (IF (THIS-OBJECT:isACCOrder OR THIS-OBJECT:isRenewalSTCOrder) THEN THIS-OBJECT:MsSeq ELSE NEXT-VALUE(MobSub))
-            THIS-OBJECT:FinalMsSeq = Order.MsSeq
-            Order.CLI           = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:CLI   ELSE THIS-OBJECT:lcCLI)
-            Order.ContractID    = THIS-OBJECT:ContractId
-            Order.SalesMan      = THIS-OBJECT:Salesman
-            Order.OrderChannel  = THIS-OBJECT:OrderChannel
-            Order.CrStamp       = THIS-OBJECT:CrStamp
-            THIS-OBJECT:orderId = Order.OrderId.
+            Order.Brand            = Syst.Var:gcBrand
+            Order.OrderId          = NEXT-VALUE(OrderId)
+            Order.Source           = "bssapi"
+            Order.CustNum          = objCustomer:CustNum
+            Order.MsSeq            = (IF (THIS-OBJECT:isACCOrder OR THIS-OBJECT:isRenewalSTCOrder) THEN THIS-OBJECT:msSeq ELSE NEXT-VALUE(MobSub))
+            THIS-OBJECT:finalMsSeq = Order.MsSeq
+            Order.CLI              = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:CLI   ELSE THIS-OBJECT:lcCLI)
+            Order.contractId       = THIS-OBJECT:contractId
+            Order.SalesMan         = THIS-OBJECT:salesMan
+            Order.OrderChannel     = THIS-OBJECT:orderChannel
+            Order.CrStamp          = THIS-OBJECT:crStamp
+            THIS-OBJECT:orderId    = Order.OrderId
+            Order.MNPStatus        = (INTEGER(THIS-OBJECT:mobileNumberType = {&TYPE_MNP})).
             
-        CASE THIS-OBJECT:MobileNumberType:
+        CASE THIS-OBJECT:mobileNumberType:
             
             WHEN {&TYPE_NEW}       THEN Order.OrderType = {&ORDER_TYPE_NEW}.
             WHEN {&TYPE_MNP}       THEN Order.OrderType = {&ORDER_TYPE_MNP}.
@@ -332,50 +292,46 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             
         END.
             
-        IF VALID-OBJECT(OrderInspectionData)
-        THEN aoOrderInspection:mStoreData().
+        IF VALID-OBJECT(ObjInspectionStruct) THEN
+            objOrderInspection:mStoreData().
             
-        IF VALID-OBJECT(OrderPaymentData)
-        THEN aoOrderPayment:mStoreData().
+        IF VALID-OBJECT(ObjPaymentStruct) THEN
+            objOrderPayment:mStoreData().
         
-        aoOrderProductFactory:mStoreData(). 
+        objOrderProductFactory:mStoreData(). 
         
-        IF THIS-OBJECT:isACCOrder = FALSE 
-        THEN DO:
-            
-            IF THIS-OBJECT:lcCLI > ""
-            THEN DO:
+        IF THIS-OBJECT:isACCOrder = FALSE THEN
+        DO:
+            IF THIS-OBJECT:lcCLI > "" THEN
+            DO:
                 mCloseOfferedOrderWithSameNumber().
                 mCheckDuplicateOrders().
             END. 
             
-            IF THIS-OBJECT:MobileNumberType = {&TYPE_NEW} AND 
-               THIS-OBJECT:ROIClose         = FALSE 
-            THEN mMakeMSISDNHistory().
+            IF THIS-OBJECT:mobileNumberType = {&TYPE_NEW} AND THIS-OBJECT:roiClose = FALSE THEN
+                mMakeMSISDNHistory().
             
-            IF THIS-OBJECT:ROIClose    = FALSE 
-            THEN DO:
+            IF THIS-OBJECT:roiClose = FALSE THEN 
+            DO:
            
-                IF THIS-OBJECT:StatusCode    <> {&ORDER_STATUS_IN_CONTROL} AND 
-                   THIS-OBJECT:OrderChannel  BEGINS "RETENTION" OR 
-                   (Func.ValidateOrder:mIsConvergentTariff(THIS-OBJECT:CLIType) AND THIS-OBJECT:MobileNumberType = "STC") AND 
-                    Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT THIS-OBJECT:lcCLI)
-                THEN DO:
+                IF THIS-OBJECT:statusCode    <> {&ORDER_STATUS_IN_CONTROL} AND 
+                   THIS-OBJECT:orderChannel  BEGINS "RETENTION" OR 
+                   (Func.ValidateOrder:mIsConvergentTariff(THIS-OBJECT:cliType) AND THIS-OBJECT:mobileNumberType = "STC") AND 
+                   Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT THIS-OBJECT:lcCLI) THEN 
+                DO:
+                     ASSIGN THIS-OBJECT:statusCode  =  {&ORDER_STATUS_MNP_RETENTION}.
                      
-                     ASSIGN THIS-OBJECT:StatusCode  =  {&ORDER_STATUS_MNP_RETENTION}.
-                     
-                     IF THIS-OBJECT:OrderChannel = "retention_stc" THEN 
+                     IF THIS-OBJECT:orderChannel = "retention_stc" THEN 
                      DO:
                          FIND FIRST MsRequest WHERE
                                     MsRequest.MsSeq = Order.MsSeq AND
-                                    MsRequest.ReqType = 0 AND
+                                    MsRequest.ReqType = 0         AND
                              LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9") = 0
                              EXCLUSIVE-LOCK NO-ERROR.
                          IF AVAIL MsRequest THEN
                              MsRequest.ReqIParam2 = THIS-OBJECT:orderId.
-                         ELSE 
-                         DO:
-                             THIS-OBJECT:StatusCode = {&ORDER_STATUS_IN_CONTROL}.
+                         ELSE DO:
+                             THIS-OBJECT:statusCode = {&ORDER_STATUS_IN_CONTROL}.
                              Func.Common:mWriteMemoWithType("Order",
                                                             STRING(THIS-OBJECT:orderId),
                                                             0,
@@ -384,53 +340,52 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                                                             "",
                                                             "BSSAPI").
                          END. /* ELSE DO: */
-                     END. /* IF Order.OrderChannel = "retention_stc" THEN DO: */
-                END. /* IF THIS-OBJECT:StatusCode    <> {&ORDER_STATUS_IN_CONTROL} AND  */
-                ELSE IF THIS-OBJECT:StatusCode <> {&ORDER_STATUS_IN_CONTROL}
-                THEN DO:
+                     END. /* IF Order.orderChannel = "retention_stc" THEN DO: */
+                END. /* IF THIS-OBJECT:statusCode    <> {&ORDER_STATUS_IN_CONTROL} AND  */
+                ELSE IF THIS-OBJECT:statusCode <> {&ORDER_STATUS_IN_CONTROL} THEN
+                DO:
                     
                     /*TO-DO PC: PLEASE IMPLEMENT BELOW LOGIC FROM WHOLE ORDER RPC*/
                     
                     /*IF pcNumberType EQ "renewal" THEN  ==> NOT IMPLEMENTED THIS LOGIC*/   
                     
-                    IF THIS-OBJECT:aoCustomer:CustIdType = "CIF" THEN 
+                    IF THIS-OBJECT:objCustomer:CustIdType = "CIF" THEN 
                         mCompanyCustomerStatus().
-                    ELSE IF THIS-OBJECT:OrderChannel BEGINS "fusion" THEN
-                        ASSIGN THIS-OBJECT:StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE}.
+                    ELSE IF THIS-OBJECT:orderChannel BEGINS "fusion" THEN
+                        ASSIGN THIS-OBJECT:statusCode = {&ORDER_STATUS_PENDING_FIXED_LINE}.
                     ELSE DO:
                         
-                        IF THIS-OBJECT:MobileNumberType     = {&TYPE_MNP} OR 
-                           THIS-OBJECT:MobileNumberType     = {&TYPE_MIGRATION}
-                        THEN ASSIGN THIS-OBJECT:StatusCode  = {&ORDER_STATUS_MNP}.
-                        ELSE ASSIGN THIS-OBJECT:StatusCode  = {&ORDER_STATUS_NEW}.
+                        IF THIS-OBJECT:mobileNumberType     = {&TYPE_MNP} OR THIS-OBJECT:mobileNumberType     = {&TYPE_MIGRATION} THEN
+                            ASSIGN THIS-OBJECT:statusCode  = {&ORDER_STATUS_MNP}.
+                        ELSE ASSIGN THIS-OBJECT:statusCode  = {&ORDER_STATUS_NEW}.
                         
                         /*TO-DO PC : STATUS Change based on the multi sim type and multi sim id*/
                         /*TO-DO PC : STATUS Change based on pending main line and porting date*/
                         
                     END. /* ELSE DO: */                    
-                END. /* ELSE IF THIS-OBJECT:StatusCode <> {&ORDER_STATUS_IN_CONTROL} */                     
-            END. /* IF THIS-OBJECT:ROIClose    = FALSE  */
+                END. /* ELSE IF THIS-OBJECT:statusCode <> {&ORDER_STATUS_IN_CONTROL} */                     
+            END. /* IF THIS-OBJECT:roiClose    = FALSE  */
             
-            IF THIS-OBJECT:ROIOrderStatus > "" 
-            THEN ASSIGN THIS-OBJECT:StatusCode = THIS-OBJECT:ROIOrderStatus.
+            IF THIS-OBJECT:roiOrderStatus > "" THEN
+                ASSIGN THIS-OBJECT:statusCode = THIS-OBJECT:roiOrderStatus.
                 
-            IF THIS-OBJECT:lcICC  GT ""   
-            THEN mCreateChangeICCRequest().
+            IF THIS-OBJECT:lcICC  GT "" THEN  
+                mCreateChangeICCRequest().
                 
         END. /*IF THIS-OBJECT:isACCOrder = FALSE */
 
         ASSIGN 
-            Order.StatusCode    = THIS-OBJECT:StatusCode
-            Order.Paytype       = (IF Func.ValidateOrder:mGetPayType(INPUT THIS-OBJECT:CLIType) = 2 THEN YES ELSE NO) .
+            Order.StatusCode    = THIS-OBJECT:statusCode
+            Order.Paytype       = (IF Func.ValidateOrder:mGetPayType(INPUT THIS-OBJECT:cliType) = 2 THEN YES ELSE NO) .
         
     END METHOD.
     
     METHOD PUBLIC VOID mCloseOfferedOrderWithSameNumber():
         
-        DEFINE BUFFER bfpcOrder FOR Order.
-        
-        IF THIS-OBJECT:OrderChannel BEGINS "RETENTION"
-        THEN DO:
+       /* DEFINE BUFFER bfpcOrder FOR Order.
+        */
+        IF THIS-OBJECT:orderChannel BEGINS "RETENTION" THEN
+        DO:
             
             FOR EACH bfpcOrder NO-LOCK WHERE
                      bfpcOrder.Brand      =     Syst.Var:gcBrand           AND
@@ -440,8 +395,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 
                 RUN Mc/closeorder.p(bfpcOrder.OrderId, TRUE) NO-ERROR.
 
-                IF RETURN-VALUE > ""
-                THEN Func.Common:mWriteMemoWithType("Order",
+                IF RETURN-VALUE > "" THEN
+                    Func.Common:mWriteMemoWithType("Order",
                                                     STRING(THIS-OBJECT:orderId),
                                                     0,
                                                     "Automatic order closing failed",
@@ -452,7 +407,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                                                     "Newton RPC").
                                                         
             END. /* FOR EACH bfpcOrder */
-        END. /* IF THIS-OBJECT:OrderChannel */
+        END. /* IF THIS-OBJECT:orderChannel */
         
     END METHOD.
 
@@ -460,20 +415,18 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
       DEFINE VARIABLE loCustObject AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loAddrObject AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loAddrArray  AS CLASS JsonArray NO-UNDO.
       
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("order-id", THIS-OBJECT:orderId).
       
-      IF aoCustomer:isNewCustomer 
-      THEN DO:
-          ASSIGN loCustObject = NEW JsonObject().
-          loCustObject =  aoCustomer:mResult().
+      IF objCustomer:isNewCustomer THEN
+      DO:
+          ASSIGN loCustObject = NEW JsonObject()
+                 loCustObject = objCustomer:mResult().
           loJsonObject:Add("customer" , loCustObject). 
       END.
        
-      aoOrderProductFactory:mResult(loJsonObject).
+      objOrderProductFactory:mResult(loJsonObject).
 
       RETURN loJsonObject.
 
@@ -481,11 +434,9 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
    
    METHOD PUBLIC VOID mCheckDuplicateOrders():
        
-       IF Func.ValidateOrder:mCheckOtherOngoingOrders(INPUT THIS-OBJECT:lcCLI ,
-                                                      INPUT THIS-OBJECT:MobileNumberType)
-       THEN DO:
-            
-           ASSIGN THIS-OBJECT:StatusCode  =  {&ORDER_STATUS_IN_CONTROL}.
+       IF Func.ValidateOrder:mCheckOtherOngoingOrders(INPUT THIS-OBJECT:lcCLI , INPUT THIS-OBJECT:mobileNumberType) THEN
+       DO:
+           ASSIGN THIS-OBJECT:statusCode  =  {&ORDER_STATUS_IN_CONTROL}.
            
            Func.Common:mWriteMemoWithType("Order",
                                           STRING(Order.OrderId),
@@ -532,11 +483,11 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
            
        IF NOT AVAILABLE HistMSISDN THEN RETURN.
           
-       IF idTimeStamp = 0 OR idTimeStamp = ? THEN idTimeStamp = Func.Common:mMakeTS().
+       IF idTimeStamp = 0 OR idTimeStamp = ? THEN 
+           idTimeStamp = Func.Common:mMakeTS().
    
-       ASSIGN HistMSISDN.ValidTo = idTimeStamp.
-
-       ldNewFrom = HistMSISDN.ValidTo.
+       ASSIGN HistMSISDN.ValidTo = idTimeStamp
+              ldNewFrom = HistMSISDN.ValidTo.
    
        /* make sure that there is atleast 1 second gap between rows */
        REPEAT:
@@ -548,15 +499,16 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
            IF NOT CAN-FIND(FIRST MSISDN WHERE
                                  MSISDN.Brand     = HistMSISDN.Brand AND
                                  MSISDN.CLI       = HistMSISDN.CLI   AND
-                                 MSISDN.ValidFrom = ldNewFrom)
-           THEN LEAVE.
+                                 MSISDN.ValidFrom = ldNewFrom) THEN
+               LEAVE.
 
            IF liNewTime >= 86400 THEN 
            ASSIGN  ldtNewDate = ldtNewDate + 1
                    liNewTime  = 1.
            ELSE liNewTime = liNewTime + 1.
       
-           ldNewFrom = Func.Common:mMake2DT(ldtNewDate,liNewTime).
+           ASSIGN 
+               ldNewFrom = Func.Common:mMake2DT(ldtNewDate,liNewTime).
        END.
    
        CREATE MSISDN.
@@ -574,14 +526,14 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
        DEFINE BUFFER bfpcCustomer2 FOR Customer.
        DEFINE BUFFER bfpcMobSub2   FOR MobSub.
        
-       IF THIS-OBJECT:aoCustomer:isNewCustomer
-       THEN ASSIGN THIS-OBJECT:StatusCode   = {&ORDER_STATUS_COMPANY_NEW}.
+       IF THIS-OBJECT:objCustomer:isNewCustomer THEN
+           ASSIGN THIS-OBJECT:statusCode   = {&ORDER_STATUS_COMPANY_NEW}.
        ELSE DO:
            
            FIND FIRST bfpcCustomer2 WHERE
                       bfpcCustomer2.Brand      = Syst.Var:gcBrand                  AND
-                      bfpcCustomer2.OrgId      = THIS-OBJECT:aoCustomer:CustId     AND
-                      bfpcCustomer2.CustIdType = THIS-OBJECT:aoCustomer:CustIdType AND
+                      bfpcCustomer2.OrgId      = THIS-OBJECT:objCustomer:CustId     AND
+                      bfpcCustomer2.CustIdType = THIS-OBJECT:objCustomer:CustIdType AND
                       bfpcCustomer2.Roles      NE "inactive" NO-LOCK NO-ERROR. 
            IF AVAIL bfpcCustomer2 THEN 
            DO:
@@ -590,8 +542,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                           bfpcMobSub2.AgrCust = bfpcCustomer2.CustNum
                NO-LOCK NO-ERROR.
                
-               IF NOT AVAIL bfpcMobSub2 THEN THIS-OBJECT:StatusCode = {&ORDER_STATUS_COMPANY_NEW}.
-               ELSE THIS-OBJECT:StatusCode = {&ORDER_STATUS_COMPANY_MNP}.
+               IF NOT AVAIL bfpcMobSub2 THEN THIS-OBJECT:statusCode = {&ORDER_STATUS_COMPANY_NEW}.
+               ELSE THIS-OBJECT:statusCode = {&ORDER_STATUS_COMPANY_MNP}.
            END. /* IF AVAIL Customer THEN DO: */
            
        END.
@@ -603,15 +555,15 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
        DEFINE VARIABLE liRequest AS INTEGER   NO-UNDO.
        DEFINE VARIABLE lcError   AS CHARACTER NO-UNDO.
        
-       IF THIS-OBJECT:OrderChannel  BEGINS "Renewal_POS" AND 
+       IF THIS-OBJECT:orderChannel  BEGINS "Renewal_POS" AND 
           THIS-OBJECT:lcICC         GT      ""           AND 
-          THIS-OBJECT:ROIClose      EQ      FALSE 
-       THEN DO:
+          THIS-OBJECT:roiClose      EQ      FALSE THEN
+       DO:
            
            liRequest  =  DYNAMIC-FUNCTION ("fSubscriptionRequest" IN lhOrderValidations ,
-                                           INPUT THIS-OBJECT:FinalMsSeq ,
+                                           INPUT THIS-OBJECT:finalMsSeq ,
                                            INPUT THIS-OBJECT:lcCLI ,
-                                           INPUT THIS-OBJECT:aoCustomer:CustNum,
+                                           INPUT THIS-OBJECT:objCustomer:CustNum,
                                            INPUT 1,
                                            INPUT "",
                                            INPUT Func.Common:mMakeTS(),
@@ -626,8 +578,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                                            OUTPUT lcError).
                                            
                                                     
-           IF liRequest = 0
-           THEN Func.Common:mWriteMemoWithType("Order",
+           IF liRequest = 0 THEN
+               Func.Common:mWriteMemoWithType("Order",
                                                STRING(THIS-OBJECT:orderId),
                                                0,
                                                "ICC change request creation failed",
@@ -640,9 +592,9 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                
                Func.Common:mWriteMemo("MsRequest",
                                       STRING(liRequest),
-                                      THIS-OBJECT:aoCustomer:CustNum,
+                                      THIS-OBJECT:objCustomer:CustNum,
                                       "ICC TYPE CHANGE AUTO",
-                                     THIS-OBJECT:OrderChannel).
+                                     THIS-OBJECT:orderChannel).
            END.                                    
        END.
        
@@ -657,11 +609,11 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                            AND bfSIM.SimStat =  1
             EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
                            
-        IF AVAILABLE bfSIM 
-        THEN DO:
+        IF AVAILABLE bfSIM THEN
+        DO:
             
-            IF THIS-OBJECT:MobileNumberType = "RENEWAL"
-            THEN ASSIGN bfSIM.SimStat   = 13.
+            IF THIS-OBJECT:mobileNumberType = "RENEWAL" THEN 
+                ASSIGN bfSIM.SimStat   = 13.
             ELSE ASSIGN bfSIM.SimStat   =  4.
             
         END.
@@ -669,5 +621,29 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         
     END METHOD.
                                              
+    DESTRUCTOR PUBLIC Order():
+
+        IF VALID-OBJECT(objCustomer) THEN
+            DELETE OBJECT objCustomer.
+
+        IF VALID-OBJECT(objOrderProductFactory) THEN 
+            DELETE OBJECT objOrderProductFactory.
+            
+        IF VALID-OBJECT(ObjPaymentStruct) THEN 
+            DELETE OBJECT ObjPaymentStruct.
+        
+        IF VALID-OBJECT(ObjInspectionStruct) THEN 
+            DELETE OBJECT ObjInspectionStruct.
+            
+        IF VALID-OBJECT(ObjCustomerStruct) THEN 
+            DELETE OBJECT ObjCustomerStruct.
+        
+        IF VALID-OBJECT(objOrderInspection) THEN 
+            DELETE OBJECT objOrderInspection.
+            
+        IF VALID-OBJECT(objOrderPayment) THEN 
+            DELETE OBJECT objOrderPayment.
+            
+    END DESTRUCTOR.
     
 END CLASS.

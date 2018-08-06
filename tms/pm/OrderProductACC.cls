@@ -74,7 +74,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       aoExecutionDate:mStoreData().
       aoOrderCustomer:mStoreData().
 
-      RUN Mm/acc_order.p(INPUT aoOrder:OrderId, OUTPUT liRequestID).
+      RUN Mm/acc_order.p(INPUT objOrder:OrderId, OUTPUT liRequestID).
 
       IF RETURN-VALUE > ""
       THEN UNDO, THROW NEW InternalError(SUBSTITUTE("acc_order failed with error '&1'", RETURN-VALUE)).
@@ -87,8 +87,8 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 	METHOD PUBLIC OVERRIDE VOID mCreateDataForType
 	  ( ioItemObject AS CLASS JsonObject ):
 
-      IF aoOrder:aoCustomer:CustNum EQ 0
-      THEN UNDO, THROW NEW ParamError("donor-customer-has-to-exist").
+      IF objOrder:objCustomer:CustNum EQ 0
+      THEN UNDO, THROW NEW ParamError("donor_customer_has_to_exist").
 
       DEFINE VARIABLE lcSubType     AS CHARACTER        NO-UNDO.
       DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
@@ -109,20 +109,20 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
                   (SUBSTITUTE("customer-data-required|&1", lcSubType)).
 
       ASSIGN
-         aoOrder:MsSeq = loAttributes:GetInteger("subscription-id")
-         lcReturnValue = Func.ValidateACC:mPreCheckSubscriptionForACC(aoOrder:MsSeq).
+         objOrder:MsSeq = loAttributes:GetInteger("subscription-id")
+         lcReturnValue = Func.ValidateACC:mPreCheckSubscriptionForACC(objOrder:MsSeq).
 
       IF lcReturnValue > ""
       THEN UNDO, THROW NEW InternalError(lcReturnValue).
 
-      IF aoOrder:OrderChannel = "newton"
+      IF objOrder:orderChannel = "newton"
       THEN lcReqSource = {&REQUEST_SOURCE_NEWTON}.
-      ELSE IF aoOrder:OrderChannel = "retail_newton"
+      ELSE IF objOrder:orderChannel = "retail_newton"
       THEN lcReqSource = {&REQUEST_SOURCE_RETAIL_NEWTON}.
       ELSE UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("invalid-order-channel|&1", aoOrder:OrderChannel)).
+                  (SUBSTITUTE("Invalid order channel|&1", objOrder:orderChannel)).
 
-      lcReturnValue = Func.ValidateACC:mCheckSubscriptionForACC(aoOrder:MsSeq,
+      lcReturnValue = Func.ValidateACC:mCheckSubscriptionForACC(objOrder:MsSeq,
                                                                 0,
                                                                 0,
                                                                 lcReqSource).
@@ -132,7 +132,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 
       IF loAttributes:Has("mandate")
       THEN DO:
-         aoMandate = NEW om.OrderAction(aoOrder).
+         aoMandate = NEW om.OrderAction(objOrder).
          aoMandate:mCreateData("Mandate", loAttributes:GetCharacter("mandate"), "").
       END.
 
@@ -153,16 +153,16 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       THEN UNDO, THROW NEW ParamError("customer-id-or-data-required").
 
       ASSIGN
-         aoOrderCustomer         = NEW om.OrderCustomer(aoOrder)
+         aoOrderCustomer         = NEW om.OrderCustomer(objOrder)
          aoOrderCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_ACC}
-         aoOrder:OrderType       = {&ORDER_TYPE_ACC}
-         aoOrder:StatusCode      = {&ORDER_STATUS_ONGOING}.
+         objOrder:orderType       = {&ORDER_TYPE_ACC}
+         objOrder:statusCode      = {&ORDER_STATUS_ONGOING}.
 
       IF loAttributes:Has("custnum")
       THEN DO:
          aoOrderCustomer:mCreateData(loAttributes:GetInteger("custnum")).
          lcReturnValue = Func.ValidateACC:mExistingCustomerACCCompability
-                                          (aoOrder:aoCustomer:Category,
+                                          (objOrder:objCustomer:Category,
                                            aoOrderCustomer:Category,
                                            aoOrderCustomer:CustNum,
                                            aoOrderCustomer:CustIdType,
@@ -176,7 +176,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       THEN aoOrderCustomer:mCreateData(loAttributes:GetJsonObject("customer")).
       
       IF NOT aoOrderCustomer:BankCode > ""  AND
-         aoOrder:PayType EQ FALSE 
+         objOrder:PayType EQ FALSE 
       THEN UNDO, THROW NEW ParamError(SUBSTITUTE("bank_account_invalid|&1",
                                       aoOrderCustomer:BankCode)).
 
@@ -187,20 +187,20 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
          THEN UNDO, THROW NEW InternalError(SUBSTRING(lcReturnValue,INDEX(lcReturnValue,"|") + 1)).
       END.
       ELSE DO:
-         lcReturnValue = Func.ValidateACC:mNewCustomerACCCompability(aoOrder:aoCustomer:Category,
+         lcReturnValue = Func.ValidateACC:mNewCustomerACCCompability(objOrder:objCustomer:Category,
                                                                      aoOrderCustomer:CustId,
                                                                      aoOrderCustomer:CustIdType).
          IF lcReturnValue > ""
          THEN UNDO, THROW NEW InternalError(lcReturnValue).
       END.
 
-      IF aoOrderCustomer:CustNum EQ aoOrder:aoCustomer:CustNum
-      THEN UNDO, THROW NEW ParamError("new-and-donor-customer-same").
+      IF aoOrderCustomer:CustNum EQ objOrder:objCustomer:CustNum
+      THEN UNDO, THROW NEW ParamError("new_and_donor_customer_same").
 
-      IF aoOrder:MobSubCustNum NE aoOrder:aoCustomer:CustNum
+      IF objOrder:mobSubCustNum NE objOrder:objCustomer:CustNum
       THEN UNDO, THROW NEW
-               ParamError(SUBSTITUTE("subscription-customer-and-donor-customer-mismatch|&1",
-                                     aoOrder:aoCustomer:CustNum)).
+               ParamError(SUBSTITUTE("subscription_customer_and_donor_customer_mismatch|&1",
+                          objOrder:objCustomer:CustNum)).
 
       IF aoOrderCustomer:Country NE "ES"
       THEN UNDO, THROW NEW ParamError("country-only-es-valid").
@@ -244,7 +244,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
                      (SUBSTITUTE("company-id-required|&1",icSubType)).
 
       IF NOT CAN-FIND(FIRST Mobsub NO-LOCK WHERE
-                            MobSub.MsSeq   EQ aoOrder:MsSeq AND
+                            MobSub.MsSeq   EQ objOrder:MsSeq AND
                             MobSub.PayType EQ llPrePaid)
       THEN UNDO, THROW NEW ParamError
                      (SUBSTITUTE("subscription-type-mismatch|&1",

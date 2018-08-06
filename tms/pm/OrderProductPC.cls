@@ -56,16 +56,16 @@ CLASS pm.OrderProductPC INHERITS pm.OrderProduct:
         
         /*TO-DO PC:WHAT IS plBypassRules in the newton_add_Whole_order.p*/
       
-        IF aoOrder:aoCustomer:isNewCustomer = FALSE
+        IF aoOrder:objCustomer:isNewCustomer = FALSE
         AND NOT aoOrder:OrderChannel BEGINS "migration"
         AND NOT liBypassRules
         
         THEN DO:            
             
-            liCustSubLimit =  Func.ValidateACC:mSubscriptionLimitCheck(INPUT aoOrder:aoCustomer:CustId ,
-                                                                       INPUT aoOrder:aoCustomer:CustIdType,
-                                                                       INPUT Func.ValidateACC:mIsSelfEmpl(aoOrder:aoCustomer:Category),
-                                                                       INPUT Func.ValidateACC:mIsPro(aoOrder:aoCustomer:Category),
+            liCustSubLimit =  Func.ValidateACC:mSubscriptionLimitCheck(INPUT aoOrder:objCustomer:CustId ,
+                                                                       INPUT aoOrder:objCustomer:CustIdType,
+                                                                       INPUT Func.ValidateACC:mIsSelfEmpl(aoOrder:objCustomer:Category),
+                                                                       INPUT Func.ValidateACC:mIsPro(aoOrder:objCustomer:Category),
                                                                        1,
                                                                        OUTPUT liSubLimit,
                                                                        OUTPUT lisubs,
@@ -77,8 +77,8 @@ CLASS pm.OrderProductPC INHERITS pm.OrderProduct:
             
             FOR FIRST Customer WHERE
                       Customer.Brand      = Syst.Var:gcBrand  AND
-                      Customer.OrgId      = aoOrder:aoCustomer:CustId AND
-                      Customer.CustIdType = aoOrder:aoCustomer:CustIdType AND
+                      Customer.OrgId      = aoOrder:objCustomer:CustId AND
+                      Customer.CustIdType = aoOrder:objCustomer:CustIdType AND
                       Customer.Roles NE "inactive" NO-LOCK:
                 IF Func.ValidateOrder:mIsBarredSubscriptionExistsToCustomer(Customer.Custnum) 
                 THEN lcFError = "barring".                                                                  
