@@ -5649,3 +5649,20 @@ bulkload: MenuText
 bulkload: MenuText
   MenuNum: 9858
   MenuText: "UPSELL"
+
+bulkload: MenuText  
+  MenuNum: 9860
+  MenuText: "ORDER   PRODUCT"
+
+bulkload: MenuText
+  MenuNum: 9861
+  MenuText: "PRODUCT PARAM'S"  
+
+bulkload: MenuText
+  MenuNum: 9862
+  MenuText: "MOBILE  SUBSCRIPTION"  
+  
+bulkload: MenuText
+  MenuNum: 9863
+  MenuText: "FIXED   SUBSCRIPTION"    
+  
