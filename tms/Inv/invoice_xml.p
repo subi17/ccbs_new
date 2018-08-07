@@ -599,7 +599,7 @@ PROCEDURE pInvoice2XML:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
          lhXML:INSERT-ATTRIBUTE("Header","TotalAmountExclInstallment").
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(
+         /* lhXML:WRITE-CHARACTERS(fDispXMLDecimal(
                                 Invoice.InvAmt
                                 - ttInvoice.InstallmentAmt
                                 - ttInvoice.PenaltyAmt
@@ -607,7 +607,10 @@ PROCEDURE pInvoice2XML:
                                 - ttInvoice.GBValue
                                 - ttInvoice.GBDiscValue
                                 - ttInvoice.AgileTV
-                                - ttInvoice.OtherConcepts)).
+                                - ttInvoice.OtherConcepts)).*/
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(
+                                Invoice.InvAmt
+                                + Invoice.VatAmt)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
       END.

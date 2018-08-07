@@ -1189,8 +1189,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
              tariff fee: SMS, MMS, international calls, AgileTV etc.
 Comment from ticket:
 Yoigo is requesting to merge the "billing groups" "Llamadas desde Fijo", "Servicio Premium Fijo" and "Llamadas desde Móvil" in only one, and this amount will be the amount of "Otros Consumos".  It means all the "billing groups" that NOT are "Tarifa" nor "Internet desde el móvil" will be accumulated and this amount will be shown in "Otros consumos". */
-          IF (ttRow.RowCode BEGINS "55" OR
-              ttRow.RowGroup EQ "1" OR
+          IF (ttRow.RowGroup EQ "1" OR
               ttRow.RowGroup EQ "51" OR
               ttRow.RowGroup EQ "53") AND ttRow.RowCode EQ "" THEN /* RowCode checked to avoid duplicate summing. */
              ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
