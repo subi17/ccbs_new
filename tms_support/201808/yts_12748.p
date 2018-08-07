@@ -14,7 +14,7 @@ INDEX custnum IS PRIMARY UNIQUE custnum.
 
 DEF VAR lcCLiTypes AS CHAR NO-UNDO.
 
-lcCLiTypes = "CONTFH109_300,CONTFH129_1000".
+lcCLiTypes = "CONTFH109_300,CONTFH129_1000,CONTFHTB69_300,CONTFHTB89_1000".
 
 do i = 1 to num-entries(lcCLiTypes):
 FOR EACH mobsub NO-LOCK where

@@ -269,7 +269,7 @@ FUNCTION fSetSpecialTTFLimit RETURNS INT (
 
    DEF BUFFER Limit FOR Limit.
 
-   IF LOOKUP(icCLiType,"CONTFH109_300,CONTFH129_1000") EQ 0
+   IF LOOKUP(icCLiType,"CONTFH109_300,CONTFH129_1000,CONTFHTB69_300,CONTFHTB89_1000") EQ 0
       THEN RETURN 0.
          
    /* Only update if TTF has default limits */
