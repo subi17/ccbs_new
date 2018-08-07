@@ -333,7 +333,7 @@ REPEAT:
                   OldCliType.Brand   = Syst.Var:gcBrand AND
                   OldCliType.CliType = lcCLIType NO-LOCK NO-ERROR.
 
-               IF LOOKUP(OldCliType.BaseBundle, "DUB,CONT30,CONTS2GB") > 0 THEN 
+               IF LOOKUP(OldCliType.BaseBundle, "DUB,CONT30,CONT35,CONTS2GB") > 0 THEN 
                   lcNewCliType = "CONT25".
                ELSE IF OldCliType.BaseBundle EQ "CONT32" THEN              
                   lcNewCliType = "CONT33".

@@ -140,7 +140,8 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER CLIType FOR CLIType.
    DEF BUFFER OrderFusion FOR OrderFusion.
-
+   DEF BUFFER OldCliType FOR CliType.
+   
    ORDER_TRANS:
    DO TRANS:
       FIND bfOrder WHERE
