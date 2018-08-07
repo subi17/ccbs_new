@@ -106,10 +106,6 @@ lcCharacteristicsObject:ADD('name','phoneNumber').
 lcCharacteristicsObject:ADD('value','lcAmendamentValue').
 
 lcServicesObject:ADD('type','PHONE').
-DEF STREAM strfixchng.
-output stream strfixchng to value("/tmp/fixnum_mmfixchg" + STRING(TODAY, "99999999") + ".txt") append.
-         export stream strfixchng REPLACE(STRING(TIME, "HH:MM:SS"),":","") lcAmendamentValue STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH) lcHost liPort lcUriPath lcUriQuery lcUriQueryValue lcHeaderName lcHeaderValue.
-         output stream strfixchng  close.
 
 RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcHost           ,
@@ -128,10 +124,6 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            OUTPUT ocStatusReason,
                            OUTPUT loResponseJson).
 
-DEF STREAM strfixchng1.
-output stream strfixchng1 to value("/tmp/fixnum_mmfixchg1" + STRING(TODAY, "99999999") + ".txt") append.
-         export stream strfixchng1 REPLACE(STRING(TIME, "HH:MM:SS"),":","") oiStatusCode ocStatusReason.
-         output stream strfixchng1  close.
 
 IF oiStatusCode NE 200 THEN DO:
    ASSIGN

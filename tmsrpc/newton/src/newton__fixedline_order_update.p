@@ -217,7 +217,7 @@ IF NOT fIsConvergenceTariff(Order.CLIType) THEN
    RETURN appl_err("Only Convergent Orders are allowed for address update" ).   
 
 IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
-   RETURN appl_err("Fixednumber is incomplete or wrong" ).
+   RETURN appl_err("Fixednumber is not correct" ).
 
 CASE pcAmendmentType:
     WHEN "ChangeInstallationAddress" THEN DO:

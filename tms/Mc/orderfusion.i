@@ -296,6 +296,20 @@ FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
                                {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}).
       END.
       
+      WHEN "ChangePhoneNumber" THEN DO:
+         IF CAN-FIND(FIRST bFusionMessage NO-LOCK WHERE
+                           bFusionMessage.OrderID = OrderFusion.OrderID AND
+                           bFusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} AND
+                           bFusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN DO:
+             ocError = "ERROR:Ongoing message".
+             RETURN FALSE.
+         END.
+
+         _fCreateFusionMessage(OrderFusion.OrderId,
+                               {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE}).
+
+      END.
+        
       OTHERWISE DO:
          RETURN FALSE.
       END.
