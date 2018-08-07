@@ -47,8 +47,7 @@ OUTPUT STREAM sdump TO value (icFile).
 ERROR_LOOP:
 FOR EACH CallAlarm NO-LOCK
    WHERE CallAlarm.Brand      = Syst.Var:gcBrand
-     AND CallAlarm.DeliStat  >= 2
-     AND CallAlarm.DeliStat  <= 3
+     AND CallAlarm.DeliStat   = {&CA_DELISTAT_SENT}
      AND CallAlarm.CreditType = {&SMSTYPE_MNP}
      AND CallAlarm.DeliStamp  > idLastDump
      :
@@ -72,7 +71,7 @@ FOR EACH CallAlarm NO-LOCK
           IF AVAILABLE MNPDetails THEN MNPDetails.DonorCode ELSE ""   lcDelimiter
           MNPProcess.PortRequest                                      lcDelimiter
           MNPProcess.StatusReason                                     lcDelimiter
-          CallAlarm.DeliStamp
+          Func.Common:mTS2HMS(CallAlarm.DeliStamp)
           SKIP.
                                 
       oiEvents = oiEvents + 1.
