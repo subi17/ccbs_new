@@ -196,7 +196,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE loBillObj AS CLASS JsonObject NO-UNDO.
         
         loBillObj = NEW JsonObject().
-        loBillObj:Add("billing-acct-num" , THIS-OBJECT:itGroupId ).
+        loBillObj:Add("billingacct-id" , THIS-OBJECT:itGroupId ).
         
         RETURN loBillObj.
         
