@@ -265,62 +265,6 @@ CLASS om.Address IMPLEMENTS bss.cls.IObjectStorage:
 	    
 	END METHOD.
 	
-	
-	METHOD PUBLIC VOID mUpdateAddressData(INPUT iiBillAddrID AS INTEGER  , INPUT iObjBillAddrStruct AS JsonObject) :
-	    
-	    DEFINE BUFFER bfAddress FOR Address.
-	    
-	    DEFINE VARIABLE objAddrValidationStruct AS CLASS JsonObject NO-UNDO.
-	    
-	    FIND FIRST bfAddress WHERE bfAddress.AddressID  =  iiBillAddrID  NO-LOCK NO-ERROR.
-	    
-	    IF NOT AVAILABLE bfAddress THEN 
-            UNDO, THROW NEW ParamError("Billing address is not available to update.").
-            
-        IF bfAddress.AddressType NE {&BILLING_ADDRESS} THEN 
-            UNDO, THROW NEW ParamError("Billing Address update failed.").
-            
-        FIND FIRST CustomerReport WHERE CustomerReport.CustNum  = THIS-OBJECT:keyValue NO-LOCK NO-ERROR.
-           
-        ASSIGN 
-            THIS-OBJECT:addrId            = iiBillAddrID
-            THIS-OBJECT:addrRegisterID    = (IF iObjBillAddrStruct:Has("address_id") THEN iObjBillAddrStruct:GetCharacter("address_id") ELSE bfAddress.AddressRegisterID )
-            THIS-OBJECT:street            = (IF iObjBillAddrStruct:Has("street") THEN iObjBillAddrStruct:GetCharacter("street") ELSE bfAddress.Address)
-            THIS-OBJECT:streetType        = (IF iObjBillAddrStruct:Has("street_type") THEN iObjBillAddrStruct:GetCharacter("street_type") ELSE bfAddress.StreetType)
-            THIS-OBJECT:buildingNum       = (IF iObjBillAddrStruct:Has("building_number") THEN iObjBillAddrStruct:GetCharacter("building_number") ELSE bfAddress.BuildingNum )
-            THIS-OBJECT:blockNum          = (IF iObjBillAddrStruct:Has("block") THEN iObjBillAddrStruct:GetCharacter("block") ELSE bfAddress.Block )
-            THIS-OBJECT:floor             = (IF iObjBillAddrStruct:Has("floor") THEN iObjBillAddrStruct:GetCharacter("floor") ELSE bfAddress.Floor )
-            THIS-OBJECT:stair             = (IF iObjBillAddrStruct:Has("stair") THEN iObjBillAddrStruct:GetCharacter("stair") ELSE bfAddress.Stair )
-            THIS-OBJECT:door              = (IF iObjBillAddrStruct:Has("door") THEN iObjBillAddrStruct:GetCharacter("door") ELSE  bfAddress.Door )
-            THIS-OBJECT:letter            = (IF iObjBillAddrStruct:Has("letter") THEN iObjBillAddrStruct:GetCharacter("letter") ELSE  bfAddress.Letter )
-            THIS-OBJECT:km                = (IF iObjBillAddrStruct:Has("km") THEN iObjBillAddrStruct:GetCharacter("km") ELSE bfAddress.km )
-            THIS-OBJECT:hand              = (IF iObjBillAddrStruct:Has("hand") THEN iObjBillAddrStruct:GetCharacter("hand") ELSE bfAddress.Hand )
-            THIS-OBJECT:bisDuplicate      = (IF iObjBillAddrStruct:Has("bis_duplicate") THEN iObjBillAddrStruct:GetCharacter("bis_duplicate") ELSE bfAddress.bisduplicate  )
-            THIS-OBJECT:additionalAddress = (IF iObjBillAddrStruct:Has("additional_address") THEN iObjBillAddrStruct:GetCharacter("additional_address") ELSE bfAddress.addresscompl  )
-            /*THIS-OBJECT:normalizedID      = (IF iObjBillAddrStruct:Has("normalizedid") THEN iObjBillAddrStruct:GetCharacter("normalizedid") ELSE bfAddress.normalizedid  )*/
-            THIS-OBJECT:latitude          = (IF iObjBillAddrStruct:Has("latitude") THEN iObjBillAddrStruct:GetCharacter("latitude") ELSE bfAddress.Latitude  )
-            THIS-OBJECT:longitude         = (IF iObjBillAddrStruct:Has("longitude") THEN iObjBillAddrStruct:GetCharacter("longitude") ELSE bfAddress.longitude  )
-            THIS-OBJECT:city              = (IF iObjBillAddrStruct:Has("city") THEN iObjBillAddrStruct:GetCharacter("city") ELSE bfAddress.City  )
-            THIS-OBJECT:region            = (IF iObjBillAddrStruct:Has("region") THEN iObjBillAddrStruct:GetCharacter("region") ELSE bfAddress.Region  )
-            THIS-OBJECT:zip               = (IF iObjBillAddrStruct:Has("zip") THEN iObjBillAddrStruct:GetCharacter("zip") ELSE bfAddress.zipCode  )
-            THIS-OBJECT:country           = (IF iObjBillAddrStruct:Has("country") THEN mGetCountry(iObjBillAddrStruct:GetCharacter("country")) ELSE bfAddress.Country )
-            THIS-OBJECT:gescal            = (IF iObjBillAddrStruct:Has("gescal") THEN iObjBillAddrStruct:GetCharacter("gescal") ELSE bfAddress.Gescal )
-            THIS-OBJECT:coverageToken     = (IF iObjBillAddrStruct:Has("coveragetoken") THEN iObjBillAddrStruct:GetCharacter("coveragetoken") ELSE bfAddress.CoverageToken )            
-            .
-        
-        IF iObjBillAddrStruct:Has("validation_data") AND AVAILABLE CustomerReport THEN 
-        DO:
-            ASSIGN 
-                objAddrValidationStruct      = NEW JsonObject()
-                objAddrValidationStruct      = iObjBillAddrStruct:GetJsonObject("validation_data")
-                THIS-OBJECT:cityCode         = (IF objAddrValidationStruct:Has("city_code")         THEN  objAddrValidationStruct:GetCharacter("city_code")   ELSE bfAddress.CityCode )
-                THIS-OBJECT:streetCode       = (IF objAddrValidationStruct:Has("street_code")       THEN  objAddrValidationStruct:GetCharacter("street_code") ELSE bfAddress.StreetCode )
-                THIS-OBJECT:municipalityCode = (IF objAddrValidationStruct:Has("municipality_code") THEN  objAddrValidationStruct:GetCharacter("municipality_code") ELSE bfAddress.towncode )
-                .
-        END. 
-              
-	END METHOD.
-	
 	DESTRUCTOR PUBLIC Address ( ):
 
     END DESTRUCTOR.

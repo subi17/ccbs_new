@@ -166,8 +166,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 	    
 	END CONSTRUCTOR.
 
-	METHOD PUBLIC VOID mCreateData
-	  (ioJsonObject AS CLASS JsonObject):
+	METHOD PUBLIC VOID mCreateData(ioJsonObject AS CLASS JsonObject):
 
         DEFINE VARIABLE loAgrCust      AS CLASS     JsonObject NO-UNDO.
         DEFINE VARIABLE ldaCreateDate  AS DATE      NO-UNDO.
@@ -201,22 +200,16 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
       ELSE IF VALID-OBJECT(ObjCustomerStruct) THEN 
       DO:
           ASSIGN 
-             ObjPaymentStruct    =   ioJsonObject:GetJsonObject("upfront_payment_method") WHEN ioJsonObject:Has("upfront_payment_method")
-             ObjInspectionStruct =   ioJsonObject:GetJsonObject("inspection")             WHEN ioJsonObject:Has("inspection").
-        
-          IF ObjCustomerStruct:Has("custnum") THEN 
-          DO:               
-              objCustomer:mFindCustomer(ObjCustomerStruct:GetInteger("custnum")).
-
-              IF ObjCustomerStruct:Has("account_id") THEN 
-              DO:              
-                  ASSIGN 
-                      THIS-OBJECT:custAcctNum = ObjCustomerStruct:GetInteger("account_id").
-                  objCustomer:mFindCustomerAcct(THIS-OBJECT:custAcctNum).                  
-              END.       
-              objCustomer:mUpdateCustomerData(INPUT ObjCustomerStruct).       
-          END.          
+              ObjPaymentStruct    = ioJsonObject:GetJsonObject("upfront_payment_method") WHEN ioJsonObject:Has("upfront_payment_method")
+              ObjInspectionStruct = ioJsonObject:GetJsonObject("inspection")             WHEN ioJsonObject:Has("inspection").
+          
+          IF ObjCustomerStruct:Has("account_id") THEN 
+          DO:              
+              ASSIGN THIS-OBJECT:custAcctNum = ObjCustomerStruct:GetInteger("account_id").
+              objCustomer:mFindCustomerAcct(THIS-OBJECT:custAcctNum).                  
+          END.    
           ELSE objCustomer:mCreateData(INPUT ObjCustomerStruct).
+          
       END.            
       
       IF ioJsonObject:Has("items") THEN

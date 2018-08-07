@@ -259,11 +259,10 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
             
        IF NOT AVAILABLE CustomerAccount THEN  
            UNDO, THROW NEW ParamError(SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
-               
-       IF THIS-OBJECT:custNum <> CustomerAccount.CustNum THEN 
-           UNDO, THROW NEW ParamError ("Invalid Custnum and AccountID combination.").
-       
+             
        ASSIGN THIS-OBJECT:custAcctId  =  iiCustAcct.
+       
+       mFindCustomer(CustomerAccount.CustNum).       
        
    END METHOD.
    
@@ -310,18 +309,14 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
       END.
 
       IF ioJsonObject:Has("customer_accounts") THEN 
-      DO:
-          ASSIGN lobjCustAccountArray =  ioJsonObject:GetJsonArray("customer_accounts").
-           
-          DO liCustAcctCnt = 1 TO lobjCustAccountArray:LENGTH:
-               
-             ASSIGN lobjCustAccount = lobjCustAccountArray:GetJsonObject(liCustAcctCnt).
+      DO:         
+             ASSIGN lobjCustAccount = ioJsonObject:GetJsonObject("customer_accounts").
 
              IF NOT llDefaultAcc THEN 
                 ASSIGN llDefaultAcc = lobjCustAccount:GetLogical("default_account").
              ELSE 
                 LEAVE.
-          END.
+         
 
           IF NOT llDefaultAcc THEN
              UNDO , THROW NEW ParamError ("Default customer account should be created when creating a new customer.").          
@@ -332,8 +327,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
    METHOD PUBLIC VOID mCreateData
      (ioJsonObject AS CLASS JsonObject):
 
-       DEFINE VARIABLE CustAccounts     AS CLASS JsonArray NO-UNDO.
-       DEFINE VARIABLE CustAcctObj      AS CLASS JsonObject NO-UNDO.
+       DEFINE VARIABLE CustAccounts      AS CLASS JsonArray NO-UNDO.
+       DEFINE VARIABLE objCustAcctStruct AS CLASS JsonObject NO-UNDO.
       
        DEFINE VARIABLE liCustAcctCnt AS INTEGER NO-UNDO.
        DEFINE VARIABLE liCustnum     AS INTEGER NO-UNDO.
@@ -361,30 +356,25 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        
        IF ioJsonObject:Has("customer_accounts") THEN 
        DO:
-           ASSIGN 
-               CustAccounts = ioJsonObject:GetJsonArray("customer_accounts").
            
-           DO liCustAcctCnt = 1 TO CustAccounts:LENGTH:
-               
-               ASSIGN 
-                   CustAcctObj = CustAccounts:GetJsonObject(liCustAcctCnt).
+           ASSIGN 
+               objCustAcctStruct = ioJsonObject:GetJsonObject("customer_accounts").
 
-               ASSIGN 
-                   objCustAccount = NEW cm.CustomerAccount(THIS-OBJECT).
-                      
-               objCustAccount:mCreateData(CustAcctObj).
+           ASSIGN 
+               objCustAccount = NEW cm.CustomerAccount(THIS-OBJECT).
+                                 
+           objCustAccount:mCreateData(objCustAcctStruct).
                
-               CREATE ttCustAccts.
-               ASSIGN 
-                   ttCustAccts.custacctobj = objCustAccount
-                   ttCustAccts.custacctnum = mGetNextCustAcctNum().
+           CREATE ttCustAccts.
+           ASSIGN 
+               ttCustAccts.custacctobj = objCustAccount
+               ttCustAccts.custacctnum = mGetNextCustAcctNum().
                       
-               ASSIGN 
-                   THIS-OBJECT:billAcctIdData = THIS-OBJECT:billAcctIdData   + "|" + objCustAccount:mGetBillAcctIDData().
+           ASSIGN THIS-OBJECT:billAcctIdData = THIS-OBJECT:billAcctIdData   + "|" + objCustAccount:mGetBillAcctIDData().
                
-           /*Example for the CustAcctData format
-            custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */
-           END.
+       /*Example for the CustAcctData format
+        custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */
+           
        END.
        
        ASSIGN THIS-OBJECT:billAcctIdData   = TRIM(THIS-OBJECT:billAcctIdData, "|").
@@ -484,13 +474,12 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                ioCustArray      = NEW JsonArray().
                
         FOR EACH ttCustAccts :
-            ioCustAcctObject = CAST(ttCustAccts.custacctobj,cm.CustomerAccount):mResult().
-            ioCustArray:Add(ioCustAcctObject).
+            ioCustAcctObject = CAST(ttCustAccts.custacctobj,cm.CustomerAccount):mResult().            
         END.      
         
         ioCustObj:Add("cust-num" , THIS-OBJECT:custNum).
         IF TEMP-TABLE ttCustAccts:HAS-RECORDS THEN 
-            ioCustObj:Add("customer-accounts" , ioCustArray).
+            ioCustObj:Add("customer-accounts" , ioCustAcctObject).
         
         RETURN ioCustObj.
         
@@ -616,18 +605,20 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE lcBillAcctList      AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcBillAcct          AS CHARACTER NO-UNDO.
         
-        ASSIGN lcTotalBillAcctData  =  ENTRY(1 , THIS-OBJECT:billAcctIdData , "|")
-               lcBillAcctList       =  ENTRY(2 , lcTotalBillAcctData        , ";").
+        ASSIGN 
+            lcTotalBillAcctData = ENTRY(1 , THIS-OBJECT:billAcctIdData , "|")
+            lcBillAcctList      = ENTRY(2 , lcTotalBillAcctData        , ";").
                
         IF NUM-ENTRIES(lcBillAcctList) < liBillAcctIndex THEN 
             UNDO , THROW NEW ParamError("Invalid billing account index.").
         
-        ASSIGN lcBillAcct  =  ENTRY(liBillAcctIndex , lcBillAcctList).
+        ASSIGN 
+            lcBillAcct = ENTRY(liBillAcctIndex , lcBillAcctList).
         
         INTEGER(lcBillAcct) NO-ERROR.
         
         IF ERROR-STATUS:ERROR THEN 
-            UNDO , THROW NEW ParamError("Billing Account type cast error").
+            UNDO , THROW NEW ParamError("Billing Account type change error").
             
         RETURN INTEGER(lcBillAcct).
         
@@ -635,135 +626,12 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
     
     METHOD PUBLIC VOID mAssignDefaultAddressObj (INPUT ioAddrObject AS JsonObject):
         
-         ASSIGN THIS-OBJECT:defaultAddressObj  = NEW JsonObject()
-                THIS-OBJECT:defaultAddressObj  = ioAddrObject.
+        ASSIGN 
+            THIS-OBJECT:defaultAddressObj = NEW JsonObject()
+            THIS-OBJECT:defaultAddressObj = ioAddrObject.
         
     END METHOD.
     
-    
-    METHOD PUBLIC VOID mUpdateCustomerData (INPUT ioCustObj AS JsonObject) :
-        
-        DEFINE VARIABLE lcSupportedTitles AS CHARACTER INITIAL "Sr.,Mr.,Sr,Mr,Mrs.,Sra.,Mrs,Sra" NO-UNDO.
-        DEFINE VARIABLE liCustnum         AS INTEGER   NO-UNDO.
-        DEFINE VARIABLE CustAccounts      AS CLASS     JsonArray  NO-UNDO.
-        DEFINE VARIABLE CustAcctObj       AS CLASS     JsonObject NO-UNDO.
-        DEFINE VARIABLE liCustAcctCnt     AS INTEGER   NO-UNDO.
-           
-        DEFINE VARIABLE ioMarketingObj    AS CLASS     JsonObject NO-UNDO .
-        DEFINE VARIABLE ioCustIDObject    AS CLASS     JsonObject NO-UNDO.
-        
-        DEFINE BUFFER bfcustomer FOR customer.
-        
-        mIsCustomerUpdate(INPUT ioCustObj).
-        
-        IF THIS-OBJECT:isCustomerUpdate = FALSE THEN RETURN.
-        
-        FIND FIRST bfCustomer WHERE bfcustomer.custnum = THIS-OBJECT:custNum NO-LOCK NO-ERROR.
-        IF NOT AVAILABLE bfcustomer THEN 
-            UNDO, THROW NEW ParamError("Customer update failed.").
-        
-        IF ioCustObj:Has("title") THEN 
-        DO:
-            IF LOOKUP(ioCustObj:GetCharacter("title"), lcSupportedTitles) EQ 0 THEN 
-                UNDO, THROW NEW ParamError(SUBSTITUTE("unsupported_person_title|&1",ioCustObj:GetCharacter("title"))).
-            ASSIGN THIS-OBJECT:custTitle = ioCustObj:GetCharacter("title").
-        END.
-        ELSE ASSIGN THIS-OBJECT:custTitle  =  bfcustomer.HonTitle.        
-        
-        ASSIGN 
-            THIS-OBJECT:firstName     = (IF ioCustObj:Has("fname")  THEN ioCustObj:GetCharacter("fname")  ELSE bfCustomer.FirstName )
-            THIS-OBJECT:surName1      = (IF ioCustObj:Has("lname")  THEN ioCustObj:GetCharacter("lname")  ELSE bfCustomer.CustName  )   
-            THIS-OBJECT:surName2      = (IF ioCustObj:Has("lname2") THEN ioCustObj:GetCharacter("lname2") ELSE bfCustomer.SurName2  )
-            THIS-OBJECT:profession    = (IF ioCustObj:Has("profession") THEN ioCustObj:GetCharacter("profession") ELSE bfCustomer.Profession )
-            THIS-OBJECT:nationality   = (IF ioCustObj:Has("nationality") THEN ioCustObj:GetCharacter("nationality") ELSE  bfCustomer.Nationality)
-            THIS-OBJECT:language      = (IF ioCustObj:Has("language") THEN mGetLanguage(ioCustObj:GetCharacter("language")) ELSE STRING(bfCustomer.Language))
-            THIS-OBJECT:selfEmployed  = (IF ioCustObj:Has("self_employed") THEN ioCustObj:GetLogical("self_employed") ELSE NO )  
-            THIS-OBJECT:birthDay      = (IF ioCustObj:Has("birthday") THEN Func.Common:mGetDate(ioCustObj:GetCharacter("birthday")) ELSE bfCustomer.Birthday) 
-            THIS-OBJECT:email         = (IF ioCustObj:Has("email") THEN ioCustObj:GetCharacter("email") ELSE bfCustomer.Email)
-            THIS-OBJECT:mobileNumber  = (IF ioCustObj:Has("sms_number") THEN ioCustObj:GetCharacter("sms_number") ELSE bfCustomer.SMSNumber) 
-            THIS-OBJECT:fixedNumber   = (IF ioCustObj:Has("phone_number") THEN ioCustObj:GetCharacter("phone_number") ELSE bfCustomer.Phone)            
-        .    
-        
-        IF ioCustObj:Has("residential") THEN 
-        DO:
-            ioCustIDObject  = NEW JsonObject().
-            ioCustIDObject  = ioCustObj:GetJsonObject("residential").
-            ASSIGN 
-                THIS-OBJECT:custIdType = (IF ioCustIDObject:Has("id_type")   THEN ioCustIDObject:GetCharacter("id_type")   ELSE bfCustomer.CustIdType )
-                THIS-OBJECT:custId     = (IF ioCustIDObject:Has("person_id") THEN ioCustIDObject:GetCharacter("person_id") ELSE bfCustomer.OrgId ) 
-                .
-        END.
-        ELSE IF ioCustObj:Has("company") THEN 
-        DO:
-            ASSIGN 
-                ioCustIDObject             = NEW JsonObject()
-                ioCustIDObject             = ioCustObj:GetJsonObject("company")    
-                THIS-OBJECT:custId         = (IF ioCustIDObject:Has("company_id") THEN ioCustIDObject:GetCharacter("company_id") ELSE bfCustomer.OrgId)
-                THIS-OBJECT:custIdType     = (IF ioCustIDObject:Has("id_type")    THEN ioCustIDObject:GetCharacter("id_type")    ELSE bfCustomer.CustIdType )
-                THIS-OBJECT:foundationDate = (IF ioCustIDObject:Has("foundation_date") THEN Func.Common:mGetDate(ioCustIDObject:GetCharacter("foundation_date")) ELSE bfCustomer.FoundationDate) 
-                THIS-OBJECT:companyName    = (IF ioCustIDObject:Has("site_name") THEN ioCustIDObject:GetCharacter("site_name")  ELSE bfCustomer.CompanyName )
-                .          
-        END.
-        ELSE UNDO , THROW NEW ParamError ("Customer ID Data does not exist.").
-        
-        IF ioCustObj:Has("customer_accounts") THEN 
-        DO:
-            
-            ASSIGN CustAccounts = ioCustObj:GetJsonArray("customer_accounts").
-           
-            DO liCustAcctCnt  = 1 TO CustAccounts:LENGTH :
-               
-                ASSIGN 
-                    CustAcctObj = CustAccounts:GetJsonObject(liCustAcctCnt)
-                    objCustAccount  = NEW cm.CustomerAccount(THIS-OBJECT).
-                      
-                objCustAccount:mUpdateCustAcctData(INPUT THIS-OBJECT:custAcctId , INPUT CustAcctObj).
-               
-                CREATE ttCustAccts.
-                ASSIGN 
-                    ttCustAccts.custacctobj = objCustAccount
-                    ttCustAccts.custacctnum = mGetNextCustAcctNum().
-                      
-                ASSIGN THIS-OBJECT:billAcctIdData = THIS-OBJECT:billAcctIdData   + "|" + objCustAccount:mGetBillAcctIDData().
-               
-            /*Example for the CustAcctData format
-             CustacctID1;Bankacct1,Bankacct2|CustacctID2;Bankacct3,Bankacct4|etc.... 
-             custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */
-
-            END.                      
-        END.
-        
-        ASSIGN   
-            THIS-OBJECT:billAcctIdData = TRIM(THIS-OBJECT:billAcctIdData, "|").
-              
-        mAssignCategory().
-        
-     END METHOD. 
-     
-     
-     METHOD PUBLIC VOID mIsCustomerUpdate(INPUT ioCustObj AS JsonObject ) :         
-         
-         DEFINE VARIABLE liCustomerUpdate AS LOGICAL NO-UNDO.
-         
-         ASSIGN THIS-OBJECT:isCustomerUpdate  =  (ioCustObj:Has("title") OR 
-                                                  ioCustObj:Has("fname") OR 
-                                                  ioCustObj:Has("lname") OR
-                                                  ioCustObj:Has("lname2") OR
-                                                  ioCustObj:Has("profession") OR
-                                                  ioCustObj:Has("nationality") OR
-                                                  ioCustObj:Has("language") OR
-                                                  ioCustObj:Has("self_employed") OR
-                                                  ioCustObj:Has("birthday") OR
-                                                  ioCustObj:Has("email") OR
-                                                  ioCustObj:Has("sms_number") OR
-                                                  ioCustObj:Has("phone_number") OR
-                                                  ioCustObj:Has("company") OR
-                                                  ioCustObj:Has("residential") OR
-                                                  ioCustObj:Has("customer_accounts")                                                           
-                                                  ).
-         
-     END METHOD.
-     
      
     DESTRUCTOR PUBLIC Customer():
         
