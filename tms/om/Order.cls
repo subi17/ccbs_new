@@ -174,8 +174,9 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         GET.
         SET.
        
-    CONSTRUCTOR PUBLIC Order(): 
-    END CONSTRUCTOR.
+	CONSTRUCTOR PUBLIC Order():
+	    
+	END CONSTRUCTOR.
 
 	METHOD PUBLIC VOID mCreateData
 	  (ioJsonObject AS CLASS JsonObject):
@@ -343,8 +344,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                      END. /* IF Order.orderChannel = "retention_stc" THEN DO: */
                 END. /* IF THIS-OBJECT:statusCode    <> {&ORDER_STATUS_IN_CONTROL} AND  */
                 ELSE IF THIS-OBJECT:statusCode <> {&ORDER_STATUS_IN_CONTROL} THEN
-                DO:
-                    
+                DO:                    
                     /*TO-DO PC: PLEASE IMPLEMENT BELOW LOGIC FROM WHOLE ORDER RPC*/
                     
                     /*IF pcNumberType EQ "renewal" THEN  ==> NOT IMPLEMENTED THIS LOGIC*/   
@@ -382,8 +382,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
     
     METHOD PUBLIC VOID mCloseOfferedOrderWithSameNumber():
         
-       /* DEFINE BUFFER bfpcOrder FOR Order.
-        */
+        DEFINE BUFFER bfpcOrder FOR Order.
+        
         IF THIS-OBJECT:orderChannel BEGINS "RETENTION" THEN
         DO:
             
@@ -586,15 +586,15 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                                                SUBST("Orderid: &1", Order.orderid),
                                                "",
                                                "BSSAPI").
-           ELSE DO:
-               
+           ELSE 
+           DO:               
                mUpdateSimStatus(THIS-OBJECT:lcICC).
                
                Func.Common:mWriteMemo("MsRequest",
-                                      STRING(liRequest),
-                                      THIS-OBJECT:objCustomer:CustNum,
-                                      "ICC TYPE CHANGE AUTO",
-                                     THIS-OBJECT:orderChannel).
+                                       STRING(liRequest),
+                                       THIS-OBJECT:objCustomer:CustNum,
+                                       "ICC TYPE CHANGE AUTO",
+                                       THIS-OBJECT:orderChannel).
            END.                                    
        END.
        
@@ -617,7 +617,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             ELSE ASSIGN bfSIM.SimStat   =  4.
             
         END.
-        ELSE UNDO, THROW NEW ParamError("Unable to update the SIM Status.").
+        ELSE 
+            UNDO, THROW NEW ParamError("Unable to update the SIM Status.").
         
     END METHOD.
                                              
