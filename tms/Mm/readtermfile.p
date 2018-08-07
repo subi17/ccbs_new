@@ -367,7 +367,10 @@ REPEAT:
          END.
       END.
       ELSE DO:
-         fError("Subscription is partially terminated. Use FULL termination.").
+         IF MobSub.MSStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
+            fError("Mobile part not yet activated. Use FULL termination.").
+         ELSE
+            fError("Subscription is partially terminated. Use FULL termination.").
          NEXT.
       END.   
       
