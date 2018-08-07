@@ -30,6 +30,22 @@ CLASS Gwy.ProCommand:
    DEFINE PUBLIC VARIABLE aoCommandLine         AS CLASS JsonConstruct NO-UNDO.
    
    DEFINE PROTECTED BUFFER ProCommand FOR ProCommand.
+   DEFINE PROTECTED BUFFER MsRequest  FOR MsRequest.
+
+   CONSTRUCTOR PUBLIC ProCommand
+      ( iiMsRequest AS INTEGER ):
+
+      FIND MsRequest NO-LOCK WHERE MsRequest.MsRequest = iiMsRequest NO-ERROR.
+      
+      IF NOT AVAILABLE MsRequest
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find MsRequest &1",
+                                               iiMsRequest)).
+
+      ASSIGN
+         aiMsRequest = iiMsRequest
+         aiMsSeq     = MsRequest.MsSeq.
+
+   END CONSTRUCTOR.
 
    DESTRUCTOR ProCommand():
       IF VALID-OBJECT(aoCommandLine)
@@ -70,7 +86,9 @@ CLASS Gwy.ProCommand:
          ProCommand.ProcommandId        = aiProCommandId
          ProCommand.ProCommandType      = acProCommandType
          ProCommand.CreatedTS           = NOW 
-         ProCommand.Creator             = Syst.Var:katun    
+         ProCommand.Creator             = IF AVAILABLE MsRequest
+                                          THEN MsRequest.UserCode
+                                          ELSE Syst.Var:katun    
          ProCommand.MsSeq               = aiMsSeq
          ProCommand.ProCommandStatus    = {&PROCOMMANDSTATUS_NEW}
          ProCommand.ProCommandTarget    = acProCommandTarget

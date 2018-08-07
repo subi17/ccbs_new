@@ -123,6 +123,7 @@ liReq = fSubscriptionRequest(
             lcOldICC,               /*old SIM*/
             pcReason,                 /*Reason*/
             pcContractID,             /*ContractID*/
+            0,
             (pdeCharge > 0),          /*CreateFees*/
             pdeCharge,                /*Charge*/
             {&REQUEST_SOURCE_NEWTON}, /*Request source*/

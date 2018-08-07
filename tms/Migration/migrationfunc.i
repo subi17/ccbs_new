@@ -219,6 +219,7 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
                         INPUT  "", /*for old SIM*/
                         INPUT  "", /*for Reason info*/
                         INPUT  "", /*for ContractID*/
+                        INPUT  Order.OrderId,
                         INPUT  FALSE,
                         INPUT  0,
                         INPUT  {&REQUEST_SOURCE_NEWTON},

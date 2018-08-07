@@ -58,6 +58,7 @@
                                     INPUT  "", /*for old SIM*/
                                     INPUT  "", /*for Reason info*/
                                     INPUT  "", /*for ContractID*/
+                                    INPUT  Order.OrderId,
                                     INPUT  FALSE,
                                     INPUT  0,
                                     INPUT  {&REQUEST_SOURCE_NEWTON},
@@ -420,7 +421,7 @@
              IF Order.OrderType NE {&ORDER_TYPE_ROLLBACK} AND
                 CAN-FIND(FIRST MsRequest WHERE
                                MsRequest.MsSeq   = Order.MSSeq  AND
-                               MsRequest.ReqType = 13 AND
+                               MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_CREATE} AND
                                MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED})
              THEN DO: 
                 NEXT.
@@ -699,6 +700,7 @@
                                   INPUT  "", /*for old SIM*/
                                   INPUT  "", /*for Reason info*/
                                   INPUT  "", /*for ContractID*/
+                                  INPUT  Order.OrderId,
                                   INPUT  FALSE,
                                   INPUT  0,
                                   INPUT  {&REQUEST_SOURCE_NEWTON},

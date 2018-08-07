@@ -360,6 +360,7 @@ REPEAT TRANSACTION WITH FRAME main:
                     INPUT  "", /*for old SIM*/
                     INPUT  "", /*for Reason info*/
                     INPUT  "", /*for ContractID*/
+                    INPUT  0,
                     INPUT  llCreateFees,
                     INPUT  ldeFee,
                     INPUT  {&REQUEST_SOURCE_MANUAL_TMS},

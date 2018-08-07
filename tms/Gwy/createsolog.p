@@ -1,14 +1,8 @@
-USING Progress.Json.ObjectModel.JsonObject.
-USING Progress.Json.ObjectModel.JsonArray .
-
 {Syst/commali.i}
 {Gwy/provision.i}
 {Func/fmakemsreq.i}
 {Func/dss_matrix.i}
 {Func/msreqfunc.i}
-{Func/SAPC.i}
-{Func/SAPC_change_API.i}
-{Func/cparam2.i}
                     
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
@@ -27,37 +21,10 @@ DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO.
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcDSSId            AS CHARACTER NO-UNDO.
  
-/* SAPC 
-   Note: Deleting ProCommands in case of error. 
-         I would prefer to undo the transaction but the business logic 
-         seems to prefer logging and updating the request */
-DEFINE VARIABLE lcmsisdns          AS CHARACTER  NO-UNDO. 
-DEFINE VARIABLE lcDatalimit        AS CHARACTER  NO-UNDO. 
-DEFINE VARIABLE dDataLimit         AS DECIMAL    NO-UNDO.  
-DEFINE VARIABLE loJson             AS JsonObject NO-UNDO.
-DEFINE VARIABLE loJsonDLimit       AS JsonObject NO-UNDO.
 DEFINE VARIABLE loProCommand       AS CLASS Gwy.ProCommand NO-UNDO.
-DEFINE VARIABLE loProCommandDLimit AS CLASS Gwy.ProCommand NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 DEF BUFFER bDSSMobSub  FOR MobSub.
-
-/* SAPC - Create DSS group */
-DEFINE TEMP-TABLE ttDSS
-   FIELD type      AS CHAR  
-   FIELD priority  AS CHAR 
-   FIELD msisdns   AS CHAR.
-
-/* SAPC - Update data limit */
-DEFINE TEMP-TABLE ttDSSDataLimit
-   FIELD offeringName      AS CHAR
-   FIELD roamingLikeAtHome AS CHAR
-   FIELD tariff            AS CHAR.
-
-DEFINE TEMP-TABLE ttDSS_msisdn
-   FIELD action AS CHAR 
-   FIELD msisdn AS CHAR.
-
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -227,12 +194,6 @@ PROCEDURE pSolog:
    DEF VAR liError       AS INT NO-UNDO.
    DEF VAR lcResult      AS CHAR NO-UNDO.
    DEF VAR liOrderId     AS INT  NO-UNDO.
-
-   /* SAPC */
-   DEFINE VARIABLE cJsonMsg           AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE cJsonMsg_DataLimit AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE lJsonCreation      AS LOGICAL  NO-UNDO.
-
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -429,104 +390,32 @@ PROCEDURE pSolog:
          END.
       END.
 
-      /* Code to be removed and fixed with the real "group" */
-      DEF VAR lcdummygrp AS CHAR NO-UNDO INITIAL "dummygrp-".
-      lcdummygrp = lcdummygrp + STRING(TIME).
-      
       /* SAPC-56 redirecting new SAPC customers to new logic */
-      IF Customer.AccGrp = 2 AND 
-         fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN  /* SAPC */
-      DO:
-         ASSIGN
-            loProCommand                    = NEW Gwy.ProCommand()
-            loJson                          = NEW JsonObject()
-            loProCommand:aiMsRequest        = MsRequest.MsRequest
-            loProCommand:aiMsSeq            = MsRequest.MsSeq
-            loProCommand:acProCommandTarget = "NB_AS".
+      IF Customer.AccGrp = 2
+      THEN
+      CASE MsRequest.ReqType:
+         WHEN {&REQTYPE_DSS}
+         THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
+              THEN loProCommand = NEW Gwy.ProCommandDSS(MsRequest.MsRequest). 
+         WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
+         THEN loProCommand = NEW Gwy.ProCommandSubscription(MsRequest.MsRequest). 
+      END CASE.
+      
+      IF VALID-OBJECT(loProCommand)
+      THEN DO TRANSACTION ON ERROR UNDO, THROW:
+         loProCommand:mStoreProCommand().
 
-         CASE MSrequest.ReqCparam1:
-            WHEN "CREATE" THEN
-            DO:
-               ASSIGN
-                  loProCommand:acProCommandType      = "CREATE_DSS_GROUP"
-                  loProCommand:acProCommandVerb      = "PUT"
-                  loProCommand:acProCommandtargetURL = "/groups/" + lcdummygrp
-                  lcmsisdns   = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDNS="))
-                  lcmsisdns   = REPLACE(lcmsisdns,"MSISDNS=","")
-                  lcmsisdns   = REPLACE(lcmsisdns,";","|")
-                  lcDataLimit = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"LIMIT_UNSHAPED="))
-                  lcDataLimit = REPLACE(lcDataLimit,"LIMIT_UNSHAPED=","").
-
-               loJson:Add("type", "POST"). /* Type of user: POST */
-               loJson:Add("priority", "1000"). /* For Base tariff = 1000 */
-               loJson:Add("msisdns", lcmsisdns).
-            END.
-            WHEN "ADD" OR WHEN "REMOVE" THEN
-            DO:
-               ASSIGN
-                  loProCommand:acProCommandType      = (IF MSrequest.ReqCparam1 = "ADD"
-                                                        THEN "ADD_TO_DSS_GROUP"
-                                                        ELSE "REMOVE_FROM_DSS_GROUP") 
-                  loProCommand:acProCommandVerb      = "POST"
-                  loProCommand:acProCommandtargetURL = "/groups/" + lcdummygrp + 
-                                                       "/manage-subscription"
-                  lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDN="))
-                  lcmsisdns = REPLACE(lcmsisdns,"MSISDN=","")
-                  lcmsisdns = SUBSTRING(lcmsisdns,1,INDEX(lcmsisdns,",") - 1).
-
-               loJson:Add("action", (IF MSrequest.ReqCparam1 = "ADD"
-                                     THEN "add"  /* Hard-coded when adding to DSS */
-                                     ELSE "remove") /* Hard-coded when removing from DSS */
-               loJson:Add("msisdn", lcmsisdns).
-            END.
-            WHEN "DELETE" THEN
-               ASSIGN
-                  loProCommand:acProCommandType      = "TERMINATE_DSS_GROUP"
-                  loProCommand:acProCommandVerb      = "DELETE"
-                  loProCommand:acProCommandtargetURL = "/groups/" + lcdummygrp.
-         END CASE.
-
-         loProCommand:mSetCommandLine(loJson).
-
-         IF MSrequest.ReqCparam1 NE "DELETE" THEN
-         DO:
-            ASSIGN
-               loProCommandDLimit                       = NEW Gwy.ProCommand()
-               loProCommandDLimit:aiMsRequest           = MsRequest.MsRequest
-               loProCommandDLimit:aiMsSeq               = MsRequest.MsSeq
-               loProCommandDLimit:acProCommandTarget    = "NB_AS"
-               loProCommandDLimit:acProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
-               loProCommandDLimit:acProCommandVerb      = "POST"
-               loProCommandDLimit:acProCommandtargetURL = "/groups/" + lcdummygrp +
-                                                          "/set-accumulated-volume".
-
-            loJsonDataLimit = NEW JsonObject().
-            loJsonDataLimit:Add("offeringName", MsRequest.ReqCParam3). /* DSS/DSS2/DSS4 */
-            loJsonDataLimit:Add("roamingLikeAtHome", lcDataLimit).
-            loJsonDataLimit:Add("tariff", lcDataLimit).
-            loProCommandDLimit:mSetCommandLine(loJsonDataLimit).
-         END.
-
-         DO TRANSACTION ON ERROR UNDO, THROW:
-            loProCommand:mStoreProCommand().
-
-            IF VALID-OBJECT(loProCommandDLimit)
-            THEN loProCommandDLimit:mStoreProCommand().
-
-            CATCH loAppError AS AppError:
-               fReqError("Json generation failed for request " +
-                         STRING(MSRequest.MSRequest)).
-               RETURN.
-            END CATCH.
-         END.
+         CATCH loAppError AS Progress.Lang.AppError:
+            fReqError(loAppError:ReturnValue).
+            RETURN.
+         END CATCH.
 
          FINALLY:
             IF VALID-OBJECT(loProCommand)
             THEN DELETE OBJECT loProCommand.
-            IF VALID-OBJECT(loProCommandDLimit)
-            THEN DELETE OBJECT loProCommandDLimit.
          END FINALLY.
-      END.  /*end of SAPC customer */
+      END. 
+      
       ELSE 
       DO: /* Existing logic for Packet Logic */
          CREATE Solog.
