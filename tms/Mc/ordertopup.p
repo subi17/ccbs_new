@@ -12,7 +12,7 @@
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OrderTopup'}
-
+{Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -49,12 +49,15 @@ DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
+DEF VAR lcTopupType  AS CHAR                   No-UNDO.
 
 DEF BUFFER bOrderTopup FOR OrderTopup.
     
 form
-    OrderTopup.Amount   
-WITH ROW FrmRow WIDTH 25 CENTERED OVERLAY FrmDown  DOWN
+    OrderTopup.Amount
+    lcTopupType HELP "1= Initial, 2= Campaign"
+    LABEL "TopupType" FORMAT "X(15)" 
+    WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.Var:cfc)   
     TITLE COLOR VALUE(Syst.Var:ctc) " TOPUPS OF ORDER " + STRING(iiOrderID) + " "
     FRAME sel.
@@ -67,6 +70,16 @@ WITH  OVERLAY ROW 6 CENTERED
     TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
+    
+FUNCTION fTopupTypeName RETURNS LOGIC
+   (iiTopupType AS INT):
+
+   IF iiTopupType EQ 1 THEN
+      ASSIGN lcTopUpType = "Initial".
+   ELSE IF iiTopupType EQ 2 THEN
+      ASSIGN lcTopUpType = "Campaign".
+      
+END FUNCTION.    
 
 Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
@@ -342,7 +355,8 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        COLOR DISPLAY VALUE(Syst.Var:ctc)
-       OrderTopup.Amount.
+       OrderTopup.Amount
+       lcTopupType.
 
        RUN local-find-NEXT.
        IF AVAILABLE OrderTopup THEN Memory = recid(OrderTopup).
@@ -364,7 +378,8 @@ REPEAT WITH FRAME sel:
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
        COLOR DISPLAY VALUE(Syst.Var:ccc)
-       OrderTopup.Amount.
+       OrderTopup.Amount
+       lcTopupType.
 
        IF ok THEN DO:
 
@@ -487,11 +502,14 @@ PROCEDURE local-disp-row:
        
        DISPLAY 
        OrderTopup.Amount
+       lcTopupType
        WITH FRAME sel.
 END PROCEDURE.
 
 PROCEDURE local-find-others.
-
+   
+   fTopupTypeName(OrderTopup.TopupType).
+   
 END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:

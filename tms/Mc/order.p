@@ -1177,9 +1177,7 @@ PROCEDURE pOrderView:
                THEN 9844 ELSE 0)
       Syst.Var:ufk[4] = (IF Order.MultiSIMId > 0 THEN 9827 ELSE 0)
       Syst.Var:ufk[5] = 1152
-      Syst.Var:ufk[6] = 2208 WHEN LOOKUP(Order.Statuscode,"1") > 0
-      Syst.Var:ufk[6] = 1957 WHEN LOOKUP(Order.Statuscode,"3") > 0
-      Syst.Var:ufk[6] = 0    WHEN icStatus = ""
+      Syst.Var:ufk[6] = 9860
       Syst.Var:ufk[7] = 2243 
       Syst.Var:ufk[8] = 8
       Syst.Var:ehto = 0               
@@ -1310,14 +1308,9 @@ PROCEDURE pOrderView:
         next action.
      end.
           
-     ELSE IF Syst.Var:toimi = 6  AND 
-          (Order.StatusCode NE "5" OR icStatus = "") 
-     THEN DO TRANSACTION ON ENDKEY UNDO, LEAVE: 
+     ELSE IF Syst.Var:toimi = 6 THEN DO: 
         
-        FIND Order WHERE recid(Order) = rtab[frame-line(sel)]
-        EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-                                 
-        {Mc/ordersender.i Action}
+        RUN Mc/orderproduct.p (Order.OrderID).
         
         ASSIGN
            memory = recid(order)
@@ -1872,7 +1865,6 @@ PROCEDURE local-disp-lis:
          lcLOStatus
          liDeliveryType lcDeliveryType
       WITH FRAME lis.
-
 END PROCEDURE.
 
 PROCEDURE local-disp-cred:
