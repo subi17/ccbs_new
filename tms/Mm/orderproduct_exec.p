@@ -19,7 +19,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 /* ********************  Preprocessor Definitions  ******************** */
 
 
-/* ***************************  Main Block  *************************** */
+
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Syst/commali.i}
@@ -57,20 +57,134 @@ DEFINE VARIABLE liMnpStatus       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ocResult          AS CHAR      NO-UNDO.
 DEFINE VARIABLE lgHoldOrder       AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcSubscriptionICC AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liRequestID       AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE liRequestID AS INTEGER NO-UNDO. 
 
-DEFINE BUFFER bfOrder FOR Order.
-
-FIND FIRST bfOrder WHERE bfOrder.OrderID = iiOrderID EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-
-IF NOT AVAILABLE bfOrder THEN RETURN.
-
+DEFINE BUFFER bfOrder              FOR Order.
 DEFINE BUFFER bfOrderProductParent FOR OrderProduct.
 
-/*Assigning the main variables*/    
-ASSIGN 
-    liMnpStatus  =  INTEGER(Func.OrderProductsData:mGetMobileNumberType(INPUT iiOrderID) = {&TYPE_MNP})     
-    llgMNPSimOnly = bfOrder.OrderType EQ {&ORDER_TYPE_MNP}   AND
+/* ***************************  Functions  *************************** */
+
+FUNCTION fValidateSIM RETURNS CHARACTER():
+        
+    IF lcICC > "" AND
+       Func.ValidateOrder:misValidICC(lcICC) = FALSE THEN 
+    DO:        
+        RUN pMarkErrorStatus.
+        Func.Common:mWriteMemo("Order",
+                               STRING(bfOrder.OrderID),
+                               0,
+                               "Order Process Error",
+                               "No valid ICC could be found").        
+    END. /*IF lcICC > ""*/    
+    RETURN "".
+    
+END FUNCTION.
+
+FUNCTION fValidateMSISDN RETURNS CHARACTER():
+    
+    DEFINE VARIABLE ldeCLI AS DECIMAL NO-UNDO.
+    
+    IF lcCLI = ""  THEN 
+    DO:        
+        RUN pMarkErrorStatus.
+        Func.Common:mWriteMemo("Order",
+                               STRING(bfOrder.OrderID),
+                               0,      
+                               "MSISDN",
+                               "MSISDN is missing").
+                               
+        IF lgHoldOrder THEN 
+            RETURN.            
+    END. /*IF lcCLI = ""*/
+    
+    ASSIGN 
+        ldeCLI = DECIMAL(lcCLI) NO-ERROR.
+    IF ERROR-STATUS:ERROR THEN 
+    DO:
+        RUN pMarkErrorStatus.
+        Func.Common:mWriteMemo("Order",
+            STRING(bfOrder.OrderID),
+            0,
+            "MSISDN",
+            "MSISDN is invalid").   
+    END.    
+    RETURN "".
+    
+END FUNCTION.   
+
+FUNCTION fValidateSubscriptionType RETURNS CHARACTER ():
+    
+    IF Func.ValidateOrder:misCLITypeExists(lcCLIType) = FALSE THEN 
+    DO:
+        RUN pMarkErrorStatus.
+        Func.Common:mWriteMemo("Order",
+                               STRING(bfOrder.OrderID),
+                               0,
+                               "CLI Type",
+                               "Invalid CLIType to the order").
+        
+    END.
+    
+    IF fIsConvergenceTariff(lcCLIType) = NO  AND
+         CAN-FIND(FIRST MobSub WHERE MobSub.CLI = lcCLI) THEN 
+    DO:          
+
+        RUN pMarkErrorStatus. 
+        Func.Common:mWriteMemo("Order",
+                               STRING(bfOrder.OrderID),
+                               0,
+                               "Subscription",
+                               "Subscription already exists with MSISDN" + " " + lcCLI).
+        
+    END.
+    
+    RETURN "".
+    
+END FUNCTION. 
+
+/* ***************************  Main Block  *************************** */
+
+DO ON ERROR UNDO, RETURN ERROR:
+    
+    FIND FIRST bfOrder WHERE bfOrder.OrderID = iiOrderID EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
+    IF NOT AVAILABLE bfOrder THEN
+        RETURN.
+    
+    RUN pInitialise.
+
+    RUN pProcess.
+
+    IF lgHoldOrder = TRUE THEN 
+        RETURN.
+        
+    RUN pCheckOrderStatus.
+
+    IF lgHoldOrder = TRUE THEN 
+        RETURN.
+
+    RUN pProcessOtherOrders.
+
+    IF lgHoldOrder = TRUE THEN 
+        RETURN.
+
+    RUN pOrderValidations.
+    
+    IF lgHoldOrder = TRUE THEN 
+        RETURN.
+
+    RUN pUpdateOrder.
+        
+    RUN pCreateMobileSubscriptionRequest.    
+    
+END.
+
+PROCEDURE pInitialise :
+    
+    /*Assigning the main variables*/    
+    ASSIGN 
+        liMnpStatus   = INTEGER(Func.OrderProductsData:mGetMobileNumberType(INPUT iiOrderID) = {&TYPE_MNP})     
+        llgMNPSimOnly = bfOrder.OrderType EQ {&ORDER_TYPE_MNP}   AND
                     bfOrder.CrStamp   >= 20150616.40200      AND
                     liMnpStatus       EQ 1                   AND
                     LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
@@ -82,78 +196,117 @@ ASSIGN
                                       OrderTimeStamp.OrderID EQ bfOrder.OrderID      AND
                                       OrderTimeStamp.RowType EQ {&ORDERTIMESTAMP_SIMONLY}).
                                       
-IF bfOrder.ResignationPeriod THEN 
-DO:
-    llReserveSimAndMsisdn =  NOT CAN-FIND(FIRST ActionLog NO-LOCK WHERE
-                                                ActionLog.Brand  = Syst.Var:gcBrand AND
-                                                ActionLog.TableName = "Order" AND
-                                                ActionLog.KeyValue = STRING(bfOrder.OrderID) AND
-                                                ActionLog.ActionId = "RESIGNATION" AND
-                                                ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}).
-END.
-ELSE llReserveSimAndMsisdn = TRUE.
-
-
-MAIN-BLOCK:
-FOR EACH OrderProduct NO-LOCK 
-    WHERE OrderProduct.OrderID  = iiOrderID 
-      AND OrderProduct.ParentID > 0 
-      BREAK BY OrderProduct.ParentID DESCENDING: 
+    IF bfOrder.ResignationPeriod THEN 
+    DO:
+        llReserveSimAndMsisdn =  NOT CAN-FIND(FIRST ActionLog NO-LOCK WHERE
+            ActionLog.Brand  = Syst.Var:gcBrand AND
+            ActionLog.TableName = "Order" AND
+            ActionLog.KeyValue = STRING(bfOrder.OrderID) AND
+            ActionLog.ActionId = "RESIGNATION" AND
+            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}).
+    END.
+    ELSE ASSIGN llReserveSimAndMsisdn = TRUE.
     
-    IF OrderProduct.ActionType  = {&ORDER_PRODUCT_SIM}
-    THEN DO:      
-   
-        RUN ipProcessSIM(INPUT OrderProduct.ParentID).
-        IF lgHoldOrder = TRUE THEN RETURN.
-       
-    END. 
+END PROCEDURE.
+
+PROCEDURE pProcess:
     
-    IF LAST-OF(OrderProduct.ParentID) 
-    THEN DO:
+    FOR EACH  OrderProduct NO-LOCK 
+        WHERE OrderProduct.OrderID  = iiOrderID 
+        AND OrderProduct.ParentID > 0 
+        BREAK BY OrderProduct.ParentID DESCENDING:     
         
-        FIND FIRST bfOrderProductParent WHERE bfOrderProductParent.OrderID         =   OrderProduct.OrderID
-                                          AND bfOrderProductParent.OrderProductID  =   OrderProduct.ParentID
-                                       NO-LOCK NO-ERROR.
+        RUN pOrderProduct(INPUT OrderProduct.ActionType , INPUT OrderProduct.ParentID).            
+        IF lgHoldOrder = TRUE THEN 
+            RETURN.     
+    
+        IF LAST-OF(OrderProduct.ParentID) THEN 
+        DO:        
+            FIND FIRST bfOrderProductParent WHERE 
+                bfOrderProductParent.OrderID        = OrderProduct.OrderID AND
+                bfOrderProductParent.OrderProductID = OrderProduct.ParentID
+                NO-LOCK NO-ERROR.
                                
-        IF AVAILABLE bfOrderProductParent 
-        THEN DO:
-            
-            IF bfOrderProductParent.ActionType =  {&ORDER_PRODUCT_SUBSCRIPTION}
-            THEN DO:
-                
-                RUN ipProcessMobileSubscription(INPUT bfOrderProductParent.OrderProductID). 
-                IF lgHoldOrder = TRUE THEN RETURN.
-                
+            IF AVAILABLE bfOrderProductParent THEN 
+            DO:
+                RUN pOrderProduct(INPUT bfOrderProductParent.ActionType,INPUT bfOrderProductParent.OrderProductID).
+                IF lgHoldOrder = TRUE THEN 
+                    RETURN.                         
             END.
-            ELSE IF bfOrderProductParent.ActionType = {&ORDER_PRODUCT_FIXED_LINE}
-            THEN DO:
-                
-                RUN ipProcessFixedLine(INPUT bfOrderProductParent.OrderProductID).
-                IF lgHoldOrder = TRUE THEN RETURN.
-                
-            END.            
-        END.
-    END. /* IF LAST-OF(OrderProduct.ParentID): */
-END. /* For each OrderProduct*/
+        END. /* IF LAST-OF(OrderProduct.ParentID): */
+    END. /* For each OrderProduct*/
 
-IF LOOKUP(bfOrder.Statuscode,{&ORDER_INACTIVE_STATUSES} + ",4,74") > 0  
-THEN RETURN.
+END PROCEDURE.    
 
-RUN ipProcessOrders.
-
-IF lgHoldOrder = TRUE 
-THEN RETURN.
-
-RUN ipOrderValidations.
+PROCEDURE pOrderProduct:
     
-IF lgHoldOrder = TRUE 
-THEN RETURN.
-
-RUN ipUpdateOrderData.
+    DEFINE INPUT  PARAMETER icProductType AS CHARACTER NO-UNDO.
+    DEFINE INPUT  PARAMETER iiProductID   AS INTEGER NO-UNDO.
+    
+    CASE icProductType :
         
-RUN ipCreateSubscriptionRequest.
+        WHEN {&ORDER_PRODUCT_SIM} THEN 
+        DO:            
+            RUN pAccessory(INPUT icProductType , INPUT iiProductID).            
+        END.
+        WHEN {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
+        DO:            
+            RUN pSubscription(icProductType , INPUT iiProductID).            
+        END.
+        WHEN {&ORDER_PRODUCT_FIXED_LINE} THEN 
+        DO:            
+            RUN pSubscription(icProductType , INPUT iiProductID).            
+        END.
+        
+    END CASE.
+    
+END PROCEDURE.  
 
-PROCEDURE ipProcessSIM:
+PROCEDURE pAccessory :
+    
+    DEFINE INPUT  PARAMETER icProductType AS CHARACTER NO-UNDO.
+    DEFINE INPUT  PARAMETER iiProductID   AS INTEGER NO-UNDO.
+    
+   CASE icProductType :
+       
+       WHEN {&ORDER_PRODUCT_SIM} THEN 
+       DO:           
+           RUN pSIM(INPUT OrderProduct.ParentID).           
+       END.      
+       
+   END CASE.
+    
+END PROCEDURE.    
+
+PROCEDURE pSubscription :
+    
+    DEFINE INPUT  PARAMETER icProductType AS CHARACTER NO-UNDO.
+    DEFINE INPUT  PARAMETER iiProductID   AS INTEGER   NO-UNDO.
+    
+    CASE icProductType :
+        
+        WHEN {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
+        DO:
+            RUN pMobile(INPUT iiProductID).
+        END.    
+        WHEN {&ORDER_PRODUCT_FIXED_LINE} THEN 
+        DO:
+            RUN pFixedLine(INPUT iiProductID).
+        END.    
+        
+    END CASE.       
+    
+END PROCEDURE.    
+  
+
+PROCEDURE pCheckOrderStatus :
+    
+    IF LOOKUP(bfOrder.Statuscode,{&ORDER_INACTIVE_STATUSES} + ",4,74") > 0  THEN 
+        ASSIGN lgHoldOrder = TRUE.
+    
+END PROCEDURE.    
+
+PROCEDURE pSIM:
     
     DEFINE INPUT  PARAMETER iiSIMParentID AS INTEGER NO-UNDO.
     
@@ -163,33 +316,35 @@ PROCEDURE ipProcessSIM:
         lcICC               =   Func.OrderProductsData:mGetOrderICC(INPUT iiOrderID)
         lcSubscriptionICC   =   Func.OrderProductsData:mGetOrderMobileICC(INPUT iiOrderID).
          
-    IF lcICC EQ "" AND lcSubscriptionICC = ""
-    THEN DO:
+    IF lcICC EQ "" AND lcSubscriptionICC = "" THEN 
+    DO:
         
-        IF LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0
-        THEN DO:
-            
+        IF LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN 
+        DO:            
             IF bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR 
-               bfOrder.OrderType EQ {&ORDER_TYPE_NEW}  
-            THEN lgHoldOrder = TRUE.
-            RETURN.
+               bfOrder.OrderType EQ {&ORDER_TYPE_NEW} THEN 
+            DO:
+                ASSIGN 
+                    lgHoldOrder = TRUE.
+                RETURN.    
+            END.               
         END.
         
         /* New change in SIM reservation logic, when order is placed from telesalses
            or web then order will be moved to order queue 15 0r 16. When order sent to LO,
            LO will pick and reserve the SIM through external API (dextra_update_order_status) */  
         
-        IF LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0
-        THEN DO:
+        IF LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN 
+        DO:
             
             IF (bfOrder.OrderType  EQ {&ORDER_TYPE_NEW} OR
                (bfOrder.OrderType  EQ {&ORDER_TYPE_MNP} AND 
-               (bfOrder.StatusCode EQ {&ORDER_STATUS_ONGOING} OR llgMNPSimOnly)))
-            THEN DO:
+               (bfOrder.StatusCode EQ {&ORDER_STATUS_ONGOING} OR llgMNPSimOnly)))THEN 
+            DO:
                  
-                IF llDoEvent  
-                THEN DO:
-                    lh15Order = BUFFER bfOrder:HANDLE.
+                IF llDoEvent THEN 
+                DO:
+                    ASSIGN lh15Order = BUFFER bfOrder:HANDLE.
                     RUN StarEventInitialize(lh15Order).
                     RUN StarEventSetOldBuffer(lh15Order).
                 END.
@@ -197,16 +352,16 @@ PROCEDURE ipProcessSIM:
                 IF CAN-FIND(FIRST OrderGroup NO-LOCK WHERE
                     OrderGroup.OrderId        EQ bfOrder.OrderId          AND
                     OrderGroup.GroupType      EQ {&OG_LOFILE}             AND
-                    ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) 
-                    THEN fSetOrderStatus(bfOrder.OrderID,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
-                ELSE fSetOrderStatus(bfOrder.OrderID,{&ORDER_STATUS_SENDING_TO_LO}).
+                    ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN 
+                        fSetOrderStatus(bfOrder.OrderID,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+                ELSE 
+                    fSetOrderStatus(bfOrder.OrderID,{&ORDER_STATUS_SENDING_TO_LO}).
                 
-                IF llDoEvent  
-                THEN DO:
+                IF llDoEvent THEN 
+                DO:
                     RUN StarEventMakeModifyEvent(lh15Order).
                     fCleanEventObjects().
                 END. 
-                
                 ASSIGN lgHoldOrder = TRUE.
                 RETURN.
                 
@@ -219,12 +374,12 @@ PROCEDURE ipProcessSIM:
         /* Event logging of 99 status setups */ 
         IF llDoEvent THEN 
         DO:
-            lh99Order = BUFFER bfOrder:HANDLE.
+            ASSIGN lh99Order = BUFFER bfOrder:HANDLE.
             RUN StarEventInitialize(lh99Order).
             RUN StarEventSetOldBuffer(lh99Order).
         END.
         
-        llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_SIM_ONLY_MNP_IN}).
+        ASSIGN llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_SIM_ONLY_MNP_IN}).
         IF llDoEvent THEN 
         DO:
             RUN StarEventMakeModifyEvent(lh99Order).
@@ -243,18 +398,18 @@ PROCEDURE ipProcessSIM:
     IF NOT AVAILABLE bfParentProduct THEN 
     DO:
        
-        RUN ipChangeOrderToErrorStatus.
+        RUN pMarkErrorStatus.
         Func.Common:mWriteMemo("Order",
                                STRING(bfOrder.OrderID),
                                0,
                                "OrderMobile",
                                "Parent product to sim is not available.").
     END.
-    ELSE RUN ipCreateOrderMobileData(INPUT bfParentProduct.OrderProductID).
+    ELSE RUN pCreateOrderMobile(INPUT bfParentProduct.OrderProductID).
             
 END PROCEDURE.
 
-PROCEDURE ipProcessMobileSubscription:
+PROCEDURE pMobile:
     
     DEFINE INPUT  PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
     
@@ -262,14 +417,14 @@ PROCEDURE ipProcessMobileSubscription:
         lcCLIType = Func.OrderProductsData:mGetOrderCLIType(INPUT iiOrderID)
         lcCLI     = Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID).
         
-    RUN ipCreateOrderMobileData(INPUT iiOrderProductID).
+    RUN pCreateOrderMobile(INPUT iiOrderProductID).
     
     IF Func.OrderProductsData:mHasInitialTopup(INPUT iiOrderID) THEN 
-        RUN ipCreateOrderTopup(iiOrderProductID , INPUT {&INITIAL_TOPUP}).
+        RUN pCreateOrderTopup(iiOrderProductID , INPUT {&INITIAL_TOPUP}).
         
 END PROCEDURE.
 
-PROCEDURE ipProcessFixedLine:
+PROCEDURE pFixedLine:
     
     DEFINE INPUT  PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
     
@@ -278,183 +433,51 @@ PROCEDURE ipProcessFixedLine:
         lcCLI         = Func.OrderProductsData:mGetOrderCLI(INPUT iiOrderID)
         lcFixedNumber = Func.OrderProductsData:mGetFixNumber(INPUT iiOrderID).
     
-    RUN ipCreateOrderFusionData(INPUT iiOrderProductID).
+    RUN pCreateOrderFusion(INPUT iiOrderProductID).
 END.    
 
-PROCEDURE ipOrderValidations:
+PROCEDURE pOrderValidations:
     
-    DEFINE VARIABLE ldeCLI AS DECIMAL NO-UNDO.
+    fValidateSIM().
     
-    IF lcCLI = ""  THEN 
-    DO:
+    IF lgHoldOrder = TRUE THEN 
+        RETURN.
         
-        RUN ipChangeOrderToErrorStatus.
-        Func.Common:mWriteMemo("Order",
-                               STRING(bfOrder.OrderID),
-                               0,
-                               "MSISDN",
-                               "MSISDN is missing").
-                               
-        IF lgHoldOrder THEN RETURN.                               
-                               
-    END. /*IF lcCLI = ""*/
+    fValidateMSISDN().
     
-    IF lcICC > "" AND
-       Func.ValidateOrder:misValidICC(lcICC) = FALSE
-    THEN DO:
+    IF lgHoldOrder = TRUE THEN 
+        RETURN.
         
-        RUN ipChangeOrderToErrorStatus.
-        Func.Common:mWriteMemo("Order",
-                               STRING(bfOrder.OrderID),
-                               0,
-                               "Order Process Error",
-                               "No valid ICC could be found").
-        
-    END. /*IF lcICC > ""*/
-    
-    ASSIGN 
-        ldeCLI = DECIMAL(lcCLI) NO-ERROR.
-    IF ERROR-STATUS:ERROR 
-    THEN DO:
-        
-        RUN ipChangeOrderToErrorStatus.
-        Func.Common:mWriteMemo("Order",
-                               STRING(bfOrder.OrderID),
-                               0,
-                               "MSISDN",
-                               "MSISDN is invalid").   
-        
-    END.
-    
-    IF Func.ValidateOrder:misCLITypeExists(lcCLIType) = FALSE 
-    THEN DO:
-
-        RUN ipChangeOrderToErrorStatus.
-        Func.Common:mWriteMemo("Order",
-                               STRING(bfOrder.OrderID),
-                               0,
-                               "CLI Type",
-                               "Invalid CLIType to the order").
-        
-    END.
-    
-    IF fIsConvergenceTariff(lcCLIType) = NO  AND
-         CAN-FIND(FIRST MobSub WHERE MobSub.CLI = lcCLI)  
-    THEN DO:          
-
-        RUN ipChangeOrderToErrorStatus. 
-        Func.Common:mWriteMemo("Order",
-                               STRING(bfOrder.OrderID),
-                               0,
-                               "Subscription",
-                               "Subscription already exists with MSISDN" + " " + lcCLI).
-        
-    END.
+    fValidateSubscriptionType().
 
 END PROCEDURE.   
 
-PROCEDURE ipProcessOrders:
+PROCEDURE pProcessOtherOrders:
     
-    IF bfOrder.OrderType = {&ORDER_TYPE_RENEWAL} THEN 
-    DO:              
-        IF bfOrder.OrderChannel BEGINS "Renewal_POS" AND
-            CAN-FIND(FIRST MsRequest WHERE
-                           MsRequest.MsSeq   = bfOrder.MSSeq                AND
-                           MsRequest.ReqType = {&REQTYPE_AFTER_SALES_ORDER} AND
-                           MsRequest.ReqIParam1 = bfOrder.OrderID)
-        THEN DO:
-            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}).
-            ASSIGN lgHoldOrder  = TRUE.
-            RETURN.
-        END.
-               
-        IF LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT_RENEWAL}) > 0 THEN
-            llOrdStChg  = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_WAITING_SENDING_LO}).  
-        ELSE llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}). 
-
-        IF bfOrder.OrderChannel BEGINS "Renewal_POS" THEN 
-        DO:
-            fAfterSalesRequest(bfOrder.MsSeq,
-                               bfOrder.OrderId,
-                               Syst.Var:katun,
-                               Func.Common:mMakeTS(),
-                               "7",
-                               OUTPUT ocResult).
-                   
-            IF ocResult > "" THEN 
-            DO:
-                Func.Common:mWriteMemo("Order",
-                                       STRING(bfOrder.OrderID),
-                                       0,
-                                       "After Sales Request creation failed",
-                                       ocResult).
-                llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_IN_CONTROL}).
-            END.
-        END.
-                 
-        ASSIGN lgHoldOrder = TRUE.
-        RELEASE bfOrder NO-ERROR.
-        RETURN.
+    CASE bfOrder.OrderType :        
         
-    END. /* bfOrder.OrderType = {&ORDER_TYPE_RENEWAL} */
-    
-    IF bfOrder.OrderType EQ {&ORDER_TYPE_STC} THEN 
-    DO:
- 
-        RUN Mm/fusion_stc.p(bfOrder.OrderID, OUTPUT liRequestID).
-               
-        IF liRequestID > 0 THEN
-            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}).            
-        ELSE 
+        WHEN {&ORDER_TYPE_RENEWAL} THEN 
         DO:
-            Func.Common:mWriteMemo("Order",
-                                   STRING(bfOrder.OrderID),
-                                   0,
-                                   "STC request creation failed",
-                                    RETURN-VALUE).
-            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_IN_CONTROL}).
+            RUN pSetRenewalOrderStatus.
+        END.
+        WHEN {&ORDER_TYPE_STC} THEN 
+        DO:
+            RUN pSetSTCOrderStatus.
+        END.
+        WHEN {&ORDER_TYPE_ACC} THEN 
+        DO:
+             RUN pSetACCOrderStatus.
+        END.
+        WHEN {&ORDER_TYPE_ROLLBACK} THEN 
+        DO:
+             RUN pCheckRollbackOrders.
         END.
 
-        RELEASE bfOrder NO-ERROR.
-        ASSIGN lgHoldOrder  = TRUE.
-        RETURN.
-        
-    END.
-    
-    IF bfOrder.OrderType EQ {&ORDER_TYPE_ACC} THEN 
-    DO:
-        RUN Mm/acc_order.p(bfOrder.OrderID, OUTPUT liRequestID).
-               
-        IF liRequestID > 0 THEN
-            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}).
-        ELSE DO:            
-            Func.Common:mWriteMemo("Order",
-                                   STRING(bfOrder.OrderID),
-                                   0,
-                                   "ACC request creation failed",
-                                   RETURN-VALUE).
-            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_IN_CONTROL}).
-        END.
-
-        RELEASE bfOrder NO-ERROR.
-        ASSIGN lgHoldOrder  = TRUE.
-        RETURN.     
-               
-    END.
-    
-    IF bfOrder.OrderType NE {&ORDER_TYPE_ROLLBACK} AND
-        CAN-FIND(FIRST MsRequest WHERE
-                       MsRequest.MsSeq     EQ bfOrder.MSSeq                  AND
-                       MsRequest.ReqType   EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND
-                       MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED})
-    THEN DO: 
-        ASSIGN lgHoldOrder  = TRUE.
-        RETURN. 
-    END.
-    
+    END CASE .
+     
 END PROCEDURE. 
 
-PROCEDURE ipChangeOrderToErrorStatus :
+PROCEDURE pMarkErrorStatus :
     
     ASSIGN 
         llOrdStChg  = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ERROR})
@@ -462,24 +485,39 @@ PROCEDURE ipChangeOrderToErrorStatus :
     
 END PROCEDURE.    
 
-PROCEDURE ipUpdateOrderData:
+PROCEDURE pUpdateOrder:
     
-    IF bfOrder.MSSeq = 0  
-    THEN bfOrder.MSSeq = NEXT-VALUE(Mobsub).
+    IF bfOrder.MSSeq = 0  THEN 
+        ASSIGN bfOrder.MSSeq = NEXT-VALUE(Mobsub).
         
     FOR EACH OrderCustomer OF bfOrder EXCLUSIVE-LOCK:
         IF OrderCustomer.Language = "0" OR
-           OrderCustomer.Language = ""
-        THEN OrderCustomer.Language = "1".
+           OrderCustomer.Language = "" THEN 
+            ASSIGN OrderCustomer.Language = "1".
     END.
     
     IF llReserveSimAndMsisdn = TRUE THEN 
-        RUN ipSIMReservationUpdate.
+        RUN pSIMReservationUpdate.
     
 END PROCEDURE.
 
-PROCEDURE ipSIMReservationUpdate :
+PROCEDURE pSIMReservationUpdate :
+    
+    RUN pReserveSIM.    
+    IF lgHoldOrder = TRUE THEN RETURN. 
+       
+    RUN pReserveMSISDN.     
+    IF bfOrder.Orderchannel BEGINS "migration" THEN 
+    DO:
+        ASSIGN lgHoldOrder  = TRUE.
+        RETURN.        
+    END.    
+    RUN pDelayedOrder.    
+    
+END PROCEDURE.
 
+PROCEDURE pReserveSIM:
+    
     IF lcSubscriptionICC > "" THEN 
     DO:
                       
@@ -487,15 +525,34 @@ PROCEDURE ipSIMReservationUpdate :
 
         IF NOT AVAILABLE Sim THEN 
         DO: 
-            ASSIGN lgHoldOrder = TRUE.
+            ASSIGN 
+                lgHoldOrder = TRUE.
             RETURN.
         END.
                  
     END.
     ELSE RELEASE SIM.
-             
+    
+    IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
+                         OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
+                         OrderTimeStamp.OrderID = bfOrder.OrderID AND
+                         OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN 
+    DO:
+        IF (LOOKUP(bfOrder.OrderChannel,"pos,cc,pre-act,vip,fusion_pos,fusion_cc,pos_pro,fusion_pos_pro") > 0 AND
+            lcSubscriptionICC > "")   OR 
+            bfOrder.OrderType = {&ORDER_TYPE_ROLLBACK} THEN 
+                ASSIGN SIM.SimStat = 4.
+    END.
+
+    IF AVAIL SIM THEN
+        ASSIGN SIM.MsSeq = bfOrder.MsSeq.    
+    
+END PROCEDURE.    
+
+PROCEDURE pReserveMSISDN:
+    
     FIND FIRST MSISDNNUMBER WHERE 
-               MSISDNNumber.CLI = lcCLI NO-LOCK NO-ERROR.
+        MSISDNNumber.CLI = lcCLI NO-LOCK NO-ERROR.
 
     IF NOT AVAIL MSISDNNumber THEN 
     DO:
@@ -517,71 +574,60 @@ PROCEDURE ipSIMReservationUpdate :
             Msisdn.StatusCode = 22
             MSISDN.MSSeq      = bfOrder.MSSeq
             MSISDN.Brand      = Syst.Var:gcBrand.
-    END.          
+    END.         
+    
+END PROCEDURE.
 
-    IF bfOrder.Orderchannel BEGINS "migration" THEN 
-    DO:
-        
-        ASSIGN lgHoldOrder  = TRUE.
-        RETURN.
-        
-    END.
-
-    IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                         OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
-                         OrderTimeStamp.OrderID = bfOrder.OrderID AND
-                         OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN 
-    DO:
-        IF (LOOKUP(bfOrder.OrderChannel,"pos,cc,pre-act,vip,fusion_pos,fusion_cc,pos_pro,fusion_pos_pro") > 0 
-            AND lcSubscriptionICC > "")   OR 
-            bfOrder.OrderType = {&ORDER_TYPE_ROLLBACK} 
-        THEN SIM.SimStat = 4.
-    END.
-
-    IF AVAIL SIM THEN
-        ASSIGN SIM.MsSeq = bfOrder.MsSeq.
-
+PROCEDURE pDelayedOrder:
+    
     IF bfOrder.ResignationPeriod THEN 
     DO:
         fSetOrderStatus(bfOrder.OrderId, {&ORDER_STATUS_RESIGNATION}).
-        ASSIGN lgHoldOrder = TRUE.
+        ASSIGN 
+            lgHoldOrder = TRUE.
         RETURN.
     END.
     
-    
 END PROCEDURE.    
 
-PROCEDURE ipGetTimeStamp :
+PROCEDURE pGetTimeStamp :
     
-    IF liMnpStatus > 0
-    THEN DO:
-        
-        FOR EACH MNPProcess NO-LOCK WHERE
-            MNPProcess.OrderId = bfOrder.OrderID AND
-            MNPProcess.StatusCode < 6 AND
-            MNPProcess.StatusCode NE 4 AND
-            MNPProcess.StatusCode NE 0,
-            FIRST MNPSub NO-LOCK WHERE
-            MNPSub.MNPSeq = MNPProcess.MNPSeq:
-            /* 6 ported, 7 canceled, 4 rejected, 0 new */
-            ldeSwitchTS = MNPSub.PortingTime.      
-        END.
-        
-    END.
-    ELSE ldeSwitchTS  =  Func.Common:mMakeTS().
+    IF liMnpStatus > 0 THEN 
+        ASSIGN ldeSwitchTS = fGetMNPTS().
+    ELSE 
+        ASSIGN ldeSwitchTS = Func.Common:mMakeTS().
     
 END PROCEDURE.   
 
+FUNCTION fGetMNPTS RETURNS DECIMAL():
+    
+    DEFINE VARIABLE ldeMNPSwitchTS AS DECIMAL NO-UNDO.
+    
+    FOR EACH MNPProcess NO-LOCK WHERE
+             MNPProcess.OrderId = bfOrder.OrderID AND
+             MNPProcess.StatusCode < 6 AND
+             MNPProcess.StatusCode NE 4 AND
+             MNPProcess.StatusCode NE 0,
+             FIRST MNPSub NO-LOCK WHERE
+             MNPSub.MNPSeq = MNPProcess.MNPSeq:
+            /* 6 ported, 7 canceled, 4 rejected, 0 new */
+        ASSIGN 
+            ldeMNPSwitchTS = MNPSub.PortingTime.      
+    END.
+        
+    RETURN ldeMNPSwitchTS.   
+    
+END PROCEDURE.    
 
-PROCEDURE ipCreateOrderMobileData:
+PROCEDURE pCreateOrderMobile:
     
     DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
     
     DEFINE BUFFER bfOrderMobile FOR OrderMobile.
     
     IF CAN-FIND(FIRST bfOrderMobile WHERE bfOrderMobile.OrderID         =  iiOrderID  
-                                      AND bfOrderMobile.OrderProductID  =  iiOrderProductID )
-    THEN DO:
+                                      AND bfOrderMobile.OrderProductID  =  iiOrderProductID ) THEN 
+    DO:
         FIND FIRST bfOrderMobile WHERE bfOrderMobile.OrderID            = iiOrderID 
                                    AND bfOrderMobile.OrderProductID     = iiOrderProductID
                                    EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
@@ -621,32 +667,33 @@ PROCEDURE ipCreateOrderMobileData:
            
 END PROCEDURE.    
 
-PROCEDURE ipCreateSubscriptionRequest :
+PROCEDURE pCreateMobileSubscriptionRequest :
     
-    RUN ipGetTimeStamp.
+    RUN pGetTimeStamp.
     
-    IF bfOrder.OrderType = {&ORDER_TYPE_ROLLBACK} 
-    THEN fReactivationRequest(INPUT bfOrder.MsSeq,
-                              INPUT bfOrder.OrderId,
-                              INPUT ldeSwitchTS,
-                              INPUT Syst.Var:katun,
-                              {&REQUEST_SOURCE_NEWTON},
-                              OUTPUT ocResult).
-    ELSE fSubscriptionRequest(INPUT  bfOrder.MSSeq,
-                              INPUT  lcCLI,
-                              INPUT  bfOrder.CustNum,
-                              INPUT  1,
-                              INPUT  Syst.Var:katun,
-                              INPUT  ldeSwitchTS,
-                              INPUT  "CREATE",
-                              INPUT  STRING(bfOrder.OrderId),
-                              INPUT  "", /*for old SIM*/
-                              INPUT  "", /*for Reason info*/
-                              INPUT  "", /*for ContractID*/
-                              INPUT  FALSE,
-                              INPUT  0,
-                              INPUT  {&REQUEST_SOURCE_NEWTON},
-                              OUTPUT ocResult).
+    IF bfOrder.OrderType = {&ORDER_TYPE_ROLLBACK} THEN 
+        fReactivationRequest(INPUT bfOrder.MsSeq,
+                             INPUT bfOrder.OrderId,
+                             INPUT ldeSwitchTS,
+                             INPUT Syst.Var:katun,
+                             {&REQUEST_SOURCE_NEWTON},
+                             OUTPUT ocResult).
+    ELSE 
+        fSubscriptionRequest(INPUT  bfOrder.MSSeq,
+                             INPUT  lcCLI,
+                             INPUT  bfOrder.CustNum,
+                             INPUT  1,
+                             INPUT  Syst.Var:katun,
+                             INPUT  ldeSwitchTS,
+                             INPUT  "CREATE",
+                             INPUT  STRING(bfOrder.OrderId),
+                             INPUT  "", /*for old SIM*/
+                             INPUT  "", /*for Reason info*/
+                             INPUT  "", /*for ContractID*/
+                             INPUT  FALSE,
+                             INPUT  0,
+                             INPUT  {&REQUEST_SOURCE_NEWTON},
+                             OUTPUT ocResult).
     IF ocResult > "" THEN 
     DO:
         llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ERROR}). 
@@ -664,7 +711,7 @@ PROCEDURE ipCreateSubscriptionRequest :
     
 END PROCEDURE.    
 
-PROCEDURE ipCreateOrderTopup :
+PROCEDURE pCreateOrderTopup :
     
     DEFINE INPUT  PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
     DEFINE INPUT  PARAMETER iiTopUpType      AS INTEGER NO-UNDO.
@@ -677,8 +724,8 @@ PROCEDURE ipCreateOrderTopup :
                                AND bfOrderTopUp.TopupType         =  iiTopUpType
                                NO-LOCK NO-ERROR.
      
-     IF NOT AVAILABLE bfOrderTopup
-     THEN DO:
+     IF NOT AVAILABLE bfOrderTopup THEN 
+     DO:
          CREATE bfOrderTopup.
      END.
      ELSE DO:
@@ -686,31 +733,143 @@ PROCEDURE ipCreateOrderTopup :
          FIND CURRENT bfOrderTopup EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
          
          IF LOCKED(bfOrderTopup) OR NOT AVAILABLE bfOrderTopup THEN 
-         DO:
-             
-             ASSIGN lgHoldOrder = TRUE.
+         DO:             
+            ASSIGN 
+                lgHoldOrder = TRUE.
                  
-             Func.Common:mWriteMemo("Order",
-                                    STRING(bfOrder.OrderID),
-                                    0,
-                                    "Initial Topup",
-                                    "Order Topup updation failed.").
-         END. 
-     END.     
+            Func.Common:mWriteMemo("Order",
+                                   STRING(bfOrder.OrderID),
+                                   0,
+                                   "Initial Topup",
+                                   "Order Topup updation failed.").
+        END. 
+    END.     
      
-    ASSIGN bfOrderTopUp.OrderID         =  iiOrderID          WHEN  bfOrderTopUp.OrderID        = 0
-           bfOrderTopUp.OrderProductID  =  iiOrderProductID   WHEN  bfOrderTopUp.OrderProductID = 0   
-           bfOrderTopup.MsSeq           =  bfOrder.MsSeq      WHEN  bfOrderTopup.MsSeq          = 0
-           bfOrderTopup.TopupType       =  iiTopUpType        WHEN  bfOrderTopup.TopupType      = 0   
-           bfOrderTopup.Amount          =  Func.OrderProductsData:mGetTopupAmount(INPUT iiOrderID ,
-                                                                                  INPUT iiOrderProductID,
-                                                                                  INPUT {&ORDER_PRODUCT_PARAM_INITIAL_TOPUP}) 
-                                           WHEN bfOrderTopup.Amount = 0
-          bfOrderTopup.DisplayAmount    =  Func.OrderProductsData:mGetTopupAmount(INPUT iiOrderID ,
-                                                                                  INPUT iiOrderProductID,
-                                                                                  INPUT {&ORDER_PRODUCT_PARAM_INITIAL_TOPUP_DISPLAY}) 
-                                           WHEN bfOrderTopup.Amount = 0   
-         bfOrderTopup.Brand             =  Syst.Var:gcBrand                                         
+    ASSIGN 
+        bfOrderTopUp.OrderID        = iiOrderID         WHEN  bfOrderTopUp.OrderID        = 0
+        bfOrderTopUp.OrderProductID = iiOrderProductID  WHEN  bfOrderTopUp.OrderProductID = 0   
+        bfOrderTopup.MsSeq          = bfOrder.MsSeq     WHEN  bfOrderTopup.MsSeq          = 0
+        bfOrderTopup.TopupType      = iiTopUpType       WHEN  bfOrderTopup.TopupType      = 0   
+        bfOrderTopup.Amount         = Func.OrderProductsData:mGetTopupAmount(INPUT iiOrderID ,
+                                                                             INPUT iiOrderProductID,
+                                                                             INPUT {&ORDER_PRODUCT_PARAM_INITIAL_TOPUP}) 
+                                      WHEN bfOrderTopup.Amount = 0
+        bfOrderTopup.DisplayAmount  = Func.OrderProductsData:mGetTopupAmount(INPUT iiOrderID ,
+                                                                             INPUT iiOrderProductID,
+                                                                             INPUT {&ORDER_PRODUCT_PARAM_INITIAL_TOPUP_DISPLAY}) 
+                                      WHEN bfOrderTopup.Amount = 0   
+        bfOrderTopup.Brand          = Syst.Var:gcBrand                                         
         .                                                              
     
 END PROCEDURE.
+
+
+PROCEDURE pSetRenewalOrderStatus :
+               
+    IF bfOrder.OrderChannel BEGINS "Renewal_POS" AND
+        CAN-FIND(FIRST MsRequest WHERE
+        MsRequest.MsSeq   = bfOrder.MSSeq                AND
+        MsRequest.ReqType = {&REQTYPE_AFTER_SALES_ORDER} AND
+        MsRequest.ReqIParam1 = bfOrder.OrderID) THEN 
+    DO:
+        ASSIGN 
+            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}).
+            lgHoldOrder = TRUE.
+        RETURN.
+    END.
+               
+    IF LOOKUP(bfOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT_RENEWAL}) > 0 THEN
+        ASSIGN 
+            llOrdStChg  = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_WAITING_SENDING_LO}).  
+    ELSE 
+        ASSIGN 
+            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}). 
+
+    IF bfOrder.OrderChannel BEGINS "Renewal_POS" THEN 
+    DO:
+        fAfterSalesRequest(bfOrder.MsSeq,
+                           bfOrder.OrderId,
+                           Syst.Var:katun,
+                           Func.Common:mMakeTS(),
+                           "7",
+                           OUTPUT ocResult).
+                   
+        IF ocResult > "" THEN 
+        DO:
+            Func.Common:mWriteMemo("Order",
+                                   STRING(bfOrder.OrderID),
+                                   0,
+                                   "After Sales Request creation failed",
+                                   ocResult).
+            ASSIGN llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_IN_CONTROL}).
+        END.
+    END.
+                 
+    ASSIGN 
+        lgHoldOrder = TRUE.
+        
+    RELEASE bfOrder NO-ERROR.
+
+END PROCEDURE.
+
+PROCEDURE pSetSTCOrderStatus :
+    
+    RUN Mm/fusion_stc.p(bfOrder.OrderID, OUTPUT liRequestID).
+               
+    IF liRequestID > 0 THEN
+        ASSIGN 
+            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}).            
+    ELSE 
+    DO:
+        Func.Common:mWriteMemo("Order",
+                               STRING(bfOrder.OrderID),
+                               0,
+                               "STC request creation failed",
+                               RETURN-VALUE).
+        ASSIGN 
+            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_IN_CONTROL}).
+    END.
+
+    RELEASE bfOrder NO-ERROR.
+    ASSIGN 
+        lgHoldOrder = TRUE.
+    
+END PROCEDURE.
+
+PROCEDURE pSetACCOrderStatus :
+    
+    RUN Mm/acc_order.p(bfOrder.OrderID, OUTPUT liRequestID).
+               
+    IF liRequestID > 0 THEN
+        ASSIGN 
+            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_ONGOING}).
+    ELSE 
+    DO:            
+        Func.Common:mWriteMemo("Order",
+                               STRING(bfOrder.OrderID),
+                               0,
+            "ACC request creation failed",
+            RETURN-VALUE).
+        ASSIGN 
+            llOrdStChg = fSetOrderStatus(bfOrder.OrderId,{&ORDER_STATUS_IN_CONTROL}).
+    END.
+
+    RELEASE bfOrder NO-ERROR.
+    
+    ASSIGN 
+        lgHoldOrder = TRUE.
+
+END PROCEDURE.    
+
+PROCEDURE pCheckRollbackOrders :
+    
+    IF CAN-FIND(FIRST MsRequest WHERE
+        MsRequest.MsSeq     EQ bfOrder.MSSeq                  AND
+        MsRequest.ReqType   EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND
+        MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED}) THEN 
+    DO: 
+        ASSIGN 
+            lgHoldOrder = TRUE.
+    END.
+    
+END PROCEDURE.    

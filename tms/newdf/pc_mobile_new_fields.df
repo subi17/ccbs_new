@@ -1,0 +1,12 @@
+ADD FIELD "OrderProductID" OF "MSRequest" AS INTEGER
+  DESCRIPTION "Order product internal id"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderProductID"
+  POSITION 40
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderProductID"
+  HELP "OrderProductID"
+  ORDER 390
+
+  
