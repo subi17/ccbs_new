@@ -398,8 +398,10 @@ PROCEDURE pSolog:
             WHEN {&REQTYPE_DSS}
             THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
                  THEN loProCommand = NEW Gwy.ProCommandDSS(MsRequest.MsRequest). 
+/*
             WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
-            THEN loProCommand = NEW Gwy.ProCommandSubscription(MsRequest.MsRequest). 
+            THEN loProCommand = NEW Gwy.ProCommandSubscription(MsRequest.MsRequest).
+*/
          END CASE.
       
          IF VALID-OBJECT(loProCommand)
