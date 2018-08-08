@@ -1,0 +1,54 @@
+In CUI
+
+cParam (function)
+
+....................... Yoigo Parameter Browser 02-08-18 .......................
+.Bran Group         Parameter                Name                   Value    OL.
+..... ............. ........................ ...................... ........ ...
+.1    DirDebit      DDInErrorFile            File for error log     /tmp/dde N .
+.1    DirDebit      DDPaymSubj               Payment Subject for DD 0        N .
+.1    DirDebit      DDTransDir               Transfer directory for /store/r N .
+.1    DIRECTORY     BillRunStatTrackDir      BillRunStatTrackDir    /mnt/qss N .
+.1    Discount      ReadDPMemberArc          Archive dir for member /store/r N .
+.1    Discount      ReadDPMemberFile         File name for member r /store/r N .
+.1    Discount      ReadDPMemberLog          Log file from member r /store/r N .
+.1    DiscountType  ExtraLine_CLITypes       Extra lines discount C CONT28   N .
+.1    DiscountType  ExtraLine_Discounts      Extra line discounts   CONT28DI N .
+.1    DiscountType  Extra_MainLine_CLITypes  Mainline for extra lin CONTDSL4 N .
+.1    DMS           DMSMsgID_20              DMS notification sendi 1        N .
+.1    DMS           DMSMsgID_21              DMS notification sendi 1        N .
+.1    DMS           DMSMsgID_44              DMS notification sendi 1        N .
+.1    DMS           DMSMsgID_A               DMS notification sendi 2        N .
+.1    DMS           DMSMsgID_A0_by_batch     DMS notification sendi 7        N .
+.................................. By Code .....................................
+FIND     FIND     FIND     MEMO             NEW      DELETE   EVENTLOG RETURN
+GROUP    CODE     NAME                      RECORD   RECORD
+
+F5 - NEW RECORD 
+Give values:
+
+....................... Yoigo Parameter Browser 02-08-18 .......................
+.Bran Group         Parameter                Name                   Value    OL.
+..... ............. ........................ ...................... ........ ...
+.1    Discount ..................... CHANGE .....................nc          N .
+.1    Discount .           Brand: 1                             .se 0        N .
+.1    Discount .       Parameter: DelayedPermanencies           .er /store/r N .
+.1    Discount .           Group: Discount                      . r /store/r N .
+.1    Discount .            Type: C                             . r /store/r N .
+.1    DiscountT.            Name: Rule list of permanency delay . C CONT28   N .
+.1    DiscountT.          OnLine: N                             .   CONT28DI N .
+.1    DiscountT..................................................in CONTDSL4 N .
+
+Give value "DTERM12-120,DTERM24-240,UTERM3-30,UTERM6-60,UTERM12-120"
+
+
+.1    Discount ..................... CHANGE .....................nc          N .
+.1    Discount .           Brand: 1                             .se 0        N .
+.1    Discount .       Parameter: DelayPermanencyValue          .er /store/r N .
+.1    Discount .           Group: Discount                      . r /store/r N .
+.1    Discount .            Type: I                             . r /store/r N .
+.1    DiscountT.            Name: Permanency delay in days      . C CONT28   N .
+.1    DiscountT.          OnLine: N                             .   CONT28DI N .
+.1    DiscountT..................................................in CONTDSL4 N .
+
+Give value 5
