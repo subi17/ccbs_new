@@ -33,12 +33,8 @@ FUNCTION fCreateCustomerAccount RETURNS LOGICAL
          CustomerAccount.AccountID = NEXT-VALUE(AccountID)
          CustomerAccount.CustNum = iiCustNum 
          CustomerAccount.DefaultAcc = TRUE
-         CustomerAccount.BillCycle = 1
-         CustomerAccount.InvInterval = 1
          CustomerAccount.FromDate = TODAY 
-         CustomerAccount.ToDate = 12/31/2049
-         CustomerAccount.DelType = Customer.DelType
-         CustomerAccount.InvoiceGroup = Customer.InvGroup.
+         CustomerAccount.ToDate = 12/31/2049.
 /*
          CustomerAccount.AccountName = 
          CustomerAccount.ShippingAddressID =       
@@ -115,8 +111,6 @@ FUNCTION fUpdateCustomerAccountDelType RETURNS LOGICAL
       RETURN FALSE.
    END.   
    
-   CustomerAccount.DelType = iiDelType.
-
    RETURN TRUE.
 
 END FUNCTION.
