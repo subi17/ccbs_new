@@ -176,9 +176,8 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
-      loJsonObject:Add("parent-id" , THIS-OBJECT:ParentID).
-      loJsonObject:Add("order-item-id", THIS-OBJECT:orderProductID).
-      loJsonObject:Add("order-item-type" , THIS-OBJECT:actionType).      
+      loJsonObject:Add("item-id", THIS-OBJECT:orderProductID).
+      loJsonObject:Add("item-type" , THIS-OBJECT:actionType).      
       ioJsonArray:Add(loJsonObject).
 
       IF VALID-OBJECT(objOrderProductFactory) THEN

@@ -6,223 +6,208 @@ ADD TABLE "OrderMobile"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-ordermobile.p" CRC "?"
   TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "triggers/rw-ordermobile.p" CRC "?"
 
-ADD FIELD "Brand" OF "OrderMobile" AS character 
-  FORMAT "x(8)"
-  INITIAL ""
-  LABEL "Brand"
-  POSITION 2
-  MAX-WIDTH 16
-  COLUMN-LABEL "Brand"
-  HELP "Brands"
-  ORDER 10
-
 ADD FIELD "OrderID" OF "OrderMobile" AS integer 
   DESCRIPTION "Order number"
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "OrderID"
-  POSITION 3
+  POSITION 2
   MAX-WIDTH 4
   COLUMN-LABEL "OrderID"
   HELP "OrderID"
-  ORDER 20
+  ORDER 10
 
 ADD FIELD "OrderProductID" OF "OrderMobile" AS integer 
   DESCRIPTION "Order Product ID"
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "ProductID"
-  POSITION 4
+  POSITION 3
   MAX-WIDTH 4
   COLUMN-LABEL "ProductID"
   HELP "ProductID"
-  ORDER 30
+  ORDER 20
 
 ADD FIELD "MsSeq" OF "OrderMobile" AS integer 
   DESCRIPTION "Subscription ID"
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "SubscrID"
-  POSITION 5
+  POSITION 4
   MAX-WIDTH 4
   COLUMN-LABEL "SubscrID"
-  ORDER 40
+  ORDER 30
 
 ADD FIELD "ICC" OF "OrderMobile" AS character 
   DESCRIPTION "SIM card serial no."
   FORMAT "x(20)"
   INITIAL ""
   LABEL "SIM Serial"
-  POSITION 6
+  POSITION 5
   MAX-WIDTH 40
   COLUMN-LABEL "ICC"
   HELP "SIM card serial no."
-  ORDER 50
+  ORDER 40
 
 ADD FIELD "Product" OF "OrderMobile" AS character 
   DESCRIPTION "Product"
   FORMAT "x(16)"
   INITIAL ""
   LABEL "Product"
-  POSITION 7
+  POSITION 6
   MAX-WIDTH 16
   COLUMN-LABEL "Product"
   HELP "Product"
-  ORDER 60
+  ORDER 50
 
 ADD FIELD "NumberType" OF "OrderMobile" AS character 
   DESCRIPTION "NumberType"
   FORMAT "x(8)"
   INITIAL ""
   LABEL "NumberType"
-  POSITION 8
+  POSITION 7
   MAX-WIDTH 16
   COLUMN-LABEL "NumberType"
   HELP "NumberType"
-  ORDER 70
+  ORDER 60
 
 ADD FIELD "CurrOper" OF "OrderMobile" AS character 
   DESCRIPTION "Current Operator"
   FORMAT "x(16)"
   INITIAL ""
   LABEL "Current Operator"
-  POSITION 9
+  POSITION 8
   MAX-WIDTH 32
   COLUMN-LABEL "Current Operator"
   HELP "Current Operator"
-  ORDER 80
+  ORDER 70
 
 ADD FIELD "StatusCode" OF "OrderMobile" AS character 
   DESCRIPTION "Subscription Status Code"
   FORMAT "x(8)"
   INITIAL ""
   LABEL "Status"
-  POSITION 10
+  POSITION 9
   MAX-WIDTH 16
   COLUMN-LABEL "Status"
   HELP "Status Code"
-  ORDER 90
+  ORDER 80
 
 ADD FIELD "CreatedTS" OF "OrderMobile" AS decimal 
   DESCRIPTION "Creation Time"
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "Creation Time"
-  POSITION 11
+  POSITION 10
   MAX-WIDTH 20
   COLUMN-LABEL "Creation Time"
   HELP "Creation Time"
   DECIMALS 5
-  ORDER 100
+  ORDER 90
 
 ADD FIELD "UpdatedTS" OF "OrderMobile" AS decimal 
   DESCRIPTION "Update Stamp"
   FORMAT "99999999.99999"
   INITIAL ""
   LABEL "Updation Time"
-  POSITION 12
+  POSITION 11
   MAX-WIDTH 17
   COLUMN-LABEL "Updation Time"
   HELP "Update Stamp"
   DECIMALS 5
-  ORDER 110
+  ORDER 100
 
 ADD FIELD "CLI" OF "OrderMobile" AS character 
   DESCRIPTION "Mobile Number"
   FORMAT "x(12)"
   INITIAL ""
   LABEL "MSISDN"
-  POSITION 13
+  POSITION 12
   MAX-WIDTH 24
   COLUMN-LABEL "MSISDN"
   HELP "Mobile Number"
-  ORDER 120
+  ORDER 110
 
 ADD FIELD "ActivationTS" OF "OrderMobile" AS decimal
   DESCRIPTION "Activated"
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "Activated"
-  POSITION 14
+  POSITION 13
   MAX-WIDTH 20
   HELP "Time when subscription was activated in TMS (HLR response OK)"
   DECIMALS 5
-  ORDER 130  
+  ORDER 120  
   
 ADD FIELD "RequestedPortingDate" OF "OrderMobile" AS date
   DESCRIPTION "PortingDate"
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "PortingDate"
-  POSITION 15
+  POSITION 14
   MAX-WIDTH 4
   COLUMN-LABEL "PortingDate"
   HELP "Porting date"
-  ORDER 140
+  ORDER 130
   
 ADD FIELD "PortingTime" OF "OrderMobile" AS decimal
   DESCRIPTION "PortingTime"
   FORMAT "99.99"
   INITIAL "0"
   LABEL "PortingTime"
-  POSITION 16
+  POSITION 15
   MAX-WIDTH 17
   COLUMN-LABEL "PortingTime"
   HELP "PortingTime"
   DECIMALS 2
-  ORDER 150
+  ORDER 140
   
 ADD FIELD "MNPStatus" OF "OrderMobile" AS integer
   FORMAT "99"
   INITIAL "0"
   LABEL "MNPStatus"
-  POSITION 17
+  POSITION 16
   MAX-WIDTH 4
   COLUMN-LABEL "MNPStatus"
   HELP "Status of MNP"
-  ORDER 160  
+  ORDER 150  
   
 ADD FIELD "OldIcc" OF "OrderMobile" AS character
   FORMAT "x(20)"
   INITIAL ""
   LABEL "Old ICC"
-  POSITION 18
+  POSITION 17
   MAX-WIDTH 40
   COLUMN-LABEL "Old ICC"
-  ORDER 170
+  ORDER 160
   
 ADD FIELD "OldPayType" OF "OrderMobile" AS logical
   FORMAT "PrePaid/PostPaid"
   INITIAL "no"
   LABEL "Old Pay Type"
-  POSITION 19
+  POSITION 18
   MAX-WIDTH 1
   COLUMN-LABEL "Old PayType"
   HELP "Old pay type"
-  ORDER 180
+  ORDER 170
   
 ADD FIELD "PayType" OF "OrderMobile" AS logical
   DESCRIPTION "PayType"
   FORMAT "PrePaid/PostPaid"
   INITIAL "no"
   LABEL "PayType"
-  POSITION 20
+  POSITION 19
   MAX-WIDTH 1
   COLUMN-LABEL "PayType"
   HELP "PayType"
-  ORDER 190  
-
-ADD INDEX "OrderID" ON "OrderMobile" 
-  AREA "Dyn_Index_1"
-  UNIQUE
-  PRIMARY
-  DESCRIPTION "OrderID"
-  INDEX-FIELD "OrderID" ASCENDING   
+  ORDER 180  
   
 ADD INDEX "OrderProductID" ON "OrderMobile" 
   AREA "Dyn_Index_1"
-  DESCRIPTION "ProductID"
-  INDEX-FIELD "OrderID" ASCENDING 
+  UNIQUE
+  PRIMARY
+  DESCRIPTION "OrderProductID"
+  INDEX-FIELD "OrderID" ASCENDING   
   INDEX-FIELD "OrderProductID" ASCENDING 
 
 ADD INDEX "MSSeq" ON "OrderMobile" 
