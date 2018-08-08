@@ -23,7 +23,7 @@ ADD FIELD "OrderProductID" OF "OrderTopUp" AS integer
   DESCRIPTION "OrderProduct ID"
   FORMAT "->>>>>>9"
   POSITION 9
-  INITIAL "0"
+  INITIAL "0"  
   LABEL "Product ID"
   COLUMN-LABEL "Product ID"
   ORDER 60
@@ -43,7 +43,13 @@ ADD INDEX "MsSeq" ON "OrderTopUp"
   AREA "Dyn_Index_1"
   DESCRIPTION "SubscriptionID"
   INDEX-FIELD "MsSeq" ASCENDING   
-
+  
+ADD INDEX "OrderProductID" ON "OrderTopUp" 
+  AREA "Dyn_Index_1"
+  DESCRIPTION "OrderProductID"
+  INDEX-FIELD "OrderID" ASCENDING
+  INDEX-FIELD "OrderProductID" ASCENDING  
+    
 .
 PSC
 cpstream=ISO8859-1

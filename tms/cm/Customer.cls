@@ -477,7 +477,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
             ioCustAcctObject = CAST(ttCustAccts.custacctobj,cm.CustomerAccount):mResult().            
         END.      
         
-        ioCustObj:Add("cust-num" , THIS-OBJECT:custNum).
+        ioCustObj:Add("custnum" , THIS-OBJECT:custNum).
         IF TEMP-TABLE ttCustAccts:HAS-RECORDS THEN 
             ioCustObj:Add("customer-accounts" , ioCustAcctObject).
         
