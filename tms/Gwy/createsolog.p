@@ -21,7 +21,8 @@ DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO.
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcDSSId            AS CHARACTER NO-UNDO.
  
-DEFINE VARIABLE loProCommand       AS CLASS Gwy.ProCommand NO-UNDO.
+DEFINE VARIABLE loProCommand       AS CLASS Gwy.ProCommand  NO-UNDO.
+DEFINE VARIABLE llSAPC             AS LOGICAL INITIAL FALSE NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 DEF BUFFER bDSSMobSub  FOR MobSub.
@@ -392,18 +393,19 @@ PROCEDURE pSolog:
 
       /* SAPC-56 redirecting new SAPC customers to new logic */
       IF Customer.AccGrp = 2
-      THEN
-      CASE MsRequest.ReqType:
-         WHEN {&REQTYPE_DSS}
-         THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
-              THEN loProCommand = NEW Gwy.ProCommandDSS(MsRequest.MsRequest). 
-         WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
-         THEN loProCommand = NEW Gwy.ProCommandSubscription(MsRequest.MsRequest). 
-      END CASE.
+      THEN DO ON ERROR UNDO, THROW:
+         CASE MsRequest.ReqType:
+            WHEN {&REQTYPE_DSS}
+            THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
+                 THEN loProCommand = NEW Gwy.ProCommandDSS(MsRequest.MsRequest). 
+            WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
+            THEN loProCommand = NEW Gwy.ProCommandSubscription(MsRequest.MsRequest). 
+         END CASE.
       
-      IF VALID-OBJECT(loProCommand)
-      THEN DO TRANSACTION ON ERROR UNDO, THROW:
-         loProCommand:mStoreProCommand().
+         IF VALID-OBJECT(loProCommand)
+         THEN loProCommand:mStoreProCommand().
+
+         llSAPC = TRUE.
 
          CATCH loAppError AS Progress.Lang.AppError:
             fReqError(loAppError:ReturnValue).
@@ -416,8 +418,8 @@ PROCEDURE pSolog:
          END FINALLY.
       END. 
       
-      ELSE 
-      DO: /* Existing logic for Packet Logic */
+      IF NOT llSAPC
+      THEN DO: /* Existing logic for Packet Logic */
          CREATE Solog.
          ASSIGN
             Solog.Solog = NEXT-VALUE(Solog).

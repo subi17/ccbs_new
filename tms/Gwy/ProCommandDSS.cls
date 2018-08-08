@@ -43,9 +43,7 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
                acProCommandtargetURL = SUBSTITUTE("/groups/&1", MsRequest.CustNum)
                lcmsisdns   = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDNS="))
                lcmsisdns   = REPLACE(lcmsisdns,"MSISDNS=","")
-               lcmsisdns   = REPLACE(lcmsisdns,";","|")
-               lcDataLimit = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"LIMIT_UNSHAPED="))
-               lcDataLimit = REPLACE(lcDataLimit,"LIMIT_UNSHAPED=","").
+               lcmsisdns   = REPLACE(lcmsisdns,";","|").
 
             loJson:Add("type", "POST"). /* Type of user: POST */
             loJson:Add("priority", "1000"). /* For Base tariff = 1000 */
@@ -67,15 +65,15 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
 
             loJson:Add("action", (IF MSrequest.ReqCparam1 = "ADD"
                                   THEN "add"  /* Hard-coded when adding to DSS */
-                                  ELSE "remove") /* Hard-coded when removing from DSS */
+                                  ELSE "remove")). /* Hard-coded when removing from DSS */
             loJson:Add("msisdn", lcmsisdns).
          END.
          WHEN "DELETE" THEN
             ASSIGN
-               loProCommand:acProCommandType      = "TERMINATE_DSS_GROUP"
-               loProCommand:acProCommandVerb      = "DELETE"
-               loProCommand:acProCommandtargetURL = SUBSTITUTE("/groups/&1",
-                                                               MsRequest.CustNum).
+               acProCommandType      = "TERMINATE_DSS_GROUP"
+               acProCommandVerb      = "DELETE"
+               acProCommandtargetURL = SUBSTITUTE("/groups/&1",
+                                                  MsRequest.CustNum).
          /* Currently there is no request for this...
          WHEN "UPDATEDATALIMIT"
          THEN DO:
@@ -84,7 +82,9 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
                acProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
                acProCommandVerb      = "POST"
                acProCommandtargetURL = SUBSTITUTE("/groups/&1/set-accumulated-volume",
-                                                  MsRequest.CustNum).
+                                                  MsRequest.CustNum)
+               lcDataLimit = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"LIMIT_UNSHAPED="))
+               lcDataLimit = REPLACE(lcDataLimit,"LIMIT_UNSHAPED=","").
 
             loJson:Add("offeringName", MsRequest.ReqCParam3). /* DSS/DSS2/DSS4 */
             loJson:Add("roamingLikeAtHome", lcDataLimit).

@@ -1,6 +1,6 @@
  
  /*------------------------------------------------------------------------
-    File        : ProCommandDSS
+    File        : ProCommandSubscription
     Purpose     : 
     Syntax      : 
     Description : 
@@ -17,14 +17,14 @@ USING Gwy.ProCommandOrderEnum.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand: 
+CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand: 
 
    DEFINE PRIVATE VARIABLE aoOrderEnum AS CLASS ProCommandOrderEnum NO-UNDO.
    
    DEFINE PRIVATE BUFFER Order FOR Order.
    DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer. 
 
-   CONSTRUCTOR ProCommandDSS
+   CONSTRUCTOR ProCommandSubscription
       ( iiMsRequest AS INTEGER ):
 
       SUPER(iiMsRequest).
@@ -40,7 +40,7 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
          THEN aoOrderEnum = ProCommandOrderEnum:PORTABILITY.
          OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandSubscription cannot " +
                                                        "handle ReqType &1",
-                                                       MsRequest.ReqType).
+                                                       MsRequest.ReqType)).
       END CASE.
 
       IF MsRequest.ReqIParam5 > 0
@@ -102,7 +102,7 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
-      loJsonObject:Add("orderId", icName).
+      loJsonObject:Add("orderId", STRING(aiProCommandId)).
       loJsonObject:Add("orderType", IF aoOrderEnum EQ ProCommandOrderEnum:TERMINATION
                                     THEN "Disconnection"
                                     ELSE "InOrder").
@@ -123,10 +123,20 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
 
       loJsonObject = NEW JsonObject().
 
-      /* Mitä tänne???
-      loJsonObject:Add("clientID", OrderCustomer.CustId).
-      loJsonObject:Add("Type", OrderCustomer.CustIdType).
-      */
+      /* Add stuff... */
+
+      RETURN loJsonObject.
+
+   END METHOD.
+
+   METHOD PRIVATE JsonObject mServicesObject():
+
+      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
+      DEFINE VARIABLE loContact    AS CLASS JsonObject NO-UNDO.
+
+      loJsonObject = NEW JsonObject().
+
+      /* Add stuff... */
 
       RETURN loJsonObject.
 
@@ -139,7 +149,7 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("clientID", OrderCustomer.CustId).
       loJsonObject:Add("Type", OrderCustomer.CustIdType).
-      loJsonObject:Add(mContactObject()).
+      loJsonObject:Add("Contact", mContactObject()).
   
       RETURN loJsonObject.
 

@@ -29,8 +29,10 @@ CLASS Gwy.ProCommand:
    
    DEFINE PUBLIC VARIABLE aoCommandLine         AS CLASS JsonConstruct NO-UNDO.
    
-   DEFINE PROTECTED BUFFER ProCommand FOR ProCommand.
    DEFINE PROTECTED BUFFER MsRequest  FOR MsRequest.
+
+   CONSTRUCTOR PUBLIC ProCommand():
+   END CONSTRUCTOR.
 
    CONSTRUCTOR PUBLIC ProCommand
       ( iiMsRequest AS INTEGER ):
@@ -68,8 +70,10 @@ CLASS Gwy.ProCommand:
 
    METHOD PUBLIC VOID mStoreProCommand():
 
+      DEFINE BUFFER ProCommand FOR ProCommand.
+
       DEFINE VARIABLE lmpJsonData AS MEMPTR NO-UNDO.
-      
+
       IF VALID-OBJECT(aoCommandLine)
       THEN DO:
          IF NOT aoCommandLine:Write(lmpJsonData, YES)
