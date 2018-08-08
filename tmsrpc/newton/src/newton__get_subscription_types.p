@@ -45,11 +45,12 @@ DEFINE VARIABLE liDestupspeconversion  AS INT64 NO-UNDO.
 DEFINE VARIABLE lcHostname             AS CHAR  NO-UNDO.
 DEFINE VARIABLE llUseApi               AS LOGI  NO-UNDO INIT TRUE.
 DEFINE VARIABLE lcMergeTargets         AS CHAR  NO-UNDO.
-
-DEFINE TEMP-TABLE ttSpeed
-          FIELD Download      AS INT64
-          FIELD Upload        AS INT64
-          INDEX ix IS UNIQUE PRIMARY Download Upload ASCENDING.
+DEFINE VARIABLE lcFixedLineType        AS CHAR  NO-UNDO.
+ 
+DEFINE TEMP-TABLE ttSpeed NO-UNDO
+   FIELD Download AS INT64
+   FIELD Upload   AS INT64
+   INDEX ix IS UNIQUE PRIMARY Download Upload ASCENDING.
 
 DEF BUFFER bCLIType        FOR CLIType.
 DEF BUFFER oldCLIType      FOR CLIType.
@@ -211,9 +212,10 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
 
    DEFINE VARIABLE lcArray  AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liInt    AS INTEGER   NO-UNDO.
-  
-   DEFINE BUFFER lbCLIType FOR CLIType.
-   DEFINE BUFFER lbMobSub  FOR MobSub.
+ 
+   DEFINE BUFFER libCLIType FOR CLIType.
+   DEFINE BUFFER lbCLIType  FOR CLIType.
+   DEFINE BUFFER lbMobSub   FOR MobSub.
 
    FIND FIRST lbMobSub NO-LOCK WHERE
               lbMobSub.MsSeq EQ piMsSeq NO-ERROR.
@@ -224,7 +226,12 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
                  lbCLIType.Brand   EQ Syst.Var:gcBrand AND
                  lbCLIType.CLIType EQ lbMobSub.CLIType NO-ERROR.
 
+      FIND FIRST libCLIType NO-LOCK WHERE
+                 libCLIType.Brand   EQ Syst.Var:gcBrand AND
+                 libCLIType.CLIType EQ icCLIType        NO-ERROR.
+
       IF AVAIL lbCLIType                 AND
+         AVAIL libCLIType                AND
          fIsConvergenceTariff(icCLIType) THEN DO:
 
          IF ((lbCLIType.TariffType  EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}   OR
@@ -232,6 +239,14 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
                lbMobSub.FixedNumber NE ""                              AND
                lbMobSub.MsStatus    EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}))      AND
             lcMergeTargets          EQ "")                                  THEN
+            RETURN FALSE.
+
+         IF lbCLIType.TariffType    EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND
+            lbCLIType.FixedLineType NE libCLIType.FixedLineType        THEN
+            RETURN FALSE.
+         ELSE IF lbCLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+                 lcMergeTargets       GT ""                               AND
+          LOOKUP(STRING(libCLIType.FixedLineType),lcFixedLineType) EQ 0   THEN
             RETURN FALSE.
 
       END.
@@ -333,8 +348,15 @@ FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
            bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
              
              IF bMobSub.CLI      EQ bMobSub.FixedNumber           AND
-                bMobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+                bMobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
                 lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
+
+                IF lcFixedLineType EQ "" THEN
+                   lcFixedLineType = STRING(bCliType2.FixedLineType).
+                ELSE IF LOOKUP(STRING(bCliType2.FixedLineType),lcFixedLineType) EQ 0 THEN
+                   lcFixedLineType = lcFixedLineType + "," + STRING(bCliType2.FixedLineType).
+
+             END.
         END.         
     END.
     
