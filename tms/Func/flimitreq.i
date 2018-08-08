@@ -21,8 +21,6 @@ IF llDoEvent THEN DO:
                                     
 END.
 
-DEF BUFFER bLimitCustomer FOR Customer.
-
 FUNCTION fLimitRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,    /* subscription     */
     INPUT  iiCustnum      AS INT,    /* customer         */
@@ -36,12 +34,16 @@ FUNCTION fLimitRequest RETURNS INTEGER
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
+
+   DEF BUFFER MsRequest FOR MsRequest.
    
    /* Check ongoing limit requests */
    FIND FIRST MsRequest WHERE
       MsRequest.Brand = Syst.Var:gcBrand AND
       MsRequest.Reqtype = 40 AND
       MsRequest.CustNum = iiCustnum AND
+      MsRequest.ReqIParam1 = iiLimitType AND
+      MsRequest.ReqIParam2 = iiTMRuleSeq AND
       LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3") >  0 
    NO-LOCK NO-ERROR.
 
@@ -254,6 +256,52 @@ FUNCTION fCreateLimitHistory RETURNS LOGICAL
 
       RELEASE bufLimit.
    END.
+END.
+
+FUNCTION fSetSpecialTTFLimit RETURNS INT (
+   INPUT iiCustnum AS INT,
+   INPUT icCLiType AS CHAR):
+   
+   DEF VAR ldeLimits AS DEC NO-UNDO EXTENT 2.
+   DEF VAR liLimitID AS INT NO-UNDO. 
+   DEF VAR lcError AS CHAR NO-UNDO. 
+   DEF VAR liReqID AS INT NO-UNDO. 
+
+   DEF BUFFER Limit FOR Limit.
+
+   IF LOOKUP(icCLiType,{&TTF_SPECIAL_LIMIT_CLITYPES}) EQ 0
+      THEN RETURN 0.
+         
+   /* Only update if TTF has default limits */
+   DO liLimitID = 1 to 2:
+      FIND FIRST limit NO-LOCK where
+         limit.custnum = iicustnum and
+         limit.limittype  = {&LIMIT_TYPE_TMRLIMIT} and
+         limit.limitid = liLimitID and
+         limit.tmruleseq = 3 and /* Total Traffic Fraud */
+         limit.defvalue = true and
+         limit.todate > today no-error.
+      IF NOT AVAIL limit THEN RETURN 0.
+   end.
+   
+   ASSIGN
+      ldeLimits[1] = 120
+      ldeLimits[2] = 150.
+
+   liReqID = fLimitRequest(
+     ?,           /* msseq */
+     iicustnum,   /* custum */
+     Func.Common:mMakeTS(),   /* act.stamp */
+     "update",    /* create, update */
+     ldeLimits,  /* new limit values */
+     FALSE,       /* default value */
+     3, /* tmruleseq */
+     {&LIMIT_TYPE_TMRLIMIT}, /* limit type */
+     "5",         /* source of request  */
+     OUTPUT lcError).
+
+   RETURN liReqID.
+
 END.
 
 &ENDIF
