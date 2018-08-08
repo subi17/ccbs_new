@@ -19,7 +19,8 @@ DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 DEF VAR lcDependentErrMsg          AS CHAR NO-UNDO. 
 DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO. 
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcDSSId AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcDSSId AS CHARACTER NO-UNDO.
+DEF VAR lcResult                   AS CHAR NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 DEF BUFFER bDSSMobSub  FOR MobSub.
@@ -44,9 +45,33 @@ IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} THEN DO:
          RETURN.
       END.
    
-      IF (MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} OR
-          MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
-         MobSub.IMSI EQ "" THEN DO:
+      IF MobSub.IMSI EQ "" THEN DO:
+
+         IF (fIsFixedOnly(Mobsub.CLIType) AND
+             CAN-FIND(FIRST bActionLog NO-LOCK  WHERE
+                            bActionLog.Brand     EQ Syst.Var:gcBrand                     AND
+                            bActionLog.ActionID  EQ {&MERGE2P3P}                         AND
+                            bActionLog.TableName EQ "MobSub"                             AND
+                    ENTRY(1,bActionLog.ActionChar,CHR(255)) EQ STRING(MsRequest.MsSeq))) THEN .
+         ELSE DO:
+
+            liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
+            IF liOrderId EQ 0
+               THEN lcResult = "OrderID not found".
+            /* This call makes synchronous termination request to MuleDB */
+            ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+
+            IF lcResult > "" THEN DO:
+               Func.Common:mWriteMemo("MobSub",
+                           STRING(Mobsub.MsSeq),
+                           Mobsub.Custnum,
+                           "La baja del sevicio fijo ha fallado: ", /* Fixed number termination failed" */
+                           lcResult).
+               fReqError("La baja del sevicio fijo ha fallado: " + lcResult).
+               RETURN.
+            END.
+         END.
+            
          fReqStatus(6,"").
          RETURN.
       END.
@@ -189,7 +214,6 @@ PROCEDURE pSolog:
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
    DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
    DEF VAR liError       AS INT NO-UNDO.
-   DEF VAR lcResult      AS CHAR NO-UNDO.
    DEF VAR liOrderId     AS INT  NO-UNDO.
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
