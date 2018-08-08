@@ -966,7 +966,48 @@ PROCEDURE pUpdateSubscription:
                                         TRUE).                        
       END.
    END.
-   
+   ELSE IF fCLITypeIsMainLine(CLIType.CliType) THEN DO:
+
+      fUpdateDSSAccount(MobSub.MsSeq,
+                        {&REQUEST_SOURCE_STC},
+                        MsRequest.MsRequest,
+                        Func.Common:mMakeTS(),
+                        "DELETE").
+
+      /* If old clitype is mainline then reset all associated extralines multisim values */
+      /* If old clitype is extraline then reset its multisim values                      */
+      IF fCLITypeIsMainLine(bOldType.CliType) THEN DO:
+
+         FOR EACH lbELMobSub NO-LOCK WHERE
+                  lbELMobSub.Brand        EQ Syst.Var:gcBrand AND
+                  lbELMobSub.MultiSimId   EQ MobSub.MsSeq     AND
+                  lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
+            fResetExtralineSubscription(lbELMobSub.MsSeq,
+                                        lbELMobSub.CLIType,
+                                        0,
+                                        0,
+                                        FALSE).
+         END.
+
+      END.
+      ELSE IF fCLITypeIsExtraLine(bOldType.CliType) THEN
+         fResetExtralineSubscription(MobSub.MsSeq,
+                                     CLIType.CLIType,
+                                     0,
+                                     0,
+                                     FALSE).
+
+      /* Check for available extralines of the customer and     */
+      /* then reassign them to new mainline and create discount */
+      IF CAN-FIND(FIRST ttExtraLines NO-LOCK) THEN
+         IF fReassigningExtralines(MobSub.MsSeq,
+                                   {&REQUEST_SOURCE_STC},
+                                   MsRequest.MsRequest) THEN
+            fCheckAndAssignOrphanExtraline(MobSub.MsSeq,
+                                           MobSub.CustNum,
+                                           MobSub.CLIType).
+   END.
+
    /* ADDLINE-324 Additional Line Discounts
       CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
       then CLOSE the all addline discounts to (STC Date - 1) */
@@ -1052,7 +1093,6 @@ PROCEDURE pFinalize:
    DEF VAR ldBegStamp            AS DEC  NO-UNDO.
    DEF VAR ldeNow                AS DEC  NO-UNDO.
    DEF VAR lcResult              AS CHAR NO-UNDO.
-   DEF VAR llgUpdateDSSAccount   AS LOG  NO-UNDO INITIAL TRUE.
    DEF VAR lcError               AS CHAR NO-UNDO.
    DEF VAR lcMultiLineSubsType   AS CHAR NO-UNDO.
    DEF VAR lcFusionSubsType      AS CHAR NO-UNDO.
@@ -1143,8 +1183,11 @@ PROCEDURE pFinalize:
                  OUTPUT lcCharValue).
 
    /* default counter limits */
-   IF MobSub.PayType = FALSE THEN 
+   IF MobSub.PayType = FALSE THEN DO:
       fTMRLimit2Subscription(MobSub.MsSeq).
+      fSetSpecialTTFLimit(MobSub.Custnum,
+                          MobSub.CLIType).
+   END.
 
    /* commission termination */
    IF llOldPayType NE MobSub.PayType THEN 
@@ -1315,6 +1358,12 @@ PROCEDURE pFinalize:
       END.
    END.
 
+   /* DSS related activity */
+   RUN pUpdateDSSAccount(INPUT MsRequest.MsRequest,
+                         INPUT MsRequest.ActStamp,
+                         INPUT ldtActDate,
+                         INPUT MsRequest.UserCode).
+
    IF Customer.Language NE 1 AND
       bOldType.PayType NE CLIType.PayType THEN DO:
 
@@ -1421,65 +1470,6 @@ PROCEDURE pFinalize:
               SUBST("Wrong order status: &1",Order.statusCode)).
       END.
    END.
-
-   /* If STC Request is Mainline, then its associate extralines has to be allinged */
-   IF (NOT fCLITypeIsMainLine(CLIType.CliType)  AND
-       NOT fCLITypeIsExtraLine(CLIType.CliType))   OR
-      fCLITypeIsMainLine(CLIType.CliType)          THEN DO:
-
-      fUpdateDSSAccount(MobSub.MsSeq,
-                        {&REQUEST_SOURCE_STC},
-                        MsRequest.MsRequest,
-                        Func.Common:mMakeTS(),
-                        "DELETE").
-
-      /* If old clitype is mainline then reset all associated extralines multisim values */
-      /* If old clitype is extraline then reset its multisim values                      */
-      IF fCLITypeIsMainLine(bOldType.CliType) THEN DO:
-
-         FOR EACH lbELMobSub NO-LOCK WHERE
-                  lbELMobSub.Brand        EQ Syst.Var:gcBrand AND
-                  lbELMobSub.MultiSimId   EQ MobSub.MsSeq     AND
-                  lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
-            fResetExtralineSubscription(lbELMobSub.MsSeq,
-                                        lbELMobSub.CLIType,
-                                        0,
-                                        0,
-                                        FALSE).
-         END.
-
-      END.
-      ELSE IF fCLITypeIsExtraLine(bOldType.CliType) THEN
-         fResetExtralineSubscription(MobSub.MsSeq,
-                                     CLIType.CLIType,
-                                     0,
-                                     0,
-                                     FALSE).
-
-      /* Check for available extralines of the customer and     */
-      /* then reassign them to new mainline and create discount */
-      IF fCLITypeIsMainLine(CLIType.CliType) THEN DO:
-
-         IF CAN-FIND(FIRST ttExtraLines NO-LOCK) THEN
-            llgUpdateDSSAccount = fReassigningExtralines(MobSub.MsSeq,
-                                                         {&REQUEST_SOURCE_STC},
-                                                         MsRequest.MsRequest).
-
-         IF llgUpdateDSSAccount THEN
-            fCheckAndAssignOrphanExtraline(MobSub.MsSeq,
-                                           MobSub.CustNum,
-                                           MobSub.CLIType).
-
-      END. /* IF fCLITypeIsMainLine(CLIType.CliType) */
-
-   END.
-
-   /* DSS related activity */
-   IF llgUpdateDSSAccount THEN
-      RUN pUpdateDSSAccount(INPUT MsRequest.MsRequest,
-                            INPUT MsRequest.ActStamp,
-                            INPUT ldtActDate,
-                            INPUT MsRequest.UserCode).
 
    /* request handled succesfully */
    fReqStatus(2,"").
