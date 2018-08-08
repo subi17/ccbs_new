@@ -1,0 +1,11 @@
+ADD FIELD "AccountID" OF "Order" AS INTEGER
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  POSITION 107
+  MAX-WIDTH 4
+  COLUMN-LABEL "AccountID"
+  ORDER 1180
+
+  
+  
