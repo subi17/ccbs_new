@@ -21,6 +21,7 @@ DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO.
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcDSSId AS CHARACTER NO-UNDO.
 DEF VAR lcResult                   AS CHAR NO-UNDO.
+DEF VAR liOrderId                  AS INT  NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 DEF BUFFER bDSSMobSub  FOR MobSub.
@@ -215,7 +216,6 @@ PROCEDURE pSolog:
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
    DEF VAR ldCurrBal     AS DECIMAL NO-UNDO.
    DEF VAR liError       AS INT NO-UNDO.
-   DEF VAR liOrderId     AS INT  NO-UNDO.
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
