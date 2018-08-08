@@ -94,7 +94,7 @@ FUNCTION fValidateMSISDN RETURNS CHARACTER():
                                "MSISDN is missing").
                                
         IF lgHoldOrder THEN 
-            RETURN.            
+            RETURN "".            
     END. /*IF lcCLI = ""*/
     
     ASSIGN 
@@ -141,6 +141,26 @@ FUNCTION fValidateSubscriptionType RETURNS CHARACTER ():
     RETURN "".
     
 END FUNCTION. 
+
+FUNCTION fGetMNPTS RETURNS DECIMAL():
+    
+    DEFINE VARIABLE ldeMNPSwitchTS AS DECIMAL NO-UNDO.
+    
+    FOR EACH MNPProcess NO-LOCK WHERE
+             MNPProcess.OrderId = bfOrder.OrderID AND
+             MNPProcess.StatusCode < 6 AND
+             MNPProcess.StatusCode NE 4 AND
+             MNPProcess.StatusCode NE 0,
+        FIRST MNPSub NO-LOCK WHERE
+              MNPSub.MNPSeq = MNPProcess.MNPSeq:
+        /* 6 ported, 7 canceled, 4 rejected, 0 new */
+        ASSIGN 
+            ldeMNPSwitchTS = MNPSub.PortingTime.      
+    END.
+        
+    RETURN ldeMNPSwitchTS.   
+    
+END FUNCTION.    
 
 /* ***************************  Main Block  *************************** */
 
@@ -599,25 +619,7 @@ PROCEDURE pGetTimeStamp :
     
 END PROCEDURE.   
 
-FUNCTION fGetMNPTS RETURNS DECIMAL():
-    
-    DEFINE VARIABLE ldeMNPSwitchTS AS DECIMAL NO-UNDO.
-    
-    FOR EACH MNPProcess NO-LOCK WHERE
-             MNPProcess.OrderId = bfOrder.OrderID AND
-             MNPProcess.StatusCode < 6 AND
-             MNPProcess.StatusCode NE 4 AND
-             MNPProcess.StatusCode NE 0,
-             FIRST MNPSub NO-LOCK WHERE
-             MNPSub.MNPSeq = MNPProcess.MNPSeq:
-            /* 6 ported, 7 canceled, 4 rejected, 0 new */
-        ASSIGN 
-            ldeMNPSwitchTS = MNPSub.PortingTime.      
-    END.
-        
-    RETURN ldeMNPSwitchTS.   
-    
-END PROCEDURE.    
+
 
 PROCEDURE pCreateOrderMobile:
     
