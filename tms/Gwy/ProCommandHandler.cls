@@ -312,7 +312,7 @@ CLASS Gwy.ProCommandHandler FINAL:
             WHEN "PUT"
             THEN aoRESTClient:mPUT(loReqJsonData).    /* loReqJsonData EQ ? is supported. */
             WHEN "DELETE"
-            THEN aoRESTClient:mDELETE(loReqJsonData). /* loReqJsonData EQ ? is supported. */
+            THEN aoRESTClient:mDELETE().
             WHEN "GET"
             THEN aoRESTClient:mGET().
          END.
