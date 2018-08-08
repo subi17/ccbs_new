@@ -274,9 +274,9 @@ CLASS web.cls.ProCommandNotify INHERITS profcgi.REST.DefaultWebHandler:
 
                IF Func.MsReqFunc:mAllProCommandOK(MsRequest.MsRequest,
                                                   ROWID(ProCommand))
-               ASSIGN
-                  MsRequest.ReqStatus         = {&REQUEST_STATUS_HLR_DONE}
-                  MsRequest.UpdateStamp       = Func.Common:mMakeTS().
+               THEN ASSIGN
+                       MsRequest.ReqStatus         = {&REQUEST_STATUS_HLR_DONE}
+                       MsRequest.UpdateStamp       = Func.Common:mMakeTS().
             END.
          END.
       END.
