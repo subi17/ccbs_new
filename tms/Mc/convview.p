@@ -54,7 +54,7 @@ FORM
     "Fixed status Time.:" lcFixedTime FORMAT "X(24)" 
     SKIP
     "Updated...........:" lcUpdateTS FORMAT "X(24)" 
-    SKIP(7)
+    SKIP(6)
  
 
 WITH OVERLAY ROW 1 WIDTH 80 centered
