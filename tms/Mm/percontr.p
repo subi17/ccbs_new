@@ -1003,8 +1003,10 @@ PROCEDURE pContractActivation:
    lcDelayedPerContList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
    IF LOOKUP(lcDCEvent, lcDelayedPerContList) > 0 THEN DO:
       liDelayedDays = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
-      IF ldtFromDate < (ldtActDate + liDelayedDays) THEN 
-         ldtFromDate = (ldtActDate + liDelayedDays). 
+      IF ldtFromDate < (ldtActDate + liDelayedDays) THEN
+         ASSIGN 
+            ldtFromDate  = (ldtActDate + liDelayedDays)
+            ldtContrDate = (ldtActDate + liDelayedDays).          
    END.   
 
    ldBegStamp = Func.Common:mMake2DT(ldtFromDate,
