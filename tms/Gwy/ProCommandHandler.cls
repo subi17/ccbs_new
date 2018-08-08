@@ -33,7 +33,7 @@ CLASS Gwy.ProCommandHandler FINAL:
 
    DEFINE PRIVATE PROPERTY ValidRESTMethods AS CHARACTER NO-UNDO
       GET:
-         RETURN "POST,GET,PATCH,PUT".
+         RETURN "POST,GET,PATCH,PUT,DELETE".
       END GET.
 
    DEFINE PRIVATE PROPERTY ValidTargets     AS CHARACTER NO-UNDO
@@ -306,11 +306,13 @@ CLASS Gwy.ProCommandHandler FINAL:
 
          CASE ProCommand.ProCommandVerb:
             WHEN "POST"
-            THEN aoRESTClient:mPOST(loReqJsonData).  /* loReqJsonData EQ ? is supported. */
+            THEN aoRESTClient:mPOST(loReqJsonData).   /* loReqJsonData EQ ? is supported. */
             WHEN "PATCH"
-            THEN aoRESTClient:mPATCH(loReqJsonData). /* loReqJsonData EQ ? is supported. */
+            THEN aoRESTClient:mPATCH(loReqJsonData).  /* loReqJsonData EQ ? is supported. */
             WHEN "PUT"
-            THEN aoRESTClient:mPUT(loReqJsonData).   /* loReqJsonData EQ ? is supported. */
+            THEN aoRESTClient:mPUT(loReqJsonData).    /* loReqJsonData EQ ? is supported. */
+            WHEN "DELETE"
+            THEN aoRESTClient:mDELETE(loReqJsonData). /* loReqJsonData EQ ? is supported. */
             WHEN "GET"
             THEN aoRESTClient:mGET().
          END.

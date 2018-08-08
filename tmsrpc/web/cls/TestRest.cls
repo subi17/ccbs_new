@@ -1,6 +1,6 @@
  
 /*------------------------------------------------------------------------
-   File        : DefaultWebHandler
+   File        : TestRest
    Purpose     : 
    Syntax      : 
    Description : 
@@ -18,7 +18,7 @@ USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS web.cls.ProMessageNotify INHERITS profcgi.REST.DefaultWebHandler: 
+CLASS web.cls.TestRest INHERITS profcgi.REST.DefaultWebHandler: 
    /*------------------------------------------------------------------------------
     Purpose:
     Notes:
