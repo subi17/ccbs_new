@@ -2162,8 +2162,10 @@ IF lcFixedLinePermanency > "" THEN DO:
          lcAddFTERM = "FTERM12-190".
       ELSE IF lcFixedLinePermanency EQ "NEBTERM12-283" THEN
          lcAddFTERM = "FTERM12-283".
+      ELSE IF lcFixedLinePermanency EQ "NEBTERM12-231" THEN
+         lcAddFTERM = "FTERM12-231".         
       ELSE lcAddFTERM = "".
- 
+      
       IF lcAddFTERM NE "" THEN /* Create FTERM */
         fCreateOrderAction(Order.Orderid,
                            "FixedPermanency",
@@ -2686,6 +2688,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     "",
                     "",
                     "",
+                    INPUT  Order.OrderId,
                     INPUT  FALSE,
                     INPUT  0.0,
                     INPUT {&REQUEST_SOURCE_ICC_CHANGE_AUTO},

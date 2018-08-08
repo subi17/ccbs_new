@@ -262,6 +262,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
                     INPUT  "", /*for old SIM*/ 
                     INPUT  "", /*for Reason info*/
                     INPUT  "", /*for ContractID*/
+                    INPUT  Order.OrderId,
                     INPUT  FALSE,
                     INPUT  0.0,
                     INPUT  {&REQUEST_SOURCE_RENEWAL},

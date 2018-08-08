@@ -1,14 +1,8 @@
-USING Progress.Json.ObjectModel.JsonObject.
-USING Progress.Json.ObjectModel.JsonArray .
-
 {Syst/commali.i}
 {Gwy/provision.i}
 {Func/fmakemsreq.i}
 {Func/dss_matrix.i}
 {Func/msreqfunc.i}
-{Func/SAPC.i}
-{Func/SAPC_change_API.i}
-{Func/cparam2.i}
                     
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
@@ -27,39 +21,11 @@ DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO.
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcDSSId            AS CHARACTER NO-UNDO.
  
-/* SAPC 
-   Note: Deleting ProCommands in case of error. 
-         I would prefer to undo the transaction but the business logic 
-         seems to prefer logging and updating the request */
-DEFINE VARIABLE lcmsisdns          AS CHARACTER  NO-UNDO. 
-DEFINE VARIABLE lcDatalimit        AS CHARACTER  NO-UNDO. 
-DEFINE VARIABLE dDataLimit         AS DECIMAL    NO-UNDO.  
-DEFINE VARIABLE oJson_DSS          AS JsonObject NO-UNDO.
-DEFINE VARIABLE oJson_DSS_msisdn   AS JsonObject NO-UNDO.
-DEFINE VARIABLE oJson_DataLimit    AS JsonObject NO-UNDO.
-DEFINE BUFFER ProCommand  FOR ProCommand.
-DEFINE BUFFER bProCommand FOR ProCommand.
-
+DEFINE VARIABLE loProCommand       AS CLASS Gwy.ProCommand  NO-UNDO.
+DEFINE VARIABLE llSAPC             AS LOGICAL INITIAL FALSE NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
 DEF BUFFER bDSSMobSub  FOR MobSub.
-
-/* SAPC - Create DSS group */
-DEFINE TEMP-TABLE ttDSS
-   FIELD type      AS CHAR  
-   FIELD priority  AS CHAR 
-   FIELD msisdns   AS CHAR.
-
-/* SAPC - Update data limit */
-DEFINE TEMP-TABLE ttDSSDataLimit
-   FIELD offeringName      AS CHAR
-   FIELD roamingLikeAtHome AS CHAR
-   FIELD tariff            AS CHAR.
-
-DEFINE TEMP-TABLE ttDSS_msisdn
-   FIELD action AS CHAR 
-   FIELD msisdn AS CHAR.
-
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -229,12 +195,6 @@ PROCEDURE pSolog:
    DEF VAR liError       AS INT NO-UNDO.
    DEF VAR lcResult      AS CHAR NO-UNDO.
    DEF VAR liOrderId     AS INT  NO-UNDO.
-
-   /* SAPC */
-   DEFINE VARIABLE cJsonMsg           AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE cJsonMsg_DataLimit AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE lJsonCreation      AS LOGICAL  NO-UNDO.
-
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
@@ -431,218 +391,35 @@ PROCEDURE pSolog:
          END.
       END.
 
-      /* Code to be removed and fixed with the real "group" */
-      DEF VAR lcdummygrp AS CHAR NO-UNDO INITIAL "dummygrp-".
-      lcdummygrp = lcdummygrp + STRING(TIME).
-      
       /* SAPC-56 redirecting new SAPC customers to new logic */
-      IF Customer.AccGrp = 2 AND 
-         fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN  /* SAPC */
-      DO:
-         IF MSrequest.ReqCparam1 = "CREATE" THEN /* Creating DSS group */
-         DO:
-            ASSIGN 
-               lcmsisdns   = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDNS="))
-               lcmsisdns   = REPLACE(lcmsisdns,"MSISDNS=","")
-               lcmsisdns   = REPLACE(lcmsisdns,";","|")
-               lcDataLimit = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"LIMIT_UNSHAPED="))
-               lcDataLimit = REPLACE(lcDataLimit,"LIMIT_UNSHAPED=","").
-                       
-            /* 1st. Creating ProCommand for creating DSS group */       
-            CREATE ProCommand.
-            ASSIGN
-               ProCommand.MsRequest           = MsRequest.MsRequest
-               ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-               ProCommand.ProCommandType      = "CREATE_DSS_GROUP"
-               ProCommand.CreatedTS           = NOW 
-               ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MsRequest.MsSeq   /* Mobile Subscription No. */
-               ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               ProCommand.ProCommandtarget    = "NB_AS"
-               ProCommand.ProCommandVerb      = "PUT"
-               ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
-            
-            /* Json content */
-            CREATE ttDSS.
-            ASSIGN 
-               ttDSS.type     = "POST"  /* Hard-coded. Type of user: POST */  
-               ttDSS.priority = "1000"  /* Hard-coded. For Base tariff = 1000 */
-               ttDSS.msisdns  = lcmsisdns.
+      IF Customer.AccGrp = 2
+      THEN DO ON ERROR UNDO, THROW:
+         CASE MsRequest.ReqType:
+            WHEN {&REQTYPE_DSS}
+            THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
+                 THEN loProCommand = NEW Gwy.ProCommandDSS(MsRequest.MsRequest). 
+            WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
+            THEN loProCommand = NEW Gwy.ProCommandSubscription(MsRequest.MsRequest). 
+         END CASE.
+      
+         IF VALID-OBJECT(loProCommand)
+         THEN loProCommand:mStoreProCommand().
 
-            /* Getting Json string */
-            oJson_DSS = NEW JsonObject().
-            oJson_DSS:add("type", ttDSS.type).
-            oJson_DSS:add("priority", ttDSS.priority).
-            oJson_DSS:add("msisdns", ttDSS.msisdns).
-            lJsonCreation = oJson_DSS:WRITE(cJsonMsg,TRUE).
-                      
-            /*
-            lJsonCreation = TEMP-TABLE ttDSS:WRITE-JSON("LONGCHAR",
-                                                        cJsonMsg, 
-                                                        TRUE,    /* Formatted           */
-                                                        "UTF-8", /* Encoding            */
-                                                        FALSE,   /* Omit initial values */
-                                                        TRUE,    /* Omit outer object   */
-                                                        FALSE).  /* Write before image  */
-            */
-            IF lJsonCreation = FALSE then
-            DO:
-               fReqError("Json generation failed for request " + 
-                         STRING(MSRequest.MSRequest)).
-               DELETE ProCommand.
-               RETURN.
-            END.
-            ELSE
-               /* Successful. Saving Json message command */ 
-               ASSIGN
-                  Procommand.CommandLine = cJsonMsg.
-         END. 
-         ELSE
-         IF MSrequest.ReqCparam1 = "ADD"    OR   /* Adding msisdn to DSS */
-            MSrequest.ReqCparam1 = "REMOVE" THEN /* Removing msisdn from DSS */    
-         DO:  
-            ASSIGN 
-               lcmsisdns = SUBSTRING(MSRequest.ReqCParam2,INDEX(MSRequest.ReqCParam2,"MSISDN="))
-               lcmsisdns = REPLACE(lcmsisdns,"MSISDN=","")
-               lcmsisdns = SUBSTRING(lcmsisdns,1,INDEX(lcmsisdns,",") - 1).
-                       
-            /* 1st. Creating ProCommand for Adding/removing msisdn to DSS group */   
-            CREATE ProCommand.
-            ASSIGN
-               ProCommand.MsRequest           = MsRequest.MsRequest
-               ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-               ProCommand.ProCommandType      = (IF MSrequest.ReqCparam1 = "ADD" THEN 
-                                                    "ADD_TO_DSS_GROUP"
-                                                 ELSE 
-                                                    "REMOVE_FROM_DSS_GROUP")
-               ProCommand.CreatedTS           = NOW 
-               ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
-               ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               ProCommand.ProCommandtarget    = "NB_AS"
-               ProCommand.ProCommandVerb      = "POST"
-               ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
-                                                "/manage-subscription".
-            
-            /* Json content */
-            CREATE ttDSS_msisdn.
-            ASSIGN 
-               ttDSS_msisdn.action = (IF MSrequest.ReqCparam1 = "ADD" THEN
-                                         "add"  /* Hard-coded when adding to DSS */
-                                      ELSE   
-                                         "remove") /* Hard-coded when removing from DSS */
-               ttDSS_msisdn.msisdn = lcmsisdns.
-            
-            /* Getting Json string */
-            oJson_DSS_msisdn = NEW JsonObject().
-            oJson_DSS_msisdn:add("action", ttDSS_msisdn.action).
-            oJson_DSS_msisdn:add("msisdn", ttDSS_msisdn.msisdn).
-            lJsonCreation = oJson_DSS_msisdn:WRITE(cJsonMsg,TRUE).
-                      
-            /* 
-            lJsonCreation = TEMP-TABLE ttDSS_msisdn:WRITE-JSON("LONGCHAR",
-                                                               cJsonMsg, 
-                                                               TRUE,    /* Formatted           */
-                                                               "UTF-8", /* Encoding            */
-                                                               FALSE,   /* Omit initial values */
-                                                               TRUE,    /* Omit outer object   */
-                                                               FALSE).  /* Write before image  */
-            */
-            IF lJsonCreation = FALSE then
-            DO:
-               fReqError("Json generation failed for request " + 
-                         STRING(MSRequest.MSRequest)).
-               DELETE ProCommand. 
-               RETURN.
-            END.
-            ELSE
-               /* Successful. Saving Json message command */ 
-               ASSIGN
-                  Procommand.CommandLine = cJsonMsg.
-         END.
-         ELSE IF MSrequest.ReqCparam1 = "DELETE" THEN /* Delete DSS group */    
-         DO:                         
-            /* Creating ProCommand for Deleting DSS group */   
-            CREATE ProCommand.
-            ASSIGN
-               ProCommand.MsRequest           = MsRequest.MsRequest
-               ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-               ProCommand.ProCommandType      = "TERMINATE_DSS_GROUP"
-               ProCommand.CreatedTS           = NOW 
-               ProCommand.Creator             = Syst.Var:katun    
-               ProCommand.MsSeq               = MsRequest.MsSeq  /* Mobile Subscription No. */
-               ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               ProCommand.ProCommandtarget    = "NB_AS"
-               ProCommand.ProCommandVerb      = "DELETE"
-               ProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp.
-         END.
-         
-         IF MSrequest.ReqCparam1 NE "DELETE" THEN /* Adding/Removing msisdn to DSS */
-         DO:
-            /* 2nd. Creating ProCommand for updating Data limit for DSS group 
-                    This command is needed when creating a DSS group or 
-                    adding a msisdn to the DSS group */
-            CREATE bProCommand.
-            ASSIGN
-               bProCommand.MsRequest           = MsRequest.MsRequest
-               bProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-               bProCommand.ProCommandType      = "UPDATE_DSS_GROUP_DATALIMIT"
-               bProCommand.CreatedTS           = NOW 
-               bProCommand.Creator             = Syst.Var:katun    
-               bProCommand.MsSeq               = MsRequest.MsSeq  
-               bProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-               bProCommand.ProCommandtarget    = "NB_AS"
-               bProCommand.ProCommandVerb      = "POST"            
-               bProCommand.ProCommandtargetURL = "/groups/" + lcdummygrp + 
-                                                 "/set-accumulated-volume".
-            /* Json content */
-            /*
-            ASSIGN dDataLimit = fGetDSSDataLimit(MsRequest.MsRequest).
-            IF dDataLimit = 0 THEN
-            DO:
-               fReqError("Json generation (datalimit not found) failed for request " + 
-                         STRING(MSRequest.MSRequest)).
-               UNDO, RETURN.
-            END.*/
-            
-            CREATE ttDSSDataLimit.
-            ASSIGN 
-               ttDSSDataLimit.offeringName      = MsRequest.ReqCParam3 /* DSS/DSS2/DSS4 */  
-               ttDSSDataLimit.roamingLikeAtHome = lcDataLimit 
-               ttDSSDataLimit.tariff            = lcDataLimit.
-   
-            /* Getting Json string */
-            oJson_DataLimit = NEW JsonObject().
-            oJson_DataLimit:add("offeringName", ttDSSDataLimit.offeringName).
-            oJson_DataLimit:add("roamingLikeAtHome", ttDSSDataLimit.roamingLikeAtHome).
-            oJson_DataLimit:add("tariff", ttDSSDataLimit.tariff).
-            lJsonCreation = oJson_DataLimit:WRITE(cJsonMsg_DataLimit,TRUE).
-                   
-            /* 
-            lJsonCreation = TEMP-TABLE ttDSSDataLimit:WRITE-JSON("LONGCHAR",
-                                                                 cJsonMsg_DataLimit, 
-                                                                 TRUE,    /* Formatted           */
-                                                                 "UTF-8", /* Encoding            */
-                                                                 FALSE,   /* Omit initial values */
-                                                                 TRUE,    /* Omit outer object   */
-                                                                 FALSE).  /* Write before image  */
-            */
-            IF lJsonCreation = FALSE then
-            DO:
-               fReqError("Json generation (datalimit) failed for request " + 
-                         STRING(MSRequest.MSRequest)).
-               DELETE ProCommand.
-               DELETE bProCommand.
-               RETURN.
-            END.
-            ELSE
-               /* Successful. Saving Json message command */ 
-               ASSIGN
-                  bProcommand.CommandLine = cJsonMsg_DataLimit.
-         END.            
-      END.  /*end of SAPC customer */
-      ELSE 
-      DO: /* Existing logic for Packet Logic */
+         llSAPC = TRUE.
+
+         CATCH loAppError AS Progress.Lang.AppError:
+            fReqError(loAppError:ReturnValue).
+            RETURN.
+         END CATCH.
+
+         FINALLY:
+            IF VALID-OBJECT(loProCommand)
+            THEN DELETE OBJECT loProCommand.
+         END FINALLY.
+      END. 
+      
+      IF NOT llSAPC
+      THEN DO: /* Existing logic for Packet Logic */
          CREATE Solog.
          ASSIGN
             Solog.Solog = NEXT-VALUE(Solog).

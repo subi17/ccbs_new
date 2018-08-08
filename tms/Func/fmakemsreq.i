@@ -1241,6 +1241,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
     INPUT  icReqParam3   AS CHAR,  /*DMS usage, old SIM*/
     INPUT  icReqParam4   AS CHAR,  /*DMS usage, reason*/
     INPUT  icReqParam6   AS CHAR,  /*DMS usage, contract_id*/
+    INPUT  iiOrderId     AS INT,
     INPUT  ilCreateFees  AS LOG,
     INPUT  ideCharge     AS DEC,
     INPUT  icReqSource   AS CHAR,
@@ -1312,6 +1313,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
       bCreaReq.ReqCParam6 = icReqParam6
       bCreaReq.ReqIParam1 = iiTrafficType
       bCreaReq.ReqIParam4 = (IF llProCustomer THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated */
+      bCreaReq.ReqIParam5 = iiOrderId
       bCreaReq.ReqDParam2 = ideCharge
       bCreaReq.ReqSource  = icReqSource
       liReqCreated        = bCreaReq.MsRequest.

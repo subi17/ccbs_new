@@ -60,6 +60,9 @@ DEF VAR llVoIPActive          AS LOG         NO-UNDO.
 DEF VAR lcAction              AS CHAR        NO-UNDO.               
 DEF VAR lcUpsellSize          AS CHAR        NO-UNDO.
 DEF VAR lcEmaDataPlan         AS CHAR        NO-UNDO.
+DEFINE VARIABLE loProCommand  AS CLASS Gwy.ProCommand NO-UNDO.
+DEFINE VARIABLE loCommandLine  AS CLASS JsonObject NO-UNDO.
+
 
 DEF VAR lcShaperConf_Tariff_Type AS CHAR NO-UNDO.
 DEF VAR lcShaperConf_Tariff      AS CHAR NO-UNDO.
@@ -546,24 +549,21 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
    END.
    ELSE 
    DO:
-      CREATE ProCommand.
       ASSIGN
-         ProCommand.MSrequest           = iiMSrequest
-         ProCommand.ProcommandId        = NEXT-VALUE(Seq_ProCommand_ProCommandId)
-         ProCommand.ProCommandType      = lcProcommandType
-         ProCommand.CreatedTS           = NOW 
-         ProCommand.Creator             = Syst.Var:katun    
-         ProCommand.MsSeq               = MobSub.MsSeq   /* Mobile Subscription No. */
-         ProCommand.ProCommandstatus    = {&PROCOMMANDSTATUS_NEW}
-         ProCommand.ProCommandtarget    = "NB_CH"
-         ProCommand.ProCommandVerb      = "POST"
-         ProCommand.ProCommandtargetURL = "".  /* Not postfix data */
+         loProCommand                       = NEW Gwy.ProCommand()
+         loProCommand:aiMsRequest           = iiMSrequest
+         loProCommand:aiMsSeq               = MobSub.MsSeq
+         loProCommand:acProCommandTarget    = "NB_CH"
+         loProCommand:acProCommandType      = lcProcommandType
+         loProCommand:acProCommandVerb      = "POST".
+      
+      loProCommand:mSetProCommandId(). 
    END. 
    
    /* Common Body to Upsell, Add/Modify/Delete dataplan */
    CREATE ttOrder.
    ASSIGN 
-      ttOrder.orderId     = ProCommand.ProCommandId  
+      ttOrder.orderId     = loProCommand:aiProCommandId
       ttOrder.orderType   = "Change"
       ttOrder.sellChannel = "TMSB2C" 
       ttOrder.sellDate    = IF AVAIL bmsrequest THEN 
@@ -642,32 +642,22 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
       END.
    END CASE.
    
-   /* Getting Json string */
-   lJsonCreation = fCreateJSON_for_API_Interface(OUTPUT cJsonMsg).
-       
-   /* Getting Json string */
-   /*
-   lJsonCreation = DATASET DS_Upsell:WRITE-JSON("LONGCHAR",
-                                         cJsonMsg, 
-                                         TRUE,    /* Formatted           */
-                                         "UTF-8", /* Encoding            */
-                                         FALSE,   /* Omit initial values */
-                                         TRUE,    /* Omit outer object   */
-                                         FALSE).  /* Write before image  */
-   */
-   
-   IF lJsonCreation = FALSE then
-   DO:
-      ocError = "ERROR: Json generation failed".
-      UNDO blk, RETURN ocError.
+   DO ON ERROR UNDO, THROW:
+      /* Getting Json string */
+      loCommandLine = fCreateJSON_for_API_Interface().
+      loProCommand:mSetCommandLine(loCommandLine).
+      loProCommand:mStoreProCommand().
+      CATCH loAppError AS Progress.Lang.AppError :
+         ocError = "ERROR: Json generation failed".
+         UNDO blk, RETURN ocError.
+      END CATCH.
    END.
 
-   /* Saving Json message command */ 
-   ASSIGN
-      Procommand.CommandLine = cJsonMsg 
-      oiReqCnt               = 1.  /* Successful */
+   oiReqCnt               = 1.  /* Successful */
       
 FINALLY:
+   IF VALID-OBJECT(loProCommand)
+   THEN DELETE OBJECT loProCommand.
    EMPTY TEMP-TABLE ttOrder.
    EMPTY TEMP-TABLE ttOutService.
    EMPTY TEMP-TABLE ttInService.

@@ -358,6 +358,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
                           INPUT  "", /*for old SIM*/
                           INPUT  "", /*for Reason info*/
                           INPUT  "", /*for ContractID*/
+                          INPUT  Order.OrderId,
                           INPUT  FALSE,
                           INPUT  0.0,
                           INPUT  {&SOURCE_LOGISTICS},
@@ -409,6 +410,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
                                        "",                       /*old SIM*/
                                        "",                       /*Reason*/
                                        "",                       /*ContractID*/
+                                       Order.OrderId,
                                        FALSE,                    /*CreateFees*/
                                        0,                        /*Charge*/
                                        {&SOURCE_LOGISTICS},      /*Request source*/
