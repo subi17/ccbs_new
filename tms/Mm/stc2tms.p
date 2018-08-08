@@ -863,14 +863,11 @@ PROCEDURE pUpdateSubscription:
 
    IF fIsConvergenceTariff(MobSub.CLIType) AND
       bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:      
-      FIND FIRST OldCliType WHERE
-                 OldCliType.Brand   = Syst.Var:gcBrand AND
-                 OldCliType.CliType = MobSub.CLIType NO-LOCK NO-ERROR.
-     
+    
       IF fListMatrix(Syst.Var:gcBrand,
                      "CONVMOBILESTC",
                      "SubsTypeFrom;SubsTypeTo",
-                     MobSub.CLIType,
+                     lcNewCliType,
                      OUTPUT lcNewCliTypeMtx) = 1 THEN DO:
          lcNewCliType =  lcNewCliTypeMtx.
       END.

@@ -337,7 +337,7 @@ REPEAT:
                IF fListMatrix(Syst.Var:gcBrand,
                               "CONVMOBILESTC",
                               "SubsTypeFrom;SubsTypeTo",
-                              MobSub.CLIType,
+                              OldCliType.BaseBundle,
                               OUTPUT lcNewCliTypeMtx) = 1 THEN DO:
                   lcNewCliType =  lcNewCliTypeMtx.
                END.
