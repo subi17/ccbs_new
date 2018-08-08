@@ -56,8 +56,10 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
       IF icDSSReqSource EQ {&REQUEST_SOURCE_STC} THEN DO:
          FIND FIRST bMsRequest EXCLUSIVE-LOCK WHERE
                     bMsRequest.MsRequest EQ liRequest NO-ERROR.
-         IF AVAIL bMsRequest THEN
+         IF AVAIL bMsRequest THEN DO:
             bMsRequest.ReqIParam2 = iiDSSMainRequest.
+            RELEASE bMsRequest.
+         END.   
       END.
 
       fGetDSSMsSeqLimit(iiDSSCustNum,
