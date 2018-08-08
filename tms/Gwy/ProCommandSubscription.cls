@@ -24,6 +24,8 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
    DEFINE PRIVATE BUFFER Order FOR Order.
    DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer. 
 
+   /* OrderAccessory tietue on jos DEVICE... */
+
    CONSTRUCTOR ProCommandSubscription
       ( iiMsRequest AS INTEGER ):
 
@@ -119,11 +121,18 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
    METHOD PRIVATE JsonObject mContactObject():
 
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loContact    AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
-
-      /* Add stuff... */
+      loJsonObject:Add("middleName", OrderCustomer.Surname1).
+      loJsonObject:Add("lastName", IF OrderCustomer.Surname2 NE ""
+                                   THEN OrderCustomer.Surname2
+                                   ELSE OrderCustomer.Surname1).
+      loJsonObject:Add("documentNumber", OrderCustomer.CustID).
+      loJsonObject:Add("documentType", OrderCustomer.CustIDType).
+      loJsonObject:Add("email", OrderCustomer.Email).
+      loJsonObject:Add("phoneNumber", IF OrderCustomer.MobileNumber > ""
+                                      THEN OrderCustomer.MobileNumber
+                                      ELSE OrderCustomer.FixedNumber).
 
       RETURN loJsonObject.
 
@@ -136,8 +145,6 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
 
       loJsonObject = NEW JsonObject().
 
-      /* Add stuff... */
-
       RETURN loJsonObject.
 
    END METHOD.
@@ -148,10 +155,23 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
 
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("clientID", OrderCustomer.CustId).
-      loJsonObject:Add("Type", OrderCustomer.CustIdType).
+      loJsonObject:Add("Type", mGetSegment()).
       loJsonObject:Add("Contact", mContactObject()).
   
       RETURN loJsonObject.
+
+   END METHOD.
+
+   METHOD PRIVATE CHARACTER mGetSegment():
+
+      FOR
+         FIRST CustCat FIELDS (Brand Category Segment) NO-LOCK WHERE
+            CustCat.Brand    = "1" AND
+            CustCat.Category = OrderCustomer.Category:
+         RETURN CustCat.Segment.
+      END.
+
+      RETURN "".
 
    END METHOD.
 

@@ -1,7 +1,8 @@
 [
     { "web.cls.ProCommandNotify": "/bpm/notification" },
     { "web.cls.SAPCServerMock": "/api/northbound-tms/1/sync/orders" },
-    { "web.cls.SAPCServerMock": "/api/northbound-common/post-sales/ema/1" },
+    { "web.cls.SAPCServerMock": "/api/northbound-common/post-sales/ema/1/groups/{group}" },
+    { "web.cls.SAPCServerMock": "/api/northbound-common/post-sales/ema/1/groups/{group}/manage-subscription" },
     { "web.cls.SAPCServerMock": "/crm-integration-tms/Order" },
     { "web.cls.ProMessageNotify": "/promessage/{messageid}" },
     { "profcgi.REST.DefaultWebHandler": "" }

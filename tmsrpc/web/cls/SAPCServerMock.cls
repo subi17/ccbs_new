@@ -84,4 +84,12 @@ CLASS web.cls.SAPCServerMock INHERITS profcgi.REST.DefaultWebHandler:
 
    END METHOD.
 
+   METHOD PROTECTED OVERRIDE VOID HandleDelete
+      ( Req  AS CLASS Request,
+        Resp AS CLASS Response ):
+
+      HandleGet(Req, Resp).
+
+   END METHOD.
+
 END CLASS.
