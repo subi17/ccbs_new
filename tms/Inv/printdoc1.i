@@ -1164,10 +1164,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
             ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
 
          /* YDR-2848 The sum of the discounts applied to the line */
-          IF (ttRow.RowCode BEGINS "13" AND
-              ttRow.RowGroup  = "13") OR
-             (ttRow.RowCode BEGINS "10" AND
-              ttRow.RowGroup  = "10") THEN DO:
+         IF (ttRow.RowCode BEGINS "13" AND
+             ttRow.RowAmtExclVat < 0) THEN DO:
             ttSub.Discounts = ttSub.Discounts + ttRow.RowAmtExclVat.
             /* Check phone discounts */
             IF ttSub.InstallmentAmt > 0 THEN
@@ -1177,6 +1175,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
 
           /* YDR-2848 The sum of the charges applied to the line */
           IF ttRow.RowCode BEGINS "31" THEN
+             ttSub.Charges = ttSub.Charges + ttRow.RowAmtExclVat.
+          IF (ttRow.RowCode BEGINS "13" AND
+             ttRow.RowAmtExclVat > 0) THEN
              ttSub.Charges = ttSub.Charges + ttRow.RowAmtExclVat.
 
           /* YDR-2848 Sum of amount due to bundles of data and data upsells */
@@ -1190,6 +1191,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
 Comment from ticket:
 Yoigo is requesting to merge the "billing groups" "Llamadas desde Fijo", "Servicio Premium Fijo" and "Llamadas desde Móvil" in only one, and this amount will be the amount of "Otros Consumos".  It means all the "billing groups" that NOT are "Tarifa" nor "Internet desde el móvil" will be accumulated and this amount will be shown in "Otros consumos". */
           IF (ttRow.RowGroup EQ "1" OR
+              ttRow.RowGroup EQ "4" OR
               ttRow.RowGroup EQ "51" OR
               ttRow.RowGroup EQ "53") AND ttRow.RowCode EQ "" THEN /* RowCode checked to avoid duplicate summing. */
              ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
