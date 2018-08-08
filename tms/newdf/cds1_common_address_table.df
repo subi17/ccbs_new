@@ -104,6 +104,89 @@ ADD FIELD "TownCode" OF "Address" AS character
   HELP "Address validation town code (CodM)"
   ORDER 120
 
+ADD FIELD "StreetType" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "StreetType"
+  COLUMN-LABEL "StreetType"
+  HELP "Street Type"
+  ORDER 130
+
+ADD FIELD "BisDuplicate" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 170
+
+ADD FIELD "Block" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 180
+
+ADD FIELD "Door" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 190
+
+ADD FIELD "Letter" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 200
+
+ADD FIELD "Stair" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 210
+
+ADD FIELD "Hand" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 220
+
+ADD FIELD "Km" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 230
+
+ADD FIELD "Floor" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 240
+
+ADD FIELD "AddressCompl" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 250
+
+ADD FIELD "Longitude" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 260
+
+ADD FIELD "Latitude" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 270
+
+ADD FIELD "Gescal" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 280
+
+ADD FIELD "CoverageToken" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 290
+
+ADD FIELD "AddressRegisterID" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 320
+
+ADD FIELD "BuildingNum" OF "Address" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  ORDER 330
+
 ADD INDEX "AddressID" ON "Address" 
   AREA "Sta_Index_1"
   UNIQUE

@@ -9,7 +9,7 @@ ADD TABLE "CustomerAccount"
   AREA "Sta_Data_32"
   LABEL "CustomerAccount"
   DESCRIPTION "CustomerAccount"
-  DUMP-NAME "custome2"
+  DUMP-NAME "customeraccount"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-customeraccount.p" CRC "?" 
   TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-customeraccount.p" CRC "?" 
 
@@ -46,63 +46,13 @@ ADD FIELD "AccountName" OF "CustomerAccount" AS character
   HELP "Account nickname"
   ORDER 40  
  
-
-ADD FIELD "ShippingAddressID" OF "CustomerAccount" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "ShippingAddressID"
-  COLUMN-LABEL "ShippingAddressID"
-  HELP "Link to Address"
-  ORDER 50
-  MANDATORY
-
-ADD FIELD "BillCycle" OF "CustomerAccount" AS integer 
-  FORMAT ">>9"
-  INITIAL "0"
-  LABEL "BillCycle"
-  COLUMN-LABEL "BillCycle"
-  HELP "Billing cycle (day of the month)"
-  ORDER 60
-
-ADD FIELD "InvInterval" OF "CustomerAccount" AS integer 
-  FORMAT ">>9"
-  INITIAL "0"
-  LABEL "InvInterval"
-  COLUMN-LABEL "InvInterval"
-  HELP "Billing interval (in months) calculated from FirstInvMonth"
-  ORDER 70
-  
-ADD FIELD "DelType" OF "CustomerAccount" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "DelType"
-  COLUMN-LABEL "DelType"
-  HELP "Invoice's delivery type"
-  ORDER 80
- 
-ADD FIELD "InvoiceGroup" OF "CustomerAccount" AS character 
-  FORMAT "x(30)"
-  INITIAL ""
-  LABEL "InvoiceGroup"
-  COLUMN-LABEL "InvoiceGroup"
-  HELP "Invoice group name"
-  ORDER 90 
-  
-ADD FIELD "DueDateOffset" OF "CustomerAccount" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "DueDateOffset"
-  COLUMN-LABEL "DueDateOffset"
-  HELP "DueDate Offset"
-  ORDER 100
-
 ADD FIELD "FromDate" OF "CustomerAccount" AS date 
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "FromDate"
   COLUMN-LABEL "FromDate"
   HELP "Date and time when Customer Account has created"
-  ORDER 110  
+  ORDER 50  
   
 ADD FIELD "ToDate" OF "CustomerAccount" AS date
   FORMAT "99-99-99"
@@ -110,7 +60,7 @@ ADD FIELD "ToDate" OF "CustomerAccount" AS date
   LABEL "ToDate"
   COLUMN-LABEL "ToDate"
   HELP "Date and time when Customer Account will expire"
-  ORDER 120  
+  ORDER 60  
   
 ADD INDEX "AccountID_s" ON "CustomerAccount" 
   AREA "Sta_Index_1"
@@ -121,5 +71,3 @@ ADD INDEX "AccountID_s" ON "CustomerAccount"
 ADD INDEX "CustNum" ON "CustomerAccount" 
   AREA "Sta_Index_2"
   INDEX-FIELD "CustNum" ASCENDING   
-  
-  

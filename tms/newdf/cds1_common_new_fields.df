@@ -1,27 +1,3 @@
-ADD FIELD "AccountID" OF "SingleFee" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "AccountID"
-  COLUMN-LABEL "AccountID"
-  HELP "Internal TMS ID"
-  ORDER 300
-  
-ADD FIELD "AccountID" OF "FixedFee" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "AccountID"
-  COLUMN-LABEL "AccountID"
-  HELP "Internal TMS ID"
-  ORDER 320
-
-ADD FIELD "AccountID" OF "Invoice" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "AccountID"
-  COLUMN-LABEL "AccountID"
-  HELP "Internal TMS ID"
-  ORDER 1470
-  
 ADD FIELD "AccountID" OF "InvoiceTargetGroup" AS integer 
   FORMAT ">>>>>>>>9"
   INITIAL "0"
@@ -77,13 +53,51 @@ ADD FIELD "MandateDate" OF "InvoiceTargetGroup" AS date
   COLUMN-LABEL "MandateDate"
   HELP "Mandate date"
   ORDER 150  
+
+ADD FIELD "BankName" OF "InvoiceTargetGroup" AS character
+  FORMAT "X(16)"
+  INITIAL ""
+  LABEL "BankName"
+  COLUMN-LABEL "BankName"
+  HELP "Bank Name"
+  ORDER 160
+
+ADD FIELD "BillCycle" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "BillCycle"
+  COLUMN-LABEL "BillCycle"
+  HELP "Billing cycle (day of the month)"
+  ORDER 170
+
+ADD FIELD "InvInterval" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "InvInterval"
+  COLUMN-LABEL "InvInterval"
+  HELP "Billing interval (in months) calculated from FirstInvMonth"
+  ORDER 180
   
-ADD FIELD "AccountID" OF "FATime" AS integer 
+ADD FIELD "InvGroup" OF "InvoiceTargetGroup" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "InvGroup"
+  COLUMN-LABEL "InvGroup"
+  HELP "Invoice group name"
+  ORDER 190 
+  
+ADD FIELD "DueDateOffset" OF "InvoiceTargetGroup" AS integer 
   FORMAT ">>>>>>>>9"
   INITIAL "0"
-  LABEL "AccountID"
-  COLUMN-LABEL "AccountID"
-  HELP "Internal TMS ID"
-  ORDER 370 
-  
-  
+  LABEL "DueDateOffset"
+  COLUMN-LABEL "DueDateOffset"
+  HELP "DueDate Offset"
+  ORDER 200
+
+ADD FIELD "DelType" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "DelType"
+  COLUMN-LABEL "DelType"
+  HELP "Invoice's delivery type"
+  ORDER 210
