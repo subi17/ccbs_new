@@ -75,7 +75,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         GET.
         SET.
         
-    DEFINE PUBLIC PROPERTY crStamp AS DECIMAL NO-UNDO
+    DEFINE PUBLIC PROPERTY crStamp AS DATETIME-TZ NO-UNDO
         GET.
         SET.        
 
@@ -168,10 +168,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 
 	METHOD PUBLIC VOID mCreateData(ioJsonObject AS CLASS JsonObject):
 
-        DEFINE VARIABLE loAgrCust      AS CLASS     JsonObject NO-UNDO.
-        DEFINE VARIABLE ldaCreateDate  AS DATE      NO-UNDO.
-        DEFINE VARIABLE liCount        AS INTEGER   NO-UNDO.
-        DEFINE VARIABLE lcMigrationErr AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE loAgrCust      AS CLASS JsonObject NO-UNDO.
+        DEFINE VARIABLE ldaCreateDate  AS DATETIME-TZ      NO-UNDO.
+        DEFINE VARIABLE liCount        AS INTEGER          NO-UNDO.
+        DEFINE VARIABLE lcMigrationErr AS CHARACTER        NO-UNDO.
               
         ASSIGN
             loAgrCust         = ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
@@ -179,11 +179,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             objCustomer       = NEW cm.Customer().
 
         ASSIGN
-            ldaCreateDate             = Func.Common:mGetDate(ioJsonObject:GetCharacter("created_at"))
+            THIS-OBJECT:crStamp       = ioJsonObject:GetDatetimeTZ("created_at")
             THIS-OBJECT:ContractId    = ioJsonObject:GetCharacter("contractid") 
             THIS-OBJECT:salesMan      = ioJsonObject:GetCharacter("salesman")
             THIS-OBJECT:orderChannel  = ioJsonObject:GetCharacter("channel")
-            THIS-OBJECT:crStamp       = YEAR(ldaCreateDate) * 10000 + MONTH(ldaCreateDate) * 100 + DAY(ldaCreateDate)
             objCustomer:isProCustomer = ( INDEX(THIS-OBJECT:orderChannel,"PRO") > 0 )     
             objCustomer:orderChannel  = THIS-OBJECT:orderChannel                   
             .
@@ -260,7 +259,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.contractId       = THIS-OBJECT:contractId
             Order.SalesMan         = THIS-OBJECT:salesMan
             Order.OrderChannel     = THIS-OBJECT:orderChannel
-            Order.CrStamp          = THIS-OBJECT:crStamp
+            Order.CrStamp          = Func.Common:mDateTimeTZ2TS(THIS-OBJECT:crStamp)
             THIS-OBJECT:orderId    = Order.OrderId
             Order.MNPStatus        = (INTEGER(THIS-OBJECT:mobileNumberType = {&TYPE_MNP})).
             
