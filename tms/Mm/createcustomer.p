@@ -40,8 +40,9 @@ DEF VAR liTarget     AS INT  NO-UNDO.
 DEF VAR lcInvGroup   AS CHAR NO-UNDO.
 DEF VAR lcRegion     AS CHAR NO-UNDO.
 DEF VAR llOk         AS LOG  NO-UNDO.
-DEF VAR llUpdateCust AS LOG  NO-UNDO.
 DEF VAR lcMemo       AS CHAR NO-UNDO.
+DEF VAR llProToNonPro AS LOG NO-UNDO. 
+DEF VAR llPayType AS LOG NO-UNDO. 
 
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
 DEF BUFFER bMobSub FOR MobSub.
@@ -57,8 +58,7 @@ IF locked(Order) THEN DO:
 END.
 
 ASSIGN llCreateCust = FALSE
-       liOldCustNum = 0
-       llUpdateCust = FALSE.
+       liOldCustNum = 0.
 
 /* is there a need to create customer */
 IF iiRole = 2 AND Order.InvCustRole NE 2 THEN RETURN.
@@ -258,6 +258,9 @@ ELSE DO:
       Customer.OutMarkEmail      = OrderCustomer.OutEMailMarketing
       Customer.OutMarkPOST       = OrderCustomer.OutPostMarketing
       Customer.DontSharePersData = OrderCustomer.DontSharePersData.
+
+   llProToNonPro = (fIsPro(Customer.Category) EQ TRUE AND
+                    fIsPro(OrderCustomer.Category) EQ FALSE).
       
    /* Renove order handling */
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN DO:
@@ -274,8 +277,9 @@ ELSE DO:
       DO:
          fUpdEmailDelType(Order.OrderId).
 
-         IF Customer.Category <> OrderCustomer.Category THEN 
-             ASSIGN Customer.Category = OrderCustomer.Category.
+         IF Customer.Category <> OrderCustomer.Category AND
+            NOT llProToNonPro THEN
+            ASSIGN Customer.Category = OrderCustomer.Category.
       END.   
    END.
    ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
@@ -283,7 +287,8 @@ ELSE DO:
       ASSIGN Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
       /* YPRO migrate YPRO-92 category */
-      IF Ordercustomer.Category NE Customer.Category THEN
+      IF Ordercustomer.Category NE Customer.Category AND
+         NOT llProToNonPro THEN
          Customer.Category = Ordercustomer.Category.
    END.
 
@@ -294,39 +299,16 @@ ELSE DO:
                     MobSub.MsSeq   = Order.MsSeq AND
                     MobSub.CustNum = Customer.CustNum NO-ERROR.
 
-         IF AVAILABLE MobSub THEN 
-         DO:
-            IF MobSub.PayType = FALSE THEN
-            DO:
-                IF CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = Syst.Var:gcBrand          AND
-                                  bMobSub.MsSeq    <> MobSub.MsSeq     AND
-                                  bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE)           THEN
-                    ASSIGN Customer.Category = OrderCustomer.Category.
-                ELSE 
-                    ASSIGN llUpdateCust = TRUE.
-            END.
-            ELSE IF Customer.Category <> OrderCustomer.Category THEN 
-                ASSIGN Customer.Category = OrderCustomer.Category.
-         END.
-         ELSE DO:
-            IF Order.PayType = FALSE THEN 
-            DO:
-                IF CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = Syst.Var:gcBrand          AND
-                                  bMobSub.MsSeq    <> Order.MsSeq      AND
-                                  bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE)           THEN
-                    ASSIGN Customer.Category = OrderCustomer.Category.
-                ELSE 
-                    ASSIGN llUpdateCust = TRUE.
-            END.
-            ELSE IF Customer.Category <> OrderCustomer.Category THEN 
-                ASSIGN Customer.Category = OrderCustomer.Category.
-         END.
-
-         IF llUpdateCust THEN DO:
+         IF AVAILABLE MobSub THEN
+            llPayType = MobSub.PayType.
+         ELSE llPayType = Order.PayType.
+            
+         IF llPayType EQ FALSE AND
+            NOT CAN-FIND(FIRST bMobSub WHERE
+                               bMobSub.Brand     = Syst.Var:gcBrand          AND
+                               bMobSub.MsSeq    <> Order.MsSeq     AND
+                               bMobSub.CustNum   = Customer.CustNum AND
+                               bMobSub.PayType   = FALSE)           THEN DO:
             ASSIGN
                Customer.HonTitle        = OrderCustomer.CustTitle
                Customer.FirstName       = TRIM(OrderCustomer.FirstName)
@@ -386,7 +368,10 @@ ELSE DO:
                END.
             END.
 
-         END. /* IF llUpdateCust THEN DO: */
+         END.
+         ELSE IF Customer.Category <> OrderCustomer.Category AND
+             NOT llProToNonPro THEN
+             ASSIGN Customer.Category = OrderCustomer.Category.
 
          IF NOT OrderCustomer.Pro THEN /* Order is with non-pro, so closing all ACC requests for pro */
             fClosePendingACC("Pro", OrderCustomer.CustIdType, OrderCustomer.CustId, Order.OrderId).
