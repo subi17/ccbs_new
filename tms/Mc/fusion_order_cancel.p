@@ -29,7 +29,9 @@ IF NOT AVAIL OrderFusion OR
    NOT fIsConvergenceTariff(Order.CLIType) THEN 
    RETURN "Not convergent order".
 
-IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} OR
+   Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} OR
+   Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
    Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
    Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3} OR
    Order.StatusCode EQ {&ORDER_STATUS_IN_CONTROL} OR
