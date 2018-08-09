@@ -99,6 +99,7 @@ FOR EACH Order NO-LOCK WHERE
                                        "",                       /*old SIM*/
                                        "",                       /*Reason*/
                                        "",                       /*ContractID*/
+                                       0,
                                        FALSE,                    /*CreateFees*/
                                        0,                        /*Charge*/
                                        {&SOURCE_LOGISTICS},      /*Request source*/
