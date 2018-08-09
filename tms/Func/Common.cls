@@ -551,6 +551,43 @@ CLASS Func.Common FINAL:
       
    END METHOD.
    
+   METHOD PUBLIC STATIC DECIMAL mDateTimeTZ2TS (INPUT idtDateTimeTz AS DATETIME-TZ) :
+       
+       DEFINE VARIABLE ideTimeStamp AS DECIMAL NO-UNDO.
+       DEFINE VARIABLE idtTzDate    AS DATE    NO-UNDO.
+       DEFINE VARIABLE iTzMtime      AS INTEGER NO-UNDO.
+       
+       ASSIGN 
+           idtTzDate = DATE(idtDateTimeTz)
+           iTzMtime  = INTEGER(TRUNCATE((MTIME(idtDateTimeTz) / 1000 ) ,0)).       
+       
+       ASSIGN ideTimeStamp = Func.Common:mGetTZTimestamp(idtTzDate,iTzMtime).
+       
+       RETURN ideTimeStamp.
+              
+   END METHOD.
+   
+   METHOD PUBLIC STATIC DECIMAL mGetTZTimestamp (INPUT idtTzdt   AS DATE ,
+                                                 INPUT iiTzMtime AS INTEGER):
+                                                     
+       DEFINE VARIABLE liYear   AS INTEGER  NO-UNDO.
+       DEFINE VARIABLE liMonth  AS INTEGER  NO-UNDO.
+       DEFINE VARIABLE liDate   AS INTEGER  NO-UNDO.
+       DEFINE VARIABLE ldeTS    AS DECIMAL  NO-UNDO.
+
+       ASSIGN
+           liYear  = YEAR(idtTzdt)
+           liMonth = MONTH(idtTzdt)
+           liDate  = DAY(idtTzdt).
+
+       ASSIGN 
+           ldeTS = liYear * 10000 + liMonth * 100 + liDate
+           ldeTS = ldeTS  + (iiTzMtime / 100000) .
+
+       RETURN ldeTS.       
+                                                     
+   END METHOD.                                                      
+   
    METHOD PUBLIC STATIC LOGICAL mMonthlyStamps
      (INPUT  pdaDate AS DATE,
       OUTPUT pdeTS1  AS DECIMAL,

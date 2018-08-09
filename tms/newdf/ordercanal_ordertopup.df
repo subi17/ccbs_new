@@ -46,6 +46,7 @@ ADD INDEX "MsSeq" ON "OrderTopUp"
   
 ADD INDEX "OrderProductID" ON "OrderTopUp" 
   AREA "Dyn_Index_1"
+  PRIMARY
   DESCRIPTION "OrderProductID"
   INDEX-FIELD "OrderID" ASCENDING
   INDEX-FIELD "OrderProductID" ASCENDING  
