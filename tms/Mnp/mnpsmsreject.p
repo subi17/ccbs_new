@@ -31,8 +31,11 @@ DEFINE STREAM sdump.
 
 DEFINE VARIABLE lcDelimiter      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStatusReason   AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC ENUME,RECH_BNUME,RECH_ICCID,RECH_IDENT".
+DEFINE VARIABLE ldtActStamp      AS DECIMAL   NO-UNDO.
 
 /* ***************************  Main Block  *************************** */
+
+ldtActStamp = Func.Common:mDate2TS( TODAY - 30 ).
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN lcDelimiter = DumpFile.DumpDelimiter.
@@ -47,9 +50,12 @@ OUTPUT STREAM sdump TO value (icFile).
 ERROR_LOOP:
 FOR EACH CallAlarm NO-LOCK
    WHERE CallAlarm.Brand      = Syst.Var:gcBrand
+     AND CallAlarm.ActStamp   >= ldtActStamp     /* Checking for last 30 day ActStamp to follow index */
      AND CallAlarm.DeliStat   = {&CA_DELISTAT_SENT}
      AND CallAlarm.CreditType = {&SMSTYPE_MNP}
+     AND CallAlarm.Delitype   = 1
      AND CallAlarm.DeliStamp  > idLastDump
+     USE-INDEX ActStamp
      :
     FOR EACH MnpSub NO-LOCK
        WHERE MnpSub.CLI = CallAlarm.CLI,
