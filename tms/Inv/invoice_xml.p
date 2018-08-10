@@ -946,7 +946,11 @@ PROCEDURE pSubInvoice2XML:
 
       /* Sum of different categories per subscription. YDR-2848 */
       lhXML:START-ELEMENT("TotalCategory").
-         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(SubInvoice.AmtExclVat)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttSub.SubscriptionTotal
+                                                           + ttSub.Discounts
+                                                           + ttSub.Bundles
+                                                           + ttSub.Charges
+                                                           + ttSub.Others)).
       lhXML:END-ELEMENT("TotalCategory").
 
       RUN pCollectCDR(SubInvoice.InvSeq,
