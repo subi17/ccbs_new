@@ -32,6 +32,86 @@ DEF BUFFER bMergeMobSub   FOR MobSub.
 DEF BUFFER bMergeDCCLI    FOR DCCLI.
 DEF BUFFER bMergedMsOwner FOR MsOwner.
 
+/*Try and buy PH 3 YCO-969*/
+
+/* Function fTariffCompare tells if which tariffs has greater value.
+   This is used in defining nee for penalty fees.
+   Return values:
+   1:  Price of 1st is greater than 2nd then
+   2:  Price of 2nd is greater than 1st
+   3:  Similar prices
+   -1: Incorrect input parameter 1
+   -2: Incorrect input parameter 2
+*/
+FUNCTION fTariffCompare RETURNS INT
+   (icFirstTariff AS CHAR,
+    icSecondTariff AS CHAR):
+   DEF BUFFER bClitype1 FOR CLIType.
+   DEF BUFFER bClitype2 FOR CLIType.
+   FIND FIRST bClitype1 NO-LOCK WHERE
+              bClitype1.Clitype eq icFirstTariff NO-ERROR.
+   IF NOT AVAIL bClitype1 THEN RETURN -1.
+
+   FIND FIRST bClitype2 NO-LOCK WHERE
+              bClitype2.Clitype eq icSecondTariff NO-ERROR.
+   IF NOT AVAIL bClitype2 THEN RETURN -2.
+
+   IF bClitype1.CommercialFee > bClitype2.CommercialFee THEN RETURN 1.
+   ELSE IF bClitype1.CommercialFee < bClitype2.CommercialFee THEN RETURN 2.
+   ELSE RETURN 0.
+
+END FUNCTION.
+
+
+/* Function fTryBuyPenaltyNeeded indicates if the the ongoing STC causes penalty
+   or not.
+   Input parameters:
+   iiReqId: STC request ID
+   Return values:
+   TRUE: Penalty Needed
+   FALSE: No Penalty needed. NOTE. False is returned also if the req is not
+          for TryBuy tariff.
+*/
+
+
+FUNCTION fTryBuyPenaltyNeeded RETURNS LOGICAL
+   (iiReqId AS INT):
+   DEF BUFFER CurrMsRequest FOR MsRequest.
+   DEF BUFFER PrevMsRequest FOR MsRequest.
+   FIND FIRST CurrMsRequest NO-LOCK WHERE
+              CurrMsRequest.MsRequest EQ iiReqId AND
+              CurrMsRequest.ReqCparam1 MATCHES "*TB*" NO-ERROR.
+
+   /*no return from TB tariff*/
+   IF NOT AVAIL CurrMsRequest THEN RETURN FALSE.
+
+   /* returning from TB tariff - check need for penalty */
+   /* penalty is needed if new tariff is cheaper than the original */
+   /* returning to sinfin25 -> FALSE*/
+   IF CurrMsRequest.ReqCparam2 EQ  "sinfin25" THEN RETURN FALSE.
+
+   /*returning to tariff before TB or more expensive -> FALSE*/
+   FIND FIRST PrevMsRequest NO-LOCK WHERE
+              PrevMsRequest.Brand EQ CurrMsRequest.Brand AND
+              PrevMsRequest.ReqType EQ CurrMsRequest.ReqType AND
+              PrevMsRequest.CustNum EQ CurrMsRequest.CustNum AND
+              PrevMsRequest.MsSeq EQ CurrMsRequest.MsSeq AND
+              PrevMsRequest.ActStamp < CurrMsRequest.ActStamp AND
+              PrevMsRequest.Reqstatus EQ 2 NO-ERROR.
+    IF AVAIL PrevMsRequest THEN DO:
+       /* If the previous stc request is for TB tariff make checks */
+       IF PrevMsRequest.ReqCparam2 EQ CurrMsRequest.ReqCparam1 THEN DO:
+          IF fTariffCompare(PrevMsRequest.ReqCparam1, /* prev */
+                            CurrMsRequest.ReqCparam2) /* new */
+          EQ 1 THEN RETURN TRUE. /*old is more valuable*/
+          ELSE RETURN FALSE.
+       END.
+    END.
+    RETURN FALSE.
+END.
+
+
+
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
