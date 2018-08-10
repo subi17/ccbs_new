@@ -31,7 +31,7 @@ CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand:
                                                "handle ReqType &1",
                                                {&REQTYPE_DSS})).
       
-      acProCommandTarget = "NB_AS".
+      acProCommandTarget = STRING(Gwy.SAPC.TargetEnum:NB_AS).
 
       CASE MsRequest.ReqCparam1:
          WHEN "CREATE"
