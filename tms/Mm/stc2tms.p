@@ -88,7 +88,7 @@ FUNCTION fTryBuyPenaltyNeeded RETURNS LOGICAL
    /* returning from TB tariff - check need for penalty */
    /* penalty is needed if new tariff is cheaper than the original */
    /* returning to sinfin25 -> FALSE*/
-   IF CurrMsRequest.ReqCparam2 EQ  "sinfin25" THEN RETURN FALSE.
+   IF CurrMsRequest.ReqCparam2 EQ "CONT25" THEN RETURN FALSE.
 
    /*returning to tariff before TB or more expensive -> FALSE*/
    FIND FIRST PrevMsRequest NO-LOCK WHERE
@@ -2033,20 +2033,24 @@ PROCEDURE pCloseContracts:
          OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
       DO:
+         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqCparam1 MATCHES "*TB*" THEN DO:
+            llCreateFees = fTryBuyPenaltyNeeded(bOrigRequest.MsRequest).
+         END.
+         ELSE DO:
          /* YDR-2038 (stc/btc to prepaid)
             ReqIParam5
             (0=no extend_term_contract
              1=extend_term_contract
              2=exclude_term_penalty)
           */
-         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
-            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
-                                                     DayCampaign.DCEvent EQ lcContract          AND 
-                                                     DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
-             llCreateFees = FALSE.
-         ELSE 
-             llCreateFees = TRUE. 
-
+            IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
+               CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
+                                                        DayCampaign.DCEvent EQ lcContract          AND 
+                                                        DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
+                llCreateFees = FALSE.
+            ELSE 
+                llCreateFees = TRUE. 
+         END.
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
                                         lcContract,
