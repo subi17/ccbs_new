@@ -73,6 +73,17 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
       aoCharacteristicArray:Add(ioJsonObject).
    END METHOD.
 
+   METHOD PROTECTED JsonObject mLineObject():
+
+      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
+
+      loJsonObject = NEW JsonObject().
+      loJsonObject:Add("phoneNumber", aoProCommandSubscription:ahOrder::CLI).
+
+      RETURN loJsonObject.
+
+   END METHOD.
+
    METHOD PROTECTED ABSTRACT VOID mFetchData().
 
 END CLASS.

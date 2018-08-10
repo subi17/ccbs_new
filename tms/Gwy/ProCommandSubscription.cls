@@ -23,7 +23,15 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
    DEFINE PUBLIC VARIABLE aoOrderEnum AS CLASS OrderEnum NO-UNDO.
    
    DEFINE PRIVATE BUFFER Order FOR Order.
-   DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer. 
+   DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer.
+
+   DEFINE PUBLIC PROPERTY ahOrder AS HANDLE NO-UNDO
+      GET.
+      PRIVATE SET.
+
+   DEFINE PUBLIC PROPERTY ahOrderCustomer AS HANDLE NO-UNDO
+      GET.
+      PRIVATE SET.
 
    /* OrderAccessory tietue on jos DEVICE... */
 
@@ -31,7 +39,11 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       ( iiMsRequest AS INTEGER ):
 
       SUPER(iiMsRequest).
-      
+
+      ASSIGN
+         ahOrder         = BUFFER Order:HANDLE
+         ahOrderCustomer = BUFFER OrderCustomer:HANDLE.
+
       DEFINE VARIABLE loJson        AS CLASS JsonObject   NO-UNDO.
       DEFINE VARIABLE loService     AS CLASS IService     NO-UNDO.
 

@@ -30,9 +30,24 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject:
 
    METHOD PROTECTED OVERRIDE VOID mFetchData():
 
-      mAddCharacteristicsArray(mNameValue("emaDataPlan", "mikä value?")). 
-      mAddCharacteristicsArray(mNameValue("subscriptionType", "prepaid/postpaid")). /* order.... */
-     
+      DEFINE BUFFER CLIType FOR CLIType.
+
+      FIND CLIType NO-LOCK WHERE
+           CLIType.Brand = "1" AND
+           CLIType.CLIType = aoProCommandSubscription:ahOrder::CLIType
+      NO-ERROR.
+
+      IF NOT AVAILABLE CLIType
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot CLIType '&1' which order has",
+                                               aoProCommandSubscription:ahOrder::CLIType)).
+
+      /* fGetShaperConfId needs to be used in here ???? */ 
+      mAddCharacteristicsArray(mNameValue("emaDataPlan", "fGetShaperConfId??")). /* DAycampaign.newfield */
+      mAddCharacteristicsArray
+         (mNameValue("subscriptionType",
+                     STRING(aoProCommandSubscription:ahOrder::PayType,
+                            "prepaid/postpaid"))).
+
       ServiceObject:Add("Characteristics", aoCharacteristicArray).
       ServiceObject:Add("Action",
                         IF aoProCommandSubscription:aoOrderEnum EQ
@@ -40,6 +55,7 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject:
                         THEN "Delete"
                         ELSE "Add").
       ServiceObject:Add("Type", "DEFAULT_PRICE_PLAN").
+      ServiceObject:Add("Line", mLineObject()).
 
       aoService = NEW UnderDefaultPricePlan().
       aoService:mCreateServices(ServiceObject, aoProCommandSubscription).
