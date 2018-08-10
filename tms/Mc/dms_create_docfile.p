@@ -1262,42 +1262,42 @@ END.
 FUNCTION fCreateDocumentCase4 RETURNS CHAR
    (idStartTS AS DECIMAL,
     idEndTS AS DECIMAL):
-   DEF VAR lcInstAddrCaseTypeID AS CHAR NO-UNDO.     
-   DEF VAR lcFixedNumCaseTypeID AS CHAR NO-UNDO.
-   DEF VAR lcACCCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR lcSTCCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO. 
-   DEF VAR lcICCCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR lcTariff AS CHAR NO-UNDO.
-   DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
-   DEF VAR lcCaseTypeId AS CHAR NO-UNDO.
-   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
-   DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
-   DEF VAR liMonths AS INT NO-UNDO.
-   DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
-   DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
-   DEF VAR lcNewHandset AS CHAR NO-UNDO.
-   DEF VAR lcPrevHandset AS CHAR NO-UNDO.
-   DEF VAR lcNewPermanency AS CHAR NO-UNDO.
-   DEF VAR lcPrevPermanency AS CHAR NO-UNDO.
+   DEF VAR lcInstAddrCaseTypeID  AS CHAR NO-UNDO.     
+   DEF VAR lcFixedNumCaseTypeID  AS CHAR NO-UNDO.
+   DEF VAR lcACCCaseTypeID       AS CHAR NO-UNDO.
+   DEF VAR lcSTCCaseTypeID       AS CHAR NO-UNDO.
+   DEF VAR lcIMEICaseTypeID      AS CHAR NO-UNDO. 
+   DEF VAR lcICCCaseTypeID       AS CHAR NO-UNDO.
+   DEF VAR lcTariff              AS CHAR NO-UNDO.
+   DEF VAR lcFixedNumber         AS CHAR NO-UNDO. 
+   DEF VAR lcCaseTypeId          AS CHAR NO-UNDO.
+   DEF VAR ldeInstallment        AS DECIMAL NO-UNDO.
+   DEF VAR ldeMonthlyFee         AS DECIMAL NO-UNDO.
+   DEF VAR liMonths              AS INT NO-UNDO.
+   DEF VAR ldeFinalFee           AS DECIMAL NO-UNDO.
+   DEF VAR lcCasefileRow         AS CHAR NO-UNDO.
+   DEF VAR lcNewHandset          AS CHAR NO-UNDO.
+   DEF VAR lcPrevHandset         AS CHAR NO-UNDO.
+   DEF VAR lcNewPermanency       AS CHAR NO-UNDO.
+   DEF VAR lcPrevPermanency      AS CHAR NO-UNDO.
 
    DEF BUFFER MobSub FOR MobSub.
 
    ASSIGN
       lcInstAddrCaseTypeID = '4e'
       lcFixedNumCaseTypeID = '4f'
-      lcICCCaseTypeID   = '4d'
-      lcACCCaseTypeID   = '4c'
-      lcSTCCaseTypeID   = '4b'
-      lcIMEICaseTypeID  = '4a'.
+      lcICCCaseTypeID      = '4d'
+      lcACCCaseTypeID      = '4c'
+      lcSTCCaseTypeID      = '4b'
+      lcIMEICaseTypeID     = '4a'.
 
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand EQ Syst.Var:gcBrand AND
-            MsRequest.ReqStatus EQ 2 AND
-            MsRequest.UpdateStamp > idStartTS AND
-            MsRequest.UpdateStamp < idEndTS AND
+            MsRequest.Brand       EQ Syst.Var:gcBrand AND
+            MsRequest.ReqStatus   EQ 2                AND
+            MsRequest.UpdateStamp > idStartTS         AND
+            MsRequest.UpdateStamp < idEndTS           AND
             (
-             MsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE}  /*81*/
+             MsRequest.ReqType    EQ {&REQTYPE_BUNDLE_CHANGE}  /*81*/
              OR MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} /*10*/
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
@@ -1309,10 +1309,10 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_FIXEDLINE_ORDER_UPDATE} THEN DO:
             CASE MsRequest.ReqCParam2:
-               WHEN "ChangeInstallationAddress" THEN DO:  
-                  DEF VAR lcCurrAddress AS CHAR NO-UNDO.
+               WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:  
+                  DEF VAR lcCurrAddress  AS CHAR NO-UNDO.
                   DEF VAR lcAmendAddress AS CHAR NO-UNDO.
-                  DEF VAR liCount AS INT NO-UNDO.
+                  DEF VAR liCount        AS INT NO-UNDO.
                   
                   ASSIGN
                      lcCurrAddress = ""
@@ -1365,7 +1365,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                         /*New_Gescal*/
                         ENTRY(12,MsRequest.ReqCParam3,"|").
                END.
-               WHEN "ChangePhoneNumber" THEN DO:
+               WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
                   ASSIGN
                      lcCaseTypeId = lcFixedNumCaseTypeID
                      lcCaseFileRow =
