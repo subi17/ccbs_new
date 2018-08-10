@@ -41,6 +41,7 @@ CLASS Gwy.ProCommandDaemon INHERITS gearbox.daemons.Daemon:
       DEFINE VARIABLE lcInstance     AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lcValidTargets AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lcTargetList   AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lii            AS INTEGER   NO-UNDO.
 
       lcInstance = REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "").
 
