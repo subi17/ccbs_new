@@ -26,28 +26,29 @@ DEFINE VARIABLE ocResult AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN
    RETURN.
-   
-piOrderId = get_int(param_toplevel_id, "0").
-pcSalesManId = get_string(param_toplevel_id, "1").
-pcReason = get_string(param_toplevel_id, "2").
+
+ASSIGN
+   piOrderId    = get_int(param_toplevel_id, "0")
+   pcSalesManId = get_string(param_toplevel_id, "1")
+   pcReason     = get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.   
 
 /* Busines logic validations */
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
-FIND FIRST Order WHERE 
-           Order.Brand EQ Syst.Var:gcBrand AND
+FIND FIRST Order NO-LOCK WHERE 
+           Order.Brand   EQ Syst.Var:gcBrand AND
            Order.OrderId EQ piOrderId 
-           NO-LOCK NO-ERROR.
+           NO-ERROR.
 IF NOT AVAIL Order THEN 
    RETURN appl_err("OrderId is invalid").
    
-FIND FIRST CliType WHERE
-           CliType.Brand EQ Syst.Var:gcBrand AND
-           CliType.CliType = Order.CliType AND
+FIND FIRST CliType NO-LOCK WHERE
+           CliType.Brand      EQ Syst.Var:gcBrand AND
+           CliType.CliType    EQ Order.CliType    AND
            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} 
-           NO-LOCK NO-ERROR.
+           NO-ERROR.
 IF AVAIL CliType OR NOT fIsConvergenceTariff(Order.CLIType) THEN
    RETURN appl_err("Not a Fixedline Order to Cancel").   
 
@@ -61,18 +62,18 @@ IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    RETURN appl_err("Order is not in valid state to cancel").   
 
 IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
-   FIND FIRST OrderCustomer WHERE 
+   FIND FIRST OrderCustomer NO-LOCK WHERE 
               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
               OrderCustomer.OrderId EQ piOrderId        AND
               OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-              NO-LOCK NO-ERROR.     
+              NO-ERROR.     
    IF NOT AVAILABLE OrderCustomer THEN 
       RETURN appl_err("Not a Fixedline Order to Cancel").
    
-   FIND FIRST OrderFusion WHERE
-              OrderFusion.Brand EQ Syst.Var:gcBrand AND
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand   EQ Syst.Var:gcBrand AND
               OrderFusion.OrderID EQ piOrderId 
-              NO-LOCK NO-ERROR.
+              NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
       RETURN appl_err("Fixedine connection is not available for this order").
    
@@ -87,7 +88,7 @@ END.
    RUN Mc/closeorder.p (INPUT piOrderId, INPUT TRUE).
    ocResult = RETURN-VALUE. 
    IF ocResult NE "" THEN 
-     RETURN appl_err(ocResult).
+      RETURN appl_err(ocResult).
    ELSE DO:
       fReleaseImei(Order.OrderId).
       add_boolean(response_toplevel_id, "", true).

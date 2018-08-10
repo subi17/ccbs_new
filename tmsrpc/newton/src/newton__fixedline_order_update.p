@@ -117,7 +117,7 @@ FUNCTION fGetAddressFields RETURNS LOGICAL:
    
    pcStreet_name = get_string(pcAmendmentStruct, "street_name").
    IF LOOKUP("street_number",lcAddressData) GT 0 THEN
-   pcStreet_number = get_string(pcAmendmentStruct, "street_number").
+      pcStreet_number = get_string(pcAmendmentStruct, "street_number").
    
    pcTerritory_owner = get_string(pcAmendmentStruct, "territory_owner").
    pcStreet_type = get_string(pcAmendmentStruct, "street_type").
@@ -139,11 +139,12 @@ IF validate_request(param_toplevel_id, "string,int,struct,string,string") EQ ? T
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcSalesManId = get_string(param_toplevel_id, "0").
-piOrderId = get_int(param_toplevel_id, "1").
-pcAmendmentStruct = get_struct(param_toplevel_id, "2").  
-pcAmendmentType = get_string(param_toplevel_id, "3").
-pcReason = get_string(param_toplevel_id, "4").
+ASSIGN
+   pcSalesManId      = get_string(param_toplevel_id, "0")
+   piOrderId         = get_int(param_toplevel_id, "1")
+   pcAmendmentStruct = get_struct(param_toplevel_id, "2")  
+   pcAmendmentType   = get_string(param_toplevel_id, "3")
+   pcReason          = get_string(param_toplevel_id, "4").
 
 scUser = "VISTA_" + pcSalesManId. /* Read from eventlog functions into eventlog.user */
 Syst.Var:katun = "VISTA_" + pcSalesManId.
@@ -151,51 +152,60 @@ Syst.Var:katun = "VISTA_" + pcSalesManId.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 CASE pcAmendmentType:
-    WHEN "ChangeInstallationAddress" THEN DO:
+    
+    WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:
     /* validate order address struct */
        ASSIGN
           lcAddressData = validate_request(pcAmendmentStruct,gcAmendmentDetails).
+       
        IF lcAddressData EQ ? THEN RETURN.
        fGetAddressFields().
     END.
-    WHEN "ChangePhoneNumber" THEN DO:
+
+    WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
         /* validate fixed Number value */
         ASSIGN
             lcFixedNumber = validate_request(pcAmendmentStruct,"fixednumber").
+        
         IF lcFixedNumber EQ ? THEN RETURN.
         fGetFixedNumber().
     END.
+
     OTHERWISE RETURN  appl_err(" AmendmentType is not available"). 
+
 END CASE.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-
 /* Busines logic validations */
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
-FIND FIRST Order WHERE 
-           Order.Brand EQ Syst.Var:gcBrand AND
+FIND FIRST Order NO-LOCK WHERE 
+           Order.Brand   EQ Syst.Var:gcBrand AND
            Order.OrderId EQ piOrderId 
-           NO-LOCK NO-ERROR.
+           NO-ERROR.
+
 IF NOT AVAIL Order THEN 
    RETURN appl_err("OrderId is invalid").
    
-IF pcAmendmentType EQ "ChangeInstallationAddress" AND 
+IF pcAmendmentType  EQ {&INFLIGHT_ADDRESS_UPDATE} AND 
    Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
    RETURN appl_err("Order is not in valid state to update").   
    
-FIND FIRST OrderCustomer WHERE 
+FIND FIRST OrderCustomer NO-LOCK WHERE 
            OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
            OrderCustomer.OrderId EQ piOrderId        AND
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-           NO-LOCK NO-ERROR.                          
+           NO-ERROR.
+
 IF NOT AVAILABLE OrderCustomer THEN 
    RETURN appl_err("Order Update possible for fixedline order only").
    
 FIND FIRST OrderFusion NO-LOCK WHERE
-           OrderFusion.Brand EQ Syst.Var:gcBrand AND
-           OrderFusion.OrderID EQ piOrderId NO-ERROR.
+           OrderFusion.Brand   EQ Syst.Var:gcBrand AND
+           OrderFusion.OrderID EQ piOrderId 
+           NO-ERROR.
+
 IF NOT AVAIL OrderFusion THEN
    RETURN appl_err("Fixed line connection is not available for this order").
    
@@ -205,11 +215,12 @@ IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT") EQ 0 THEN
 IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
       RETURN appl_err("fixedline is not in valid state to update").
       
-FIND FIRST CliType WHERE
-           CliType.Brand EQ Syst.Var:gcBrand AND
-           CliType.CliType = Order.CliType AND
+FIND FIRST CliType NO-LOCK WHERE
+           CliType.Brand      EQ Syst.Var:gcBrand AND
+           CliType.CliType    EQ Order.CliType    AND
            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} 
-           NO-LOCK NO-ERROR.
+           NO-ERROR.
+
 IF AVAIL CliType THEN
    RETURN appl_err("Invalid TariffType").
             
@@ -220,64 +231,64 @@ IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
    RETURN appl_err("Fixednumber is not correct" ).
 
 CASE pcAmendmentType:
-    WHEN "ChangeInstallationAddress" THEN DO:
+    WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:
 
        IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
-                          FusionMessage.OrderID = OrderFusion.OrderID AND
-                          FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
+                          FusionMessage.OrderID       EQ OrderFusion.OrderID AND
+                          FusionMessage.MessageType   EQ {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
                           FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN 
           RETURN appl_err("Ongoing message, not possible to update order").      
        
        ASSIGN
           lcAmendmentType = pcAmendmentType
-          lcCurrentDetails = OrderCustomer.StreetType + "|" + 
-                             OrderCustomer.Street + "|" + 
-                             OrderCustomer.BuildingNum + "|" + 
-                             OrderCustomer.Floor + "|" + 
-                             OrderCustomer.Door + "|" + 
-                             OrderCustomer.Letter + "|" + 
-                             OrderCustomer.Stair + "|" + 
-                             OrderCustomer.Block + "|" + 
+          lcCurrentDetails = OrderCustomer.StreetType   + "|" + 
+                             OrderCustomer.Street       + "|" + 
+                             OrderCustomer.BuildingNum  + "|" + 
+                             OrderCustomer.Floor        + "|" + 
+                             OrderCustomer.Door         + "|" + 
+                             OrderCustomer.Letter       + "|" + 
+                             OrderCustomer.Stair        + "|" + 
+                             OrderCustomer.Block        + "|" + 
                              OrderCustomer.BisDuplicate + "|" + 
-                             OrderCustomer.ZipCode + "|" + 
-                             OrderCustomer.PostOffice + "|" + 
-                             OrderCustomer.Gescal + "|" +
-                             OrderCustomer.AddressId + "|" +
-                             OrderCustomer.Country + "|" +
-                             OrderCustomer.km + "|" +
-                             OrderCustomer.Region + "|" +
-                             OrderCustomer.Hand + "|" +
+                             OrderCustomer.ZipCode      + "|" + 
+                             OrderCustomer.PostOffice   + "|" + 
+                             OrderCustomer.Gescal       + "|" +
+                             OrderCustomer.AddressId    + "|" +
+                             OrderCustomer.Country      + "|" +
+                             OrderCustomer.km           + "|" +
+                             OrderCustomer.Region       + "|" +
+                             OrderCustomer.Hand         + "|" +
                              OrderCustomer.TerritoryOwner
-          lcAmendmentValue = pcStreet_type + "|" + 
-                             pcStreet_name + "|" + 
+          lcAmendmentValue = pcStreet_type   + "|" + 
+                             pcStreet_name   + "|" + 
                              pcStreet_number + "|" + 
-                             pcFloor + "|" + 
-                             pcDoor + "|" + 
-                             pcLetter + "|" + 
-                             pcStair + "|" + 
-                             pcBlock + "|" + 
-                             pcBis + "|" + 
-                             pcZip + "|" + 
-                             pcCity + "|" + 
-                             pcGescal + "|" + 
-                             pcAddressId + "|" +  
-                             pcCountry + "|" +  
-                             pcKm + "|" +
-                             pcRegion + "|" + 
-                             pcHand + "|" + 
+                             pcFloor         + "|" + 
+                             pcDoor          + "|" + 
+                             pcLetter        + "|" + 
+                             pcStair         + "|" + 
+                             pcBlock         + "|" + 
+                             pcBis 	         + "|" + 
+                             pcZip           + "|" + 
+                             pcCity          + "|" + 
+                             pcGescal        + "|" + 
+                             pcAddressId     + "|" +  
+                             pcCountry       + "|" +  
+                             pcKm            + "|" +
+                             pcRegion        + "|" + 
+                             pcHand          + "|" + 
                              pcTerritory_owner.
         
     END. 
-    WHEN "ChangePhoneNumber" THEN DO:
+    WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
         
        IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
-           FusionMessage.OrderID = OrderFusion.OrderID AND
-           FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} AND
-           FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}) THEN 
+           FusionMessage.OrderID       EQ OrderFusion.OrderID AND
+           FusionMessage.MessageType   EQ {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} AND
+           FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN 
           RETURN appl_err("Ongoing message, not possible to update order").      
        
        ASSIGN
-          lcAmendmentType = pcAmendmentType
+          lcAmendmentType  = pcAmendmentType
           lcCurrentDetails = OrderCustomer.FixedNumber
           lcAmendmentValue = pcFixedNumber.
 
@@ -287,10 +298,9 @@ CASE pcAmendmentType:
        RETURN appl_err("Invalid AmendmentType").
     END. 
       
-END CASE.    
-
-fOrderUpdateRequest(
-                    pcSalesManId,
+END CASE.   
+ 
+fOrderUpdateRequest(pcSalesManId,
                     piOrderId,
                     0,
                     lcAmendmentType,

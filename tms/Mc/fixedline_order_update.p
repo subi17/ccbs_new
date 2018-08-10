@@ -8,21 +8,20 @@ DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
 DEF VAR lcError AS CHAR NO-UNDO.
 
-FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
+FIND MsRequest NO-LOCK WHERE
+     MsRequest.MsRequest = iiRequest
+     NO-ERROR.
+     
 IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE {&REQTYPE_FIXEDLINE_ORDER_UPDATE} THEN RETURN "ERROR".
 
 CASE MsRequest.ReqCParam2:
-    WHEN "ChangeInstallationAddress" THEN DO:
+    
+    WHEN {&INFLIGHT_ADDRESS_UPDATE} OR WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
        fCreateFusionUpdateOrderMessage(MsRequest.ReqIParam1,
                                        MsRequest.ReqCParam2,
                                        OUTPUT lcError).
     END.
-    WHEN "ChangePhoneNumber" THEN DO:
-       fCreateFusionUpdateOrderMessage(MsRequest.ReqIParam1,
-                                       MsRequest.ReqCParam2,
-                                       OUTPUT lcError).
-    END.
-
+    
     OTHERWISE DO:
        fReqStatus(3,"Invalid AmendmentType").
     END.

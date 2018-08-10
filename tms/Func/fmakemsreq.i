@@ -716,20 +716,20 @@ FUNCTION fOrderUpdateRequest RETURNS INTEGER
    DEF BUFFER bOrdCustomer FOR OrderCustomer.
    DEF BUFFER bOrder FOR order.
    
-   FIND FIRST bOrder WHERE
-              bOrder.Brand EQ Syst.Var:gcBrand AND
+   FIND FIRST bOrder NO-LOCK WHERE
+              bOrder.Brand   EQ Syst.Var:gcBrand AND
               bOrder.OrderId EQ iiOrderId 
-              NO-LOCK NO-ERROR.
+              NO-ERROR.
    IF NOT AVAIL bOrder THEN DO: 
       ocResult = SUBST("Order for &1 not found", iiOrderId).
       RETURN 0.
    END.
               
-   FIND FIRST bOrdCustomer WHERE 
+   FIND FIRST bOrdCustomer NO-LOCK WHERE 
               bOrdCustomer.Brand   EQ Syst.Var:gcBrand AND
               bOrdCustomer.OrderId EQ iiOrderId AND 
               bOrdCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-              NO-LOCK NO-ERROR.
+              NO-ERROR.
    IF NOT AVAIL bOrdCustomer THEN DO: 
       ocResult = SUBST("OrderCustomer for &1 not found", iiOrderId).
       RETURN 0.

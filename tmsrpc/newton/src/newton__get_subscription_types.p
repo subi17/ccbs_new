@@ -180,6 +180,8 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
                                    lcUriPath ,
                                    lcUriQuery,
                                    lcUriQueryVal,
+                                   ""           ,
+                                   ""           ,
                                    loRequestJson,
                                    OUTPUT oiStatusCode,
                                    OUTPUT ocStatusReason,

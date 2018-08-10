@@ -23,7 +23,7 @@ else:
 
 p=s.newton.fixedline_order_update('rarebari',var1,
                                   {
-                                   'fixednumber':'998988989'
+                                   'fixednumber':'998811122'
                                   },
                                   'ChangePhoneNumber',
                                   'Customers request')
