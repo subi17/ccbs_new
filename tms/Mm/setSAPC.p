@@ -553,7 +553,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
          loProCommand                       = NEW Gwy.ProCommand()
          loProCommand:aiMsRequest           = iiMSrequest
          loProCommand:aiMsSeq               = MobSub.MsSeq
-         loProCommand:acProCommandTarget    = "NB_CH"
+         loProCommand:acProCommandTarget    = STRING(Gwy.SAPC.TargetEnum:NB_CH)
          loProCommand:acProCommandType      = lcProcommandType
          loProCommand:acProCommandVerb      = "POST".
       

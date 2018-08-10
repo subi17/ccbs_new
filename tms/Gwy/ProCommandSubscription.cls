@@ -11,7 +11,8 @@
 
 USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.*.
-USING Gwy.ProCommandOrderEnum.
+USING Gwy.SAPC.OrderEnum.
+USING Gwy.SAPC.Service.IService.
 
 {Syst/tmsconst.i}
 
@@ -19,7 +20,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand: 
 
-   DEFINE PRIVATE VARIABLE aoOrderEnum AS CLASS ProCommandOrderEnum NO-UNDO.
+   DEFINE PUBLIC VARIABLE aoOrderEnum AS CLASS OrderEnum NO-UNDO.
    
    DEFINE PRIVATE BUFFER Order FOR Order.
    DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer. 
@@ -31,15 +32,16 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
 
       SUPER(iiMsRequest).
       
-      DEFINE VARIABLE loJson    AS CLASS JsonObject NO-UNDO.
+      DEFINE VARIABLE loJson        AS CLASS JsonObject   NO-UNDO.
+      DEFINE VARIABLE loService     AS CLASS IService     NO-UNDO.
 
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
-         THEN aoOrderEnum = ProCommandOrderEnum:CREATION.
+         THEN aoOrderEnum = OrderEnum:CREATION.
          WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
-         THEN aoOrderEnum = ProCommandOrderEnum:TERMINATION.
+         THEN aoOrderEnum = OrderEnum:TERMINATION.
          WHEN {&REQTYPE_SUBSCRIPTION_REACTIVATION}
-         THEN aoOrderEnum = ProCommandOrderEnum:PORTABILITY.
+         THEN aoOrderEnum = OrderEnum:PORTABILITY.
          OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandSubscription cannot " +
                                                        "handle ReqType &1",
                                                        MsRequest.ReqType)).
@@ -70,13 +72,20 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find agreement ordercustomer for order &1",
                                                Order.OrderId)).
 
-      acProCommandTarget = "BPM".
+      acProCommandTarget = STRING(Gwy.SAPC.TargetEnum:BPM).
       mSetProCommandId().
       
       loJson = mOrderObject().
 
       loJson:Add("Client", mClientObject()).
-      loJson:Add("Services", mServicesObject()).
+      
+      CASE aoOrderEnum:
+         WHEN OrderEnum:CREATION
+         THEN loService = NEW Gwy.SAPC.Service.MobileLineSAPC.UnderRoot(). 
+      END CASE.
+
+      IF VALID-OBJECT(loService)
+      THEN loService:mCreateServices(loJson, THIS-OBJECT).
 
       FINALLY:
          IF VALID-OBJECT(loJson)
@@ -105,9 +114,10 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
 
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("orderId", STRING(aiProCommandId)).
-      loJsonObject:Add("orderType", IF aoOrderEnum EQ ProCommandOrderEnum:TERMINATION
+      loJsonObject:Add("orderType", IF aoOrderEnum EQ OrderEnum:TERMINATION
                                     THEN "Disconnection"
                                     ELSE "InOrder").
+      loJsonObject:Add("subscriptionID", STRING(MsRequest.MsSeq)).
       loJsonObject:Add("Sellchannel", "TMSB2C").
       loJsonObject:Add("Selldate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.ActStamp))).
       loJsonObject:Add("Seller", CAPS(multitenancy.TenantInformation:mGetEffectiveBrand())).
@@ -118,6 +128,7 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
 
    END METHOD.
 
+/*
    METHOD PRIVATE JsonObject mContactObject():
 
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
@@ -137,17 +148,7 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       RETURN loJsonObject.
 
    END METHOD.
-
-   METHOD PRIVATE JsonObject mServicesObject():
-
-      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loContact    AS CLASS JsonObject NO-UNDO.
-
-      loJsonObject = NEW JsonObject().
-
-      RETURN loJsonObject.
-
-   END METHOD.
+*/
 
    METHOD PRIVATE JsonObject mClientObject():
 
@@ -156,7 +157,7 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("clientID", OrderCustomer.CustId).
       loJsonObject:Add("Type", mGetSegment()).
-      loJsonObject:Add("Contact", mContactObject()).
+      /*loJsonObject:Add("Contact", mContactObject()).*/
   
       RETURN loJsonObject.
 

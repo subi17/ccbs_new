@@ -38,22 +38,33 @@ CLASS Gwy.ProCommandDaemon INHERITS gearbox.daemons.Daemon:
 
    METHOD OVERRIDE PUBLIC VOID setUp ():
 
-      DEFINE VARIABLE lcInstance AS CHARACTER NO-UNDO.
-      
+      DEFINE VARIABLE lcInstance     AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcValidTargets AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcTargetList   AS CHARACTER NO-UNDO.
+
       lcInstance = REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "").
-      
-      IF lcInstance BEGINS "NB_AS"
-      THEN lcInstance = "NB_AS".
-      ELSE IF lcInstance BEGINS "NB_CH"
-      THEN lcInstance = "NB_CH".
-      ELSE IF lcInstance BEGINS "NB"
-      THEN lcInstance = "NB_AS,NB_CH".
-      ELSE IF lcInstance BEGINS "BPM"
-      THEN lcInstance = "BPM".
-      ELSE IF lcInstance BEGINS "ALL"
-      THEN lcInstance = "NB_AS,NB_CH,BPM".
-      ELSE RETURN ERROR NEW Progress.Lang.AppError
-            ("The daemon instance must begin with NB_AS, NB_CH, NB, BPM or ALL", 1).
+
+      lcValidTargets = GET-CLASS(Gwy.SAPC.TargetEnum):GetEnumNames().
+
+      IF lcInstance = "ALL"
+      THEN lcInstance = lcValidTargets.
+
+      ELSE DO lii = 1 TO NUM-ENTRIES(lcValidTargets):
+
+         IF ENTRY(lii, lcValidTargets) BEGINS lcInstance
+         THEN lcTargetList = lcTargetList +
+                             (IF lcTargetList EQ "" THEN "" ELSE ",") +
+                             ENTRY(lii, lcValidTargets).
+
+      END.
+
+      IF lcTargetList > ""
+      THEN lcInstance = lcTargetList.
+
+      IF lcInstance EQ ""
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+            (SUBSTITUTE("The daemon instance must begin to with the values " +
+                        "&1 begins or it can be ALL", lcValidTargets), 1).
 
       aoProCommandHandler = NEW Gwy.ProCommandHandler(lcInstance).
 

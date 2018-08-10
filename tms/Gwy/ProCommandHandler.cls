@@ -8,6 +8,8 @@ USING Progress.Lang.*.
 USING PROGRESS.Json.ObjectModel.*.
 USING Gwy.ParamRESTClient.
 USING Gwy.RESTError.
+USING Gwy.SAPC.TargetEnum.
+USING Gwy.SAPC.VerbEnum.
 
 {Syst/tmsconst.i}
 
@@ -31,16 +33,6 @@ CLASS Gwy.ProCommandHandler FINAL:
       FIELD LastUpdated AS DATETIME-TZ
       INDEX ProCommandTarget IS PRIMARY UNIQUE ProCommandTarget ProCommandType.
 
-   DEFINE PRIVATE PROPERTY ValidRESTMethods AS CHARACTER NO-UNDO
-      GET:
-         RETURN "POST,GET,PATCH,PUT,DELETE".
-      END GET.
-
-   DEFINE PRIVATE PROPERTY ValidTargets     AS CHARACTER NO-UNDO
-      GET:
-         RETURN "NB_AS,NB_CH,BPM".
-      END GET.
-
    DEFINE PRIVATE VARIABLE aoRESTClient        AS CLASS ParamRESTClient NO-UNDO.
 
    DEFINE PRIVATE VARIABLE aiRoundTime     AS INTEGER   NO-UNDO.
@@ -48,6 +40,8 @@ CLASS Gwy.ProCommandHandler FINAL:
    DEFINE PRIVATE VARIABLE acTenants       AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE acCurrentTenant AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE ahQuery         AS HANDLE    NO-UNDO.
+   DEFINE PRIVATE VARIABLE acProCommandTargetList  AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE VARIABLE acProCommandVerbList    AS CHARACTER NO-UNDO.
 
    DEFINE PRIVATE VARIABLE aoOMParser      AS CLASS ObjectModelParser   NO-UNDO.
 
@@ -91,6 +85,10 @@ CLASS Gwy.ProCommandHandler FINAL:
       ahQuery:QUERY-PREPARE('PRESELECT EACH ttProcess NO-LOCK BREAK BY ttProcess.TenantName').
 
       aoOMParser = NEW ObjectModelParser().
+
+      ASSIGN
+         acProCommandTargetList = GET-CLASS(TargetEnum):GetEnumNames()
+         acProCommandVerbList   = GET-CLASS(VerbEnum):GetEnumNames().
 
    END CONSTRUCTOR.
 
@@ -151,14 +149,14 @@ CLASS Gwy.ProCommandHandler FINAL:
                ttProcess.TenantName       = ENTRY(lij, lcTenants)
                ttProcess.LastProcessed    = NOW.
 
-            CASE ttProcess.ProCommandTarget:
-               WHEN "NB_AS"
+            CASE TargetEnum:GetEnum(ttProcess.ProCommandTarget):
+               WHEN TargetEnum:NB_AS
                THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/api/northbound-common/post-sales/ema/1",
                                                                acURIPrefix).
-               WHEN "NB_CH"
+               WHEN TargetEnum:NB_CH
                THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/api/northbound-tms/1/sync/orders",
                                                                acURIPrefix).
-               WHEN "BPM"
+               WHEN TargetEnum:BPM
                THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/crm-integration-tms/Order",
                                                                acURIPrefix).
             END CASE. 
@@ -264,13 +262,13 @@ CLASS Gwy.ProCommandHandler FINAL:
                             ProCommand.MsRequest),
                  {&PROCOMMANDSTATUS_FAULTY_RECORD}).
 
-         IF LOOKUP(ProCommand.ProCommandVerb,ValidRESTMethods) EQ 0
+         IF LOOKUP(ProCommand.ProCommandVerb,acProCommandVerbList) EQ 0
          THEN UNDO, THROW NEW AppError
                 (SUBSTITUTE("Invalid rest method &1 defined to ProCommandVerb",
                             ProCommand.ProCommandVerb),
                  {&PROCOMMANDSTATUS_FAULTY_RECORD}).
 
-         IF LOOKUP(ProCommand.ProCommandTarget,ValidTargets) EQ 0
+         IF LOOKUP(ProCommand.ProCommandTarget,acProCommandTargetList) EQ 0
          THEN UNDO, THROW NEW AppError
                 (SUBSTITUTE("Invalid ProCommandTarget &1",
                             ProCommand.ProCommandTarget),
@@ -304,16 +302,16 @@ CLASS Gwy.ProCommandHandler FINAL:
             the finally block */
          ldtSendTS = NOW.
 
-         CASE ProCommand.ProCommandVerb:
-            WHEN "POST"
+         CASE VerbEnum:GetEnum(ProCommand.ProCommandVerb):
+            WHEN VerbEnum:POST
             THEN aoRESTClient:mPOST(loReqJsonData).   /* loReqJsonData EQ ? is supported. */
-            WHEN "PATCH"
+            WHEN VerbEnum:PATCH
             THEN aoRESTClient:mPATCH(loReqJsonData).  /* loReqJsonData EQ ? is supported. */
-            WHEN "PUT"
+            WHEN VerbEnum:PUT
             THEN aoRESTClient:mPUT(loReqJsonData).    /* loReqJsonData EQ ? is supported. */
-            WHEN "DELETE"
+            WHEN VerbEnum:DELETE
             THEN aoRESTClient:mDELETE().
-            WHEN "GET"
+            WHEN VerbEnum:GET
             THEN aoRESTClient:mGET().
          END.
 
@@ -354,10 +352,10 @@ CLASS Gwy.ProCommandHandler FINAL:
             Note! SendTS and ResponseTS will be set in finally block
          */
          IF mVerifyStatusOK(CAST(aoRESTClient:aoResultObject, JsonObject))
-         THEN CASE ProCommand.ProCommandTarget:
-                 WHEN "BPM"
+         THEN CASE TargetEnum:GetEnum(ProCommand.ProCommandTarget):
+                 WHEN TargetEnum:BPM
                  THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_WAITING_ACCEPT_NOTIFY}.
-                 WHEN "NB_AO" OR WHEN "NB_CH"
+                 WHEN TargetEnum:NB_AS OR WHEN TargetEnum:NB_CH
                  THEN ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_DONE}.
               END CASE.
          ELSE ProCommand.ProCommandStatus = {&PROCOMMANDSTATUS_KO_RESPONSE}.
