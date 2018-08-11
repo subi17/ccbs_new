@@ -1,6 +1,6 @@
  
 /*------------------------------------------------------------------------
-   File        : OrderProductPC
+   File        : OrderProductDummy
    Purpose     : Parses the Product data coming from BSS
    Syntax      : 
    Description : 
@@ -18,7 +18,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/tmsconst.i}
 
-CLASS pm.OrderProductPC INHERITS pm.OrderProduct: 
+CLASS pm.OrderProductDummy INHERITS pm.OrderProduct: 
     /*------------------------------------------------------------------------------
      Purpose:
      Notes:
@@ -29,14 +29,14 @@ CLASS pm.OrderProductPC INHERITS pm.OrderProduct:
         GET.
         SET.
         
-	CONSTRUCTOR PUBLIC OrderProductPC ( ioOrder AS CLASS om.Order ):
+	CONSTRUCTOR PUBLIC OrderProductDummy ( ioOrder AS CLASS om.Order ):
         SUPER(ioOrder).
     END CONSTRUCTOR.
 		
-	DESTRUCTOR PUBLIC OrderProductPC ( ):
+	DESTRUCTOR PUBLIC OrderProductDummy ( ):
 
-        IF VALID-OBJECT(aoOrderCustomer)
-        THEN DELETE OBJECT aoOrderCustomer.
+        IF VALID-OBJECT(aoOrderCustomer) THEN
+            DELETE OBJECT aoOrderCustomer.
         
     END DESTRUCTOR.
     

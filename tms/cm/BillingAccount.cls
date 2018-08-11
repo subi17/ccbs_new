@@ -149,15 +149,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
     
     METHOD PUBLIC VOID mStoreData() :
         
-        FIND FIRST InvoiceTargetGroup WHERE 
-                   InvoiceTargetGroup.Brand      =  Syst.Var:gcBrand  AND 
-                   InvoiceTargetGroup.ITGroupID  =  THIS-OBJECT:itGroupId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-                   
-        IF LOCKED(InvoiceTargetGroup) THEN 
-            UNDO, THROW NEW ParamError ("Billing Accout is locked.").
-            
-        IF NOT AVAILABLE InvoiceTargetGroup 
-        THEN CREATE InvoiceTargetGroup.     
+       CREATE InvoiceTargetGroup.     
         
         ASSIGN 
             InvoiceTargetGroup.Brand         = Syst.Var:gcBrand

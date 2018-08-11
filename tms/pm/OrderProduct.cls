@@ -57,12 +57,7 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
       
     DEFINE PUBLIC PROPERTY ParentID AS INTEGER NO-UNDO
         GET.
-        SET(INPUT iiParentID AS INTEGER):
-          
-            ASSIGN 
-                THIS-OBJECT:ParentID = iiParentID.
-          
-        END SET.
+        SET.
       
     DEFINE PUBLIC PROPERTY billAcctIndex AS INTEGER NO-UNDO
         GET.
@@ -86,14 +81,6 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:productID          = ioItemObject:GetCharacter("product_id")  WHEN ioItemObject:Has("product_id")   
          THIS-OBJECT:productOfferingID  = ioItemObject:GetCharacter("product_offering_id").
          
-      IF THIS-OBJECT:actionType = {&ORDER_PRODUCT_SUBSCRIPTION} OR THIS-OBJECT:actionType = {&ORDER_PRODUCT_FIXED_LINE} THEN 
-      DO:
-          
-          IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CliType = THIS-OBJECT:productID) THEN
-              UNDO, THROW NEW ParamError (SUBSTITUTE("Unknown Product: ", THIS-OBJECT:productID)).
-             
-      END.
-     
       IF ioItemObject:Has("billing_account_id") THEN
       DO:
           /*This will be executed in case of existing customer.*/
@@ -102,12 +89,10 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
          
       END.       
       ELSE IF ioItemObject:Has("billing_account_index") THEN
-      DO:    
-          
+      DO:              
           ASSIGN 
               THIS-OBJECT:billAcctIndex = ioItemObject:GetInteger("billing_account_index")                 
-              THIS-OBJECT:itGroupId     = objOrder:objCustomer:mGetBillingAcctID(THIS-OBJECT:billAcctIndex).
-             
+              THIS-OBJECT:itGroupId     = objOrder:objCustomer:mGetBillingAcctID(THIS-OBJECT:billAcctIndex).             
       END. 
 
       mCreateDataForType(ioItemObject).
@@ -117,8 +102,7 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
           
          ASSIGN objOrderProductFactory = NEW pm.OrderProductFactory().
          objOrderProductFactory:mCreateData(ioItemObject:GetJsonArray("items"), objOrder).
-         IF THIS-OBJECT:actionType <> {&ORDER_PRODUCT_MAIN} THEN
-             ASSIGN objOrderProductFactory:isChildArray =  TRUE.
+         ASSIGN objOrderProductFactory:isChildArray =  TRUE.
              
       END.
      
@@ -126,34 +110,32 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
 
    METHOD PUBLIC ABSTRACT VOID mStoreDataForType().
 
-   METHOD PUBLIC VOID mStoreData():
+    METHOD PUBLIC VOID mStoreData():
+      
+        CREATE abOrderProduct.
+        ASSIGN
+            abOrderProduct.OrderProductId    = NEXT-VALUE(OrderProductID)
+            abOrderProduct.OrderId           = objOrder:OrderId
+            THIS-OBJECT:orderProductID       = abOrderProduct.OrderProductId
+            THIS-OBJECT:orderID              = abOrderProduct.OrderId
+            abOrderProduct.actionType        = THIS-OBJECT:actionType
+            abOrderProduct.ProductID         = THIS-OBJECT:productID
+            abOrderProduct.ProductOfferingID = THIS-OBJECT:productOfferingID
+            abOrderProduct.ParentID          = THIS-OBJECT:ParentID
+            abOrderProduct.ITGroupID         = THIS-OBJECT:itGroupId
+            abOrderProduct.StatusCode        = objOrder:statusCode
+            .
      
-       IF THIS-OBJECT:actionType <> {&ORDER_PRODUCT_MAIN} THEN            
-       DO:
-           CREATE abOrderProduct.
-           ASSIGN
-               abOrderProduct.OrderProductId    = NEXT-VALUE(OrderProductID)
-               abOrderProduct.OrderId           = objOrder:OrderId
-               THIS-OBJECT:orderProductID       = abOrderProduct.OrderProductId
-               THIS-OBJECT:orderID              = abOrderProduct.OrderId
-               abOrderProduct.actionType        = THIS-OBJECT:actionType
-               abOrderProduct.ProductID         = THIS-OBJECT:productID
-               abOrderProduct.ProductOfferingID = THIS-OBJECT:productOfferingID
-               abOrderProduct.ParentID          = THIS-OBJECT:ParentID
-               abOrderProduct.ITGroupID         = THIS-OBJECT:itGroupId
-               .
-       END.
-     
-       mStoreDataForType().
+        mStoreDataForType().
 
-       IF VALID-OBJECT(objOrderProductFactory) THEN
-       DO:
-           IF objOrderProductFactory:isChildArray THEN
-               ASSIGN objOrderProductFactory:ParentID   =  THIS-OBJECT:orderProductID.
-           objOrderProductFactory:mStoreData().
-       END.
+        IF VALID-OBJECT(objOrderProductFactory) THEN
+        DO:
+            IF objOrderProductFactory:isChildArray THEN
+                ASSIGN objOrderProductFactory:ParentID = THIS-OBJECT:orderProductID.
+            objOrderProductFactory:mStoreData().
+        END.
 
-   END METHOD.
+    END METHOD.
    
    METHOD PUBLIC VOID mIsBillingAccountExists() :
             

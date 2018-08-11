@@ -202,6 +202,17 @@ ADD FIELD "PayType" OF "OrderMobile" AS logical
   HELP "PayType"
   ORDER 180  
   
+ADD FIELD "CancellationReason" OF "OrderMobile" AS character
+  DESCRIPTION "Cancelreason"
+  FORMAT "X(32)"
+  INITIAL ""
+  LABEL "CancelReason"
+  POSITION 20
+  MAX-WIDTH 40
+  COLUMN-LABEL "CancelReason"
+  HELP "CancellationReason"
+  ORDER 190 
+  
 ADD INDEX "OrderProductID" ON "OrderMobile" 
   AREA "Dyn_Index_1"
   UNIQUE

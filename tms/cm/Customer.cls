@@ -385,14 +385,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
    METHOD PUBLIC VOID mStoreCustomer():
 
-      FIND FIRST Customer WHERE Customer.CustNum  =  THIS-OBJECT:custNum EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-      IF LOCKED(Customer) THEN 
-         UNDO , THROW NEW ParamError ("Customer record is locked.").
-       
-      IF NOT AVAILABLE Customer THEN 
-      DO:
-         CREATE Customer.
-      END.   
+      CREATE Customer.
 
       ASSIGN      
          Customer.CustNum           = THIS-OBJECT:custNum

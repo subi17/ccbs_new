@@ -42,6 +42,10 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
     DEFINE PUBLIC PROPERTY ICC AS CHARACTER NO-UNDO
        GET.
        SET.
+       
+    DEFINE PUBLIC PROPERTY objParamFactory AS CLASS pm.OrderProductParamFactory NO-UNDO 
+        GET.
+        SET.
         
     CONSTRUCTOR PUBLIC OrderProductSIM ( iObjOrder AS CLASS om.Order ):
 		
@@ -72,7 +76,10 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
                    Func.ValidateOrder:misFreeICC(THIS-OBJECT:ICC) = FALSE 
                 THEN UNDO, THROW NEW ParamError(SUBSTITUTE("SIM with ICC &1 not found or not free", THIS-OBJECT:ICC)).
                 
-                mCreateDataOrderProductParamData(loAttributes,"ICC","Char").    
+                ASSIGN 
+                    objParamFactory = NEW pm.OrderProductParamFactory(THIS-OBJECT).
+                objParamFactory:mCreateData(loAttributes).
+                
             END. 
         END.
        
@@ -84,30 +91,9 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
                 objShipCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}
                 loShipAddress           = NEW JsonObject()
                 loShipAddress           = loAttributes:GetJsonObject("shipping_address").
-                
                 objShipCustomer:mCreateRowCustomerData(loShipAddress).
-        
         END.
         
-    END METHOD.
-    
-    METHOD PUBLIC VOID mCreateDataOrderProductParamData  (INPUT loAttributes AS CLASS JsonObject ,
-                                                          INPUT Attribute    AS CHARACTER,
-                                                          INPUT AttrType     AS CHARACTER  ):  
-                                                              
-        DEFINE VARIABLE liNextParamNum AS INTEGER NO-UNDO.                                                            
-       
-        objSimParams = NEW pm.OrderProductParam(THIS-OBJECT) .
-        objSimParams:mCreateData(loAttributes,Attribute,AttrType).
-       
-        ASSIGN 
-            liNextParamNum = mNextParamNb().
-                                            
-        CREATE ttOrderProductParam.
-        ASSIGN 
-            ttOrderProductParam.opobject = objSimParams
-            ttOrderProductParam.paramnb  = liNextParamNum. 
-                  
     END METHOD.
     
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
@@ -118,20 +104,13 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
         
         IF VALID-OBJECT(objShipCustomer) THEN 
             objShipCustomer:mStoreData().
+            
+        IF VALID-OBJECT(objParamFactory) THEN 
+            objParamFactory:mStoreData().
         
         IF THIS-OBJECT:ICC > "" THEN 
             objOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
         
-    END METHOD.
-    
-    METHOD PUBLIC INTEGER mNextParamNb():
-
-        FIND LAST ttOrderProductParam USE-INDEX paramnb NO-ERROR.
-               
-        IF NOT AVAILABLE ttOrderProductParam THEN RETURN 1.
-        
-        RETURN ( ttOrderProductParam.paramnb + 1 ).
-
     END METHOD.
     
     DESTRUCTOR PUBLIC OrderProductSIM ( ):
@@ -141,8 +120,10 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
             
         IF VALID-OBJECT(objShipCustomer) THEN 
             DELETE OBJECT objShipCustomer.
+            
+        IF VALID-OBJECT(objParamFactory) THEN 
+            DELETE OBJECT objParamFactory.
 
     END DESTRUCTOR.
-    
 
 END CLASS.

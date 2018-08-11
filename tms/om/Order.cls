@@ -30,6 +30,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY objCustomer AS CLASS cm.Customer NO-UNDO
         GET.
         SET.
+        
+   DEFINE PUBLIC PROPERTY ObjCustomerAcct AS CLASS cm.CustomerAccount NO-UNDO 
+       GET.
+       SET.
        
     DEFINE PUBLIC PROPERTY objOrderInspection AS CLASS om.OrderInspection NO-UNDO 
         GET.
@@ -76,6 +80,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         SET.
         
     DEFINE PUBLIC PROPERTY crStamp AS DATETIME-TZ NO-UNDO
+        GET.
+        SET.        
+        
+    DEFINE PUBLIC PROPERTY createdStamp AS DECIMAL NO-UNDO
         GET.
         SET.        
 
@@ -138,7 +146,23 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY isRenewalSTCOrder AS LOGICAL NO-UNDO
         GET.
         SET.
-      
+        
+    DEFINE PUBLIC PROPERTY custAcctid AS INTEGER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY objBillAcctArray AS CLASS JsonArray  NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY payType AS LOGICAL NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY icc AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
     /* A value for this property is populated in OrderProduct class */
     DEFINE PUBLIC PROPERTY msSeq AS INTEGER NO-UNDO
         GET.
@@ -172,11 +196,13 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE ldaCreateDate  AS DATETIME-TZ      NO-UNDO.
         DEFINE VARIABLE liCount        AS INTEGER          NO-UNDO.
         DEFINE VARIABLE lcMigrationErr AS CHARACTER        NO-UNDO.
+        
               
         ASSIGN
             loAgrCust         = ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
             ObjCustomerStruct = ioJsonObject:GetJsonObject("customer")           WHEN ioJsonObject:Has("customer")
-            objCustomer       = NEW cm.Customer().
+            objCustomer       = NEW cm.Customer()
+            ObjCustomerAcct   = NEW cm.CustomerAccount(objCustomer).
 
         ASSIGN
             THIS-OBJECT:crStamp       = ioJsonObject:GetDatetimeTZ("created_at")
@@ -205,10 +231,18 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
           IF ObjCustomerStruct:Has("account_id") THEN 
           DO:              
               ASSIGN THIS-OBJECT:custAcctNum = ObjCustomerStruct:GetInteger("account_id").
-              objCustomer:mFindCustomerAcct(THIS-OBJECT:custAcctNum).                  
+              objCustomerAcct:mFindCustomerAcct(THIS-OBJECT:custAcctNum).
+              ASSIGN THIS-OBJECT:custAcctid  = objCustomerAcct:mGetCustomerAcctId(). 
+              objCustomer:mFindCustomer(objCustomerAcct:mGetCustNum()).     
           END.    
           ELSE objCustomer:mCreateData(INPUT ObjCustomerStruct).
           
+          IF ObjCustomerStruct:Has("billing_accounts") THEN
+          DO:             
+              ASSIGN 
+                  objBillAcctArray = ObjCustomerStruct:GetJsonArray("billing_accounts"). 
+                  objCustomerAcct:mCreateBillingAcct(objBillAcctArray).                           
+          END.          
       END.            
       
       IF ioJsonObject:Has("items") THEN
@@ -249,19 +283,20 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         
         CREATE Order.
         ASSIGN
-            Order.Brand            = Syst.Var:gcBrand
-            Order.OrderId          = NEXT-VALUE(OrderId)
-            Order.Source           = "bssapi"
-            Order.CustNum          = objCustomer:CustNum
-            Order.MsSeq            = (IF (THIS-OBJECT:isACCOrder OR THIS-OBJECT:isRenewalSTCOrder) THEN THIS-OBJECT:msSeq ELSE NEXT-VALUE(MobSub))
-            THIS-OBJECT:finalMsSeq = Order.MsSeq
-            Order.CLI              = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:CLI   ELSE THIS-OBJECT:lcCLI)
-            Order.contractId       = THIS-OBJECT:contractId
-            Order.SalesMan         = THIS-OBJECT:salesMan
-            Order.OrderChannel     = THIS-OBJECT:orderChannel
-            Order.CrStamp          = Func.Common:mDateTimeTZ2TS(THIS-OBJECT:crStamp)
-            THIS-OBJECT:orderId    = Order.OrderId
-            Order.MNPStatus        = (INTEGER(THIS-OBJECT:mobileNumberType = {&TYPE_MNP})).
+            Order.Brand              = Syst.Var:gcBrand
+            Order.OrderId            = NEXT-VALUE(OrderId)
+            Order.Source             = "bssapi"
+            Order.CustNum            = objCustomer:CustNum
+            Order.MsSeq              = (IF (THIS-OBJECT:isACCOrder OR THIS-OBJECT:isRenewalSTCOrder) THEN THIS-OBJECT:msSeq ELSE NEXT-VALUE(MobSub))
+            THIS-OBJECT:finalMsSeq   = Order.MsSeq
+            Order.CLI                = (IF THIS-OBJECT:isACCOrder THEN THIS-OBJECT:CLI   ELSE THIS-OBJECT:lcCLI)
+            Order.contractId         = THIS-OBJECT:contractId
+            Order.SalesMan           = THIS-OBJECT:salesMan
+            Order.OrderChannel       = THIS-OBJECT:orderChannel
+            Order.CrStamp            = Func.Common:mDateTimeTZ2TS(THIS-OBJECT:crStamp)
+            THIS-OBJECT:createdStamp = Order.CrStamp
+            THIS-OBJECT:orderId      = Order.OrderId
+            Order.MNPStatus          = (INTEGER(THIS-OBJECT:mobileNumberType = {&TYPE_MNP})).
             
         CASE THIS-OBJECT:mobileNumberType:
             
@@ -356,7 +391,13 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 
         ASSIGN 
             Order.StatusCode    = THIS-OBJECT:statusCode
-            Order.Paytype       = (IF Func.ValidateOrder:mGetPayType(INPUT THIS-OBJECT:cliType) = 2 THEN YES ELSE NO) .
+            Order.Paytype       = (IF Func.ValidateOrder:mGetPayType(INPUT THIS-OBJECT:cliType) = 2 THEN YES ELSE NO) 
+            Order.AccountId     = THIS-OBJECT:custAcctid
+            THIS-OBJECT:payType = Order.Paytype.
+            
+            
+        IF VALID-OBJECT(objBillAcctArray) THEN 
+            ObjCustomerAcct:mStoreBillingAcct().
         
     END METHOD.
     
@@ -370,8 +411,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             FOR EACH bfpcOrder NO-LOCK WHERE
                      bfpcOrder.Brand      =     Syst.Var:gcBrand           AND
                      bfpcOrder.CLI        =     THIS-OBJECT:lcCLI          AND
-                     bfpcOrder.StatusCode =     {&ORDER_STATUS_OFFER_SENT} AND /* shouldn't never get this value because of YDR-2575 */
-                ROWID(bfpcOrder) <> ROWID(Order):
+                     bfpcOrder.StatusCode =     {&ORDER_STATUS_OFFER_SENT} AND  /* shouldn't never get this value because of YDR-2575 */
+                     ROWID(bfpcOrder)     <>    ROWID(Order):
 
                 RUN Mc/closeorder.p(bfpcOrder.OrderId, TRUE) NO-ERROR.
 
