@@ -66,7 +66,7 @@ DEF BUFFER OrderCustomer FOR OrderCustomer.
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-WAIT NO-ERROR.
      
-IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} OR 
+IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND  
    FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} THEN
    RETURN SUBST("Incorrect message type: &1", FusionMessage.MessageType).
    
