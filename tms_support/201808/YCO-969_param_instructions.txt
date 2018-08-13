@@ -1,0 +1,13 @@
+IN CUI, cParam (function), create these two new records:
+
+Parameter:LaSinfin25CliTypes
+Group:CLITypesInfo
+Type:C 
+Name:CLITypes for ADSL/Fiber + La Sinfín 25
+VALUE:CONTDSL59,CONTFH59_50,CONTFH69_300,CONTFH89_1000
+ 
+Parameter:Try&BuyCliTypes
+Group:CLITypesInfo
+Type:C 
+Name:CliTypes for Try & Buy convergent tariffs 
+VALUE:CONTDSLTB59,CONTFHTB59_50,CONTFHTB69_300,CONTFHTB89_1000,CONTFHNBTB69_300
