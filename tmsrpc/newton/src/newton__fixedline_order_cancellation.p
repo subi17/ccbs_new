@@ -52,4 +52,3 @@ add_boolean(response_toplevel_id, "", true).
 
 FINALLY:
 END.
-
