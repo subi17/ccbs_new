@@ -219,7 +219,7 @@ FUNCTION fCreateJSON_for_API_Interface RETURNS JsonObject
       loJsonObject = NEW JsonObject().
 
       /* Order (root) object */
-      loJsonObject:add("orderID", ttOrder.orderid).
+      loJsonObject:add("orderID", STRING(ttOrder.orderid)).
       loJsonObject:add("orderType", ttOrder.ordertype).
       loJsonObject:add("sellChannel", ttOrder.sellChannel).
       loJsonObject:add("sellDate", ttOrder.sellDate).
