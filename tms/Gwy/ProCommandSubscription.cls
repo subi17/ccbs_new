@@ -124,7 +124,7 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
-      loJsonObject:Add("orderId", STRING(aiProCommandId)).
+      loJsonObject:Add("orderID", STRING(aiProCommandId)).
       loJsonObject:Add("orderType", IF aoOrderEnum EQ OrderEnum:TERMINATION
                                     THEN "Disconnection"
                                     ELSE "InOrder").
