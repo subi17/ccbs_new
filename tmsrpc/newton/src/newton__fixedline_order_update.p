@@ -227,9 +227,6 @@ IF AVAIL CliType THEN
 IF NOT fIsConvergenceTariff(Order.CLIType) THEN 
    RETURN appl_err("Only Convergent Orders are allowed for address update" ).   
 
-IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
-   RETURN appl_err("Fixednumber is not correct" ).
-
 CASE pcAmendmentType:
     WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:
 
@@ -280,6 +277,9 @@ CASE pcAmendmentType:
         
     END. 
     WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
+        
+       IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
+          RETURN appl_err("Fixednumber is not correct" ).
         
        IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
            FusionMessage.OrderID       EQ OrderFusion.OrderID AND
