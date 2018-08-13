@@ -58,7 +58,7 @@ FUNCTION fTariffCompare RETURNS INT
 
    IF bClitype1.CommercialFee > bClitype2.CommercialFee THEN RETURN 1.
    ELSE IF bClitype1.CommercialFee < bClitype2.CommercialFee THEN RETURN 2.
-   ELSE RETURN 0.
+   ELSE RETURN 3.
 
 END FUNCTION.
 
@@ -76,11 +76,20 @@ END FUNCTION.
 
 FUNCTION fTryBuyPenaltyNeeded RETURNS LOGICAL
    (iiReqId AS INT):
+      
    DEF BUFFER CurrMsRequest FOR MsRequest.
    DEF BUFFER PrevMsRequest FOR MsRequest.
+   
+   DEFINE VARIABLE lcTry&BuyCliTypes    AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcLaSinfin25CliTypes AS CHARACTER NO-UNDO.
+   
+   ASSIGN 
+      lcTry&BuyCliTypes    = fCParamC("Try&BuyCliTypes")
+      lcLaSinfin25CliTypes = fCParamC("LaSinfin25CliTypes").   
+   
    FIND FIRST CurrMsRequest NO-LOCK WHERE
               CurrMsRequest.MsRequest EQ iiReqId AND
-              CurrMsRequest.ReqCparam1 MATCHES "*TB*" NO-ERROR.
+              LOOKUP(CurrMsRequest.ReqCparam1, lcTry&BuyCliTypes) > 0 NO-ERROR.
 
    /*no return from TB tariff*/
    IF NOT AVAIL CurrMsRequest THEN RETURN FALSE.
@@ -88,7 +97,7 @@ FUNCTION fTryBuyPenaltyNeeded RETURNS LOGICAL
    /* returning from TB tariff - check need for penalty */
    /* penalty is needed if new tariff is cheaper than the original */
    /* returning to sinfin25 -> FALSE*/
-   IF CurrMsRequest.ReqCparam2 EQ "CONT25" THEN RETURN FALSE.
+   IF LOOKUP(CurrMsRequest.ReqCparam2, "LaSinfin25CliTypes") > 0 THEN RETURN FALSE.
 
    /*returning to tariff before TB or more expensive -> FALSE*/
    FIND FIRST PrevMsRequest NO-LOCK WHERE
@@ -97,7 +106,8 @@ FUNCTION fTryBuyPenaltyNeeded RETURNS LOGICAL
               PrevMsRequest.CustNum EQ CurrMsRequest.CustNum AND
               PrevMsRequest.MsSeq EQ CurrMsRequest.MsSeq AND
               PrevMsRequest.ActStamp < CurrMsRequest.ActStamp AND
-              PrevMsRequest.Reqstatus EQ 2 NO-ERROR.
+              PrevMsRequest.Reqstatus EQ 2 
+              USE-INDEX MsActStamp NO-ERROR.
     IF AVAIL PrevMsRequest THEN DO:
        /* If the previous stc request is for TB tariff make checks */
        IF PrevMsRequest.ReqCparam2 EQ CurrMsRequest.ReqCparam1 THEN DO:
@@ -1936,6 +1946,11 @@ PROCEDURE pCloseContracts:
    DEF VAR llCreateFees                         AS LOG NO-UNDO.
    DEF VAR llIsSTCBetweenConvergent             AS LOG NO-UNDO.
    DEF VAR llIsSTCBetweenFixedOnlyAndConvergent AS LOG NO-UNDO.
+   
+   DEF VAR lcTry&BuyCliTypes AS CHARACTER NO-UNDO.
+
+   lcTry&BuyCliTypes  = fCParamC("Try&BuyCliTypes").
+ 
 
    EMPTY TEMP-TABLE ttContract.
 
@@ -2033,7 +2048,7 @@ PROCEDURE pCloseContracts:
          OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
       DO:
-         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqCparam1 MATCHES "*TB*" THEN DO:
+         IF AVAILABLE(bOrigRequest) AND LOOKUP(bOrigRequest.ReqCparam1, lcTry&BuyCliTypes) > 0  THEN DO:
             llCreateFees = fTryBuyPenaltyNeeded(bOrigRequest.MsRequest).
          END.
          ELSE DO:
