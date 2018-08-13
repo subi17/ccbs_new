@@ -561,32 +561,11 @@ CLASS Func.Common FINAL:
            idtTzDate = DATE(idtDateTimeTz)
            iTzMtime  = INTEGER(TRUNCATE((MTIME(idtDateTimeTz) / 1000 ) ,0)).       
        
-       ASSIGN ideTimeStamp = Func.Common:mGetTZTimestamp(idtTzDate,iTzMtime).
+       ASSIGN ideTimeStamp = Func.Common:mMake2DT(idtTzDate,iTzMtime).
        
        RETURN ideTimeStamp.
               
    END METHOD.
-   
-   METHOD PUBLIC STATIC DECIMAL mGetTZTimestamp (INPUT idtTzdt   AS DATE ,
-                                                 INPUT iiTzMtime AS INTEGER):
-                                                     
-       DEFINE VARIABLE liYear   AS INTEGER  NO-UNDO.
-       DEFINE VARIABLE liMonth  AS INTEGER  NO-UNDO.
-       DEFINE VARIABLE liDate   AS INTEGER  NO-UNDO.
-       DEFINE VARIABLE ldeTS    AS DECIMAL  NO-UNDO.
-
-       ASSIGN
-           liYear  = YEAR(idtTzdt)
-           liMonth = MONTH(idtTzdt)
-           liDate  = DAY(idtTzdt).
-
-       ASSIGN 
-           ldeTS = liYear * 10000 + liMonth * 100 + liDate
-           ldeTS = ldeTS  + (iiTzMtime / 100000) .
-
-       RETURN ldeTS.       
-                                                     
-   END METHOD.                                                      
    
    METHOD PUBLIC STATIC LOGICAL mMonthlyStamps
      (INPUT  pdaDate AS DATE,
@@ -1361,5 +1340,28 @@ CLASS Func.Common FINAL:
        
    END METHOD.
    
+   METHOD PUBLIC STATIC INT64 mConvertSppedtoBits(INPUT icSpeed AS CHARACTER):
+       
+       IF INDEX(icSpeed,"K") > 0 THEN
+       DO:
+           ASSIGN 
+               icSpeed = REPLACE(icSpeed,"K","").
+           RETURN (INTEGER(icSpeed) * 1024).
+       END.       
+       ELSE IF INDEX(icSpeed,"M") > 0 THEN
+       DO:
+           ASSIGN 
+               icSpeed = REPLACE(icSpeed,"M","").
+           RETURN (INTEGER(icSpeed) * 1024 * 1024).
+       END.       
+       ELSE IF INDEX(icSpeed,"G") > 0 THEN
+           DO:
+               ASSIGN 
+                   icSpeed = REPLACE(icSpeed,"G","").
+               RETURN (INTEGER(icSpeed) * 1024 * 1024 * 1024).
+           END. 
+           ELSE      
+               RETURN INTEGER(icSpeed).
+   END METHOD.
 
 END CLASS.

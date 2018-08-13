@@ -64,38 +64,41 @@ CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
 	  ( ioItemsArray AS CLASS JsonArray,
 	    ioOrder      AS CLASS om.Order ):
 
-      DEFINE VARIABLE lii AS INTEGER NO-UNDO.
-      DEFINE VARIABLE loItemObject AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loOrderProduct AS CLASS pm.OrderProduct NO-UNDO.
+        DEFINE VARIABLE lii            AS INTEGER   NO-UNDO.
+        DEFINE VARIABLE loItemObject   AS CLASS     JsonObject      NO-UNDO.
+        DEFINE VARIABLE loOrderProduct AS CLASS     pm.OrderProduct NO-UNDO.
+        DEFINE VARIABLE lcItemType     AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lcCLITye       AS CHARACTER NO-UNDO.
 
-      DO lii = 1 TO ioItemsArray:Length:
-         loItemObject = ioItemsArray:GetJsonObject(lii).
-         CASE loItemObject:GetCharacter("type"):
-            WHEN {&ORDER_PRODUCT_ACC} THEN 
-                ASSIGN loOrderProduct = NEW pm.OrderProductACC(ioOrder).
-            WHEN {&ORDER_PRODUCT_MAIN} THEN 
-                ASSIGN loOrderProduct = NEW pm.OrderProductPC(ioOrder).
-            WHEN {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
-                ASSIGN loOrderProduct = NEW pm.OrderProductSubscription(ioOrder).
-            WHEN {&ORDER_PRODUCT_SIM} THEN 
-                ASSIGN loOrderProduct = NEW pm.OrderProductSIM(ioOrder).
-            WHEN {&ORDER_PRODUCT_FIXED_LINE} THEN 
-                ASSIGN loOrderProduct = NEW pm.OrderProductFLine(ioOrder).
-            WHEN {&ORDER_PRODUCT_ACCESSORY} THEN 
-                ASSIGN loOrderProduct = NEW pm.OrderProductAccessory(ioOrder).
-            OTHERWISE
-            UNDO, THROW
-              NEW ParamError(SUBSTITUTE("Invalid items type '&1'",
-                                        loItemObject:GetCharacter("type"))).
-         END.
+        DO lii = 1 TO ioItemsArray:Length:
+         
+            ASSIGN
+                loItemObject = ioItemsArray:GetJsonObject(lii)
+                lcItemType   = loItemObject:GetCharacter("type").
+             
+            CASE lcItemType:
+                WHEN {&ORDER_PRODUCT_ACC} THEN 
+                    ASSIGN loOrderProduct = NEW pm.OrderProductACC(ioOrder).
+                WHEN {&ORDER_PRODUCT_MAIN} THEN 
+                    ASSIGN loOrderProduct = NEW pm.OrderProductDummy(ioOrder).
+                WHEN {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
+                    ASSIGN loOrderProduct = NEW pm.OrderProductSubscription(ioOrder).
+                WHEN {&ORDER_PRODUCT_SIM} THEN 
+                    ASSIGN loOrderProduct = NEW pm.OrderProductSIM(ioOrder).
+                WHEN {&ORDER_PRODUCT_ACCESSORY} THEN 
+                    ASSIGN loOrderProduct = NEW pm.OrderProductAccessory(ioOrder).
+                OTHERWISE  
+                    UNDO , THROW NEW InternalError(SUBSTITUTE("Invalid Action type: &1",lcItemType)).
+            END.
 
-         CREATE ttOrderProduct.
-         ASSIGN
-            ttOrderProduct.opobject = loOrderProduct
-            ttOrderProduct.ordernb  = mNextOrderNb().
-
-         loOrderProduct:mCreateData(loItemObject).
-      END.
+            CREATE ttOrderProduct.
+            ASSIGN
+                ttOrderProduct.opobject = loOrderProduct
+                ttOrderProduct.ordernb  = mNextOrderNb().
+         
+            loOrderProduct:mCreateData(loItemObject).
+            
+        END.
 
 	END METHOD.
 
@@ -108,20 +111,37 @@ CLASS pm.OrderProductFactory IMPLEMENTS bss.cls.IObjectStorage:
 
    END METHOD.
 
-   METHOD PUBLIC VOID mResult(ioJsonObject AS CLASS JsonObject):
+    METHOD PUBLIC VOID mResult(ioJsonObject AS CLASS JsonObject):
 
-      DEFINE VARIABLE loJsonArray AS CLASS JsonArray NO-UNDO.
+        DEFINE VARIABLE loJsonArray AS CLASS JsonArray NO-UNDO.
 
-      loJsonArray = NEW JsonArray().
+        ASSIGN loJsonArray = NEW JsonArray().
 
-      FOR EACH ttOrderProduct:
-         CAST(ttOrderProduct.opobject, pm.OrderProduct):mResult(loJsonArray).
-      END.
+        FOR EACH ttOrderProduct:
+            CAST(ttOrderProduct.opobject, pm.OrderProduct):mResult(loJsonArray).
+        END.
 
-      ioJsonObject:Add("items", loJsonArray).
+        ioJsonObject:Add("items", loJsonArray).
 
-   END METHOD.
-   
+    END METHOD.
+    
+    METHOD PUBLIC VOID mIsValidActionType(INPUT icItemType  AS CHARACTER) :
+        
+        DEFINE VARIABLE lcInvalidTypeList AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lcValidTypeList   AS CHARACTER NO-UNDO.
+        
+        ASSIGN 
+            lcValidTypeList   = {&ORDER_PRODUCT_ACC} + "," +
+                                {&ORDER_PRODUCT_SUBSCRIPTION} + "," + 
+                                {&ORDER_PRODUCT_MAIN} + "," +  
+                                {&ORDER_PRODUCT_SIM} + "," + 
+                                {&ORDER_PRODUCT_ACCESSORY}.
+        
+        IF LOOKUP(icItemType,lcValidTypeList) = 0 THEN 
+            UNDO,THROW NEW ParamError(SUBSTITUTE("Invalid action type &1 .",icItemType)).
+        
+    END METHOD.
+    
     DESTRUCTOR PUBLIC OrderProductFactory():
         
         FOR EACH ttOrderProduct:

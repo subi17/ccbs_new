@@ -50,12 +50,14 @@ CLASS pm.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY objOrderProduct AS CLASS pm.OrderProduct NO-UNDO
       GET.
       SET.
+      
+   DEFINE PUBLIC PROPERTY objParamStruct AS CLASS JsonObject NO-UNDO
+       GET.
+       SET.
 
    CONSTRUCTOR PUBLIC OrderProductParam ( iObjOrderProduct AS CLASS pm.OrderProduct ):
       ASSIGN objOrderProduct = iObjOrderProduct.   
    END CONSTRUCTOR.
-
-	
 
    METHOD PUBLIC VOID mCreateData
      ( ioJsonObject AS CLASS JsonObject ):
@@ -65,27 +67,53 @@ CLASS pm.OrderProductParam IMPLEMENTS bss.cls.IObjectStorage:
    END METHOD.
 	
 	METHOD PUBLIC VOID mCreateData
-      ( ioJsonObject   AS CLASS JsonObject,
-        icPropertyName AS CHARACTER,
-        icDataType     AS CHARACTER ):
-
-      CASE icDataType:
-         WHEN "Char" THEN THIS-OBJECT:charValue = ioJsonObject:GetCharacter(icPropertyName).
-         WHEN "Date" THEN THIS-OBJECT:dateValue = ioJsonObject:GetDate(icPropertyName).
-         WHEN "Int"  THEN THIS-OBJECT:intValue  = ioJsonObject:GetInteger(icPropertyName).
-         WHEN "Dec"  THEN THIS-OBJECT:decValue  = ioJsonObject:GetDecimal(icPropertyName).
-         OTHERWISE UNDO, THROW NEW InternalError
-                                 (SUBSTITUTE("Called mCreateOrderProductParam " +
-                                             "with unsupported datatype '&1'",
-                                             icDataType)).
-      END CASE.
+      ( icPropertyValue   AS CHARACTER,
+        icPropertyName    AS CHARACTER,
+        icDataType        AS CHARACTER ):
+        
+        CASE icDataType:
+            WHEN "Char" THEN 
+            DO:
+                ASSIGN 
+                    THIS-OBJECT:charValue = icPropertyValue NO-ERROR.
+                IF ERROR-STATUS:ERROR THEN 
+                    UNDO, THROW NEW InternalError(SUBSTITUTE("Invalid value in the parameter &1 for data type conversion &2.",icPropertyValue,icDataType)).
+            END.            
+            WHEN "Date" THEN
+            DO:
+                ASSIGN 
+                    THIS-OBJECT:dateValue = DATE(icPropertyValue) NO-ERROR.
+                IF ERROR-STATUS:ERROR THEN 
+                    UNDO, THROW NEW InternalError(SUBSTITUTE("Invalid value in the parameter &1 for data type conversion &2.",icPropertyValue,icDataType)).   
+            END.
+      
+            WHEN "Int" THEN 
+            DO:
+                ASSIGN 
+                    THIS-OBJECT:intValue = INTEGER(icPropertyValue) NO-ERROR.
+                IF ERROR-STATUS:ERROR THEN 
+                    UNDO, THROW NEW InternalError(SUBSTITUTE("Invalid value in the parameter &1 for data type conversion &2.",icPropertyValue,icDataType)).    
+            END.
+      
+            WHEN "Dec" THEN 
+            DO:
+                ASSIGN 
+                    THIS-OBJECT:decValue = DECIMAL(icPropertyValue) NO-ERROR.  
+                IF ERROR-STATUS:ERROR THEN 
+                    UNDO, THROW NEW InternalError(SUBSTITUTE("Invalid value in the parameter &1 for data type conversion &2.",icPropertyValue,icDataType)).  
+            END. 
+            OTHERWISE            
+                UNDO, THROW NEW InternalError(SUBSTITUTE("Called mCreateOrderProductParam " +
+                                              "with unsupported datatype '&1'",
+                                              icDataType)).
+        END CASE.
 
       ASSIGN
          THIS-OBJECT:paramName = icPropertyName
          THIS-OBJECT:valueType = icDataType.
 
 	END METHOD.
-
+	
    METHOD PUBLIC VOID mStoreData():
 
       CREATE OrderProductParam.

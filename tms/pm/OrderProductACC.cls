@@ -143,7 +143,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       END.
 
       aoExecutionDate = NEW pm.OrderProductParam(THIS-OBJECT).
-      aoExecutionDate:mCreateData(loAttributes,
+      aoExecutionDate:mCreateData(STRING(loAttributes:GetDate("execution-date")),
                                   "execution-date",
                                   "Date").
 

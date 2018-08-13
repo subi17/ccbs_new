@@ -7,6 +7,15 @@ ADD FIELD "ITGroupID" OF "OrderProduct" AS integer
   COLUMN-LABEL "Target Group ID"
   ORDER 70
   
+ADD FIELD "StatusCode" OF "OrderProduct" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Status"
+  POSITION 9
+  MAX-WIDTH 30
+  COLUMN-LABEL "status"
+  ORDER 80  
+  
 .
 PSC
 cpstream=1252

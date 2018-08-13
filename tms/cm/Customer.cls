@@ -252,19 +252,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
      
     END METHOD.
 
-    METHOD PUBLIC VOID mFindCustomerAcct (INPUT iiCustAcct AS INTEGER) :       
-       
-       FIND FIRST CustomerAccount 
-            WHERE CustomerAccount.AccountID  = iiCustAcct NO-LOCK NO-ERROR .
-            
-       IF NOT AVAILABLE CustomerAccount THEN  
-           UNDO, THROW NEW ParamError(SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
-             
-       ASSIGN THIS-OBJECT:custAcctId  =  iiCustAcct.
-       
-       mFindCustomer(CustomerAccount.CustNum).       
-       
-   END METHOD.
    
   METHOD PUBLIC INTEGER mGetLatestCustNum():
 
@@ -385,14 +372,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
    METHOD PUBLIC VOID mStoreCustomer():
 
-      FIND FIRST Customer WHERE Customer.CustNum  =  THIS-OBJECT:custNum EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-      IF LOCKED(Customer) THEN 
-         UNDO , THROW NEW ParamError ("Customer record is locked.").
-       
-      IF NOT AVAILABLE Customer THEN 
-      DO:
-         CREATE Customer.
-      END.   
+      CREATE Customer.
 
       ASSIGN      
          Customer.CustNum           = THIS-OBJECT:custNum

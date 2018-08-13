@@ -41,7 +41,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY ValiTo AS DATETIME-TZ NO-UNDO
+    DEFINE PUBLIC PROPERTY validTo AS DATETIME-TZ NO-UNDO
        GET.
        SET.
        
@@ -79,24 +79,20 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 		ASSIGN objCustomer = iobjCustomer.
 		
 	END CONSTRUCTOR.
-
-
 	
 	METHOD PUBLIC VOID mCreateData(INPUT ioCustAcctObject AS CLASS JsonObject):
-	    
-	    DEFINE VARIABLE aoBillingAcct AS CLASS cm.BillingAccount NO-UNDO.
-	    DEFINE VARIABLE BillAcctArray AS CLASS JsonArray NO-UNDO.
-	    DEFINE VARIABLE BillAcctObj   AS CLASS JsonObject NO-UNDO.
-	    DEFINE VARIABLE liBillAcctCnt AS INTEGER NO-UNDO.
+	   
+	  DEFINE VARIABLE BillAcctArray AS CLASS JsonArray NO-UNDO. 
 	    
       ASSIGN 
           THIS-OBJECT:defaultAcct = ioCustAcctObject:GetLogical("default_account")
           THIS-OBJECT:acctName    = ioCustAcctObject:GetCharacter("account_name")
           THIS-OBJECT:validFrom   =  DATETIME-TZ(TODAY)
-          THIS-OBJECT:ValiTo      =  DATETIME-TZ(DATE(12,31,2049))
+          THIS-OBJECT:validTo     =  DATETIME-TZ(DATE(12,31,2049))
           THIS-OBJECT:accountId   =  NEXT-VALUE (accountid)  
           THIS-OBJECT:custNum     =  objCustomer:CustNum
-          THIS-OBJECT:statusCode  =  0. /*0=pending, 1=active*/
+          THIS-OBJECT:statusCode  =  0
+          objCustomer:custAcctID  =  THIS-OBJECT:accountId. /*0=pending, 1=active*/
           
       IF ioCustAcctObject:Has("billing_address") THEN 
       DO:    
@@ -113,59 +109,76 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
       
       IF ioCustAcctObject:Has("billing_accounts") THEN 
       DO:
-          ASSIGN BillAcctArray = ioCustAcctObject:GetJsonArray("billing_accounts").
           
-          DO liBillAcctCnt = 1 TO BillAcctArray:LENGTH :
-              
-              ASSIGN BillAcctObj = BillAcctArray:GetJsonObject(liBillAcctCnt).
-
-              IF liBillAcctCnt = 1 THEN
-                 objCustomer:bankCode = BillAcctObj:GetCharacter("bank_account").
-
-              aoBillingAcct = NEW cm.BillingAccount(THIS-OBJECT).
-
-              aoBillingAcct:mCreateData(BillAcctObj).
-              
-              CREATE ttBillingAcct.
-              ASSIGN ttBillingAcct.BillAcctObj = aoBillingAcct
-                     ttBillingAcct.BillAcctNum = mNextBillAcctNum().
-                     
-              ASSIGN THIS-OBJECT:billingAcctIds  =  THIS-OBJECT:billingAcctIds  + "," + aoBillingAcct:mGetBillingAcctID().
-          END.            
+          ASSIGN BillAcctArray = ioCustAcctObject:GetJsonArray("billing_accounts").
+          mCreateBillingAcct(BillAcctArray).
+                
       END.
+	    
+	END METHOD.
+	
+	METHOD PUBLIC VOID mCreateBillingAcct(INPUT iobjBillAcctArray AS CLASS JsonArray):
+	    
+        DEFINE VARIABLE liBillAcctCnt     AS INTEGER NO-UNDO.
+        DEFINE VARIABLE objBillAcctStruct AS CLASS   JsonObject        NO-UNDO.
+        DEFINE VARIABLE objBillAcct       AS CLASS   cm.BillingAccount NO-UNDO.
+        
+        DO liBillAcctCnt = 1 TO iobjBillAcctArray:LENGTH :
+              
+            ASSIGN 
+                objBillAcctStruct = iobjBillAcctArray:GetJsonObject(liBillAcctCnt).
 
-      ASSIGN THIS-OBJECT:billingAcctIds   = TRIM(THIS-OBJECT:billingAcctIds , ",").
+            IF liBillAcctCnt = 1 THEN
+                objCustomer:bankCode = objBillAcctStruct:GetCharacter("bank_account").
+
+            objBillAcct = NEW cm.BillingAccount(THIS-OBJECT).
+
+            objBillAcct:mCreateData(objBillAcctStruct).
+              
+            CREATE ttBillingAcct.
+            ASSIGN 
+                ttBillingAcct.BillAcctObj = objBillAcct
+                ttBillingAcct.BillAcctNum = mNextBillAcctNum().
+                     
+            ASSIGN 
+                THIS-OBJECT:billingAcctIds = THIS-OBJECT:billingAcctIds  + "," + objBillAcct:mGetBillingAcctID().
+        END.      
+	    
+        ASSIGN 
+            THIS-OBJECT:billingAcctIds = TRIM(THIS-OBJECT:billingAcctIds , ",").
+	    
 	    
 	END METHOD.
 	
 	METHOD PUBLIC VOID mStoreData():
-	    
-	    FIND FIRST CustomerAccount WHERE CustomerAccount.AccountID = THIS-OBJECT:accountId EXCLUSIVE-LOCK  NO-WAIT NO-ERROR.
-	    
-	    IF LOCKED CustomerAccount THEN 
-            UNDO, THROW NEW ParamError("Customer Account record is locked.").
-	    
-	    IF NOT AVAILABLE CustomerAccount THEN                                     
-    	    CREATE CustomerAccount.
+	                                        
+    	CREATE CustomerAccount.
     	    
 	    ASSIGN Customeraccount.AccountID   = THIS-OBJECT:accountId
 	           CustomerAccount.CustNum     = THIS-OBJECT:custNum
 	           CustomerAccount.DefaultAcc  = THIS-OBJECT:defaultAcct
 	           CustomerAccount.AccountName = THIS-OBJECT:acctName
 	           CustomerAccount.FromDate    = THIS-OBJECT:validFrom
-	           CustomerAccount.ToDate      = THIS-OBJECT:ValiTo
+	           CustomerAccount.ToDate      = THIS-OBJECT:validTo
 	           CustomerAccount.StatusCode  = THIS-OBJECT:statusCode
 	     .
 	   
-	     IF VALID-OBJECT(objBillingAddress) THEN 
-	     DO:
-             objBillingAddress:mStoreData().
-             ASSIGN THIS-OBJECT:billAddrId = objBillingAddress:AddrID.	         
-	     END.
-	     FOR EACH ttBillingAcct :
-             CAST(ttBillingAcct.BillAcctObj, cm.BillingAccount):mStoreData().
-	     END.
+	    IF VALID-OBJECT(objBillingAddress) THEN 
+	    DO:
+            objBillingAddress:mStoreData().
+            ASSIGN THIS-OBJECT:billAddrId = objBillingAddress:AddrID.	         
+	    END.
+	     
+        mStoreBillingAcct().   
 	    
+	END METHOD.
+	
+	METHOD PUBLIC VOID mStoreBillingAcct():
+	    
+	    FOR EACH ttBillingAcct :
+            CAST(ttBillingAcct.BillAcctObj, cm.BillingAccount):mStoreData().
+        END.
+        
 	END METHOD.
 	
 	METHOD PUBLIC CHARACTER mGetBillAcctIDData():
@@ -233,6 +246,39 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             
         RETURN (InvoiceTargetGroup.ITGroupID).                                
 	    
+    END METHOD.
+    
+    METHOD PUBLIC VOID mFindCustomerAcct (INPUT iiCustAcct AS INTEGER) :       
+       
+        FIND FIRST CustomerAccount 
+            WHERE CustomerAccount.AccountID  = iiCustAcct NO-LOCK NO-ERROR .
+            
+        IF NOT AVAILABLE CustomerAccount THEN  
+            UNDO, THROW NEW ParamError(SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
+             
+        ASSIGN 
+            THIS-OBJECT:accountId   = CustomerAccount.AccountID
+            THIS-OBJECT:custNum     = CustomerAccount.CustNum
+            THIS-OBJECT:defaultAcct = CustomerAccount.DefaultAcc
+            THIS-OBJECT:acctName    = CustomerAccount.AccountName
+            THIS-OBJECT:validFrom   = CustomerAccount.FromDate
+            THIS-OBJECT:validTo     = CustomerAccount.ToDate
+            THIS-OBJECT:statusCode  = CustomerAccount.StatusCode
+            objCustomer:custAcctID  = THIS-OBJECT:accountId.
+                  
+       
+    END METHOD.
+    
+    METHOD PUBLIC INTEGER mGetCustomerAcctId() :
+        
+        RETURN THIS-OBJECT:accountId.
+        
+    END METHOD.
+    
+    METHOD PUBLIC INTEGER mGetCustNum():
+        
+        RETURN THIS-OBJECT:custNum.
+        
     END METHOD.
 	
     DESTRUCTOR PUBLIC CustomerAccount ( ):

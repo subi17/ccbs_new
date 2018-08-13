@@ -1,4 +1,3 @@
- 
  /*------------------------------------------------------------------------
     File        : OrderProducts
     Purpose     : 
@@ -24,14 +23,14 @@ CLASS Func.OrderProductsData FINAL:
         DEFINE VARIABLE lcParamType  AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcParamValue AS CHARACTER NO-UNDO.
         
-        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID          =  liOrderID
-                                    AND bfOrderProduct.ActionType       =  {&ORDER_PRODUCT_FIXED_LINE}
+        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID    =  liOrderID
+                                    AND bfOrderProduct.ActionType =  {&ORDER_PRODUCT_FIXED_LINE}
                                   NO-LOCK NO-ERROR.
                                   
         IF NOT AVAILABLE bfOrderProduct
         THEN DO:
-            FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID          =  liOrderID
-                                        AND bfOrderProduct.ActionType       =  {&ORDER_PRODUCT_SUBSCRIPTION}
+            FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID     =  liOrderID
+                                        AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_MOBILE}
                                       NO-LOCK NO-ERROR.
         END.
         
@@ -43,8 +42,8 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamType ,
                                                           OUTPUT lcParamValue).
                                                           
-        IF lcParamType = {&ORDER_PRODUCT_PARAM_CHAR_VALUE} /*CLI Is char value in db while order saving*/
-        THEN RETURN lcParamValue.
+        IF lcParamType = {&ORDER_PRODUCT_PARAM_CHAR_VALUE} THEN /*CLI Is char value in db while order saving*/
+            RETURN lcParamValue.
         
         RETURN "".                                                         
                                   
@@ -89,7 +88,7 @@ CLASS Func.OrderProductsData FINAL:
         IF NOT AVAILABLE bfOrderProduct
         THEN DO:
             FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID      =  liOrderID
-                                        AND bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_SUBSCRIPTION}
+                                        AND bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_MOBILE}
                                       NO-LOCK NO-ERROR.
         END.
         
@@ -140,7 +139,7 @@ CLASS Func.OrderProductsData FINAL:
         IF NOT AVAILABLE bfOrderProduct
         THEN DO:
             FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID      =  liOrderID
-                                        AND bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_SUBSCRIPTION}
+                                        AND bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_MOBILE}
                                       NO-LOCK NO-ERROR.
         END.
         
@@ -207,7 +206,7 @@ CLASS Func.OrderProductsData FINAL:
         THEN DO:
             
             FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID     =  iiOrderID
-                                        AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_SUBSCRIPTION}
+                                        AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_MOBILE}
                                       NO-LOCK NO-ERROR.
                                       
         END.
@@ -247,7 +246,7 @@ CLASS Func.OrderProductsData FINAL:
         DEFINE BUFFER bfOrderProductParam   FOR OrderProductParam.
         
         FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID     =  iiOrderID
-                                    AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_SUBSCRIPTION}
+                                    AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_MOBILE}
                                     NO-LOCK NO-ERROR.
                                     
         IF NOT AVAILABLE bfOrderProduct THEN RETURN NO.
@@ -268,7 +267,7 @@ CLASS Func.OrderProductsData FINAL:
         DEFINE VARIABLE lcParamValue AS CHARACTER NO-UNDO.
         
         FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID     =  iiOrderID
-                                    AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_SUBSCRIPTION}
+                                    AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_MOBILE}
                                   NO-LOCK NO-ERROR.
           
         IF NOT AVAILABLE bfOrderProduct THEN RETURN 0.
