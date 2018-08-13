@@ -52,8 +52,6 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
          THEN aoOrderEnum = OrderEnum:CREATION.
          WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
          THEN aoOrderEnum = OrderEnum:TERMINATION.
-         WHEN {&REQTYPE_SUBSCRIPTION_REACTIVATION}
-         THEN aoOrderEnum = OrderEnum:PORTABILITY.
          OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandSubscription cannot " +
                                                        "handle ReqType &1",
                                                        MsRequest.ReqType)).
@@ -84,7 +82,10 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find agreement ordercustomer for order &1",
                                                Order.OrderId)).
 
-      acProCommandTarget = STRING(Gwy.SAPC.TargetEnum:BPM).
+      ASSIGN
+         acProCommandTarget = STRING(Gwy.SAPC.TargetEnum:BPM)
+         aiOrderId          = Order.OrderId.
+
       mSetProCommandId().
       
       loJson = mOrderObject().

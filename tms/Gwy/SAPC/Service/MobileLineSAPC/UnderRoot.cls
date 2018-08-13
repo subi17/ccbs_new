@@ -25,9 +25,9 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderRoot IMPLEMENTS IService:
       Service Hierarchy:
 
       MOBILE_LINE_SAPC
-         DEFAULT_PRICE_PLAN (1..1) tariffin bundle (mobile)
+         DEFAULT_PRICE_PLAN (1..1)
          SIM (1..1) 
-         PERIODIC_DATAPLAN (0..n) (the interface supports 0..n but we have 0..1 tämä on bono esim. data6 ehkä sama ellei bonoa ole???
+         PERIODIC_DATAPLAN (0..n)
    
       (Note: No upsells is possible here)
    */
@@ -40,8 +40,7 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderRoot IMPLEMENTS IService:
       loJsonArray = NEW JsonArray().
       
       loJsonArray:Add(NEW DefaultPricePlan(ioPCS, "DPP"):ServiceObject).
-      /*...*/
-      
+
       ioJsonObject:Add("Services", loJsonArray).
       
    END METHOD.

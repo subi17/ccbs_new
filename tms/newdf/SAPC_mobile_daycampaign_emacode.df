@@ -1,0 +1,9 @@
+ADD FIELD "EMAcode" OF "DayCampaign" AS character
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "EMA code"
+  COLUMN-LABEL "EMA code"
+  POSITION 36
+  MAX-WIDTH 40
+  HELP "EMA code"
+  ORDER 410
