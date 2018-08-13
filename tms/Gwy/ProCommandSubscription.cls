@@ -33,8 +33,6 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       GET.
       PRIVATE SET.
 
-   /* OrderAccessory tietue on jos DEVICE... */
-
    CONSTRUCTOR ProCommandSubscription
       ( iiMsRequest AS INTEGER ):
 
