@@ -23,7 +23,15 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
    DEFINE PUBLIC VARIABLE aoOrderEnum AS CLASS OrderEnum NO-UNDO.
    
    DEFINE PRIVATE BUFFER Order FOR Order.
-   DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer. 
+   DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer.
+
+   DEFINE PUBLIC PROPERTY ahOrder AS HANDLE NO-UNDO
+      GET.
+      PRIVATE SET.
+
+   DEFINE PUBLIC PROPERTY ahOrderCustomer AS HANDLE NO-UNDO
+      GET.
+      PRIVATE SET.
 
    /* OrderAccessory tietue on jos DEVICE... */
 
@@ -31,7 +39,11 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       ( iiMsRequest AS INTEGER ):
 
       SUPER(iiMsRequest).
-      
+
+      ASSIGN
+         ahOrder         = BUFFER Order:HANDLE
+         ahOrderCustomer = BUFFER OrderCustomer:HANDLE.
+
       DEFINE VARIABLE loJson        AS CLASS JsonObject   NO-UNDO.
       DEFINE VARIABLE loService     AS CLASS IService     NO-UNDO.
 
@@ -40,8 +52,6 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
          THEN aoOrderEnum = OrderEnum:CREATION.
          WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
          THEN aoOrderEnum = OrderEnum:TERMINATION.
-         WHEN {&REQTYPE_SUBSCRIPTION_REACTIVATION}
-         THEN aoOrderEnum = OrderEnum:PORTABILITY.
          OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandSubscription cannot " +
                                                        "handle ReqType &1",
                                                        MsRequest.ReqType)).
@@ -72,7 +82,10 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find agreement ordercustomer for order &1",
                                                Order.OrderId)).
 
-      acProCommandTarget = STRING(Gwy.SAPC.TargetEnum:BPM).
+      ASSIGN
+         acProCommandTarget = STRING(Gwy.SAPC.TargetEnum:BPM)
+         aiOrderId          = Order.OrderId.
+
       mSetProCommandId().
       
       loJson = mOrderObject().

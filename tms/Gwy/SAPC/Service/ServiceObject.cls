@@ -1,6 +1,6 @@
  
  /*------------------------------------------------------------------------
-    File        : SAPCServiceObject
+    File        : ServiceObject
     Purpose     : 
     Syntax      : 
     Description : 
@@ -9,10 +9,10 @@
     Notes       : 
   ----------------------------------------------------------------------*/
 
-USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.*.
 USING Gwy.SAPC.Service.IService.
 USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.OrderEnum.
 
 {Syst/tmsconst.i}
 
@@ -36,7 +36,13 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
       aoProCommandSubscription = ioPCS.
       ServiceObject = NEW JsonObject().
       ServiceObject:Add("serviceID", SUBSTITUTE("&1_&2", ioPCS:aiProCommandId, icType)).
+      ServiceObject:Add("Action",
+                        IF aoProCommandSubscription:aoOrderEnum EQ
+                           OrderEnum:TERMINATION
+                        THEN "Delete"
+                        ELSE "Add").
       mFetchData().
+
    END CONSTRUCTOR.
 
    DESTRUCTOR ServiceObject():
@@ -71,6 +77,17 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
       IF NOT VALID-OBJECT(aoCharacteristicArray)
       THEN aoCharacteristicArray = NEW JsonArray().
       aoCharacteristicArray:Add(ioJsonObject).
+   END METHOD.
+
+   METHOD PROTECTED JsonObject mLineObject():
+
+      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
+
+      loJsonObject = NEW JsonObject().
+      loJsonObject:Add("phoneNumber", aoProCommandSubscription:ahOrder::CLI).
+
+      RETURN loJsonObject.
+
    END METHOD.
 
    METHOD PROTECTED ABSTRACT VOID mFetchData().

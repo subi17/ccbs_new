@@ -10,10 +10,8 @@
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
-USING Progress.Json.ObjectModel.*.
 USING Gwy.SAPC.Service.ServiceObject.
 USING Gwy.ProCommandSubscription.
-USING Gwy.SAPC.OrderEnum.
 USING Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
@@ -30,16 +28,39 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject:
 
    METHOD PROTECTED OVERRIDE VOID mFetchData():
 
-      mAddCharacteristicsArray(mNameValue("emaDataPlan", "mikä value?")). 
-      mAddCharacteristicsArray(mNameValue("subscriptionType", "prepaid/postpaid")). /* order.... */
-     
-      ServiceObject:Add("Characteristics", aoCharacteristicArray).
-      ServiceObject:Add("Action",
-                        IF aoProCommandSubscription:aoOrderEnum EQ
-                           OrderEnum:TERMINATION
-                        THEN "Delete"
-                        ELSE "Add").
+      DEFINE BUFFER CLIType FOR CLIType.
+      DEFINE BUFFER DayCampaign FOR DayCampaign.
+
+      FIND CLIType NO-LOCK WHERE
+           CLIType.Brand = "1" AND
+           CLIType.CLIType = aoProCommandSubscription:ahOrder::CLIType
+      NO-ERROR.
+
+      IF NOT AVAILABLE CLIType
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot CLIType '&1' which order has",
+                                               aoProCommandSubscription:ahOrder::CLIType)).
+
+      FIND DayCampaign NO-LOCK WHERE
+           DayCampaign.Brand = "1" AND
+           DayCampaign.DCEvent = CLIType.BaseBundle
+      NO-ERROR.
+
+      IF NOT AVAILABLE DayCampaign
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find base mobile bundle '&1' which CLIType '&2' has",
+                                               CLIType.BaseBundle, CLIType.CLIType)).
+
+
       ServiceObject:Add("Type", "DEFAULT_PRICE_PLAN").
+
+      mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
+      mAddCharacteristicsArray
+         (mNameValue("subscriptionType",
+                     STRING(aoProCommandSubscription:ahOrder::PayType,
+                            "prepaid/postpaid"))).
+
+      ServiceObject:Add("Characteristics", aoCharacteristicArray).
+
+      ServiceObject:Add("Line", mLineObject()).
 
       aoService = NEW UnderDefaultPricePlan().
       aoService:mCreateServices(ServiceObject, aoProCommandSubscription).

@@ -26,7 +26,7 @@
 /* ***************************  Definitions  ************************** */
 
 DEF TEMP-TABLE ttOrder SERIALIZE-NAME "Order"
-   FIELD orderId     AS INT
+   FIELD orderID     AS INT
    FIELD orderType   AS CHAR
    FIELD sellChannel AS CHAR 
    FIELD sellDate    AS DATETIME-TZ 
@@ -35,14 +35,14 @@ DEF TEMP-TABLE ttOrder SERIALIZE-NAME "Order"
    FIELD createdDate AS DATETIME-TZ.   
 
 DEF TEMP-TABLE ttOutService SERIALIZE-NAME "Services"
-   FIELD orderid     AS INT  
+   FIELD orderID     AS INT  
    FIELD type        AS CHAR 
    FIELD serviceId   AS CHAR 
    FIELD quantity    AS CHAR
    FIELD action      AS CHAR. 
 
 DEF TEMP-TABLE ttInService SERIALIZE-NAME "Services"
-   FIELD orderId       AS INT
+   FIELD orderID       AS INT
    FIELD outtype       AS CHAR 
    FIELD outserviceId  AS CHAR 
    FIELD type          AS CHAR 
@@ -51,14 +51,14 @@ DEF TEMP-TABLE ttInService SERIALIZE-NAME "Services"
    FIELD action        AS CHAR. 
    
 DEF TEMP-TABLE ttCharacteristic SERIALIZE-NAME "Characteristics"
-   FIELD orderid      AS INT 
+   FIELD orderID      AS INT 
    FIELD type         AS CHAR 
    FIELD serviceName  AS CHAR 
    FIELD name         AS CHAR 
    FIELD valueamt     AS CHAR.
    
 DEF TEMP-TABLE ttLine SERIALIZE-NAME "Line"
-   FIELD orderid     AS INT
+   FIELD orderID     AS INT
    FIELD type        AS CHAR 
    FIELD serviceId   AS CHAR 
    FIELD phonenumber AS CHAR.

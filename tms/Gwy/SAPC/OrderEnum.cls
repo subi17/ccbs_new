@@ -16,7 +16,6 @@ ENUM Gwy.SAPC.OrderEnum:
    DEFINE ENUM
       CREATION
       TERMINATION
-      PORTABILITY
       .
       
 END ENUM.
