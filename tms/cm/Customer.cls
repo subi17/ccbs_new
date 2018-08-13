@@ -252,19 +252,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
      
     END METHOD.
 
-    METHOD PUBLIC VOID mFindCustomerAcct (INPUT iiCustAcct AS INTEGER) :       
-       
-       FIND FIRST CustomerAccount 
-            WHERE CustomerAccount.AccountID  = iiCustAcct NO-LOCK NO-ERROR .
-            
-       IF NOT AVAILABLE CustomerAccount THEN  
-           UNDO, THROW NEW ParamError(SUBSTITUTE("Account_not_found|&1", iiCustAcct)).
-             
-       ASSIGN THIS-OBJECT:custAcctId  =  iiCustAcct.
-       
-       mFindCustomer(CustomerAccount.CustNum).       
-       
-   END METHOD.
    
   METHOD PUBLIC INTEGER mGetLatestCustNum():
 

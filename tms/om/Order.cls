@@ -392,7 +392,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         ASSIGN 
             Order.StatusCode    = THIS-OBJECT:statusCode
             Order.Paytype       = (IF Func.ValidateOrder:mGetPayType(INPUT THIS-OBJECT:cliType) = 2 THEN YES ELSE NO) 
-            Order.AccountId     = THIS-OBJECT:custAcctid
+            Order.AccountId     = objCustomer:custAcctID
             THIS-OBJECT:payType = Order.Paytype.
             
             

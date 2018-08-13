@@ -263,7 +263,8 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
             THIS-OBJECT:acctName    = CustomerAccount.AccountName
             THIS-OBJECT:validFrom   = CustomerAccount.FromDate
             THIS-OBJECT:validTo     = CustomerAccount.ToDate
-            THIS-OBJECT:statusCode  = CustomerAccount.StatusCode.
+            THIS-OBJECT:statusCode  = CustomerAccount.StatusCode
+            objCustomer:custAcctID  = THIS-OBJECT:accountId.
                   
        
     END METHOD.
