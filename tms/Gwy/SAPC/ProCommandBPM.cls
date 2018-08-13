@@ -1,6 +1,6 @@
  
  /*------------------------------------------------------------------------
-    File        : ProCommandSubscription
+    File        : ProCommandBPM
     Purpose     : 
     Syntax      : 
     Description : 
@@ -13,44 +13,35 @@ USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.*.
 USING Gwy.SAPC.OrderEnum.
 USING Gwy.SAPC.Service.IService.
+USING Gwy.SAPC.ProCommandOrder.
 
 {Syst/tmsconst.i}
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand: 
-
-   DEFINE PUBLIC VARIABLE aoOrderEnum AS CLASS OrderEnum NO-UNDO.
+CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder: 
    
    DEFINE PRIVATE BUFFER Order FOR Order.
    DEFINE PRIVATE BUFFER OrderCustomer FOR OrderCustomer.
 
-   DEFINE PUBLIC PROPERTY ahOrder AS HANDLE NO-UNDO
-      GET.
-      PRIVATE SET.
-
-   DEFINE PUBLIC PROPERTY ahOrderCustomer AS HANDLE NO-UNDO
-      GET.
-      PRIVATE SET.
-
-   CONSTRUCTOR ProCommandSubscription
+   CONSTRUCTOR ProCommandBPM
       ( iiMsRequest AS INTEGER ):
 
       SUPER(iiMsRequest).
-
-      ASSIGN
-         ahOrder         = BUFFER Order:HANDLE
-         ahOrderCustomer = BUFFER OrderCustomer:HANDLE.
 
       DEFINE VARIABLE loJson        AS CLASS JsonObject   NO-UNDO.
       DEFINE VARIABLE loService     AS CLASS IService     NO-UNDO.
 
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
-         THEN aoOrderEnum = OrderEnum:CREATION.
+         THEN ASSIGN
+                 aoOrderEnum      = OrderEnum:CREATION
+                 acProCommandType = "SUBSCRIPTION_CREATE".
          WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
-         THEN aoOrderEnum = OrderEnum:TERMINATION.
-         OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandSubscription cannot " +
+         THEN ASSIGN
+                 aoOrderEnum = OrderEnum:TERMINATION
+                 acProCommandType = "SUBSCRIPTION_TERMINATE".
+         OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandBPM cannot " +
                                                        "handle ReqType &1",
                                                        MsRequest.ReqType)).
       END CASE.
@@ -82,18 +73,19 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
 
       ASSIGN
          acProCommandTarget = STRING(Gwy.SAPC.TargetEnum:BPM)
-         aiOrderId          = Order.OrderId.
+         acCLI              = Order.CLI
+         aiOrderId          = Order.OrderId
+         acICC              = Order.ICC
+         acCLIType          = Order.CLIType
+         alPayType          = Order.PayType.
 
-      mSetProCommandId().
-      
-      loJson = mOrderObject().
+      loJson = mOrderObject(IF aoOrderEnum EQ OrderEnum:TERMINATION
+                            THEN "Disconnection"
+                            ELSE "InOrder").
 
       loJson:Add("Client", mClientObject()).
       
-      CASE aoOrderEnum:
-         WHEN OrderEnum:CREATION
-         THEN loService = NEW Gwy.SAPC.Service.MobileLineSAPC.UnderRoot(). 
-      END CASE.
+      loService = NEW Gwy.SAPC.Service.MobileLineSAPC.UnderRoot().
 
       IF VALID-OBJECT(loService)
       THEN loService:mCreateServices(loJson, THIS-OBJECT).
@@ -104,41 +96,7 @@ CLASS Gwy.ProCommandSubscription INHERITS Gwy.ProCommand:
       END FINALLY.
 
    END CONSTRUCTOR.
-
-   METHOD PRIVATE JsonObject mNameValue
-      ( icName  AS CHARACTER,
-        icValue AS CHARACTER ):
-
-      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
-
-      loJsonObject = NEW JsonObject().
-      loJsonObject:Add("name", icName).
-      loJsonObject:Add("value", icValue).
-
-      RETURN loJsonObject.
-
-   END METHOD.
    
-   METHOD PRIVATE JsonObject mOrderObject():
-
-      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
-
-      loJsonObject = NEW JsonObject().
-      loJsonObject:Add("orderID", STRING(aiProCommandId)).
-      loJsonObject:Add("orderType", IF aoOrderEnum EQ OrderEnum:TERMINATION
-                                    THEN "Disconnection"
-                                    ELSE "InOrder").
-      loJsonObject:Add("subscriptionID", STRING(MsRequest.MsSeq)).
-      loJsonObject:Add("Sellchannel", "TMSB2C").
-      loJsonObject:Add("Selldate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.ActStamp))).
-      loJsonObject:Add("Seller", CAPS(multitenancy.TenantInformation:mGetEffectiveBrand())).
-      loJsonObject:Add("createdBy", MsRequest.UserCode).
-      loJsonObject:Add("createdDate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp))).
-
-      RETURN loJsonObject.
-
-   END METHOD.
-
 /*
    METHOD PRIVATE JsonObject mContactObject():
 

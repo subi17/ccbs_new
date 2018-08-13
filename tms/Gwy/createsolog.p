@@ -21,7 +21,7 @@ DEF VAR lcDSS4PrimarySubTypes      AS CHAR NO-UNDO.
 DEF VAR lcDSS2PrimarySubTypes      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcDSSId            AS CHARACTER NO-UNDO.
  
-DEFINE VARIABLE loProCommand       AS CLASS Gwy.ProCommand  NO-UNDO.
+DEFINE VARIABLE loProCommand       AS CLASS Gwy.SAPC.ProCommand  NO-UNDO.
 DEFINE VARIABLE llSAPC             AS LOGICAL INITIAL FALSE NO-UNDO.
 
 DEF BUFFER bbMsRequest FOR MSRequest.
@@ -397,9 +397,9 @@ PROCEDURE pSolog:
          CASE MsRequest.ReqType:
             WHEN {&REQTYPE_DSS}
             THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
-                 THEN loProCommand = NEW Gwy.ProCommandDSS(MsRequest.MsRequest). 
+                 THEN loProCommand = NEW Gwy.SAPC.ProCommandDSS(MsRequest.MsRequest). 
             WHEN {&REQTYPE_SUBSCRIPTION_CREATE} OR WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
-            THEN loProCommand = NEW Gwy.ProCommandSubscription(MsRequest.MsRequest).
+            THEN loProCommand = NEW Gwy.SAPC.ProCommandBPM(MsRequest.MsRequest).
          END CASE.
       
          IF VALID-OBJECT(loProCommand)

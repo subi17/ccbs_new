@@ -11,7 +11,7 @@
 
 USING Progress.Json.ObjectModel.JsonObject.
 USING Progress.Json.ObjectModel.JsonArray.
-USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.Service.IService.
 USING Gwy.SAPC.Service.MobileLineSAPC.SIM.
 USING Gwy.SAPC.Service.MobileLineSAPC.PeriodicDataPlan.
@@ -28,7 +28,7 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan IMPLEMENTS IService:
    */
    METHOD PUBLIC VOID mCreateServices
       ( ioJsonObject AS CLASS JsonObject,
-        ioPCS        AS CLASS ProCommandSubscription ):
+        icPCO        AS CLASS ProCommandOrder ):
 
       DEFINE BUFFER OrderAction FOR OrderAction.
 
@@ -36,14 +36,14 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan IMPLEMENTS IService:
       DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
       loJsonArray = NEW JsonArray().
-      loJsonArray:Add(NEW SIM(ioPCS, "SIM"):ServiceObject).
+      loJsonArray:Add(NEW SIM(icPCO, "SIM"):ServiceObject).
 
       FOR EACH OrderAction NO-LOCK WHERE
                OrderAction.Brand = "1" AND
-               OrderAction.OrderId = ioPCS:aiOrderId AND
+               OrderAction.OrderId = icPCO:aiOrderId AND
                OrderAction.ItemType = "OptionalBundleItem":
          lii = lii + 1.
-         loJsonArray:Add(NEW PeriodicDataPlan(ioPCS, SUBSTITUTE("PDP&1", lii), OrderAction.ItemKey):ServiceObject).
+         loJsonArray:Add(NEW PeriodicDataPlan(icPCO, SUBSTITUTE("PDP&1", lii), OrderAction.ItemKey):ServiceObject).
       END.
 
       ioJsonObject:Add("Services", loJsonArray).

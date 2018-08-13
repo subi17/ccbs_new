@@ -9,12 +9,12 @@
   ----------------------------------------------------------------------*/
 
 USING Progress.Json.ObjectModel.JsonObject.
-USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.ProCommandOrder.
 
 INTERFACE Gwy.SAPC.Service.IService:  
 
    METHOD PUBLIC VOID mCreateServices
       (ioJsonObject AS CLASS JsonObject,
-       ioPCS AS CLASS ProCommandSubscription).
+       ioPCO AS CLASS ProCommandOrder).
 
 END INTERFACE.

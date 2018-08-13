@@ -16,7 +16,7 @@ USING Progress.Json.ObjectModel.*.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.ProCommand: 
+CLASS Gwy.SAPC.ProCommand: 
 
    DEFINE PUBLIC VARIABLE aiOrderId             AS INTEGER     NO-UNDO.
    DEFINE PUBLIC VARIABLE aiMsRequest           AS INTEGER     NO-UNDO.
