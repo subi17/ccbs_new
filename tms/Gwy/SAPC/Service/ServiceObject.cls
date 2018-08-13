@@ -11,7 +11,7 @@
 
 USING Progress.Json.ObjectModel.*.
 USING Gwy.SAPC.Service.IService.
-USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.OrderEnum.
 
 {Syst/tmsconst.i}
@@ -20,9 +20,9 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT: 
 
-   DEFINE PROTECTED VARIABLE aoCharacteristicArray    AS CLASS JsonArray    NO-UNDO.
-   DEFINE PROTECTED VARIABLE aoProCommandSubscription AS CLASS ProCommandSubscription NO-UNDO.
-   DEFINE PROTECTED VARIABLE aoService                AS CLASS IService     NO-UNDO.
+   DEFINE PROTECTED VARIABLE aoCharacteristicArray AS CLASS JsonArray       NO-UNDO.
+   DEFINE PROTECTED VARIABLE aoProCommandOrder     AS CLASS ProCommandOrder NO-UNDO.
+   DEFINE PROTECTED VARIABLE aoService             AS CLASS IService        NO-UNDO.
    
    DEFINE PUBLIC PROPERTY ServiceObject  AS CLASS JsonObject   NO-UNDO
       GET.
@@ -31,13 +31,13 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
    DEFINE PROTECTED VARIABLE acServiceID              AS CHARACTER          NO-UNDO.
 
    CONSTRUCTOR ServiceObject
-      ( ioPCS  AS CLASS ProCommandSubscription,
+      ( ioPCO  AS CLASS ProCommandOrder,
         icType AS CHARACTER ):
-      aoProCommandSubscription = ioPCS.
+      aoProCommandOrder = ioPCO.
       ServiceObject = NEW JsonObject().
-      ServiceObject:Add("serviceID", SUBSTITUTE("&1_&2", ioPCS:aiProCommandId, icType)).
+      ServiceObject:Add("serviceID", SUBSTITUTE("&1_&2", ioPCO:aiProCommandId, icType)).
       ServiceObject:Add("Action",
-                        IF aoProCommandSubscription:aoOrderEnum EQ
+                        IF aoProCommandOrder:aoOrderEnum EQ
                            OrderEnum:TERMINATION
                         THEN "Delete"
                         ELSE "Add").
@@ -55,7 +55,7 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
       IF VALID-OBJECT(aoService)
       THEN DELETE OBJECT aoService.
 
-      aoProCommandSubscription = ?.
+      aoProCommandOrder = ?.
    END DESTRUCTOR.
 
    METHOD PROTECTED JsonObject mNameValue
@@ -84,7 +84,7 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
-      loJsonObject:Add("phoneNumber", aoProCommandSubscription:ahOrder::CLI).
+      loJsonObject:Add("phoneNumber", aoProCommandOrder:acCLI).
 
       RETURN loJsonObject.
 

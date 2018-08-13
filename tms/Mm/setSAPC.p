@@ -60,7 +60,7 @@ DEF VAR llVoIPActive          AS LOG         NO-UNDO.
 DEF VAR lcAction              AS CHAR        NO-UNDO.               
 DEF VAR lcUpsellSize          AS CHAR        NO-UNDO.
 DEF VAR lcEmaDataPlan         AS CHAR        NO-UNDO.
-DEFINE VARIABLE loProCommand  AS CLASS Gwy.ProCommand NO-UNDO.
+DEFINE VARIABLE loProCommand  AS CLASS Gwy.SAPC.ProCommand NO-UNDO.
 DEFINE VARIABLE loCommandLine  AS CLASS JsonObject NO-UNDO.
 
 
@@ -550,7 +550,7 @@ DO TRANSACTION ON ERROR UNDO blk, LEAVE blk
    ELSE 
    DO:
       ASSIGN
-         loProCommand                       = NEW Gwy.ProCommand()
+         loProCommand                       = NEW Gwy.SAPC.ProCommand()
          loProCommand:aiMsRequest           = iiMSrequest
          loProCommand:aiMsSeq               = MobSub.MsSeq
          loProCommand:acProCommandTarget    = STRING(Gwy.SAPC.TargetEnum:NB_CH)

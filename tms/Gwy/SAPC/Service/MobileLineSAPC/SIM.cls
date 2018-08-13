@@ -11,17 +11,17 @@
 
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
-USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.ProCommandOrder.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.Service.MobileLineSAPC.SIM INHERITS ServiceObject: 
 
    CONSTRUCTOR SIM
-      ( ioPCS  AS CLASS ProCommandSubscription,
+      ( ioPCO  AS CLASS ProCommandOrder,
         icType AS CHARACTER ):
 
-      SUPER(ioPCS, icType).
+      SUPER(ioPCO, icType).
 
    END CONSTRUCTOR.
 
@@ -31,12 +31,12 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.SIM INHERITS ServiceObject:
       DEFINE BUFFER SIM FOR SIM.
 
       FIND SIM NO-LOCK WHERE
-           SIM.ICC = aoProCommandSubscription:ahOrder::ICC
+           SIM.ICC = aoProCommandOrder:acICC
       NO-ERROR.
 
       IF NOT AVAILABLE SIM
-      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot SIM with Order.ICC '&1'",
-                                               aoProCommandSubscription:ahOrder::ICC)).
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot SIM with ICC '&1'",
+                                               aoProCommandOrder:acICC)).
       
       FIND FIRST IMSI NO-LOCK WHERE 
                  IMSI.ICC = SIM.ICC

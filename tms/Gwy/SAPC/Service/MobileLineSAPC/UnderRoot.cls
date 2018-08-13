@@ -11,11 +11,9 @@
 
 USING Progress.Json.ObjectModel.JsonObject.
 USING Progress.Json.ObjectModel.JsonArray.
-USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.Service.IService.
 USING Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan.
-
-{Syst/tmsconst.i}
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -33,13 +31,13 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderRoot IMPLEMENTS IService:
    */
    METHOD PUBLIC VOID mCreateServices
       ( ioJsonObject AS CLASS JsonObject,
-        ioPCS        AS CLASS ProCommandSubscription ):
+        ioPCO        AS CLASS ProCommandOrder ):
 
       DEFINE VARIABLE loJsonArray  AS CLASS JsonArray  NO-UNDO.
 
       loJsonArray = NEW JsonArray().
       
-      loJsonArray:Add(NEW DefaultPricePlan(ioPCS, "DPP"):ServiceObject).
+      loJsonArray:Add(NEW DefaultPricePlan(ioPCO, "DPP"):ServiceObject).
 
       ioJsonObject:Add("Services", loJsonArray).
       

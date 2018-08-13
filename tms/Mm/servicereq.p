@@ -32,7 +32,7 @@ DEF BUFFER bSSPara   FOR SubSerPara.
 
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 1 OR
+IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE {&REQTYPE_SERVICE_CHANGE} OR
    MsRequest.ReqCparam1 EQ "" THEN RETURN "ERROR".
 
 /* pending for subrequest (used in reset process) */

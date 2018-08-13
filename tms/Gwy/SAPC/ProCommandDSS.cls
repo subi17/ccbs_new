@@ -11,12 +11,13 @@
 
 USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.*.
+USING Gwy.SAPC.ProCommand.
 
 {Syst/tmsconst.i}
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.ProCommandDSS INHERITS Gwy.ProCommand: 
+CLASS Gwy.SAPC.ProCommandDSS INHERITS ProCommand: 
 
    CONSTRUCTOR ProCommandDSS
       ( iiMsRequest AS INTEGER ):

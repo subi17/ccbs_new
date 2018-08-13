@@ -11,7 +11,7 @@
 
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
-USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
@@ -19,7 +19,7 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject: 
 
    CONSTRUCTOR DefaultPricePlan
-      ( ioPCS  AS CLASS ProCommandSubscription,
+      ( ioPCS  AS CLASS ProCommandOrder,
         icType AS CHARACTER ):
 
       SUPER(ioPCS, icType).
@@ -33,12 +33,12 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject:
 
       FIND CLIType NO-LOCK WHERE
            CLIType.Brand = "1" AND
-           CLIType.CLIType = aoProCommandSubscription:ahOrder::CLIType
+           CLIType.CLIType = aoProCommandOrder:acCLIType
       NO-ERROR.
 
       IF NOT AVAILABLE CLIType
-      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot CLIType '&1' which order has",
-                                               aoProCommandSubscription:ahOrder::CLIType)).
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find CLIType '&1'",
+                                               aoProCommandOrder:acCLIType)).
 
       FIND DayCampaign NO-LOCK WHERE
            DayCampaign.Brand = "1" AND
@@ -55,7 +55,7 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject:
       mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
       mAddCharacteristicsArray
          (mNameValue("subscriptionType",
-                     STRING(aoProCommandSubscription:ahOrder::PayType,
+                     STRING(aoProCommandOrder:alPayType,
                             "prepaid/postpaid"))).
 
       ServiceObject:Add("Characteristics", aoCharacteristicArray).
@@ -63,7 +63,7 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject:
       ServiceObject:Add("Line", mLineObject()).
 
       aoService = NEW UnderDefaultPricePlan().
-      aoService:mCreateServices(ServiceObject, aoProCommandSubscription).
+      aoService:mCreateServices(ServiceObject, aoProCommandOrder).
 
    END METHOD.
 

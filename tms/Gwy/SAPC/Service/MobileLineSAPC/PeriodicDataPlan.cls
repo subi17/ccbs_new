@@ -11,7 +11,7 @@
 
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
-USING Gwy.ProCommandSubscription.
+USING Gwy.SAPC.ProCommandOrder.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -20,11 +20,11 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.PeriodicDataPlan INHERITS ServiceObject:
    DEFINE PRIVATE VARIABLE acBundle AS CHARACTER NO-UNDO.
 
    CONSTRUCTOR PeriodicDataPlan
-      ( ioPCS    AS CLASS ProCommandSubscription,
+      ( ioPCO    AS CLASS ProCommandOrder,
         icType   AS CHARACTER,
         icBundle AS CHARACTER ):
 
-      SUPER(ioPCS, icType).
+      SUPER(ioPCO, icType).
       acBundle = icBundle.
 
    END CONSTRUCTOR.
