@@ -93,11 +93,3 @@ ADD FIELD "DueDateOffset" OF "InvoiceTargetGroup" AS integer
   COLUMN-LABEL "DueDateOffset"
   HELP "DueDate Offset"
   ORDER 200
-
-ADD FIELD "DelType" OF "InvoiceTargetGroup" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "DelType"
-  COLUMN-LABEL "DelType"
-  HELP "Invoice's delivery type"
-  ORDER 210
