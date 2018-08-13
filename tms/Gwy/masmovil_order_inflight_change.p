@@ -15,7 +15,9 @@ IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    DEF VAR lhOrdCustomer            AS HANDLE     NO-UNDO.
+   DEF VAR lhOrdFusion              AS HANDLE     NO-UNDO.
    lhOrdCustomer = BUFFER OrderCustomer:HANDLE.
+   lhOrdFusion   = BUFFER OrderFUsion:HANDLE .
    RUN StarEventInitialize(lhOrdCustomer).
 END.  
 
@@ -263,6 +265,12 @@ ELSE DO:
 
 END.
 
+RETURN "".
+
+FINALLY:
+   IF llDoEvent THEN fCleanEventObjects().
+END.
+
 PROCEDURE pUpdateAddress:
        
    DEF INPUT PARAMETER iiOrderID AS INT NO-UNDO.
@@ -325,19 +333,28 @@ PROCEDURE pUpdateFixedNumber:
    IF NOT AVAIL OrderCustomer THEN
       RETURN "ErrorCode: OrderCustomer is not available".
       
-   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrdCustomer).
+   IF llDoEvent THEN DO:
+      RUN StarEventSetOldBuffer(lhOrdCustomer).
+      RUN StarEventSetOldBuffer(lhOrdFusion).
+   END.
       
    ASSIGN
-      OrderCustomer.FixedNumber   = lcAmendamentValue.
+      OrderCustomer.FixedNumber   = lcAmendamentValue
+      OrderFusion.FixedNumber     = lcAmendamentValue 
+      OrderFusion.FixedNumberType = "NEW" .
           
-   IF llDoEvent THEN
+   IF llDoEvent THEN DO:
       RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer,
                                            {&STAR_EVENT_USER},
                                            "Fixed Number Updated").
-      
+      RUN StarEventMakeModifyEventWithMemo(lhOrdFusion,
+                                           {&STAR_EVENT_USER},
+                                           "Fixed Number and Type Updated").
+   END. 
+   
    RELEASE OrderCustomer.
 
 END PROCEDURE.
 
-RETURN "".
+
        
