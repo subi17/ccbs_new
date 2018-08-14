@@ -36,6 +36,7 @@ FUNCTION fCalculateFactor RETURNS DEC
    IF idtBegContract = ? OR idtEndContract = ? OR idtCalcDate = ? OR
       idtEndContract < idtBegContract OR
       idtCalcDate > idtEndContract OR
+      TODAY < idtBegContract OR
       iiCalcMethod = 0 
    THEN ldFactor = 0.
    
