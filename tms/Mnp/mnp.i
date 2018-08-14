@@ -163,7 +163,7 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
          CallAlarm.CLI        = pcCLI
          CallAlarm.DeliStat   = 1
          CallAlarm.Delitype   = 1
-         CallAlarm.DeliPara   = pcFormReq /* Previously "1" ; unused field */
+         CallAlarm.DeliPara   = IF LOOKUP(pcAction,"MNPIdentDirect,MNPReject,MNPEnumePOS,MNPIccidPOS") > 0 THEN pcFormReq ELSE "1" /* Previously "1" ; unused field */
          CallAlarm.DeliMsg    = lcAlarmMess
          CallAlarm.Limit      = 0
          CallAlarm.CreditType = {&SMSTYPE_MNP}

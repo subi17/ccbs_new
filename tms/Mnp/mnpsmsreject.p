@@ -57,28 +57,28 @@ FOR EACH CallAlarm NO-LOCK
      AND CallAlarm.DeliStamp  > idLastDump
      USE-INDEX ActStamp
      :
-    FOR EACH MnpSub NO-LOCK
-       WHERE MnpSub.CLI = CallAlarm.CLI,
-        EACH MnpProcess NO-LOCK
-       WHERE MNPProcess.Brand       = Syst.Var:gcBrand
-         AND MnpProcess.MnpSeq      = MnpSub.MnpSeq
-         AND MNPProcess.MNPType     = {&MNP_TYPE_IN}
-         AND (MNPProcess.StatusCode = {&MNP_ST_AREC}
-          OR  MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED})
-         AND MNPProcess.FormRequest    = CallAlarm.DeliPara
-         AND LOOKUP(MnpProcess.StatusReason, lcStatusReason) > 0
-          BY MNPProcess.UpdateTS DESCENDING:
+   FOR EACH MnpSub NO-LOCK
+      WHERE MnpSub.CLI = CallAlarm.CLI,
+       EACH MnpProcess NO-LOCK
+      WHERE MNPProcess.Brand       = Syst.Var:gcBrand
+        AND MnpProcess.MnpSeq      = MnpSub.MnpSeq
+        AND MNPProcess.MNPType     = {&MNP_TYPE_IN}
+        AND (MNPProcess.StatusCode = {&MNP_ST_AREC}
+         OR  MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED})
+        AND MNPProcess.FormRequest    = CallAlarm.DeliPara
+        AND LOOKUP(MnpProcess.StatusReason, lcStatusReason) > 0
+         BY MNPProcess.UpdateTS DESCENDING:
             
-       FIND FIRST MNPDetails NO-LOCK 
-            WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+      FIND FIRST MNPDetails NO-LOCK 
+           WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
        
-       PUT STREAM sdump UNFORMATTED
-          MNPSub.CLI                                                  lcDelimiter
-          IF AVAILABLE MNPDetails THEN MNPDetails.DonorCode ELSE ""   lcDelimiter
-          MNPProcess.PortRequest                                      lcDelimiter
-          MNPProcess.StatusReason                                     lcDelimiter
-          Func.Common:mTS2HMS(CallAlarm.DeliStamp)
-          SKIP.
+      PUT STREAM sdump UNFORMATTED
+         MNPSub.CLI                                                  lcDelimiter
+         IF AVAILABLE MNPDetails THEN MNPDetails.DonorCode ELSE ""   lcDelimiter
+         MNPProcess.PortRequest                                      lcDelimiter
+         MNPProcess.StatusReason                                     lcDelimiter
+         Func.Common:mTS2HMS(CallAlarm.DeliStamp)
+         SKIP.
                                 
       oiEvents = oiEvents + 1.
       
@@ -86,7 +86,8 @@ FOR EACH CallAlarm NO-LOCK
       DO:
          PAUSE 0.
          DISP oiEvents WITH FRAME fColl.
-      END.  
+      END.
+      LEAVE.
    END.                   
 END.
 
