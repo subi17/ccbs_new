@@ -95,10 +95,6 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         GET.
         SET.
 
-   DEFINE PUBLIC PROPERTY PayType AS LOGICAL NO-UNDO
-      GET.
-      SET.
-
    DEFINE PUBLIC PROPERTY liCustNum AS INTEGER NO-UNDO
       GET.
       SET.
