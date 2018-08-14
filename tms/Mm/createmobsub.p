@@ -438,12 +438,8 @@ IF NOT AVAIL mobsub THEN DO:
       Mobsub.Activationdate   = TODAY
       Mobsub.IDCode           = STRING(RANDOM(0,9999),"9999")
       MobSub.TariffActDate    = TODAY
-      MobSub.TariffActTS      = ldeActivationTS.
-
-
-   /* CDS-8 start */
-   fUpdateAccountID(Customer.CustNum).
-   /* CDS-8 end */
+      MobSub.TariffActTS      = ldeActivationTS
+      MobSub.AccountID        = fGetDefaultCustomerAccount(MobSub.CustNum). /* CDS-8 */
 
    /* Extra line */
    /* In case of extra line discount subcription creation,
@@ -563,8 +559,10 @@ IF NOT AVAIL mobsub THEN DO:
       MSOwner.IMSI       = MobSub.IMSI
       MSowner.Paytype    = MObsub.Paytype
       MSOwner.clitype    = mobsub.clitype
-      MSOWner.clievent   = (IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}                            THEN "F" ELSE "C")
-      Msowner.InPortOper = Order.CurrOper .
+      MSOWner.clievent   = (IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} 
+                            THEN "F" ELSE "C")
+      Msowner.InPortOper = Order.CurrOper 
+      Msowner.AccountID  = mobsub.AccountID.
 
       IF fGetOrderMandateId(BUFFER Order,
                             OUTPUT lcMandateId,

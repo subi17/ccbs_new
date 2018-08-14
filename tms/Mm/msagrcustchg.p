@@ -600,7 +600,7 @@ PROCEDURE pOwnerChange:
                RETURN.
             END.          
             
-            IF NOT fCreateCustomerAccount(liCreated[liReqCnt]) THEN DO:
+            IF fCreateDefaultCustomerAccount(liCreated[liReqCnt]) EQ 0 THEN DO:
                fReqError("CustomerAccount not created").
                RETURN.
             END.               

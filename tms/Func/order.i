@@ -425,8 +425,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          /* new user account */
          create_account(Customer.CustNum,?,?).
          /* CDS-6 */
-         IF NOT fCreateCustomerAccount(Customer.Custnum) THEN
-            RETURN FALSE.
+         fCreateDefaultCustomerAccount(Customer.Custnum).
+
          /* CDS-6 */
 
          IF OrderCustomer.SubQty > 0 THEN DO:
