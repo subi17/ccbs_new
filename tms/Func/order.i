@@ -241,7 +241,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
             
             llISPro = fIsPro(bf_Customer.Category).
 
-            IF (icCloseType = "Pro" AND NOT llISPro = FALSE) OR
+            IF (icCloseType = "Pro" AND llISPro = FALSE) OR
                (icCloseType NE "Pro" AND llISPro = TRUE) THEN NEXT.
                                            
             IF NOT fChangeReqStatus(bf_MsRequest.MsRequest,
