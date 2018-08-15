@@ -31,9 +31,9 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         GET.
         SET.
         
-   DEFINE PUBLIC PROPERTY ObjCustomerAcct AS CLASS cm.CustomerAccount NO-UNDO 
-       GET.
-       SET.
+    DEFINE PUBLIC PROPERTY ObjCustomerAcct AS CLASS cm.CustomerAccount NO-UNDO 
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY objOrderInspection AS CLASS om.OrderInspection NO-UNDO 
         GET.
@@ -167,10 +167,6 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY icc AS CHARACTER NO-UNDO
-       GET.
-       SET.
-       
     /* A value for this property is populated in OrderProduct class */
     DEFINE PUBLIC PROPERTY msSeq AS INTEGER NO-UNDO
         GET.
@@ -203,8 +199,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE loAgrCust      AS CLASS JsonObject NO-UNDO.
         DEFINE VARIABLE ldaCreateDate  AS DATETIME-TZ      NO-UNDO.
         DEFINE VARIABLE liCount        AS INTEGER          NO-UNDO.
-        DEFINE VARIABLE lcMigrationErr AS CHARACTER        NO-UNDO.
-        
+        DEFINE VARIABLE lcMigrationErr AS CHARACTER        NO-UNDO.        
               
         ASSIGN
             loAgrCust         = ioJsonObject:GetJsonObject("agreement-customer") WHEN ioJsonObject:Has("agreement-customer")
@@ -221,66 +216,76 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             objCustomer:orderChannel  = THIS-OBJECT:orderChannel                   
             .
 
-      IF VALID-OBJECT(loAgrCust) THEN 
-      DO:          
-          IF loAgrCust:Has("custnum") THEN 
-              objCustomer:mFindCustomer(loAgrCust:GetInteger("custnum")).
-          ELSE 
-              objCustomer:mCreateData(loAgrCust).
+        IF VALID-OBJECT(loAgrCust) THEN 
+        DO:          
+            IF loAgrCust:Has("custnum") THEN 
+                objCustomer:mFindCustomer(loAgrCust:GetInteger("custnum")).
+            ELSE 
+                objCustomer:mCreateData(loAgrCust).
           
-          ASSIGN THIS-OBJECT:isACCOrder = TRUE.
-      END. 
-      ELSE IF VALID-OBJECT(ObjCustomerStruct) THEN 
-      DO:
-          ASSIGN 
-              ObjPaymentStruct    = ioJsonObject:GetJsonObject("upfront_payment_method") WHEN ioJsonObject:Has("upfront_payment_method")
-              ObjInspectionStruct = ioJsonObject:GetJsonObject("inspection")             WHEN ioJsonObject:Has("inspection").
-          
-          IF ObjCustomerStruct:Has("account_id") THEN 
-          DO:              
-              ASSIGN THIS-OBJECT:custAcctNum = ObjCustomerStruct:GetInteger("account_id").
-              objCustomerAcct:mFindCustomerAcct(THIS-OBJECT:custAcctNum).
-              ASSIGN THIS-OBJECT:custAcctid  = objCustomerAcct:mGetCustomerAcctId(). 
-              objCustomer:mFindCustomer(objCustomerAcct:mGetCustNum()).     
-          END.    
-          ELSE objCustomer:mCreateData(INPUT ObjCustomerStruct).
-          
-          IF ObjCustomerStruct:Has("billing_accounts") THEN
-          DO:             
-              ASSIGN 
-                  objBillAcctArray = ObjCustomerStruct:GetJsonArray("billing_accounts"). 
-                  objCustomerAcct:mCreateBillingAcct(objBillAcctArray).                           
-          END.          
-      END.            
+            ASSIGN 
+                THIS-OBJECT:isACCOrder = TRUE.
+        END. 
+        ELSE IF VALID-OBJECT(ObjCustomerStruct) THEN 
+        DO:
+            ASSIGN 
+                ObjPaymentStruct    = ioJsonObject:GetJsonObject("upfront_payment_method") WHEN ioJsonObject:Has("upfront_payment_method")
+                ObjInspectionStruct = ioJsonObject:GetJsonObject("inspection")             WHEN ioJsonObject:Has("inspection").
       
-      IF ioJsonObject:Has("items") THEN
-      DO:
-         objOrderProductFactory = NEW pm.OrderProductFactory().
-         objOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
-      END.
-      ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
+            IF ObjCustomerStruct:Has("account_id") THEN 
+            DO:              
+                ASSIGN 
+                    THIS-OBJECT:custAcctNum = ObjCustomerStruct:GetInteger("account_id").
+                    
+                objCustomerAcct:mFindCustomerAcct(THIS-OBJECT:custAcctNum).
+                
+                ASSIGN 
+                    THIS-OBJECT:custAcctid = objCustomerAcct:mGetCustomerAcctId().
+                     
+                objCustomer:mFindCustomer(objCustomerAcct:mGetCustNum()).     
+            END.    
+            ELSE objCustomer:mCreateData(INPUT ObjCustomerStruct).
       
-      RUN Mc/ordervalidations.p PERSISTENT SET lhOrderValidations.  /* This is for the complicated business logic */
+            IF ObjCustomerStruct:Has("billing_accounts") THEN
+            DO:             
+                ASSIGN 
+                    objBillAcctArray = ObjCustomerStruct:GetJsonArray("billing_accounts"). 
+                objCustomerAcct:mCreateBillingAcct(objBillAcctArray). 
+                objCustomer:mAssignBillAcctIdData(ObjCustomerAcct:mGetBillAcctIDData()).     
+            END.          
+        END.            
+  
+        RUN Mc/ordervalidations.p PERSISTENT SET lhOrderValidations.  /* This is for the complicated business logic */
       
-      IF THIS-OBJECT:orderChannel BEGINS "migration"
-          AND THIS-OBJECT:isACCOrder  = FALSE THEN 
-      DO:
-          ASSIGN lcMigrationErr =  DYNAMIC-FUNCTION("fMigrationCheckCustomer" IN THIS-OBJECT:lhOrderValidations , INPUT Syst.Var:gcBrand , INPUT objCustomer:CustId).
-          IF lcMigrationErr > "" THEN
-              UNDO , THROW NEW ParamError("Migration data validation error:" + lcMigrationErr).
-      END.
+        IF THIS-OBJECT:orderChannel BEGINS "migration"
+            AND THIS-OBJECT:isACCOrder  = FALSE THEN 
+        DO:
+            ASSIGN 
+                lcMigrationErr = DYNAMIC-FUNCTION("fMigrationCheckCustomer" IN THIS-OBJECT:lhOrderValidations , INPUT Syst.Var:gcBrand , INPUT objCustomer:CustId).
+            IF lcMigrationErr > "" THEN
+                UNDO , THROW NEW ParamError("Migration data validation error:" + lcMigrationErr).
+        END.
       
-      IF VALID-OBJECT(ObjInspectionStruct) THEN
-      DO:
-          ASSIGN objOrderInspection = NEW om.OrderInspection(THIS-OBJECT).
-          objOrderInspection:mCreateData(ObjInspectionStruct).
-      END.
+        IF VALID-OBJECT(ObjInspectionStruct) THEN
+        DO:
+            ASSIGN 
+                objOrderInspection = NEW om.OrderInspection(THIS-OBJECT).
+            objOrderInspection:mCreateData(ObjInspectionStruct).
+        END.
         
-      IF VALID-OBJECT(ObjPaymentStruct) THEN
-      DO:
-          ASSIGN objOrderPayment  = NEW om.OrderPayment(THIS-OBJECT).
-          objOrderPayment:mCreateData(ObjPaymentStruct).
-      END.      
+        IF VALID-OBJECT(ObjPaymentStruct) THEN
+        DO:
+            ASSIGN 
+                objOrderPayment = NEW om.OrderPayment(THIS-OBJECT).
+            objOrderPayment:mCreateData(ObjPaymentStruct).
+        END.      
+      
+        IF ioJsonObject:Has("items") THEN
+        DO:
+            objOrderProductFactory = NEW pm.OrderProductFactory().
+            objOrderProductFactory:mCreateData(ioJsonObject:GetJsonArray("items"), THIS-OBJECT).
+        END.
+        ELSE UNDO, THROW NEW ParamError("order_items_are_mandatory").
     
     END METHOD.
 
@@ -321,8 +326,6 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             
         IF VALID-OBJECT(ObjPaymentStruct) THEN
             objOrderPayment:mStoreData().
-        
-        objOrderProductFactory:mStoreData(). 
         
         IF THIS-OBJECT:isACCOrder = FALSE THEN
         DO:
@@ -401,11 +404,13 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.StatusCode    = THIS-OBJECT:statusCode
             Order.Paytype       = (IF Func.ValidateOrder:mGetPayType(INPUT THIS-OBJECT:cliType) = 2 THEN YES ELSE NO) 
             Order.AccountId     = objCustomer:custAcctID
+            Order.CLIType       = THIS-OBJECT:cliType
             THIS-OBJECT:payType = Order.Paytype.
-            
             
         IF VALID-OBJECT(objBillAcctArray) THEN 
             ObjCustomerAcct:mStoreBillingAcct().
+        
+        objOrderProductFactory:mStoreData().    
         
     END METHOD.
     
@@ -442,22 +447,36 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
 
    METHOD PUBLIC JsonObject mResult():
 
-      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
-      DEFINE VARIABLE loCustObject AS CLASS JsonObject NO-UNDO.
+       DEFINE VARIABLE loJsonObject  AS CLASS JsonObject NO-UNDO.
+       DEFINE VARIABLE loCustObject  AS CLASS JsonObject NO-UNDO.
+       DEFINE VARIABLE loCustAcctobj AS CLASS JsonObject NO-UNDO.
       
-      loJsonObject = NEW JsonObject().
-      loJsonObject:Add("order-id", THIS-OBJECT:orderId).
+       loJsonObject = NEW JsonObject().
+       loJsonObject:Add("order-id", THIS-OBJECT:orderId).
       
-      IF objCustomer:isNewCustomer THEN
-      DO:
-          ASSIGN loCustObject = NEW JsonObject()
-                 loCustObject = objCustomer:mResult().
-          loJsonObject:Add("customer" , loCustObject). 
-      END.
+       IF objCustomer:isNewCustomer THEN
+       DO:
+           ASSIGN 
+               loCustObject = NEW JsonObject()
+               loCustObject = objCustomer:mResult().
+           loJsonObject:Add("customer" , loCustObject). 
+       END.
+      
+       IF VALID-OBJECT(objBillAcctArray) THEN 
+       DO:
+           ASSIGN 
+               loCustObject  = NEW JsonObject()
+               loCustAcctobj = NEW JsonObject()
+               loCustAcctobj = ObjCustomerAcct:mResult().
+              
+           loCustObject:Add("cust-num",objCustomer:custNum).     
+           loCustObject:ADD("customer-accounts",loCustAcctobj).
+           loJsonObject:Add("customer",loCustObject).
+       END.
        
-      objOrderProductFactory:mResult(loJsonObject).
+       objOrderProductFactory:mResult(loJsonObject).
 
-      RETURN loJsonObject.
+       RETURN loJsonObject.
 
    END METHOD.
    

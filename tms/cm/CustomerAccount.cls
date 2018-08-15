@@ -142,11 +142,11 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                      
             ASSIGN 
                 THIS-OBJECT:billingAcctIds = THIS-OBJECT:billingAcctIds  + "," + objBillAcct:mGetBillingAcctID().
+                    
         END.      
 	    
         ASSIGN 
             THIS-OBJECT:billingAcctIds = TRIM(THIS-OBJECT:billingAcctIds , ",").
-	    
 	    
 	END METHOD.
 	
@@ -235,19 +235,6 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	    
 	END METHOD.	
 	
-    METHOD PUBLIC INTEGER mGetBillingAcctID():	    
-	    
-        FIND FIRST InvoiceTargetGroup WHERE InvoiceTargetGroup.Brand        =  Syst.Var:gcBrand
-            AND InvoiceTargetGroup.AccountID    =  THIS-OBJECT:accountId
-            AND InvoiceTargetGroup.CustAccName  =  THIS-OBJECT:acctName NO-LOCK NO-ERROR.
-	                                    
-        IF NOT AVAILABLE InvoiceTargetGroup THEN 
-            UNDO, THROW NEW ParamError("Billing Account not found to update.").	    
-            
-        RETURN (InvoiceTargetGroup.ITGroupID).                                
-	    
-    END METHOD.
-    
     METHOD PUBLIC VOID mFindCustomerAcct (INPUT iiCustAcct AS INTEGER) :       
        
         FIND FIRST CustomerAccount 

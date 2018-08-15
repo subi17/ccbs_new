@@ -239,7 +239,9 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
                 ASSIGN objOrder:orderType  = {&ORDER_TYPE_NEW}
                        objOrder:statusCode = {&ORDER_STATUS_NEW}.
                  
-            IF iObjItemStruct:Has("billing_account_id") THEN
+            IF iObjItemStruct:Has("billing_account_id") OR 
+                (objOrder:objCustomer:isNewCustomer = FALSE AND 
+                iObjItemStruct:Has("billing_account_index"))THEN
             DO:
                 mGetBillingAddressObject(). 
             END.       

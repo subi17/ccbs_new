@@ -61,16 +61,16 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
         ASSIGN 
             loAttributes = NEW JsonObject()
             loAttributes = objSimProductStruct:GetJsonObject("attributes") WHEN objSimProductStruct:Has("attributes").
-        
+            
         IF VALID-OBJECT(loAttributes)
         THEN DO:
             
             /*ICC attribute will be in the json structure. But, some times icc will be assigned by dextra*/            
-            IF loAttributes:Has("ICC")
+            IF loAttributes:Has("icc")
             THEN DO:
                 
-                ASSIGN THIS-OBJECT:ICC  =  loAttributes:GetCharacter("ICC")
-                       objOrder:lcICC    =  THIS-OBJECT:ICC.
+                ASSIGN THIS-OBJECT:ICC  =  loAttributes:GetCharacter("icc")
+                       objOrder:lcICC   =  THIS-OBJECT:ICC.
                 
                 IF THIS-OBJECT:ICC > "" AND  
                    Func.ValidateOrder:misFreeICC(THIS-OBJECT:ICC) = FALSE 
