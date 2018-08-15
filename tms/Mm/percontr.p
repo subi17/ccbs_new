@@ -163,7 +163,7 @@ END FUNCTION.
 
 FUNCTION fTerminationProvisionNeeded RETURNS LOGICAL
    ( iiOrigMsRequest AS INTEGER,
-     iiActMsRequest  AS INTEGER ) :
+     iiTermMsRequest AS INTEGER ) :
 
    DEFINE BUFFER MsRequest FOR MsRequest.
    DEFINE BUFFER DayCampaign FOR DayCampaign.
@@ -191,7 +191,8 @@ FUNCTION fTerminationProvisionNeeded RETURNS LOGICAL
             is sent */
       FOR EACH MsRequest NO-LOCK USE-INDEX OrigRequest WHERE
                MsRequest.OrigRequest EQ iiOrigMsRequest AND
-               MsRequest.ReqType     EQ {&REQTYPE_CONTRACT_ACTIVATION},
+               MsRequest.ReqType     EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+               MsRequest.ReqIParam2  EQ iiTermMsRequest,
           FIRST DayCampaign NO-LOCK WHERE
                 DayCampaign.Brand   EQ "1" AND
                 DayCampaign.DCEvent EQ MsRequest.ReqCParam3 AND
@@ -2932,7 +2933,7 @@ PROCEDURE pContractTermination:
       IF llSAPC
       THEN DO:
          IF DayCampaign.EMACode > "" AND
-            fTerminationProvisionNeeded(MsRequest.OrigRequest, MsRequest.ReqIParam2)
+            fTerminationProvisionNeeded(MsRequest.OrigRequest, MsRequest.MsRequest)
          THEN DO ON ERROR UNDO, THROW:
             loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
          
