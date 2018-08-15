@@ -111,8 +111,8 @@ form
      FORMAT "99999999.99999"
      SKIP
      
-  OrderMobile.ActivationTS
-     LABEL "ActivationTS .."
+  OrderMobile.ActivatedTS 
+     LABEL "ActivatedTS .."
      FORMAT "99999999.99999"
      SKIP
      
@@ -429,22 +429,21 @@ BROWSE:
          FIND FIRST OrderMobile where 
               recid(OrderMobile) = rtab[frame-line(sel)]
          no-lock.
-         assign ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
-         RUN Syst/ufkey.p.
+         assign ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 9.
 
-         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderMobile).
 
-         RUN LOCAL-UPDATE-RECORD(FALSE).
+         RUN local-disp-lis.
 
          IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
          KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
        
+         RUN local-disp-row.
+         
          xrecid = recid(OrderMobile).
-
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderMobile).
-
+         LEAVE.
       END.
 
       ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
@@ -561,7 +560,7 @@ PROCEDURE local-UPDATE-record:
          OrderMobile.CreatedTS        
          OrderMobile.UpdatedTS        
          OrderMobile.CLI              
-         OrderMobile.ActivationTS      
+         OrderMobile.ActivatedTS      
          OrderMobile.RequestedPortingDate  
          OrderMobile.PortingTime      
          OrderMobile.MNPStatus        
@@ -608,7 +607,7 @@ PROCEDURE local-disp-lis:
       OrderMobile.CreatedTS        
       OrderMobile.UpdatedTS        
       OrderMobile.CLI              
-      OrderMobile.ActivationTS      
+      OrderMobile.ActivatedTS      
       OrderMobile.RequestedPortingDate  
       OrderMobile.PortingTime      
       OrderMobile.MNPStatus        
@@ -642,7 +641,7 @@ PROCEDURE pUpdate:
       UPDATE
          OrderMobile.UpdatedTS        
          OrderMobile.CLI              
-         OrderMobile.ActivationTS      
+         OrderMobile.ActivatedTS      
          OrderMobile.RequestedPortingDate  
          OrderMobile.PortingTime         
          WITH FRAME lis EDITING: 
