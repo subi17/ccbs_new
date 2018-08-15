@@ -15,7 +15,7 @@ USING Gwy.SAPC.ProCommandOrder.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.MobileLineSAPC.SIM INHERITS ServiceObject: 
+CLASS Gwy.SAPC.Service.CreateOrder.SIM INHERITS ServiceObject: 
 
    CONSTRUCTOR SIM
       ( ioPCO  AS CLASS ProCommandOrder,
@@ -46,12 +46,12 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.SIM INHERITS ServiceObject:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find IMSI with ICC '&1'",
                                                SIM.ICC)).
 
-      ServiceObject:Add("Type", "SIM").
+      aoJsonObject:Add("Type", "SIM").
 
       mAddCharacteristicsArray(mNameValue("Iccid", SIM.ICC)).
       mAddCharacteristicsArray(mNameValue("Imsi", IMSI.IMSI)).
       mAddCharacteristicsArray(mNameValue("Ki", IMSI.KI)).
-      ServiceObject:Add("Characteristics", aoCharacteristicArray).
+      aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
    END METHOD.
 

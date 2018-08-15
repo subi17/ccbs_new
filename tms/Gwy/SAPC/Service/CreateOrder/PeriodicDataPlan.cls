@@ -12,10 +12,11 @@
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
 USING Gwy.SAPC.ProCommandOrder.
+USING Gwy.SAPC.OrderEnum.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.MobileLineSAPC.PeriodicDataPlan INHERITS ServiceObject: 
+CLASS Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan INHERITS ServiceObject: 
 
    DEFINE PRIVATE VARIABLE acBundle AS CHARACTER NO-UNDO.
 
@@ -42,10 +43,16 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.PeriodicDataPlan INHERITS ServiceObject:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find OptionalBundleItem '&1'",
                                                acBundle)).
 
-      ServiceObject:Add("Type", "PERIODIC_DATAPLAN").
+      aoJsonObject:Add("Action",
+                        IF aoProCommandOrder:aoOrderEnum EQ
+                           OrderEnum:SUBSCRIPTION_TERMINATE
+                        THEN "Delete"
+                        ELSE "Add").
+
+      aoJsonObject:Add("Type", "PERIODIC_DATAPLAN").
 
       mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
-      ServiceObject:Add("Characteristics", aoCharacteristicArray).
+      aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
    END METHOD.
 

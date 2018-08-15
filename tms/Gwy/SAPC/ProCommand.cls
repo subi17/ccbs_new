@@ -31,6 +31,11 @@ CLASS Gwy.SAPC.ProCommand:
    
    DEFINE PROTECTED BUFFER MsRequest  FOR MsRequest.
 
+   DEFINE PUBLIC PROPERTY ahMsRequest AS HANDLE NO-UNDO
+      GET:
+         RETURN BUFFER MsRequest:HANDLE.
+      END GET.
+
    CONSTRUCTOR PUBLIC ProCommand():
    END CONSTRUCTOR.
 

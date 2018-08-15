@@ -30,16 +30,15 @@ CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder:
       SUPER(iiMsRequest).
 
       DEFINE VARIABLE loJson        AS CLASS JsonObject   NO-UNDO.
-      DEFINE VARIABLE loService     AS CLASS IService     NO-UNDO.
 
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
          THEN ASSIGN
-                 aoOrderEnum      = OrderEnum:CREATION
+                 aoOrderEnum      = OrderEnum:SUBSCRIPTION_CREATE
                  acProCommandType = "SUBSCRIPTION_CREATE".
          WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
          THEN ASSIGN
-                 aoOrderEnum = OrderEnum:TERMINATION
+                 aoOrderEnum = OrderEnum:SUBSCRIPTION_TERMINATE
                  acProCommandType = "SUBSCRIPTION_TERMINATE".
          OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandBPM cannot " +
                                                        "handle ReqType &1",
@@ -79,16 +78,15 @@ CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder:
          acCLIType          = Order.CLIType
          alPayType          = Order.PayType.
 
-      loJson = mOrderObject(IF aoOrderEnum EQ OrderEnum:TERMINATION
+      loJson = mOrderObject(IF aoOrderEnum EQ OrderEnum:SUBSCRIPTION_TERMINATE
                             THEN "Disconnection"
                             ELSE "InOrder").
 
       loJson:Add("Client", mClientObject()).
       
-      loService = NEW Gwy.SAPC.Service.MobileLineSAPC.UnderRoot().
+      aoService = NEW Gwy.SAPC.Service.CreateOrder.UnderRoot(THIS-OBJECT).
 
-      IF VALID-OBJECT(loService)
-      THEN loService:mCreateServices(loJson, THIS-OBJECT).
+      aoService:mCreateServices(loJson).
 
       FINALLY:
          IF VALID-OBJECT(loJson)

@@ -161,6 +161,49 @@ FUNCTION fExtractWebContractId RETURNS CHARACTER(INPUT icMemo AS CHARACTER ) :
     RETURN ''.
 END FUNCTION. 
 
+FUNCTION fTerminationProvisionNeeded RETURNS LOGICAL
+   ( iiOrigMsRequest AS INTEGER,
+     iiActMsRequest  AS INTEGER ) :
+
+   DEFINE BUFFER MsRequest FOR MsRequest.
+   DEFINE BUFFER DayCampaign FOR DayCampaign.
+
+   /* If no parent request (origrequest) then this is
+      independent dataplan deletion and provision is needed */
+   IF iiOrigMsRequest EQ 0
+   THEN RETURN TRUE.
+
+   FIND MsRequest NO-LOCK WHERE MsRequest.MsRequest = iiOrigMsRequest NO-ERROR.
+
+   /* Provision is not needed for the termination request if the parent request
+      (origrequest) is STC or bundle change request
+      => Then the activation request having the same parent will make
+         dataplan modify to the provision system (SAPC) containing
+         the information about the termination request */
+   IF AVAILABLE MsRequest AND
+      ( MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
+        MsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE} )
+   THEN DO:
+
+      /* We need to verify that the activation request for STC or
+         bundle change will be provisioned (i.e. the EMAcode > "")
+         => If it is not then normal termination provision command
+            is sent */
+      FOR EACH MsRequest NO-LOCK USE-INDEX OrigRequest WHERE
+               MsRequest.OrigRequest EQ iiOrigMsRequest AND
+               MsRequest.ReqType     EQ {&REQTYPE_CONTRACT_ACTIVATION},
+          FIRST DayCampaign NO-LOCK WHERE
+                DayCampaign.Brand   EQ "1" AND
+                DayCampaign.DCEvent EQ MsRequest.ReqCParam3 AND
+                DayCampaign.EMACode > "":
+         RETURN FALSE.
+      END.
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
 
@@ -293,12 +336,12 @@ liOrigStatus = MsRequest.ReqStatus.
 
 CASE MsRequest.ReqType:
 /* PIN for periodical contract */
-WHEN 7 THEN DO:
+WHEN {&REQTYPE_CONTRACT_PIN} THEN DO:
    RUN pPerContractPIN.
 END.
 
 /* activate or continue periodical contract */
-WHEN 8 THEN DO:
+WHEN {&REQTYPE_CONTRACT_ACTIVATION} THEN DO:
    /*SVA activation / YPRO*/
    IF MsRequest.ReqCParam6 BEGINS "SVA" AND 
       MsRequest.ReqStatus EQ {&REQUEST_STATUS_HLR_DONE} THEN
@@ -311,12 +354,12 @@ WHEN 8 THEN DO:
    /* re-create contract */ 
    ELSE IF MsRequest.ReqCParam2 = "recreate" THEN DO:
       CASE MsRequest.ReqStatus:
-      WHEN 0 THEN DO:
+      WHEN {&REQUEST_STATUS_NEW} THEN DO:
          RUN pContractTermination.
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN 
             RUN pContractActivation.
       END.
-      WHEN 8 THEN DO:
+      WHEN {&REQUEST_STATUS_SUB_REQUEST_DONE} THEN DO:
          RUN pFinalize(INPUT 9). /* Trigger only Deactivation SMS */
          IF NOT RETURN-VALUE BEGINS "ERROR" THEN 
             RUN pFinalize(INPUT 8). /* Trigger only Activation SMS */
@@ -327,36 +370,33 @@ WHEN 8 THEN DO:
    /* Reactivate the Terminated Contracts */
    ELSE IF MsRequest.ReqCParam2 = "Reactivate" THEN DO:
       CASE MsRequest.ReqStatus:
-      WHEN 0 THEN RUN pContractReactivation.
-      WHEN 8 THEN RUN pFinalize(INPUT 8). /* Trigger only Activation SMS */
+      WHEN {&REQUEST_STATUS_NEW} THEN RUN pContractReactivation.
+      WHEN {&REQUEST_STATUS_SUB_REQUEST_DONE} OR WHEN {&REQUEST_STATUS_HLR_DONE}
+      THEN RUN pFinalize(INPUT 8). /* Trigger only Activation SMS */
       END CASE. /* CASE MsRequest.ReqStatus: */
    END. /* ELSE IF MsRequest.ReqCParam2 = "Reactivate" THEN DO: */
 
    /* creation, renewal */
    ELSE DO:
       CASE MsRequest.ReqStatus:
-      WHEN 0 THEN RUN pContractActivation.
-      WHEN 8 THEN DO:
-         /* YPR-135 */
-         IF MsRequest.ReqCparam3 EQ "HSPA_ROAM_EU" THEN DO:
-            RUN pContractActivation.
-            FIND CURRENT MsRequest NO-LOCK.
-            IF MsRequest.ReqStatus NE 8 THEN RETURN.
-         END.
-         RUN pFinalize(INPUT 8). /* Trigger only Activation SMS */
-      END.
-
+      WHEN {&REQUEST_STATUS_NEW} THEN RUN pContractActivation.
+      WHEN {&REQUEST_STATUS_SUB_REQUEST_DONE} OR WHEN {&REQUEST_STATUS_HLR_DONE}
+      THEN RUN pFinalize(INPUT 8). /* Trigger only Activation SMS */
       END CASE.
    END.
 END.   
 
 /* terminate a periodical contract */
-WHEN 9 THEN DO:
+WHEN {&REQTYPE_CONTRACT_TERMINATION} THEN DO:
 
-   CASE MsRequest.ReqStatus:
-   WHEN 6 THEN RUN pContractTermination. /*SVA, YPRO*/
-   WHEN 0 THEN RUN pContractTermination.
-   WHEN 8 THEN RUN pFinalize(INPUT 9). /* Trigger only Deactivation SMS */
+   IF MsRequest.ReqCParam6 BEGINS "SVA" AND 
+      MsRequest.ReqStatus EQ {&REQUEST_STATUS_HLR_DONE}
+   THEN RUN pContractTermination. /*SVA, YPRO*/
+
+   ELSE CASE MsRequest.ReqStatus:
+      WHEN {&REQUEST_STATUS_NEW} THEN RUN pContractTermination.
+      WHEN {&REQUEST_STATUS_SUB_REQUEST_DONE} OR WHEN {&REQUEST_STATUS_HLR_DONE}
+      THEN RUN pFinalize(INPUT 9). /* Trigger only Deactivation SMS */
    END CASE.
 END.
 
@@ -460,7 +500,7 @@ PROCEDURE pContractActivation:
    DEF VAR ldtFatDate    AS DATE NO-UNDO.
    DEF VAR ldBegStamp    AS DEC  NO-UNDO.
    DEF VAR ldEndStamp    AS DEC  NO-UNDO.
-   DEF VAR llSubRequest  AS LOG  NO-UNDO.
+   DEF VAR liNewReqStatus AS INT  INITIAL {&REQUEST_STATUS_SUB_REQUEST_DONE} NO-UNDO.
    DEF VAR lcError       AS CHAR NO-UNDO.
    DEF VAR lcUseCLIType  AS CHAR NO-UNDO.
    DEF VAR lcSMSName     AS CHAR NO-UNDO.
@@ -497,6 +537,8 @@ PROCEDURE pContractActivation:
    DEF VAR lcErrMsg                   AS CHAR NO-UNDO.
    DEF VAR lcDelayedPerContList       AS CHAR NO-UNDO.
    DEF VAR liDelayedDays              AS INT  NO-UNDO.
+   DEFINE VARIABLE llSAPC AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE VARIABLE loProCommand AS CLASS Gwy.SAPC.ProCommandNBCH NO-UNDO.
 
    /* DSS related variables */
    DEF VAR lcResult         AS CHAR NO-UNDO.
@@ -535,7 +577,8 @@ PROCEDURE pContractActivation:
             OUTPUT liActTime).
 
    /* day campaign id */
-   ASSIGN 
+   ASSIGN
+      llSAPC       = Customer.AccGrp EQ 2 
       lcDCEvent    = MsRequest.ReqCParam3
       llRerate     = FALSE.
    
@@ -943,18 +986,6 @@ PROCEDURE pContractActivation:
       fReqError("Nothing to do").
       RETURN.
    END.
-   
-   IF lcDCEvent EQ "HSPA_ROAM_EU" AND liOrigStatus EQ 0 THEN DO:
-      RUN pActivateServicePackage(lcDCEvent,
-                                  MsOwner.MsSeq,
-                                  lcUseCLIType,
-                                  (IF ldtFromDate < TODAY THEN TODAY
-                                   ELSE ldtFromDate),
-                                  OUTPUT llSubRequest).
-      IF llSubRequest THEN fReqStatus(7,"").
-      ELSE fReqError("Provisioning request creation failed").
-      RETURN.
-   END.
 
    IF LOOKUP(lcDCEvent,"TARJ_UPSELL,TARJ7_UPSELL") > 0 THEN DO:
       RUN pAdjustBal(INPUT lcDCEvent,INPUT MsOwner.MsSeq,
@@ -1217,17 +1248,35 @@ PROCEDURE pContractActivation:
 
    END.  /* dctype ne 1/4 */
 
-   /* Send Shaper if VOIP is added manually or by subs. creation */
-   IF lcDCEvent NE "HSPA_ROAM_EU" AND
-      (lcDCEvent <> "BONO_VOIP" OR MsRequest.OrigRequest = 0 OR
-       LOOKUP(MsRequest.ReqSource,"1,19") > 0) THEN
-   RUN pActivateServicePackage(lcDCEvent,
-                               MsOwner.MsSeq,
-                               lcUseCLIType,
-                               (IF ldtFromDate < TODAY THEN TODAY
-                                ELSE ldtFromDate) /* Renewal order can be past date */,
-                               OUTPUT llSubRequest).
+   IF llSAPC
+   THEN DO:
+      IF DayCampaign.EMACode > ""
+      THEN DO ON ERROR UNDO, THROW:
+         loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
+      
+         loProCommand:mStoreProCommand().
 
+         liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
+
+         CATCH loAppError AS Progress.Lang.AppError:
+            fReqError(loAppError:ReturnValue).
+            RETURN.
+         END CATCH.
+
+         FINALLY:
+            IF VALID-OBJECT(loProCommand)
+            THEN DELETE OBJECT loProCommand.
+         END FINALLY.
+      END.
+   END.
+
+   /* Activate package related services (only when not SAPC) */
+   ELSE RUN pActivateServicePackage(lcDCEvent,
+                                    MsOwner.MsSeq,
+                                    lcUseCLIType,
+                                    (IF ldtFromDate < TODAY THEN TODAY
+                                     ELSE ldtFromDate) /* Renewal order can be past date */,
+                                    OUTPUT liNewReqStatus).
 
    /* create (monthly) fees for new contract */
    IF MsRequest.CreateFees AND
@@ -1442,7 +1491,7 @@ PROCEDURE pContractActivation:
    MsRequest.ReqDtParam1 = ldtFromDate.
    IF llRerate THEN MsRequest.ReqIParam4 = 1.
    
-   fReqStatus(IF llSubRequest THEN 7 ELSE 8,""). 
+   fReqStatus(liNewReqStatus, ""). 
  
    /* If DSS Upsell is being added then update DSS Quota */
    IF lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
@@ -2001,7 +2050,7 @@ PROCEDURE pContractTermination:
    DEF VAR ldtOrigValidToOrig      AS DATE NO-UNDO INIT ?.
    DEF VAR ldPrice                 AS DEC  NO-UNDO INIT ?.
    DEF VAR llCreatePenaltyFee      AS LOG  NO-UNDO INIT FALSE.
-   DEF VAR llSubRequest            AS LOG  NO-UNDO.
+   DEF VAR liNewReqStatus AS INT  INITIAL {&REQUEST_STATUS_SUB_REQUEST_DONE} NO-UNDO.
    DEF VAR ldNewEndStamp           AS DEC  NO-UNDO.
    DEF VAR liSLCount               AS INT  NO-UNDO.
    DEF VAR ldeInclAmt              AS DEC  NO-UNDO.
@@ -2052,6 +2101,8 @@ PROCEDURE pContractTermination:
    DEF VAR llFMFee                 AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq              AS INT  NO-UNDO. 
    DEF VAR ldaMonth22              AS DATE NO-UNDO.
+   DEFINE VARIABLE llSAPC AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE VARIABLE loProCommand AS CLASS Gwy.SAPC.ProCommandNBCH NO-UNDO.
 
    DEF BUFFER bLimit           FOR MServiceLimit.
    DEF BUFFER bMsRequest       FOR MsRequest.
@@ -2878,11 +2929,33 @@ PROCEDURE pContractTermination:
       LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
       NOT lcDCEvent BEGINS {&DSS} THEN DO:
 
-      RUN pTerminateServicePackage(lcDCEvent,
-                                   MsOwner.MsSeq,
-                                   MsOwner.CLIType,
-                                   ldtActDate,
-                                   OUTPUT llSubRequest).
+      IF llSAPC
+      THEN DO:
+         IF DayCampaign.EMACode > "" AND
+            fTerminationProvisionNeeded(MsRequest.OrigRequest, MsRequest.ReqIParam2)
+         THEN DO ON ERROR UNDO, THROW:
+            loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
+         
+            loProCommand:mStoreProCommand().
+   
+            liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
+   
+            CATCH loAppError AS Progress.Lang.AppError:
+               fReqError(loAppError:ReturnValue).
+               RETURN.
+            END CATCH.
+   
+            FINALLY:
+               IF VALID-OBJECT(loProCommand)
+               THEN DELETE OBJECT loProCommand.
+            END FINALLY.
+         END.
+      END.
+      ELSE RUN pTerminateServicePackage(lcDCEvent,
+                                        MsOwner.MsSeq,
+                                        MsOwner.CLIType,
+                                        ldtActDate,
+                                        OUTPUT liNewReqStatus).
 
       /* Deactivate Bono6 */
       IF lcDCEvent EQ "DATA6" THEN DO: 
@@ -2902,7 +2975,8 @@ PROCEDURE pContractTermination:
       END.
           
       /* iSTC - Reduce bundle consumption to network for non-DSS */
-      IF LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 AND
+      IF llSAPC = FALSE                              AND
+         LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 AND
          MsRequest.ActStamp < ldeLastDayofMonthStamp AND
          llPostpaidBundleTerm = FALSE AND
          MsRequest.OrigRequest > 0 THEN DO:
@@ -2963,7 +3037,7 @@ PROCEDURE pContractTermination:
    IF MsRequest.ReqCParam2 = "recreate" AND
       liContractID > 0 THEN MsRequest.ReqIParam1 = liContractID.
    
-   fReqStatus(IF llSubRequest THEN 7 ELSE 8,""). 
+   fReqStatus(liNewReqStatus,""). 
 
    /* Update DSS limit if bundle is being deactivated from DSS group     */
    /* Delete DSS group if last bundle is being terminated from DSS group */
@@ -3307,18 +3381,17 @@ END PROCEDURE.
 
 PROCEDURE pActivateServicePackage:
 
-   DEF INPUT  PARAMETER icDCEvent         AS CHAR NO-UNDO.
-   DEF INPUT  PARAMETER iiMsSeq           AS INT  NO-UNDO.
-   DEF INPUT  PARAMETER icCLIType         AS CHAR NO-UNDO.
-   DEF INPUT  PARAMETER idaActivationDate AS DATE NO-UNDO.
-   DEF OUTPUT PARAMETER olSubRequest      AS LOG  NO-UNDO.
-      
+   DEF INPUT  PARAMETER icDCEvent         AS CHAR    NO-UNDO.
+   DEF INPUT  PARAMETER iiMsSeq           AS INT     NO-UNDO.
+   DEF INPUT  PARAMETER icCLIType         AS CHAR    NO-UNDO.
+   DEF INPUT  PARAMETER idaActivationDate AS DATE    NO-UNDO.
+   DEF OUTPUT PARAMETER oiNewReqStatus    AS INT     NO-UNDO.
+
+   oiNewReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}.
+
    DEF VAR liService     AS INT  NO-UNDO.
    
    DEF BUFFER bMemoRequest FOR MsRequest.
-   
-   ASSIGN
-      olSubRequest  = FALSE.
    
    /* service packages that need to be activated */
    FOR EACH DCServicePackage NO-LOCK WHERE
@@ -3339,7 +3412,7 @@ PROCEDURE pActivateServicePackage:
                        TRUE,   /* mandatory subrequest */
                        OUTPUT liService). 
 
-      IF liService > 0 THEN olSubRequest = TRUE.
+      IF liService > 0 THEN oiNewReqStatus = {&REQUEST_STATUS_SUB_REQUEST_PENDING}.
       ELSE DO:   
          FIND FIRST bMemoRequest WHERE RECID(bMemoRequest) = RECID(MsRequest)
             EXCLUSIVE-LOCK.
@@ -3360,7 +3433,7 @@ PROCEDURE pTerminateServicePackage:
    DEF INPUT  PARAMETER iiMsSeq            AS INT  NO-UNDO.
    DEF INPUT  PARAMETER icCurrentCLIType   AS CHAR NO-UNDO.
    DEF INPUT  PARAMETER idaTerminationDate AS DATE NO-UNDO.
-   DEF OUTPUT PARAMETER olSubRequest       AS LOG  NO-UNDO.
+   DEF OUTPUT PARAMETER oiNewReqStatus     AS INT  NO-UNDO.
  
    DEF VAR liService             AS INT  NO-UNDO.
    DEF VAR lcBundles             AS CHAR NO-UNDO.
@@ -3372,7 +3445,7 @@ PROCEDURE pTerminateServicePackage:
    DEF BUFFER bOrigRequest FOR MsRequest.
     
    ASSIGN 
-       olSubRequest         = FALSE
+       oiNewReqStatus       = {&REQUEST_STATUS_SUB_REQUEST_DONE}
        lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
 
    IF MsRequest.OrigRequest > 0 THEN 
@@ -3430,7 +3503,7 @@ PROCEDURE pTerminateServicePackage:
                             TRUE,
                             OUTPUT liService).
 
-      IF liService > 0 THEN olSubRequest = TRUE.
+      IF liService > 0 THEN oiNewReqStatus = {&REQUEST_STATUS_SUB_REQUEST_PENDING}.
 
    END.
 
@@ -3445,7 +3518,7 @@ PROCEDURE pContractReactivation:
    DEF VAR lcDCEvent     AS CHAR NO-UNDO.
    DEF VAR ldtFromDate   AS DATE NO-UNDO.
    DEF VAR ldtEndDate    AS DATE NO-UNDO.
-   DEF VAR llSubRequest  AS LOG  NO-UNDO.
+   DEF VAR liNewReqStatus AS INT  INITIAL {&REQUEST_STATUS_SUB_REQUEST_DONE} NO-UNDO.
    DEF VAR lcUseCLIType  AS CHAR NO-UNDO.
    DEF VAR ldtActDate    AS DATE NO-UNDO.
    DEF VAR liActTime     AS INT  NO-UNDO.
@@ -3475,6 +3548,8 @@ PROCEDURE pContractReactivation:
    DEF VAR liReacPeriod      AS INT NO-UNDO.
    DEF VAR ldateDccli        AS DATE  NO-UNDO.
    DEF VAR llUpdateResidualFeeCode AS LOG NO-UNDO. 
+   DEFINE VARIABLE llSAPC AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE VARIABLE loProCommand AS CLASS Gwy.SAPC.ProCommandNBCH NO-UNDO.
 
    DEF BUFFER bMsRequest FOR MsRequest.
    
@@ -3505,7 +3580,8 @@ PROCEDURE pContractReactivation:
    END.
 
    /* day campaign id and subscription type */
-   ASSIGN lcDCEvent = MsRequest.ReqCParam3
+   ASSIGN llSAPC       = Customer.AccGrp EQ 2
+          lcDCEvent = MsRequest.ReqCParam3
           lcUseCLIType = MsOwner.CLIType
           liReacPeriod = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
 
@@ -3976,19 +4052,41 @@ PROCEDURE pContractReactivation:
       FIND CURRENT MsRequest EXCLUSIVE-LOCK.
       MsRequest.ReqIParam4 = 1.
    END.
+
+   IF llSAPC
+   THEN DO:
+      IF DayCampaign.EMACode > ""
+      THEN DO ON ERROR UNDO, THROW:
+         loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
+      
+         loProCommand:mStoreProCommand().
+
+         liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
+
+         CATCH loAppError AS Progress.Lang.AppError:
+            fReqError(loAppError:ReturnValue).
+            RETURN.
+         END CATCH.
+
+         FINALLY:
+            IF VALID-OBJECT(loProCommand)
+            THEN DELETE OBJECT loProCommand.
+         END FINALLY.
+      END.
+   END.
    
-   RUN pActivateServicePackage(lcDCEvent,
-                               MsOwner.MsSeq,
-                               lcUseCLIType,
-                               ldtActDate,
-                               OUTPUT llSubRequest).
+   ELSE RUN pActivateServicePackage(lcDCEvent,
+                                    MsOwner.MsSeq,
+                                    lcUseCLIType,
+                                    ldtActDate,
+                                    OUTPUT liNewReqStatus).
 
    IF AVAILABLE DCCLI THEN RELEASE DCCLI.
 
    FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
    MsRequest.ReqDtParam1 = ldtFromDate.
 
-   fReqStatus(IF llSubRequest THEN 7 ELSE 8,""). 
+   fReqStatus(liNewReqStatus,""). 
 
    IF DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
       DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
