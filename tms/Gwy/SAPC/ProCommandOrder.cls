@@ -17,12 +17,12 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand: 
 
-   DEFINE PROTECTED VARIABLE aoService   AS CLASS IService  NO-UNDO.
-   DEFINE PUBLIC    VARIABLE aoOrderEnum AS CLASS OrderEnum NO-UNDO.
-   DEFINE PUBLIC    VARIABLE acCLI       AS CHARACTER       NO-UNDO.
-   DEFINE PUBLIC    VARIABLE acCLIType   AS CHARACTER       NO-UNDO.
-   DEFINE PUBLIC    VARIABLE acICC       AS CHARACTER       NO-UNDO.
-   DEFINE PUBLIC    VARIABLE alPayType   AS LOGICAL         NO-UNDO.
+   DEFINE PROTECTED VARIABLE aoService    AS CLASS IService  NO-UNDO.
+   DEFINE PUBLIC    VARIABLE aoOrderEnum  AS CLASS OrderEnum NO-UNDO.
+   DEFINE PUBLIC    VARIABLE acCLI        AS CHARACTER       NO-UNDO.
+   DEFINE PUBLIC    VARIABLE acCLIType    AS CHARACTER       NO-UNDO.
+   DEFINE PUBLIC    VARIABLE acICC        AS CHARACTER       NO-UNDO.
+   DEFINE PUBLIC    VARIABLE alPayType    AS LOGICAL         NO-UNDO.
 
    CONSTRUCTOR ProCommandOrder
       ( iiMsRequest AS INTEGER ):
@@ -49,8 +49,12 @@ CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand:
       loJsonObject:Add("subscriptionID", STRING(MsRequest.MsSeq)).
       loJsonObject:Add("Sellchannel", "TMSB2C").
       loJsonObject:Add("Selldate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.ActStamp))).
+      loJsonObject:Add("Seller", IF MsRequest.SalesMan > "" THEN MsRequest.SalesMan ELSE MsRequest.UserCode).
+      loJsonObject:Add("createdBy", IF MsRequest.SalesMan > "" THEN MsRequest.SalesMan ELSE MsRequest.UserCode).
+/*
       loJsonObject:Add("Seller", CAPS(multitenancy.TenantInformation:mGetEffectiveBrand())).
       loJsonObject:Add("createdBy", MsRequest.UserCode).
+*/
       loJsonObject:Add("createdDate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp))).
 
       RETURN loJsonObject.

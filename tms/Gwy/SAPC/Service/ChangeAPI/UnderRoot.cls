@@ -11,24 +11,20 @@
 
 USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.Service.ServiceObjectFactory.
-USING Gwy.SAPC.Service.CreateOrder.DefaultPricePlan.
+USING Gwy.SAPC.Service.ChangeAPI.MobileLine.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.CreateOrder.UnderRoot INHERITS ServiceObjectFactory: 
+CLASS Gwy.SAPC.Service.ChangeAPI.UnderRoot INHERITS ServiceObjectFactory: 
 
    /*
       Service Hierarchy:
-
-      MOBILE_LINE_SAPC
-         DEFAULT_PRICE_PLAN (1..1)
-         SIM (1..1) 
-         PERIODIC_DATAPLAN (0..n)
-   
-      (Note: No upsells is possible here)
+      DEFAULT_PRICE_PLAN
+         SIM (optional)
+         PERIODIC_DATAPLAN (optional)
    */
    CONSTRUCTOR UnderRoot(ioPCO AS CLASS ProCommandOrder):
-      mAddObject(NEW DefaultPricePlan(ioPCO, "DPP")).
+      mAddObject(NEW MobileLine(ioPCO, "ML")).
    END CONSTRUCTOR.
 
 END CLASS.

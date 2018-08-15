@@ -84,7 +84,7 @@ CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder:
 
       loJson:Add("Client", mClientObject()).
       
-      aoService = NEW Gwy.SAPC.Service.MobileLineSAPC.UnderRoot(THIS-OBJECT).
+      aoService = NEW Gwy.SAPC.Service.CreateOrder.UnderRoot(THIS-OBJECT).
 
       aoService:mCreateServices(loJson).
 

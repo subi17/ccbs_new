@@ -15,7 +15,7 @@ USING Gwy.SAPC.ProCommandOrder.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.MobileLineSAPC.SIM INHERITS ServiceObject: 
+CLASS Gwy.SAPC.Service.CreateOrder.SIM INHERITS ServiceObject: 
 
    CONSTRUCTOR SIM
       ( ioPCO  AS CLASS ProCommandOrder,

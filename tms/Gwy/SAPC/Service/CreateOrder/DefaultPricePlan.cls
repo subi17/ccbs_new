@@ -12,12 +12,12 @@
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
 USING Gwy.SAPC.ProCommandOrder.
-USING Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan.
+USING Gwy.SAPC.Service.CreateOrder.UnderDefaultPricePlan.
 USING Gwy.SAPC.OrderEnum.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan INHERITS ServiceObject: 
+CLASS Gwy.SAPC.Service.CreateOrder.DefaultPricePlan INHERITS ServiceObject: 
 
    CONSTRUCTOR DefaultPricePlan
       ( ioPCS  AS CLASS ProCommandOrder,

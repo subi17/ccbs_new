@@ -16,17 +16,13 @@ USING Gwy.SAPC.OrderEnum.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan INHERITS ServiceObject: 
-
-   DEFINE PRIVATE VARIABLE acBundle AS CHARACTER NO-UNDO.
+CLASS Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan INHERITS ServiceObject: 
 
    CONSTRUCTOR PeriodicDataPlan
       ( ioPCO    AS CLASS ProCommandOrder,
-        icType   AS CHARACTER,
-        icBundle AS CHARACTER ):
+        icType   AS CHARACTER ):
 
       SUPER(ioPCO, icType).
-      acBundle = icBundle.
 
    END CONSTRUCTOR.
 
@@ -36,16 +32,16 @@ CLASS Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan INHERITS ServiceObject:
 
       FIND DayCampaign NO-LOCK WHERE
            DayCampaign.Brand = "1" AND
-           DayCampaign.DCEvent = acBundle
+           DayCampaign.DCEvent = aoProCommandOrder:ahMsRequest::ReqCParam3
       NO-ERROR.
 
       IF NOT AVAILABLE DayCampaign
-      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find OptionalBundleItem '&1'",
-                                               acBundle)).
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find bundle '&1' stored to msrequest",
+                                               aoProCommandOrder:ahMsRequest::ReqCParam3)).
 
       aoJsonObject:Add("Action",
                         IF aoProCommandOrder:aoOrderEnum EQ
-                           OrderEnum:SUBSCRIPTION_TERMINATE
+                           OrderEnum:DATAPLAN_DELETE
                         THEN "Delete"
                         ELSE "Add").
 

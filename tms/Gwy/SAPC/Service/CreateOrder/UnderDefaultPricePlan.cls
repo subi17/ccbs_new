@@ -1,6 +1,6 @@
  
  /*------------------------------------------------------------------------
-    File        : MobileLineSAPC
+    File        : CreateOrder
     Purpose     : 
     Syntax      : 
     Description : 
@@ -11,12 +11,12 @@
 
 USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.Service.ServiceObjectFactory.
-USING Gwy.SAPC.Service.MobileLineSAPC.SIM.
-USING Gwy.SAPC.Service.MobileLineSAPC.PeriodicDataPlan.
+USING Gwy.SAPC.Service.CreateOrder.SIM.
+USING Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan INHERITS ServiceObjectFactory: 
+CLASS Gwy.SAPC.Service.CreateOrder.UnderDefaultPricePlan INHERITS ServiceObjectFactory: 
 
    /*
       SIM (1..1)

@@ -62,7 +62,7 @@ CLASS Gwy.SAPC.ProCommandNBCH INHERITS ProCommandOrder:
 
       loJson = mOrderObject("Change").
     
-      aoService = NEW Gwy.SAPC.Service.MobileLineSAPC.UnderRoot(THIS-OBJECT).
+      aoService = NEW Gwy.SAPC.Service.CreateOrder.UnderRoot(THIS-OBJECT).
       aoService:mCreateServices(loJson).
 
       FINALLY:
