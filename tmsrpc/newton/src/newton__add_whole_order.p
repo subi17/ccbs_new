@@ -1526,8 +1526,8 @@ gcCustomerStructStringFields = "city," +
                                "km," +
                                "territory_owner," +
                                "coverage_token," +
-                               "address_id" + 
-                               "dni_expiry_date" + 
+                               "address_id," + 
+                               "dni_expiry_date," + 
                                "income".   /* EXTENT value count 44 */ 
 
 gcPoUserStructFields = "fname!," +
