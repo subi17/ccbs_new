@@ -295,19 +295,19 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
              UNDO, THROW NEW ParamError ("Expected either person_id or company_id").
       END.
 
-      IF ioJsonObject:Has("customer_accounts") THEN 
-      DO:         
-             ASSIGN lobjCustAccount = ioJsonObject:GetJsonObject("customer_accounts").
+       IF ioJsonObject:Has("customer_accounts") THEN 
+       DO:         
+           ASSIGN 
+               lobjCustAccount = ioJsonObject:GetJsonObject("customer_accounts").
 
-             IF NOT llDefaultAcc THEN 
-                ASSIGN llDefaultAcc = lobjCustAccount:GetLogical("default_account").
-             ELSE 
-                LEAVE.
-         
+           IF NOT llDefaultAcc THEN 
+               ASSIGN llDefaultAcc = lobjCustAccount:GetLogical("default_account").
+           ELSE 
+               LEAVE.
 
-          IF NOT llDefaultAcc THEN
-             UNDO , THROW NEW ParamError ("Default customer account should be created when creating a new customer.").          
-      END.            
+           IF NOT llDefaultAcc THEN
+               UNDO , THROW NEW ParamError ("Default customer account should be created when creating a new customer.").          
+       END.            
 
    END METHOD.  
 
@@ -359,12 +359,12 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
                       
            ASSIGN THIS-OBJECT:billAcctIdData = THIS-OBJECT:billAcctIdData   + "|" + objCustAccount:mGetBillAcctIDData().
                
-       /*Example for the CustAcctData format
-        custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */
-           
        END.
        
        ASSIGN THIS-OBJECT:billAcctIdData   = TRIM(THIS-OBJECT:billAcctIdData, "|").
+       
+       /*Example for the CustAcctData format
+        custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */
               
        mAssignCategory().
      
@@ -584,11 +584,12 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         DEFINE VARIABLE lcTotalBillAcctData AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcBillAcctList      AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcBillAcct          AS CHARACTER NO-UNDO.
+       
         
         ASSIGN 
             lcTotalBillAcctData = ENTRY(1 , THIS-OBJECT:billAcctIdData , "|")
             lcBillAcctList      = ENTRY(2 , lcTotalBillAcctData        , ";").
-               
+            
         IF NUM-ENTRIES(lcBillAcctList) < liBillAcctIndex THEN 
             UNDO , THROW NEW ParamError("Invalid billing account index.").
         
@@ -598,11 +599,19 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         INTEGER(lcBillAcct) NO-ERROR.
         
         IF ERROR-STATUS:ERROR THEN 
-            UNDO , THROW NEW ParamError("Billing Account type change error").
+            UNDO , THROW NEW ParamError("Billing Account type casting error").
             
         RETURN INTEGER(lcBillAcct).
         
     END.
+    
+    METHOD PUBLIC VOID mAssignBillAcctIdData(INPUT icBillAcctIdData AS CHARACTER):
+        
+        /*New billing account to the prepaid exising customer*/
+        
+        ASSIGN THIS-OBJECT:billAcctIdData = icBillAcctIdData.
+        
+    END METHOD.
     
     METHOD PUBLIC VOID mAssignDefaultAddressObj (INPUT ioAddrObject AS JsonObject):
         

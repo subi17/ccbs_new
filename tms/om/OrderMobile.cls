@@ -25,20 +25,20 @@ CLASS om.OrderMobile:
         SET.
         
     DEFINE PUBLIC PROPERTY product AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY numberType AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY currOper AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY statusCode AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY createdTs AS DECIMAL NO-UNDO
         GET.
@@ -49,36 +49,36 @@ CLASS om.OrderMobile:
         SET.
         
     DEFINE PUBLIC PROPERTY cancellationReason AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY CLI AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY requestPortingDate AS DATE NO-UNDO
-       GET.
-       SET. 
+        GET.
+        SET. 
        
     DEFINE PUBLIC PROPERTY portingTime AS DECIMAL NO-UNDO
         GET.
         SET. 
     
     DEFINE PUBLIC PROPERTY mnpStatus AS INTEGER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY oldIcc AS CHARACTER NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
     
     DEFINE PUBLIC PROPERTY oldPayType AS LOGICAL NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
        
     DEFINE PUBLIC PROPERTY payType AS LOGICAL NO-UNDO
-       GET.
-       SET.
+        GET.
+        SET.
     
     CONSTRUCTOR PUBLIC OrderMobile(INPUT iobjOrderProduct AS CLASS pm.OrderProduct):
         
@@ -90,7 +90,7 @@ CLASS om.OrderMobile:
         
         ASSIGN 
             THIS-OBJECT:product             = objOrderProduct:productId
-            THIS-OBJECT:numberType          = iObjAttributeStruct:GetCharacter("mobile_number_type")
+            THIS-OBJECT:numberType          = iObjAttributeStruct:GetCharacter("mobile_number_type")                                               
             THIS-OBJECT:currOper            = iObjAttributeStruct:GetCharacter("mobile_old_operator_name") 
                                               WHEN iObjAttributeStruct:Has("mobile_old_operator_name")
             THIS-OBJECT:CLI                 = iObjAttributeStruct:GetCharacter("mobile_number")
@@ -99,10 +99,10 @@ CLASS om.OrderMobile:
             THIS-OBJECT:portingTime         = iObjAttributeStruct:GetDecimal("mnptime") 
                                               WHEN iObjAttributeStruct:Has("mnptime")  
             THIS-OBJECT:mnpStatus           = INTEGER(THIS-OBJECT:numberType = {&TYPE_MNP})   
-            THIS-OBJECT:oldIcc              = iObjAttributeStruct:GetCharacter("oldicc") 
-                                              WHEN iObjAttributeStruct:Has("oldicc")     
-            THIS-OBJECT:oldPayType          = iObjAttributeStruct:GetLogical("oldpaytype") 
-                                              WHEN iObjAttributeStruct:Has("oldpaytype") 
+            THIS-OBJECT:oldIcc              = iObjAttributeStruct:GetCharacter("mobile_old_icc") 
+                                              WHEN iObjAttributeStruct:Has("mobile_old_icc")     
+            THIS-OBJECT:oldPayType          = iObjAttributeStruct:GetLogical("mobile_old_product_type") 
+                                              WHEN iObjAttributeStruct:Has("mobile_old_product_type") 
             .                                                                          
         
     END METHOD.
@@ -113,7 +113,7 @@ CLASS om.OrderMobile:
         ASSIGN OrderMobile.OrderId              = objOrderProduct:objOrder:orderId
                OrderMobile.OrderProductId       = objOrderProduct:orderProductID
                OrderMobile.MsSeq                = objOrderProduct:objOrder:finalMsSeq
-               OrderMobile.ICC                  = objOrderProduct:objOrder:icc
+               OrderMobile.ICC                  = objOrderProduct:objOrder:lcICC
                OrderMobile.Product              = THIS-OBJECT:product
                OrderMobile.NumberType           = THIS-OBJECT:numberType
                OrderMobile.CurrOper             = THIS-OBJECT:currOper

@@ -114,8 +114,6 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
 		ASSIGN objCustAcct = ioCustAcct.
 		
 	END CONSTRUCTOR.
-
-	
 	
     METHOD PUBLIC VOID mCreateData (ioBillingAcct AS CLASS JsonObject) :
   
@@ -143,7 +141,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             
         mValidateInvDeliveryType(ioBillingAcct:GetCharacter("invoice_delivery_type")).
             
-        THIS-OBJECT:delType       = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type")).
+        THIS-OBJECT:delType  = mGetTMSCodeValue("Billing" , "DelType" , ioBillingAcct:GetCharacter("invoice_delivery_type")).
         
     END METHOD.
     
@@ -198,13 +196,13 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
                                             INPUT icFieldName AS CHARACTER , 
                                             INPUT icCodeName AS CHARACTER ) :
                                                 
-       /*TO-DO PC : Please get the confirmation on this TMSCodes and investigate where it has been used in PC*/                                                
+        /*TO-DO PC : Please get the confirmation on this TMSCodes and investigate where it has been used in PC*/                                                
         
         FIND FIRST TMSCodes 
-                WHERE TMSCodes.CodeGroup = icCodeGroup
-                  AND TMSCodes.FieldName = icFieldName
-                  AND TMSCodes.TableName = "Invoice"
-                  AND TMSCodes.CodeName  = icCodeName  NO-LOCK NO-ERROR.
+            WHERE TMSCodes.CodeGroup = icCodeGroup
+              AND TMSCodes.FieldName = icFieldName
+              AND TMSCodes.TableName = "Invoice"
+              AND TMSCodes.CodeName  = icCodeName  NO-LOCK NO-ERROR.
                   
         IF NOT AVAILABLE TMSCodes THEN 
             UNDO, THROW NEW ParamError ("TMSCodes record does not exist for the Billing Account.").
@@ -219,9 +217,9 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
         
         CASE liDeliveryMethod:
             
-            WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
-            WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
-            WHEN "SMS"   THEN liDelType = {&INV_DEL_TYPE_ESI}.
+            WHEN "PAPER"       THEN liDelType = {&INV_DEL_TYPE_PAPER}.
+            WHEN "EMAIL"       THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
+            WHEN "SMS"         THEN liDelType = {&INV_DEL_TYPE_ESI}.
             WHEN "No delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
             WHEN "" THEN .
             OTHERWISE 

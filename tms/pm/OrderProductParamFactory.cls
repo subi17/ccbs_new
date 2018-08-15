@@ -97,9 +97,9 @@ CLASS pm.OrderProductParamFactory IMPLEMENTS bss.cls.IObjectStorage :
                                     "mnptime",
                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).
                                              
-        IF iObjParamStruct:Has("ICC") THEN 
-            mCreateOrderProductParam(iObjParamStruct:GetCharacter("ICC"),
-                                     "ICC",
+        IF iObjParamStruct:Has("icc") THEN 
+            mCreateOrderProductParam(iObjParamStruct:GetCharacter("icc"),
+                                     "icc",
                                      {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).  
                                      
         IF iObjParamStruct:Has("mobile_old_operator_code") THEN 
@@ -111,6 +111,11 @@ CLASS pm.OrderProductParamFactory IMPLEMENTS bss.cls.IObjectStorage :
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_old_operator_name"),
                                      "mobile_old_operator_name",
                                      {&ORDER_PRODUCT_PARAM_CHAR_VALUE}). 
+                                     
+        IF iObjParamStruct:Has("mobile_old_icc") THEN 
+            mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_old_icc"),
+                                     "mobile_old_icc",
+                                      {&ORDER_PRODUCT_PARAM_CHAR_VALUE}). 
                                      
         IF iObjParamStruct:Has("initial_topup_amount") THEN 
             mCreateOrderProductParam(STRING(iObjParamStruct:GetDecimal("initial_topup_amount")),
@@ -149,16 +154,18 @@ CLASS pm.OrderProductParamFactory IMPLEMENTS bss.cls.IObjectStorage :
                                                 INPUT icPropertyType  AS CHARACTER):
         
         DEFINE VARIABLE objOrderProductParam AS CLASS pm.OrderProductParam NO-UNDO.
+        DEFINE VARIABLE liSequence AS INTEGER NO-UNDO.
         
         ASSIGN 
-            objOrderProductParam = NEW pm.OrderProductParam(objOrderProduct).
+            objOrderProductParam = NEW pm.OrderProductParam(objOrderProduct)
+            liSequence           = mGetNextSequence().
             
         objOrderProductParam:mCreateData(icPropertyValue,icPropertyName,icPropertyType).
         
         CREATE ttOrderParamFactory.
         ASSIGN 
             ttOrderParamFactory.opobject = objOrderProductParam
-            ttOrderParamFactory.ordernb  = mGetNextSequence().
+            ttOrderParamFactory.ordernb  = liSequence.
         
     END METHOD.
     
