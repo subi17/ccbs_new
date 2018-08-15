@@ -12,7 +12,6 @@
 USING Progress.Json.ObjectModel.*.
 USING Gwy.SAPC.Service.IService.
 USING Gwy.SAPC.ProCommandOrder.
-USING Gwy.SAPC.OrderEnum.
 
 {Syst/tmsconst.i}
 
@@ -24,7 +23,7 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
    DEFINE PROTECTED VARIABLE aoProCommandOrder     AS CLASS ProCommandOrder NO-UNDO.
    DEFINE PROTECTED VARIABLE aoService             AS CLASS IService        NO-UNDO.
    
-   DEFINE PUBLIC PROPERTY ServiceObject  AS CLASS JsonObject   NO-UNDO
+   DEFINE PUBLIC PROPERTY aoJsonObject  AS CLASS JsonObject   NO-UNDO
       GET.
       PROTECTED SET.
    
@@ -34,20 +33,15 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
       ( ioPCO  AS CLASS ProCommandOrder,
         icType AS CHARACTER ):
       aoProCommandOrder = ioPCO.
-      ServiceObject = NEW JsonObject().
-      ServiceObject:Add("serviceID", SUBSTITUTE("&1_&2", ioPCO:aiProCommandId, icType)).
-      ServiceObject:Add("Action",
-                        IF aoProCommandOrder:aoOrderEnum EQ
-                           OrderEnum:TERMINATION
-                        THEN "Delete"
-                        ELSE "Add").
+      aoJsonObject = NEW JsonObject().
+      aoJsonObject:Add("serviceID", SUBSTITUTE("&1_&2", ioPCO:aiProCommandId, icType)).
       mFetchData().
 
    END CONSTRUCTOR.
 
    DESTRUCTOR ServiceObject():
-      IF VALID-OBJECT(ServiceObject)
-      THEN DELETE OBJECT ServiceObject.
+      IF VALID-OBJECT(aoJsonObject)
+      THEN DELETE OBJECT aoJsonObject.
 
       IF VALID-OBJECT(aoCharacteristicArray)
       THEN DELETE OBJECT aoCharacteristicArray.

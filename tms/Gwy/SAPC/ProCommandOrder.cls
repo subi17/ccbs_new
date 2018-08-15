@@ -9,22 +9,20 @@
     Notes       : 
   ----------------------------------------------------------------------*/
 
-USING Progress.Lang.*.
-USING Progress.Json.ObjectModel.*.
+USING Progress.Json.ObjectModel.JsonObject.
 USING Gwy.SAPC.OrderEnum.
 USING Gwy.SAPC.Service.IService.
-
-{Syst/tmsconst.i}
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand: 
 
-   DEFINE PUBLIC VARIABLE aoOrderEnum AS CLASS OrderEnum NO-UNDO.
-   DEFINE PUBLIC VARIABLE acCLI       AS CHARACTER       NO-UNDO.
-   DEFINE PUBLIC VARIABLE acCLIType   AS CHARACTER       NO-UNDO.
-   DEFINE PUBLIC VARIABLE acICC       AS CHARACTER       NO-UNDO.
-   DEFINE PUBLIC VARIABLE alPayType   AS LOGICAL         NO-UNDO.
+   DEFINE PROTECTED VARIABLE aoService   AS CLASS IService  NO-UNDO.
+   DEFINE PUBLIC    VARIABLE aoOrderEnum AS CLASS OrderEnum NO-UNDO.
+   DEFINE PUBLIC    VARIABLE acCLI       AS CHARACTER       NO-UNDO.
+   DEFINE PUBLIC    VARIABLE acCLIType   AS CHARACTER       NO-UNDO.
+   DEFINE PUBLIC    VARIABLE acICC       AS CHARACTER       NO-UNDO.
+   DEFINE PUBLIC    VARIABLE alPayType   AS LOGICAL         NO-UNDO.
 
    CONSTRUCTOR ProCommandOrder
       ( iiMsRequest AS INTEGER ):
@@ -34,7 +32,12 @@ CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand:
       mSetProCommandId().
 
    END CONSTRUCTOR.
-   
+
+   DESTRUCTOR ProCommandOrder():
+      IF VALID-OBJECT(aoService)
+      THEN DELETE OBJECT aoService.
+   END DESTRUCTOR.
+
    METHOD PROTECTED JsonObject mOrderObject
       (icOrderType AS CHARACTER):
 

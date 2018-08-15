@@ -159,6 +159,24 @@ FUNCTION fCreatePoUser RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fDefaultShaperCLIType RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER CLIType FOR CLIType.
+   
+   FOR EACH CLIType NO-LOCK WHERE
+            CLIType.CLIType EQ icCLIType AND
+            CLIType.Basebundle > ""      AND
+            CLIType.Tarifftype EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+            CLIType.Paytype    EQ {&CLITYPE_PAYTYPE_POSTPAID}:
+
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
 EXCLUSIVE-LOCK NO-ERROR.
@@ -888,9 +906,7 @@ FIND FIRST OrderAction WHERE
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
 
 IF NOT AVAIL OrderAction AND
-   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27,CONT31,CONT33,CONT34") = 0 AND
-   NOT MobSub.CLIType BEGINS "CONTFH" AND
-   NOT MobSub.CLITYpe BEGINS "CONTDSL" THEN DO:
+   fDefaultShaperCLIType(MobSub.CLIType) EQ FALSE THEN DO:
 
    RUN pCopyPackage(MobSub.CLIType,
                     "SHAPER",

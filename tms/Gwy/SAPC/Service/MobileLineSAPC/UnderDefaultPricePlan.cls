@@ -9,16 +9,14 @@
     Notes       : 
   ----------------------------------------------------------------------*/
 
-USING Progress.Json.ObjectModel.JsonObject.
-USING Progress.Json.ObjectModel.JsonArray.
 USING Gwy.SAPC.ProCommandOrder.
-USING Gwy.SAPC.Service.IService.
+USING Gwy.SAPC.Service.ServiceObjectFactory.
 USING Gwy.SAPC.Service.MobileLineSAPC.SIM.
 USING Gwy.SAPC.Service.MobileLineSAPC.PeriodicDataPlan.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan IMPLEMENTS IService: 
+CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan INHERITS ServiceObjectFactory: 
 
    /*
       SIM (1..1)
@@ -26,28 +24,20 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderDefaultPricePlan IMPLEMENTS IService:
    
       (Note: No upsells is possible here)
    */
-   METHOD PUBLIC VOID mCreateServices
-      ( ioJsonObject AS CLASS JsonObject,
-        icPCO        AS CLASS ProCommandOrder ):
+   CONSTRUCTOR UnderDefaultPricePlan(ioPCO AS CLASS ProCommandOrder):
 
       DEFINE BUFFER OrderAction FOR OrderAction.
-
-      DEFINE VARIABLE loJsonArray  AS CLASS JsonArray  NO-UNDO.
       DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
-      loJsonArray = NEW JsonArray().
-      loJsonArray:Add(NEW SIM(icPCO, "SIM"):ServiceObject).
-
+      mAddObject(NEW SIM(ioPCO, "SIM")).
       FOR EACH OrderAction NO-LOCK WHERE
                OrderAction.Brand = "1" AND
-               OrderAction.OrderId = icPCO:aiOrderId AND
+               OrderAction.OrderId = ioPCO:aiOrderId AND
                OrderAction.ItemType = "OptionalBundleItem":
          lii = lii + 1.
-         loJsonArray:Add(NEW PeriodicDataPlan(icPCO, SUBSTITUTE("PDP&1", lii), OrderAction.ItemKey):ServiceObject).
+         mAddObject(NEW PeriodicDataPlan(ioPCO, SUBSTITUTE("PDP&1", lii), OrderAction.ItemKey)).
       END.
 
-      ioJsonObject:Add("Services", loJsonArray).
-      
-   END METHOD.
+   END CONSTRUCTOR.
 
 END CLASS.

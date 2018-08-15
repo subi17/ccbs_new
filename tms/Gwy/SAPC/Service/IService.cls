@@ -14,7 +14,6 @@ USING Gwy.SAPC.ProCommandOrder.
 INTERFACE Gwy.SAPC.Service.IService:  
 
    METHOD PUBLIC VOID mCreateServices
-      (ioJsonObject AS CLASS JsonObject,
-       ioPCO AS CLASS ProCommandOrder).
+      (ioJsonObject AS CLASS JsonObject).
 
 END INTERFACE.

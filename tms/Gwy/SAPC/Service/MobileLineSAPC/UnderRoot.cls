@@ -9,15 +9,13 @@
     Notes       : 
   ----------------------------------------------------------------------*/
 
-USING Progress.Json.ObjectModel.JsonObject.
-USING Progress.Json.ObjectModel.JsonArray.
 USING Gwy.SAPC.ProCommandOrder.
-USING Gwy.SAPC.Service.IService.
+USING Gwy.SAPC.Service.ServiceObjectFactory.
 USING Gwy.SAPC.Service.MobileLineSAPC.DefaultPricePlan.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderRoot IMPLEMENTS IService: 
+CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderRoot INHERITS ServiceObjectFactory: 
 
    /*
       Service Hierarchy:
@@ -29,18 +27,8 @@ CLASS Gwy.SAPC.Service.MobileLineSAPC.UnderRoot IMPLEMENTS IService:
    
       (Note: No upsells is possible here)
    */
-   METHOD PUBLIC VOID mCreateServices
-      ( ioJsonObject AS CLASS JsonObject,
-        ioPCO        AS CLASS ProCommandOrder ):
-
-      DEFINE VARIABLE loJsonArray  AS CLASS JsonArray  NO-UNDO.
-
-      loJsonArray = NEW JsonArray().
-      
-      loJsonArray:Add(NEW DefaultPricePlan(ioPCO, "DPP"):ServiceObject).
-
-      ioJsonObject:Add("Services", loJsonArray).
-      
-   END METHOD.
+   CONSTRUCTOR UnderRoot(ioPCO AS CLASS ProCommandOrder):
+      mAddObject(NEW DefaultPricePlan(ioPCO, "DPP")).
+   END CONSTRUCTOR.
 
 END CLASS.
