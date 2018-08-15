@@ -78,7 +78,7 @@ CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder:
          acCLIType          = Order.CLIType
          alPayType          = Order.PayType.
 
-      loJson = mOrderObject(IF aoOrderEnum EQ OrderEnum:TERMINATION
+      loJson = mOrderObject(IF aoOrderEnum EQ OrderEnum:SUBSCRIPTION_TERMINATE
                             THEN "Disconnection"
                             ELSE "InOrder").
 

@@ -30,6 +30,8 @@ CLASS Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan INHERITS ServiceObject:
 
       DEFINE BUFFER DayCampaign FOR DayCampaign.
 
+      DEFINE VARIABLE lcAction AS CHARACTER NO-UNDO.
+
       FIND DayCampaign NO-LOCK WHERE
            DayCampaign.Brand = "1" AND
            DayCampaign.DCEvent = aoProCommandOrder:ahMsRequest::ReqCParam3
@@ -39,15 +41,26 @@ CLASS Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan INHERITS ServiceObject:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find bundle '&1' stored to msrequest",
                                                aoProCommandOrder:ahMsRequest::ReqCParam3)).
 
-      aoJsonObject:Add("Action",
-                        IF aoProCommandOrder:aoOrderEnum EQ
-                           OrderEnum:DATAPLAN_DELETE
-                        THEN "Delete"
-                        ELSE "Add").
+      CASE aoProCommandOrder:aoOrderEnum:
+         WHEN OrderEnum:DATAPLAN_DELETE THEN lcAction = "Delete".
+         WHEN OrderEnum:DATAPLAN_ADD    THEN lcAction = "Add".
+         WHEN OrderEnum:DATAPLAN_MODIFY THEN lcAction = "Modify".
+         OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("Cannot handle type &1",
+                                                       STRING(aoProCommandOrder:aoOrderEnum))).
+      END CASE.
+
+      aoJsonObject:Add("Action", lcAction).
 
       aoJsonObject:Add("Type", "PERIODIC_DATAPLAN").
 
-      mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
+      IF aoProCommandOrder:aoOrderEnum EQ OrderEnum:DATAPLAN_MODIFY
+      THEN DO:
+         mAddCharacteristicsArray(mNameValue("newEmaDataPlan", DayCampaign.EMACode)).
+         mAddCharacteristicsArray(mNameValue("currentEmaDataPlan",
+                                             aoProCommandOrder:acEMACode)).
+      END.
+      ELSE mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
+
       aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
    END METHOD.

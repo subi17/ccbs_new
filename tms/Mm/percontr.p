@@ -161,6 +161,49 @@ FUNCTION fExtractWebContractId RETURNS CHARACTER(INPUT icMemo AS CHARACTER ) :
     RETURN ''.
 END FUNCTION. 
 
+FUNCTION fTerminationProvisionNeeded RETURNS LOGICAL
+   ( iiOrigMsRequest AS INTEGER,
+     iiActMsRequest  AS INTEGER ) :
+
+   DEFINE BUFFER MsRequest FOR MsRequest.
+   DEFINE BUFFER DayCampaign FOR DayCampaign.
+
+   /* If no parent request (origrequest) then this is
+      independent dataplan deletion and provision is needed */
+   IF iiOrigMsRequest EQ 0
+   THEN RETURN TRUE.
+
+   FIND MsRequest NO-LOCK WHERE MsRequest.MsRequest = iiOrigMsRequest NO-ERROR.
+
+   /* Provision is not needed for the termination request if the parent request
+      (origrequest) is STC or bundle change request
+      => Then the activation request having the same parent will make
+         dataplan modify to the provision system (SAPC) containing
+         the information about the termination request */
+   IF AVAILABLE MsRequest AND
+      ( MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
+        MsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE} )
+   THEN DO:
+
+      /* We need to verify that the activation request for STC or
+         bundle change will be provisioned (i.e. the EMAcode > "")
+         => If it is not then normal termination provision command
+            is sent */
+      FOR EACH MsRequest NO-LOCK USE-INDEX OrigRequest WHERE
+               MsRequest.OrigRequest EQ iiOrigMsRequest AND
+               MsRequest.ReqType     EQ {&REQTYPE_CONTRACT_ACTIVATION},
+          FIRST DayCampaign NO-LOCK WHERE
+                DayCampaign.Brand   EQ "1" AND
+                DayCampaign.DCEvent EQ MsRequest.ReqCParam3 AND
+                DayCampaign.EMACode > "":
+         RETURN FALSE.
+      END.
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
 
@@ -2888,7 +2931,8 @@ PROCEDURE pContractTermination:
 
       IF llSAPC
       THEN DO:
-         IF DayCampaign.EMACode > ""
+         IF DayCampaign.EMACode > "" AND
+            fTerminationProvisionNeeded(MsRequest.OrigRequest, MsRequest.ReqIParam2)
          THEN DO ON ERROR UNDO, THROW:
             loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
          
