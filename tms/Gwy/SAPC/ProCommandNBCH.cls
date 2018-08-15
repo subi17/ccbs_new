@@ -65,7 +65,8 @@ CLASS Gwy.SAPC.ProCommandNBCH INHERITS ProCommandOrder:
                IF ( lbMsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
                     lbMsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE} )
                THEN
-               FOR EACH lbMsRequest NO-LOCK USE-INDEX OrigRequest WHERE
+               FOR EACH lbMsRequest NO-LOCK WHERE
+                        lbMsRequest.MsRequest   EQ MsRequest.ReqIParam2 AND
                         lbMsRequest.OrigRequest EQ MsRequest.OrigRequest AND
                         lbMsRequest.ReqType     EQ {&REQTYPE_CONTRACT_TERMINATION},
                    FIRST DayCampaign NO-LOCK WHERE
