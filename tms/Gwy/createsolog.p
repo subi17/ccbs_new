@@ -349,12 +349,19 @@ PROCEDURE pSolog:
    ldActStamp = MSRequest.ActStamp.
    IF liOffSet NE 0 THEN 
       ldActStamp = Func.Common:mSecOffSet(ldActStamp,liOffSet).
-      
+
+   /* SAPC-56 redirecting new SAPC customers to new logic */
+   IF MsRequest.CustNum EQ 0
+   THEN llSAPC = fCParam("SAPC", "SAPC_ENABLED_NEW_CUSTOMERS") EQ "SAPC".
+   ELSE llSAPC = CAN-FIND(FIRST Customer NO-LOCK WHERE
+                                Customer.CustNum EQ MsRequest.CustNum AND
+                                Customer.AccGrp EQ 2).
+
    DO TRANSACTION:
 
-      /* SAPC-56 redirecting new SAPC customers to new logic */
-      IF Customer.AccGrp = 2
+      IF llSAPC
       THEN DO ON ERROR UNDO, THROW:
+         llSAPC = FALSE.
          CASE MsRequest.ReqType:
             WHEN {&REQTYPE_DSS}
             THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
