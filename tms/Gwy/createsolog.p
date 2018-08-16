@@ -359,7 +359,9 @@ PROCEDURE pSolog:
             WHEN {&REQTYPE_DSS}
             THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
                  THEN loProCommand = NEW Gwy.SAPC.ProCommandDSS(MsRequest.MsRequest). 
-            WHEN {&REQTYPE_SUBSCRIPTION_CREATE} OR WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
+            WHEN {&REQTYPE_SUBSCRIPTION_CREATE} OR WHEN
+                 {&REQTYPE_SUBSCRIPTION_TERMINATION} OR WHEN
+                 {&REQTYPE_SUBSCRIPTION_REACTIVATION}
             THEN loProCommand = NEW Gwy.SAPC.ProCommandBPM(MsRequest.MsRequest).
          END CASE.
       
@@ -414,7 +416,7 @@ PROCEDURE pSolog:
 
       END.
       
-      fReqStatus(5,"").
+      fReqStatus({&REQUEST_STATUS_HLR_PENDING}, "").
       
    END.
 

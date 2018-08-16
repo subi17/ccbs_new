@@ -32,7 +32,8 @@ CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder:
       DEFINE VARIABLE loJson        AS CLASS JsonObject   NO-UNDO.
 
       CASE MsRequest.ReqType:
-         WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
+         WHEN {&REQTYPE_SUBSCRIPTION_CREATE} OR WHEN
+              {&REQTYPE_SUBSCRIPTION_REACTIVATION}
          THEN ASSIGN
                  aoOrderEnum      = OrderEnum:SUBSCRIPTION_CREATE
                  acProCommandType = "SUBSCRIPTION_CREATE".
