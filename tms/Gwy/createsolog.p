@@ -366,10 +366,11 @@ PROCEDURE pSolog:
             WHEN {&REQTYPE_DSS}
             THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
                  THEN loProCommand = NEW Gwy.SAPC.ProCommandDSS(MsRequest.MsRequest). 
-            WHEN {&REQTYPE_SUBSCRIPTION_CREATE} OR WHEN
-                 {&REQTYPE_SUBSCRIPTION_TERMINATION} OR WHEN
+            WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
+            THEN loProCommand = NEW Gwy.SAPC.ProCommandBPMOrder(MsRequest.MsRequest).
+            WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION} OR WHEN
                  {&REQTYPE_SUBSCRIPTION_REACTIVATION}
-            THEN loProCommand = NEW Gwy.SAPC.ProCommandBPM(MsRequest.MsRequest).
+            THEN loProCommand = NEW Gwy.SAPC.ProCommandBPMMobSub(MsRequest.MsRequest).
          END CASE.
       
          IF VALID-OBJECT(loProCommand)
