@@ -32,6 +32,44 @@ IF llDoEvent THEN DO:
    DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
 END.
 
+FUNCTION fGetChildProductID RETURNS INT
+    (INPUT iiOrderID              AS INT,
+     INPUT iiParentOrderProductID AS INT,
+     INPUT icChildProductType     AS CHAR):
+
+    DEFINE BUFFER bf_OrderProduct FOR OrderProduct.
+
+    FIND FIRST bf_OrderProduct WHERE bf_OrderProduct.OrderId    = iiOrderID              AND  
+                                     bf_OrderProduct.ParentID   = iiParentOrderProductID AND 
+                                     bf_OrderProduct.ActionType = icChildProductType     NO-LOCK NO-ERROR.
+    IF AVAIL bf_OrderProduct THEN 
+       RETURN bf_OrderProduct.OrderProductId.     
+    
+    RETURN 0.
+
+END FUNCTION.
+
+FUNCTION fSetOrderProductStatus RETURNS LOGICAL
+    (INPUT iiOrderID        AS INT,
+     INPUT iiOrderProductID AS INT,
+     INPUT icStatusCode     AS CHAR):
+
+    DEFINE BUFFER bf_OrderProduct FOR OrderProduct.
+
+    FIND FIRST bf_OrderProduct WHERE 
+               bf_OrderProduct.OrderID        = iiOrderID        AND
+               bf_OrderProduct.OrderProductID = iiOrderProductID EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+    IF NOT AVAIL bf_OrderProduct THEN 
+        RETURN FALSE.
+
+    ASSIGN bf_OrderProduct.StatusCode = icStatusCode.
+
+    RELEASE bf_OrderProduct.
+
+    RETURN TRUE.
+
+END FUNCTION.
+
 FUNCTION fIsMainLineOrderPending RETURNS LOGICAL
    (INPUT pcIdType AS CHAR,
     INPUT pcPersonId AS CHAR,
