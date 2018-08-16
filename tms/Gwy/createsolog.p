@@ -58,8 +58,7 @@ END.
  
 IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
     MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) AND
-    MSRequest.ReqIParam5 > 0 THEN 
-DO:
+    MSRequest.ReqIParam5 > 0 THEN DO:
    
   FIND FIRST bbMsRequest NO-LOCK WHERE
              bbMsRequest.MsRequest = MsRequest.ReqIParam5 NO-ERROR.
@@ -113,7 +112,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
                         INPUT  MsRequest.MsSeq,
                         INPUT  (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
                                 MsRequest.ActStamp ELSE Func.Common:mMakeTS()),
-                        INPUt  MsRequest.ReqCparam3,
+                        INPUT  MsRequest.ReqCparam3,
                         INPUT  "",
                         OUTPUT ldeCurrMonthLimit,
                         OUTPUT ldeConsumedData,
@@ -245,11 +244,9 @@ PROCEDURE pSolog:
       lcCli = BufMobsub.CLI.
    
       IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
-          MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN 
-      DO:
+          MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) THEN DO:
 
-         IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN
-         DO:
+         IF MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION}  THEN DO:
 
             IF (fIsFixedOnly(bufMobsub.CLIType)                  AND
                 MSRequest.ReqCParam6 EQ {&TERMINATION_TYPE_FULL} AND
@@ -354,42 +351,6 @@ PROCEDURE pSolog:
       ldActStamp = Func.Common:mSecOffSet(ldActStamp,liOffSet).
       
    DO TRANSACTION:
-      
-      /* Locating data: subscription and customer */
-      FIND FIRST Mobsub WHERE 
-                 Mobsub.MSSeq = MSRequest.MSSeq
-                 NO-LOCK NO-ERROR.
-      IF AVAILABLE Mobsub THEN
-      DO:
-         FIND Customer OF MobSub NO-LOCK NO-ERROR. 
-         IF NOT AVAILABLE Customer THEN
-         DO:
-            fReqError("Customer not found for " + mobsub.cli).
-            RETURN.
-         END.
-      END.
-      ELSE 
-      DO:
-         /* In case when we reach this point subscription is in TermMobsub */
-         FIND FIRST TermMobsub WHERE 
-                    TermMobsub.MSSeq = MSRequest.MSSeq
-                    NO-LOCK NO-ERROR.
-         IF AVAILABLE TermMobsub THEN
-         DO:
-            FIND Customer OF TermMobSub NO-LOCK NO-ERROR. 
-            IF NOT AVAILABLE Customer THEN
-            DO:
-               fReqError("Customer not found for " + termmobsub.cli).
-               RETURN.
-            END.
-         END.
-         ELSE
-         DO:
-            fReqError("Mobile Subscription not found for request " + 
-                      STRING(MSRequest.MSRequest)).
-            RETURN.
-         END.
-      END.
 
       /* SAPC-56 redirecting new SAPC customers to new logic */
       IF Customer.AccGrp = 2
