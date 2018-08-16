@@ -293,7 +293,7 @@ END FINALLY.
 
 PROCEDURE pInitialise:
         
-    ASSIGN loEventLogMaker = NEW Gwy.EventLogMaker(Syst.Var.katun).
+    ASSIGN loEventLogMaker = NEW Gwy.EventLogMaker(Syst.Var:katun).
 
     RETURN "".
 
@@ -367,16 +367,15 @@ PROCEDURE pOrderProduct:
     DEFINE INPUT PARAMETER icProductType AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER iiProductID   AS INTEGER   NO-UNDO.
     
-    CASE icProductType :
-        
+    CASE icProductType:
         WHEN {&ORDER_PRODUCT_SIM}      OR 
         WHEN {&ORDER_PRODUCT_ROUTER}   OR 
         WHEN {&ORDER_PRODUCT_SETUPBOX} THEN 
         DO:            
             RUN pAccessory(icProductType, iiProductID).            
         END.
-        WHEN {&ORDER_PRODUCT_SUBSCRIPTION} OR 
-        WHEN {&ORDER_PRODUCT_FIXED_LINE}   THEN 
+        WHEN {&ORDER_PRODUCT_MOBILE}     OR 
+        WHEN {&ORDER_PRODUCT_FIXED_LINE} THEN 
         DO:            
             RUN pSubscription(icProductType, iiProductID).            
         END.
@@ -425,12 +424,11 @@ PROCEDURE pSubscription:
     DEFINE INPUT PARAMETER iiProductID   AS INTEGER   NO-UNDO.
     
     CASE icProductType:
-        WHEN {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
+        WHEN {&ORDER_PRODUCT_MOBILE} THEN 
         DO:
             RUN pMobile(iiProductID).
         END.    
-        WHEN {&ORDER_PRODUCT_FIXED_LINE} OR 
-        WHEN {&ORDER_PRODUCT_CONVERGENT} THEN 
+        WHEN {&ORDER_PRODUCT_FIXED_LINE} THEN 
         DO:
             RUN pFixedLine(iiProductID).
         END.    
