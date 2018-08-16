@@ -294,6 +294,9 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         IF objCustomer:isNewCustomer OR objCustomer:isCustomerUpdate THEN
             objCustomer:mStoreData().
         
+        IF THIS-OBJECT:lcICC > "" THEN 
+            mUpdateSimStatus(THIS-OBJECT:lcICC).
+            
         CREATE Order.
         ASSIGN
             Order.Brand              = Syst.Var:gcBrand
@@ -507,8 +510,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
               AND bfpcMSISDN.ValidTo    GE {&nowts}
               AND bfpcMSISDN.cli        EQ THIS-OBJECT:lcCLI
               AND bfpcMSISDN.statuscode EQ 1 
-           NO-ERROR.
-       
+           NO-ERROR.       
           
        mMakeMSISDNHistoryTimeStamp(RECID(bfpcMSISDN) , Func.Common:mMakeTS()).
        
@@ -564,7 +566,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
        ASSIGN
            MSISDN.ValidFrom  = ldNewFrom
            MSISDN.ValidTo    = 99999999.99999
-           MSISDN.ActionDate = ldtNewDate.
+           MSISDN.ActionDate = ldtNewDate
+           MSISDN.LockedTo   = Func.Common:mSecOffSet(Func.Common:mMakeTS(),60).
                                                       
                                                       
    END METHOD.        
