@@ -674,7 +674,7 @@ END PROCEDURE.
 PROCEDURE pRouter:
     DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
 
-    IF fIsFixedLineRouterShipped() THEN 
+    IF fIsADSLFixedLineRouterShipped() THEN 
        fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}).
 
     RETURN "".
@@ -714,7 +714,7 @@ PROCEDURE pValidateMSISDN:
     
     DEFINE VARIABLE llValidMSISDN AS LOGICAL   NO-UNDO.
     
-    ASSIGN llValidMSISDN = fValidateMSISDN(lcMSISDN).
+    ASSIGN llValidMSISDN = fValidateMSISDN(icMSISDN).
 
     IF NOT llValidMSISDN THEN
     DO:
@@ -1022,25 +1022,24 @@ PROCEDURE pCheckRollbackOrders:
 END PROCEDURE.                
 
 PROCEDURE pSetRenewalOrderStatus:
-               
+
+    DEFINE VARIABLE ocResult AS CHARACTER NO-UNDO.
+
     IF bf_Order.OrderChannel BEGINS "Renewal_POS" AND
         CAN-FIND(FIRST MsRequest WHERE
         MsRequest.MsSeq   = bf_Order.MSSeq                AND
         MsRequest.ReqType = {&REQTYPE_AFTER_SALES_ORDER} AND
         MsRequest.ReqIParam1 = bf_Order.OrderID) THEN 
     DO:
-        ASSIGN 
-            llOrdStChg = fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_ONGOING}).
-            lgHoldOrder = TRUE.
+        fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_ONGOING}).
+        ASSIGN lgHoldOrder = TRUE.
         RETURN.
     END.
                
     IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_DIRECT_RENEWAL}) > 0 THEN
-        ASSIGN 
-            llOrdStChg  = fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_WAITING_SENDING_LO}).  
+        fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_WAITING_SENDING_LO}).  
     ELSE 
-        ASSIGN 
-            llOrdStChg = fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_ONGOING}). 
+        fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_ONGOING}). 
 
     IF bf_Order.OrderChannel BEGINS "Renewal_POS" THEN 
     DO:
@@ -1062,8 +1061,7 @@ PROCEDURE pSetRenewalOrderStatus:
         END.
     END.
                  
-    ASSIGN 
-        lgHoldOrder = TRUE.
+    ASSIGN lgHoldOrder = TRUE.
         
     RELEASE bf_Order NO-ERROR.
 
@@ -1132,7 +1130,8 @@ END PROCEDURE.
 PROCEDURE pReactivationRequest:
     DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
 
-    DEF VAR lcResult AS CHAR NO-UNDO.
+    DEF VAR lcResult         AS CHAR    NO-UNDO.
+    DEF VAR llStatusAssigned AS LOGICAL NO-UNDO.
 
     fReactivationRequest(INPUT bf_Order.MsSeq,
                          INPUT bf_Order.OrderId,
