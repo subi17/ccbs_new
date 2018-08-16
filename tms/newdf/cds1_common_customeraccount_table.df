@@ -47,7 +47,7 @@ ADD FIELD "AccountName" OF "CustomerAccount" AS character
   ORDER 40  
  
 ADD FIELD "FromDate" OF "CustomerAccount" AS date 
-  FORMAT "99-99-99"
+  FORMAT "99-99-9999"
   INITIAL ?
   LABEL "FromDate"
   COLUMN-LABEL "FromDate"
@@ -55,7 +55,7 @@ ADD FIELD "FromDate" OF "CustomerAccount" AS date
   ORDER 50  
   
 ADD FIELD "ToDate" OF "CustomerAccount" AS date
-  FORMAT "99-99-99"
+  FORMAT "99-99-9999"
   INITIAL ?
   LABEL "ToDate"
   COLUMN-LABEL "ToDate"
@@ -71,3 +71,4 @@ ADD INDEX "AccountID_s" ON "CustomerAccount"
 ADD INDEX "CustNum" ON "CustomerAccount" 
   AREA "Sta_Index_2"
   INDEX-FIELD "CustNum" ASCENDING   
+  INDEX-FIELD "ToDate" DESCENDING   

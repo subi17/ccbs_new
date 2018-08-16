@@ -16,6 +16,7 @@
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Func/femailinvoice.i}
+{Func/customeraccount.i}
 
 DEFINE VARIABLE lcInvoiceTargetMode AS CHARACTER NO-UNDO.
 
@@ -56,23 +57,19 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
           bInvoiceTargetGroup.FromDate = TODAY 
           bInvoiceTargetGroup.ToDate = 12/31/2049
           bInvoiceTargetGroup.DelType = iiDelType
-   /* CDS-6 */
+          /* CDS-6 */
           bInvoiceTargetGroup.Currency = bCustomer.Currency
           bInvoiceTargetGroup.BankAccount = bCustomer.BankAcct
-          bInvoiceTargetGroup.PaymentMethod = bCustomer.PaymMethod.
+          bInvoiceTargetGroup.PaymentMethod = bCustomer.ChargeType
+          bInvoiceTargetGroup.Currency = bCustomer.Currency
+          bInvoiceTargetGroup.PaymentMethod = bCustomer.ChargeType
+          bInvoiceTargetGroup.DelType = bCustomer.DelType
+          bInvoiceTargetGroup.InvGroup = bCustomer.InvGroup
+          bInvoiceTargetGroup.AccountID = fCreateDefaultCustomerAccount(bCustomer.Custnum)   
+          bInvoiceTargetGroup.BillCycle = 1
+          bInvoiceTargetGroup.InvInterval = 1
+          bInvoiceTargetGroup.DueDateOffSet = 0.
 
-   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.CustNum = bInvoiceTargetGroup.CustNum NO-ERROR.
-      IF AVAIL CustomerAccount THEN 
-         ASSIGN bInvoiceTargetGroup.AccountID = CustomerAccount.AccountID        
-                bInvoiceTargetGroup.CustAccName = CustomerAccount.AccountName.
-
-   FIND FIRST MsOwner NO-LOCK WHERE MsOwner.Brand   = Syst.Var:gcBrand AND
-                                    MsOwner.CustNum = bCustomer.CustNum NO-ERROR.
-   IF AVAIL MsOwner THEN 
-      ASSIGN bInvoiceTargetGroup.MandateId = MsOwner.MandateId
-             bInvoiceTargetGroup.MandateDate = MsOwner.MandateDate. 
-   /*CDS-6 ends */
-      
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bInvoiceTargetGroup:HANDLE),
                                       "",
                                       Syst.Var:katun,

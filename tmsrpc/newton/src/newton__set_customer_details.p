@@ -74,8 +74,6 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fbankdata.i}
 {Func/msreqfunc.i}
-{Func/customeraccount.i}
-{Func/address.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -539,6 +537,13 @@ IF llCustomerChanged THEN DO:
         customer.profession = lcCustomerData[LOOKUP("profession", lcDataFields)].  /* APIBSS-174 */
           
    IF llAddressChanged THEN DO:
+
+      FIND Address EXCLUSIVE-LOCK WHERE
+           Address.HostTable = "Customer" AND
+           Address.KeyValue = STRING(Customer.Custnum) AND
+           Address.AddressType = {&ADDRESS_TYPE_BILLING} NO-ERROR.
+      IF NOT AVAIL Address THEN
+         UNDO CUST_UPDATE, RETURN appl_err("Address not found").
        
       CREATE ttCustomerReport.
       ASSIGN
@@ -607,17 +612,21 @@ IF llCustomerChanged THEN DO:
             BUFFER-COPY ttCustomerreport EXCEPT Custnum TO CustomerReport.
          END.
       END.
-
-      /* CDS-10 start */
-      IF NOT fUpdateAddress(Customer.CustNum, 
-                            Customer.Address, 
-                            Customer.PostOffice, 
-                            Customer.ZipCode, 
-                            Customer.Region, 
-                            Customer.Country) THEN
-         RETURN appl_err("Customer billing address can not be changed").                            
-      /* CDS-10 end */
-
+   
+      IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER Address:HANDLE)).
+      ASSIGN
+         Address.Address   = lcCustomerData[LOOKUP("street", lcDataFields)]
+         Address.City      = lcCustomerData[LOOKUP("city", lcDataFields)]
+         Address.ZipCode   = lcCustomerData[LOOKUP("zip", lcDataFields)]
+         Address.Region    = lcCustomerData[LOOKUP("region", lcDataFields)]
+         Address.Country   = lcCustomerData[LOOKUP("zip", lcDataFields)]
+         Address.StreetCode = ttCustomerreport.StreetCode
+         Address.CityCode  = ttCustomerreport.CityCode
+         Address.TownCode  = ttCustomerreport.TownCode.
+      IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
+                              (BUFFER Address:HANDLE), 
+                              {&STAR_EVENT_USER}, 
+                              lcMemo).
    END.
         
     /* Added check for BankAccount change, YDR-1811
@@ -635,15 +644,9 @@ IF llCustomerChanged THEN DO:
          IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
             IF customer.BankAcct = lcBankAccount
             THEN llBankAcctChange = FALSE.
-            ELSE DO: 
-               llBankAcctChange = TRUE.
-               customer.BankAcct = lcBankAccount.                             
-               /* CDS-10 start */
-               IF NOT fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
-                                                   Customer.BankAcct) THEN
-                  RETURN appl_err("Customer bank account can not be changed").                                                                 
-               /* CDS-10 end */
-            END.   
+            ELSE llBankAcctChange = TRUE.
+
+            customer.BankAcct = lcBankAccount.
          END.
          ELSE
             UNDO CUST_UPDATE, RETURN appl_err("Incorrect bank account length").
@@ -724,12 +727,6 @@ IF llCustomerChanged THEN DO:
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL}.
           ELSE
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
-
-          /* CDS-10 start */
-          IF NOT fUpdateCustomerAccountDelType(Customer.Custnum, InvoiceTargetGroup.DelType) THEN
-            RETURN appl_err("Customer delivery method can not be changed").           
-          /* CDS-10 end */
-          
 
           RELEASE InvoiceTargetGroup.
        END. /* IF AVAIL InvoiceTargetGroup THEN DO: */

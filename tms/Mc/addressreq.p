@@ -11,7 +11,8 @@
 {Func/msreqfunc.i}
 {Syst/eventval.i}
 {Func/fcustdata.i}
-{Func/address.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -65,7 +66,7 @@ PROCEDURE pAddressChange:
    lcRegion = STRING(MsRequest.ReqIParam2,"99").
    
    IF lcRegion ne "00" THEN 
-   FIND FIRST Region WHERE Region.Region = lcRegion NO-LOCK NO-ERROR.
+   FIND Region WHERE Region.Region = lcRegion NO-LOCK NO-ERROR.
    IF NOT AVAIL Region THEN DO:
       fReqError("Unknown region " + lcRegion).
       RETURN.
@@ -87,6 +88,15 @@ PROCEDURE pAddressChange:
       
    IF NOT AVAILABLE Customer THEN DO:
       fReqError("Customer not found").
+      RETURN.
+   END.
+   
+   FIND Address EXCLUSIVE-LOCK WHERE
+        Address.HostTable = "Customer" AND
+        Address.KeyValue = STRING(Customer.Custnum) AND
+        Address.AddressType = {&ADDRESS_TYPE_BILLING} NO-ERROR.
+   IF NOT AVAIL Address THEN DO:
+      fReqError("Address not found").
       RETURN.
    END.
 
@@ -131,20 +141,24 @@ PROCEDURE pAddressChange:
        CustomerReport.CityCode = lcCityCode
        CustomerReport.TownCode = lcTownCode.
    
-      /* CDS-10 start */
-      IF NOT fUpdateAddress(Customer.CustNum, 
-                            Customer.Address, 
-                            Customer.PostOffice, 
-                            Customer.ZipCode, 
-                            Customer.Region, 
-                            Customer.Country) THEN DO:
-         fReqError("Customer billing address can not be changed").
-         RETURN.
-      END.                              
-      /* CDS-10 end */
+   IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER Address:HANDLE)).
+   ASSIGN
+      Address.Address   = MsRequest.ReqCParam1
+      Address.City      = MsRequest.ReqCParam2
+      Address.ZipCode   = STRING(MsRequest.ReqIParam1,"99999")
+      Address.Region    = lcRegion
+      Address.Country   = MsRequest.ReqCParam3
+      Address.StreetCode = lcStreetCode
+      Address.CityCode  = lcCityCode
+      Address.TownCode  = lcTownCode.
+   IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
+                           (BUFFER Address:HANDLE), 
+                           {&STAR_EVENT_USER}, 
+                           lcMemo).
    
    RELEASE Customer.
    RELEASE CustomerReport.
+   RELEASE Address.
              
    /* request handled succesfully */   
    fReqStatus(2,""). 

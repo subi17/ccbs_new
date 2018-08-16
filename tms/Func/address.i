@@ -14,36 +14,20 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
     INPUT icRegion AS CHAR,
     INPUT icCountry AS CHAR): 
 
+   ASSIGN
+      Address.Address = icAddress
+      Address.City = icPostOffice
+      Address.ZipCode = icZipCode
+      Address.Region = icRegion
+      Address.Country = icCountry.
 
-   FIND FIRST Address WHERE Address.Keyvalue = STRING(iiCustNum) EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAIL Address THEN DO:
-      CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
-             ErrorLog.ActionID  = "UpdateAddress"
-             ErrorLog.TableName = "Address"
-             ErrorLog.KeyValue  = STRING(iiCustNum) 
-             ErrorLog.ErrorMsg  = "Address not found"
-             ErrorLog.UserCode  = Syst.Var:katun
-             ErrorLog.ActionTS  = Func.Common:mMakeTS().
-      RETURN FALSE.
-   END.
-/*   IF Address.AddressType = {&BILLING_ADDRESS} THEN DO:      */
+   FIND FIRST CustomerReport WHERE CustomerReport.Custnum = iiCustNum
+   NO-LOCK NO-ERROR.
+   IF AVAIL CustomerReport THEN
       ASSIGN
-         Address.Address = icAddress
-         Address.City = icPostOffice
-         Address.ZipCode = icZipCode
-         Address.Region = icRegion
-         Address.Country = icCountry.
-
-      FIND FIRST CustomerReport WHERE CustomerReport.Custnum = iiCustNum
-      NO-LOCK NO-ERROR.
-
-      IF AVAIL CustomerReport THEN
-         ASSIGN
-            Address.StreetCode = CustomerReport.StreetCode
-            Address.CityCode = CustomerReport.CityCode
-            Address.TownCode = CustomerReport.TownCode.
-/*   END.             */
+         Address.StreetCode = CustomerReport.StreetCode
+         Address.CityCode = CustomerReport.CityCode
+         Address.TownCode = CustomerReport.TownCode.
    
    RETURN TRUE.
 

@@ -487,7 +487,7 @@ PROCEDURE pOwnerChange:
          ASSIGN liCreated[liReqCnt] = liDefCust
                 llNewCust           = TRUE.
          RUN Mm/copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
-                       FALSE).                       
+                       FALSE).
       END.
       
       /* update old customer's data if vrk has been succesful */
@@ -571,6 +571,30 @@ PROCEDURE pOwnerChange:
                fReqError("Wrong format in new customer data").
                RETURN.
             END.
+
+            FIND FIRST Address EXCLUSIVE-LOCK WHERE
+                       Address.HostTable = "Customer" AND
+                       Address.KeyValue = STRING(Customer.Custnum) AND
+                       Address.AddressType = {&ADDRESS_TYPE_BILLING} NO-ERROR.
+             
+            IF NOT AVAIL Address THEN DO:
+               CREATE Address.
+               ASSIGN
+                  Address.AddressID = NEXT-VALUE(AddressID)
+                  Address.HostTable = "Customer"
+                  Address.KeyValue = STRING(Customer.Custnum)
+                  Address.AddressType = {&ADDRESS_TYPE_BILLING}.
+            END.
+
+            ASSIGN
+               Address.Address   = ttCustomer.Address
+               Address.City      = ttCustomer.PostOffice
+               Address.ZipCode   = ttCustomer.ZipCode
+               Address.Region    = ttCustomer.Region
+               Address.Country   = ttCustomer.Country
+               Address.StreetCode = ttCustomer.StreetCode
+               Address.CityCode  = ttCustomer.CityCode
+               Address.TownCode  = ttCustomer.TownCode.
             
             /* Category according to id type */ 
             FOR EACH CustCat NO-LOCK WHERE 
@@ -595,16 +619,8 @@ PROCEDURE pOwnerChange:
             END.
 
             /* CDS-12 start */
-            IF NOT fCloseCustomerAccount(MobSub.AccountID) THEN DO:
-               fReqError("CustomerAccount not closed").
-               RETURN.
-            END.          
-            
-            IF fCreateDefaultCustomerAccount(liCreated[liReqCnt]) EQ 0 THEN DO:
-               fReqError("CustomerAccount not created").
-               RETURN.
-            END.               
-            fUpdateAccountID(Customer.CustNum).    
+            fCloseCustomerAccount(MobSub.AccountID).
+            fCreateDefaultCustomerAccount(liCreated[liReqCnt]).
             /* CDS-12 end */ 
 
             FIND FIRST CustomerReport WHERE
@@ -902,6 +918,7 @@ PROCEDURE pMsCustMove:
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
    DEF VAR liOldAgrCust AS INT  NO-UNDO.
+   DEF VAR liCustomerAccountID AS INT NO-UNDO. 
 
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
@@ -1257,7 +1274,8 @@ PROCEDURE pMsCustMove:
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
 
    ASSIGN ldEndStamp    = MsOwner.TSEnd
-          MsOwner.TSEnd = Func.Common:mSecOffSet(MsRequest.ActStamp,-1).
+          MsOwner.TSEnd = Func.Common:mSecOffSet(MsRequest.ActStamp,-1)
+          liCustomerAccountID = fGetDefaultCustomerAccount(iiNewOwner).
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
           
@@ -1268,7 +1286,8 @@ PROCEDURE pMsCustMove:
           bOwner.TSEnd   = ldEndStamp
           bOwner.InvCust = iiNewInvCust WHEN iiNewInvCust > 0
           bOwner.AgrCust = iiNewOwner
-          bOwner.CLIEvent = "ACC".
+          bOwner.CLIEvent = "ACC"
+          bOwner.AccountID = liCustomerAccountID.
 
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                      CLIType.CLIType = MobSub.CLIType AND
@@ -1307,7 +1326,8 @@ PROCEDURE pMsCustMove:
    liOldAgrCust = MobSub.AgrCust.
    ASSIGN MobSub.CustNum = iiNewUser    WHEN iiNewUser > 0
           MobSub.InvCust = iiNewInvCust WHEN iiNewInvCust > 0
-          MobSub.AgrCust = iiNewOwner.
+          MobSub.AgrCust = iiNewOwner
+          MobSub.AccountID = liCustomerAccountID.
    
    /* Extraline discount will be closed WITH last date of previous month 
       if ACC is done on Extraline subscription */

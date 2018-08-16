@@ -16,8 +16,6 @@
 {Syst/tmsconst.i}
 {Func/order.i}
 {Func/fcustdata.i}
-{Func/customeraccount.i}
-{Func/address.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -47,7 +45,6 @@ DEF VAR lcMemo       AS CHAR NO-UNDO.
 
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
 DEF BUFFER bMobSub FOR MobSub.
-
 
 FIND FIRST Order WHERE
            Order.Brand   = Syst.Var:gcBrand AND
@@ -345,6 +342,22 @@ ELSE DO:
                Customer.Category   = OrderCustomer.Category WHEN
                                      OrderCustomer.CustID EQ Customer.OrgID AND
                                      OrderCustomer.CustIDType EQ Customer.CustIDType.
+            
+            FOR FIRST Address EXCLUSIVE-LOCK WHERE
+                      Address.HostTable = "Customer" AND
+                      Address.KeyValue = STRING(Customer.Custnum) AND
+                      Address.AddressType = {&ADDRESS_TYPE_BILLING}:
+
+               ASSIGN
+                  Address.Address   = OrderCustomer.Address
+                  Address.City      = OrderCustomer.PostOffice
+                  Address.ZipCode   = OrderCustomer.ZipCode
+                  Address.Region    = OrderCustomer.Region
+                  Address.Country   = OrderCustomer.Country
+                  Address.StreetCode = OrderCustomer.AddressCodC
+                  Address.CityCode  = OrderCustomer.AddressCodP
+                  Address.TownCode  = OrderCustomer.AddressCodM.
+            END.
 
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:
@@ -364,21 +377,6 @@ ELSE DO:
                         Customer.Category = OrderCustomer.Category.
                END.
             END.
-
-            /* CDS-8 start */
-            fUpdateCustomerAccountDelType(OrderCustomer.Custnum, OrderCustomer.DelType).
-
-
-            fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
-                                         Customer.BankAcct).
-            
-            fUpdateAddress(Customer.CustNum, 
-                           Customer.Address, 
-                           Customer.PostOffice, 
-                           Customer.ZipCode, 
-                           Customer.Region, 
-                           Customer.Country).
-            /* CDS-8 end */
 
          END. /* IF llUpdateCust THEN DO: */
 

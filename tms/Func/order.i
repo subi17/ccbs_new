@@ -359,6 +359,21 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
            Customer.AuthCustIdType = OrderCustomer.AuthCustIdType
            .
 
+   CREATE Address.
+   ASSIGN
+      Address.AddressID = NEXT-VALUE(AddressID)
+      Address.HostTable = "Customer"
+      Address.Keyvalue = STRING(Customer.Custnum)
+      Address.AddressType = {&ADDRESS_TYPE_BILLING}
+      Address.Address   = OrderCustomer.Address
+      Address.City      = OrderCustomer.PostOffice
+      Address.ZipCode   = OrderCustomer.ZipCode
+      Address.Region    = OrderCustomer.Region
+      Address.Country   = OrderCustomer.Country
+      Address.StreetCode = OrderCustomer.AddressCodC
+      Address.CityCode  = OrderCustomer.AddressCodP
+      Address.TownCode  = OrderCustomer.AddressCodM.
+
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).
    
@@ -450,20 +465,6 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
             Limit.LimitAmt  = OrderCustomer.SubQty.
 
          END.
-
-         /* CDS- */
-         IF NOT fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
-                                      Customer.BankAcct) THEN
-            RETURN FALSE.
-
-         IF NOT fUpdateAddress(Customer.CustNum, 
-                        Customer.Address, 
-                        Customer.PostOffice, 
-                        Customer.ZipCode, 
-                        Customer.Region, 
-                        Customer.Country) THEN
-            RETURN FALSE.
-         /* CDS- */
 
       END.   
          
@@ -590,6 +591,25 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
       bCustomer.PostOffice = CAPS(bOrderCustomer.PostOffice) WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
       bCustomer.Region = Region.Region WHEN bCustomer.Region NE Region.Region
       bCustomer.InvGroup = lcInvGroup WHEN bCustomer.InvGroup NE lcInvGroup.
+            
+   FIND FIRST Address EXCLUSIVE-LOCK WHERE
+              Address.HostTable = "Customer" AND
+              Address.KeyValue = STRING(Customer.Custnum) AND
+              Address.AddressType = {&ADDRESS_TYPE_BILLING} NO-ERROR.
+
+   IF AVAIL Address THEN DO:
+      IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER Address:HANDLE)).
+      ASSIGN
+         Address.Address   = lcNewAddress
+         Address.City      = CAPS(OrderCustomer.PostOffice)
+         Address.ZipCode   = bOrderCustomer.ZipCode
+         Address.Region    = Region.Region
+         Address.Country   = bOrderCustomer.Country
+         Address.StreetCode = bOrderCustomer.AddressCodC
+         Address.CityCode  = bOrderCustomer.AddressCodP
+         Address.TownCode  = bOrderCustomer.AddressCodM.
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER Address:HANDLE)).
+   END.
 
    IF llDoEvent THEN DO:
       RUN StarEventMakeModifyEvent(lhCustomer).
