@@ -800,7 +800,7 @@ PROCEDURE pMobile:
         
         RUN pSetDefaultsToMissingAttributesOfOrder.
 
-        RUN pValidateMobile(lcMSISDN).
+        RUN pValidateMSISDN(lcMSISDN).
         IF RETURN-VALUE NE "" THEN
             RETURN RETURN-VALUE.
 
