@@ -23,8 +23,6 @@ DEF VAR ldeCerrada   AS DEC    NO-UNDO.
 DEF VAR ldeCurrent   AS DEC    NO-UNDO.
 DEF VAR lhOrder      AS HANDLE NO-UNDO.
 DEF VAR ldeCerradaTS AS DEC    NO-UNDO.
-DEF VAR llAvailOrderProduct AS LOG NO-UNDO.
-DEF VAR liSIMOrderProductId AS INT NO-UNDO.
 
 DEF STREAM strout. 
 
@@ -46,20 +44,6 @@ FOR EACH Order NO-LOCK WHERE
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER} AND
          Order.ICC        EQ "":               
 
-   ASSIGN llAvailOrderProduct = CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderId = Order.OrderId NO-LOCK).
-
-   IF llAvailOrderProduct THEN
-   DO:      
-       FIND FIRST OrderMobile WHERE OrderMobile.OrderId        = Order.OrderId AND 
-                                    OrderMobile.OrderProductID > 0             NO-LOCK NO-ERROR.
-       IF NOT AVAIL OrderMobile OR (AVAIL OrderMobile AND OrderMobile.ICC > "") THEN
-          NEXT.
-
-       ASSIGN liSIMOrderProductId = fGetChildProductID(OrderMobile.OrderId, OrderMobile.OrderProductID, {&ORDER_PRODUCT_SIM}).
-       IF liSIMOrderProductId = 0 THEN 
-          NEXT.
-   END.
-      
    FIND FIRST EventLog NO-LOCK WHERE
               EventLog.TableName            EQ "Order"                                    AND
               EventLog.Key                  EQ "1" + CHR(255) + STRING(Order.OrderId)     AND
@@ -94,9 +78,6 @@ FOR EACH Order NO-LOCK WHERE
       END.
    
       fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_SENDING_TO_LO}).
-
-      IF liSIMOrderProductId > 0 THEN
-         fSetOrderProductStatus(Order.OrderId, liSIMOrderProductId, {&ORDER_STATUS_SENDING_TO_LO}).
 
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrder).

@@ -61,7 +61,6 @@ DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProductCLI     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProductICC     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llHasProducts    AS LOGICAL NO-UNDO.
-DEFINE VARIABLE liSIMOrderProductId AS INTEGER NO-UNDO.
 
 DEF VAR lcDeliveryAddress AS CHAR NO-UNDO.
 DEF VAR lcRegion          AS CHAR NO-UNDO.
@@ -220,27 +219,23 @@ IF llDoEvent THEN DO:
    {Func/lib/eventlog.i}
 END.
 
-IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  = Order.OrderID NO-LOCK) THEN 
+IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  = Order.OrderID) THEN 
 DO:
     ASSIGN lcProductCLI   =  Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
            lcProductICC   =  Func.OrderProductsData:mGetOrderICC(Order.OrderID)
            llHasProducts  =  YES.
-
-    FIND FIRST OrderMobile WHERE OrderMobile.OrderId        = Order.OrderId AND 
-                                 OrderMobile.OrderProductID > 0             NO-LOCK NO-ERROR.
-    IF NOT AVAIL OrderMobile THEN
-       RETURN.
-
-    ASSIGN liSIMOrderProductId = fGetChildProductID(OrderMobile.OrderId, 
-                                                    OrderMobile.OrderProductID, 
-                                                    {&ORDER_PRODUCT_SIM}).
 END.
-ELSE 
-DO:
-    ASSIGN 
-        lcProductCLI        = Order.CLI
-        lcProductICC        = Order.ICC
-        liSIMOrderProductId = 0.
+ELSE DO:
+    ASSIGN lcProductCLI     =   Order.CLI
+           lcProductICC     =   Order.ICC.
+END.
+
+IF llHasProducts THEN DO:
+    
+    FOR FIRST OrderMobile WHERE OrderMobile.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK :
+        /*Just find the record to further use. Tenant-id does not support  find first*/
+    END.
+    
 END.
 
 IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
@@ -471,8 +466,10 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
       FIND bOrder EXCLUSIVE-LOCK WHERE
            ROWID(bOrder) = ROWID(Order) NO-ERROR.
            
-       IF llHasProducts THEN
-          FIND CURRENT OrderMobile EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+       IF llHasProducts 
+       THEN DO:
+          FIND FIRST bfOrderMobile WHERE ROWID(bfOrderMobile)  =  ROWID(OrderMobile) EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+      END.
 
       IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
 
@@ -480,7 +477,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
            bOrder.ICC              = lcICC
            SIM.SimStat             = 4
            SIM.MsSeq               = bOrder.MsSeq
-           OrderMobile.ICC         = lcICC   WHEN AVAILABLE OrderMobile.
+           bfOrderMobile.ICC       = lcICC   WHEN AVAILABLE bfOrderMobile.
 
       CREATE SimDeliveryhist.
       ASSIGN SimDeliveryHist.OrderID    = bOrder.OrderID
@@ -502,23 +499,10 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
 
       /* order status with 76 is not needed to be released, at it will
          be released when associated main line fixed line is installed */
-      IF bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} THEN 
-      DO:
+      IF bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} THEN DO:
          CASE bOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW} THEN 
-            DO:
-                fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
-
-                IF liSIMOrderProductId > 0 THEN /* This is populated inside fDelivSIM */
-                   fSetOrderProductStatus(bOrder.OrderId, liSIMOrderProductId, {&ORDER_STATUS_NEW}).
-            END.
-            WHEN {&ORDER_TYPE_MNP} THEN 
-            DO:
-                fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_MNP}).
-                
-                IF liSIMOrderProductId > 0 THEN /* This is populated inside fDelivSIM */
-                   fSetOrderProductStatus(bOrder.OrderId, liSIMOrderProductId, {&ORDER_STATUS_MNP}).
-            END.    
+            WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
+            WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_MNP}).
          END CASE.
       END.
 
