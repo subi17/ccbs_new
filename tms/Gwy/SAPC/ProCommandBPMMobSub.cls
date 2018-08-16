@@ -1,0 +1,79 @@
+ 
+ /*------------------------------------------------------------------------
+    File        : ProCommandBPMMobSub
+    Purpose     : BPM messages where no up to date order information
+                  is available (e.g. reactivation request or subscription
+                  termination)
+    Syntax      : 
+    Description : 
+    Author(s)   : tlamminmaki
+    Created     : Mon Aug 06 15:52:48 EEST 2018
+    Notes       : 
+  ----------------------------------------------------------------------*/
+
+USING Progress.Lang.*.
+USING Progress.Json.ObjectModel.JsonObject.
+USING Gwy.SAPC.OrderEnum.
+USING Gwy.SAPC.ProCommandBPM.
+
+{Syst/tmsconst.i}
+
+BLOCK-LEVEL ON ERROR UNDO, THROW.
+
+CLASS Gwy.SAPC.ProCommandBPMMobSub INHERITS ProCommandBPM: 
+
+   DEFINE PRIVATE BUFFER MobSub FOR MobSub.
+
+   CONSTRUCTOR ProCommandBPMMobSub
+      ( iiMsRequest AS INTEGER ):
+
+      SUPER(iiMsRequest).
+
+      DEFINE BUFFER Customer FOR Customer.
+
+      CASE MsRequest.ReqType:
+         WHEN {&REQTYPE_SUBSCRIPTION_REACTIVATION}
+         THEN ASSIGN
+                 aoOrderEnum      = OrderEnum:SUBSCRIPTION_REACTIVATE
+                 acProCommandType = "SUBSCRIPTION_REACTIVATE".
+         WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
+         THEN ASSIGN
+                 aoOrderEnum = OrderEnum:SUBSCRIPTION_TERMINATE
+                 acProCommandType = "SUBSCRIPTION_TERMINATE".
+         OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandBPMMobSub cannot " +
+                                                       "handle ReqType &1",
+                                                       MsRequest.ReqType)).
+      END CASE.
+
+      FIND MobSub NO-LOCK WHERE 
+          MobSub.MsSeq = aiMsSeq
+      NO-ERROR.
+      
+      IF NOT AVAILABLE MobSub
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find mobsub &1 for msrequest &2",
+                                               aiMsSeq, MsRequest.MsRequest)).
+
+      FIND Customer NO-LOCK WHERE 
+          Customer.Custnum = MsRequest.CustNum
+      NO-ERROR.
+      
+      IF NOT AVAILABLE Customer
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find customer &1 for msrequest &2",
+                                               MsRequest.CustNum, MsRequest.MsRequest)).
+
+      ASSIGN
+         acCLI              = MobSub.CLI
+         acICC              = MobSub.ICC
+         acCLIType          = MobSub.CLIType
+         alPayType          = MobSub.PayType.
+
+      mCreateCommandLine(Customer.OrgId, Customer.Category).
+
+   END CONSTRUCTOR.
+
+   METHOD PROTECTED OVERRIDE JsonObject mContactObject():
+      /* No need for contact object so far.. */
+      RETURN ?.
+   END METHOD.
+
+END CLASS.

@@ -12,6 +12,7 @@
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
 USING Gwy.SAPC.ProCommandOrder.
+USING Gwy.SAPC.OrderEnum.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -47,6 +48,12 @@ CLASS Gwy.SAPC.Service.CreateOrder.SIM INHERITS ServiceObject:
                                                SIM.ICC)).
 
       aoJsonObject:Add("Type", "SIM").
+
+      aoJsonObject:Add("Action",
+                        IF aoProCommandOrder:aoOrderEnum EQ
+                           OrderEnum:SUBSCRIPTION_TERMINATE
+                        THEN "Delete"
+                        ELSE "Add").
 
       mAddCharacteristicsArray(mNameValue("Iccid", SIM.ICC)).
       mAddCharacteristicsArray(mNameValue("Imsi", IMSI.IMSI)).

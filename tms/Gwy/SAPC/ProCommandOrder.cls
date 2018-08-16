@@ -1,7 +1,7 @@
  
  /*------------------------------------------------------------------------
     File        : ProCommandOrder
-    Purpose     : 
+    Purpose     : Contains information common for Change API and Create Order
     Syntax      : 
     Description : 
     Author(s)   : tlamminmaki
@@ -15,7 +15,7 @@ USING Gwy.SAPC.Service.IService.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand: 
+CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand ABSTRACT: 
 
    DEFINE PROTECTED VARIABLE aoService    AS CLASS IService  NO-UNDO.
    DEFINE PUBLIC    VARIABLE aoOrderEnum  AS CLASS OrderEnum NO-UNDO.
@@ -29,7 +29,7 @@ CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand:
       ( iiMsRequest AS INTEGER ):
 
       SUPER(iiMsRequest).
-
+      acProCommandVerb = "POST".
       mSetProCommandId().
 
    END CONSTRUCTOR.

@@ -288,6 +288,29 @@ FUNCTION fReqError RETURNS LOGICAL
 
 END FUNCTION.
 
+/* error occurred -> write to log and mark new status for request */
+FUNCTION fReqErrorObject RETURNS LOGICAL
+   ( ioAppError AS CLASS Progress.Lang.AppError ).
+
+   DEFINE VARIABLE lii         AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcErrorText AS CHARACTER NO-UNDO.
+
+   IF ioAppError:ReturnValue > ""
+   THEN lcErrorText = ioAppError:ReturnValue.
+
+   DO lii = 1 TO ioAppError:NumMessages:
+      lcErrorText = lcErrorText + CHR(10) + ioAppError:GetMessage(lii).
+   END.
+
+   lcErrorText = TRIM(lcErrorText).
+
+   fReqLog("ERROR " + lcErrorText).
+
+   fReqStatus(3, lcErrorText).
+
+END FUNCTION.
+
+
 FUNCTION fMakeServiceSolog RETURNS INTEGER
    (iiMsRequest AS INT,
     output ocError AS CHAR):
