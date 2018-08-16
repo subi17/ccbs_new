@@ -652,7 +652,7 @@ PROCEDURE pSIM:
        
        RUN pReserveSIM(bf_Order.MsSeq, lcICC).
 
-       IF fIsResignationPeriod() THEN /* Delayed order */
+       IF bf_Order.ResignationPeriod AND fIsResignationPeriod() THEN /* Delayed order */
        DO:
           fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_RESIGNATION}).
 
