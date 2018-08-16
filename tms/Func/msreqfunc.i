@@ -290,16 +290,16 @@ END FUNCTION.
 
 /* error occurred -> write to log and mark new status for request */
 FUNCTION fReqErrorObject RETURNS LOGICAL
-   ( ioAppError AS CLASS Progress.Lang.AppError ).
+   ( ioError AS CLASS Progress.Lang.Error ).
 
    DEFINE VARIABLE lii         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcErrorText AS CHARACTER NO-UNDO.
 
-   IF ioAppError:ReturnValue > ""
-   THEN lcErrorText = ioAppError:ReturnValue.
+   IF TYPE-OF(ioError, Progress.Lang.AppError)
+   THEN lcErrorText = CAST(ioError, Progress.Lang.AppError):ReturnValue.
 
-   DO lii = 1 TO ioAppError:NumMessages:
-      lcErrorText = lcErrorText + CHR(10) + ioAppError:GetMessage(lii).
+   DO lii = 1 TO ioError:NumMessages:
+      lcErrorText = lcErrorText + CHR(10) + ioError:GetMessage(lii).
    END.
 
    lcErrorText = TRIM(lcErrorText).

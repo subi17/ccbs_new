@@ -374,13 +374,13 @@ PROCEDURE pSolog:
          END CASE.
       
          IF VALID-OBJECT(loProCommand)
-         THEN DO:
+         THEN DO ON ERROR UNDO, THROW:
             loProCommand:mStoreProCommand().
             llSAPC = TRUE.
          END.
 
-         CATCH loAppError AS Progress.Lang.AppError:
-            fReqErrorObject(loAppError).
+         CATCH loError AS Progress.Lang.Error:
+            fReqErrorObject(loError).
             RETURN.
          END CATCH.
 

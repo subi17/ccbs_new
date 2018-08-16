@@ -13,8 +13,6 @@ USING Progress.Json.ObjectModel.JsonObject.
 USING Gwy.SAPC.OrderEnum.
 USING Gwy.SAPC.ProCommandOrder.
 
-{Syst/tmsconst.i}
-
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder ABSTRACT:
