@@ -24,6 +24,7 @@ END.
 DEF INPUT PARAM piMessageSeq     AS INT        NO-UNDO.
 
 /* Parsing Order data to JSON */
+DEF VAR loReqJson                AS JsonObject NO-UNDO.
 DEF VAR loInstObject             AS JsonObject NO-UNDO.
 DEF VAR lcServicesArray          AS JsonArray  NO-UNDO.
 DEF VAR lcServicesObject         AS JsonObject NO-UNDO.
@@ -109,7 +110,8 @@ ASSIGN
    lcHeaderValue   = fCParam("Masmovil", "InflightHeaderValue")
    liLogRequest    = fIParam("Masmovil", "InflightLogRequest")
    llLogRequest    = LOGICAL(liLogRequest)
-   lcUriPath       = lcUriPath + SUBST("Y&1", Order.OrderID).
+   lcUriPath       = lcUriPath + SUBST("Y&1", Order.OrderID)
+   loReqJson       = NEW JsonObject().
 
 CASE MSRequest.ReqCParam2:
    WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:
@@ -165,6 +167,7 @@ CASE MSRequest.ReqCParam2:
       lcAddressObject:ADD('floor',ENTRY(4,lcAmendamentValue,"|")).
       lcAddressObject:ADD('hand',ENTRY(17,lcAmendamentValue,"|")).
       
+      Assign loReqJson = loInstObject.
    END.
        
    WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
@@ -188,7 +191,7 @@ CASE MSRequest.ReqCParam2:
       lcfixCharacteristicsObject:ADD('value',lcAmendamentValue).
       
       lcfixServicesObject:ADD('type','PHONE').
-  
+      Assign loReqJson = loFixObject.
    END. 
       
    OTHERWISE RETURN.
@@ -207,7 +210,7 @@ RUN Gwy/http_rest_client.p(STRING(OpenEdge.Net.HTTP.MethodEnum:PATCH),
                            lcUriQueryValue  ,
                            lcHeaderName     ,
                            lcHeaderValue    ,
-                           loFixObject      ,
+                           loReqJson        ,
                            OUTPUT oiStatusCode,
                            OUTPUT ocStatusReason,
                            OUTPUT loResponseJson).
