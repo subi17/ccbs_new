@@ -1262,8 +1262,8 @@ PROCEDURE pContractActivation:
 
          liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
 
-         CATCH loAppError AS Progress.Lang.AppError:
-            fReqErrorObject(loAppError).
+         CATCH loError AS Progress.Lang.Error:
+            fReqErrorObject(loError).
             RETURN.
          END CATCH.
 
@@ -2947,8 +2947,8 @@ PROCEDURE pContractTermination:
    
             liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
    
-            CATCH loAppError AS Progress.Lang.AppError:
-               fReqErrorObject(loAppError).
+            CATCH loError AS Progress.Lang.Error:
+               fReqErrorObject(loError).
                RETURN.
             END CATCH.
    
@@ -4073,8 +4073,8 @@ PROCEDURE pContractReactivation:
 
          liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
 
-         CATCH loAppError AS Progress.Lang.AppError:
-            fReqErrorObject(loAppError).
+         CATCH loError AS Progress.Lang.Error:
+            fReqErrorObject(loError).
             RETURN.
          END CATCH.
 
