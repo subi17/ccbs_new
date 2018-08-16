@@ -29,15 +29,10 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
 
-DEFINE INPUT  PARAMETER iiOrderID AS INTEGER NO-UNDO.
+DEFINE INPUT PARAMETER iiOrderID AS INTEGER NO-UNDO.
 
-
-DEFINE VARIABLE llgMNPSimOnly         AS LOG    NO-UNDO INITIAL NO.  
-
-DEFINE VARIABLE lgHoldOrder       AS LOGICAL   NO-UNDO.
- 
-
-DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
+DEFINE VARIABLE lgHoldOrder     AS LOGICAL           NO-UNDO.
+DEFINE VARIABLE loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
 
 DEFINE BUFFER bf_Order FOR Order.
 
@@ -141,7 +136,7 @@ END FUNCTION.
 
 FUNCTION fGetOrderProductStatus RETURNS CHAR
     (INPUT iiOrderID     AS INT,
-     INPUT icProductType AS INT):
+     INPUT icProductType AS CHAR):
 
     DEFINE BUFFER bf_OrderProduct FOR OrderProduct.
 
@@ -287,9 +282,6 @@ DO ON ERROR UNDO, RETURN ERROR:
     
     RUN pInitialise.
 
-    IF RETURN-VALUE NE "" THEN
-        RETURN.
-
     RUN pProcess.
 
 END.
@@ -303,8 +295,6 @@ PROCEDURE pInitialise:
         
     ASSIGN loEventLogMaker = NEW Gwy.EventLogMaker(Syst.Var.katun).
 
-    
-    
     RETURN "".
 
 END PROCEDURE.
@@ -347,7 +337,7 @@ PROCEDURE pProcess:
             FOR EACH bf_RemainingChildOrderProduct WHERE 
                      bf_RemainingChildOrderProduct.OrderId  = OrderProduct.OrderId        AND 
                      bf_RemainingChildOrderProduct.ParentID = OrderProduct.OrderProductID AND 
-                     ROWID(bf_RemainingChildOrderProduct)  <> bf_ChildOrderProduct        NO-LOCK:
+                     ROWID(bf_RemainingChildOrderProduct)  <> ROWID(bf_ChildOrderProduct) NO-LOCK:
 
                 RUN pOrderProduct(bf_ChildOrderProduct.ActionType, bf_ChildOrderProduct.OrderProductID).
 

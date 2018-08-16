@@ -69,7 +69,8 @@ DEFINE VARIABLE ocTerminalCode     AS CHAR      NO-UNDO.
 DEFINE VARIABLE lcOrderProductCLI  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lIsConvergenceType AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcRenewalICC       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcOrderProductCLIType    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcOrderProductCLIType AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liSIMOrderProductId   AS INTEGER   NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -419,8 +420,6 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE lcProductCLI              AS CHAR      NO-UNDO.
    DEFINE VARIABLE lcProductCLIType          AS CHAR      NO-UNDO.
    DEFINE VARIABLE lcProductICC              AS CHAR      NO-UNDO.
-   
-   DEFINE VARIABLE liSIMOrderProductId AS INT NO-UNDO.
 
    DEFINE BUFFER bufRow         FOR InvRow.
    DEFINE BUFFER bufItem        FOR BillItem.
