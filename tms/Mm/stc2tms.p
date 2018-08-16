@@ -397,12 +397,8 @@ PROCEDURE pFeesAndServices:
    DEF VAR lcResult           AS CHAR NO-UNDO.
    DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
    DEF VAR lcAddLineDisc      AS CHAR NO-UNDO.
-   DEF VAR lcTry&BuyCliTypes  AS CHAR NO-UNDO.
    DEF BUFFER bMember FOR DPMember.
-
-   ASSIGN 
-      lcTry&BuyCliTypes    = fCParamC("Try&BuyCliTypes").
-   
+  
    /* first handle services that are not on subscription level;
       fees etc. */
 
@@ -572,20 +568,6 @@ PROCEDURE pFeesAndServices:
       END.   
    END.
  
-    /* YCO-968 */ 
-    IF LOOKUP(MsRequest.ReqCparam1, lcTry&BuyCliTypes) > 0 THEN DO:
-       lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
-                                        "CONT_DISC_TB_20",
-                                        16.53, /* discount */
-                                        ldtActDate,
-                                        12/31/18, 
-                                        ?,
-                                        0).
-
-      IF RETURN-VALUE BEGINS "ERROR" THEN
-         RETURN RETURN-VALUE.
-   END.
-
    /* ADDLINE-20 Additional Line Discounts 
       CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type 
       ADDLINE-267 Phase 2 fix */
@@ -656,7 +638,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liConfigExtraLineCount  AS INT  NO-UNDO.
    DEF VAR lcMandatoryExtraLines   AS CHAR NO-UNDO.
    DEF VAR lcAllowedExtraLines     AS CHAR NO-UNDO.   
-   DEF VAR liAllowedELCount       AS INT  NO-UNDO.
+   DEF VAR liAllowedELCount        AS INT  NO-UNDO.
    DEF VAR liManELCount            AS INT  NO-UNDO.
    DEF VAR liAvailExtraLineCount   AS INT  NO-UNDO.
    DEF VAR llgMandatoryExtraLine   AS LOG  NO-UNDO.
@@ -664,7 +646,8 @@ PROCEDURE pUpdateSubscription:
    DEF VAR lcAssignSubId           AS CHAR NO-UNDO.
    DEF VAR liAssignSubId           AS INT  NO-UNDO.
    DEF VAR liOrigMsSeq             AS INT  NO-UNDO.
-
+   DEF VAR lcTry&BuyCliTypes       AS CHAR NO-UNDO.
+   
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
    DEF BUFFER lbELMobSub     FOR MobSub.
@@ -673,6 +656,10 @@ PROCEDURE pUpdateSubscription:
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
    DEF BUFFER lbOrigRequest  FOR MsRequest.
+
+   ASSIGN 
+      lcTry&BuyCliTypes    = fCParamC("Try&BuyCliTypes").
+
 
    /* make sure that customer has a billtarget with correct rateplan */
    liBillTarg = CLIType.BillTarget.
@@ -1076,6 +1063,22 @@ PROCEDURE pUpdateSubscription:
    
       END.
    END.
+
+    /* YCO-968 */ 
+    IF LOOKUP(MsRequest.ReqCparam1, lcTry&BuyCliTypes) > 0 THEN DO:
+       lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                        "CONT_DISC_TB_20",
+                                        16.53, /* discount */
+                                        ldtActDate,
+                                        12/31/18, 
+                                        ?,
+                                        0).
+
+      IF RETURN-VALUE BEGINS "ERROR" THEN
+         RETURN RETURN-VALUE.
+   END.
+
+
 
 END PROCEDURE.
 
