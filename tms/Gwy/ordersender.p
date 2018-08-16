@@ -76,11 +76,10 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
             
       IF LOCKED(Order) THEN NEXT.    
       
-      IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID)
-      THEN DO:
+      IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID) THEN 
           RUN Mm/orderproduct_exec.p(INPUT Order.OrderID).
-      END.
-      ELSE DO:
+      ELSE
+      DO:
           {Mc/ordersender.i LOOP}
       END.   
    

@@ -419,6 +419,8 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE lcProductCLI              AS CHAR      NO-UNDO.
    DEFINE VARIABLE lcProductCLIType          AS CHAR      NO-UNDO.
    DEFINE VARIABLE lcProductICC              AS CHAR      NO-UNDO.
+   
+   DEFINE VARIABLE liSIMOrderProductId AS INT NO-UNDO.
 
    DEFINE BUFFER bufRow         FOR InvRow.
    DEFINE BUFFER bufItem        FOR BillItem.
@@ -438,16 +440,28 @@ FUNCTION fDelivSIM RETURNS LOG
 
    IF NOT AVAIL Order THEN RETURN FALSE.     
    
-   IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
-   THEN DO:
-       ASSIGN lcProductCLI          =    Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
-              lcProductCLIType      =    Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
-              lcProductICC          =    Func.OrderProductsData:mGetOrderICC(Order.OrderID).
+   IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID) THEN 
+   DO:
+       ASSIGN   
+           lcProductCLI        = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+           lcProductCLIType    = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
+           lcProductICC        = Func.OrderProductsData:mGetOrderICC(Order.OrderID).
+            
+       FIND FIRST OrderMobile WHERE OrderMobile.OrderId        = Order.OrderId AND 
+                                    OrderMobile.OrderProductID > 0             NO-LOCK NO-ERROR.
+       IF NOT AVAIL OrderMobile OR (AVAIL OrderMobile AND OrderMobile.ICC > "") THEN
+          RETURN FALSE.
+
+       ASSIGN liSIMOrderProductId = fGetChildProductID(OrderMobile.OrderId, 
+                                                       OrderMobile.OrderProductID, 
+                                                       {&ORDER_PRODUCT_SIM}).
    END.
-   ELSE DO:
-       ASSIGN lcProductCLI          = Order.CLI
-              lcProductCLIType      = Order.CLIType
-              lcProductICC          = Order.ICC.
+   ELSE 
+   DO:
+       ASSIGN lcProductCLI        = Order.CLI
+              lcProductCLIType    = Order.CLIType
+              lcProductICC        = Order.ICC
+              liSIMOrderProductId = 0.
    END.
 
    /* skip those in control or already closed */
@@ -1632,10 +1646,8 @@ FOR EACH Order NO-LOCK WHERE
       liNewDelay      NE ? AND
       Func.Common:mOffSet(Order.CrStamp, 24 * liNewDelay) > Func.Common:mMakeTS() THEN NEXT.
 
-   IF fDelivSIM(Order.OrderId,
-                TRUE,
-                "",
-                "") THEN DO: 
+   IF fDelivSIM(Order.OrderId,TRUE,"","") THEN 
+   DO: 
       fUpdateOrderLogisticsValue(Order.OrderId).
 
       IF llDoEvent THEN DO:
@@ -1645,12 +1657,14 @@ FOR EACH Order NO-LOCK WHERE
       END.
 
       fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
-      
+
+      IF liSIMOrderProductId > 0 THEN /* This is populated inside fDelivSIM */
+         fSetOrderProductStatus(Order.OrderId, liSIMOrderProductId, {&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrder).
          fCleanEventObjects().
       END.
-   
    END.
 
 END.
@@ -1698,10 +1712,7 @@ FOR EACH Order NO-LOCK WHERE
       
    IF NOT fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN NEXT.
 
-   IF fDelivSIM(Order.OrderId,
-                TRUE,
-                "",
-                "") THEN  
+   IF fDelivSIM(Order.OrderId,TRUE,"","") THEN  
       fUpdateOrderLogisticsValue(Order.OrderId).
 
 END.
@@ -1731,9 +1742,10 @@ FOR EACH OrderGroup NO-LOCK WHERE
         NOT (Order.MNPStatus EQ 6 OR
              Order.MNPStatus EQ 7)            THEN NEXT.
              
-      IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
-      THEN ASSIGN lIsConvergenceType  = fIsConvergenceTariff(Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)).
-      ELSE ASSIGN lIsConvergenceType  = fIsConvergenceTariff(Order.CLIType).
+      IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID) THEN
+         ASSIGN lIsConvergenceType  = fIsConvergenceTariff(Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)).
+      ELSE 
+         ASSIGN lIsConvergenceType  = fIsConvergenceTariff(Order.CLIType).
       /* For convergent + terminal order, LO info should not be sent
          if fixed line is not yet installed */
       IF lIsConvergenceType         AND
@@ -1763,6 +1775,9 @@ FOR EACH OrderGroup NO-LOCK WHERE
 
          fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
          
+         IF liSIMOrderProductId > 0 THEN /* This is populated inside fDelivSIM */
+            fSetOrderProductStatus(Order.OrderId, liSIMOrderProductId, {&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+
          IF llDoEvent THEN DO:
             RUN StarEventMakeModifyEvent(lhOrder).
             fCleanEventObjects().
@@ -1882,16 +1897,17 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
       NEXT.
     END.
 
-    IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
-    THEN DO:        
+    IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID) THEN
+    DO:        
         ASSIGN 
-            lcOrderProductCLI       = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
-            lcOrderProductCLIType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
+            lcOrderProductCLI     = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+            lcOrderProductCLIType = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
     END.
-    ELSE DO:
+    ELSE 
+    DO:
         ASSIGN 
-            lcOrderProductCLI       = Order.CLI
-            lcOrderProductCLIType   = Order.CLIType.
+            lcOrderProductCLI     = Order.CLI
+            lcOrderProductCLIType = Order.CLIType.
     END.
 
    FIND FIRST CliType WHERE
@@ -1929,13 +1945,14 @@ FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_AC
       NEXT.
     END.
    
-    IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
-    THEN DO:
+    IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID) THEN 
+    DO:
         ASSIGN 
             lcOrderProductCLI       = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
             lcOrderProductCLIType   = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID).
     END.
-    ELSE DO:
+    ELSE 
+    DO:
         ASSIGN 
             lcOrderProductCLI       = Order.CLI
             lcOrderProductCLIType   = Order.CLIType.
