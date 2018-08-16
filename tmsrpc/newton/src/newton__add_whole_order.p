@@ -754,7 +754,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR lcField               AS CHARACTER NO-UNDO. 
    DEF VAR lcMarkOut             AS CHARACTER NO-UNDO. 
    DEF VAR lcMarketing           AS CHARACTER NO-UNDO. 
-   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 42.
+   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 44.
    DEF VAR lcIdOrderCustomer     AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR ldBirthDay            AS DATE      NO-UNDO.
