@@ -817,7 +817,7 @@ PROCEDURE pMobile:
         IF RETURN-VALUE NE "" THEN
             RETURN RETURN-VALUE.
 
-        RUN pReserveMSISDN(lcMSISDN).
+        RUN pReserveMSISDN(bf_Order.MsSeq, lcMSISDN).
 
         RUN pMobileActivationRequest(iiOrderProductID, lcMSISDN).
 
