@@ -108,9 +108,6 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
         IF VALID-OBJECT(objParamFactory) THEN 
             objParamFactory:mStoreData().
         
-        IF THIS-OBJECT:ICC > "" THEN 
-            objOrder:mUpdateSimStatus(THIS-OBJECT:ICC).
-        
     END METHOD.
     
     DESTRUCTOR PUBLIC OrderProductSIM ( ):

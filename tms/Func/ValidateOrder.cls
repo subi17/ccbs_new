@@ -66,7 +66,7 @@ CLASS Func.ValidateOrder FINAL:
         
         DEFINE BUFFER bfpcMSISDN FOR MSISDN.
         
-        RETURN (CAN-FIND(FIRST bfpcMSISDN WHERE bfpcMSISDN.Brand EQ Syst.Var:gcBrand 
+        RETURN (CAN-FIND(FIRST bfpcMSISDN WHERE bfpcMSISDN.Brand      EQ Syst.Var:gcBrand 
                                             AND bfpcMSISDN.ValidTo    GE {&nowts}
                                             AND bfpcMSISDN.CLI        EQ lcCLI
                                             AND bfpcMSISDN.statuscode EQ 1 )) .        
