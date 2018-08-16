@@ -1251,7 +1251,10 @@ PROCEDURE pContractActivation:
 
    IF llSAPC
    THEN DO:
-      IF DayCampaign.EMACode > ""
+      /* Subscription creation request is handling the
+         provision when ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} */
+      IF DayCampaign.EMACode > "" AND
+         MsRequest.ReqSource NE {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}
       THEN DO ON ERROR UNDO, THROW:
          loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
       
@@ -1260,7 +1263,7 @@ PROCEDURE pContractActivation:
          liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
 
          CATCH loAppError AS Progress.Lang.AppError:
-            fReqError(loAppError:ReturnValue).
+            fReqErrorObject(loAppError).
             RETURN.
          END CATCH.
 
@@ -2932,7 +2935,10 @@ PROCEDURE pContractTermination:
 
       IF llSAPC
       THEN DO:
+         /* Subscription termination request is handling the
+            provision when ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} */
          IF DayCampaign.EMACode > "" AND
+            MsRequest.ReqSource NE {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
             fTerminationProvisionNeeded(MsRequest.OrigRequest, MsRequest.MsRequest)
          THEN DO ON ERROR UNDO, THROW:
             loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
@@ -2942,7 +2948,7 @@ PROCEDURE pContractTermination:
             liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
    
             CATCH loAppError AS Progress.Lang.AppError:
-               fReqError(loAppError:ReturnValue).
+               fReqErrorObject(loAppError).
                RETURN.
             END CATCH.
    
@@ -4056,7 +4062,10 @@ PROCEDURE pContractReactivation:
 
    IF llSAPC
    THEN DO:
-      IF DayCampaign.EMACode > ""
+      /* Subscription reactivation request is handling the
+         provision when ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} */
+      IF DayCampaign.EMACode > "" AND
+         MsRequest.ReqSource NE {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}
       THEN DO ON ERROR UNDO, THROW:
          loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest). 
       
@@ -4065,7 +4074,7 @@ PROCEDURE pContractReactivation:
          liNewReqStatus = {&REQUEST_STATUS_HLR_PENDING}.
 
          CATCH loAppError AS Progress.Lang.AppError:
-            fReqError(loAppError:ReturnValue).
+            fReqErrorObject(loAppError).
             RETURN.
          END CATCH.
 

@@ -18,30 +18,19 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan INHERITS ServiceObject: 
 
-   DEFINE PRIVATE VARIABLE acBundle AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE VARIABLE acEMACode AS CHARACTER NO-UNDO.
 
    CONSTRUCTOR PeriodicDataPlan
-      ( ioPCO    AS CLASS ProCommandOrder,
-        icType   AS CHARACTER,
-        icBundle AS CHARACTER ):
+      ( ioPCO     AS CLASS ProCommandOrder,
+        icType    AS CHARACTER,
+        icEMACode AS CHARACTER ):
 
       SUPER(ioPCO, icType).
-      acBundle = icBundle.
+      acEMACode = icEMACode.
 
    END CONSTRUCTOR.
 
    METHOD PROTECTED OVERRIDE VOID mFetchData():
-
-      DEFINE BUFFER DayCampaign FOR DayCampaign.
-
-      FIND DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = "1" AND
-           DayCampaign.DCEvent = acBundle
-      NO-ERROR.
-
-      IF NOT AVAILABLE DayCampaign
-      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find OptionalBundleItem '&1'",
-                                               acBundle)).
 
       aoJsonObject:Add("Action",
                         IF aoProCommandOrder:aoOrderEnum EQ
@@ -51,7 +40,7 @@ CLASS Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan INHERITS ServiceObject:
 
       aoJsonObject:Add("Type", "PERIODIC_DATAPLAN").
 
-      mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
+      mAddCharacteristicsArray(mNameValue("emaDataPlan", acEMACode)).
       aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
    END METHOD.
