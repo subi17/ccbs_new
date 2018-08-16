@@ -1057,7 +1057,7 @@ PROCEDURE pSetRenewalOrderStatus:
                                    0,
                                    "After Sales Request creation failed",
                                    ocResult).
-            ASSIGN llOrdStChg = fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_IN_CONTROL}).
+            fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_IN_CONTROL}).
         END.
     END.
                  
