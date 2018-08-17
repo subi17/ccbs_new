@@ -61,6 +61,11 @@ CLASS Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan INHERITS ServiceObject:
       END.
       ELSE mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
 
+      mAddCharacteristicsArray
+         (mNameValue("subscriptionType",
+                     STRING(aoProCommandOrder:alPayType,
+                            "PREPAID/POSTPAID"))).
+
       aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
    END METHOD.
