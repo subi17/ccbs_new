@@ -12,6 +12,7 @@
 USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.OrderEnum.
 USING Gwy.SAPC.Service.ServiceObjectFactory.
+USING Gwy.SAPC.Service.CreateOrder.DefaultPricePlan.
 USING Gwy.SAPC.Service.CreateOrder.SIM.
 USING Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan.
 
@@ -19,7 +20,7 @@ USING Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.CreateOrder.UnderDefaultPricePlan INHERITS ServiceObjectFactory: 
+CLASS Gwy.SAPC.Service.CreateOrder.UnderMobileLineSAPC INHERITS ServiceObjectFactory: 
 
    /*
       SIM (1..1)
@@ -27,7 +28,7 @@ CLASS Gwy.SAPC.Service.CreateOrder.UnderDefaultPricePlan INHERITS ServiceObjectF
    
       (Note: No upsells is possible here)
    */
-   CONSTRUCTOR UnderDefaultPricePlan(ioPCO AS CLASS ProCommandOrder):
+   CONSTRUCTOR UnderMobileLineSAPC(ioPCO AS CLASS ProCommandOrder):
 
       DEFINE BUFFER OrderAction FOR OrderAction.
       DEFINE BUFFER TermMsRequest FOR MsRequest.
@@ -37,6 +38,7 @@ CLASS Gwy.SAPC.Service.CreateOrder.UnderDefaultPricePlan INHERITS ServiceObjectF
       DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
       mAddObject(NEW SIM(ioPCO, "SIM")).
+      mAddObject(NEW DefaultPricePlan(ioPCO, "DPP")).
 
       CASE ioPCO:aoOrderEnum:
          WHEN OrderEnum:SUBSCRIPTION_CREATE THEN

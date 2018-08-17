@@ -32,13 +32,13 @@ CLASS Gwy.SAPC.Service.CreateOrder.PeriodicDataPlan INHERITS ServiceObject:
 
    METHOD PROTECTED OVERRIDE VOID mFetchData():
 
-      aoJsonObject:Add("Action",
+      aoJsonObject:Add("action",
                         IF aoProCommandOrder:aoOrderEnum EQ
                            OrderEnum:SUBSCRIPTION_TERMINATE
                         THEN "Delete"
                         ELSE "Add").
 
-      aoJsonObject:Add("Type", "PERIODIC_DATAPLAN").
+      aoJsonObject:Add("type", "PERIODIC_DATAPLAN").
 
       mAddCharacteristicsArray(mNameValue("emaDataPlan", acEMACode)).
       aoJsonObject:Add("Characteristics", aoCharacteristicArray).

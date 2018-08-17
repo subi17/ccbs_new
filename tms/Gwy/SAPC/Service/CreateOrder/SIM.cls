@@ -47,9 +47,9 @@ CLASS Gwy.SAPC.Service.CreateOrder.SIM INHERITS ServiceObject:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find IMSI with ICC '&1'",
                                                SIM.ICC)).
 
-      aoJsonObject:Add("Type", "SIM").
+      aoJsonObject:Add("type", "SIM").
 
-      aoJsonObject:Add("Action",
+      aoJsonObject:Add("action",
                         IF aoProCommandOrder:aoOrderEnum EQ
                            OrderEnum:SUBSCRIPTION_TERMINATE
                         THEN "Delete"

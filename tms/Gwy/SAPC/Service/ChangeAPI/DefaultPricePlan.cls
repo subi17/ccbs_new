@@ -27,9 +27,9 @@ CLASS Gwy.SAPC.Service.ChangeAPI.DefaultPricePlan INHERITS ServiceObject:
 
    METHOD PROTECTED OVERRIDE VOID mFetchData():
 
-      aoJsonObject:Add("Action", "None").
+      aoJsonObject:Add("action", "None").
 
-      aoJsonObject:Add("Type", "DEFAULT_PRICE_PLAN").
+      aoJsonObject:Add("type", "DEFAULT_PRICE_PLAN").
 
       aoJsonObject:AddNull("Characteristics").
 

@@ -11,7 +11,7 @@
 
 USING Gwy.SAPC.ProCommandOrder.
 USING Gwy.SAPC.Service.ServiceObjectFactory.
-USING Gwy.SAPC.Service.CreateOrder.DefaultPricePlan.
+USING Gwy.SAPC.Service.CreateOrder.MobileLineSAPC.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -28,7 +28,7 @@ CLASS Gwy.SAPC.Service.CreateOrder.UnderRoot INHERITS ServiceObjectFactory:
       (Note: No upsells is possible here)
    */
    CONSTRUCTOR UnderRoot(ioPCO AS CLASS ProCommandOrder):
-      mAddObject(NEW DefaultPricePlan(ioPCO, "DPP")).
+      mAddObject(NEW MobileLineSAPC(ioPCO, "MLSAPC")).
    END CONSTRUCTOR.
 
 END CLASS.
