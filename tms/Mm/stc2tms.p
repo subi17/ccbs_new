@@ -1110,7 +1110,8 @@ PROCEDURE pFinalize:
    DEF VAR liTermReq             AS INT  NO-UNDO.
    DEF VAR ocResult              AS CHAR NO-UNDO.
    DEF VAR liMergeOrderId        AS INT  NO-UNDO.
-
+   DEF VAR lcTry&BuyCliTypes     AS CHAR NO-UNDO.
+    
    DEF BUFFER DataContractReq FOR MsRequest. 
    DEF BUFFER Order           FOR Order.
    DEF BUFFER bMobsub         FOR Mobsub.
@@ -1121,7 +1122,9 @@ PROCEDURE pFinalize:
    DEF BUFFER bufMergeMsOwner FOR MsOwner.
    DEF BUFFER lbELMobSub      FOR MobSub.
    DEF BUFFER lbCustomer      FOR Customer.
-   
+
+   ASSIGN 
+      lcTry&BuyCliTypes    = fCParamC("Try&BuyCliTypes").   
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -1476,7 +1479,21 @@ PROCEDURE pFinalize:
 
    /* request handled succesfully */
    fReqStatus(2,"").
-  
+
+   /* YCO-968 */ 
+   IF LOOKUP(MsRequest.ReqCparam1, lcTry&BuyCliTypes) > 0 THEN DO:
+      lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                       "CONT_DISC_TB_20",
+                                       16.53, /* discount */
+                                       ldtActDate,
+                                       12/31/18, 
+                                       ?,
+                                       0).
+
+      IF RETURN-VALUE BEGINS "ERROR" THEN
+         RETURN RETURN-VALUE.
+   END.
+ 
    MERGEREQUEST:
    DO:
       IF fCheckMsRequestParam(MsRequest.MsRequest,
