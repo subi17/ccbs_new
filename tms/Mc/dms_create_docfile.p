@@ -1366,14 +1366,18 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                         ENTRY(12,MsRequest.ReqCParam3,"|").
                END.
                WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
+                  DEF VAR lcSfId  AS CHAR NO-UNDO.
                   ASSIGN
                      lcCaseTypeId = lcFixedNumCaseTypeID
+                     lcSfId       = "MASOSS"  
                      lcCaseFileRow =
                         lcCaseTypeId                                   + lcDelim +
                         /*Contract_ID*/
                         MsRequest.ReqCParam6                           + lcDelim +
                         /*OrderId*/
                         STRING(MsRequest.ReqIParam1)                   + lcDelim +
+                        /*SFID*/
+                        lcSfId                                         + lcDelim +
                         /*MSISDN*/
                         STRING(MsRequest.CLI)                          + lcDelim +
                         /*Change_Request_date*/

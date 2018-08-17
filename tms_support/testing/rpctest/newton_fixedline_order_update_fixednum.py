@@ -20,15 +20,17 @@ print(sys.argv[1])
 if len(sys.argv) < 2: instruction()
 else:
    var1 = int(sys.argv[1])
+   var2 = sys.argv[2]
 
 p=s.newton.fixedline_order_update('rarebari',var1,
                                   {
-                                   'fixednumber':'998811122'
+                                   'fixednumber':var2
                                   },
                                   'ChangePhoneNumber',
-                                  'Customers request')
+                                  'FNP Error')
 
 print_results(p)
+
 
 
 
