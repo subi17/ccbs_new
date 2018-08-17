@@ -68,14 +68,184 @@ FUNCTION fFindSMSTarget RETURNS CHAR
    RETURN "".
 END.
 
-/**/
+
+FUNCTION BinaryXOR RETURNS INTEGER
+    (INPUT intOperand1 AS INTEGER,
+    INPUT intOperand2 AS INTEGER):
+
+    DEFINE VARIABLE iByteLoop  AS INTEGER NO-UNDO.
+    DEFINE VARIABLE iXOResult  AS INTEGER NO-UNDO.
+    DEFINE VARIABLE lFirstBit  AS LOGICAL NO-UNDO.
+    DEFINE VARIABLE lSecondBit AS LOGICAL NO-UNDO.
+
+    iXOResult = 0.
+
+    /*spin through each byte of each char*/
+    DO iByteLoop = 0 TO 7: /* as processing a single byte character */
+
+        /*find state (true / false) of each integers byte*/
+        ASSIGN
+            lFirstBit  = GET-BITS(intOperand1,iByteLoop + 1,1) = 1
+            lSecondBit = GET-BITS(intOperand2,iByteLoop + 1,1) = 1.
+
+        /* XOR each bit*/
+        IF (lFirstBit AND NOT lSecondBit) OR
+            (lSecondBit AND NOT lFirstBit) THEN
+            iXOResult = iXOResult + EXP(2, iByteLoop).
+    END.
+ 
+    RETURN iXOResult.
+END FUNCTION. /*End function of BinaryXOR */
+
+/* From Progress documentation
+   Function */
+FUNCTION HMAC-BASE64 RETURN CHARACTER 
+    (INPUT pcSHA AS CHARACTER,
+    INPUT pcKey AS CHARACTER, 
+    INPUT pcData AS CHARACTER):
+
+    DEFINE VARIABLE mKeyOpad       AS MEMPTR    NO-UNDO.
+    DEFINE VARIABLE mKeyIpad       AS MEMPTR    NO-UNDO.
+    DEFINE VARIABLE mData          AS MEMPTR    NO-UNDO.
+    DEFINE VARIABLE mKey           AS MEMPTR    NO-UNDO.
+    DEFINE VARIABLE mInnerCombined AS MEMPTR    NO-UNDO.
+    DEFINE VARIABLE mOuterCombined AS MEMPTR    NO-UNDO.
+    DEFINE VARIABLE iBytePos       AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE iOpad          AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE iIpad          AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE iKey           AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE iTimeTaken     AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE rRawDataSHA    AS RAW       NO-UNDO.
+    DEFINE VARIABLE cHMACSHA       AS CHARACTER NO-UNDO.
+    
+    &SCOPED-DEFINE xiBlockSize  64
+    
+    SET-SIZE(mKey)     = 0.
+    SET-SIZE(mKeyOpad) = 0.
+    SET-SIZE(mKeyIpad) = 0.
+    SET-SIZE(mKey)     = {&xiBlockSize}.
+    SET-SIZE(mKeyOpad) = {&xiBlockSize}.
+    SET-SIZE(mKeyIpad) = {&xiBlockSize}.
+    
+    DO iBytePos = 1 TO {&xiBlockSize}:
+        PUT-BYTES(mKey,     iBytePos) = HEX-DECODE("00":U).  /* 64 bytes of zeros 0x00*/
+        PUT-BYTES(mKeyOpad, iBytePos) = HEX-DECODE("5C":U).  /* 64 bytes of 0x5C (92 dec,  "/" ascii) */
+        PUT-BYTES(mKeyIpad, iBytePos) = HEX-DECODE("36":U).  /* 64 bytes of 0x36 (54 dec, "6" ascii)*/
+    END.
+    
+    /* correction by Valery A.Eliseev */
+    IF LENGTH(pcKey) > {&xiBlockSize} THEN 
+    DO:
+        set-size(mData) = LENGTH(pcKey).
+        put-string(mData, 1, LENGTH(pcKey)) = pcKey.
+        rRawDataSHA = SHA1-DIGEST(mData).
+        PUT-BYTES(mKey, 1) = rRawDataSHA.
+    END.
+    ELSE
+        /* end of correction */
+    
+        PUT-STRING(mKey, 1, LENGTH(pckey))  = pcKey. 
+    
+    DO iBytePos = 1 TO {&xiBlockSize}:
+      
+        ASSIGN
+            iKey  = GET-BYTE(mKey,     iBytePos)
+            iOpad = GET-BYTE(mKeyOpad, iBytePos)
+            iIpad = GET-BYTE(mKeyIpad, iBytePos).
+      
+        /* The inner key, mKeyIpad is formed from mKey by XORing each byte with 0x36.. */
+        PUT-BYTE(mKeyIpad, iBytePos) = BinaryXOR(INPUT iKey, 
+            INPUT iIpad).
+    
+        /* The inner key, mKeyOpad is formed from mKey by XORing each byte with 0x5C. */
+        PUT-BYTE(mKeyOpad, iBytePos) = BinaryXOR(INPUT iKey, 
+            INPUT iOpad).
+    
+    END.
+    
+    SET-SIZE(mKey)  = 0.
+    SET-SIZE(mData) = 0.
+    SET-SIZE(mData) = LENGTH(pcData).
+    PUT-STRING(mData,1,LENGTH(pcData)) = pcData.
+    
+    
+    /* Inner Loop*/
+    SET-SIZE(mInnerCombined)      = GET-SIZE(mKeyIpad) + GET-SIZE(mData).
+    
+    PUT-BYTES(mInnerCombined, 1)  = mKeyIpad.
+    SET-SIZE(mKeyIpad) = 0.
+    
+    /*Append the data the end of the block size.*/
+    PUT-BYTES(mInnerCombined, {&xiBlockSize} + 1) = mData.
+    
+    /* Deallocates any memory. */
+    SET-SIZE(mData) = 0.
+    
+    /* Get the results of the SHA Digest.*/
+    CASE pcSHA:
+        WHEN 'SHA1' THEN
+            ASSIGN
+                rRawDataSHA = SHA1-DIGEST(mInnerCombined).
+        WHEN 'SHA-256' THEN
+            ASSIGN
+                rRawDataSHA = MESSAGE-DIGEST('SHA-256', mInnerCombined).
+        OTHERWISE 
+        ASSIGN
+            rRawDataSHA = SHA1-DIGEST(mInnerCombined).
+    END CASE.
+                                     
+    /* Deallocates any memory. */
+    SET-SIZE(mInnerCombined) = 0.
+    
+    /* Outer Loop calculation for SHA*/
+    SET-SIZE(mOuterCombined)                      = 0.
+    SET-SIZE(mOuterCombined)                      = GET-SIZE(mKeyOpad) + LENGTH(rRawDataSHA,'RAW':U).
+    PUT-BYTES(mOuterCombined, 1)                  = mKeyOpad.
+    PUT-BYTES(mOuterCombined, {&xiBlockSize} + 1) = rRawDataSHA.
+    
+    /* SHA*/
+    CASE pcSHA:
+        WHEN 'SHA1' THEN
+            ASSIGN
+                rRawDataSHA = SHA1-DIGEST(mOuterCombined).
+        WHEN 'SHA-256' THEN
+            ASSIGN
+                rRawDataSHA = MESSAGE-DIGEST('SHA-256', mOuterCombined).
+        OTHERWISE 
+        ASSIGN
+            rRawDataSHA = SHA1-DIGEST(mOuterCombined).
+    END CASE.
+    
+    /* Deallocates any memory. */
+    SET-SIZE(mKeyOpad)       = 0.
+    SET-SIZE(mOuterCombined) = 0.
+    
+    /* Convert the raw binary results into a human readable BASE-64 value.*/
+    cHMACSHA = BASE64-ENCODE(rRawDataSHA).
+    
+    &UNDEFINE xiBlockSize
+    RETURN cHMACSHA.
+END FUNCTION. /** End Of Function HMACSHA1-BASE64 */
+
+/ * Function fShortCrypt 
+   Function calculates a crypted part of key that stores information for 
+   opening correct ESI page.
+   Crypted part is combined of MSISDN + part of billing period
+   Idea:
+      MSISDN and part of billing period is put to inter variable (10 base digit)
+      Secure key is taken from this number.
+      The "10 base digit" is converted/compressed to shorter format by using "bigger base digit" 
+      Secure key and compressed parts are combined.
+     
+*/
+
 FUNCTION fShortCrypt RETURNS CHAR
    (icMSISDN AS CHAR,
     iiPeriod AS INT):
    DEF VAR lcChSet AS CHAR NO-UNDO.  /* CharSet of out string */
    DEF VAR lcNum AS CHAR NO-UNDO.    /* Temp variable */
    DEF VAR liNum AS INT64 NO-UNDO.   /* long int to be converted to new set */
-   DEF VAR liBase AS INT64 NO-UNDO.  /* base: how many chars are in char set */
+   DEF VAR liBase AS INT64 NO-UNDO.  /* base: how many chars are in the new char set */
    DEF VAR liRem AS INT64 NO-UNDO.   /* remainder in modulo */
    DEF VAR lcCharInPosition AS CHAR NO-UNDO. /* corresponding char in chset */
    DEF VAR lcOut AS CHAR NO-UNDO.    /* Result */
@@ -86,15 +256,16 @@ FUNCTION fShortCrypt RETURNS CHAR
    DEF VAR lcDigestPart AS CHAR NO-UNDO.
    DEF VAR liPosition AS INT NO-UNDO.
 
-   /*1234567890*/
-   /*123 = 3*10^0 + 2*10^1 + 1*10^2*  */
+   /* Combine input to integer variable */
    lcNum = icMSISDN + SUBSTRING(STRING(iiPeriod),3). /* 201806 -> 1806 */
    liNum = INT64(lcNum).
    lcChSet = "kD0EFGHI1Zz5fghijlmnoAYqrstNOPQRS987cdepuvwxTUVW2346abyBCJKLMX"
-   /*+ "<>|-=_.:;,!#¤%&()@§".*/ .
-   /*lcDigest = STRING(MESSAGE-DIGEST("SHA-256", lcNum, "S0mmarEn")).*/
-    lcDigest = HMAC-BASE64("SHA-256", "S0mmarEn", lcNum).
+   
+   /* Calculate secure key */
+   lcDigest = HMAC-BASE64("SHA-256", "sz009_23#opleK_NaRv0q", lcNum).
 
+   /* Transfer the understandable integer to shorter format */
+   /* 123 = 3*10^0 + 2*10^1 + 1*10^2*  */
    /* HEX test  lcChSet = "0123456789ABCDEF".*/
    liBase = LENGTH(lcChSet).
    IF liNum EQ 0 THEN lcOut = SUBSTRING(lcChSet, 1, 1).
@@ -106,9 +277,9 @@ FUNCTION fShortCrypt RETURNS CHAR
       lcOut = lcCharInPosition + lcOut.
 
    END.
+
    /* Calculete security part */
-   /* Take alphabethical characters from digest */
-   /* If there are no´t enough alphabets then assign A */
+   /* If there are not enough alphabets then assign A */
    liPosition = 1.
    lcAlpha = "abcdefghijklmnopqrstuvwxyz" +
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ".
@@ -123,8 +294,9 @@ FUNCTION fShortCrypt RETURNS CHAR
       liPosition = liPosition + 1.
 
    END.
-   lcOut = lcDigestPart + lcOut.
 
+   /* combine and return final result */  
+   lcOut = lcDigestPart + lcOut.
    RETURN lcOut.
 END.
 
@@ -153,10 +325,6 @@ FUNCTION fGenerateEinvoiceTemplate RETURNS CHAR
  
    ASSIGN
       
-      /* lcCrypted =  encrypt_data(icMSISDN + "|" + 
-                                STRING(iiPeriod),
-                                {&ENCRYPTION_METHOD}, 
-                                {&ESI_PASSPHRASE}) */
       lcCrypted = fShortCrypt(icMSISDN, iiPeriod) 
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
