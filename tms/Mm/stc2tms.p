@@ -32,6 +32,96 @@ DEF BUFFER bMergeMobSub   FOR MobSub.
 DEF BUFFER bMergeDCCLI    FOR DCCLI.
 DEF BUFFER bMergedMsOwner FOR MsOwner.
 
+/*Try and buy PH 3 YCO-969*/
+
+/* Function fTariffCompare tells if which tariffs has greater value.
+   This is used in defining nee for penalty fees.
+   Return values:
+   1:  Price of 1st is greater than 2nd then
+   2:  Price of 2nd is greater than 1st
+   3:  Similar prices
+   -1: Incorrect input parameter 1
+   -2: Incorrect input parameter 2
+*/
+FUNCTION fTariffCompare RETURNS INT
+   (icFirstTariff AS CHAR,
+    icSecondTariff AS CHAR):
+   DEF BUFFER bClitype1 FOR CLIType.
+   DEF BUFFER bClitype2 FOR CLIType.
+   FIND FIRST bClitype1 NO-LOCK WHERE
+              bClitype1.Clitype eq icFirstTariff NO-ERROR.
+   IF NOT AVAIL bClitype1 THEN RETURN -1.
+
+   FIND FIRST bClitype2 NO-LOCK WHERE
+              bClitype2.Clitype eq icSecondTariff NO-ERROR.
+   IF NOT AVAIL bClitype2 THEN RETURN -2.
+
+   IF bClitype1.CommercialFee > bClitype2.CommercialFee THEN RETURN 1.
+   ELSE IF bClitype1.CommercialFee < bClitype2.CommercialFee THEN RETURN 2.
+   ELSE RETURN 3.
+
+END FUNCTION.
+
+
+/* Function fTryBuyPenaltyNeeded indicates if the the ongoing STC causes penalty
+   or not.
+   Input parameters:
+   iiReqId: STC request ID
+   Return values:
+   TRUE: Penalty Needed
+   FALSE: No Penalty needed. NOTE. False is returned also if the req is not
+          for TryBuy tariff.
+*/
+
+
+FUNCTION fTryBuyPenaltyNeeded RETURNS LOGICAL
+   (iiReqId AS INT):
+      
+   DEF BUFFER CurrMsRequest FOR MsRequest.
+   DEF BUFFER PrevMsRequest FOR MsRequest.
+   
+   DEFINE VARIABLE lcTry&BuyCliTypes    AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcLaSinfin25CliTypes AS CHARACTER NO-UNDO.
+   
+   ASSIGN 
+      lcTry&BuyCliTypes    = fCParamC("Try&BuyCliTypes")
+      lcLaSinfin25CliTypes = fCParamC("LaSinfin25CliTypes").   
+   
+   FIND FIRST CurrMsRequest NO-LOCK WHERE
+              CurrMsRequest.MsRequest EQ iiReqId AND
+              LOOKUP(CurrMsRequest.ReqCparam1, lcTry&BuyCliTypes) > 0 NO-ERROR.
+
+   /*no return from TB tariff*/
+   IF NOT AVAIL CurrMsRequest THEN RETURN FALSE.
+
+   /* returning from TB tariff - check need for penalty */
+   /* penalty is needed if new tariff is cheaper than the original */
+   /* returning to sinfin25 -> FALSE*/
+   IF LOOKUP(CurrMsRequest.ReqCparam2, "LaSinfin25CliTypes") > 0 THEN RETURN FALSE.
+
+   /*returning to tariff before TB or more expensive -> FALSE*/
+   FIND FIRST PrevMsRequest NO-LOCK WHERE
+              PrevMsRequest.Brand EQ CurrMsRequest.Brand AND
+              PrevMsRequest.ReqType EQ CurrMsRequest.ReqType AND
+              PrevMsRequest.CustNum EQ CurrMsRequest.CustNum AND
+              PrevMsRequest.MsSeq EQ CurrMsRequest.MsSeq AND
+              PrevMsRequest.ActStamp < CurrMsRequest.ActStamp AND
+              PrevMsRequest.Reqstatus EQ 2 
+              USE-INDEX MsActStamp NO-ERROR.
+    IF AVAIL PrevMsRequest THEN DO:
+       /* If the previous stc request is for TB tariff make checks */
+       IF PrevMsRequest.ReqCparam2 EQ CurrMsRequest.ReqCparam1 THEN DO:
+          IF fTariffCompare(PrevMsRequest.ReqCparam1, /* prev */
+                            CurrMsRequest.ReqCparam2) /* new */
+          EQ 1 THEN RETURN TRUE. /*old is more valuable*/
+          ELSE RETURN FALSE.
+       END.
+    END.
+    RETURN FALSE.
+END.
+
+
+
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
@@ -397,8 +487,8 @@ PROCEDURE pFeesAndServices:
    DEF VAR lcResult           AS CHAR NO-UNDO.
    DEF VAR llAddLineDisc      AS LOG  NO-UNDO.
    DEF VAR lcAddLineDisc      AS CHAR NO-UNDO.
-
    DEF BUFFER bMember FOR DPMember.
+
    
    /* first handle services that are not on subscription level;
       fees etc. */
@@ -569,7 +659,6 @@ PROCEDURE pFeesAndServices:
       END.   
    END.
  
- 
    /* ADDLINE-20 Additional Line Discounts 
       CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type 
       ADDLINE-267 Phase 2 fix */
@@ -658,6 +747,7 @@ PROCEDURE pUpdateSubscription:
    DEF BUFFER lMLMobSub      FOR MobSub.
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
+   DEF BUFFER bMsRequest     FOR Msrequest.
    DEF BUFFER lbOrigRequest  FOR MsRequest.
 
    /* make sure that customer has a billtarget with correct rateplan */
@@ -755,8 +845,12 @@ PROCEDURE pUpdateSubscription:
          lcFixedNumber = OrderFusion.FixedNumber.
       END.
    
-   /* YTS-10293 */
-   IF fisConvergenceTariff(MsRequest.reqcparam1) AND
+   /* YTS-10293 */ 
+   IF ( fisConvergenceTariff(MsRequest.reqcparam1) OR 
+        CAN-FIND(FIRST bMsRequest /* 2p3p-merge */
+                 WHERE bMsRequest.MSRequest = MsRequest.OrigRequest
+                   AND bMsRequest.ReqType = {&REQTYPE_2P3P_MERGE}) )
+                                                 AND
       fisConvergenceTariff(MsRequest.reqcparam2) AND
       lcFixedNumber EQ ? THEN
       lcFixedNumber = mobsub.fixednumber.
@@ -1107,6 +1201,7 @@ PROCEDURE pFinalize:
    DEF VAR liTermReq             AS INT  NO-UNDO.
    DEF VAR ocResult              AS CHAR NO-UNDO.
    DEF VAR liMergeOrderId        AS INT  NO-UNDO.
+   DEF VAR lcTry&BuyCliTypes     AS CHAR NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
    DEF BUFFER Order           FOR Order.
@@ -1119,6 +1214,8 @@ PROCEDURE pFinalize:
    DEF BUFFER lbELMobSub      FOR MobSub.
    DEF BUFFER lbCustomer      FOR Customer.
    
+   ASSIGN 
+      lcTry&BuyCliTypes    = fCParamC("Try&BuyCliTypes").
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -1440,18 +1537,18 @@ PROCEDURE pFinalize:
                                    lcResult).
                END.
             END.
-			
+         
             FIND FIRST OrderCustomer NO-LOCK WHERE
                        OrderCustomer.Brand EQ Syst.Var:gcBrand AND
                        Ordercustomer.OrderID EQ Order.OrderID AND
                        OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} AND
                        OrderCustomer.TerritoryOwner NE "" NO-ERROR.
 
-				IF Avail OrderCustomer THEN DO:
+            IF Avail OrderCustomer THEN DO:
                FIND CURRENT Mobsub EXCLUSIVE-LOCK NO-ERROR.
                   ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
-               FIND CURRENT Mobsub NO-LOCK NO-ERROR.				
-				END.
+               FIND CURRENT Mobsub NO-LOCK NO-ERROR.           
+            END.
 
             /* YTS-11912 */
             IF fCLITypeIsMainLine(Order.CLIType) THEN  
@@ -1473,6 +1570,20 @@ PROCEDURE pFinalize:
 
    /* request handled succesfully */
    fReqStatus(2,"").
+  
+   /* YCO-968 */ 
+   IF LOOKUP(MsRequest.ReqCparam2, lcTry&BuyCliTypes) > 0 THEN DO:
+      lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                       "CONT_DISC_TB_20",
+                                       16.53, /* discount */
+                                       ldtActDate,
+                                       12/31/18, 
+                                       ?,
+                                       0).
+
+      IF RETURN-VALUE BEGINS "ERROR" THEN
+         RETURN RETURN-VALUE.
+   END.
   
    MERGEREQUEST:
    DO:
@@ -1872,6 +1983,11 @@ PROCEDURE pCloseContracts:
    DEF VAR llCreateFees                         AS LOG NO-UNDO.
    DEF VAR llIsSTCBetweenConvergent             AS LOG NO-UNDO.
    DEF VAR llIsSTCBetweenFixedOnlyAndConvergent AS LOG NO-UNDO.
+   
+   DEF VAR lcTry&BuyCliTypes AS CHARACTER NO-UNDO.
+
+   lcTry&BuyCliTypes  = fCParamC("Try&BuyCliTypes").
+ 
 
    EMPTY TEMP-TABLE ttContract.
 
@@ -1969,20 +2085,24 @@ PROCEDURE pCloseContracts:
          OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN 
       DO:
+         IF AVAILABLE(bOrigRequest) AND LOOKUP(bOrigRequest.ReqCparam1, lcTry&BuyCliTypes) > 0  THEN DO:
+            llCreateFees = fTryBuyPenaltyNeeded(bOrigRequest.MsRequest).
+         END.
+         ELSE DO:
          /* YDR-2038 (stc/btc to prepaid)
             ReqIParam5
             (0=no extend_term_contract
              1=extend_term_contract
              2=exclude_term_penalty)
           */
-         IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
-            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
-                                                     DayCampaign.DCEvent EQ lcContract          AND 
-                                                     DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
-             llCreateFees = FALSE.
-         ELSE 
-             llCreateFees = TRUE. 
-
+            IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
+               CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
+                                                        DayCampaign.DCEvent EQ lcContract          AND 
+                                                        DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
+                llCreateFees = FALSE.
+            ELSE 
+                llCreateFees = TRUE. 
+         END.
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
                                         lcContract,
