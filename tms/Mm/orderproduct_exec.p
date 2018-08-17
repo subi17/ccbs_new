@@ -37,7 +37,7 @@ DEFINE VARIABLE loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
 DEFINE BUFFER bf_Order FOR Order.
 
 /* ***************************  Functions  *************************** */
-FUNCTION fGetParentProductID RETURNS INT
+FUNCTION fGetParentProductIDBasedOnChild RETURNS INT
     (INPUT iiOrderID             AS INT,
      INPUT iiChildOrderProductID AS INT):
 
