@@ -105,8 +105,8 @@ form
   OrderMobile.UpdatedTS 
      LABEL "UpdatedTS ....."
      FORMAT "99999999.99999"
-  OrderMobile.ActivatedTS AT 38
-     LABEL "ActivatedTS ..."
+  OrderMobile.ActivationTS AT 38
+     LABEL "ActivationTS .."
      FORMAT "99999999.99999"
      SKIP
      
@@ -548,7 +548,7 @@ PROCEDURE local-UPDATE-record:
          OrderMobile.CreatedTS        
          OrderMobile.UpdatedTS        
          OrderMobile.CLI              
-         OrderMobile.ActivatedTS      
+         OrderMobile.ActivationTS      
          OrderMobile.RequestedPortingDate  
          OrderMobile.PortingTime      
          OrderMobile.MNPStatus        
@@ -593,7 +593,7 @@ PROCEDURE local-disp-lis:
       OrderMobile.CreatedTS        
       OrderMobile.UpdatedTS        
       OrderMobile.CLI              
-      OrderMobile.ActivatedTS      
+      OrderMobile.ActivationTS      
       OrderMobile.RequestedPortingDate  
       OrderMobile.PortingTime      
       OrderMobile.MNPStatus        
@@ -626,7 +626,7 @@ PROCEDURE pUpdate:
       UPDATE
          OrderMobile.UpdatedTS        
          OrderMobile.CLI              
-         OrderMobile.ActivatedTS      
+         OrderMobile.ActivationTS      
          OrderMobile.RequestedPortingDate  
          OrderMobile.PortingTime         
          WITH FRAME lis EDITING: 
