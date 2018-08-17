@@ -1280,6 +1280,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcPrevHandset         AS CHAR NO-UNDO.
    DEF VAR lcNewPermanency       AS CHAR NO-UNDO.
    DEF VAR lcPrevPermanency      AS CHAR NO-UNDO.
+   DEF VAR lcSFId                AS CHAR NO-UNDO INIT "MASOSS".
 
    DEF BUFFER MobSub FOR MobSub.
 
@@ -1366,10 +1367,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                         ENTRY(12,MsRequest.ReqCParam3,"|").
                END.
                WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
-                  DEF VAR lcSfId  AS CHAR NO-UNDO.
                   ASSIGN
                      lcCaseTypeId = lcFixedNumCaseTypeID
-                     lcSfId       = "MASOSS"  
                      lcCaseFileRow =
                         lcCaseTypeId                                   + lcDelim +
                         /*Contract_ID*/
