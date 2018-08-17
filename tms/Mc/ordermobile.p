@@ -66,60 +66,54 @@ form
     TITLE COLOR VALUE(Syst.Var:ctc) " MOBILE SUBSCRIPTION OF ORDER :" + STRING(iiOrderID) + " " FRAME sel.
 
 form
-  OrderMobile.Brand  
-     LABEL "Brand ........."
-  OrderMobile.OrderID   AT 46
+  OrderMobile.OrderID   
      LABEL "Order ID ......" 
-     SKIP
-
-  OrderMobile.OrderProductID 
+  OrderMobile.OrderProductID AT 38
      LABEL "Product ID ...."  
      help "Order Product ID"     
-  OrderMobile.MsSeq AT 46
-     LABEL "MsSeq ........." 
      SKIP
-
-  OrderMobile.ICC 
+     
+  OrderMobile.MsSeq 
+     LABEL "MsSeq ........." 
+  OrderMobile.ICC AT 38
      LABEL "ICC ..........."
-     FORMAT "X(12)"
-  OrderMobile.Product AT 46
+     SKIP
+  
+  OrderMobile.NumberType 
+     LABEL "Number Type ..." 
+     FORMAT "X(12)"    
+  OrderMobile.Product AT 38
      LABEL "Order Product ." 
      SKIP
 
-  OrderMobile.NumberType 
-     LABEL "Number Type ..." 
-     FORMAT "X(12)" 
-  OrderMobile.CurrOper AT 46
-     LABEL "Curr.Operator ." 
-     SKIP
- 
   OrderMobile.StatusCode 
      LABEL "StatusCode ...."
      HELP  "StatusCode" 
      FORMAT "X(12)"
-  OrderMobile.CLI AT 46
-     LABEL "CLI ..........."
-     FORMAT "X(12)"
+  OrderMobile.CurrOper AT 38
+     LABEL "Curr.Operator ." 
      SKIP
-     
-  
+ 
   OrderMobile.CreatedTS 
      LABEL "CreatedTS ....."
      FORMAT "99999999.99999"
-  OrderMobile.UpdatedTS AT 46
+  OrderMobile.CLI AT 38
+     LABEL "CLI ..........."
+     FORMAT "X(12)"
+     SKIP
+  
+  OrderMobile.UpdatedTS 
      LABEL "UpdatedTS ....."
      FORMAT "99999999.99999"
-     SKIP
-     
-  OrderMobile.ActivationTS
-     LABEL "ActivationTS .."
+  OrderMobile.ActivatedTS AT 38
+     LABEL "ActivatedTS ..."
      FORMAT "99999999.99999"
      SKIP
      
   OrderMobile.RequestedPortingDate
      LABEL "REQ.PortDate .."
      FORMAT "99-99-9999"
-  OrderMobile.PortingTime AT 46
+  OrderMobile.PortingTime AT 38
      LABEL "PortTime ......"
      FORMAT "99.99"
      SKIP    
@@ -127,18 +121,13 @@ form
   OrderMobile.MNPStatus 
      LABEL "MNP Status ...." 
      FORMAT "99"     
-  OrderMobile.OldICC AT 46
+  OrderMobile.OldICC AT 38
      LABEL "Old ICC ......."
      FORMAT "X(12)"
      SKIP          
      
-  OrderMobile.OldPayType       
-     LABEL "Old PayType ..."
-     FORMAT "YES/NO"
-  OrderMobile.PayType AT 46
+  OrderMobile.PayType       
      LABEL "PayType ......."
-     FORMAT "YES/NO"
-     SKIP
   
   WITH  CENTERED OVERLAY ROW 1 WIDTH 80 
   SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
@@ -429,22 +418,21 @@ BROWSE:
          FIND FIRST OrderMobile where 
               recid(OrderMobile) = rtab[frame-line(sel)]
          no-lock.
-         assign ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
-         RUN Syst/ufkey.p.
+         assign ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 9.
 
-         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderMobile).
 
-         RUN LOCAL-UPDATE-RECORD(FALSE).
+         RUN local-disp-lis.
 
          IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
          KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
        
+         RUN local-disp-row.
+         
          xrecid = recid(OrderMobile).
-
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderMobile).
-
+         LEAVE.
       END.
 
       ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
@@ -549,7 +537,6 @@ PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
        
       DISPLAY 
-         OrderMobile.Brand            
          OrderMobile.OrderID          
          OrderMobile.OrderProductID   
          OrderMobile.MsSeq            
@@ -561,12 +548,11 @@ PROCEDURE local-UPDATE-record:
          OrderMobile.CreatedTS        
          OrderMobile.UpdatedTS        
          OrderMobile.CLI              
-         OrderMobile.ActivationTS      
+         OrderMobile.ActivatedTS      
          OrderMobile.RequestedPortingDate  
          OrderMobile.PortingTime      
          OrderMobile.MNPStatus        
          OrderMobile.OldICC           
-         OrderMobile.OldPayType       
          OrderMobile.PayType   
          WITH FRAME lis.
          
@@ -596,7 +582,6 @@ PROCEDURE local-disp-lis:
       
    RUN local-find-others.
    DISP
-      OrderMobile.Brand            
       OrderMobile.OrderID          
       OrderMobile.OrderProductID   
       OrderMobile.MsSeq            
@@ -608,12 +593,11 @@ PROCEDURE local-disp-lis:
       OrderMobile.CreatedTS        
       OrderMobile.UpdatedTS        
       OrderMobile.CLI              
-      OrderMobile.ActivationTS      
+      OrderMobile.ActivatedTS      
       OrderMobile.RequestedPortingDate  
       OrderMobile.PortingTime      
       OrderMobile.MNPStatus        
       OrderMobile.OldICC           
-      OrderMobile.OldPayType       
       OrderMobile.PayType   
       WITH FRAME lis.
       
@@ -642,7 +626,7 @@ PROCEDURE pUpdate:
       UPDATE
          OrderMobile.UpdatedTS        
          OrderMobile.CLI              
-         OrderMobile.ActivationTS      
+         OrderMobile.ActivatedTS      
          OrderMobile.RequestedPortingDate  
          OrderMobile.PortingTime         
          WITH FRAME lis EDITING: 

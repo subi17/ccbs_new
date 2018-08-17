@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: orderproduct.P
-  TASK .........: ORDER PRODUCTS
+  MODULE .......: customeraccount.P
+  TASK .........: Customer Account for the Order
   APPLICATION ..: TMS
   AUTHOR .......: srvuddan
-  CREATED ......: 23-07-2018
+  CREATED ......: 11-08-2018
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
 {Syst/eventval.i}
@@ -14,22 +14,22 @@ DO:
    
    {Func/lib/eventlog.i}
       
-   DEFINE VARIABLE lhOrderProduct AS HANDLE NO-UNDO.
-   lhOrderProduct = BUFFER OrderProduct:HANDLE.
-   RUN StarEventInitialize(lhOrderProduct).
+   DEFINE VARIABLE lhCustomerAccount AS HANDLE NO-UNDO.
+   lhCustomerAccount = BUFFER CustomerAccount:HANDLE.
+   RUN StarEventInitialize(lhCustomerAccount).
               
 ON F12 ANYWHERE 
    DO:
-      RUN Mc/eventview2.p(lhOrderProduct).
+      RUN Mc/eventview2.p(lhCustomerAccount).
    END.
    
 END.
 
-DEF INPUT PARAMETER iiOrderID AS INT  NO-UNDO.
+DEF INPUT PARAMETER iiAccountID AS INT  NO-UNDO.
 
 DEF /* NEW */ shared VAR siirto       AS CHAR.
 
-DEF VAR OrderProduct LIKE OrderProduct.ProductID NO-UNDO.
+DEF VAR CustomerAccount LIKE CustomerAccount.AccountID NO-UNDO.
 DEF VAR xrecid       AS RECID init ?.
 DEF VAR FIRSTrow     AS INT   NO-UNDO init 0.
 DEF VAR FrmRow       AS INT   NO-UNDO init 1.
@@ -52,31 +52,30 @@ DEF VAR ok           AS log   format "Yes/No" NO-UNDO.
 DEF VAR lcHeader     AS CHAR  NO-UNDO.
 
 form
-    OrderProduct.OrderProductID    FORMAT ">>>>>9" COLUMN-LABEL "OrderProductID"
-    OrderProduct.ProductID         FORMAT "X(12)"
-    OrderProduct.ParentID          FORMAT ">>>9" 
-    OrderProduct.ActionType        FORMAT "X(24)"
-    OrderProduct.StatusCode        
-    WITH OVERLAY ROW FrmRow WIDTH 80 CENTERED FrmDown DOWN
+    CustomerAccount.AccountID   FORMAT ">>>>>>>9" COLUMN-LABEL "AccountID"
+    CustomerAccount.CustNum     FORMAT ">>>>>>>>9"
+    CustomerAccount.DefaultAcc  FORMAT "Yes/No" 
+    CustomerAccount.AccountName FORMAT "X(15)" 
+    CustomerAccount.statuscode  FORMAT ">>>>>>>9"
+    WITH OVERLAY ROW FrmRow WIDTH 80 CENTERED SCROLL 1 FrmDown DOWN
     COLOR VALUE(Syst.Var:cfc)   
-    TITLE COLOR VALUE(Syst.Var:ctc) " PRODUCTS OF ORDER:" + STRING(iiOrderID) + " " FRAME sel.
+    TITLE COLOR VALUE(Syst.Var:ctc) " CUSTOMER ACCOUNT OF ORDER:" + STRING(iiAccountID) + " " FRAME sel.
     
 form
-    OrderProduct.OrderID           COLON 20
-    OrderProduct.OrderProductID    COLON 20 FORMAT ">>>>>>>9" COLUMN-LABEL "ProductID"
-    OrderProduct.ProductID         COLON 20 FORMAT "X(20)"
-    OrderProduct.ProductOfferingID COLON 20 FORMAT "X(24)" 
-    OrderProduct.ActionType        COLON 20 FORMAT "X(24)"
-    OrderProduct.ParentID          COLON 20 FORMAT ">>>>>>>>9"
-    OrderProduct.ITGroupID         COLON 20 FORMAT ">>>>>>>>>9"
-    OrderProduct.StatusCode        COLON 20 FORMAT "X(8)"
+    CustomerAccount.AccountID   COLON 20  
+    CustomerAccount.CustNum     COLON 20 
+    CustomerAccount.DefaultAcc  COLON 20 
+    CustomerAccount.AccountName COLON 20 
+    CustomerAccount.statuscode  COLON 20 
+    CustomerAccount.FromDate    COLON 20
+    CustomerAccount.ToDate      COLON 20
     WITH  OVERLAY ROW 4 CENTERED 
     COLOR VALUE(Syst.Var:cfc)
     TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
     
-IF iiOrderID > 0 THEN ASSIGN 
+IF iiAccountID > 0 THEN ASSIGN 
    order = 1
    maxorder = 1
    FrmRow = 3
@@ -89,12 +88,12 @@ VIEW FRAME sel.
 
 RUN local-find-first.
 
-IF AVAILABLE OrderProduct THEN ASSIGN
-        Memory     = recid(OrderProduct)
+IF AVAILABLE CustomerAccount THEN ASSIGN
+        Memory     = recid(CustomerAccount)
         must-print = TRUE
         must-add   = FALSE.
 ELSE DO: 
-MESSAGE "No Order Products available !" VIEW-AS ALERT-BOX.
+MESSAGE "No Customer Account available !" VIEW-AS ALERT-BOX.
 ASSIGN
         Memory     = ?
         must-print = FALSE
@@ -110,7 +109,7 @@ REPEAT WITH FRAME sel:
    END.
 
    IF must-add THEN 
-   DO:  /* Add a OrderProduct  */
+   DO:  /* Add a CustomerAccount  */
       ASSIGN 
          Syst.Var:cfc = "lis" 
          ufkey        = true 
@@ -128,29 +127,29 @@ REPEAT WITH FRAME sel:
            
               CLEAR FRAME lis NO-PAUSE.
               
-              PROMPT-FOR OrderProduct.OrderProductID
-                 VALIDATE(OrderProduct.OrderProductID = "" OR
-                 NOT can-find(OrderProduct WHERE 
-                 OrderProduct.OrderProductID = INPUT FRAME lis OrderProduct.OrderProductID),
-                 "OrderProducts " + string(INPUT OrderProduct.OrderProductID) +
+              PROMPT-FOR CustomerAccount.AccountID
+                 VALIDATE(CustomerAccount.AccountID = "" OR
+                 NOT can-find(CustomerAccount WHERE 
+                 CustomerAccount.AccountID = INPUT FRAME lis CustomerAccount.AccountID),
+                 "CustomerAccount " + string(INPUT CustomerAccount.AccountID) +
                  " already exists !").
-              IF INPUT OrderProduct.OrderProductID NOT ENTERED THEN 
+              IF INPUT CustomerAccount.AccountID NOT ENTERED THEN 
                  LEAVE add-row.
                
-              CREATE OrderProduct.
+              CREATE CustomerAccount.
               ASSIGN
-                 OrderProduct.OrderProductID = INPUT FRAME lis 
-                                         OrderProduct.OrderProductID.
+                 CustomerAccount.AccountID = INPUT FRAME lis 
+                                         CustomerAccount.AccountID.
 
               RUN local-UPDATE-record.
 
               IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 THEN
                  UNDO add-row, LEAVE add-row.
 
-              IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhOrderProduct).
+              IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhCustomerAccount).
               
               ASSIGN
-                 Memory = recid(OrderProduct)
+                 Memory = recid(CustomerAccount)
                  xrecid = Memory.
               LEAVE.
            END.
@@ -161,10 +160,10 @@ REPEAT WITH FRAME sel:
            must-print = TRUE.
 
         /* is there ANY record ? */
-        FIND FIRST OrderProduct WHERE 
-                   OrderProduct.OrderID = iiOrderID
+        FIND FIRST CustomerAccount WHERE 
+                   CustomerAccount.AccountID = iiAccountID
        /* srule */ NO-LOCK NO-ERROR.
-        IF NOT AVAILABLE OrderProduct THEN LEAVE LOOP.
+        IF NOT AVAILABLE CustomerAccount THEN LEAVE LOOP.
         NEXT LOOP.
     END.
     
@@ -173,7 +172,7 @@ REPEAT WITH FRAME sel:
        IF must-print THEN 
        DO:
           UP FRAME-LINE - 1.
-          FIND OrderProduct WHERE recid(OrderProduct) = Memory NO-LOCK NO-ERROR.
+          FIND CustomerAccount WHERE recid(CustomerAccount) = Memory NO-LOCK NO-ERROR.
 
           /* DISPLAY one page beginning the record 
           whose RECID is saved into 'Memory'.
@@ -183,10 +182,10 @@ REPEAT WITH FRAME sel:
           IF delrow > 0 THEN DOWN delrow - 1.
 
           REPEAT WITH FRAME sel:
-             IF AVAILABLE OrderProduct THEN 
+             IF AVAILABLE CustomerAccount THEN 
                 DO:
                    RUN local-disp-row.
-                   rtab[FRAME-LINE] = recid(OrderProduct).
+                   rtab[FRAME-LINE] = recid(CustomerAccount).
                    RUN local-find-NEXT.
                 END.
              ELSE 
@@ -218,7 +217,7 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-            Syst.Var:ufk[1]= 9861 Syst.Var:ufk[2]= 9862 Syst.Var:ufk[3]= 9863  Syst.Var:ufk[4]= 0
+            Syst.Var:ufk[1]= 0 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
             Syst.Var:ufk[5]= 0  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
             Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
@@ -227,14 +226,14 @@ BROWSE:
       
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW OrderProduct.OrderProductID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.Var:ccc) OrderProduct.OrderProductID WITH FRAME sel.
+         CHOOSE ROW CustomerAccount.AccountID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) CustomerAccount.AccountID WITH FRAME sel.
       END.
-      ELSE IF order = 2 THEN DO:
-         CHOOSE ROW OrderProduct.ProductID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.Var:ccc) OrderProduct.ProductID WITH FRAME sel.
+  /*    ELSE IF order = 2 THEN DO:
+         CHOOSE ROW CustomerAccount.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) CustomerAccount.CustNum WITH FRAME sel.
       END.  
-
+*/
       Syst.Var:nap = keylabel(LASTKEY).
       
       IF rtab[FRAME-LINE] = ? THEN DO:
@@ -257,11 +256,11 @@ BROWSE:
          ASSIGN 
             FIRSTrow = 0 
             Memory   = rtab[FRAME-LINE].
-         FIND OrderProduct WHERE recid(OrderProduct) = Memory NO-LOCK.
+         FIND CustomerAccount WHERE recid(CustomerAccount) = Memory NO-LOCK.
          DO i = 1 TO FRAME-LINE - 1:
             RUN local-find-PREV.
-            IF AVAILABLE OrderProduct THEN
-               ASSIGN FIRSTrow = i Memory   = recid(OrderProduct).
+            IF AVAILABLE CustomerAccount THEN
+               ASSIGN FIRSTrow = i Memory   = recid(CustomerAccount).
             ELSE LEAVE.
          END.
          must-print = TRUE.
@@ -273,7 +272,7 @@ BROWSE:
          IF FRAME-LINE = 1 THEN DO:
             RUN local-find-this(FALSE).
             RUN local-find-PREV.
-            IF NOT AVAILABLE OrderProduct THEN DO:
+            IF NOT AVAILABLE CustomerAccount THEN DO:
                MESSAGE "YOU ARE ON THE FIRST ROW !".
                BELL. PAUSE 1 NO-MESSAGE.
                NEXT BROWSE.
@@ -286,7 +285,7 @@ BROWSE:
                   rtab[i] = rtab[i - 1].
                END.
                ASSIGN
-                  rtab[1] = recid(OrderProduct)
+                  rtab[1] = recid(CustomerAccount)
                   Memory  = rtab[1].
             END.
         END.
@@ -299,7 +298,7 @@ BROWSE:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             RUN local-find-this(FALSE).
             RUN local-find-NEXT.
-            IF NOT AVAILABLE OrderProduct THEN DO:
+            IF NOT AVAILABLE CustomerAccount THEN DO:
                MESSAGE "YOU ARE ON THE LAST ROW !".
                BELL. PAUSE 1 NO-MESSAGE.
                NEXT BROWSE.
@@ -311,7 +310,7 @@ BROWSE:
                DO i = 1 TO FRAME-DOWN - 1:
                   rtab[i] = rtab[i + 1].
                END.
-               rtab[FRAME-DOWN] = recid(OrderProduct).
+               rtab[FRAME-DOWN] = recid(CustomerAccount).
                /* save RECID of uppermost ROW */
                Memory = rtab[1].
            END.
@@ -322,15 +321,15 @@ BROWSE:
       /* PREV page */
       ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
-         FIND OrderProduct WHERE recid(OrderProduct) = Memory NO-LOCK NO-ERROR.
+         FIND CustomerAccount WHERE recid(CustomerAccount) = Memory NO-LOCK NO-ERROR.
          RUN local-find-PREV.
-         IF AVAILABLE OrderProduct THEN DO:
-            Memory = recid(OrderProduct).
+         IF AVAILABLE CustomerAccount THEN DO:
+            Memory = recid(CustomerAccount).
 
             /* reverse 1 page */
             DO RowNo = 1 TO (FRAME-DOWN - 1):
                RUN local-find-PREV.
-               IF AVAILABLE OrderProduct THEN Memory = recid(OrderProduct).
+               IF AVAILABLE CustomerAccount THEN Memory = recid(CustomerAccount).
                ELSE RowNo = FRAME-DOWN.
             END.
             must-print = TRUE.
@@ -352,32 +351,11 @@ BROWSE:
          END.
          ELSE DO: /* downmost ROW was NOT empty*/
             Memory = rtab[FRAME-DOWN].
-            FIND OrderProduct WHERE recid(OrderProduct) = Memory NO-LOCK.
+            FIND CustomerAccount WHERE recid(CustomerAccount) = Memory NO-LOCK.
             must-print = TRUE.
             NEXT LOOP.
          END.
       END. /* NEXT page */
-     
-      ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
-         FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.
-         RUN Mc/orderproductparam.p(iiOrderID,OrderProduct.OrderProductID).
-         ufkey = TRUE.  
-         NEXT loop.
-      END. 
-     
-      ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO:
-         FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.
-         RUN Mc/ordermobile.p(iiOrderID,OrderProduct.OrderProductID).
-         ufkey = TRUE.  
-         NEXT loop.
-      END. 
-      
-      ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:
-         FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.
-         RUN Mc/orderfusion.p(iiOrderID).
-         ufkey = TRUE.  
-         NEXT loop.
-      END. 
      
       ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
          REPEAT WITH FRAME lis TRANSACTION
@@ -395,20 +373,20 @@ BROWSE:
         
          RUN local-disp-row.
           
-         xrecid = recid(OrderProduct).
+         xrecid = recid(CustomerAccount).
          LEAVE.
          
       END.
       
       ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
          RUN local-find-FIRST.
-         ASSIGN Memory = recid(OrderProduct) must-print = TRUE.
+         ASSIGN Memory = recid(CustomerAccount) must-print = TRUE.
          NEXT LOOP.
       END.
 
       ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
          RUN local-find-LAST.
-         ASSIGN Memory = recid(OrderProduct) must-print = TRUE.
+         ASSIGN Memory = recid(CustomerAccount) must-print = TRUE.
          NEXT LOOP.
       END.
 
@@ -424,34 +402,34 @@ PROCEDURE local-find-this:
    DEF INPUT PARAMETER exlock AS lo NO-UNDO.
 
    IF exlock THEN
-      FIND OrderProduct WHERE recid(OrderProduct) = rtab[frame-line(sel)] 
+      FIND CustomerAccount WHERE recid(CustomerAccount) = rtab[frame-line(sel)] 
       EXCLUSIVE-LOCK.
    ELSE
-      FIND OrderProduct WHERE recid(OrderProduct) = rtab[frame-line(sel)] 
+      FIND CustomerAccount WHERE recid(CustomerAccount) = rtab[frame-line(sel)] 
       NO-LOCK.
 END PROCEDURE.
         
 PROCEDURE local-find-FIRST:
-   FIND FIRST OrderProduct WHERE
-              OrderProduct.OrderID = iiOrderID
+   FIND FIRST CustomerAccount WHERE
+              CustomerAccount.AccountID = iiAccountID
               NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
-   IF order = 1 THEN FIND LAST OrderProduct WHERE
-      OrderProduct.OrderID = iiOrderID
+   IF order = 1 THEN FIND LAST CustomerAccount WHERE
+      CustomerAccount.AccountID = iiAccountID
       NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
-   IF order = 1 THEN FIND NEXT OrderProduct WHERE
-      OrderProduct.OrderID = iiOrderID
+   IF order = 1 THEN FIND NEXT CustomerAccount WHERE
+      CustomerAccount.AccountID = iiAccountID
       NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
-   IF order = 1 THEN FIND PREV OrderProduct WHERE
-      OrderProduct.OrderID = iiOrderID
+   IF order = 1 THEN FIND PREV CustomerAccount WHERE
+      CustomerAccount.AccountID = iiAccountID
       NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -459,11 +437,11 @@ PROCEDURE local-disp-row:
    RUN local-find-others.
    CLEAR FRAME sel NO-PAUSE.
    DISPLAY 
-      OrderProduct.OrderProductID    
-      OrderProduct.ProductID         
-      OrderProduct.ParentID           
-      OrderProduct.ActionType        
-      OrderProduct.StatusCode  
+      CustomerAccount.AccountID
+      CustomerAccount.CustNum
+      CustomerAccount.DefaultAcc
+      CustomerAccount.AccountName
+      CustomerAccount.StatusCode
       WITH FRAME sel.       
             
 END PROCEDURE.
@@ -476,14 +454,13 @@ PROCEDURE local-disp-lis:
    RUN local-find-others.
    CLEAR FRAME lis NO-PAUSE.
    DISPLAY
-      OrderProduct.OrderID           
-      OrderProduct.OrderProductID    
-      OrderProduct.ProductID         
-      OrderProduct.ProductOfferingID  
-      OrderProduct.ActionType        
-      OrderProduct.ParentID          
-      OrderProduct.ITGroupID         
-      OrderProduct.StatusCode 
+      CustomerAccount.AccountID
+      CustomerAccount.CustNum
+      CustomerAccount.DefaultAcc
+      CustomerAccount.AccountName
+      CustomerAccount.statuscode
+      CustomerAccount.FromDate
+      CustomerAccount.ToDate
       with frame lis. 
     
 END PROCEDURE.    
@@ -492,26 +469,22 @@ PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
       DISPLAY
-         OrderProduct.OrderID           
-         OrderProduct.OrderProductID    
-         OrderProduct.ProductID         
-         OrderProduct.ProductOfferingID  
-         OrderProduct.ActionType        
-         OrderProduct.ParentID          
-         OrderProduct.ITGroupID         
-         OrderProduct.StatusCode 
-         with frame lis. 
+         CustomerAccount.AccountID
+         CustomerAccount.CustNum
+         CustomerAccount.DefaultAcc
+         CustomerAccount.AccountName
+         CustomerAccount.statuscode
+         CustomerAccount.FromDate
+         CustomerAccount.ToDate
+         WITH FRAME lis.
       
       UPDATE
-         OrderProduct.OrderID           
-         OrderProduct.OrderProductID    
-         OrderProduct.ProductID         
-         OrderProduct.ProductOfferingID  
-         OrderProduct.ActionType        
-         OrderProduct.ParentID          
-         OrderProduct.ITGroupID         
-         OrderProduct.StatusCode 
-         with frame lis. 
+         CustomerAccount.DefaultAcc
+         CustomerAccount.AccountName
+         CustomerAccount.statuscode
+         CustomerAccount.FromDate
+         CustomerAccount.ToDate
+         WITH FRAME lis. 
       LEAVE.
    END.
 END PROCEDURE.
