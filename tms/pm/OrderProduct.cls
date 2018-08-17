@@ -123,8 +123,10 @@ CLASS pm.OrderProduct ABSTRACT IMPLEMENTS bss.cls.IObjectStorage:
             abOrderProduct.ProductOfferingID = THIS-OBJECT:productOfferingID
             abOrderProduct.ParentID          = THIS-OBJECT:ParentID
             abOrderProduct.ITGroupID         = THIS-OBJECT:itGroupId
-            abOrderProduct.StatusCode        = objOrder:statusCode
             .
+            
+        IF THIS-OBJECT:ParentID = 0 THEN 
+            abOrderProduct.StatusCode = objOrder:statusCode.   
      
         mStoreDataForType().
 

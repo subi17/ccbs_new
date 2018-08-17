@@ -1195,7 +1195,7 @@ CLASS Func.Common FINAL:
        
    END METHOD.
    
-   METHOD PUBLIC STATIC INT64 mConvertSppedtoBits(INPUT icSpeed AS CHARACTER):
+   METHOD PUBLIC STATIC INT64 mConvertSpeedtoBits(INPUT icSpeed AS CHARACTER):
        
        IF INDEX(icSpeed,"K") > 0 THEN
        DO:

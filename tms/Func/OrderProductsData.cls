@@ -231,8 +231,7 @@ CLASS Func.OrderProductsData FINAL:
         DEFINE BUFFER bfpcOrderMobile FOR OrderMobile.
         
         FIND FIRST bfpcOrderMobile  
-            WHERE  bfpcOrderMobile.Brand     = Syst.Var:gcBrand  
-              AND  bfpcOrderMobile.OrderID   = iiOrderID NO-LOCK NO-ERROR.
+            WHERE bfpcOrderMobile.OrderID   = iiOrderID NO-LOCK NO-ERROR.
             
         IF NOT AVAILABLE bfpcOrderMobile THEN RETURN "".
         
