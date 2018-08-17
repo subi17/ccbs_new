@@ -36,7 +36,7 @@ CLASS Gwy.SAPC.Service.CreateOrder.SIM INHERITS ServiceObject:
       NO-ERROR.
 
       IF NOT AVAILABLE SIM
-      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot SIM with ICC '&1'",
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find SIM with ICC '&1'",
                                                aoProCommandOrder:acICC)).
       
       FIND FIRST IMSI NO-LOCK WHERE 

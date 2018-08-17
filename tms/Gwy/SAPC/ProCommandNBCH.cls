@@ -85,6 +85,10 @@ CLASS Gwy.SAPC.ProCommandNBCH INHERITS ProCommandOrder:
                     aoOrderEnum      = OrderEnum:DATAPLAN_ADD
                     acProCommandType = "ADD_DATAPLAN".
          END.
+         WHEN {&REQTYPE_ICC_CHANGE}
+         THEN ASSIGN
+                 aoOrderEnum      = OrderEnum:CHANGE_SIM
+                 acProCommandType = "CHANGE_SIM".
          OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandNBCH cannot " +
                                                        "handle ReqType &1",
                                                        MsRequest.ReqType)).
