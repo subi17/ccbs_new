@@ -1460,7 +1460,7 @@ PROCEDURE pFinalize:
    fReqStatus(2,"").
 
    /* YCO-968 */ 
-   IF LOOKUP(MsRequest.ReqCparam1, lcTry&BuyCliTypes) > 0 THEN DO:
+   IF LOOKUP(MsRequest.ReqCparam2, lcTry&BuyCliTypes) > 0 THEN DO:
       lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
                                        "CONT_DISC_TB_20",
                                        16.53, /* discount */
