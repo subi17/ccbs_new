@@ -58,7 +58,18 @@ FUNCTION fGetParentProductID RETURNS INT
     DEFINE BUFFER bf_OrderProduct FOR OrderProduct.
 
     IF icProductType = {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
-       ASSIGN lcProductType = (IF CAN-FIND(FIRST ) THEN {&ORDER_PRODUCT_FIXED_LINE} ELSE {&ORDER_PRODUCT_MOBILE}).
+       ASSIGN lcProductType = (IF CAN-FIND(FIRST bf_OrderProduct WHERE 
+                                                 bf_OrderProduct.OrderId  = iiOrderID AND 
+                                                 bf_OrderProduct.ParentID = 0         AND 
+                                                 bf_OrderProduct.ActionType = {&ORDER_PRODUCT_FIXED_LINE} NO-LOCK) THEN 
+                                  {&ORDER_PRODUCT_FIXED_LINE} 
+                               ELSE IF CAN-FIND(FIRST bf_OrderProduct WHERE 
+                                                      bf_OrderProduct.OrderId  = iiOrderID AND 
+                                                      bf_OrderProduct.ParentID = 0         AND 
+                                                      bf_OrderProduct.ActionType = {&ORDER_PRODUCT_MOBILE} NO-LOCK) THEN 
+                                  {&ORDER_PRODUCT_MOBILE}
+                               ELSE 
+                                  {&ORDER_PRODUCT_GENERIC}).
 
     FIND FIRST bf_OrderProduct WHERE bf_OrderProduct.OrderId    = iiOrderID     AND  
                                      bf_OrderProduct.ParentID   = 0             AND 
