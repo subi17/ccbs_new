@@ -52,10 +52,11 @@ DEF VAR ok           AS log   format "Yes/No" NO-UNDO.
 DEF VAR lcHeader     AS CHAR  NO-UNDO.
 
 form
-    OrderProduct.OrderProductID    FORMAT ">>>>>>>9" COLUMN-LABEL "OrderProductID"
-    OrderProduct.ProductID         FORMAT "X(20)"
-    OrderProduct.ProductOfferingID FORMAT "X(20)" 
-    OrderProduct.ActionType        FORMAT "X(15)" 
+    OrderProduct.OrderProductID    FORMAT ">>>>>9" COLUMN-LABEL "OrderProductID"
+    OrderProduct.ProductID         FORMAT "X(12)"
+    OrderProduct.ParentID          FORMAT ">>>9" 
+    OrderProduct.ActionType        FORMAT "X(24)"
+    OrderProduct.StatusCode        
     WITH OVERLAY ROW FrmRow WIDTH 80 CENTERED FrmDown DOWN
     COLOR VALUE(Syst.Var:cfc)   
     TITLE COLOR VALUE(Syst.Var:ctc) " PRODUCTS OF ORDER:" + STRING(iiOrderID) + " " FRAME sel.
@@ -64,9 +65,11 @@ form
     OrderProduct.OrderID           COLON 20
     OrderProduct.OrderProductID    COLON 20 FORMAT ">>>>>>>9" COLUMN-LABEL "ProductID"
     OrderProduct.ProductID         COLON 20 FORMAT "X(20)"
-    OrderProduct.ProductOfferingID COLON 20 FORMAT "X(20)" 
-    OrderProduct.ActionType        COLON 20 FORMAT "X(15)"
-    OrderProduct.ParentID          COLON 20 
+    OrderProduct.ProductOfferingID COLON 20 FORMAT "X(24)" 
+    OrderProduct.ActionType        COLON 20 FORMAT "X(24)"
+    OrderProduct.ParentID          COLON 20 FORMAT ">>>>>>>>9"
+    OrderProduct.ITGroupID         COLON 20 FORMAT ">>>>>>>>>9"
+    OrderProduct.StatusCode        COLON 20 FORMAT "X(8)"
     WITH  OVERLAY ROW 4 CENTERED 
     COLOR VALUE(Syst.Var:cfc)
     TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
@@ -456,10 +459,11 @@ PROCEDURE local-disp-row:
    RUN local-find-others.
    CLEAR FRAME sel NO-PAUSE.
    DISPLAY 
-      OrderProduct.OrderProductID
-      OrderProduct.ProductID
-      OrderProduct.ProductOfferingID
-      OrderProduct.ActionType
+      OrderProduct.OrderProductID    
+      OrderProduct.ProductID         
+      OrderProduct.ParentID           
+      OrderProduct.ActionType        
+      OrderProduct.StatusCode  
       WITH FRAME sel.       
             
 END PROCEDURE.
@@ -472,11 +476,14 @@ PROCEDURE local-disp-lis:
    RUN local-find-others.
    CLEAR FRAME lis NO-PAUSE.
    DISPLAY
-      OrderProduct.OrderID
-      OrderProduct.OrderProductID
-      OrderProduct.ProductID
-      OrderProduct.ProductOfferingID
-      OrderProduct.ActionType 
+      OrderProduct.OrderID           
+      OrderProduct.OrderProductID    
+      OrderProduct.ProductID         
+      OrderProduct.ProductOfferingID  
+      OrderProduct.ActionType        
+      OrderProduct.ParentID          
+      OrderProduct.ITGroupID         
+      OrderProduct.StatusCode 
       with frame lis. 
     
 END PROCEDURE.    
@@ -484,20 +491,27 @@ END PROCEDURE.
 PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
-      DISP
-         OrderProduct.OrderProductId
-         OrderProduct.ParentID
-         OrderProduct.ProductID
-         OrderProduct.ProductOfferingID
-         OrderProduct.ActionType 
-         WITH FRAME lis.
+      DISPLAY
+         OrderProduct.OrderID           
+         OrderProduct.OrderProductID    
+         OrderProduct.ProductID         
+         OrderProduct.ProductOfferingID  
+         OrderProduct.ActionType        
+         OrderProduct.ParentID          
+         OrderProduct.ITGroupID         
+         OrderProduct.StatusCode 
+         with frame lis. 
       
       UPDATE
-         OrderProduct.ParentID
-         OrderProduct.ProductID
-         OrderProduct.ProductOfferingID
-         OrderProduct.ActionType
-         WITH FRAME lis. 
+         OrderProduct.OrderID           
+         OrderProduct.OrderProductID    
+         OrderProduct.ProductID         
+         OrderProduct.ProductOfferingID  
+         OrderProduct.ActionType        
+         OrderProduct.ParentID          
+         OrderProduct.ITGroupID         
+         OrderProduct.StatusCode 
+         with frame lis. 
       LEAVE.
    END.
 END PROCEDURE.
