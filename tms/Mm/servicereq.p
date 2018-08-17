@@ -20,7 +20,6 @@
 {Func/remfees.i}
 {Func/barrfunc.i}
 {Func/fmakesms.i}
-{Func/SAPC.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -32,7 +31,7 @@ DEF BUFFER bSSPara   FOR SubSerPara.
 
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE {&REQTYPE_SERVICE_CHANGE} OR
+IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 1 OR
    MsRequest.ReqCparam1 EQ "" THEN RETURN "ERROR".
 
 /* pending for subrequest (used in reset process) */
@@ -73,13 +72,6 @@ PROCEDURE pServCompSolog:
       
    IF NOT AVAILABLE MobSub THEN DO:
       fReqError("MobSub not found").
-      RETURN.
-   END.
-
-   FIND Customer OF MobSub NO-LOCK NO-ERROR. 
-   IF NOT AVAILABLE Customer THEN
-   DO:
-      fReqError("Customer not found").
       RETURN.
    END.
 
@@ -134,36 +126,18 @@ PROCEDURE pServCompSolog:
                        OUTPUT ldeReqAmt,
                        OUTPUT liReqCnt).
    
-   /* SAPC-44 redirecting new SAPC customers to new logic */
-   IF Customer.AccGrp = 2 AND 
-      fIsFunctionAvailInSAPC(Msrequest.msrequest) THEN
-   DO:
-      /* create procommand */
-      RUN Mm/setSAPC.p(MsRequest.MSRequest,
-                       OUTPUT liReqCnt,
-                       OUTPUT lcError).
+   /* create solog */
+   RUN Mm/setms.p(MsRequest.MSRequest,
+             TRUE,
+             OUTPUT liReqCnt,
+             OUTPUT lcError).
 
-      /* error occurred */
-      IF liReqCnt < 0 OR lcError BEGINS "ERROR" THEN DO:
-          fReqError("ProCommand creation failed:" + lcError).
-          RETURN.
-      END.
+   /* error occurred */
+   IF liReqCnt < 0 OR lcError BEGINS "ERROR" THEN DO:
+      fReqError("Solog creation failed:" + lcError).
+      RETURN.
    END.
-   ELSE DO:
-      /* create solog */
-      RUN Mm/setms.p(MsRequest.MSRequest,
-                    TRUE,
-                    OUTPUT liReqCnt,
-                    OUTPUT lcError).
-
-      /* error occurred */
-      IF liReqCnt < 0 OR lcError BEGINS "ERROR" THEN DO:
-          fReqError("Solog creation failed:" + lcError).
-          RETURN.
-      END.
-   END.
-   /* SAPC-44 end */
-   
+      
    /* solog was not needed -> direct additional handling */
    IF liReqCnt = 0 THEN liMarkStatus = 6.
    /* if solog was created then mark request to pending state */
