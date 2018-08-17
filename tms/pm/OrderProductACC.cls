@@ -88,7 +88,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 	  ( ioItemObject AS CLASS JsonObject ):
 
       IF objOrder:objCustomer:CustNum EQ 0
-      THEN UNDO, THROW NEW ParamError("donor_customer_has_to_exist").
+      THEN UNDO, THROW NEW ParamError("donor-customer-has-to-exist").
 
       DEFINE VARIABLE lcSubType     AS CHARACTER        NO-UNDO.
       DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
@@ -195,11 +195,10 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       END.
 
       IF aoOrderCustomer:CustNum EQ objOrder:objCustomer:CustNum
-      THEN UNDO, THROW NEW ParamError("new_and_donor_customer_same").
+      THEN UNDO, THROW NEW ParamError("new-and-donor-customer-same").
 
       IF objOrder:mobSubCustNum NE objOrder:objCustomer:CustNum
       THEN UNDO, THROW NEW
-               ParamError(SUBSTITUTE("subscription_customer_and_donor_customer_mismatch|&1",
                           objOrder:objCustomer:CustNum)).
 
       IF aoOrderCustomer:Country NE "ES"
