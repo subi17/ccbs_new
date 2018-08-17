@@ -20,6 +20,7 @@ ENUM Gwy.SAPC.OrderEnum:
       DATAPLAN_ADD
       DATAPLAN_DELETE
       DATAPLAN_MODIFY
+      CHANGE_SIM
       .
       
 END ENUM.

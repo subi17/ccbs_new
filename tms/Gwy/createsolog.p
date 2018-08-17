@@ -371,6 +371,8 @@ PROCEDURE pSolog:
             WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION} OR WHEN
                  {&REQTYPE_SUBSCRIPTION_REACTIVATION}
             THEN loProCommand = NEW Gwy.SAPC.ProCommandBPMMobSub(MsRequest.MsRequest).
+            WHEN {&REQTYPE_ICC_CHANGE}
+            THEN loProCommand = NEW Gwy.SAPC.ProCommandNBCH(MsRequest.MsRequest).
          END CASE.
       
          IF VALID-OBJECT(loProCommand)
