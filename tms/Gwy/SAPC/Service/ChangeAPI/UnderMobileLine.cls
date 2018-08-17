@@ -14,7 +14,7 @@ USING Gwy.SAPC.OrderEnum.
 USING Gwy.SAPC.Service.ServiceObjectFactory.
 USING Gwy.SAPC.Service.ChangeAPI.DefaultPricePlan.
 USING Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan.
-/*USING Gwy.SAPC.Service.ChangeAPI.SIM. */
+USING Gwy.SAPC.Service.ChangeAPI.SIM.
 /*USING Gwy.SAPC.Service.ChangeAPI.Upsell.*/
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
@@ -31,9 +31,10 @@ CLASS Gwy.SAPC.Service.ChangeAPI.UnderMobileLine INHERITS ServiceObjectFactory:
 /*
          WHEN OrderEnum:UPSELL_ADD
          THEN mAddObject(NEW Upsell(ioPCO, "Upsell")).
-         WHEN OrderEnum:SIM_UPDATE
-         THEN mAddObject(NEW SIM(ioPCO, "SIM")).
 */
+         WHEN OrderEnum:CHANGE_SIM
+         THEN mAddObject(NEW SIM(ioPCO, "SIM")).
+
       END CASE.
 
    END CONSTRUCTOR.
