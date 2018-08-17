@@ -241,7 +241,7 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
                                    lcResult).
             fReqError(SUBST("La baja del sevicio fijo ha fallado: &1", lcResult)).
             RETURN.
-         END.
+         END.        
       END.
 
       RUN pNetworkAction.
@@ -640,7 +640,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liConfigExtraLineCount  AS INT  NO-UNDO.
    DEF VAR lcMandatoryExtraLines   AS CHAR NO-UNDO.
    DEF VAR lcAllowedExtraLines     AS CHAR NO-UNDO.   
-   DEF VAR liAllowedELCount       AS INT  NO-UNDO.
+   DEF VAR liAllowedELCount        AS INT  NO-UNDO.
    DEF VAR liManELCount            AS INT  NO-UNDO.
    DEF VAR liAvailExtraLineCount   AS INT  NO-UNDO.
    DEF VAR llgMandatoryExtraLine   AS LOG  NO-UNDO.
@@ -648,6 +648,8 @@ PROCEDURE pUpdateSubscription:
    DEF VAR lcAssignSubId           AS CHAR NO-UNDO.
    DEF VAR liAssignSubId           AS INT  NO-UNDO.
    DEF VAR liOrigMsSeq             AS INT  NO-UNDO.
+   DEF VAR lcNewCliType            AS CHAR NO-UNDO.
+   DEF VAR lcNewCliTypeMtx         AS CHAR NO-UNDO.
 
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -857,7 +859,21 @@ PROCEDURE pUpdateSubscription:
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
 
-   ASSIGN Mobsub.CLIType       = MsRequest.ReqCParam2
+   lcNewCliType =  MsRequest.ReqCParam2.
+
+   IF fIsConvergenceTariff(MobSub.CLIType) AND
+      bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:      
+    
+      IF fListMatrix(Syst.Var:gcBrand,
+                     "CONVMOBILESTC",
+                     "SubsTypeFrom;SubsTypeTo",
+                     lcNewCliType,
+                     OUTPUT lcNewCliTypeMtx) = 1 THEN DO:
+         lcNewCliType =  lcNewCliTypeMtx.
+      END.
+   END.  
+
+   ASSIGN Mobsub.CLIType       = lcNewCliType
           Mobsub.BillTarget    = liBillTarg
           Mobsub.Paytype       = (CLIType.PayType = 2)
           Mobsub.TariffActDate = ldtActDate
