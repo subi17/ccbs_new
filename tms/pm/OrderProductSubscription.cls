@@ -97,7 +97,6 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         GET.
         SET.
         
-    DEFINE VARIABLE lcTariffType AS CHARACTER NO-UNDO.
     DEFINE VARIABLE loAttributes AS CLASS JsonObject NO-UNDO.
        
     CONSTRUCTOR PUBLIC OrderProductSubscription ( iObjOrder AS CLASS om.Order ):
@@ -133,27 +132,26 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
 
 	METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( iObjItemStruct AS CLASS JsonObject ):
 
-        mGetProductTariffType(INPUT THIS-OBJECT:productId, OUTPUT lcTariffType).
+        mGetProductTariffType().
         
-        IF lcTariffType = {&ORDER_PRODUCT_MOBILE} THEN 
+        IF THIS-OBJECT:actionType = {&ORDER_PRODUCT_MOBILE} THEN 
             mCreateMobileProduct(iObjItemStruct).
         ELSE 
             mCreateFixedorCovergentProduct(iObjItemStruct).
                     
     END METHOD.
     
-    METHOD PUBLIC VOID mGetProductTariffType (INPUT  icCLIType    AS CHARACTER,
-                                              OUTPUT ocTariffType AS CHARACTER) :
+    METHOD PUBLIC VOID mGetProductTariffType () :
        
-        IF Func.ValidateOrder:misCLITypeExists(icCLIType) = FALSE THEN 
-            UNDO, THROW NEW ParamError(SUBSTITUTE("invalid clitype : &1",icCLIType)).
+        IF Func.ValidateOrder:misCLITypeExists(THIS-OBJECT:productId) = FALSE THEN 
+            UNDO, THROW NEW ParamError(SUBSTITUTE("invalid clitype : &1",THIS-OBJECT:productId)).
             
-        IF Func.ValidateOrder:mIsConvergentORFixedOnly(icCLIType) THEN 
-        DO:
-            ASSIGN ocTariffType = {&ORDER_PRODUCT_FIXED_LINE}.
-            RETURN.
-        END.
-        ASSIGN ocTariffType = {&ORDER_PRODUCT_MOBILE}.       
+        IF Func.ValidateOrder:mIsConvergentORFixedOnly(THIS-OBJECT:productId) THEN 
+            ASSIGN 
+                THIS-OBJECT:actionType = {&ORDER_PRODUCT_FIXED_LINE}.
+        ELSE 
+            ASSIGN
+                THIS-OBJECT:actionType = {&ORDER_PRODUCT_MOBILE}.       
        
     END METHOD.
     
@@ -441,7 +439,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
     
     METHOD PUBLIC OVERRIDE VOID mStoreDataForType():
         
-        IF lcTariffType = {&ORDER_PRODUCT_MOBILE} THEN 
+        IF THIS-OBJECT:actionType = {&ORDER_PRODUCT_MOBILE} THEN 
             mStoreMobileProduct().
         ELSE 
             mStoreFixedorConvergentProduct().
