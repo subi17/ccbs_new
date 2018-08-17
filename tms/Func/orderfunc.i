@@ -49,6 +49,27 @@ FUNCTION fGetChildProductID RETURNS INT
 
 END FUNCTION.
 
+FUNCTION fGetParentProductID RETURNS INT
+    (INPUT iiOrderID              AS INT,
+     INPUT icProductType          AS CHAR):
+
+    DEFINE VARIABLE lcProductType AS CHAR NO-UNDO.
+
+    DEFINE BUFFER bf_OrderProduct FOR OrderProduct.
+
+    IF icProductType = {&ORDER_PRODUCT_SUBSCRIPTION} THEN 
+       ASSIGN lcProductType = (IF CAN-FIND(FIRST ) THEN {&ORDER_PRODUCT_FIXED_LINE} ELSE {&ORDER_PRODUCT_MOBILE}).
+
+    FIND FIRST bf_OrderProduct WHERE bf_OrderProduct.OrderId    = iiOrderID     AND  
+                                     bf_OrderProduct.ParentID   = 0             AND 
+                                     bf_OrderProduct.ActionType = lcProductType NO-LOCK NO-ERROR.
+    IF AVAIL bf_OrderProduct THEN 
+       RETURN bf_OrderProduct.OrderProductId.     
+    
+    RETURN 0.
+
+END FUNCTION.
+
 FUNCTION fSetOrderProductStatus RETURNS LOGICAL
     (INPUT iiOrderID        AS INT,
      INPUT iiOrderProductID AS INT,
