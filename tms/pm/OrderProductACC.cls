@@ -88,7 +88,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 	  ( ioItemObject AS CLASS JsonObject ):
 
       IF objOrder:objCustomer:CustNum EQ 0
-      THEN UNDO, THROW NEW ParamError("donor_customer_has_to_exist").
+      THEN UNDO, THROW NEW ParamError("donor-customer-has-to-exist").
 
       DEFINE VARIABLE lcSubType     AS CHARACTER        NO-UNDO.
       DEFINE VARIABLE loAttributes  AS CLASS JsonObject NO-UNDO.
@@ -102,11 +102,11 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 
       IF lcSubType BEGINS "existing" AND NOT loAttributes:Has("custnum")
       THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("existing_customer_id_required|&1", lcSubType)).
+                  (SUBSTITUTE("existing-customer-id-required|&1", lcSubType)).
 
       IF lcSubType BEGINS "new" AND NOT loAttributes:Has("customer")
       THEN UNDO, THROW NEW ParamError
-                  (SUBSTITUTE("customer_data_required|&1", lcSubType)).
+                  (SUBSTITUTE("customer-data-required|&1", lcSubType)).
 
       ASSIGN
          objOrder:MsSeq = loAttributes:GetInteger("subscription-id")
@@ -150,7 +150,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 
       IF (NOT loAttributes:Has("custnum")) AND
          (NOT loAttributes:Has("customer"))
-      THEN UNDO, THROW NEW ParamError("customer_id_or_data_required").
+      THEN UNDO, THROW NEW ParamError("customer-id-or-data-required").
 
       ASSIGN
          aoOrderCustomer         = NEW om.OrderCustomer(objOrder)
@@ -174,6 +174,11 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       /* OrderCustomer data will be updated from the customer property */
       IF loAttributes:Has("customer")
       THEN aoOrderCustomer:mCreateData(loAttributes:GetJsonObject("customer")).
+      
+      IF NOT aoOrderCustomer:BankCode > ""  AND
+         aoOrder:PayType EQ FALSE 
+      THEN UNDO, THROW NEW ParamError(SUBSTITUTE("bank_account_invalid|&1",
+                                      aoOrderCustomer:BankCode)).
 
       IF loAttributes:Has("custnum")
       THEN DO:
@@ -190,15 +195,15 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       END.
 
       IF aoOrderCustomer:CustNum EQ objOrder:objCustomer:CustNum
-      THEN UNDO, THROW NEW ParamError("new_and_donor_customer_same").
+      THEN UNDO, THROW NEW ParamError("new-and-donor-customer-same").
 
       IF objOrder:mobSubCustNum NE objOrder:objCustomer:CustNum
       THEN UNDO, THROW NEW
-               ParamError(SUBSTITUTE("subscription_customer_and_donor_customer_mismatch|&1",
+               ParamError(SUBSTITUTE("subscription-customer-and-donor-customer-mismatch|&1",
                           objOrder:objCustomer:CustNum)).
 
       IF aoOrderCustomer:Country NE "ES"
-      THEN UNDO, THROW NEW ParamError("country_only_es_valid").
+      THEN UNDO, THROW NEW ParamError("country-only-es-valid").
 
       mSubTypeValidations(lcSubType).
 
@@ -228,39 +233,46 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
          THEN ASSIGN
                  llPrePaid = YES
                  llCompany = NO.
-         WHEN "existing-customer"
+         WHEN "existing-customer" OR WHEN "existing-customer-update"
          THEN RETURN.
          OTHERWISE UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("invalid_type|&1",icSubType)).
+                     (SUBSTITUTE("invalid-type|&1",icSubType)).
       END CASE.
 
       IF llCompany AND aoOrderCustomer:CustIdType NE "CIF"
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("company_id_required|&1",icSubType)).
+                     (SUBSTITUTE("company-id-required|&1",icSubType)).
 
       IF NOT CAN-FIND(FIRST Mobsub NO-LOCK WHERE
                             MobSub.MsSeq   EQ objOrder:MsSeq AND
                             MobSub.PayType EQ llPrePaid)
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("subscription_type_mismatch|&1",
+                     (SUBSTITUTE("subscription-type-mismatch|&1",
                                  icSubType)).
 
       IF (NOT llPrePaid) AND
          (aoOrderCustomer:BankCode EQ "" OR
           NOT VALID-OBJECT(aoMandate))
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("bank_account_and_mandate_required|&1",
+                     (SUBSTITUTE("bank-account-and-mandate-required|&1",
                                  icSubType)).
 
       IF llPrePaid AND
          VALID-OBJECT(aoMandate)
       THEN UNDO, THROW NEW ParamError
-                     (SUBSTITUTE("mandate_not_allowed|&1",
+                     (SUBSTITUTE("mandate-not-allowed|&1",
                                  icSubType)).
 
       IF (NOT llPrePaid) AND (aoOrderCustomer:CustIdType     EQ "Passport" OR
                               aoOrderCustomer:AuthCustIdType EQ "Passport")
-      THEN UNDO, THROW NEW ParamError("passport_in_postpaid_not_allowed").
+      THEN UNDO, THROW NEW ParamError("passport-in-postpaid-not-allowed").
+
+      IF CAN-FIND(FIRST Customer NO-LOCK WHERE
+                        Customer.Brand = Syst.Var:gcBrand AND
+                        Customer.OrgID = aoOrderCustomer:CustID AND
+                        Customer.CustIDType = aoOrderCustomer:CustIDType AND
+                        Customer.Roles NE "inactive")
+      THEN UNDO, THROW NEW ParamError(SUBST("customer-already-exists|&1", icSubType)).
 
 
    END METHOD.

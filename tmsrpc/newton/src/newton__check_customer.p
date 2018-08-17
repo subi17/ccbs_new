@@ -115,6 +115,20 @@ FUNCTION fSetError RETURNS LOG (INPUT icError AS CHARACTER):
       RETURN TRUE .
 END FUNCTION .        
 
+/* YCO-712                              */
+/* Returns TRUE if any subscription of  */
+/* this customer has TV Service active. */      
+FUNCTION fTVService RETURNS LOGICAL ():
+   DEFINE BUFFER bMobSub FOR MobSub.
+   FOR EACH bMobsub NO-LOCK WHERE 
+            bMobsub.Brand   EQ Syst.Var:gcBrand AND 
+            bMobsub.AgrCust EQ Customer.CustNum:
+      IF fIsTVServiceActive(bMobsub.MsSeq) THEN 
+        RETURN TRUE.            
+   END.           
+   RETURN FALSE.
+END FUNCTION.
+
 FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF BUFFER Order FOR Order.
@@ -122,7 +136,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF VAR llOnlyActiveFound AS LOG NO-UNDO.
 
-   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService()) /* YCO-712 */
+      THEN
        fSetError ("PRO migration not possible because of not company or selfemployed") .
    ELSE DO:
       FIND Mobsub WHERE Mobsub.Brand EQ Syst.Var:gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
@@ -159,14 +174,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       LEAVE.        
                    END.
 
-                   /* TV service not allowed for PRO */    
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN 
-                      NEXT.
-                   IF fHasTVService(Mobsub.msseq) THEN 
-                   DO:   
-                      fSetError ("PRO migration not possible because of TV service").
-                      LEAVE.
-                   END.
+                   /* YCO-712. "PRO migration not possible because of TV service" removed. */
 
                 END.
              END.
@@ -209,14 +217,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       LEAVE.        
                    END.
 
-                   /* TV service not allowed for PRO */    
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN 
-                      NEXT.
-                   IF fHasTVService(Mobsub.msseq) THEN 
-                   DO:   
-                      fSetError ("PRO migration not possible because of TV service").
-                      LEAVE.
-                   END.
+                   /* YCO-712. "PRO migration not possible because of TV service" removed. */
 
                 END.                
              END.             
@@ -231,8 +232,9 @@ FUNCTION fCheckMigration RETURNS LOG ():
          END.         
          ELSE IF Mobsub.paytype THEN
                fSetError ("PRO migration not possible because of prepaid subscription" ).
-         ELSE IF fHasTVService(Mobsub.msseq) THEN
-               fSetError ("PRO migration not possible because of TV service").
+               
+         /* YCO-712. "PRO migration not possible because of TV service" removed. */
+         
          /* Migration not possible for retired or non active convergent */
          ELSE IF fIsConvergenceTariff(Mobsub.clitype) AND
             CAN-FIND(First CliType WHERE
@@ -335,7 +337,8 @@ ELSE IF AVAIL Customer AND
 
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
-       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService())  /* YCO-712 */
+       THEN
           ASSIGN
              llOrderAllowed = FALSE
              lcReason = "PRO migration not possible because of not company or selfemployed"
@@ -405,14 +408,18 @@ ELSE IF AVAIL Customer AND
         END.
     END.
 END.
-ELSE DO:
-   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
-       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+ELSE 
+DO:
+   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
+   DO:
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService())  /* YCO-712 */
+       THEN
           ASSIGN
              llOrderAllowed = FALSE
              lcReason = "PRO migration not possible because of not company or selfemployed"
              lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
-      ELSE DO:
+       ELSE 
+       DO:
          FOR EACH OrderCustomer NO-LOCK WHERE
                   OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
                   OrderCustomer.CustIdType EQ pcIdType   AND
@@ -436,7 +443,7 @@ ELSE DO:
                     LEAVE.    
                 END.
              END.
-             ELSE 
+             ELSE IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN
                 ASSIGN llPROOngoingOrder = TRUE.
          END.
 
@@ -451,10 +458,36 @@ ELSE DO:
                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
              END.
          END.
+       END.
+   END.
+   ELSE 
+   DO: /* Block nonpro order's from non-pro channels when pro order is ongoing */
+      FOR EACH OrderCustomer NO-LOCK WHERE
+               OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
+               OrderCustomer.CustIdType EQ pcIdType   AND
+               OrderCustomer.CustId     EQ pcPersonId AND
+               OrderCustomer.Rowtype    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+         FIRST Order NO-LOCK WHERE
+               Order.Brand EQ Syst.Var:gcBrand AND
+               Order.OrderID = OrderCustomer.OrderID:
+
+          IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+             Order.OrderType NE {&ORDER_TYPE_MNP} AND
+             Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
+
+           IF OrderCustomer.PRO THEN 
+           DO:    
+              IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
+              DO:
+                  llOrderAllowed = FALSE.
+                  lcReason = "Ongoing PRO order".
+                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+                  LEAVE.    
+              END.
+           END.
       END.
    END.
 END.
-
 
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 

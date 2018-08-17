@@ -27,7 +27,7 @@
 {Func/fmakeservlimit.i}
 {Func/service.i}
 {Mm/fbundle.i}
-{Func/dss_activation.i}
+{Func/customerextralinefunc.i}
 {Func/nncoit2.i}
 {Func/contract_end_date.i}
 {Func/fcpfat.i}
@@ -495,6 +495,8 @@ PROCEDURE pContractActivation:
    DEF VAR lcExtraOfferId             AS CHAR NO-UNDO.
    DEF VAR liDiscReq                  AS INTE NO-UNDO.
    DEF VAR lcErrMsg                   AS CHAR NO-UNDO.
+   DEF VAR lcDelayedPerContList       AS CHAR NO-UNDO.
+   DEF VAR liDelayedDays              AS INT  NO-UNDO.
 
    /* DSS related variables */
    DEF VAR lcResult         AS CHAR NO-UNDO.
@@ -900,6 +902,7 @@ PROCEDURE pContractActivation:
 
       /* immediately */
       OTHERWISE ldtFromDate = ldtActDate.
+
       END CASE.
       
    END.
@@ -994,6 +997,17 @@ PROCEDURE pContractActivation:
 
    IF ldtEndDate >= 12/31/2049 THEN ldEndStamp = 99999999.99999.
    ELSE ldEndStamp = Func.Common:mMake2DT(ldtEndDate,liEndTime).
+        
+   /* YCO-757 Periodical Contracts with aplication date delayed.                */
+   /* For this Periodical Contracts, delay FromDate, but it must keep EndDate.  */ 
+   lcDelayedPerContList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+   IF LOOKUP(lcDCEvent, lcDelayedPerContList) > 0 THEN DO:
+      liDelayedDays = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+      IF ldtFromDate < (ldtActDate + liDelayedDays) THEN
+         ASSIGN 
+            ldtFromDate  = (ldtActDate + liDelayedDays)
+            ldtContrDate = (ldtActDate + liDelayedDays).          
+   END.   
 
    ldBegStamp = Func.Common:mMake2DT(ldtFromDate,
                          IF ldtFromDate = ldtActDate
@@ -1517,15 +1531,10 @@ PROCEDURE pFinalize:
    DEF VAR ldeNextMonthStamp         AS DEC  NO-UNDO.
    DEF VAR ldaCont15PromoFrom        AS DATE NO-UNDO. 
    DEF VAR ldaCont15PromoEnd         AS DATE NO-UNDO. 
-   DEF VAR ldaOrderDate AS DATE NO-UNDO. 
-   DEF VAR llgMatrixAvailable AS LOG NO-UNDO. 
-   DEF VAR lcActDSSBundleId   AS CHAR NO-UNDO.
+   DEF VAR ldaOrderDate              AS DATE NO-UNDO. 
 
-   DEF BUFFER bMsRequest    FOR MsRequest.
-   DEF BUFFER bTerMsRequest FOR MsRequest.
-   DEF BUFFER bMobSub       FOR MobSub.
-   DEF BUFFER bELMobSub     FOR MobSub.
-   DEF BUFFER bPriMobSub    FOR MobSub.
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCLIType   FOR CLIType.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
@@ -1578,7 +1587,9 @@ PROCEDURE pFinalize:
    ASSIGN lcDCEvent             = MsRequest.ReqCParam3
           lcSMSText             = MsRequest.SMSText
           lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-          lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
+          lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
+          lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+          lcDSS4PrimarySubsType = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
 
    IF DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
       DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
@@ -1807,169 +1818,26 @@ PROCEDURE pFinalize:
 
    IF iiRequestType = 8 THEN DO:
 
-      IF LOOKUP(MsOwner.CLIType,lcAllowedDSS2SubsType) > 0 OR 
-         LOOKUP(MsOwner.CLIType,lcAllowedDSS4SubsType) > 0 THEN DO:
+      FIND FIRST bCLIType NO-LOCK WHERE
+                 bCLIType.Brand   EQ Syst.Var:gcBrand AND
+                 bCLIType.CLIType EQ MsOwner.CLIType  NO-ERROR.
 
-         ASSIGN ldCurrTS = (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
-                               MsRequest.ActStamp 
-                            ELSE Func.Common:mMakeTS())
-                lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
-                lcDSS4PrimarySubsType = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
+      IF AVAIL bCLIType                                       AND
+         bCLIType.BaseBundle EQ MsRequest.ReqCparam3          AND
+         (LOOKUP(MsOwner.CLIType,lcAllowedDSS2SubsType) > 0 OR
+          LOOKUP(MsOwner.CLIType,lcAllowedDSS4SubsType) > 0)  THEN DO:
 
-         IF fCLITypeIsMainLine(MsOwner.CLIType) THEN DO:
+         ldCurrTS = (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
+                        MsRequest.ActStamp
+                     ELSE Func.Common:mMakeTS()).
 
-             llgMatrixAvailable = fCheckActiveExtraLinePair(MsOwner.MsSeq,
-                                                            MsOwner.CLIType,
-                                                            OUTPUT lcActDSSBundleId).
-             FIND FIRST bELMobSub NO-LOCK WHERE
-                        bELMobSub.Brand      EQ Syst.Var:gcBrand AND
-                        bELMobSub.MultiSimId EQ MsOwner.MsSeq    NO-ERROR.
-
-             IF AVAIL bELMobSub    AND 
-                llgMatrixAvailable THEN DO: 
-
-                IF LOOKUP(bELMobSub.CLIType,lcAllowedDSS4SubsType) GT 0  AND
-                    lcActDSSBundleId EQ {&DSS4}                          AND
-                   fIsDSSActivationAllowed(bELMobSub.CustNum,
-                                           bELMobSub.MsSeq,
-                                           ldCurrTS,
-                                           {&DSS4},
-                                           OUTPUT liDSSMsSeq,
-                                           OUTPUT lcError) THEN
-                      ASSIGN lcDSSRelatedSubsType = lcDSS4PrimarySubsType
-                             lcDSSId              = {&DSS4}.
-                ELSE IF LOOKUP(bELMobSub.CLIType,lcAllowedDSS2SubsType) GT 0 AND
-                    lcActDSSBundleId EQ {&DSS2}                              AND
-                   fIsDSSActivationAllowed(bELMobSub.CustNum,
-                                           bELMobSub.MsSeq,
-                                           ldCurrTS,
-                                           {&DSS2},
-                                           OUTPUT liDSSMsSeq,
-                                           OUTPUT lcError) THEN
-                      ASSIGN lcDSSRelatedSubsType = lcDSS2PrimarySubsType 
-                             lcDSSId              = {&DSS2}. 
-             END.  
-
-         END.
-         ELSE IF LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) GT 0 AND 
-            fIsDSSActivationAllowed(MsOwner.CustNum,
-                                    0,
-                                    ldCurrTS,
-                                    lcDSSId,
-                                    OUTPUT liDSSMsSeq,
-                                    OUTPUT lcError) THEN 
-            ASSIGN lcDSSRelatedSubsType = lcDSS2PrimarySubsType
-                   lcDSSId              = {&DSS2}.
-
-         FIND FIRST bPriMobSub NO-LOCK WHERE 
-                    bPriMobSub.MsSeq EQ liDSSMsSeq NO-ERROR.
-
-         IF AVAIL bPriMobSub                                              AND
-            (LOOKUP(MsRequest.ReqCparam3,lcDSSRelatedSubsType) GT 0 OR
-            (LOOKUP(MsOwner.CLIType,lcDSSRelatedSubsType)      GT 0 AND 
-             CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                            CLIType.Brand      EQ Syst.Var:gcBrand   AND 
-                            CLIType.CLIType    EQ MsOwner.CLIType    AND 
-                            CLIType.BaseBundle EQ MsRequest.ReqCParam3))) AND
-            NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS)                    AND
-            NOT fOngoingDSSAct(MsOwner.CustNum)                           THEN DO:
-
-            /* Functionality changed to deny DSS2 creation if 
-                  there is DSS2 termination request. YTS-8140 
-               used MsOwner.Custnum cause of ACC */
-            FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                       bTerMsRequest.Brand      EQ Syst.Var:gcBrand AND
-                       bTerMsRequest.ReqType    EQ 83               AND
-                       bTerMsRequest.Custnum    EQ MsOwner.Custnum  AND
-                       bTerMsRequest.ReqCParam3 BEGINS "DSS"        AND
-                       bTerMsRequest.ReqCParam1 EQ "DELETE"         AND
-         LOOKUP(STRING(bTerMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") EQ 0 NO-ERROR.
-            
-            IF NOT AVAIL bTerMsRequest THEN 
-               liRequest = fDSSCreateRequest(bPriMobSub.MsSeq,
-                                             bPriMobSub.CustNum,
-                                             lcDSSId,
-                                             MsRequest.ReqSource,
-                                             MsRequest.MsRequest,
-                                             ldCurrTS,
-                                             "DSS2 activation failed in percontr handling", /* Error Msg */
-                                             OUTPUT lcError).
-
-         END. /* IF AVAIL bPriMobSub */ 
-         ELSE IF fOngoingDSSTerm(MsOwner.CustNum,ldeLastDayofMonthStamp) AND
-                 fIsDSSActivationAllowed(MsOwner.CustNum,
-                                         0,
-                                         ldCurrTS,
-                                         {&DSS2},
-                                         OUTPUT liDSSMsSeq,
-                                         OUTPUT lcError) THEN DO:
-
-            FOR FIRST MsRequest NO-LOCK WHERE
-                      MsRequest.Brand      EQ Syst.Var:gcBrand      AND
-                      MsRequest.ReqType    EQ {&REQTYPE_DSS}        AND
-                      MsRequest.Custnum    EQ MsOwner.CustNum       AND
-                      MsRequest.ReqCParam1 EQ "DELETE"              AND
-                      MsRequest.ReqStatus  EQ {&REQUEST_STATUS_NEW} AND
-                      MsRequest.ReqCParam3 EQ lcDSSId: 
-
-               fGetDSSMsSeqLimit(MsOwner.CustNum,
-                                 ldCurrTS,
-                                 OUTPUT liCurrDSSMsSeq,
-                                 OUTPUT ldeDSSLimit,
-                                 OUTPUT lcDSSBundleId).
-
-               IF liCurrDSSMsSeq = 0 THEN 
-                  liCurrDSSMsSeq = MsRequest.MsSeq.
-
-               FIND FIRST bMobSub NO-LOCK WHERE
-                          bMobSub.MsSeq = liCurrDSSMsSeq NO-ERROR.
-
-               IF NOT AVAIL bMobSub OR
-                  LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType) = 0 THEN DO:
-
-                  IF NOT fTransferDSS(INPUT liCurrDSSMsSeq,
-                                      INPUT liDSSMsSeq,
-                                      INPUT TODAY,
-                                      INPUT Syst.Var:katun,
-                                      INPUT "Contract",
-                                      OUTPUT lcError) THEN
-                     Func.Common:mWriteMemo("Customer",
-                                            STRING(MsRequest.CustNum),
-                                            MsRequest.CustNum,
-                                            MsRequest.ReqCParam3 + " Transfer Failed",
-                                            MsRequest.ReqCParam3 + " was not transferred from Subs.Id " +
-                                            STRING(MsRequest.MsSeq) + " to Subs. Id " +
-                                            STRING(liDSSMsSeq) + ". " + lcError).
-                  ELSE fReqStatus(4,"dss_criteria_match").
-               END.
-               ELSE fReqStatus(4,"dss_criteria_match").
-            END.
-
-            /* Find main request */
-            FIND FIRST MSRequest WHERE 
-                       MSRequest.MSrequest = iiRequest NO-LOCK NO-ERROR.
-         END.
+         fUpdateDSSAccount(MsOwner.MsSeq,
+                           MsRequest.ReqSource,
+                           MsRequest.MsRequest,
+                           ldCurrTS,
+                           "CREATE").
       END.
 
-      /* Adjust DSS consumption if required */
-      IF LOOKUP(MsRequest.ReqCparam3,lcPostpaidDataBundles) > 0 AND
-         MsRequest.ActStamp    < ldeLastDayofMonthStamp         AND
-         MsRequest.OrigRequest > 0                              THEN DO:
-
-         FIND FIRST bMsRequest NO-LOCK WHERE
-                    bMsRequest.MsRequest = MsRequest.OrigRequest NO-ERROR.
-
-         IF AVAIL bMsRequest                                                    AND
-                  bMsRequest.ActStamp LT ldeNextMonthStamp                      AND
-                 (bMsRequest.ReqType  EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-                  bMsRequest.ReqType  EQ {&REQTYPE_BUNDLE_CHANGE})              THEN
-            RUN pUpdateDSSConsumption(INPUT bMsRequest.MsRequest,
-                                      INPUT (IF bMsRequest.ReqType EQ
-                                      {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
-                                      {&REQUEST_SOURCE_STC} ELSE
-                                      {&REQUEST_SOURCE_BTC})).
-
-      END. /* IF MsRequest.OrigRequest > 0 THEN DO: */
    END. /* IF iiRequestType = 8 THEN DO: */
 
    IF MsRequest.ReqType = 8 AND
@@ -2120,72 +1988,74 @@ END PROCEDURE.  /* Finalize */
 /*  terminate a periodical contract */
 PROCEDURE pContractTermination:
 
-   DEF VAR lcTerminationType AS CHAR NO-UNDO.
-   DEF VAR lcDCEvent        AS CHAR NO-UNDO.
-   DEF VAR ldtCreDate       AS DATE NO-UNDO.
-   DEF VAR liEndPeriod      AS INT  NO-UNDO.
-   DEF VAR ldCoefficient    AS DECI NO-UNDO.
-   DEF VAR ldEndStamp       AS DEC  NO-UNDO.
-   DEF VAR lcTermFeeCalc    AS CHAR NO-UNDO.
-   DEF VAR ldtOrigValidFrom AS DATE NO-UNDO.
-   DEF VAR ldtOrigRenewalDate AS DATE NO-UNDO.
-   DEF VAR ldtOrigValidTo   AS DATE NO-UNDO.
-   DEF VAR ldtOrigValidToOrig AS DATE NO-UNDO INIT ?.
-   DEF VAR ldPrice          AS DEC NO-UNDO INIT ?.
-   DEF VAR llCreatePenaltyFee AS LOG NO-UNDO INIT FALSE.
-   DEF VAR llSubRequest     AS LOG  NO-UNDO.
-   DEF VAR ldNewEndStamp    AS DEC  NO-UNDO.
-   DEF VAR liSLCount        AS INT  NO-UNDO.
-   DEF VAR ldeInclAmt       AS DEC  NO-UNDO.
-   DEF VAR liCheckMsSeq     AS INT  NO-UNDO.
-   DEF VAR llRelativeLast   AS LOG  NO-UNDO.
-   DEF VAR ldaFromDate      AS DATE NO-UNDO.
-   DEF VAR ldaLastDay       AS DATE NO-UNDO. 
-   DEF VAR llPostpaidBundleTerm AS LOG NO-UNDO.
-   DEF VAR llRerate         AS LOG  NO-UNDO INIT FALSE. 
-   DEF VAR lcHandled        AS CHAR NO-UNDO. 
-   DEF VAR llKeepDSSActive  AS LOG  NO-UNDO.
-   DEF VAR lcFatGroups      AS CHAR NO-UNDO. 
-   DEF VAR i                AS INT NO-UNDO. 
-   DEF VAR ldeNextMonthStamp AS DEC  NO-UNDO.
-   DEF VAR ldeLastDayofMonthStamp AS DEC  NO-UNDO.
-   DEF VAR liCurrentServiceClass AS INT NO-UNDO. 
-   DEF VAR lcError          AS CHAR NO-UNDO. 
-   DEF VAR liRequest        AS INT NO-UNDO.  
-   DEF VAR ldContractEndDate AS DATE NO-UNDO.
+   DEF VAR lcTerminationType       AS CHAR NO-UNDO.
+   DEF VAR lcDCEvent               AS CHAR NO-UNDO.
+   DEF VAR ldtCreDate              AS DATE NO-UNDO.
+   DEF VAR liEndPeriod             AS INT  NO-UNDO.
+   DEF VAR ldCoefficient           AS DECI NO-UNDO.
+   DEF VAR ldEndStamp              AS DEC  NO-UNDO.
+   DEF VAR lcTermFeeCalc           AS CHAR NO-UNDO.
+   DEF VAR ldtOrigValidFrom        AS DATE NO-UNDO.
+   DEF VAR ldtOrigRenewalDate      AS DATE NO-UNDO.
+   DEF VAR ldtOrigValidTo          AS DATE NO-UNDO.
+   DEF VAR ldtOrigValidToOrig      AS DATE NO-UNDO INIT ?.
+   DEF VAR ldPrice                 AS DEC  NO-UNDO INIT ?.
+   DEF VAR llCreatePenaltyFee      AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR llSubRequest            AS LOG  NO-UNDO.
+   DEF VAR ldNewEndStamp           AS DEC  NO-UNDO.
+   DEF VAR liSLCount               AS INT  NO-UNDO.
+   DEF VAR ldeInclAmt              AS DEC  NO-UNDO.
+   DEF VAR liCheckMsSeq            AS INT  NO-UNDO.
+   DEF VAR llRelativeLast          AS LOG  NO-UNDO.
+   DEF VAR ldaFromDate             AS DATE NO-UNDO.
+   DEF VAR ldaLastDay              AS DATE NO-UNDO. 
+   DEF VAR llPostpaidBundleTerm    AS LOG  NO-UNDO.
+   DEF VAR llRerate                AS LOG  NO-UNDO INIT FALSE. 
+   DEF VAR lcHandled               AS CHAR NO-UNDO. 
+   DEF VAR llKeepDSSActive         AS LOG  NO-UNDO.
+   DEF VAR lcFatGroups             AS CHAR NO-UNDO. 
+   DEF VAR i                       AS INT  NO-UNDO. 
+   DEF VAR ldeNextMonthStamp       AS DEC  NO-UNDO.
+   DEF VAR ldeLastDayofMonthStamp  AS DEC  NO-UNDO.
+   DEF VAR liCurrentServiceClass   AS INT  NO-UNDO. 
+   DEF VAR lcError                 AS CHAR NO-UNDO. 
+   DEF VAR liRequest               AS INT  NO-UNDO.  
+   DEF VAR ldContractEndDate       AS DATE NO-UNDO.
    DEF VAR lcIPhoneDiscountRuleIds AS CHAR NO-UNDO.
    DEF VAR lcIPhoneDiscountRuleId  AS CHAR NO-UNDO.
-   DEF VAR liContractID     AS INT NO-UNDO.
-   DEF VAR liFFNum          AS INT NO-UNDO. 
-   DEF VAR lcFeeSourceTable AS CHAR NO-UNDO. 
-   DEF VAR lcFeeSourceKey   AS CHAR NO-UNDO.
-   DEF VAR lcBundleId       AS CHAR NO-UNDO.
-   DEF VAR lcCLIType        AS CHAR NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-   DEF VAR lcDSS2PrimarySubsType AS CHAR NO-UNDO. 
-   DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
-   DEF VAR ldeNextDayStamp  AS DEC NO-UNDO.
-   DEF VAR llChargeUsageBased AS LOG NO-UNDO.
-   DEF VAR liSlSeq          AS INT NO-UNDO.
-   DEF VAR ldeConsumption   AS DEC NO-UNDO.
-   DEF VAR lcAdjustConsProfile AS CHAR NO-UNDO.
-   DEF VAR liCustNum        AS INT NO-UNDO.
-   DEF VAR llgResult        AS LOG NO-UNDO.
-   DEF VAR llCancelOrder AS LOG NO-UNDO. 
-   DEF VAR llCancelInstallment AS LOG NO-UNDO. 
-   DEF VAR liOrderId AS INT NO-UNDO. 
-   DEF VAR liCnt AS INT NO-UNDO.
-   DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
-   DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
-   DEF VAR llActiveInstallment AS LOG  NO-UNDO.   
+   DEF VAR liContractID            AS INT  NO-UNDO.
+   DEF VAR liFFNum                 AS INT  NO-UNDO. 
+   DEF VAR lcFeeSourceTable        AS CHAR NO-UNDO. 
+   DEF VAR lcFeeSourceKey          AS CHAR NO-UNDO.
+   DEF VAR lcBundleId              AS CHAR NO-UNDO.
+   DEF VAR lcCLIType               AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS4SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS4PrimarySubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO. 
+   DEF VAR lcPostpaidDataBundles   AS CHAR NO-UNDO.
+   DEF VAR ldeNextDayStamp         AS DEC  NO-UNDO.
+   DEF VAR llChargeUsageBased      AS LOG  NO-UNDO.
+   DEF VAR liSlSeq                 AS INT  NO-UNDO.
+   DEF VAR ldeConsumption          AS DEC  NO-UNDO.
+   DEF VAR lcAdjustConsProfile     AS CHAR NO-UNDO.
+   DEF VAR liCustNum               AS INT  NO-UNDO.
+   DEF VAR llgResult               AS LOG  NO-UNDO.
+   DEF VAR llCancelOrder           AS LOG  NO-UNDO. 
+   DEF VAR llCancelInstallment     AS LOG  NO-UNDO. 
+   DEF VAR liOrderId               AS INT  NO-UNDO. 
+   DEF VAR liCnt                   AS INT  NO-UNDO.
+   DEF VAR liEndPeriodPostpone     AS INT  NO-UNDO.
+   DEF VAR ldtActDatePostpone      AS DATE NO-UNDO.
+   DEF VAR llActiveInstallment     AS LOG  NO-UNDO.   
+   DEF VAR lcDSSRelatedSubsType    AS CHAR NO-UNDO.
+   DEF VAR llFMFee                 AS LOG  NO-UNDO. 
+   DEF VAR liDSSMsSeq              AS INT  NO-UNDO. 
+   DEF VAR ldaMonth22              AS DATE NO-UNDO.
 
-   DEF VAR llFMFee AS LOG  NO-UNDO. 
-   DEF VAR liDSSMsSeq AS INT NO-UNDO. 
-   DEF VAR ldaMonth22 AS DATE NO-UNDO.
-
-   DEF BUFFER bLimit        FOR MServiceLimit.
-   DEF BUFFER bMsRequest    FOR MsRequest.
-   DEF BUFFER bMsOwner      FOR MsOwner.
+   DEF BUFFER bLimit           FOR MServiceLimit.
+   DEF BUFFER bMsRequest       FOR MsRequest.
+   DEF BUFFER bMsOwner         FOR MsOwner.
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
@@ -2263,7 +2133,7 @@ PROCEDURE pContractTermination:
    /* Don't set the flag if DSS is already terminated or   */
    /* scheduled to deactivate end of month                 */
    IF LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 AND
-      /* check if dss/dss2 was active before bundle termination */
+      /* check if dss/dss2/dss4 was active before bundle termination */
       fGetDSSMsSeqLimitTerm(INPUT  MsRequest.CustNum,
                             INPUT  ldeNextDayStamp,
                             INPUT  MsRequest.ActStamp,
@@ -2271,45 +2141,54 @@ PROCEDURE pContractTermination:
                             OUTPUT ldeDSSTotalLimit,
                             OUTPUT lcBundleId) THEN DO:
 
-      IF lcBundleId = "DSS2" THEN DO:
-         
-         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+      IF (lcBundleID EQ {&DSS4}  OR
+          lcBundleId EQ {&DSS2}) THEN DO:        
+
+         ASSIGN lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
+                lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+                lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+                lcDSS4PrimarySubsType = fCParamC("DSS4_PRIMARY_SUBS_TYPE")
+                llPostpaidBundleTerm  = TRUE.
+ 
          FIND FIRST bMsOwner NO-LOCK USE-INDEX MsSeq WHERE
-                    bMsOwner.MsSeq  = MsRequest.MsSeq AND
-                    bMsOwner.TsEnd  = MsRequest.ActStamp NO-ERROR.
+                    bMsOwner.MsSeq EQ MsRequest.MsSeq    AND
+                    bMsOwner.TsEnd EQ MsRequest.ActStamp NO-ERROR.
+
          IF AVAILABLE bMsOwner THEN
             lcCLIType = bMsOwner.CLIType.
          ELSE
             lcCLIType = MsOwner.CLIType.
 
-         IF LOOKUP(lcCLIType,lcAllowedDSS2SubsType) > 0 THEN DO:
+         IF (LOOKUP(lcCLIType,lcAllowedDSS4SubsType) GT 0  OR
+             LOOKUP(lcCLIType,lcAllowedDSS2SubsType) GT 0) THEN DO:
 
-            ASSIGN
-               llPostpaidBundleTerm = TRUE
-               lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
+            IF lcBundleId EQ {&DSS4} THEN
+               lcDSSRelatedSubsType = lcDSS4PrimarySubsType.
+            ELSE IF lcBundleId EQ {&DSS2} THEN
+               lcDSSRelatedSubsType = lcDSS2PrimarySubsType.
 
             /* Check STC Request with DSS2 data bundle */
-            FIND FIRST bMsRequest NO-LOCK WHERE
-                       bMsRequest.Brand = Syst.Var:gcBrand AND
-                       bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                       bMsRequest.Custnum = MsOwner.Custnum AND
-                       bMsRequest.ActStamp = ldeNextDayStamp AND 
-                LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") = 0 AND
-               (LOOKUP(bMsRequest.ReqCparam2,lcDSS2PrimarySubsType) > 0 OR
-                LOOKUP(bMsRequest.ReqCparam5,lcDSS2PrimarySubsType) > 0)
-                       USE-INDEX Custnum NO-ERROR.
+            FIND FIRST bMsRequest NO-LOCK USE-INDEX Custnum WHERE
+                       bMsRequest.Brand    EQ Syst.Var:gcBrand                    AND
+                       bMsRequest.ReqType  EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                       bMsRequest.Custnum  EQ MsOwner.Custnum                     AND
+                       bMsRequest.ActStamp EQ ldeNextDayStamp                     AND 
+         LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") EQ 0                       AND
+               (LOOKUP(bMsRequest.ReqCparam2,lcDSSRelatedSubsType) GT 0 OR
+                LOOKUP(bMsRequest.ReqCparam5,lcDSSRelatedSubsType) GT 0)          NO-ERROR.
+
             IF AVAIL bMsRequest THEN llKeepDSSActive = TRUE.
 
             /* Check BTC Request with DSS2 data bundle */
             IF NOT llKeepDSSActive THEN DO:
-               FIND FIRST bMsRequest NO-LOCK WHERE
-                          bMsRequest.Brand = Syst.Var:gcBrand AND
-                          bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
-                          bMsRequest.Custnum = MsOwner.Custnum AND
-                          bMsRequest.ActStamp = ldeNextDayStamp AND
-                   LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") = 0 AND
-                   LOOKUP(bMsRequest.ReqCparam2,lcDSS2PrimarySubsType) > 0
-                          USE-INDEX Custnum NO-ERROR.
+               FIND FIRST bMsRequest NO-LOCK USE-INDEX Custnum WHERE
+                          bMsRequest.Brand    EQ Syst.Var:gcBrand          AND
+                          bMsRequest.ReqType  EQ {&REQTYPE_BUNDLE_CHANGE}  AND
+                          bMsRequest.Custnum  EQ MsOwner.Custnum           AND
+                          bMsRequest.ActStamp EQ ldeNextDayStamp           AND
+            LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") EQ 0             AND
+                   LOOKUP(bMsRequest.ReqCparam2,lcDSSRelatedSubsType) GT 0 NO-ERROR.
+
                IF AVAIL bMsRequest THEN llKeepDSSActive = TRUE.
             END.
          END.
@@ -2845,7 +2724,7 @@ PROCEDURE pContractTermination:
       IF MsRequest.ReqSource  = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
          ( DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
            DayCampaign.DCType = {&DCTYPE_BUNDLE})                          AND
-         ( DayCampaign.BundleType NE {&DC_BUNDLE_TYPE_TARIFF} )           THEN DO:  
+         ( DayCampaign.BundleTarget  NE {&DB_BUNDLE_TARGET_TARIFF} )           THEN DO:
       
          FIND FIRST MobSub NO-LOCK WHERE
                     MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
@@ -3112,7 +2991,7 @@ PROCEDURE pContractTermination:
                                   INPUT "DELETE",
                                   INPUT "",        /* Optional param list */
                                   INPUT MsRequest.MsRequest,
-                                  INPUT ldeLastDayofMonthStamp,
+                                  INPUT Func.Common:mMakeTS(),
                                   INPUT {&REQUEST_SOURCE_CONTRACT_TERMINATION},
                                   INPUT lcBundleId).
       END. /* ELSE DO: */
@@ -3133,6 +3012,10 @@ PROCEDURE pContractTermination:
          IF AVAILABLE bMsRequest AND
             MsRequest.ReqCParam3 = lcDCEvent AND
             MsRequest.CreStamp > bMsRequest.CreStamp THEN NEXT.
+
+         IF AVAILABLE bMsRequest                          AND
+            MsRequest.ReqStatus  EQ {&REQUEST_STATUS_NEW} AND
+            MsRequest.ReqCParam3 NE bMsRequest.ReqCParam3 THEN NEXT.
 
          CASE MsRequest.ReqStatus:
             WHEN 0 THEN fReqStatus(4,"DSS is terminated.").

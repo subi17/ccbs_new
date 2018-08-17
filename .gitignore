@@ -54,6 +54,7 @@ tools/dotr
 tools/fcgi_agent
 tools/multitenancy
 tools/stompAdapter
+tools/QStomp
 support/*/*.out
 docs/modulegraph/all_runs.dot
 docs/modulegraph/*.png

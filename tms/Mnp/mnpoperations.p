@@ -107,6 +107,7 @@ form
    MNPOperation.ErrorCode LABEL "Error Code"
    MNPOperation.ErrorDesc LABEL "Error Desc"
    lcErrorHandled LABEL "Error Handled"
+   MNPOperation.MsgTurn LABEL "Resent"
 
 WITH OVERLAY ROW 6 centered 1 columns 
    COLOR value(Syst.Var:cfc)
@@ -588,6 +589,7 @@ PROCEDURE local-UPDATE-record:
          MNPOperation.ErrorCode 
          MNPOperation.ErrorDesc 
          lcErrorHandled 
+         MNPOperation.MsgTurn
       WITH FRAME lis.
 
 

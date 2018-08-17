@@ -27,6 +27,8 @@
 {Syst/commali.i} /*upd = TRUE.*/
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Eventlog'}
+{Func/lib/accesslog.i}
+{Syst/tmsconst.i}
 
 &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
@@ -63,8 +65,11 @@ DEF VAR lcTable      AS CHAR FORMAT "X(20)"    NO-UNDO.
 DEF VAR lcKey        AS CHAR FORMAT "X(20)"    NO-UNDO.
 DEF VAR lcevtime     AS CHAR FORMAT "XX:XX:XX" NO-UNDO.
 DEF VAR llBegins     AS LOG                    NO-UNDO.
+DEF VAR lcProgram    AS CHAR                   NO-UNDO.
 
 DEFINE VARIABLE muutokset AS CHARACTER NO-UNDO.
+
+lcProgram = PROGRAM-NAME(1).
 
 form
     Eventlog.EventDate 
@@ -446,11 +451,14 @@ REPEAT WITH FRAME sel:
        HIDE FRAME f3 NO-PAUSE.
        IF lcTable ENTERED OR lcKey ENTERED THEN
        DO:
-          IF lcKey NE "" THEN 
-          FIND FIRST Eventlog NO-LOCK WHERE 
-                     Eventlog.TableName = lcTable AND
-                     EventLog.Key BEGINS replace(lcKey," / ",chr(255))
-          NO-ERROR.
+          IF lcKey NE "" THEN DO:
+             FIND FIRST Eventlog NO-LOCK WHERE 
+                        Eventlog.TableName = lcTable AND
+                        EventLog.Key BEGINS replace(lcKey," / ",chr(255))
+             NO-ERROR.
+             IF LOOKUP(lcTable, {&ACCESSLOG_TABLES} ) > 0  THEN
+                RUN CreateReadAccess(lcTable, Syst.Var:katun, EventLog.Key, lcProgram, "Key" ).
+          END.  
           ELSE 
           FIND FIRST Eventlog NO-LOCK WHERE 
                      Eventlog.TableName = lcTable NO-ERROR.
@@ -465,7 +473,7 @@ REPEAT WITH FRAME sel:
                 order      = 3 
                 memory     = recid(Eventlog) 
                 must-print = TRUE.
-          NEXT LOOP.
+          NEXT LOOP. 
        END.
      END. /* Search-3 */
 

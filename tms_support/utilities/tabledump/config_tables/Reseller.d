@@ -92,6 +92,7 @@
 "TO" "TELESTANT ONLINE" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 yes "" ""
 "TP" "YOIGO PHONE HOUSE" "" 0 "" "" "" "marta.delarosa@yoigo.com" "1" 99 yes "323841551" "332296607"
 "TR" "TRECEDIS" "" 0 "" "" "" "Felix.deIturriaga.Gandini@yoigo.com" "1" ? no "" ""
+"TT" "ATENTO" "" 0 "" "" "" "david.gonzalezv@masmovil.com" "1" 99 yes "" ""
 "TU" "TU Y TU" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 99 no "" ""
 "UN" "UNISONO" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 yes "" ""
 "UR" "URENDE" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 99 no "" ""

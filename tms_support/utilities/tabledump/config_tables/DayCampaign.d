@@ -96,8 +96,8 @@
 "FREE100MINUTES" 01/06/16 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 2 3 0 "" "" "" 3 1 0 yes 1 0 0 1 "" 0 1 0 0
 "FTERM12-100" 27/10/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-110" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-110 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD110" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
-"FTERM12-140" 25/04/18 0 31/12/49 "" 0 "" "" "FTERM12-140 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD140" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
-"FTERM12-177" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-177 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD177" 0 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-140" 25/04/18 0 31/12/49 "" 0 "" "" "FTERM12-140 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD140" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
+"FTERM12-177" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-177 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD177" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-187" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-187 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD187" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-233" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-233 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD233" 2 1 2 yes 1 0 0 1 "" 0 0 0 0
 "FTERM12-243" 07/05/18 0 31/12/49 "" 0 "" "" "FTERM12-243 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD243" 2 1 2 yes 1 0 0 1 "" 0 0 0 0

@@ -57,7 +57,7 @@ FUNCTION fSelectNebaFee RETURNS CHAR
    IF NOT AVAIL FMItem THEN RETURN "No NEBA fmitem".
 
    odValue = FMItem.Amount.
-   ocFeeName = FMItem.FeeModel.
+   ocFeeName = FMItem.BillCode.
    RETURN "".
 END.
 

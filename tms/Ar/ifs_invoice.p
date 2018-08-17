@@ -728,10 +728,17 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                  BillItem.Brand    = Syst.Var:gcBrand AND
                  BillItem.BillCode = InvRow.BillCode NO-LOCK NO-ERROR.
                  
-      IF NOT AVAILABLE BillItem THEN DO:           
-         fError(InvRow.BillCode + ": missing").
-         NEXT InvoiceLoop.
-      END.   
+       IF NOT AVAILABLE BillItem THEN 
+       DO:           
+           fError(InvRow.BillCode + ": missing").
+           NEXT InvoiceLoop.
+       END.   
+       FIND FIRST CCRule NO-LOCK WHERE 
+                  CCRule.Brand      =   BillItem.Brand      AND 
+                  CCRule.Category   =   "*"                 AND 
+                  CCRule.BillCode   =   BillItem.BillCode   AND
+                  CCRule.CLIType    =   ""                  AND 
+                  CCRule.ValidTo    >=  TODAY NO-ERROR.
 
       IF llSalesInv THEN DO:
          IF LOOKUP(STRING(InvRow.SlsAcc),lcSkipSlsCode) > 0 THEN
@@ -740,11 +747,11 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          IF ttRow.ProductCode > "" THEN ttRow.Operator = "010".
       END.
       
-      ELSE DO:
-         IF BillItem.SAPRid > "" THEN DO:
+      ELSE DO:         
+         IF AVAILABLE CCRule AND CCRule.ReportingID > "" THEN DO:
             ASSIGN
                ttRow.Operator    = "010"
-               ttRow.ProductCode = BillItem.SAPRid. 
+               ttRow.ProductCode = CCRule.ReportingID. 
          END.
       END.
        
@@ -756,8 +763,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
       END.
 
       IF LOOKUP(SUBSTRING(STRING(InvRow.SlsAcc),1,1),"6,7") > 0 THEN 
-      ASSIGN
-         ttRow.CostCentre = BillItem.CostCentre
+      ASSIGN          
+         ttRow.CostCentre = ( IF AVAILABLE CCRule THEN CCRule.CostCentre ELSE "" )
          ttRow.PayType    = ttSub.PayType
          ttRow.Segment    = lcSegment
          ttRow.SlsChannel = ttSub.SlsChannel.
@@ -934,13 +941,24 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                        BillItem.BillCode = ttRow.BillCode NO-LOCK NO-ERROR.
                        
             IF AVAILABLE BillItem THEN DO:
-               ASSIGN ttRow.SlsAcc = BillItem.AccNum /* Only used account number currently */
-                      ttRow.CostCentre = BillItem.CostCentre.
+               
+               FIND FIRST CCRule NO-LOCK WHERE 
+                          CCRule.Brand      =   BillItem.Brand      AND 
+                          CCRule.Category   =   "*"                 AND  
+                          CCRule.BillCode   =   BillItem.BillCode   AND
+                          CCRule.CLIType    =   ""                  AND 
+                          CCRule.ValidTo    >=  TODAY NO-ERROR.
+                
+               IF AVAILABLE CCRule       
+               THEN ASSIGN ttRow.SlsAcc     = CCRule.AccNum /* Only used account number currently */
+                           ttRow.CostCentre = CCRule.CostCentre.
 
-               IF NOT llSalesInv AND BillItem.SAPRid > "" THEN
-                  ASSIGN
-                     ttRow.Operator    = "010"
-                     ttRow.ProductCode = BillItem.SAPRid. 
+               IF AVAILABLE CCRule    AND 
+                   NOT llSalesInv     AND 
+                   CCRule.ReportingID  > "" 
+               THEN ASSIGN ttRow.Operator     =   "010"
+                           ttRow.ProductCode  =   CCRule.ReportingID.
+                      
             END.
             ELSE DO:
                fError(ttRow.BillCode + ": missing").

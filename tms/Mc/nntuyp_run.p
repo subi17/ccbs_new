@@ -28,6 +28,7 @@
                   14.11.06/aam account with 8 digits
                   21.11.06/aam SAPRid, VipAccNum,
                                translations (invlang)
+                  24.04.18/skm Introduced the Account Rules Menu for Billitem
                   
   Version ......: yoigo
   -------------------------------------------------------------------------- */
@@ -64,7 +65,6 @@ DEF VAR haku  LIKE BillItem.BillCode  NO-UNDO.
 DEF VAR haku2 LIKE BillItem.BIName NO-UNDO.
 DEF VAR BIGroup LIKE BItemGroup.BIGroup NO-UNDO.
 DEF VAR firstline  AS i  NO-UNDO.
-DEF VAR AccName    AS c  NO-UNDO.
 DEF VAR BIGName    AS c  NO-UNDO.
 DEF VAR order      AS i  NO-UNDO.
 DEF VAR ex-order   AS i  NO-UNDO.
@@ -80,42 +80,22 @@ DEF VAR i          AS i  NO-UNDO.
 DEF VAR xrecid     AS re.
 DEF VAR endloop    AS I NO-UNDO.
 
-DEF VAR lcAltName   AS CHAR NO-UNDO.
-DEF VAR lcVIPName   AS CHAR NO-UNDO.
-DEF VAR lcEUConName AS CHAR NO-UNDO.
-DEF VAR lcEUAccName AS CHAR NO-UNDO.
-DEF VAR lcFSAccName AS CHAR NO-UNDO.
-DEF VAR lcEuVATName AS CHAR NO-UNDO.
 DEF VAR llCanDelete AS LOG  NO-UNDO INITIAL TRUE.
 
 /* variables used in case of CCAdminTool */
-DEF VAR liccAcount AS INT NO-UNDO.
-DEF VAR lcCCSAPRId AS CHAR NO-UNDO.
+
 IF icUpdateListMode = "update-mode-cc" THEN DO:
 
   llCanDelete = FALSE.
 
-  FIND TMSParam WHERE TMSParam.Brand = Syst.Var:gcBrand AND
-                      TMSParam.ParamGroup = "CCAdminTool" AND
-                      TMSParam.ParamCode = "BillItemAccount" NO-LOCK NO-ERROR.
-  IF AVAIL TMSParam THEN liccAcount = TMSParam.IntVal.
- 
-  FIND TMSParam WHERE TMSParam.Brand = Syst.Var:gcBrand AND
-                      TMSParam.ParamGroup = "CCAdminTool" AND
-                      TMSParam.ParamCode = "BillItemSAPRId" NO-LOCK NO-ERROR.
-  IF AVAIL TMSParam THEN lcCCSAPRId = TMSParam.CharVal.
-
 END.
-
 
 form
     BillItem.Brand      FORMAT "X(4)" COLUMN-LABEL "Bran"
     BillItem.BillCode   format "x(16)"
     BillItem.BIName     format "x(17)"
     BillItem.BIGroup    column-label "Group"
-          BIGName       column-label "GroupName" format "x(11)"
-    BillItem.AccNum     column-label "Acct"   help "Account number"
-                        FORMAT ">>>>>>>9"
+          BIGName       column-label "GroupName" format "x(20)"
     BillItem.TaxClass   COLUMN-LABEL "TaxClass"
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(Syst.Var:cfc)
     title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
@@ -131,39 +111,14 @@ form
            SKIP
     BillItem.BIGroup   label "Group ....." 
        BItemGroup.BIGName AT 25 NO-LABEL  SKIP
-    BillItem.AccNum    label "Account ..." 
-           FORMAT ">>>>>>>>>9"
-           Account.AccName    AT 25 NO-LABEL  SKIP
-    BillItem.AltAccNum label "Own Use ..." 
-           FORMAT ">>>>>>>>>9"
-           HELP "Account for own use"   
-           lcAltName   AT 25 NO-LABEL FORMAT "X(30)" SKIP
-    BillItem.VIPAccNum label "VIP Use ..." 
-           FORMAT ">>>>>>>>>9"
-           HELP "Account for VIP customer use"   
-           lcVIPName   AT 25 NO-LABEL FORMAT "X(30)" SKIP
-    BillItem.EUConAccNum LABEL "EU Consum. "
-           FORMAT ">>>>>>>>>9"
-           lcEUConName AT 25 NO-LABEL FORMAT "X(30)" SKIP
-    BillItem.EUAccNum  label "EU Account " 
-           FORMAT ">>>>>>>>>9"
-           lcEUAccName AT 25 NO-LABEL FORMAT "X(30)" SKIP
-    BillItem.FSAccNum  label "FS Account " 
-           FORMAT ">>>>>>>>>9"
-           lcFSAccName AT 25 NO-LABEL FORMAT "X(30)" SKIP
     BillItem.InvSect   label "Section ..." 
        InvSect.ISName  AT 23 NO-LABEL  SKIP
     BillItem.TaxClass label "Tax Class ." 
        HELP "Tax class"
        TaxClass.TCName AT 23 NO-LABEL SKIP
-    BillItem.SAPRid 
-       LABEL "SAP Data .."
-       FORMAT "X(3)" 
-       SKIP
     BillItem.DispMPM  LABEL "Display MPM"       
        HELP "Display MPM on specification (if not then display '----')"
        FORMAT "Yes/No" SKIP
-    BillItem.CostCentre LABEL "Cost Centre" SKIP
     BillItem.ItemType  LABEL "Item Type ."
        HELP "Billing Item Type (0=mobile, 1=covergent)"
        FORMAT ">>9" SKIP
@@ -304,7 +259,7 @@ print-line:
                RUN local-find-others.
 
                DISPLAY BillItem.Brand BillItem.BillCode BillItem.BIName 
-                       BillItem.AccNum BillItem.BIGroup
+                       BillItem.BIGroup
                        BIGName BillItem.TaxClass.
                rtab[FRAME-LINE] = recid(BillItem).
                
@@ -344,7 +299,7 @@ BROWSE:
          Syst.Var:ufk[4]= 814
          Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
          Syst.Var:ufk[6]= (IF lcRIght = "RW" AND llCanDelete THEN 4 ELSE 0)
-         Syst.Var:ufk[7]= 1760 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ufk[7]= 9857 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
          Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -416,7 +371,6 @@ BROWSE:
 
 
                DISPLAY BillItem.Brand BillItem.BillCode BillItem.BIName    
-                       BillItem.AccNum 
                        BillItem.BIGroup
                        BIGName BillItem.TaxClass.
                DO i = FRAME-DOWN TO 2 BY -1:
@@ -449,7 +403,7 @@ BROWSE:
                RUN local-find-others.
 
                DISPLAY BillItem.Brand BillItem.BillCode BillItem.BIName
-                       BillItem.AccNum BillItem.BIGroup
+                       BillItem.BIGroup
                        BIGName BillItem.TaxClass .
                DO i = 1 TO FRAME-DOWN - 1: rtab[i] = rtab[i + 1]. END.
                rtab[FRAME-DOWN] = recid(BillItem).
@@ -586,12 +540,11 @@ BROWSE:
 
         /* line TO be deleted is lightened */
         COLOR DISPLAY value(Syst.Var:ctc) 
-              BillItem.Brand BillItem.BillCode BillItem.BIName BillItem.AccNum
+              BillItem.Brand BillItem.BillCode BillItem.BIName 
               BIGName BillItem.TaxClass BillItem.BIGroup.
 
         RUN local-find-next.
 
-       
         IF AVAILABLE BillItem THEN memory = recid(BillItem).
         ELSE DO:
            /* the one TO be deleted is reread */
@@ -614,7 +567,7 @@ BROWSE:
         "WARNING: YOU SHOULD NEVER DELETE A BillCode THAT EXISTS ON CALLS/INVOICES !".
         message " DO YOU REALLY WANT TO ERASE (Y/N)? " UPDATE ok.
         COLOR DISPLAY value(Syst.Var:ccc) 
-           BillItem.Brand BillItem.BillCode BillItem.BIName BillItem.AccNum
+           BillItem.Brand BillItem.BillCode BillItem.BIName 
            BIGName BillItem.TaxClass BillItem.BIGroup.
         IF ok THEN DO:
 
@@ -648,7 +601,7 @@ BROWSE:
         PAUSE 0.
         DO TRANS:
            FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
-           RUN Mc/invotxt.p("BillItem",BillItem.BillCode).
+           RUN Mc/ccrule.p(BillItem.BillCode,"").
         END.
         ufkey = TRUE.
         NEXT LOOP.
@@ -662,48 +615,6 @@ BROWSE:
         FIND BillItem where recid(BillItem) = rtab[frame-line(sel)]
         exclusive-lock.
 
-        ASSIGN lcAltName   = ""
-               lcVIPName   = "" 
-               lcEUAccName = ""
-               lcEUConName = ""
-               lcFSAccName = ""
-               lcEUVATName = "".
-        IF BillItem.AltAccNum > 0 THEN DO:
-           FIND Account WHERE 
-                Account.Brand  = lcBrand AND
-                Account.AccNum = BillItem.AltAccNum 
-           NO-LOCK NO-ERROR.
-           IF AVAILABLE Account THEN lcAltName = Account.AccName.
-        END.
-        IF BillItem.VipAccNum > 0 THEN DO:
-           FIND Account WHERE 
-                Account.Brand  = lcBrand AND
-                Account.AccNum = BillItem.VipAccNum 
-           NO-LOCK NO-ERROR.
-           IF AVAILABLE Account THEN lcVipName = Account.AccName.
-        END.
-        IF BillItem.EUConAccNum > 0 THEN DO:
-           FIND Account WHERE 
-                Account.Brand  = lcBrand AND
-                Account.AccNum = BillItem.EUConAccNum 
-           NO-LOCK NO-ERROR.
-           IF AVAILABLE Account THEN lcEuConName = Account.AccName.
-        END.
-        IF BillItem.EUAccNum > 0 THEN DO:
-           FIND Account WHERE 
-                Account.Brand  = lcBrand AND
-                Account.AccNum = BillItem.EUAccNum 
-           NO-LOCK NO-ERROR.
-           IF AVAILABLE Account THEN lcEuAccName = Account.AccName.
-        END.
-        IF BillItem.FSAccNum > 0 THEN DO:
-           FIND Account WHERE 
-                Account.Brand  = lcBrand AND
-                Account.AccNum = BillItem.FSAccNum 
-           NO-LOCK NO-ERROR.
-           IF AVAILABLE Account THEN lcFSAccName = Account.AccName.
-        END.
- 
         RUN local-find-others.
 
         FIND InvSect where 
@@ -725,16 +636,8 @@ BROWSE:
         InvSect.ISName when AVAIL InvSect 
         ""  when NOT AVAIL InvSect ;& InvSect.ISName
         BillItem.InvSect
-        AccName @ Account.AccName
         BillItem.BIGroup 
-        BillItem.AccNum 
-        BillItem.AltAccNum   lcAltName
-        BillItem.VIPAccNum   lcVipName
-        BillItem.EuConAccNum lcEuConName
-        BillItem.EUAccNum    lcEuAccName
-        BillItem.FSAccNum    lcFsAccName
         BillItem.TaxClass
-        BillItem.SAPRid
         TaxClass.TCName WHEN AVAILABLE TaxClass
         "" WHEN NOT AVAILABLE TaxClass @ TaxClass.TCName.
 
@@ -756,8 +659,8 @@ BROWSE:
         
         RUN local-find-others.
         DISPLAY BillItem.Brand 
-                BillItem.BIName BillItem.AccNum BillItem.BIGroup 
-                BillItem.TaxClass  BIGName
+                BillItem.BIName BillItem.BIGroup 
+                BillItem.TaxClass  BIGName 
         WITH FRAME sel.
         xrecid = recid(BillItem).
 
@@ -884,32 +787,15 @@ PROCEDURE local-find-others:
    THEN BIGName = BItemGroup.BIGName.  
    ELSE BIGName = "!! UNKNOWN !!".
 
-   FIND Account where 
-        Account.Brand  = BillItem.Brand AND
-        Account.AccNum = BillItem.AccNum 
-   no-lock no-error.                     
-   IF AVAIL Account 
-   THEN AccName = Account.AccName.  
-   ELSE AccName = "!! UNKNOWN !!".
-
 END PROCEDURE.
 
 PROCEDURE update-mode-general:
 
      UPDATE BillItem.BIName 
             BillItem.BIGroup 
-            BillItem.AccNum 
-            BillItem.AltAccNum
-            BillItem.VIpAccNum
-            BillItem.EUConAccNum 
-            BillItem.EUAccNum 
-            BillItem.FSAccNum 
-            BillItem.FSAccNum 
             BillItem.InvSect 
             BillItem.TaxClass  
-            BillItem.SAPRid
             BillItem.DispMPM
-            BillItem.CostCentre
             BillItem.ItemType
      WITH FRAME lis EDITING:
             
@@ -927,101 +813,6 @@ PROCEDURE update-mode-general:
                         NEXT.
                      END.
                      DISP BItemGroup.BIGName.
-                  END.
-
-                  else if frame-field = "AccNum" THEN DO:
-                     FIND Account where 
-                          Account.Brand = lcBrand AND
-                          Account.AccNum = INPUT FRAME lis BillItem.AccNum 
-                     no-lock no-error.
-                     IF NOT AVAIL Account THEN DO:
-                        bell. message "Unknown Account !".
-                        NEXT.
-                     END.
-                     DISP Account.AccName.
-                  END.
-
-                  else if frame-field = "AltAccNum" THEN DO:
-                     IF INPUT FRAME lis BillItem.AltAccNum = 0
-                     THEN DISPLAY "" @ lcAltName.
-                     ELSE DO:
-                        FIND Account where 
-                             Account.Brand = lcBrand AND
-                             Account.AccNum = INPUT FRAME lis
-                                              BillItem.AltAccNum 
-                        no-lock no-error.
-                        IF NOT AVAIL Account THEN DO:
-                           bell. message "Unknown Account !".
-                           NEXT.
-                        END.
-                        DISP Account.AccName @ lcAltName.
-                     END.
-                  END.
-
-                  else if frame-field = "VipAccNum" THEN DO:
-                     IF INPUT FRAME lis BillItem.VipAccNum = 0
-                     THEN DISPLAY "" @ lcVipName.
-                     ELSE DO:
-                        FIND Account where 
-                             Account.Brand = lcBrand AND
-                             Account.AccNum = INPUT FRAME lis
-                                              BillItem.VipAccNum 
-                        no-lock no-error.
-                        IF NOT AVAIL Account THEN DO:
-                           bell. message "Unknown Account !".
-                           NEXT.
-                        END.
-                        DISP Account.AccName @ lcVipName.
-                     END.
-                  END.
-
-                   else if frame-field = "EUConAccNum" THEN DO:
-                     IF INPUT FRAME lis BillItem.EuConAccNum = 0
-                     THEN DISPLAY "" @ lcEuConName.
-                     ELSE DO:
-                        FIND Account where 
-                             Account.Brand = lcBrand AND
-                             Account.AccNum = INPUT FRAME lis
-                                              BillItem.EUConAccNum 
-                        no-lock no-error.
-                        IF NOT AVAIL Account THEN DO:
-                           bell. message "Unknown Account !".
-                           NEXT.
-                        END.
-                        DISP Account.AccName @ lcEUConName.
-                     END.
-                  END.
-
-                  else if frame-field = "EUAccNum" THEN DO:
-                     IF INPUT FRAME lis BillItem.EuAccNum = 0
-                     THEN DISPLAY "" @ lcEuAccName.
-                     ELSE DO:
-                        FIND Account where 
-                             Account.Brand = lcBrand AND
-                             Account.AccNum = INPUT FRAME lis BillItem.EUAccNum 
-                        no-lock no-error.
-                        IF NOT AVAIL Account THEN DO:
-                           bell. message "Unknown Account !".
-                           NEXT.
-                        END.
-                        DISP Account.AccName @ lcEUAccName.
-                     END.   
-                  END.
-
-                  else if frame-field = "FSAccNum" THEN DO:
-                     IF INPUT FRAME lis BillItem.FSAccNum = 0
-                     THEN DISPLAY "" @ lcFSAccName.
-                     ELSE DO:
-                        FIND Account where 
-                             Account.Brand = lcBrand AND
-                             Account.AccNum = INPUT FRAME lis BillItem.FSAccNum 
-                        no-lock no-error.
-                        IF NOT AVAIL Account THEN DO:
-                           bell. message "Unknown Account !".
-                           NEXT.
-                        END.
-                        DISP Account.AccName @ lcFSAccName.
-                     END.
                   END.
 
                   else if frame-field = "InvSect" 
@@ -1074,14 +865,7 @@ PROCEDURE update-mode-cc:
             BillItem.Brand    = lcBrand
             BillItem.BillCode = INPUT FRAME lis BillItem.BillCode
             BillItem.DispMPM = FALSE
-            BillItem.AccNum = liccAcount
-            BillItem.AltAccNum = liccAcount
-            BillItem.VipAccNum = liccAcount
-            BillItem.EUConAccNum = liccAcount
-            BillItem.EUAccNum = liccAcount
-            BillItem.FSAccNum = liccAcount
-            BillItem.TaxClass = "1"
-            BillItem.SAPRid = lcCCSAPRId. 
+            BillItem.TaxClass = "1". 
              
             /* go and find the rest of information to display */
                                 
@@ -1093,7 +877,6 @@ PROCEDURE update-mode-cc:
 
             FIND TaxClass WHERE
                  TaxClass.TaxClass = BillItem.TaxClass NO-LOCK NO-ERROR.
-       
           
             DISPLAY 
                  BillItem.Brand
@@ -1103,18 +886,9 @@ PROCEDURE update-mode-cc:
                  InvSect.ISName when AVAIL InvSect 
                  ""  when NOT AVAIL InvSect ;& InvSect.ISName
                  BillItem.InvSect
-                 AccName @ Account.AccName
                  BillItem.BIGroup 
-                 BillItem.AccNum 
-                 BillItem.AltAccNum
-                 BillItem.VIpAccNum
-                 BillItem.EUConAccNum 
-                 BillItem.EUAccNum 
-                 BillItem.FSAccNum 
-                 BillItem.FSAccNum 
                  BillItem.InvSect 
                  BillItem.TaxClass
-                 BillItem.SAPRid
                  TaxClass.TCName WHEN AVAILABLE TaxClass
                  "" WHEN NOT AVAILABLE TaxClass @ TaxClass.TCName
             WITH FRAME lis.
@@ -1136,7 +910,7 @@ PROCEDURE update-mode-cc:
                           BItemGroup.Brand = lcBrand AND
                           BItemGroup.BIGroup = INPUT FRAME lis BillItem.BIGroup 
                           no-lock no-error.
-                     DISP BItemGroup.BIGName.
+                      DISP BItemGroup.BIGName. 
                   END.
                END.
               APPLY LASTKEY.

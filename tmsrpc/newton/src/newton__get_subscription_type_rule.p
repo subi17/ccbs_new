@@ -297,6 +297,7 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
 
 END FUNCTION. 
 
+/* Moved to Func/penaltyfee.i
 FUNCTION fGetReferenceTariff RETURNS CHARACTER
          (INPUT pcDCEvent      AS CHAR,
           INPUT pdtValidFrom   AS DATE,
@@ -347,6 +348,7 @@ FUNCTION fGetReferenceTariff RETURNS CHARACTER
 
    RETURN lcCLIType.
 END FUNCTION.
+*/
 
 /*
    Purpose: Fetch Quota 25 refinance remaining amount

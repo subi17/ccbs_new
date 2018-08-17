@@ -24,9 +24,15 @@ FOR FIRST FatGroup OF FATime NO-LOCK,
     FIRST BillItem NO-LOCK WHERE
           BillItem.Brand    = Syst.Var:gcBrand AND
           BillItem.BillCode = FatGroup.BillCode,
+    FIRST CCRule NO-LOCK WHERE 
+          CCRule.Brand      = BillItem.Brand    AND 
+          CCRule.Category   = "*"               AND 
+          CCRule.BillCode   = BillItem.BillCode AND 
+          CCRule.CLIType    = ""                AND 
+          CCRule.ValidTo    >= TODAY   , 
     FIRST Account NO-LOCK WHERE
-          Account.Brand   = Syst.Var:gcBrand         AND
-          Account.AccNum  = BillItem.AccNum AND
+          Account.Brand   = Syst.Var:gcBrand  AND
+          Account.AccNum  = CCRule.AccNum     AND
           Account.AccType = 19:
               
    /* adv.payment is posted to invoicing customer */

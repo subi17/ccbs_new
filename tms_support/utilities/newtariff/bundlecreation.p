@@ -18,6 +18,7 @@ DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 DEFINE STREAM strexport.
 
 {utilities/newtariff/chartointmap.i}
+{Syst/tmsconst.i}
 
 &GLOBAL-DEFINE TYPE "Type"
 &GLOBAL-DEFINE BTYPE "BundleType"
@@ -706,6 +707,8 @@ PROCEDURE pStoreBundle:
    DEFINE VARIABLE lcProcessType    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liSlSeq          AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcDCUpsells      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liCount          AS INTEGER   NO-UNDO.
       
    ASSIGN
       lcBundle     = fGetFieldValue({&BUNDLE})
@@ -760,14 +763,36 @@ PROCEDURE pStoreBundle:
                                      THEN 0
                                      ELSE 1)
       DayCampaign.WeekDay         = ""
-      DayCampaign.BundleUpsell    = fGetFieldValue({&UPSELL})
       DayCampaign.FeeModel        = DayCampaign.BillCode
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          
       DayCampaign.TermFeeCalc     = 0.
-
-   fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).
       
+   fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).  
+    
+   ASSIGN lcDCUpsells = fGetFieldValue({&UPSELL}).
+   
+   DO liCount = 1 TO NUM-ENTRIES(lcDCUpsells):
+       
+       Syst.TMSRelation:mAddRelation({&DCTABLENAME},
+                                     {&DCKEYTYPE},
+                                     DayCampaign.DCEvent,
+                                     ENTRY(liCount,lcDCUpsells),
+                                     {&DCRELATIONTYPE},
+                                     YES).
+       
+       
+   END.
+   
+   FOR EACH TMSRelation NO-LOCK WHERE 
+            TMSRelation.TableName    =  {&DCTABLENAME}      AND 
+            TMSRelation.KeyType      =  {&DCKEYTYPE}        AND
+            TMSRelation.ParentValue  =  DayCampaign.DCEvent :
+   
+       fExport(icSpoolDir + "tmsrelation.d", HPD.HPDCommon:mDynExport(BUFFER TMSRelation:HANDLE, " ")).
+       
+   END.
+         
    IF ldeDataLimit > 0 THEN   
       RUN pDCServicePackage(lcBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).
 

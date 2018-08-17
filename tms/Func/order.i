@@ -19,6 +19,7 @@
 {Func/custfunc.i}
 {Func/log.i}
 {Func/msreqfunc.i}
+{Func/orderfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -240,7 +241,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
             
             llISPro = fIsPro(bf_Customer.Category).
 
-            IF (icCloseType = "Pro" AND NOT llISPro = FALSE) OR
+            IF (icCloseType = "Pro" AND llISPro = FALSE) OR
                (icCloseType NE "Pro" AND llISPro = TRUE) THEN NEXT.
                                            
             IF NOT fChangeReqStatus(bf_MsRequest.MsRequest,
@@ -251,13 +252,13 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
                 NEXT.
             END.
 
-            IF MsRequest.ReqIParam4 > 0 THEN DO:
+            IF bf_MsRequest.ReqIParam4 > 0 THEN DO:
                FIND Order NO-LOCK WHERE
                     Order.Brand = Syst.Var:gcBrand AND
-                    Order.OrderID = MsRequest.ReqIParam4 AND
+                    Order.OrderID = bf_MsRequest.ReqIParam4 AND
                     Order.OrderType = {&ORDER_TYPE_ACC} AND
                     Order.StatusCode = {&ORDER_STATUS_ONGOING} NO-ERROR.
-               IF AVAIL Order THEN RUN fSetOrderStatus(Order.OrderID,{&ORDER_STATUS_CLOSED}).
+               IF AVAIL Order THEN fSetOrderStatus(Order.OrderID,{&ORDER_STATUS_CLOSED}).
             END.
 
        END.

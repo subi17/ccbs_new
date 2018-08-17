@@ -670,6 +670,38 @@ FUNCTION fIsAddLineTariff RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Function selects correct permanency amount for an order */
+FUNCTION fSelectFTERMFee RETURNS CHAR
+   (INPUT iiOrderID  AS INT,
+    OUTPUT odValue   AS DEC,
+    OUTPUT ocFeeName AS CHAR):
+
+   odValue = 0.0.
+   ocFeeName = "".
+
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand EQ Syst.Var:gcBrand AND
+              OrderAction.Orderid EQ iiOrderId AND
+              OrderAction.itemkey BEGINS "fterm" NO-ERROR.
+   IF NOT AVAIL OrderAction THEN RETURN "No FTERM orderaction".
+
+   FIND FIRST DayCampaign NO-LOCK WHERE
+              DayCampaign.brand EQ Syst.Var:gcBrand AND
+              DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DayCampaign THEN RETURN "No FTERM dayycampaign".
+
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand  EQ DayCampaign.Brand AND
+              FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
+   IF NOT AVAIL FMItem THEN RETURN "No FTERM fmitem".
+
+   odValue = FMItem.Amount.
+   ocFeeName = FMItem.FeeModel.
+   RETURN "".
+END.
+
+
+
 /* Return true if order made for convergent additional line */
 FUNCTION fIsAddLineOrder RETURNS LOGICAL
    (INPUT iiOrderId AS INT):
@@ -794,7 +826,122 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
 
     RETURN ldeFee.
 
-END FUNCTION. 
+END FUNCTION.
 
+FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
+   ( INPUT iiOrderId AS INTEGER ):
+
+   DEFINE VARIABLE lcUriPath        AS CHARACTER       NO-UNDO.
+   DEFINE VARIABLE objRESTClient    AS CLASS Gwy.ParamRESTClient.
+   DEFINE VARIABLE loOMParser       AS CLASS Progress.Json.ObjectModel.ObjectModelParser NO-UNDO.
+   DEFINE VARIABLE loJsonConstruct  AS CLASS Progress.Json.ObjectModel.JsonConstruct     NO-UNDO.
+   DEFINE VARIABLE lii              AS INTEGER         NO-UNDO.
+   DEFINE VARIABLE lcError          AS CHARACTER       NO-UNDO.
+   DEFINE VARIABLE liMuleESBIFInUse AS INT             NO-UNDO.
+
+   liMuleESBIFInUse = Syst.Parameters:geti("TerminatioNotificationAPIInUse", "RESTMuleESB").
+   IF liMuleESBIFInUse EQ 0 THEN
+      RETURN "".
+
+   DO ON ERROR UNDO, THROW:
+
+      objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
+      objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
+
+      objRESTClient:mPOST().
+
+      CATCH loRESTError AS Gwy.RESTError:
+
+         /* NOTE: The errors automatically are logged to the client log */
+
+         IF loRESTError:ErrorMessage > ""
+         THEN DO ON ERROR UNDO, THROW:
+            ASSIGN
+               loOMParser      = NEW Progress.Json.ObjectModel.ObjectModelParser()
+               loJsonConstruct = loOMParser:Parse(loRESTError:ErrorMessage).
+
+            IF TYPE-OF(loJsonConstruct, Progress.Json.ObjectModel.JsonObject)
+               THEN RETURN CAST(loJsonConstruct, Progress.Json.ObjectModel.JsonObject):GetCharacter("resultDescription").
+            ELSE RETURN STRING(SUBSTRING(loRESTError:ErrorMessage, 1, 30000)).
+
+            CATCH loError AS Progress.Lang.Error:
+               RETURN STRING(SUBSTRING(loRESTError:ErrorMessage, 1, 30000)).
+            END CATCH.
+
+            FINALLY:
+               IF VALID-OBJECT(loOMParser)
+                  THEN DELETE OBJECT loOMParser.
+            END FINALLY.
+         END.
+
+         IF loRESTError:ReturnValue > ""
+            THEN RETURN loRESTError:ReturnValue.
+   
+         DO lii = 1 TO loRESTError:NumMessages:
+            lcError = lcError + "," + loRESTError:GetMessage(lii).
+         END.
+
+         IF lcError > ""
+            THEN RETURN LEFT-TRIM(lcError,",").
+   
+         RETURN "Error was thrown but no error message available".
+
+      END CATCH.
+     
+      FINALLY:
+         IF VALID-OBJECT(objRESTClient)
+            THEN DELETE OBJECT objRESTClient.
+      END FINALLY.
+
+   END.
+   RETURN "".
+
+END FUNCTION.
+
+
+FUNCTION fFindFixedLineOrder RETURNS INTEGER
+   ( iiMsSeq AS INTEGER ):
+
+   DEFINE BUFFER Order      FOR Order.
+   DEFINE BUFFER MobSub     FOR MobSub.
+   DEFINE BUFFER bActionLog FOR ActionLog.
+
+   DEF VAR liMsSeq AS INT NO-UNDO.
+
+   FIND FIRST Mobsub NO-LOCK USE-INDEX MsSeq WHERE
+              Mobsub.MsSeq       EQ iiMsSeq AND
+              Mobsub.FixedNumber GT ""      NO-ERROR.
+
+   IF NOT AVAILABLE MobSub THEN 
+      RETURN 0.
+
+   /* Check if terminated subscription is Merged 3P subscription */
+   FIND FIRST bActionLog NO-LOCK  WHERE
+              bActionLog.Brand     EQ Syst.Var:gcBrand     AND
+              bActionLog.TableName EQ "MobSub"             AND
+              bActionLog.KeyValue  EQ STRING(MobSub.MsSeq) AND
+              bActionLog.ActionID  EQ {&MERGE2P3P}         NO-ERROR.
+
+   IF AVAIL bActionLog THEN
+      liMsSeq = INT(ENTRY(1,bActionLog.ActionChar,CHR(255))).
+   ELSE liMsSeq = iiMsSeq.
+
+   FOR EACH Order NO-LOCK WHERE 
+            Order.MsSeq EQ liMSSeq BY Order.CrStamp DESC:
+
+      IF NOT CAN-FIND(FIRST OrderFusion NO-LOCK USE-INDEX OrderId WHERE
+                            OrderFusion.Brand        EQ "1"                AND
+                            OrderFusion.OrderId      EQ Order.OrderId      AND
+                            OrderFusion.FixedNumber  EQ Mobsub.FixedNumber AND
+                            OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED})
+      THEN NEXT.
+
+      RETURN Order.OrderId.
+
+   END.
+
+   RETURN 0.
+
+END FUNCTION.
 
 &ENDIF

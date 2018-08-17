@@ -1503,6 +1503,7 @@
 "Salesman" "SmPrefix" "IFS" "TM" "TELESTANT TM" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TO" "Telestant Online" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TP" "The Phone House exlusivo Yoigo" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "TT" "ATENTO" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TU" "Tu Y Tu" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "UN" "Unisono" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "UR" "Urende" "" "23" 0

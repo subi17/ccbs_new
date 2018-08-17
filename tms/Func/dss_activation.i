@@ -29,6 +29,7 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
 
    DEFINE BUFFER lbMobSub      FOR MobSub.
    DEFINE BUFFER bTerMsRequest FOR MsRequest.
+   DEFINE BUFFER bMsRequest    FOR MsRequest.
 
    liRequest = fDSSRequest(iiDSSMsSeq,
                            iiDSSCustNum,
@@ -50,6 +51,16 @@ FUNCTION fDSSCreateRequest RETURNS INTEGER
                              (icDSSBundleId + " " + icErrorMsg),
                              ocResult). 
    ELSE DO:
+      /* Link MainRequest Id to current created DSS group request */
+      /* so it can be skipped while processing percontr.p         */
+      IF icDSSReqSource EQ {&REQUEST_SOURCE_STC} THEN DO:
+         FIND FIRST bMsRequest EXCLUSIVE-LOCK WHERE
+                    bMsRequest.MsRequest EQ liRequest NO-ERROR.
+         IF AVAIL bMsRequest THEN DO:
+            bMsRequest.ReqIParam2 = iiDSSMainRequest.
+            RELEASE bMsRequest.
+         END.   
+      END.
 
       fGetDSSMsSeqLimit(iiDSSCustNum,
                         Func.Common:mMakeTS(),
@@ -98,7 +109,8 @@ FUNCTION fDSSAddRequest RETURNS LOGICAL
    (INPUT iiDSSMsSeq    AS INT,
     INPUT icDSSBundleId AS CHAR,
     INPUT iiMsRequest   AS INT,
-    INPUT icMsReqSource AS CHAR): 
+    INPUT icMsReqSource AS CHAR,
+    INPUT ideActStamp   AS DEC): 
    
    DEFINE BUFFER lbMobSub FOR MobSub. 
 
@@ -108,16 +120,149 @@ FUNCTION fDSSAddRequest RETURNS LOGICAL
    IF NOT AVAIL lbMobSub THEN 
       RETURN FALSE.
 
+   IF ideActStamp EQ 0 OR 
+      ideActStamp EQ ? THEN 
+      ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),180). /* 3 mins delay */
+
    RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
                          INPUT lbMobsub.CLI,
                          INPUT lbMobSub.CustNum,
                          INPUT "ADD",
-                         INPUT "",                                                /* Optional param list */
+                         INPUT "",     
                          INPUT iiMsRequest,
-                         INPUT Func.Common:mSecOffSet(Func.Common:mMakeTS(),180), /* 3 mins delay */
+                         INPUT ideActStamp, 
                          INPUT icMsReqSource,
                          INPUT icDSSBundleId).
 
    RETURN TRUE.
 
-END FUNCTION.            
+END FUNCTION. 
+
+FUNCTION fDSSCreateDSS2ToDSS4 RETURNS LOGICAL
+   (INPUT iiDSSMsSeq    AS INT,
+    INPUT iiMsRequest   AS INT,
+    INPUT icMsReqSource AS CHAR,
+    INPUT ideActStamp   AS DEC,
+    INPUT icErrorMsg    AS CHAR):
+
+   DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER lbMobSub  FOR MobSub.
+   DEFINE BUFFER bELMobSub FOR MobSub.
+
+   DEF VAR liDSSMsSeq AS INT  NO-UNDO. 
+   DEF VAR lcError    AS CHAR NO-UNDO. 
+   DEF VAR liRequest  AS INT  NO-UNDO. 
+
+   FIND FIRST lbMobSub NO-LOCK WHERE 
+              lbMobSub.MsSeq EQ iiDSSMsSeq NO-ERROR.
+
+   IF NOT AVAIL lbMobSub THEN 
+      RETURN FALSE.
+  
+   IF ideActStamp EQ 0 OR
+      ideActStamp EQ ? THEN
+      ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),180). /* 3 mins delay */
+   
+   IF fCLITypeIsMainLine(lbMobSub.CLIType) THEN DO:
+      FIND FIRST bELMobSub NO-LOCK WHERE
+                 bELMobSub.Brand      EQ Syst.Var:gcBrand AND
+                 bELMobSub.MultiSimId EQ lbMobSub.MsSeq   NO-ERROR.
+
+      IF NOT AVAIL bELMobSub THEN 
+         RETURN FALSE.
+
+      IF NOT fIsDSSActivationAllowed(bELMobSub.CustNum,
+                                     bELMobSub.MsSeq,
+                                     ideActStamp,
+                                     {&DSS4},
+                                     OUTPUT liDSSMsSeq,
+                                     OUTPUT lcError) THEN 
+         RETURN FALSE.
+   END.
+   ELSE IF fCLITypeIsExtraLine(lbMobSub.CLIType) THEN DO:
+      IF NOT fIsDSSActivationAllowed(lbMobSub.CustNum,
+                                     lbMobSub.MsSeq,
+                                     ideActStamp,
+                                     {&DSS4},
+                                     OUTPUT liDSSMsSeq,
+                                     OUTPUT lcError) THEN 
+      RETURN FALSE.
+   END.
+
+   FIND FIRST bMobSub NO-LOCK WHERE
+              bMobSub.MsSeq EQ liDSSMsSeq NO-ERROR.
+
+   IF NOT AVAIL bMobSub THEN 
+      RETURN FALSE.
+
+   liRequest = fDSSCreateRequest(bMobSub.MsSeq,
+                                 bMobSub.CustNum,
+                                 {&DSS4},
+                                 icMsReqSource,
+                                 iiMsRequest,
+                                 ideActStamp,
+                                 icErrorMsg, 
+                                 OUTPUT lcError).
+   IF liRequest GT 0 THEN
+      RETURN TRUE.
+   ELSE 
+      RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fDSSAddExtralineGroup RETURNS LOGICAL
+   (INPUT iiDSSMsSeq    AS INT,
+    INPUT icDSSBundleId AS CHAR,
+    INPUT iiMsRequest   AS INT,
+    INPUT icMsReqSource AS CHAR,
+    INPUT ideActStamp   AS DEC):
+
+   DEFINE BUFFER lbMobSub  FOR MobSub.
+   DEFINE BUFFER bELMobSub FOR MobSub. 
+
+   FIND FIRST lbMobSub NO-LOCK WHERE 
+              lbMobSub.MsSeq EQ iiDSSMsSeq NO-ERROR.
+
+   IF NOT AVAIL lbMobSub THEN 
+      RETURN FALSE.
+  
+   IF ideActStamp EQ 0 OR
+      ideActStamp EQ ? THEN
+      ideActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),180). /* 3 mins delay */
+
+   fDSSAddRequest(lbMobsub.MsSeq,
+                  icDSSBundleId,
+                  iiMsRequest,
+                  icMsReqSource,
+                  ideActStamp).
+
+   /* Extraline Business Functionality                                            */
+   /* Rule 1: In case of adding any Mainline subscription to existing DSS group,  */
+   /*         then add its associated Extralines to the group.                    */
+   /* Rule 2: In case of adding any Extraline subscription to existing DSS group, */
+   /*         then its associated mainline DSS add request call has to be         */
+   /*         done only once - when its first Extraline subscription is added     */
+   IF fCLITypeIsMainLine(lbMobSub.CLIType) THEN DO:
+       FOR EACH bELMobSub NO-LOCK WHERE
+                bELMobSub.Brand      EQ Syst.Var:gcBrand AND
+                bELMobSub.MultiSimId EQ lbMobSub.MsSeq:
+          fDSSAddRequest(bELMobSub.MsSeq,
+                         icDSSBundleId,
+                         iiMsRequest,
+                         icMsReqSource,
+                         ideActStamp).
+       END.
+   END.
+   ELSE IF fCLITypeIsExtraLine(lbMobSub.CLIType)             AND
+           fExtraLineCountForMainLine(lbMobSub.MultiSimId,
+                                      lbMobSub.CustNum) EQ 1 THEN DO:
+      fDSSAddRequest(lbMobSub.MultiSimId,
+                     icDSSBundleId,
+                     iiMsRequest,
+                     icMsReqSource,
+                     ideActStamp).
+   END.
+
+   RETURN TRUE.   
+
+END FUNCTION.           

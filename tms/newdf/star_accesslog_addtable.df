@@ -1,0 +1,78 @@
+ADD TABLE "AccessLog"
+  AREA "EventLog_Data"
+  LABEL "AccessLog"
+  DESCRIPTION "AccessLog"
+  DUMP-NAME "AccessLog"
+
+ADD FIELD "EventTS" OF "AccessLog" AS datetime-tz
+  FORMAT "99/99/9999 hh:mm:ss.sss+hh:mm"
+  INITIAL ?
+  LABEL "EventTS"
+  COLUMN-LABEL "EventTS"
+  HELP "EventTS"
+  ORDER 10
+
+ADD FIELD "Action" OF "AccessLog" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Action"
+  COLUMN-LABEL "Action"
+  HELP "Action"
+  ORDER 20
+
+ADD FIELD "UserCode" OF "AccessLog" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "UserCode"
+  COLUMN-LABEL "UserCode"
+  HELP "User id of event"
+  ORDER 30
+
+ADD FIELD "Key" OF "AccessLog" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Key"
+  COLUMN-LABEL "Key"
+  HELP "Key"
+  ORDER 40
+
+ADD FIELD "TableName" OF "AccessLog" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "TableName"
+  COLUMN-LABEL "Table"
+  HELP "Table"
+  ORDER 50
+
+ADD FIELD "Info" OF "AccessLog" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Info"
+  COLUMN-LABEL "Info"
+  HELP "Info"
+  ORDER 60
+
+ADD FIELD "KeyColumn" OF "AccessLog" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "KeyColumn"
+  COLUMN-LABEL "KeyColumn"
+  HELP "KeyColumn"
+  ORDER 70
+
+ADD INDEX "EventTS" ON "AccessLog"
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "EventTS" DESCENDING
+
+ADD INDEX "Key" ON "AccessLog"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Key" ASCENDING
+
+ADD INDEX "TableName" ON "AccessLog"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "TableName" DESCENDING
+  INDEX-FIELD "EventTS"  DESCENDING
+
+
+

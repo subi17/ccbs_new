@@ -89,7 +89,7 @@ FIND FIRST NewCliType WHERE
            NewCliType.CliType = MSRequest.ReqCParam2 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL NewCliType THEN DO:
-   fReqError ("ERROR: Unknown old clitype " + MSRequest.ReqCParam2).
+   fReqError ("ERROR: Unknown new clitype " + MSRequest.ReqCParam2).
    RETURN.
 END.
 
@@ -331,14 +331,10 @@ IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR
    MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} OR
    MSRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} OR
    MSRequest.ReqSource = {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION} THEN
-   MSRequest.ActStamp =   MSREquest.ReqDParam1 .  
+   MSRequest.ActStamp =   MSREquest.ReqDParam1.
 
 /* Check sub-requests */      
 IF fChkSubRequest(MSrequest.MSRequest) THEN  fReqStatus(8,"").          
-
-IF fIsConvergenceTariff(MobSub.CLIType) AND
-   NOT fIsConvergenceTariff(MSRequest.ReqCParam2) THEN
-   MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
 /* YDR-1847 */
 fAdditionalLineSTC(iiReqId,

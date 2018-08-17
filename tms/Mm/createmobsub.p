@@ -630,6 +630,9 @@ IF NOT AVAIL mobsub THEN DO:
                           MobSub.CustNum,
                           "Invoice target creation failed",
                           lcError).
+
+      fSetSpecialTTFLimit(MobSub.Custnum,
+                          MobSub.CLIType).
    END.
 
    IF MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} THEN
@@ -996,14 +999,16 @@ IF NOT MobSub.PayType THEN DO:
          fDSSAddRequest(Mobsub.MsSeq,
                         lcBundleId,
                         MsRequest.MsRequest,
-                        MsRequest.ReqSource).
+                        MsRequest.ReqSource,
+                        0).
       ELSE IF llgMatrixAvailable                                       AND 
               ((lcBundleId EQ {&DSS2} AND lcDSSBundleId EQ {&DSS2}) OR  
                (lcBundleId EQ {&DSS4}))                                THEN DO:
          fDSSAddRequest(Mobsub.MsSeq,
                         lcBundleId,
                         MsRequest.MsRequest,
-                        MsRequest.ReqSource).
+                        MsRequest.ReqSource,
+                        0).
               
          /* Extraline Business Functionality                                            */
          /* Rule 1: In case of adding any Mainline subscription to existing DSS group,  */
@@ -1018,7 +1023,8 @@ IF NOT MobSub.PayType THEN DO:
                 fDSSAddRequest(lbELMobSub.MsSeq,
                                lcBundleId,
                                MsRequest.MsRequest,
-                               MsRequest.ReqSource).
+                               MsRequest.ReqSource,
+                               0).
              END.
          END.
          ELSE IF fCLITypeIsExtraLine(MobSub.CLIType)             AND 
@@ -1027,7 +1033,8 @@ IF NOT MobSub.PayType THEN DO:
             fDSSAddRequest(MobSub.MultiSimId,
                            lcBundleId,
                            MsRequest.MsRequest,
-                           MsRequest.ReqSource).
+                           MsRequest.ReqSource,
+                           0).
          END.
 
       END.

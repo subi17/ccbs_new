@@ -1286,7 +1286,6 @@ PROCEDURE pTerminate:
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                bCLIType.Brand      = Syst.Var:gcBrand           AND
                bCLIType.CLIType    = TermMobSub.CLIType                AND
-               bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
               (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
                bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN
    DO:

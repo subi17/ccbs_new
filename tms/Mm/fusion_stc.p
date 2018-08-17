@@ -108,6 +108,7 @@ IF fValidateMobTypeCh(
    TRUE, /* bypass stc type check */
    piOrderID,
    "",
+   FALSE,
    OUTPUT lcError) EQ FALSE
 THEN RETURN lcError.
 

@@ -7,9 +7,10 @@
  * @clitypes    cli_type;string;mandatory;
                 tariff_bundle;string;mandatory;
                 status_code;int;mandatory;(0=Inactive,1=active,2=retired)
+                merge_target;array;list of MSISDN's;                 
  */
-USING Progress.Json.ObjectModel.JsonArray.
-USING Progress.Json.ObjectModel.JsonObject.
+USING Progress.Json.ObjectModel.*.
+USING OpenEdge.Net.HTTP.MethodEnum.
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
@@ -43,15 +44,20 @@ DEFINE VARIABLE liDestDowspeconversion AS INT64 NO-UNDO.
 DEFINE VARIABLE liDestupspeconversion  AS INT64 NO-UNDO.
 DEFINE VARIABLE lcHostname             AS CHAR  NO-UNDO.
 DEFINE VARIABLE llUseApi               AS LOGI  NO-UNDO INIT TRUE.
-
-DEFINE TEMP-TABLE ttSpeed
-          FIELD Download      AS INT64
-          FIELD Upload        AS INT64
-          INDEX ix IS UNIQUE PRIMARY Download Upload ASCENDING.
+DEFINE VARIABLE lcMergeTargets         AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcFixedLineType        AS CHAR  NO-UNDO.
+ 
+DEFINE TEMP-TABLE ttSpeed NO-UNDO
+   FIELD Download AS INT64
+   FIELD Upload   AS INT64
+   INDEX ix IS UNIQUE PRIMARY Download Upload ASCENDING.
 
 DEF BUFFER bCLIType        FOR CLIType.
 DEF BUFFER oldCLIType      FOR CLIType.
 DEF BUFFER bfMobSub        FOR MobSub.
+DEF BUFFER bMobSub         FOR MobSub.
+DEF BUFFER bCliType1       FOR CLIType.
+DEF BUFFER bCliType2       FOR CLIType.
 
 FUNCTION fSpeedConversion RETURNS INT64
     (INPUT icSpeed  AS CHAR):
@@ -132,6 +138,8 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
     DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
     DEF VAR loRequestJson  AS JsonObject NO-UNDO.
     DEF VAR loJson         AS JsonObject NO-UNDO.
+    DEF VAR oiStatusCode   AS INT        NO-UNDO. 
+    DEF VAR ocStatusReason AS CHAR       NO-UNDO. 
 
     DEFINE VARIABLE loJsonArray  AS JsonArray         NO-UNDO.
     DEFINE VARIABLE loJsonObject AS JsonObject        NO-UNDO.
@@ -162,15 +170,19 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
     DO:
         ASSIGN lcUriQueryVal = REPLACE(REPLACE(lcUriQueryVal,"#GESCAL",lcGescal)," ","+").
 
-        RUN Gwy/http_rest_client.p("get"     ,
+        RUN Gwy/http_rest_client.p(STRING(MethodEnum:GET),
                                    lcHost    ,
                                    liPort    ,     
+                                   ""        ,
+                                   ""        ,
                                    ""        ,
                                    ""        ,
                                    lcUriPath ,
                                    lcUriQuery,
                                    lcUriQueryVal,
                                    loRequestJson,
+                                   OUTPUT oiStatusCode,
+                                   OUTPUT ocStatusReason,
                                    OUTPUT loJson).
 
         ASSIGN lcJsonArray = loJson:GetJsonArray('feasibilities').
@@ -196,7 +208,50 @@ END FUNCTION.
 
 FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
                                             INPUT icTariffBundle AS CHAR,
-                                            INPUT iiStatusCode   AS INT):
+                                            INPUT iiStatusCode   AS INTEGER ):                                            
+
+   DEFINE VARIABLE lcArray  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liInt    AS INTEGER   NO-UNDO.
+ 
+   DEFINE BUFFER libCLIType FOR CLIType.
+   DEFINE BUFFER lbCLIType  FOR CLIType.
+   DEFINE BUFFER lbMobSub   FOR MobSub.
+
+   FIND FIRST lbMobSub NO-LOCK WHERE
+              lbMobSub.MsSeq EQ piMsSeq NO-ERROR.
+
+   IF AVAIL lbMobSub THEN DO:
+
+      FIND FIRST lbCLIType NO-LOCK WHERE
+                 lbCLIType.Brand   EQ Syst.Var:gcBrand AND
+                 lbCLIType.CLIType EQ lbMobSub.CLIType NO-ERROR.
+
+      FIND FIRST libCLIType NO-LOCK WHERE
+                 libCLIType.Brand   EQ Syst.Var:gcBrand AND
+                 libCLIType.CLIType EQ icCLIType        NO-ERROR.
+
+      IF AVAIL lbCLIType                 AND
+         AVAIL libCLIType                AND
+         fIsConvergenceTariff(icCLIType) THEN DO:
+
+         IF ((lbCLIType.TariffType  EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}   OR
+              (lbCLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND
+               lbMobSub.FixedNumber NE ""                              AND
+               lbMobSub.MsStatus    EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}))      AND
+            lcMergeTargets          EQ "")                                  THEN
+            RETURN FALSE.
+
+         IF lbCLIType.TariffType    EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND
+            lbCLIType.FixedLineType NE libCLIType.FixedLineType        THEN
+            RETURN FALSE.
+         ELSE IF lbCLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+                 lcMergeTargets       GT ""                               AND
+          LOOKUP(STRING(libCLIType.FixedLineType),lcFixedLineType) EQ 0   THEN
+            RETURN FALSE.
+
+      END.
+
+   END. 
 
    /* YPR-1720 */
    IF icCLIType EQ "CONT15" AND
@@ -204,12 +259,109 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL (INPUT icCLIType      AS CHAR,
       ldaCont15PromoEnd NE ? AND
       TODAY <= ldaCont15PromoEnd THEN iiStatusCode = 1.
 
-   sub_struct = add_struct(result_array,"").
+   sub_struct = add_struct(result_array,"").   
 
    add_string(sub_struct,"cli_type",icCLIType).
    add_string(sub_struct,"tariff_bundle",icTariffBundle).
-   add_int(sub_struct,"status_code",iiStatusCode).
+   add_int(sub_struct,"status_code",iiStatusCode).   
    
+   lcArray = add_array(sub_struct,"merge_target").   
+   
+   DO liInt = 1 TO NUM-ENTRIES(lcMergeTargets):
+      add_string(lcArray,"",ENTRY(liInt,lcMergeTargets)).
+   END.   
+   
+END FUNCTION.
+
+FUNCTION fGetPossibleMergeMSISDNs RETURNS CHARACTER
+   (INPUT  iiMsSeq AS INTEGER):
+
+    DEF VAR lcMsisdn            AS CHAR NO-UNDO.
+    DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
+    DEF VAR llgAvail            AS LOG  NO-UNDO INIT FALSE.
+
+    lcExtraLineCLITypes = fExtraLineCLITypes().
+
+    FIND FIRST bfMobSub NO-LOCK
+         WHERE bfMobSub.MsSeq EQ iiMsSeq NO-ERROR.
+         
+    IF NOT AVAILABLE bfMobSub THEN RETURN "".
+     
+    FIND FIRST bCliType1 NO-LOCK
+         WHERE bCliType1.Brand   EQ Syst.Var:gcBrand
+           AND bCliType1.CliType EQ bfMobSub.CliType NO-ERROR.
+
+    IF NOT AVAILABLE bCliType1 OR 
+       bCliType1.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN RETURN "".
+    
+    IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND
+      (bfMobSub.CLI         NE bfMobSub.FixedNumber         OR
+       bfMobSub.MsStatus    NE {&MSSTATUS_MOBILE_NOT_ACTIVE})  THEN
+       RETURN "".
+    
+    FOR EACH bMobSub NO-LOCK
+       WHERE bMobSub.brand   EQ Syst.Var:gcBrand
+         AND bMobSub.CustNum EQ bfMobSub.CustNum:
+        FIND FIRST bCliType2 NO-LOCK
+             WHERE bCliType2.Brand   EQ Syst.Var:gcBrand
+               AND bCliType2.CliType EQ bMobSub.CliType NO-ERROR.
+        IF NOT AVAILABLE bCliType2 OR 
+           bCliType2.PayType NE {&CLITYPE_PAYTYPE_POSTPAID} THEN NEXT.
+        
+        IF LOOKUP(bMobSub.CliType,lcExtraLineCLITypes) > 0 THEN NEXT.
+
+        llgAvail = FALSE.
+
+        MERGEREQUEST:
+        FOR EACH MsRequestParam NO-LOCK WHERE
+                 MsRequestParam.ParamName EQ {&MERGE2P3P} AND
+                 MsRequestParam.ParamType EQ {&INTVAL}    AND
+                 MsRequestParam.IntValue  EQ bMobSub.MsSeq:
+
+            IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                              MsRequest.Brand     EQ Syst.Var:gcBrand                       AND
+                              MsRequest.ReqType   EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}    AND
+                              MsRequest.MsRequest EQ MsRequestParam.MsRequest               AND
+                LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3,19") = 0) THEN
+               llgAvail = TRUE.
+
+            IF llgAvail THEN
+               LEAVE MERGEREQUEST.
+        END.
+
+        IF llgAvail THEN NEXT.
+
+        IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} AND 
+           bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:
+               
+            IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
+                MsRequest.MsSeq   EQ bMobsub.MsSeq AND
+               (MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR
+                MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION}) AND
+             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0) 
+             THEN
+               IF NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bMobSub.CLI) THEN
+                    lcMsisdn = lcMsisdn + ','  + bMobSub.CLI.
+        END. 
+        ELSE 
+        IF bCliType1.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
+           bCliType2.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN DO:
+             
+             IF bMobSub.CLI      EQ bMobSub.FixedNumber           AND
+                bMobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
+                lcMsisdn = lcMsisdn + ',' + bMobSub.CLI.
+
+                IF lcFixedLineType EQ "" THEN
+                   lcFixedLineType = STRING(bCliType2.FixedLineType).
+                ELSE IF LOOKUP(STRING(bCliType2.FixedLineType),lcFixedLineType) EQ 0 THEN
+                   lcFixedLineType = lcFixedLineType + "," + STRING(bCliType2.FixedLineType).
+
+             END.
+        END.         
+    END.
+    
+    RETURN TRIM(lcMsisdn,",").
+    
 END FUNCTION.
 
 ASSIGN Syst.Var:katun = "Newton".
@@ -269,6 +421,8 @@ DO:
     END.
 END.
 
+lcMergeTargets = fGetPossibleMergeMSISDNs(INPUT piMsSeq).
+
 FOR EACH CLIType NO-LOCK WHERE
          CLIType.Brand = Syst.Var:gcBrand AND
          CLIType.WebStatusCode > 0:
@@ -307,7 +461,7 @@ FOR EACH CLIType NO-LOCK WHERE
               (oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}  AND CliType.FixedLineType = {&FIXED_LINE_TYPE_FIBER})) THEN 
               ASSIGN lcStatusCode = 0.    
           /* Mobile subscrition should be allowed to do STC between only convergent tariffs, but fixed part should remain same */
-          ELSE IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
+          ELSE IF fIsFixedOnly(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
               ASSIGN lcStatusCode = 0.    
           ELSE IF CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
           DO: 
