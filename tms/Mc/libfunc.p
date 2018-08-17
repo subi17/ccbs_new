@@ -1,11 +1,11 @@
 
 /*------------------------------------------------------------------------
-    File        : ordervalidations.p
+    File        : libfunc.p
     Purpose     : 
 
     Syntax      :
 
-    Description : 
+    Description : Contains all the functions related to the order saving/processing 
 
     Author(s)   : 
     Created     : Sat Jul 14 14:51:40 IST 2018

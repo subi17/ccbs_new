@@ -186,7 +186,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                 THIS-OBJECT:mobSubCustNum = MobSub.CustNum.
         END SET.
        
-    DEFINE PUBLIC PROPERTY lhOrderValidations AS HANDLE NO-UNDO 
+    DEFINE PUBLIC PROPERTY lhOrderLibrary AS HANDLE NO-UNDO 
         GET.
         SET.
        
@@ -255,13 +255,13 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             END.          
         END.            
   
-        RUN Mc/ordervalidations.p PERSISTENT SET lhOrderValidations.  /* This is for the complicated business logic */
+        RUN Mc/libfunc.p PERSISTENT SET lhOrderLibrary.  /* This is for the complicated business logic */
       
         IF THIS-OBJECT:orderChannel BEGINS "migration"
             AND THIS-OBJECT:isACCOrder  = FALSE THEN 
         DO:
             ASSIGN 
-                lcMigrationErr = DYNAMIC-FUNCTION("fMigrationCheckCustomer" IN THIS-OBJECT:lhOrderValidations , INPUT Syst.Var:gcBrand , INPUT objCustomer:CustId).
+                lcMigrationErr = DYNAMIC-FUNCTION("fMigrationCheckCustomer" IN THIS-OBJECT:lhOrderLibrary , INPUT Syst.Var:gcBrand , INPUT objCustomer:CustId).
             IF lcMigrationErr > "" THEN
                 UNDO , THROW NEW ParamError("Migration data validation error:" + lcMigrationErr).
         END.
@@ -383,10 +383,11 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                     ELSE IF THIS-OBJECT:orderChannel BEGINS "fusion" THEN
                         ASSIGN THIS-OBJECT:statusCode = {&ORDER_STATUS_PENDING_FIXED_LINE}.
                     ELSE DO:
-                        
+                                                
                         IF THIS-OBJECT:mobileNumberType     = {&TYPE_MNP} OR THIS-OBJECT:mobileNumberType     = {&TYPE_MIGRATION} THEN
                             ASSIGN THIS-OBJECT:statusCode  = {&ORDER_STATUS_MNP}.
-                        ELSE ASSIGN THIS-OBJECT:statusCode  = {&ORDER_STATUS_NEW}.
+                        ELSE 
+                            ASSIGN THIS-OBJECT:statusCode  = {&ORDER_STATUS_NEW}.
                         
                         /*TO-DO PC : STATUS Change based on the multi sim type and multi sim id*/
                         /*TO-DO PC : STATUS Change based on pending main line and porting date*/
@@ -611,7 +612,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
           THIS-OBJECT:roiClose      EQ      FALSE THEN
        DO:
            
-           liRequest  =  DYNAMIC-FUNCTION ("fSubscriptionRequest" IN lhOrderValidations ,
+           liRequest  =  DYNAMIC-FUNCTION ("fSubscriptionRequest" IN lhOrderLibrary ,
                                            INPUT THIS-OBJECT:finalMsSeq ,
                                            INPUT THIS-OBJECT:lcCLI ,
                                            INPUT THIS-OBJECT:objCustomer:CustNum,
@@ -672,7 +673,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             UNDO, THROW NEW ParamError("Unable to update the SIM Status.").
         
     END METHOD.
-                                             
+    
     DESTRUCTOR PUBLIC Order():
 
         IF VALID-OBJECT(objCustomer) THEN
