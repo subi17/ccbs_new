@@ -303,8 +303,10 @@ REPEAT:
       END.
 
       IF fIsConvergenceTariff(lcCLIType) AND 
-         NOT CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = MobSub.MsSeq)
-      THEN DO.
+         NOT CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = MobSub.MsSeq) AND
+         MobSub.MSStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND /* YTS-13493 */
+         MobSub.MSStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}
+      THEN DO:
          IF lcTerminationType EQ "MOBILE" THEN DO:
             liRequest = fTerminationRequest(MobSub.MSSeq,
                                             ldKillStamp,
@@ -365,7 +367,10 @@ REPEAT:
          END.
       END.
       ELSE DO:
-         fError("Subscription is partially terminated. Use FULL termination.").
+         IF MobSub.MSStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
+            fError("Mobile part not yet activated. Use FULL termination.").
+         ELSE
+            fError("Subscription is partially terminated. Use FULL termination.").
          NEXT.
       END.   
       
