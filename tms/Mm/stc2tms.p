@@ -646,7 +646,6 @@ PROCEDURE pUpdateSubscription:
    DEF VAR lcAssignSubId           AS CHAR NO-UNDO.
    DEF VAR liAssignSubId           AS INT  NO-UNDO.
    DEF VAR liOrigMsSeq             AS INT  NO-UNDO.
-   DEF VAR lcTry&BuyCliTypes       AS CHAR NO-UNDO.
    
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -656,10 +655,6 @@ PROCEDURE pUpdateSubscription:
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
    DEF BUFFER lbOrigRequest  FOR MsRequest.
-
-   ASSIGN 
-      lcTry&BuyCliTypes    = fCParamC("Try&BuyCliTypes").
-
 
    /* make sure that customer has a billtarget with correct rateplan */
    liBillTarg = CLIType.BillTarget.
@@ -1063,22 +1058,6 @@ PROCEDURE pUpdateSubscription:
    
       END.
    END.
-
-    /* YCO-968 */ 
-    IF LOOKUP(MsRequest.ReqCparam1, lcTry&BuyCliTypes) > 0 THEN DO:
-       lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
-                                        "CONT_DISC_TB_20",
-                                        16.53, /* discount */
-                                        ldtActDate,
-                                        12/31/18, 
-                                        ?,
-                                        0).
-
-      IF RETURN-VALUE BEGINS "ERROR" THEN
-         RETURN RETURN-VALUE.
-   END.
-
-
 
 END PROCEDURE.
 
