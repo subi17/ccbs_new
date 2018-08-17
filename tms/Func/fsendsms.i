@@ -16,6 +16,9 @@
 {Func/transname.i}
 {Mm/bundle_type.i}
 
+def stream slog.
+output stream slog to "/tmp/yot_5872_test.log".
+
 FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                                         INPUT icSMSText     AS CHARACTER,
                                         INPUT icExtraParams AS CHARACTER,
@@ -165,7 +168,7 @@ PROCEDURE pSendSMS:
 
    DEFINE VARIABLE ldReqStamp             AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE liSMSType              AS INTEGER   NO-UNDO.
-   DEF VAR lcMessage AS CHAR NO-UNDO. 
+   DEF VAR lcMessage AS CHAR NO-UNDO.
 
    DEFINE BUFFER bMobSub    FOR MobSub.
    DEFINE BUFFER MsRequest  FOR MsRequest.
@@ -191,12 +194,24 @@ PROCEDURE pSendSMS:
       Mm.MManMessage:mCreateMMLogSMS(bMobSub.CLI).
       RETURN.
    END.
+    /* YOT-5872 */
+   put stream slog unformatted
+            iiMsSeq "|"
+            iiMsRequest "|"
+            icSMSText "|"
+            icSender "|"
+            icExtraParams "|"
+            Customer.Language
+            skip.
 
    /* send SMS */
    lcMessage = fGetSMSTxt(icSMSText,
                           TODAY,
                           Customer.Language,
                           OUTPUT ldReqStamp).
+   put stream slog unformatted
+      lcMessage skip.
+   output stream slog close.
 
    IF NOT lcMessage > "" THEN RETURN.
 

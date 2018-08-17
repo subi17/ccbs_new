@@ -59,6 +59,8 @@ PROCEDURE pRequestActions:
    DEF VAR llAllowed             AS LOG    NO-UNDO.
    DEF VAR lcSMSName             AS CHAR   NO-UNDO.
    DEF VAR lcSender              AS CHAR   NO-UNDO.
+   DEF VAR ldtFromDate           AS DATE   NO-UNDO.
+   DEF VAR ldPeriodFromSTC       AS DEC    NO-UNDO.
    
    DEF BUFFER bAction FOR ttAction.
    
@@ -93,6 +95,13 @@ PROCEDURE pRequestActions:
 
             IF lcSender EQ "" THEN lcSender = {&SMPP_DEFAULT_SOURCE_ADDRESS}.
                    
+            /* YOT-5872 Separate STC_DONE and iSTC_DONE */
+            ldtFromDate = DATE((MONTH(TODAY)), 1, YEAR(TODAY)).
+            ldPeriodFromSTC = Func.Common:mMake2DT(ldtFromDate,0).
+            IF ihRequest::ActStamp = ldPeriodFromSTC AND 
+               lcSMSName = "STC_DONE" THEN 
+               lcSMSName = "i" + lcSMSName.
+
             RUN pSendSMS(iiMsSeq,
                          ihRequest::MsRequest,
                          lcSMSName,
