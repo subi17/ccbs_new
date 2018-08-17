@@ -92,7 +92,8 @@ FUNCTION fShortCrypt RETURNS CHAR
    liNum = INT64(lcNum).
    lcChSet = "kD0EFGHI1Zz5fghijlmnoAYqrstNOPQRS987cdepuvwxTUVW2346abyBCJKLMX"
    /*+ "<>|-=_.:;,!#¤%&()@§".*/ .
-   lcDigest = STRING(MESSAGE-DIGEST("SHA-256", lcNum, "S0mmarEn")).
+   /*lcDigest = STRING(MESSAGE-DIGEST("SHA-256", lcNum, "S0mmarEn")).*/
+    lcDigest = HMAC-BASE64("SHA-256", "S0mmarEn", lcNum).
 
    /* HEX test  lcChSet = "0123456789ABCDEF".*/
    liBase = LENGTH(lcChSet).
