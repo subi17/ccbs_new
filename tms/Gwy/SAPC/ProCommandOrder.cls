@@ -48,12 +48,12 @@ CLASS Gwy.SAPC.ProCommandOrder INHERITS Gwy.SAPC.ProCommand ABSTRACT:
       loJsonObject:Add("orderID", STRING(aiProCommandId)).
       loJsonObject:Add("orderType", icOrderType).
       loJsonObject:Add("subscriptionID", STRING(MsRequest.MsSeq)).
-      loJsonObject:Add("Sellchannel", "TMSB2C").
-      loJsonObject:Add("Selldate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.ActStamp))).
-      loJsonObject:Add("Seller", IF MsRequest.SalesMan > "" THEN MsRequest.SalesMan ELSE MsRequest.UserCode).
+      loJsonObject:Add("sellChannel", "TMSB2C").
+      loJsonObject:Add("sellDate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.ActStamp))).
+      loJsonObject:Add("seller", IF MsRequest.SalesMan > "" THEN MsRequest.SalesMan ELSE MsRequest.UserCode).
       loJsonObject:Add("createdBy", IF MsRequest.SalesMan > "" THEN MsRequest.SalesMan ELSE MsRequest.UserCode).
 /*
-      loJsonObject:Add("Seller", CAPS(multitenancy.TenantInformation:mGetEffectiveBrand())).
+      loJsonObject:Add("seller", CAPS(multitenancy.TenantInformation:mGetEffectiveBrand())).
       loJsonObject:Add("createdBy", MsRequest.UserCode).
 */
       loJsonObject:Add("createdDate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp))).

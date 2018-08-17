@@ -12,7 +12,6 @@
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
 USING Gwy.SAPC.ProCommandOrder.
-USING Gwy.SAPC.Service.CreateOrder.UnderDefaultPricePlan.
 USING Gwy.SAPC.OrderEnum.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
@@ -50,26 +49,23 @@ CLASS Gwy.SAPC.Service.CreateOrder.DefaultPricePlan INHERITS ServiceObject:
       THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find base mobile bundle '&1' which CLIType '&2' has",
                                                CLIType.BaseBundle, CLIType.CLIType)).
 
-      aoJsonObject:Add("Action",
+      aoJsonObject:Add("action",
                         IF aoProCommandOrder:aoOrderEnum EQ
                            OrderEnum:SUBSCRIPTION_TERMINATE
                         THEN "Delete"
                         ELSE "Add").
 
-      aoJsonObject:Add("Type", "DEFAULT_PRICE_PLAN").
+      aoJsonObject:Add("type", "DEFAULT_PRICE_PLAN").
 
       mAddCharacteristicsArray(mNameValue("emaDataPlan", DayCampaign.EMACode)).
       mAddCharacteristicsArray
          (mNameValue("subscriptionType",
                      STRING(aoProCommandOrder:alPayType,
-                            "prepaid/postpaid"))).
+                            "PREPAID/POSTPAID"))).
 
       aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
       aoJsonObject:Add("Line", mLineObject()).
-
-      aoService = NEW UnderDefaultPricePlan(aoProCommandOrder).
-      aoService:mCreateServices(aoJsonObject).
 
    END METHOD.
 

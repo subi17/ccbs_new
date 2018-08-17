@@ -60,7 +60,7 @@ CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder ABSTRACT:
 
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("clientID", icCustID).
-      loJsonObject:Add("Type", mGetSegment(icCategory)).
+      loJsonObject:Add("type", mGetSegment(icCategory)).
 
       loContactObject = mContactObject().
       IF VALID-OBJECT(loContactObject)

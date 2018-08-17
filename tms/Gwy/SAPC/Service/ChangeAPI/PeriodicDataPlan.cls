@@ -49,9 +49,9 @@ CLASS Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan INHERITS ServiceObject:
                                                        STRING(aoProCommandOrder:aoOrderEnum))).
       END CASE.
 
-      aoJsonObject:Add("Action", lcAction).
+      aoJsonObject:Add("action", lcAction).
 
-      aoJsonObject:Add("Type", "PERIODIC_DATAPLAN").
+      aoJsonObject:Add("type", "PERIODIC_DATAPLAN").
 
       IF aoProCommandOrder:aoOrderEnum EQ OrderEnum:DATAPLAN_MODIFY
       THEN DO:

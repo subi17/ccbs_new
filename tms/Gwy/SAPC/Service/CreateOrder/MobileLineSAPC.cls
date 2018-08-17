@@ -1,6 +1,6 @@
  
  /*------------------------------------------------------------------------
-    File        : MobileLine
+    File        : MobileLineSAPC
     Purpose     : 
     Syntax      : 
     Description : 
@@ -12,14 +12,14 @@
 USING Progress.Lang.*.
 USING Gwy.SAPC.Service.ServiceObject.
 USING Gwy.SAPC.ProCommandOrder.
-USING Gwy.SAPC.Service.ChangeAPI.UnderMobileLine.
+USING Gwy.SAPC.Service.CreateOrder.UnderMobileLineSAPC.
 USING Gwy.SAPC.OrderEnum.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS Gwy.SAPC.Service.ChangeAPI.MobileLine INHERITS ServiceObject: 
+CLASS Gwy.SAPC.Service.CreateOrder.MobileLineSAPC INHERITS ServiceObject: 
 
-   CONSTRUCTOR MobileLine
+   CONSTRUCTOR MobileLineSAPC
       ( ioPCS  AS CLASS ProCommandOrder,
         icType AS CHARACTER ):
 
@@ -31,11 +31,11 @@ CLASS Gwy.SAPC.Service.ChangeAPI.MobileLine INHERITS ServiceObject:
 
       aoJsonObject:Add("action", "None").
 
-      aoJsonObject:Add("type", "MOBILE_LINE").
+      aoJsonObject:Add("type", "MOBILE_LINE_SAPC").
       
       aoJsonObject:AddNull("Characteristics").
 
-      aoService = NEW UnderMobileLine(aoProCommandOrder).
+      aoService = NEW UnderMobileLineSAPC(aoProCommandOrder).
       aoService:mCreateServices(aoJsonObject).
 
    END METHOD.
