@@ -64,7 +64,7 @@ CLASS Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan INHERITS ServiceObject:
       mAddCharacteristicsArray
          (mNameValue("subscriptionType",
                      STRING(aoProCommandOrder:alPayType,
-                            "PREPAID/POSTPAID"))).
+                            "prepaid/postpaid"))).
 
       aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
