@@ -176,7 +176,7 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       THEN aoOrderCustomer:mCreateData(loAttributes:GetJsonObject("customer")).
       
       IF NOT aoOrderCustomer:BankCode > ""  AND
-         aoOrder:PayType EQ FALSE 
+         objOrder:PayType EQ FALSE 
       THEN UNDO, THROW NEW ParamError(SUBSTITUTE("bank_account_invalid|&1",
                                       aoOrderCustomer:BankCode)).
 
