@@ -42,7 +42,7 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamType ,
                                                           OUTPUT lcParamValue).
                                                           
-        IF lcParamType = {&ORDER_PRODUCT_PARAM_CHAR_VALUE} THEN /*CLI Is char value in db while order saving*/
+        IF lcParamType = {&CHARACTER_PARAM} THEN /*CLI Is char value in db while order saving*/
             RETURN lcParamValue.
         
         RETURN "".                                                         
@@ -70,7 +70,7 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamValue).    
                                                           
                                                                                             
-        IF lcParamType = {&ORDER_PRODUCT_PARAM_CHAR_VALUE}  /* ICC is charvalue in orderproductparam*/
+        IF lcParamType = {&CHARACTER_PARAM}  /* ICC is charvalue in orderproductparam*/
         THEN RETURN lcParamValue.
         
         RETURN "".
@@ -118,7 +118,7 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamType ,
                                                           OUTPUT lcParamValue). 
                                                           
-        IF lcParamType = {&ORDER_PRODUCT_PARAM_CHAR_VALUE} THEN /* ICC is charvalue in orderproductparam*/
+        IF lcParamType = {&CHARACTER_PARAM} THEN /* ICC is charvalue in orderproductparam*/
             RETURN lcParamValue.
         
         RETURN "".                                                              
@@ -152,7 +152,7 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamValue).    
                                                           
                                                                                             
-        IF lcParamType = {&ORDER_PRODUCT_PARAM_CHAR_VALUE}  /* ICC is charvalue in orderproductparam*/
+        IF lcParamType = {&CHARACTER_PARAM}  /* ICC is charvalue in orderproductparam*/
         THEN RETURN lcParamValue.
         
         RETURN "".
@@ -178,15 +178,14 @@ CLASS Func.OrderProductsData FINAL:
             
             ASSIGN ocParamType = bfOrderProductParam.ValueType.
             
-            IF ocParamType  = {&ORDER_PRODUCT_PARAM_CHAR_VALUE} THEN
+            IF ocParamType  = {&CHARACTER_PARAM} THEN
                 ASSIGN ocParamValue  =  bfOrderProductParam.CharValue.
-            ELSE IF ocParamType  = {&ORDER_PRODUCT_PARAM_DATE_VALUE} THEN
+            ELSE IF ocParamType  = {&DATE_PARAM} THEN
                 ASSIGN ocParamValue  = STRING(bfOrderProductParam.CharValue , "99/99/99").
-            ELSE IF ocParamType  = {&ORDER_PRODUCT_PARAM_DEC_VALUE} THEN
+            ELSE IF ocParamType  = {&DECIMAL_PARAM} THEN
                 ASSIGN ocParamValue  = STRING(bfOrderProductParam.DecValue).
-            ELSE IF ocParamType  = {&ORDER_PRODUCT_PARAM_INT_VALUE} THEN
-                ASSIGN ocParamValue  = STRING(bfOrderProductParam.IntValue).
-            
+            ELSE IF ocParamType  = {&INTEGER_PARAM} THEN
+                ASSIGN ocParamValue  = STRING(bfOrderProductParam.IntValue).            
         END.                            
                                                               
     END METHOD.               
@@ -219,7 +218,7 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamType ,
                                                           OUTPUT lcParamValue).  
         
-        IF lcParamType = {&ORDER_PRODUCT_PARAM_CHAR_VALUE} THEN 
+        IF lcParamType = {&CHARACTER_PARAM} THEN 
             RETURN lcParamValue.
             
         RETURN "".
@@ -277,7 +276,7 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamType ,
                                                           OUTPUT lcParamValue). 
                                                           
-        IF lcParamType = {&ORDER_PRODUCT_PARAM_DEC_VALUE} THEN 
+        IF lcParamType = {&DECIMAL_PARAM} THEN 
             RETURN DECIMAL(lcParamValue).
             
         RETURN 0.                                                                                                       

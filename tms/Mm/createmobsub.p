@@ -537,15 +537,15 @@ IF NOT AVAIL mobsub THEN DO:
          lcTaxZone = fRegionTaxZone(bInvCust.Region).
       END.
          
-      IF OrderTopup.TopupType  = {&INITIAL_TOPUP}
-      THEN DO:          
-          ASSIGN lcTopupPrefix  =  Func.Common:mGetTMSParamCharValue(INPUT "TOPUP" , INPUT "InitialTopupPrefix").  
-      END.
-      ELSE DO:          
-          ASSIGN lcTopupPrefix  =  Func.Common:mGetTMSParamCharValue(INPUT "TOPUP" , INPUT "CampaignTopupPrefix").          
-      END. 
+      IF OrderTopup.TopupType  = {&INITIAL_TOPUP} THEN
+          ASSIGN 
+              lcTopupPrefix = Func.Common:mGetTMSParamValue(INPUT "TOPUP",INPUT "InitialTopupPrefix",INPUT {&CHARACTER_PARAM}).  
+      ELSE           
+          ASSIGN 
+              lcTopupPrefix = Func.Common:mGetTMSParamValue(INPUT "TOPUP",INPUT "CampaignTopupPrefix",INPUT {&CHARACTER_PARAM}).          
       
-      ASSIGN lcTopupReference = Func.OrderProductsData:mGetOrderProductOfferingID(INPUT OrderTopup.OrderID , INPUT OrderTopup.OrderProductID).
+      ASSIGN 
+          lcTopupReference = Func.OrderProductsData:mGetOrderProductOfferingID(INPUT OrderTopup.OrderID , INPUT OrderTopup.OrderProductID).
       
       IF lcTopupReference = "" THEN ASSIGN lcTopupReference = "CAMPAIGN".
          

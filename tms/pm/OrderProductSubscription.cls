@@ -238,11 +238,8 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
                        objOrder:statusCode = {&ORDER_STATUS_NEW}.
                  
             IF iObjItemStruct:Has("billing_account_id") OR 
-                (objOrder:objCustomer:isNewCustomer = FALSE AND 
-                iObjItemStruct:Has("billing_account_index"))THEN
-            DO:
-                mGetBillingAddressObject(). 
-            END.       
+                (objOrder:objCustomer:isNewCustomer = FALSE AND iObjItemStruct:Has("billing_account_index"))THEN
+                 mGetBillingAddressObject(). 
             
             IF objOrder:isPrePaidOrder AND objOrder:objCustomer:isNewCustomer = FALSE THEN
                 mGetBillingAddressObject(). /* This will prepare address object for the aggrement ordercustomer for prepaid order to existing customer */
@@ -487,9 +484,9 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         
         DEFINE VARIABLE loValidationObj AS CLASS JsonObject NO-UNDO.
         
-        FIND FIRST Address WHERE Address.HostTable    =  "Customer"
-            AND Address.KeyValue     =  STRING(objOrder:objCustomer:CustNum)
-            AND Address.AddressType  =  {&BILLING_ADDRESS} NO-LOCK NO-ERROR.
+        FIND FIRST Address WHERE Address.HostTable    =  "Customer" AND
+                                 Address.KeyValue     =  STRING(objOrder:objCustomer:CustNum) AND
+                                 Address.AddressType  =  {&BILLING_ADDRESS} NO-LOCK NO-ERROR.
 
         IF NOT AVAILABLE Address THEN 
             UNDO,THROW NEW ParamError("Default Billing Address Not Found.").

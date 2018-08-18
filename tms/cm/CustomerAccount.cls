@@ -82,37 +82,40 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	
 	METHOD PUBLIC VOID mCreateData(INPUT ioCustAcctObject AS CLASS JsonObject):
 	   
-	  DEFINE VARIABLE BillAcctArray AS CLASS JsonArray NO-UNDO. 
+	  DEFINE VARIABLE BillAcctArray     AS CLASS JsonArray NO-UNDO. 
+	  DEFINE VARIABLE objBillAddrStruct AS CLASS JsonObject NO-UNDO.
 	    
       ASSIGN 
           THIS-OBJECT:defaultAcct = ioCustAcctObject:GetLogical("default_account")
           THIS-OBJECT:acctName    = ioCustAcctObject:GetCharacter("account_name")
           THIS-OBJECT:validFrom   =  DATETIME-TZ(TODAY)
           THIS-OBJECT:validTo     =  DATETIME-TZ(DATE(12,31,2049))
-          THIS-OBJECT:accountId   =  NEXT-VALUE (accountid)  
-          THIS-OBJECT:custNum     =  objCustomer:CustNum
+          THIS-OBJECT:accountId   =  NEXT-VALUE (accountid)            
           THIS-OBJECT:statusCode  =  0
           objCustomer:custAcctID  =  THIS-OBJECT:accountId. /*0=pending, 1=active*/
           
       IF ioCustAcctObject:Has("billing_address") THEN 
       DO:    
-          objBillingAddress = NEW om.Address().
+          ASSIGN 
+              objBillingAddress = NEW om.Address()
+              objBillAddrStruct = NEW JsonObject()
+              objBillAddrStruct = ioCustAcctObject:GetJsonObject("billing_address").
 
-          objBillingAddress:mCreateData(ioCustAcctObject:GetJsonObject("billing_address")).
+          objBillingAddress:mCreateData(objBillAddrStruct).
 
-          ASSIGN objBillingAddress:KeyValue  = THIS-OBJECT:custNum
-                 objBillingAddress:AddrType  = {&BILLING_ADDRESS}. 
+          ASSIGN objBillingAddress:AddrType  = {&BILLING_ADDRESS}. 
                  
           IF THIS-OBJECT:defaultAcct = TRUE THEN 
-              objCustomer:mAssignDefaultAddressObj(ioCustAcctObject:GetJsonObject("billing_address")).
+              objCustomer:mAssignDefaultAddressObj(objBillAddrStruct).
+             
+          objCustomer:mAssignRegion(objBillAddrStruct:GetCharacter("region")).    
       END.
       
       IF ioCustAcctObject:Has("billing_accounts") THEN 
       DO:
-          
-          ASSIGN BillAcctArray = ioCustAcctObject:GetJsonArray("billing_accounts").
+          ASSIGN 
+              BillAcctArray = ioCustAcctObject:GetJsonArray("billing_accounts").
           mCreateBillingAcct(BillAcctArray).
-                
       END.
 	    
 	END METHOD.
@@ -141,8 +144,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
                 ttBillingAcct.BillAcctNum = mNextBillAcctNum().
                      
             ASSIGN 
-                THIS-OBJECT:billingAcctIds = THIS-OBJECT:billingAcctIds  + "," + objBillAcct:mGetBillingAcctID().
-                    
+                THIS-OBJECT:billingAcctIds = THIS-OBJECT:billingAcctIds  + "," + objBillAcct:mGetBillingAcctID().                    
         END.      
 	    
         ASSIGN 
@@ -154,17 +156,21 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
 	                                        
     	CREATE CustomerAccount.
     	    
-	    ASSIGN Customeraccount.AccountID   = THIS-OBJECT:accountId
-	           CustomerAccount.CustNum     = THIS-OBJECT:custNum
-	           CustomerAccount.DefaultAcc  = THIS-OBJECT:defaultAcct
-	           CustomerAccount.AccountName = THIS-OBJECT:acctName
-	           CustomerAccount.FromDate    = THIS-OBJECT:validFrom
-	           CustomerAccount.ToDate      = THIS-OBJECT:validTo
-	           CustomerAccount.StatusCode  = THIS-OBJECT:statusCode
-	     .
+        ASSIGN 
+            Customeraccount.AccountID   = THIS-OBJECT:accountId
+            CustomerAccount.CustNum     = objCustomer:CustNum
+            CustomerAccount.DefaultAcc  = THIS-OBJECT:defaultAcct
+            CustomerAccount.AccountName = THIS-OBJECT:acctName
+            CustomerAccount.FromDate    = THIS-OBJECT:validFrom
+            CustomerAccount.ToDate      = THIS-OBJECT:validTo
+            CustomerAccount.StatusCode  = THIS-OBJECT:statusCode
+            THIS-OBJECT:custNum         = CustomerAccount.CustNum
+            .
 	   
 	    IF VALID-OBJECT(objBillingAddress) THEN 
 	    DO:
+            ASSIGN 
+                objBillingAddress:KeyValue  = THIS-OBJECT:custNum.
             objBillingAddress:mStoreData().
             ASSIGN THIS-OBJECT:billAddrId = objBillingAddress:AddrID.	         
 	    END.

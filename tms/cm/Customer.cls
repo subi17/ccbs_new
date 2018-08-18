@@ -152,7 +152,15 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
     DEFINE PUBLIC PROPERTY bankCode AS CHARACTER NO-UNDO
         GET.
         SET.
-
+        
+    DEFINE PUBLIC PROPERTY region AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY invoiceGroup AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
     DEFINE TEMP-TABLE ttCustAccts NO-UNDO 
         FIELDS custacctobj  AS CLASS Progress.Lang.Object
         FIELDS custacctnum  AS INTEGER
@@ -370,40 +378,63 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
      
    END METHOD.
 
-   METHOD PUBLIC VOID mStoreCustomer():
+    METHOD PUBLIC VOID mStoreCustomer():
 
-      CREATE Customer.
+        DEFINE BUFFER bfNewCustomer FOR Customer.
 
-      ASSIGN      
-         Customer.CustNum           = THIS-OBJECT:custNum
-         Customer.HonTitle          = THIS-OBJECT:custTitle  
-         Customer.FirstName         = THIS-OBJECT:firstName
-         Customer.CustName          = THIS-OBJECT:surName1
-         Customer.SurName2          = THIS-OBJECT:surName2
-         Customer.Nationality       = THIS-OBJECT:nationality
-         Customer.Language          = INTEGER(THIS-OBJECT:language)
-         Customer.CustIdType        = THIS-OBJECT:custIdType
-         Customer.OrgId             = THIS-OBJECT:custId
-         Customer.AuthCustIdType    = THIS-OBJECT:authCustIdType
-         Customer.AuthCustId        = THIS-OBJECT:authCustId
-         Customer.Birthday          = THIS-OBJECT:birthDay
-         Customer.Email             = THIS-OBJECT:email
-         Customer.SMSNumber         = THIS-OBJECT:mobileNumber
-         Customer.Phone             = THIS-OBJECT:fixedNumber
-         Customer.FoundationDate    = THIS-OBJECT:foundationDate
-         Customer.CompanyName       = THIS-OBJECT:companyName
-         Customer.Profession        = THIS-OBJECT:profession
-         Customer.RateCust          = Customer.CustNum
-         Customer.InvCust           = Customer.CustNum
-         Customer.PaymCust          = Customer.CustNum
-         Customer.RepCust           = Customer.CustNum
-         Customer.AgrCust           = Customer.CustNum
-         Customer.Brand             = Syst.Var:gcBrand
-         Customer.CreUser           = Syst.Var:katun
-         Customer.CreDate           = TODAY 
-         Customer.Category          = THIS-OBJECT:category.
+        DEFINE VARIABLE liParamName AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE liTempCust  AS INTEGER   NO-UNDO.
 
-   END METHOD.
+        mGetInvoiceGroup().
+        
+        ASSIGN 
+            liParamName = "DefCust" + THIS-OBJECT:invoiceGroup.
+      
+        ASSIGN 
+            THIS-OBJECT:custNum = INTEGER(Func.Common:mGetTMSParamValue("",liParamName,input {&INTEGER_PARAM})). 
+
+        IF THIS-OBJECT:custNum = 0 OR THIS-OBJECT:custNum = ? THEN 
+            ASSIGN 
+                THIS-OBJECT:custNum = 300.
+                
+        ASSIGN liTempCust = THIS-OBJECT:custNum. /*cannot use properties as input-output params*/
+                
+        RUN Mm/copymobcu.p(INPUT-OUTPUT liTempCust, INPUT FALSE).
+        
+        ASSIGN THIS-OBJECT:custNum = liTempCust.
+        
+        FIND FIRST bfNewCustomer EXCLUSIVE-LOCK WHERE 
+                   bfNewCustomer.CustNum = THIS-OBJECT:custNum
+            NO-WAIT NO-ERROR.
+                   
+        IF LOCKED(bfNewCustomer) THEN 
+            UNDO , THROW NEW ParamError ("Customer record is locked").
+            
+        IF NOT AVAILABLE bfNewCustomer THEN 
+            UNDO , THROW NEW ParamError ("Customer record is not available to update").
+        
+        ASSIGN      
+            THIS-OBJECT:custNum          = bfNewCustomer.CustNum
+            bfNewCustomer.HonTitle       = THIS-OBJECT:custTitle  
+            bfNewCustomer.FirstName      = THIS-OBJECT:firstName
+            bfNewCustomer.CustName       = THIS-OBJECT:surName1
+            bfNewCustomer.SurName2       = THIS-OBJECT:surName2
+            bfNewCustomer.Nationality    = THIS-OBJECT:nationality
+            bfNewCustomer.Language       = INTEGER(THIS-OBJECT:language)
+            bfNewCustomer.CustIdType     = THIS-OBJECT:custIdType
+            bfNewCustomer.OrgId          = THIS-OBJECT:custId
+            bfNewCustomer.AuthCustIdType = THIS-OBJECT:authCustIdType
+            bfNewCustomer.AuthCustId     = THIS-OBJECT:authCustId
+            bfNewCustomer.Birthday       = THIS-OBJECT:birthDay
+            bfNewCustomer.Email          = THIS-OBJECT:email
+            bfNewCustomer.SMSNumber      = THIS-OBJECT:mobileNumber
+            bfNewCustomer.Phone          = THIS-OBJECT:fixedNumber
+            bfNewCustomer.FoundationDate = THIS-OBJECT:foundationDate
+            bfNewCustomer.CompanyName    = THIS-OBJECT:companyName
+            bfNewCustomer.Profession     = THIS-OBJECT:profession
+            bfNewCustomer.Category       = THIS-OBJECT:category.
+
+    END METHOD.
 
    METHOD PUBLIC VOID mStoreCustomerAccount():
 
@@ -621,6 +652,44 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         
     END METHOD.
     
+    METHOD PUBLIC VOID mGetInvoiceGroup():
+        
+        IF THIS-OBJECT:region > "" THEN 
+        DO:
+            FIND Region WHERE Region.Region = THIS-OBJECT:region NO-LOCK NO-ERROR.
+            IF AVAILABLE Region THEN 
+            DO:            
+                FOR FIRST InvGroup NO-LOCK WHERE
+                          InvGroup.Brand   = Syst.Var:gcBrand AND
+                          InvGroup.TaxZone = Region.TaxZone:                              
+                    ASSIGN 
+                        THIS-OBJECT:invoiceGroup = InvGroup.InvGroup.                               
+                END.
+            END.   
+        END.
+
+        /* if nothing was found based on region then get first with empty taxzone */
+        FOR FIRST InvGroup NO-LOCK WHERE
+                  InvGroup.Brand   = Syst.Var:gcBrand AND
+                  InvGroup.TaxZone = "":                      
+            ASSIGN 
+                THIS-OBJECT:invoiceGroup = InvGroup.InvGroup.                     
+        END.   
+
+        /* if nothing was found then just get first */
+        FOR FIRST InvGroup NO-LOCK WHERE
+                  InvGroup.Brand   = Syst.Var:gcBrand:                      
+            ASSIGN 
+                THIS-OBJECT:invoiceGroup = InvGroup.InvGroup.                    
+        END.   
+        
+    END METHOD.
+    
+    METHOD PUBLIC VOID mAssignRegion(INPUT lcRegion AS CHARACTER):
+
+        ASSIGN THIS-OBJECT:region = lcRegion.
+        
+    END METHOD.
      
     DESTRUCTOR PUBLIC Customer():
         
