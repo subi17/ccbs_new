@@ -92,7 +92,7 @@ DEF VAR lcProductCLI          AS CHAR NO-UNDO.
 DEF VAR lcOrderSubICC         AS CHAR NO-UNDO.
 DEF VAR lcTopupPrefix         AS CHAR NO-UNDO.
 DEF VAR lcTopupReference      AS CHAR NO-UNDO.
-
+DEF VAR liSubscriptionProductId AS INTE NO-UNDO.
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -191,17 +191,19 @@ FIND FIRST order WHERE
            Order.MSSeq = MSRequest.MSSeq
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
-IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID)
-THEN DO:
+IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID) THEN 
+DO:
     ASSIGN 
-        lcProductCLIType   =   Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
-        lcProductCLI       =   Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
-        lcOrderSubICC      =   Func.OrderProductsData:mGetOrderMobileICC(Order.OrderID).
+        lcProductCLIType        = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
+        lcProductCLI            = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
+        lcOrderSubICC           = Func.OrderProductsData:mGetOrderMobileICC(Order.OrderID)
+        liSubscriptionProductId = fGetParentProductID(Order.OrderID,{&ORDER_PRODUCT_SUBSCRIPTION}).
 END.
 ELSE DO:
-    ASSIGN lcProductCLIType  = Order.CLIType
-           lcProductCLI      = Order.CLI
-           lcOrderSubICC     = Order.ICC.    
+    ASSIGN lcProductCLIType        = Order.CLIType
+           lcProductCLI            = Order.CLI
+           lcOrderSubICC           = Order.ICC
+           liSubscriptionProductId = 0.    
 END.
 
 RUN check-order(output lcErrorTxt).
@@ -540,15 +542,15 @@ IF NOT AVAIL mobsub THEN DO:
          lcTaxZone = fRegionTaxZone(bInvCust.Region).
       END.
          
-      IF OrderTopup.TopupType  = {&INITIAL_TOPUP}
-      THEN DO:          
-          ASSIGN lcTopupPrefix  =  Func.Common:mGetTMSParamCharValue(INPUT "TOPUP" , INPUT "InitialTopupPrefix").  
-      END.
-      ELSE DO:          
-          ASSIGN lcTopupPrefix  =  Func.Common:mGetTMSParamCharValue(INPUT "TOPUP" , INPUT "CampaignTopupPrefix").          
-      END. 
+      IF OrderTopup.TopupType  = {&INITIAL_TOPUP} THEN
+          ASSIGN 
+              lcTopupPrefix = Func.Common:mGetTMSParamValue(INPUT "TOPUP",INPUT "InitialTopupPrefix",INPUT {&CHARACTER_PARAM}).  
+      ELSE           
+          ASSIGN 
+              lcTopupPrefix = Func.Common:mGetTMSParamValue(INPUT "TOPUP",INPUT "CampaignTopupPrefix",INPUT {&CHARACTER_PARAM}).          
       
-      ASSIGN lcTopupReference = Func.OrderProductsData:mGetOrderProductOfferingID(INPUT OrderTopup.OrderID , INPUT OrderTopup.OrderProductID).
+      ASSIGN 
+          lcTopupReference = Func.OrderProductsData:mGetOrderProductOfferingID(INPUT OrderTopup.OrderID , INPUT OrderTopup.OrderProductID).
       
       IF lcTopupReference = "" THEN ASSIGN lcTopupReference = "CAMPAIGN".
          
@@ -810,6 +812,10 @@ IF AVAIL OrderCustomer THEN DO:
 END.
 
 fSetOrderStatus(Order.OrderId,"6").  
+
+IF liSubscriptionProductId > 0 THEN
+   fSetOrderProductStatus(Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_DELIVERED}).
+
 fMarkOrderStamp(Order.OrderID,
                 "Delivery",
                 Func.Common:mMakeTS()).

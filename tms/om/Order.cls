@@ -665,8 +665,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         DO:
             
             IF THIS-OBJECT:mobileNumberType = "RENEWAL" THEN 
-                ASSIGN bfSIM.SimStat   = 13.
-            ELSE ASSIGN bfSIM.SimStat   =  4.
+                ASSIGN 
+                    bfSIM.SimStat   = 13.
+            ELSE 
+                ASSIGN bfSIM.SimStat   =  4.
             
         END.
         ELSE 

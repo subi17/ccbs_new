@@ -37,7 +37,7 @@ DEFINE VARIABLE loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
 DEFINE BUFFER bf_Order FOR Order.
 
 /* ***************************  Functions  *************************** */
-FUNCTION fGetParentProductID RETURNS INT
+FUNCTION fGetParentProductIDBasedOnChild RETURNS INT
     (INPUT iiOrderID             AS INT,
      INPUT iiChildOrderProductID AS INT):
 
@@ -309,15 +309,19 @@ PROCEDURE pProcess:
              OrderProduct.OrderID  = iiOrderID AND
              OrderProduct.ParentID = 0         BY OrderProduct.OrderProductID:     
         
-        IF LOOKUP(OrderProduct.StatusCode, {&ORDER_STATUS_COMPANY_NEW}     + "," + 
-                                           {&ORDER_STATUS_COMPANY_MNP}     + "," + 
-                                           {&ORDER_STATUS_ROI_LEVEL_1}     + "," + 
-                                           {&ORDER_STATUS_ROI_LEVEL_2}     + "," +
-                                           {&ORDER_STATUS_ROI_LEVEL_3}     + "," +
-                                           {&ORDER_STATUS_MORE_DOC_NEEDED} + "," + 
-                                           {&ORDER_STATUS_ERROR}           + "," + 
-                                           {&ORDER_STATUS_ONGOING}         + "," +  
-                                           {&ORDER_INACTIVE_STATUSES}) > 0 THEN 
+        IF LOOKUP(OrderProduct.StatusCode, {&ORDER_STATUS_COMPANY_NEW}         + "," + 
+                                           {&ORDER_STATUS_COMPANY_MNP}         + "," + 
+                                           {&ORDER_STATUS_ROI_LEVEL_1}         + "," + 
+                                           {&ORDER_STATUS_ROI_LEVEL_2}         + "," +
+                                           {&ORDER_STATUS_ROI_LEVEL_3}         + "," +
+                                           {&ORDER_STATUS_MORE_DOC_NEEDED}     + "," + 
+                                           {&ORDER_STATUS_ERROR}               + "," + 
+                                           {&ORDER_STATUS_ONGOING}             + "," +  
+                                           {&ORDER_INACTIVE_STATUSES}          + "," + 
+                                           {&ORDER_STATUS_MNP_ON_HOLD}         + "," + 
+                                           {&ORDER_STATUS_SENDING_TO_LO}       + "," +
+                                           {&ORDER_STATUS_PENDING_ICC_FROM_LO} + "," + 
+                                           {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}) > 0 THEN 
            NEXT.
 
         IF Func.ValidateOrder:mIsConvergentTariff(OrderProduct.ProductID) THEN
@@ -349,6 +353,21 @@ PROCEDURE pProcess:
             FOR EACH bf_ChildOrderProduct WHERE 
                      bf_ChildOrderProduct.OrderId  = OrderProduct.OrderId        AND 
                      bf_ChildOrderProduct.ParentID = OrderProduct.OrderProductID NO-LOCK:
+
+                IF LOOKUP(bf_ChildOrderProduct.StatusCode, {&ORDER_STATUS_COMPANY_NEW}         + "," + 
+                                                           {&ORDER_STATUS_COMPANY_MNP}         + "," + 
+                                                           {&ORDER_STATUS_ROI_LEVEL_1}         + "," + 
+                                                           {&ORDER_STATUS_ROI_LEVEL_2}         + "," +
+                                                           {&ORDER_STATUS_ROI_LEVEL_3}         + "," +
+                                                           {&ORDER_STATUS_MORE_DOC_NEEDED}     + "," + 
+                                                           {&ORDER_STATUS_ERROR}               + "," + 
+                                                           {&ORDER_STATUS_ONGOING}             + "," +  
+                                                           {&ORDER_INACTIVE_STATUSES}          + "," + 
+                                                           {&ORDER_STATUS_MNP_ON_HOLD}         + "," + 
+                                                           {&ORDER_STATUS_SENDING_TO_LO}       + "," +
+                                                           {&ORDER_STATUS_PENDING_ICC_FROM_LO} + "," + 
+                                                           {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}) > 0 THEN
+                   NEXT.                                                     
 
                 RUN pOrderProduct(bf_ChildOrderProduct.ActionType, bf_ChildOrderProduct.OrderProductID).
 

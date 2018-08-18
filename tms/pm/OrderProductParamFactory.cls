@@ -54,78 +54,78 @@ CLASS pm.OrderProductParamFactory IMPLEMENTS bss.cls.IObjectStorage :
         IF iObjParamStruct:Has("fixedline_number_type") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("fixedline_number_type"),
                                             "fixedline_number_type",
-                                            {&ORDER_PRODUCT_PARAM_CHAR_VALUE}). 
+                                            {&CHARACTER_PARAM}). 
                                      
         IF iObjParamStruct:Has("fixedline_number") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("fixedline_number"),
                                      "fixedline_number",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}). 
+                                     {&CHARACTER_PARAM}). 
                                      
         IF iObjParamStruct:Has("estimated_speed") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("estimated_speed"),
                                      "estimated_speed",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).   
+                                     {&CHARACTER_PARAM}).   
                                      
         IF iObjParamStruct:Has("serial_number") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("serial_number"),
                                      "serial_number",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).  
+                                     {&CHARACTER_PARAM}).  
         
         IF iObjParamStruct:Has("fixedline_old_operator_code") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("fixedline_old_operator_code"),
                                      "fixedline_old_operator_code",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).        
+                                     {&CHARACTER_PARAM}).        
             
         IF iObjParamStruct:Has("fixedline_old_operator_name") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("fixedline_old_operator_name"),
                                      "fixedline_old_operator_name",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).
+                                     {&CHARACTER_PARAM}).
                                                                    
         
         IF iObjParamStruct:Has("mobile_number_type") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_number_type"),
                                      "mobile_number_type",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).  
+                                     {&CHARACTER_PARAM}).  
                                      
         IF iObjParamStruct:Has("mobile_number") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_number"),
                                      "mobile_number",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).  
+                                     {&CHARACTER_PARAM}).  
                                              
         IF iObjParamStruct:Has("mnptime") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mnptime"),
                                     "mnptime",
-                                    {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).
+                                    {&CHARACTER_PARAM}).
                                              
         IF iObjParamStruct:Has("icc") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("icc"),
                                      "icc",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).  
+                                     {&CHARACTER_PARAM}).  
                                      
         IF iObjParamStruct:Has("mobile_old_operator_code") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_old_operator_code"),
                                      "mobile_old_operator_code",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}).  
+                                     {&CHARACTER_PARAM}).  
                                      
         IF iObjParamStruct:Has("mobile_old_operator_name") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_old_operator_name"),
                                      "mobile_old_operator_name",
-                                     {&ORDER_PRODUCT_PARAM_CHAR_VALUE}). 
+                                     {&CHARACTER_PARAM}). 
                                      
         IF iObjParamStruct:Has("mobile_old_icc") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_old_icc"),
                                      "mobile_old_icc",
-                                      {&ORDER_PRODUCT_PARAM_CHAR_VALUE}). 
+                                      {&CHARACTER_PARAM}). 
                                      
         IF iObjParamStruct:Has("initial_topup_amount") THEN 
             mCreateOrderProductParam(STRING(iObjParamStruct:GetDecimal("initial_topup_amount")),
                                      "initial_topup_amount",
-                                     {&ORDER_PRODUCT_PARAM_DEC_VALUE}).
+                                     {&DECIMAL_PARAM}).
                                      
         IF iObjParamStruct:Has("initial_topup_display_amount") THEN 
             mCreateOrderProductParam(STRING(iObjParamStruct:GetDecimal("initial_topup_display_amount")),
                                      "initial_topup_display_amount",
-                                     {&ORDER_PRODUCT_PARAM_DEC_VALUE}).     
+                                     {&DECIMAL_PARAM}).     
          
                      
     END METHOD.

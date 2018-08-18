@@ -30,6 +30,8 @@ USING Progress.Lang.*.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+{Syst/tmsconst.i}
+
 CLASS Func.Common FINAL: 
 
    /* METHOD PUBLIC STATIC FOR converting Date FORMAT */
@@ -1318,25 +1320,40 @@ CLASS Func.Common FINAL:
        
    END METHOD.
    
-   METHOD PUBLIC STATIC CHARACTER mGetTMSParamCharValue ( INPUT icGroupCode AS CHARACTER,
-                                                          INPUT icParamCode AS CHARACTER) :
+   METHOD PUBLIC STATIC CHARACTER mGetTMSParamValue ( INPUT icGroupCode AS CHARACTER,
+                                                      INPUT icParamCode AS CHARACTER,
+                                                      INPUT icParamType AS CHARACTER) :
        
        DEFINE BUFFER bfTMSParam FOR TMSParam.
        
        IF icGroupCode > "" THEN 
-           FIND FIRST bfTMSParam WHERE bfTMSParam.Brand         =   Syst.Var:gcBrand
-                                   AND bfTMSParam.ParamGroup    =   icGroupCode
-                                   AND bfTMSParam.ParamCode     =   icParamCode
-                                   NO-LOCK NO-ERROR.
+           FIND FIRST bfTMSParam WHERE bfTMSParam.Brand      = Syst.Var:gcBrand
+                                   AND bfTMSParam.ParamGroup = icGroupCode
+                                   AND bfTMSParam.ParamCode  = icParamCode
+                                 NO-LOCK NO-ERROR.
        
        ELSE 
-           FIND FIRST bfTMSParam WHERE bfTMSParam.Brand         =   Syst.Var:gcBrand
-                                   AND bfTMSParam.ParamCode     =   icParamCode
+           FIND FIRST bfTMSParam WHERE bfTMSParam.Brand     = Syst.Var:gcBrand
+                                   AND bfTMSParam.ParamCode = icParamCode
                                  NO-LOCK NO-ERROR.
                        
        IF NOT AVAILABLE bfTMSParam THEN RETURN "".
-                          
-       RETURN bfTMSParam.CharVal.
+       
+       CASE icParamType :
+            
+           WHEN {&CHARACTER_PARAM} THEN             
+               RETURN bfTMSParam.CharVal.
+           WHEN {&DATE_PARAM} THEN             
+               RETURN STRING(bfTMSParam.DateVal,"99/99/99").
+           WHEN {&DECIMAL_PARAM} THEN             
+               RETURN STRING(bfTMSParam.DecVal).
+           WHEN {&INTEGER_PARAM} THEN 
+               RETURN STRING(bfTMSParam.IntVal).
+           OTHERWISE .
+           
+       END CASE.                  
+       
+       RETURN "".
        
    END METHOD.
    

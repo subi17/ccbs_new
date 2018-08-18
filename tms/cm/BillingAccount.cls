@@ -127,8 +127,6 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:paymentMethod = mGetTMSCodeValue("AccRec" , "ChargeType" , ioBillingAcct:GetCharacter("invoice_charge_type"))
             THIS-OBJECT:mandateID     = ioBillingAcct:GetCharacter("mandate_id")
             THIS-OBJECT:mandateDate   = Func.Common:mGetDate(ioBillingAcct:GetCharacter("mandate_date"))
-            THIS-OBJECT:custNum       = objCustAcct:CustNum
-            THIS-OBJECT:agrCust       = THIS-OBJECT:custNum /*TODO-JSON*/
             THIS-OBJECT:defaultGroup  = TRUE /*TODO-JSON*/
             THIS-OBJECT:billCycle     = ioBillingAcct:GetInteger("invoice_cycle")
             THIS-OBJECT:invInterval   = ioBillingAcct:GetInteger("invoice_interval")
@@ -160,8 +158,8 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             InvoiceTargetGroup.PaymentMethod = THIS-OBJECT:paymentMethod
             InvoiceTargetGroup.MandateID     = THIS-OBJECT:mandateID
             InvoiceTargetGroup.MandateDate   = THIS-OBJECT:mandateDate
-            InvoiceTargetGroup.CustNum       = THIS-OBJECT:custNum
-            InvoiceTargetGroup.AgrCust       = THIS-OBJECT:agrCust
+            InvoiceTargetGroup.CustNum       = objCustAcct:CustNum
+            InvoiceTargetGroup.AgrCust       = InvoiceTargetGroup.CustNum
             InvoiceTargetGroup.DefaultGroup  = THIS-OBJECT:defaultGroup
             InvoiceTargetGroup.BillCycle     = THIS-OBJECT:billCycle
             InvoiceTargetGroup.InvInterval   = THIS-OBJECT:invInterval
@@ -171,6 +169,7 @@ CLASS cm.BillingAccount IMPLEMENTS bss.cls.IObjectStorage:
             InvoiceTargetGroup.StatusCode    = THIS-OBJECT:statusCode
             InvoiceTargetGroup.FromDate      = THIS-OBJECT:fromDate
             InvoiceTargetGroup.ToDate        = THIS-OBJECT:toDate
+            THIS-OBJECT:custNum              = InvoiceTargetGroup.CustNum
             .
             
     END METHOD.

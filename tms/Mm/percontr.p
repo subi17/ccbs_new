@@ -1000,9 +1000,9 @@ PROCEDURE pContractActivation:
         
    /* YCO-757 Periodical Contracts with aplication date delayed.                */
    /* For this Periodical Contracts, delay FromDate, but it must keep EndDate.  */ 
-   lcDelayedPerContList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+   lcDelayedPerContList = Syst.Parameters:getc("DelayedPermanencies", "Discount") NO-ERROR.
    IF LOOKUP(lcDCEvent, lcDelayedPerContList) > 0 THEN DO:
-      liDelayedDays = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+      liDelayedDays = Syst.Parameters:geti("DelayPermanencyValue", "Discount") NO-ERROR.
       IF ldtFromDate < (ldtActDate + liDelayedDays) THEN
          ASSIGN 
             ldtFromDate  = (ldtActDate + liDelayedDays)
