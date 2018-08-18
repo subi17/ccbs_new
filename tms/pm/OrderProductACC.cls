@@ -199,7 +199,8 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
 
       IF objOrder:mobSubCustNum NE objOrder:objCustomer:CustNum
       THEN UNDO, THROW NEW
-                          objOrder:objCustomer:CustNum)).
+           ParamError(SUBSTITUTE("subscription-customer-and-donor-customer-mismatch|&1",                         
+                      objOrder:objCustomer:CustNum)).
 
       IF aoOrderCustomer:Country NE "ES"
       THEN UNDO, THROW NEW ParamError("country-only-es-valid").
