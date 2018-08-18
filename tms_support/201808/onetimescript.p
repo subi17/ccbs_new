@@ -19,5 +19,7 @@ END FUNCTION .
  fCreateMenuText(9861,"PRODUCT PARAM'S"). 
  fCreateMenuText(9862,"MOBILE  SUBSCRIPTION"). 
  fCreateMenuText(9863,"FIXED   SUBSCRIPTION"). 
+ fCreateMenuText(9864,"CUSTOMERACCOUNT"). 
+ 
    
    

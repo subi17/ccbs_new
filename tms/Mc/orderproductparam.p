@@ -54,26 +54,23 @@ DEF VAR lcHeader     AS CHAR  NO-UNDO.
 
 DEF TEMP-TABLE ttOrdProductParam NO-UNDO LIKE OrderProductParam
    FIELD DbRec       AS INT
+   FIELD ParamValue  AS CHAR
    INDEX OrderProductID OrderProductID
    INDEX OrderID OrderID.
    
 DEF BUFFER bttOrdProductParam FOR ttOrdProductParam.   
 
-form
-    ttOrdProductParam.ParamName   format "x(8)"        
-    ttOrdProductParam.ValueType         
-    ttOrdProductParam.CharValue
-    ttOrdProductParam.DateValue  
-    ttOrdProductParam.DecValue     
-    ttOrdProductParam.IntValue
+FORM
+    ttOrdProductParam.ParamName   FORMAT "x(24)"   
+    ttOrdProductParam.ParamValue  FORMAT "x(24)"   
     WITH OVERLAY ROW FrmRow WIDTH 80 CENTERED SCROLL 1 FrmDown DOWN
     COLOR VALUE(Syst.Var:cfc)   
     TITLE COLOR VALUE(Syst.Var:ctc) " PRODUCT PARAMS OF ORDER PRODUCTID:" + STRING(iiOrderProductID) + " " FRAME sel.
 
-form
+FORM
     ttOrdProductParam.OrderID        COLON 20
     ttOrdProductParam.OrderProductID COLON 20 FORMAT ">>>>>>>9" COLUMN-LABEL "ProductID"
-    ttOrdProductParam.ParamName      COLON 20 format "x(8)"       
+    ttOrdProductParam.ParamName      COLON 20 FORMAT "x(24)"       
     ttOrdProductParam.ValueType      COLON 20       
     ttOrdProductParam.CharValue      COLON 20
     ttOrdProductParam.DateValue      COLON 20
@@ -97,14 +94,19 @@ ELSE IF iiOrderProductID > 0 THEN ASSIGN
    FrmDown = 10.
 
 IF iiOrderID > 0 AND iiOrderProductID > 0 THEN DO:
-   FIND FIRST OrderProductParam WHERE
-              OrderProductParam.orderid = iiOrderID AND
-              OrderProductParam.OrderProductID = iiOrderProductID
-              NO-LOCK NO-ERROR.
-   IF AVAIL OrderProductParam THEN DO:
+   FOR EACH OrderProductParam WHERE
+            OrderProductParam.orderid = iiOrderID AND
+            OrderProductParam.OrderProductID = iiOrderProductID
+            NO-LOCK:
        CREATE ttOrdProductParam.
        BUFFER-COPY OrderProductParam to ttOrdProductParam.
-       ttOrdProductParam.DbRec = RECID(OrderProductParam).  
+       ttOrdProductParam.DbRec = RECID(OrderProductParam).
+       CASE ttOrdProductParam.ValueType:
+          WHEN "CHAR" THEN ASSIGN ttOrdProductParam.ParamValue = STRING(ttOrdProductParam.CharValue).
+          WHEN "INT" THEN ASSIGN ttOrdProductParam.ParamValue = STRING(ttOrdProductParam.IntValue).
+          WHEN "DEC" THEN ASSIGN ttOrdProductParam.ParamValue = STRING(ttOrdProductParam.DecValue).
+          WHEN "DATE" THEN ASSIGN ttOrdProductParam.ParamValue = STRING(ttOrdProductParam.DateValue).
+       END CASE.  
    END. 
 END.  
 
@@ -481,11 +483,7 @@ PROCEDURE local-disp-row:
        RUN local-find-others.
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY ttOrdProductParam.ParamName
-               ttOrdProductParam.ValueType
-               ttOrdProductParam.CharValue
-               ttOrdProductParam.DateValue  
-               ttOrdProductParam.DecValue
-               ttOrdProductParam.IntValue
+               ttOrdProductParam.ParamValue
                WITH FRAME sel.  
 END PROCEDURE.
 

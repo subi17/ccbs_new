@@ -1202,9 +1202,8 @@ PROCEDURE pOrderView:
                               RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT})
                         THEN 2246 /* agreement customer */
                         ELSE 0)
-              Syst.Var:ufk[2] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
-                           RowType = {&ORDERCUSTOMER_ROWTYPE_INVOICE})
-                        THEN 2242 /* invoice customer */
+              Syst.Var:ufk[2] = (IF CAN-FIND(FIRST CustomerAccount OF Order)
+                        THEN 9864 /* customer account */
                         ELSE 0)
               Syst.Var:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_ACC})
@@ -1238,7 +1237,7 @@ PROCEDURE pOrderView:
            THEN RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_AGREEMENT},FALSE).
 
            ELSE IF Syst.Var:toimi = 2 THEN DO:
-              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_INVOICE},FALSE).
+              RUN Mc/customeraccount.p(Order.AccountID).
            END.
 
            ELSE IF Syst.Var:toimi = 3 THEN DO:
