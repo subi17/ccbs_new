@@ -102,6 +102,20 @@ FUNCTION fSetOrderProductStatus RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fSetAllOrderProductsStatus RETURNS LOGICAL 
+    (INPUT iiOrderID        AS INTEGER ,
+     INPUT icStatusCode     AS CHARACTER):
+         
+    DEFINE BUFFER bf_OrderProduct FOR OrderProduct.
+    
+    FOR EACH bf_OrderProduct NO-LOCK WHERE 
+             bf_OrderProduct.OrderID         =  iiOrderID AND 
+             bf_OrderProduct.OrderProductID  >  0 :
+        fSetOrderProductStatus(iiOrderID,bf_OrderProduct.OrderProductID,icStatusCode).           
+    END.
+        
+END FUNCTION.        
+
 FUNCTION fIsMainLineOrderPending RETURNS LOGICAL
    (INPUT pcIdType AS CHAR,
     INPUT pcPersonId AS CHAR,

@@ -158,6 +158,7 @@ ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} AND
 IF lcNewOrderStatus > "" THEN DO:
 
    fSetOrderStatus(Order.OrderId,lcNewOrderStatus).
+   fSetAllOrderProductsStatus(Order.OrderId,lcNewOrderStatus).
    
    IF lcNewOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 
@@ -184,11 +185,15 @@ IF lcNewOrderStatus > "" THEN DO:
    END.
 END.
 ELSE IF order.mnpstatus NE 0 THEN
-   /* mnp order */
-   fSetOrderStatus(Order.OrderId,"3").
+DO:
+    fSetOrderStatus(Order.OrderId,"3").
+    fSetAllOrderProductsStatus(Order.OrderId,lcNewOrderStatus).
+END.
 ELSE 
-   /* normal order */
-   fSetOrderStatus(Order.OrderId,"1").
+DO:
+    fSetOrderStatus(Order.OrderId,"1").
+    fSetAllOrderProductsStatus(Order.OrderId,lcNewOrderStatus).
+END.     
 
 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
 fCleanEventObjects().
