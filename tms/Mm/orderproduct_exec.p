@@ -559,6 +559,8 @@ PROCEDURE pSIM:
         /* When parent product is of type 'convergent subscription' */
         IF Func.ValidateOrder:mIsConvergentTariff(bf_Order.CliType) THEN 
         DO:
+            loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
+
             IF bf_Order.OrderType EQ {&ORDER_TYPE_MNP} AND 
                fGetMobileNumberPortingDate(bf_Order.OrderId, iiOrderProductID) <> ? THEN /* MNP */
             DO:
@@ -617,10 +619,13 @@ PROCEDURE pSIM:
                     END.
                 END.
             END.
+
             loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
         END.
         ELSE
         DO: /* When parent product is of type 'mobile subscription' */ 
+            loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
+
             IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN /* POS */
             DO: /* Ideally, this shouldn't be a possibility */
                 fSetOrderStatus(bf_Order.OrderID,{&ORDER_STATUS_ERROR}).
@@ -653,6 +658,8 @@ PROCEDURE pSIM:
 
         IF fIsSimOnlyMNPNonPosOrder() THEN
         DO:
+            loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
+
             fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_SIM_ONLY_MNP_IN}).
 
             fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_SIM_ONLY_MNP_IN}). 
@@ -673,9 +680,13 @@ PROCEDURE pSIM:
 
        IF bf_Order.ResignationPeriod AND fIsResignationPeriod() THEN /* Delayed order */
        DO:
+          loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
+          
           fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_RESIGNATION}).
 
           fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_RESIGNATION}).
+
+          loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
 
           RETURN "Resignation Period".
        END.   
