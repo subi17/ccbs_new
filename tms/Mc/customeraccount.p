@@ -54,9 +54,11 @@ DEF VAR lcHeader     AS CHAR  NO-UNDO.
 form
     CustomerAccount.AccountID   FORMAT ">>>>>>>9" COLUMN-LABEL "AccountID"
     CustomerAccount.CustNum     FORMAT ">>>>>>>>9"
-    CustomerAccount.DefaultAcc  FORMAT "Yes/No" 
-    CustomerAccount.AccountName FORMAT "X(15)" 
-    CustomerAccount.statuscode  FORMAT ">>>>>>>9"
+    CustomerAccount.AccountName FORMAT "X(24)" COLUMN-LABEL "Name"
+    CustomerAccount.DefaultAcc  FORMAT "Yes/No" COLUMN-LABEL "Default" 
+    CustomerAccount.statuscode  FORMAT ">>9" COLUMN-LABEL "Status"
+    CustomerAccount.FromDate    LABEL "Valid From"
+    CustomerAccount.ToDate      LABEL "Valid To"
     WITH OVERLAY ROW FrmRow WIDTH 80 CENTERED SCROLL 1 FrmDown DOWN
     COLOR VALUE(Syst.Var:cfc)   
     TITLE COLOR VALUE(Syst.Var:ctc) " CUSTOMER ACCOUNT OF ORDER:" + STRING(iiAccountID) + " " FRAME sel.
@@ -377,7 +379,7 @@ BROWSE:
          LEAVE.
          
       END.
-      
+    
       ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
          RUN local-find-FIRST.
          ASSIGN Memory = recid(CustomerAccount) must-print = TRUE.
@@ -442,6 +444,8 @@ PROCEDURE local-disp-row:
       CustomerAccount.DefaultAcc
       CustomerAccount.AccountName
       CustomerAccount.StatusCode
+      CustomerAccount.FromDate
+      CustomerAccount.ToDate
       WITH FRAME sel.       
             
 END PROCEDURE.
@@ -450,7 +454,6 @@ PROCEDURE local-find-others:
 END PROCEDURE.
 
 PROCEDURE local-disp-lis:
-   
    RUN local-find-others.
    CLEAR FRAME lis NO-PAUSE.
    DISPLAY
@@ -467,6 +470,7 @@ END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
+      RUN local-find-this(TRUE).
       RUN local-find-others.
       DISPLAY
          CustomerAccount.AccountID

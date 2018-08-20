@@ -20,6 +20,10 @@ END FUNCTION .
  fCreateMenuText(9862,"MOBILE  SUBSCRIPTION"). 
  fCreateMenuText(9863,"FIXED   SUBSCRIPTION"). 
  fCreateMenuText(9864,"CUSTOMERACCOUNT"). 
+ fCreateMenuText(9865,"BILLING ACCOUNT"). 
+ fCreateMenuText(9866,"TARGET  CUSTOMER"). 
+ 
+ 
  
    
    
