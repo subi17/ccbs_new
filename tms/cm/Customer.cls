@@ -333,7 +333,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        mFillCustomerIDDetails(ioJsonObject).
 
        ASSIGN 
-           liCustnum                  = mGetLatestCustNum()
            THIS-OBJECT:isNewCustomer  = TRUE
            THIS-OBJECT:custTitle      = ioJsonObject:GetCharacter("title")
            THIS-OBJECT:firstName      = ioJsonObject:GetCharacter("fname")
@@ -347,7 +346,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
            THIS-OBJECT:email          = ioJsonObject:GetCharacter("email")
            THIS-OBJECT:mobileNumber   = ioJsonObject:GetCharacter("sms_number")
            THIS-OBJECT:fixedNumber    = ioJsonObject:GetCharacter("phone_number")
-           THIS-OBJECT:custNum        = liCustnum.
+           .
        
        IF ioJsonObject:Has("customer_accounts") THEN 
        DO:
