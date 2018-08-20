@@ -1280,7 +1280,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcPrevHandset         AS CHAR NO-UNDO.
    DEF VAR lcNewPermanency       AS CHAR NO-UNDO.
    DEF VAR lcPrevPermanency      AS CHAR NO-UNDO.
-   DEF VAR lcSFId                AS CHAR NO-UNDO INIT "MASOSS".
+   DEF VAR lcSfId                AS CHAR NO-UNDO INIT "MASOSS".
 
    DEF BUFFER MobSub FOR MobSub.
 
