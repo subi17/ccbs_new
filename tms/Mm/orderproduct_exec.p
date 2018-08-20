@@ -337,15 +337,20 @@ PROCEDURE pProcess:
 
             RUN pOrderProduct(OrderProduct.ActionType, OrderProduct.OrderProductID).  /* Fixed line */
 
-            /* Remaining products like mobile sim */
-            FOR EACH bf_RemainingChildOrderProduct WHERE 
-                     bf_RemainingChildOrderProduct.OrderId  = OrderProduct.OrderId        AND 
-                     bf_RemainingChildOrderProduct.ParentID = OrderProduct.OrderProductID AND 
-                     ROWID(bf_RemainingChildOrderProduct)  <> ROWID(bf_ChildOrderProduct) NO-LOCK:
+            IF CAN-FIND(FIRST MsRequest WHERE 
+                              MsRequest.MsSeq   = bf_Order.MSSeq AND 
+                              MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE}) THEN
+            DO:
+                /* Remaining products like mobile sim */
+                FOR EACH bf_RemainingChildOrderProduct WHERE 
+                         bf_RemainingChildOrderProduct.OrderId  = OrderProduct.OrderId        AND 
+                         bf_RemainingChildOrderProduct.ParentID = OrderProduct.OrderProductID AND 
+                         ROWID(bf_RemainingChildOrderProduct)  <> ROWID(bf_ChildOrderProduct) NO-LOCK:
 
-                RUN pOrderProduct(bf_ChildOrderProduct.ActionType, bf_ChildOrderProduct.OrderProductID).
+                    RUN pOrderProduct(bf_RemainingChildOrderProduct.ActionType, bf_RemainingChildOrderProduct.OrderProductID).
 
-            END.    
+                END.    
+            END.
         END.
         ELSE 
         DO:
