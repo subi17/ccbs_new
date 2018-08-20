@@ -15,6 +15,7 @@
 {Mc/invoicetarget.i}
 
 DEF INPUT PARAMETER iiCustnum  AS INT NO-UNDO.
+DEF INPUT PARAMETER iiITGroupID AS INT NO-UNDO.
 
 DEF BUFFER bInvoiceTargetGroup FOR InvoiceTargetGroup.
 
@@ -61,20 +62,75 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
 
 {Func/brand.i}
 
-FORM
-    invoicetargetgroup.Brand            COLON 20
-    invoicetargetgroup.ITGroupID        COLON 20
-    liCustnum                           COLON 20
-    invoicetargetgroup.Custnum          COLON 20
-    invoicetargetgroup.FromDate         COLON 20
-    invoicetargetgroup.ToDate           COLON 20
-    invoicetargetgroup.DefaultGroup     COLON 20
-    lcDelType                           COLON 20 LABEL "Delivery Type"
-WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(Syst.Var:cfc)
-    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
-    SIDE-LABELS 
-    FRAME lis.
+form
+  InvoiceTargetGroup.Brand   
+     LABEL "Brand ........." 
+  InvoiceTargetGroup.ITGroupID AT 38
+     LABEL "IT GroupID ...."  
+     help "Invoice Target Group ID"     
+     SKIP
+     
+  InvoiceTargetGroup.AccountID 
+     LABEL "Account ID ...." 
+  InvoiceTargetGroup.CustAccName AT 38
+     LABEL "Account Name .."
+     SKIP
+  
+  InvoiceTargetGroup.Currency 
+     LABEL "Currency ......" 
+  InvoiceTargetGroup.BankAccount AT 38
+     LABEL "BankAccount ..." 
+     SKIP
+
+  InvoiceTargetGroup.BankName 
+     LABEL "BankName ......"
+     HELP  "Bank Name" 
+  InvoiceTargetGroup.PaymentMethod AT 38
+     LABEL "Pay Mode ......" 
+     SKIP
+ 
+  InvoiceTargetGroup.MandateID 
+     LABEL "MandateID ....."
+  InvoiceTargetGroup.MandateDate AT 38
+     LABEL "Mandate Date .."
+     SKIP
+  
+  InvoiceTargetGroup.CustNum 
+     LABEL "CustNum ......."
+  InvoiceTargetGroup.AgrCust AT 38
+     LABEL "Agr. Customer ."
+     SKIP
+     
+  InvoiceTargetGroup.DefaultGroup
+     LABEL "DefaultGroup .."
+  InvoiceTargetGroup.BillCycle AT 38
+     LABEL "BillCycle ....."
+     SKIP    
+     
+  InvoiceTargetGroup.InvInterval 
+     LABEL "InvInterval ..." 
+  lcDelType AT 38
+     LABEL "DelType ......."
+     SKIP          
+     
+  InvoiceTargetGroup.InvGroup       
+     LABEL "PayType ......."
+  InvoiceTargetGroup.DueDateOffSet AT 38
+     LABEL "Due Date ......"
+     SKIP
+  
+  InvoiceTargetGroup.StatusCode
+     LABEL "Status Code ..."   
+     SKIP
+     
+  InvoiceTargetGroup.FromDate
+     LABEL "Valid From ...."
+  InvoiceTargetGroup.ToDate AT 38
+     LABEL "Valid To ......"   
+     SKIP   
+  WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
+  SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
+  FRAME lis.
 
 FORM 
     "ITGroupID:" liinvoicetargetgroup
@@ -538,10 +594,15 @@ PROCEDURE local-find-FIRST:
       FIND FIRST invoicetargetgroup USE-INDEX Custnum WHERE 
                  invoicetargetgroup.Custnum = iiCustnum NO-LOCK NO-ERROR.
    
+   ELSE IF iiITGroupID > 0 THEN
+      FIND FIRST invoicetargetgroup USE-INDEX ITGroupID WHERE 
+                 invoicetargetgroup.ITGroupID = iiITGroupID NO-LOCK NO-ERROR.
    ELSE IF order = 1 THEN 
-      FIND FIRST invoicetargetgroup USE-INDEX itgroupid NO-LOCK NO-ERROR.
+      FIND FIRST invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX itgroupid NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
-      FIND FIRST invoicetargetgroup USE-INDEX Custnum NO-LOCK NO-ERROR.
+      FIND FIRST invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX Custnum NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -549,35 +610,56 @@ PROCEDURE local-find-LAST:
 
    IF iiCustnum > 0 THEN 
       FIND LAST invoicetargetgroup USE-INDEX Custnum WHERE 
-                invoicetargetgroup.Custnum = iiCustnum NO-LOCK NO-ERROR.
+                 invoicetargetgroup.Custnum = iiCustnum NO-LOCK NO-ERROR.
+   
+   ELSE IF iiITGroupID > 0 THEN
+      FIND LAST invoicetargetgroup USE-INDEX ITGroupID WHERE 
+                 invoicetargetgroup.ITGroupID = iiITGroupID NO-LOCK NO-ERROR.
    ELSE IF order = 1 THEN 
-      FIND LAST invoicetargetgroup USE-INDEX itgroupid NO-LOCK NO-ERROR.
+      FIND LAST invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX itgroupid NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
-      FIND LAST invoicetargetgroup USE-INDEX Custnum NO-LOCK NO-ERROR.
+      FIND LAST invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX Custnum NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
+
    IF iiCustnum > 0 THEN 
       FIND NEXT invoicetargetgroup USE-INDEX Custnum WHERE 
-                invoicetargetgroup.Custnum = iiCustnum NO-LOCK NO-ERROR.
-
+                 invoicetargetgroup.Custnum = iiCustnum NO-LOCK NO-ERROR.
+   
+   ELSE IF iiITGroupID > 0 THEN
+      FIND NEXT invoicetargetgroup USE-INDEX ITGroupID WHERE 
+                 invoicetargetgroup.ITGroupID = iiITGroupID NO-LOCK NO-ERROR.
    ELSE IF order = 1 THEN 
-      FIND NEXT invoicetargetgroup USE-INDEX itgroupid NO-LOCK NO-ERROR.
+      FIND NEXT invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX itgroupid NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
-      FIND NEXT invoicetargetgroup USE-INDEX Custnum NO-LOCK NO-ERROR.
+      FIND NEXT invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX Custnum NO-LOCK NO-ERROR.
+
+      
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
 
    IF iiCustnum > 0 THEN 
       FIND PREV invoicetargetgroup USE-INDEX Custnum WHERE 
-                invoicetargetgroup.Custnum = iiCustnum NO-LOCK NO-ERROR.
-
+                 invoicetargetgroup.Custnum = iiCustnum NO-LOCK NO-ERROR.
+   
+   ELSE IF iiITGroupID > 0 THEN
+      FIND PREV invoicetargetgroup USE-INDEX ITGroupID WHERE 
+                 invoicetargetgroup.ITGroupID = iiITGroupID NO-LOCK NO-ERROR.
    ELSE IF order = 1 THEN 
-      FIND PREV invoicetargetgroup USE-INDEX itgroupid NO-LOCK NO-ERROR.
+      FIND PREV invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX itgroupid NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
-      FIND PREV invoicetargetgroup USE-INDEX Custnum NO-LOCK NO-ERROR.
+      FIND PREV invoicetargetgroup WHERE (IF iiCustnum   > 0 THEN invoicetargetgroup.Custnum = iiCustnum   ELSE TRUE) 
+                                         AND (IF iiITGroupID > 0 THEN invoicetargetgroup.ITGroupID = iiITGroupID ELSE TRUE) USE-INDEX Custnum NO-LOCK NO-ERROR.
+
+      
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -616,17 +698,29 @@ PROCEDURE local-UPDATE-record:
    RUN local-find-others.
    
    DISP 
-      invoicetargetgroup.Brand       
-      invoicetargetgroup.ITGroupID       
-      invoicetargetgroup.Custnum     
-      invoicetargetgroup.AgrCust  @ liCustnum
-      invoicetargetgroup.DefaultGroup
-      invoicetargetgroup.FromDate    
-      invoicetargetgroup.ToDate      
+      InvoiceTargetGroup.Brand
+      InvoiceTargetGroup.ITGroupID     
+      InvoiceTargetGroup.AccountID     
+      InvoiceTargetGroup.CustAccName   
+      InvoiceTargetGroup.Currency      
+      InvoiceTargetGroup.BankAccount   
+      InvoiceTargetGroup.BankName      
+      InvoiceTargetGroup.PaymentMethod 
+      InvoiceTargetGroup.MandateID     
+      InvoiceTargetGroup.MandateDate   
+      InvoiceTargetGroup.CustNum       
+      InvoiceTargetGroup.AgrCust       
+      InvoiceTargetGroup.DefaultGroup  
+      InvoiceTargetGroup.BillCycle     
+      InvoiceTargetGroup.InvInterval   
       lcDelType
-   
+      InvoiceTargetGroup.InvGroup      
+      InvoiceTargetGroup.DueDateOffSet 
+      InvoiceTargetGroup.StatusCode    
+      InvoiceTargetGroup.FromDate      
+      InvoiceTargetGroup.ToDate 
    WITH FRAME lis.
-
+   
       ASSIGN 
          Syst.Var:ufk    = 0
          Syst.Var:ufk[3] = 9023

@@ -26,6 +26,7 @@ ON F12 ANYWHERE
 END.
 
 DEF INPUT PARAMETER iiOrderID AS INT  NO-UNDO.
+DEF INPUT PARAMETER iiOrderProductID AS INT NO-UNDO.
 
 DEF /* NEW */ shared VAR siirto       AS CHAR.
 
@@ -507,45 +508,49 @@ END PROCEDURE.
         
 PROCEDURE local-find-FIRST:
    IF order = 1 THEN DO:
-      IF iiOrderID > 0 THEN 
+      IF iiOrderID > 0 AND iiOrderProductID > 0 THEN 
          FIND FIRST OrderFusion WHERE 
-                    OrderFusion.OrderID = iiOrderID 
+                    OrderFusion.OrderID = iiOrderID AND
+                    OrderFusion.OrderProductID = iiOrderProductID 
                     NO-LOCK NO-ERROR.
       ELSE
-         FIND FIRST OrderFusion USE-INDEX OrderID NO-LOCK NO-ERROR.
+         FIND FIRST OrderFusion USE-INDEX OrderProductID NO-LOCK NO-ERROR.
    END.         
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN DO:
-      IF iiOrderID > 0 THEN 
+      IF iiOrderID > 0 AND iiOrderProductID > 0 THEN 
          FIND LAST OrderFusion WHERE 
-                   OrderFusion.OrderID = iiOrderID 
+                   OrderFusion.OrderID = iiOrderID AND
+                    OrderFusion.OrderProductID = iiOrderProductID
                    NO-LOCK NO-ERROR.
       ELSE
-         FIND LAST OrderFusion USE-INDEX OrderID NO-LOCK NO-ERROR.
+         FIND LAST OrderFusion USE-INDEX OrderProductID NO-LOCK NO-ERROR.
    END.    
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN DO:
-      IF iiOrderID > 0 THEN 
+      IF iiOrderID > 0 AND iiOrderProductID > 0 THEN 
          FIND NEXT OrderFusion WHERE 
-                   OrderFusion.OrderID = iiOrderID 
+                   OrderFusion.OrderID = iiOrderID AND
+                    OrderFusion.OrderProductID = iiOrderProductID
                    NO-LOCK NO-ERROR.
       ELSE
-         FIND NEXT OrderFusion USE-INDEX OrderID NO-LOCK NO-ERROR.
+         FIND NEXT OrderFusion USE-INDEX OrderProductID NO-LOCK NO-ERROR.
    END.            
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN DO:
-      IF iiOrderID > 0 AND iiOrderID > 0 THEN 
+      IF iiOrderID > 0 AND iiOrderProductID > 0 THEN 
          FIND PREV OrderFusion WHERE 
-                   OrderFusion.OrderID = iiOrderID 
+                   OrderFusion.OrderID = iiOrderID AND
+                    OrderFusion.OrderProductID = iiOrderProductID
                    NO-LOCK NO-ERROR.
       ELSE
-         FIND PREV OrderFusion USE-INDEX OrderID NO-LOCK NO-ERROR.
+         FIND PREV OrderFusion USE-INDEX OrderProductID NO-LOCK NO-ERROR.
    END.     
 END PROCEDURE.
 

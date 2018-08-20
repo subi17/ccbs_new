@@ -8,4 +8,4 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-RUN Mc/invoicetargetgroup.p(0).
+RUN Mc/invoicetargetgroup.p(0,0).
