@@ -230,7 +230,7 @@ FUNCTION HMAC-BASE64 RETURN CHARACTER
     RETURN cHMACSHA.
 END FUNCTION. /** End Of Function HMACSHA1-BASE64 */
 
-/ * Function fShortCrypt 
+/* Function fShortCrypt 
    Function calculates a crypted part of key that stores information for 
    opening correct ESI page.
    Crypted part is combined of MSISDN + part of billing period
@@ -241,7 +241,7 @@ END FUNCTION. /** End Of Function HMACSHA1-BASE64 */
       Secure key and compressed parts are combined. 
       
       Decoding operation is done in ESI Landing Page
-      */
+*/
 FUNCTION fShortCrypt RETURNS CHAR
    (icMSISDN AS CHAR,
     iiPeriod AS INT):
@@ -262,7 +262,7 @@ FUNCTION fShortCrypt RETURNS CHAR
    /* Combine input to integer variable */
    lcNum = icMSISDN + SUBSTRING(STRING(iiPeriod),3). /* 201806 -> 1806 */
    liNum = INT64(lcNum).
-   lcChSet = "kD0EFGHI1Zz5fghijlmnoAYqrstNOPQRS987cdepuvwxTUVW2346abyBCJKLMX"
+   lcChSet = "kD0EFGHI1Zz5fghijlmnoAYqrstNOPQRS987cdepuvwxTUVW2346abyBCJKLMX".
    
    /* Calculate secure key */
    /* Do not chhange this without agreeing with Landing Page side */
