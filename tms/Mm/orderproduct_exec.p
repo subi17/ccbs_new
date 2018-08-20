@@ -186,6 +186,17 @@ FUNCTION fGetFixedLineInstallationTS RETURNS DECIMAL():
 
 END FUNCTION.
 
+FUNCTION fIsFixedLineProvisioningDone RETURNS LOGICAL():
+
+    FIND OrderFusion WHERE OrderFusion.Brand   = bf_Order.Brand   AND
+                           OrderFusion.OrderID = bf_Order.OrderID NO-LOCK NO-ERROR.
+    IF (NOT AVAIL OrderFusion) OR (NOT OrderFusion.FixedInstallationTS > 0) THEN 
+       RETURN FALSE.    
+
+    RETURN TRUE.
+
+END FUNCTION.
+
 FUNCTION fIsADSLFixedLineRouterShipped RETURNS LOGICAL():
 
     FIND OrderFusion WHERE OrderFusion.Brand   = bf_Order.Brand   AND
@@ -766,25 +777,6 @@ PROCEDURE pValidateMSISDN:
 
 END PROCEDURE.
 
-PROCEDURE pValidateFixedLine:
-
-    FIND OrderFusion WHERE OrderFusion.Brand   = bf_Order.Brand   AND
-                           OrderFusion.OrderID = bf_Order.OrderID NO-LOCK NO-ERROR.
-    IF (NOT AVAIL OrderFusion) OR (NOT OrderFusion.FixedInstallationTS > 0) THEN 
-    DO:
-        Func.Common:mWriteMemo("Order",
-                               STRING(bf_Order.OrderID),
-                               0,
-                               "FIXED LINE ACTIVATION FAILED",
-                               "Missing fixed line installation timestamp").
-
-        RETURN "Missing fixed line installation timestamp".
-    END.    
-
-    RETURN "".
-
-END PROCEDURE.
-
 PROCEDURE pReserveMSISDN:
     DEFINE INPUT PARAMETER iiMsSeq   AS INTEGER   NO-UNDO.
     DEFINE INPUT PARAMETER icMSISDN  AS CHARACTER NO-UNDO.
@@ -875,14 +867,11 @@ PROCEDURE pFixedLine:
         lcFixedNumber = Func.OrderProductsData:mGetFixNumber(INPUT iiOrderID).
 
     IF fIsADSLFixedLineRouterShipped() AND 
+       fIsFixedLineProvisioningDone()  AND
        (NOT CAN-FIND(FIRST MsRequest WHERE
                           MsRequest.MsSeq   = bf_Order.MSSeq  AND
                           MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE})) THEN 
-    DO:
-        RUN pValidateFixedLine.
-        IF RETURN-VALUE NE "" THEN
-           RETURN RETURN-VALUE. /* This will mark order status to error. */
-        
+    DO:  
         RUN pFixedLineActivationRequest(iiOrderProductID, lcFixedNumber, lcCLIType).
         IF RETURN-VALUE NE "" THEN
            RETURN RETURN-VALUE.   
