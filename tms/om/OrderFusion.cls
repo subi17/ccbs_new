@@ -75,7 +75,7 @@ CLASS om.OrderFusion:
             THIS-OBJECT:fixedNumber   = iObjAttributeStruct:GetCharacter("fixedline_number")
             THIS-OBJECT:estimateSpeed = Func.Common:mConvertSpeedtoBits(iObjAttributeStruct:GetCharacter("estimated_speed"))
             THIS-OBJECT:serialNumber  = iObjAttributeStruct:GetCharacter("serial_number")
-            THIS-OBJECT:customerType  = iObjAttributeStruct:GetCharacter("broadband_old_product_type")
+            THIS-OBJECT:customerType  = iObjAttributeStruct:GetCharacter("broadband_old_product_type") WHEN iObjAttributeStruct:Has("broadband_old_product_type")
             THIS-OBJECT:customerType  = (IF THIS-OBJECT:customerType = "" THEN "NONE" ELSE THIS-OBJECT:customerType)
             objFusionMessage          = NEW om.FusionMessage(objOrderProduct).
 
