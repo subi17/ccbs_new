@@ -393,6 +393,10 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         objParamFactory:mCreateData(loAttributes).
         
         ASSIGN 
+            objOrderFusion = NEW om.OrderFusion(THIS-OBJECT).
+        objOrderFusion:mCreateData(loAttributes).    
+        
+        ASSIGN 
             objAggrementCustomer         = NEW om.OrderCustomer(objOrder)
             objAggrementCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
             
