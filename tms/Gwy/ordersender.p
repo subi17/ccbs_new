@@ -56,7 +56,7 @@ DEF BUFFER bOldOrder FOR Order.
 DEF BUFFER bSIM FOR SIM.
 
 DEFINE VARIABLE lii           AS INT       NO-UNDO.
-DEFINE VARIABLE lcStatuses    AS CHAR NO-UNDO EXTENT 3 INITIAL ["1","3","30"].
+DEFINE VARIABLE lcStatuses    AS CHAR NO-UNDO EXTENT 3 INITIAL ["1","3","30", "77"].
 
 IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
 
@@ -78,6 +78,8 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
       
       IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID = Order.OrderID) THEN 
           RUN Mm/orderproduct_exec.p(INPUT Order.OrderID).
+      ELSE IF Order.StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE} THEN 
+          NEXT.    
       ELSE
       DO:
           {Mc/ordersender.i LOOP}
