@@ -37,10 +37,6 @@ CLASS om.OrderFusion:
        GET.
        SET.
        
-    DEFINE PUBLIC PROPERTY serialNumber AS CHARACTER NO-UNDO
-       GET.
-       SET.
-       
     DEFINE PUBLIC PROPERTY fixedCurrOper AS CHARACTER NO-UNDO
        GET.
        SET.
@@ -74,7 +70,6 @@ CLASS om.OrderFusion:
             THIS-OBJECT:fixNumberType = iObjAttributeStruct:GetCharacter("fixedline_number_type")
             THIS-OBJECT:fixedNumber   = iObjAttributeStruct:GetCharacter("fixedline_number")
             THIS-OBJECT:estimateSpeed = Func.Common:mConvertSpeedtoBits(iObjAttributeStruct:GetCharacter("estimated_speed"))
-            THIS-OBJECT:serialNumber  = iObjAttributeStruct:GetCharacter("serial_number")
             THIS-OBJECT:customerType  = iObjAttributeStruct:GetCharacter("broadband_old_product_type") WHEN iObjAttributeStruct:Has("broadband_old_product_type")
             THIS-OBJECT:customerType  = (IF THIS-OBJECT:customerType = "" THEN "NONE" ELSE THIS-OBJECT:customerType)
             objFusionMessage          = NEW om.FusionMessage(objOrderProduct).
@@ -113,7 +108,6 @@ CLASS om.OrderFusion:
             OrderFusion.FixedCurrOper      = THIS-OBJECT:fixedCurrOper
             OrderFusion.UpdateTS           = Func.Common:mMakeTS() 
             OrderFusion.FixedCurrOperCode  = THIS-OBJECT:fixedCurrOperCode
-            OrderFusion.SerialNumber       = THIS-OBJECT:serialNumber
             OrderFusion.EstimatedDataSpeed = THIS-OBJECT:estimateSpeed
             OrderFusion.CustomerType       = THIS-OBJECT:customerType
             OrderFusion.ADSLLinkState      = THIS-OBJECT:adslLinkState.
