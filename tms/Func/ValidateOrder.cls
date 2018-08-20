@@ -134,10 +134,9 @@ CLASS Func.ValidateOrder FINAL:
         DEFINE BUFFER bfpcCLIType FOR CLIType.
         
         RETURN (CAN-FIND(FIRST bfpcCLIType NO-LOCK WHERE
-                               bfpcCLIType.Brand             EQ Syst.Var:gcBrand AND
-                               bfpcCLIType.CliType           EQ icCLIType        AND 
-                               bfpcCLIType.FixedLineDownload NE ?                AND 
-                               bfpcCLIType.FixedLineDownload NE "" )) .
+                               bfpcCLIType.Brand      EQ Syst.Var:gcBrand AND
+                               bfpcCLIType.CliType    EQ icCLIType        AND 
+                               bfpcCLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT})) .
         
         
     END METHOD.
