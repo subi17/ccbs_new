@@ -98,7 +98,7 @@ PROCEDURE pRequestActions:
             /* YOT-5872 Separate STC_DONE and iSTC_DONE */
             ldtFromDate = DATE((MONTH(TODAY)), 1, YEAR(TODAY)).
             ldPeriodFromSTC = Func.Common:mMake2DT(ldtFromDate,0).
-            IF ihRequest::ActStamp = ldPeriodFromSTC AND 
+            IF ihRequest::ActStamp <> ldPeriodFromSTC AND 
                lcSMSName = "STC_DONE" THEN 
                lcSMSName = "i" + lcSMSName.
 
