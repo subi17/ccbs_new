@@ -68,7 +68,9 @@ FUNCTION fFindSMSTarget RETURNS CHAR
    RETURN "".
 END.
 
-
+/* From Progress documentation
+   https://knowledgebase.progress.com/articles/Article/000043232
+*/
 FUNCTION BinaryXOR RETURNS INTEGER
     (INPUT intOperand1 AS INTEGER,
     INPUT intOperand2 AS INTEGER):
@@ -98,7 +100,8 @@ FUNCTION BinaryXOR RETURNS INTEGER
 END FUNCTION. /*End function of BinaryXOR */
 
 /* From Progress documentation
-   Function */
+   https://knowledgebase.progress.com/articles/Article/000043232
+ */
 FUNCTION HMAC-BASE64 RETURN CHARACTER 
     (INPUT pcSHA AS CHARACTER,
     INPUT pcKey AS CHARACTER, 
@@ -233,12 +236,12 @@ END FUNCTION. /** End Of Function HMACSHA1-BASE64 */
    Crypted part is combined of MSISDN + part of billing period
    Idea:
       MSISDN and part of billing period is put to inter variable (10 base digit)
-      Secure key is taken from this number.
-      The "10 base digit" is converted/compressed to shorter format by using "bigger base digit" 
-      Secure key and compressed parts are combined.
-     
-*/
-
+      Secure key is taken from this number (5 first digits).
+      The "10 base digit" is converted/compressed to shorter format by using "bigger base digit"
+      Secure key and compressed parts are combined. 
+      
+      Decoding operation is done in ESI Landing Page
+      */
 FUNCTION fShortCrypt RETURNS CHAR
    (icMSISDN AS CHAR,
     iiPeriod AS INT):
@@ -262,10 +265,11 @@ FUNCTION fShortCrypt RETURNS CHAR
    lcChSet = "kD0EFGHI1Zz5fghijlmnoAYqrstNOPQRS987cdepuvwxTUVW2346abyBCJKLMX"
    
    /* Calculate secure key */
+   /* Do not chhange this without agreeing with Landing Page side */
    lcDigest = HMAC-BASE64("SHA-256", "sz009_23#opleK_NaRv0q", lcNum).
 
-   /* Transfer the understandable integer to shorter format */
-   /* 123 = 3*10^0 + 2*10^1 + 1*10^2*  */
+   /* Transfer MSISDN+PERIOD to shorter format */
+   /* Number system works: 123 = 3*10^0 + 2*10^1 + 1*10^2*  */
    /* HEX test  lcChSet = "0123456789ABCDEF".*/
    liBase = LENGTH(lcChSet).
    IF liNum EQ 0 THEN lcOut = SUBSTRING(lcChSet, 1, 1).
@@ -278,7 +282,7 @@ FUNCTION fShortCrypt RETURNS CHAR
 
    END.
 
-   /* Calculete security part */
+   /* Calculete security part - 5 first suitable digits from digest*/
    /* If there are not enough alphabets then assign A */
    liPosition = 1.
    lcAlpha = "abcdefghijklmnopqrstuvwxyz" +
@@ -408,12 +412,10 @@ FOR EACH Invoice WHERE
       IF NOT AVAIL MobSub OR
          MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
 
-      /*Ilkka test 28.3.2018*/
-/*      
-         IF NOT (Mobsub.CLI EQ "661473828" OR
-                 Mobsub.CLI EQ "661485255" OR
-                 Mobsub.CLI EQ "639152671") THEN NEXT SUBINVOICE_LOOP.
-*/
+      
+      IF Mobsub.CLI EQ "" OR
+         Mobsub.CLI EQ ? THEN NEXT SUBINVOICE_LOOP.
+
       IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO:
          lcTemplate = fGetSMSTxt("EInvMessage",
                                  TODAY,
