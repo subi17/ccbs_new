@@ -72,7 +72,7 @@ CLASS om.OrderFusion:
         
         ASSIGN 
             THIS-OBJECT:fixNumberType = iObjAttributeStruct:GetCharacter("fixedline_number_type")
-            THIS-OBJECT:fixedNumber   = iObjAttributeStruct:GetCharacter("FixedNumber")
+            THIS-OBJECT:fixedNumber   = iObjAttributeStruct:GetCharacter("fixedline_number")
             THIS-OBJECT:estimateSpeed = Func.Common:mConvertSpeedtoBits(iObjAttributeStruct:GetCharacter("estimated_speed"))
             THIS-OBJECT:serialNumber  = iObjAttributeStruct:GetCharacter("serial_number")
             THIS-OBJECT:customerType  = iObjAttributeStruct:GetCharacter("broadband_old_product_type")
