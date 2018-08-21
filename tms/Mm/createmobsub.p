@@ -93,6 +93,7 @@ DEF VAR lcOrderSubICC         AS CHAR NO-UNDO.
 DEF VAR lcTopupPrefix         AS CHAR NO-UNDO.
 DEF VAR lcTopupReference      AS CHAR NO-UNDO.
 DEF VAR liSubscriptionProductId AS INTE NO-UNDO.
+DEF VAR llIsFixedOnly         AS CHAR NO-UNDO.
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -191,20 +192,28 @@ FIND FIRST order WHERE
            Order.MSSeq = MSRequest.MSSeq
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
-IF CAN-FIND(FIRST OrderProduct WHERE OrderProduct.OrderID  =  Order.OrderID) THEN 
-DO:
+ASSIGN liSubscriptionProductId = INT(MsRequest.ReqCParam5).
+
+IF liSubscriptionProductId > 0 THEN
+DO: 
     ASSIGN 
-        lcProductCLIType        = Func.OrderProductsData:mGetOrderCLIType(Order.OrderID)
-        lcProductCLI            = Func.OrderProductsData:mGetOrderCLI(Order.OrderID)
-        lcOrderSubICC           = Func.OrderProductsData:mGetOrderMobileICC(Order.OrderID)
-        liSubscriptionProductId = fGetParentProductID(Order.OrderID,{&ORDER_PRODUCT_SUBSCRIPTION}).
-END.
-ELSE DO:
-    ASSIGN lcProductCLIType        = Order.CLIType
-           lcProductCLI            = Order.CLI
-           lcOrderSubICC           = Order.ICC
-           liSubscriptionProductId = 0.    
-END.
+        lcProductCLIType = Func.OrderProductsData:mGetOrderProductCLIType(Order.OrderID, liSubscriptionProductId)
+        llIsFixedOnly    = Func.ValidateOrder:mIsFixedOnlyTariff(lcProductCLIType).
+
+    IF llIsFixedOnly THEN
+        ASSIGN  
+            lcProductCLI  = Func.OrderProductsData:mGetOrderProductFixedNumber(Order.OrderID, liSubscriptionProductId)
+            lcOrderSubICC = "".
+    ELSE
+        ASSIGN  
+            lcProductCLI  = Func.OrderProductsData:mGetOrderProductCLI(Order.OrderID, liSubscriptionProductId)
+            lcOrderSubICC = Func.OrderProductsData:mGetOrderMobileICC(Order.OrderID, liSubscriptionProductId).
+END.        
+ELSE 
+    ASSIGN 
+        lcProductCLIType = Order.CLIType
+        lcProductCLI     = Order.CLI
+        lcOrderSubICC    = Order.ICC.
 
 RUN check-order(output lcErrorTxt).
 
@@ -305,39 +314,42 @@ IF lcProductCLIType EQ "TARJ5" THEN DO:
 END.
    
 IF NOT AVAIL mobsub THEN DO:
+   
+   IF NOT llIsFixedOnly THEN
+   DO: 
+       FIND FIRST MSISDNNumber WHERE
+                  MSISDNNumber.CLI   = lcProductCLI
+       EXCLUSIVE-LOCK NO-ERROR.
+                
+       IF NOT AVAIL msisdnNumber THEN DO:
+          CREATE MSISDNNumber.
+          ASSIGN MSISDNNumber.CLI = lcProductCLI.
+       END.
 
-   FIND FIRST MSISDNNumber WHERE
-              MSISDNNumber.CLI   = lcProductCLI
-   EXCLUSIVE-LOCK NO-ERROR.
-            
-   IF NOT AVAIL msisdnNumber THEN DO:
-      CREATE MSISDNNumber.
-      ASSIGN MSISDNNumber.CLI = lcProductCLI.
-   END.
+       FIND FIRST MSISDN WHERE 
+                  MSISDN.Brand    = Syst.Var:gcBrand    AND 
+                  MSISDN.CLI      = lcProductCLI        AND 
+                  MSISDN.ValidTo >= Func.Common:mMakeTS() 
+       EXCLUSIVE-LOCK NO-ERROR.
 
-   FIND FIRST MSISDN WHERE 
-              MSISDN.Brand    = Syst.Var:gcBrand    AND 
-              MSISDN.CLI      = lcProductCLI        AND 
-              MSISDN.ValidTo >= Func.Common:mMakeTS() 
-   EXCLUSIVE-LOCK NO-ERROR.
+       IF NOT AVAIL MSISDN THEN DO:
 
-   IF NOT AVAIL MSISDN THEN DO:
+          CREATE MSISDN.
+          ASSIGN
+             MSISDN.CLI         = lcProductCLI
+             MSISDN.Brand       = Syst.Var:gcBrand
+             MSISDN.Stat        = 3.
 
-      CREATE MSISDN.
-      ASSIGN
-         MSISDN.CLI         = lcProductCLI
-         MSISDN.Brand       = Syst.Var:gcBrand
-         MSISDN.Stat        = 3.
+          ASSIGN 
+             MSISDN.ValidFrom   = ldeActivationTS 
+             MSISDN.ActionDate  = Today.
+       END.
 
-      ASSIGN 
-         MSISDN.ValidFrom   = ldeActivationTS 
-         MSISDN.ActionDate  = Today.
-   END.
-
-   ELSE DO:
-      
-      fMakeMsidnHistory(INPUT RECID(MSISDN)).
-      MSISDN.Stat        = 3.
+       ELSE DO:
+          
+          fMakeMsidnHistory(INPUT RECID(MSISDN)).
+          MSISDN.Stat        = 3.
+       END.
    END.
 
    RUN Mm/createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
@@ -442,10 +454,10 @@ IF NOT AVAIL mobsub THEN DO:
       MobSub.FixedNumber      = orderfusion.FixedNumber WHEN AVAIL orderfusion
       Mobsub.icc              = lcOrderSubICC WHEN MsRequest.ReqType NE {&REQTYPE_FIXED_LINE_CREATE}
       Mobsub.Brand            = Order.Brand 
-      Mobsub.MsStatus         = (IF MsRequest.ReqType EQ 
-                                    {&REQTYPE_FIXED_LINE_CREATE} 
-                                 THEN {&MSSTATUS_MOBILE_PROV_ONG} 
-                                 ELSE {&MSSTATUS_ACTIVE})
+      Mobsub.MsStatus         = (IF NOT llIsFixedOnly AND MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN 
+                                    {&MSSTATUS_MOBILE_PROV_ONG} 
+                                 ELSE 
+                                    {&MSSTATUS_ACTIVE})
       MobSub.Reseller         = Order.Reseller
       Mobsub.Paytype          = (CLIType.PayType = 2)
       Mobsub.salesman         = Order.salesman 
@@ -585,8 +597,11 @@ IF NOT AVAIL mobsub THEN DO:
       MSOwner.IMSI       = MobSub.IMSI
       MSowner.Paytype    = MObsub.Paytype
       MSOwner.clitype    = mobsub.clitype
-      MSOWner.clievent   = (IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE}                            THEN "F" ELSE "C")
-      Msowner.InPortOper = Order.CurrOper .
+      MSOWner.clievent   = (IF NOT llIsFixedOnly AND MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN 
+                               "F" 
+                            ELSE 
+                               "C")
+      Msowner.InPortOper = Order.CurrOper.
 
       IF fGetOrderMandateId(BUFFER Order,
                             OUTPUT lcMandateId,
@@ -725,6 +740,7 @@ IF NOT AVAIL mobsub THEN DO:
                       MsRequest.MsRequest,
                       {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}). 
       fReqStatus(2,"").
+      IF NOT llIsFixedOnly THEN 
       RETURN.
    END.
 
@@ -1298,7 +1314,7 @@ PROCEDURE check-order:
                    "been checked or is not ok !   "  .
       END.
              
-      IF lcProductCLI    = "" THEN DO:
+      IF lcProductCLI = "" THEN DO:
          ocError = "MSISDN empty".
       END.
              
@@ -1320,7 +1336,7 @@ PROCEDURE check-order:
         ocError =  "Invalid CLIType !".
       END.
       
-      IF lcOrderSubICC = "" THEN 
+      IF NOT llIsFixedOnly AND lcOrderSubICC = "" THEN 
           ASSIGN ocError  = "ICC is not assigned.".
 
       IF ocError ne "" THEN RETURN.

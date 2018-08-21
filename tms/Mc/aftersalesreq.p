@@ -259,6 +259,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
                     INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  Order.ICC,
+                    INPUT  "", /* OrderProductId */
                     INPUT  "", /*for old SIM*/ 
                     INPUT  "", /*for Reason info*/
                     INPUT  "", /*for ContractID*/

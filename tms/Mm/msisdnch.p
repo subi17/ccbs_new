@@ -357,6 +357,7 @@ REPEAT TRANSACTION WITH FRAME main:
                     INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEMSISDN",
                     INPUT  new-cli,
+                    INPUT  "",
                     INPUT  "", /*for old SIM*/
                     INPUT  "", /*for Reason info*/
                     INPUT  "", /*for ContractID*/

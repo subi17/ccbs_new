@@ -58,7 +58,8 @@ FUNCTION fGetParentProductIDBasedOnChild RETURNS INT
 END FUNCTION.
 
 FUNCTION fIsSIMNumberAssigned RETURNS LOGICAL
-    (INPUT iiOrderID AS INT,
+    (INPUT iiOrderID        AS INT,
+     INPUT iiOrderProductId AS INT,
      OUTPUT ocICC    AS CHAR):
 
     DEFINE VARIABLE lcICC             AS CHARACTER NO-UNDO.
@@ -66,7 +67,7 @@ FUNCTION fIsSIMNumberAssigned RETURNS LOGICAL
 
     ASSIGN 
         lcICC             = Func.OrderProductsData:mGetOrderICC(iiOrderID)
-        lcSubscriptionICC = Func.OrderProductsData:mGetOrderMobileICC(iiOrderID)
+        lcSubscriptionICC = Func.OrderProductsData:mGetOrderMobileICC(iiOrderID, iiOrderProductId)
         ocICC             = lcICC.
 
     IF ocICC = "" THEN
@@ -568,9 +569,11 @@ PROCEDURE pSIM:
     DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
 
     DEFINE VARIABLE lcICC AS CHARACTER NO-UNDO.
-      
+    DEFINE VARIABLE liSubscriptionProductId AS INT NO-UNDO.
+
+    ASSIGN liSubscriptionProductId = fGetParentProductIDBasedOnChild(bf_Order.OrderId, iiOrderProductID).  
     /* When SIM is still not alloted */
-    IF NOT fIsSIMNumberAssigned(bf_Order.OrderId, OUTPUT lcICC) THEN 
+    IF NOT fIsSIMNumberAssigned(bf_Order.OrderId, liSubscriptionProductId, OUTPUT lcICC) THEN 
     DO:  
         /* When parent product is of type 'convergent subscription' */
         IF Func.ValidateOrder:mIsConvergentTariff(bf_Order.CliType) THEN 
@@ -863,8 +866,8 @@ PROCEDURE pFixedLine:
     DEFINE VARIABLE lcFixedNumber AS CHARACTER NO-UNDO.
     
     ASSIGN 
-        lcCLIType     = Func.OrderProductsData:mGetOrderCLIType(INPUT iiOrderID)
-        lcFixedNumber = Func.OrderProductsData:mGetFixNumber(INPUT iiOrderID).
+        lcCLIType     = Func.OrderProductsData:mGetOrderCLIType(iiOrderID)
+        lcFixedNumber = Func.OrderProductsData:mGetOrderProductFixedNumber(iiOrderID, iiOrderProductID).
 
     IF fIsADSLFixedLineRouterShipped() AND 
        fIsFixedLineProvisioningDone()  AND
@@ -905,6 +908,7 @@ PROCEDURE pFixedLineActivationRequest:
                          INPUT  ldFixedActTS,
                          INPUT  "CREATE-FIXED",
                          INPUT  STRING(bf_Order.OrderId),
+                         INPUT  STRING(iiOrderProductID),
                          INPUT  "", /*for old SIM*/
                          INPUT  "", /*for Reason info*/
                          INPUT  "", /*for ContractID*/
@@ -976,6 +980,7 @@ PROCEDURE pMobileActivationRequest:
                          INPUT  ldeSwitchTS,
                          INPUT  "CREATE",
                          INPUT  STRING(bf_Order.OrderId),
+                         INPUT  STRING(iiOrderProductID),
                          INPUT  "", /*for old SIM*/
                          INPUT  "", /*for Reason info*/
                          INPUT  "", /*for ContractID*/

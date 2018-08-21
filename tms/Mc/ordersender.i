@@ -55,6 +55,7 @@
                                     INPUT  OrderFusion.FixedInstallationTS,
                                     INPUT  "CREATE-FIXED",
                                     INPUT  STRING(Order.OrderId),
+                                    INPUT  "",
                                     INPUT  "", /*for old SIM*/
                                     INPUT  "", /*for Reason info*/
                                     INPUT  "", /*for ContractID*/
@@ -695,6 +696,7 @@
                                   INPUT  ldeSwitchTS,
                                   INPUT  "CREATE",
                                   INPUT  STRING(Order.OrderId),
+                                  INPUT  "",
                                   INPUT  "", /*for old SIM*/
                                   INPUT  "", /*for Reason info*/
                                   INPUT  "", /*for ContractID*/

@@ -389,6 +389,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
                           INPUT  Func.Common:mMakeTS(),
                           INPUT  "CHANGEICC",
                           INPUT  lcICC,
+                          INPUT  "", /*for OrderProductId */
                           INPUT  "", /*for old SIM*/
                           INPUT  "", /*for Reason info*/
                           INPUT  "", /*for ContractID*/
@@ -442,6 +443,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
                                        Func.Common:mMakeTS(),    /*ActStamp*/
                                        "CHANGEICC",              /*ReqParam*/
                                        lcICC,                    /*ReqParam2*/
+                                       "",                       /*OrderProductId*/
                                        "",                       /*old SIM*/
                                        "",                       /*Reason*/
                                        "",                       /*ContractID*/

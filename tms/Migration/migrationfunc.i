@@ -216,6 +216,7 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
                         INPUT  ldeSwitchTS,
                         INPUT  "CREATE",
                         INPUT  STRING(Order.OrderId),
+                        INPUT  "",
                         INPUT  "", /*for old SIM*/
                         INPUT  "", /*for Reason info*/
                         INPUT  "", /*for ContractID*/

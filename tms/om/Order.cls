@@ -616,6 +616,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                                            INPUT "",
                                            INPUT "",
                                            INPUT "",
+                                           INPUT "",
                                            INPUT FALSE,
                                            INPUT 0.0,
                                            INPUT {&REQUEST_SOURCE_ICC_CHANGE_AUTO},
