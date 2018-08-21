@@ -15,7 +15,7 @@ USING Gwy.SAPC.Service.ServiceObjectFactory.
 USING Gwy.SAPC.Service.ChangeAPI.DefaultPricePlan.
 USING Gwy.SAPC.Service.ChangeAPI.PeriodicDataPlan.
 USING Gwy.SAPC.Service.ChangeAPI.SIM.
-/*USING Gwy.SAPC.Service.ChangeAPI.Upsell.*/
+USING Gwy.SAPC.Service.ChangeAPI.Upsell.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -26,7 +26,9 @@ CLASS Gwy.SAPC.Service.ChangeAPI.UnderMobileLine INHERITS ServiceObjectFactory:
       mAddObject(NEW DefaultPricePlan(ioPCO, "DPP")).
 
       CASE ioPCO:aoOrderEnum:
-         WHEN OrderEnum:DATAPLAN_ADD OR WHEN OrderEnum:DATAPLAN_DELETE
+         WHEN OrderEnum:DATAPLAN_ADD OR WHEN
+              OrderEnum:DATAPLAN_DELETE OR WHEN
+              OrderEnum:DATAPLAN_MODIFY
          THEN mAddObject(NEW PeriodicDataPlan(ioPCO, "PDP")).
 
          WHEN OrderEnum:UPSELL_ADD
