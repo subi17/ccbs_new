@@ -180,7 +180,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
         lobjCustomerType = ioJsonObject:GetJsonObject("residential").
 
-        RETURN lobjCustomerType:GetCharacter("person_id").
+        RETURN lobjCustomerType:GetCharacter("id").
      END.
      ELSE IF ioJsonObject:Has("company") THEN 
      DO:
@@ -208,7 +208,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
         ASSIGN 
            THIS-OBJECT:custIdType = lobjCustomerType:GetCharacter("id_type")  
-           THIS-OBJECT:custId     = lobjCustomerType:GetCharacter("person_id").
+           THIS-OBJECT:custId     = lobjCustomerType:GetCharacter("id").
      END.
      ELSE IF ioJsonObject:Has("company") THEN 
      DO:
@@ -338,14 +338,14 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
            THIS-OBJECT:firstName      = ioJsonObject:GetCharacter("fname")
            THIS-OBJECT:surName1       = ioJsonObject:GetCharacter("lname")
            THIS-OBJECT:surName2       = ioJsonObject:GetCharacter("lname2")
-           THIS-OBJECT:profession     = ioJsonObject:GetCharacter("profession")
+           THIS-OBJECT:profession     = ioJsonObject:GetCharacter("profession") WHEN ioJsonObject:Has("profession")
            THIS-OBJECT:nationality    = ioJsonObject:GetCharacter("nationality")
            THIS-OBJECT:language       = mGetLanguage(ioJsonObject:GetCharacter("language"))
            THIS-OBJECT:selfEmployed   = ioJsonObject:GetLogical("self_employed")
            THIS-OBJECT:birthDay       = Func.Common:mGetDate(ioJsonObject:GetCharacter("birthday"))
-           THIS-OBJECT:email          = ioJsonObject:GetCharacter("email")
+           THIS-OBJECT:email          = ioJsonObject:GetCharacter("email") WHEN ioJsonObject:Has("email")
            THIS-OBJECT:mobileNumber   = ioJsonObject:GetCharacter("sms_number")
-           THIS-OBJECT:fixedNumber    = ioJsonObject:GetCharacter("phone_number")
+           THIS-OBJECT:fixedNumber    = ioJsonObject:GetCharacter("phone_number") WHEN ioJsonObject:Has("phone_number")
            .
        
        IF ioJsonObject:Has("customer_accounts") THEN 
