@@ -523,7 +523,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
               AND bfpcMSISDN.ValidTo    GE {&nowts}
               AND bfpcMSISDN.cli        EQ THIS-OBJECT:lcCLI
               AND bfpcMSISDN.statuscode EQ 1 
-           NO-ERROR.       
+           NO-WAIT NO-ERROR.       
           
        mMakeMSISDNHistoryTimeStamp(RECID(bfpcMSISDN) , Func.Common:mMakeTS()).
        

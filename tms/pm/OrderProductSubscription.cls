@@ -293,13 +293,10 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             THIS-OBJECT:fixedNumber   = loAttributes:GetCharacter("fixedline_number").
             
         ASSIGN 
-            THIS-OBJECT:mobileNumberType = loAttributes:GetCharacter("mobile_number_type") 
-                                           WHEN loAttributes:Has("mobile_number_type")
-            THIS-OBJECT:mobileNumber     = loAttributes:GetCharacter("mobile_number")      
-                                           WHEN loAttributes:Has("mobile_number")
+            THIS-OBJECT:mobileNumberType = loAttributes:GetCharacter("mobile_number_type") WHEN loAttributes:Has("mobile_number_type")
+            THIS-OBJECT:mobileNumber     = loAttributes:GetCharacter("mobile_number")      WHEN loAttributes:Has("mobile_number")
             objOrder:mobileNumberType    = THIS-OBJECT:mobileNumberType
-            objOrder:lcCLI               = THIS-OBJECT:mobileNumber 
-                                           WHEN THIS-OBJECT:mobileNumber > ""
+            objOrder:lcCLI               = THIS-OBJECT:mobileNumber
             objOrder:cliType             = THIS-OBJECT:productID.
             
         IF LOOKUP(THIS-OBJECT:fixNumberType,"new,mnp") = 0 THEN
