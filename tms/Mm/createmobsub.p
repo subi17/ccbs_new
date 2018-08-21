@@ -197,7 +197,7 @@ ASSIGN liSubscriptionProductId = INT(MsRequest.ReqCParam5).
 IF liSubscriptionProductId > 0 THEN
 DO: 
     ASSIGN 
-        lcProductCLIType = Func.OrderProductsData:mGetOrderProductCLIType(Order.OrderID, liSubscriptionProductId)
+        lcProductCLIType = Func.OrderProductsData:mGetOrderProductCLIType(liSubscriptionProductId)
         llIsFixedOnly    = Func.ValidateOrder:mIsFixedOnlyTariff(lcProductCLIType).
 
     IF llIsFixedOnly THEN
