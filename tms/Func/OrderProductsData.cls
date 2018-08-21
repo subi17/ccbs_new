@@ -337,7 +337,7 @@ CLASS Func.OrderProductsData FINAL:
         IF NOT AVAILABLE bfpcOrderProduct THEN 
             RETURN "".
            
-        RETURN bfOrderProduct.ProductID.
+        RETURN bfpcOrderProduct.ProductID.
        
     END.                                                       
     
