@@ -78,8 +78,14 @@ CLASS Gwy.SAPC.ProCommandNBCH INHERITS ProCommandOrder:
                        acProCommandType = "MODIFY_DATAPLAN"
                        acEMACode        = DayCampaign.EMACode.
                END.
-
+               ELSE 
+               IF lbMsRequest.ReqCparam3 MATCHES "*_UPSELL" THEN
+                  ASSIGN
+                     aoOrderEnum      = OrderEnum:UPSELL_ADD
+                     acProCommandType = "ADD_UPSELL"
+                     acEMACode        = DayCampaign.EMACode.
             END.
+
             IF acProCommandType EQ ""
             THEN ASSIGN
                     aoOrderEnum      = OrderEnum:DATAPLAN_ADD

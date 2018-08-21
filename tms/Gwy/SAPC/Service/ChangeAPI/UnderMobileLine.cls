@@ -28,10 +28,10 @@ CLASS Gwy.SAPC.Service.ChangeAPI.UnderMobileLine INHERITS ServiceObjectFactory:
       CASE ioPCO:aoOrderEnum:
          WHEN OrderEnum:DATAPLAN_ADD OR WHEN OrderEnum:DATAPLAN_DELETE
          THEN mAddObject(NEW PeriodicDataPlan(ioPCO, "PDP")).
-/*
+
          WHEN OrderEnum:UPSELL_ADD
          THEN mAddObject(NEW Upsell(ioPCO, "Upsell")).
-*/
+
          WHEN OrderEnum:CHANGE_SIM
          THEN mAddObject(NEW SIM(ioPCO, "SIM")).
 
