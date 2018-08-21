@@ -205,6 +205,14 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
    DEFINE PUBLIC PROPERTY coverageToken AS CHARACTER NO-UNDO
       GET.
       SET.
+      
+   DEFINE PUBLIC PROPERTY pro AS LOGICAL NO-UNDO
+      GET.
+      SET.
+      
+   DEFINE PUBLIC PROPERTY selfEmployed AS LOGICAL NO-UNDO
+      GET.
+      SET.
 
    DEFINE PROTECTED VARIABLE objOrder AS CLASS om.Order NO-UNDO.
 
@@ -246,7 +254,10 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          THIS-OBJECT:bankCode           = bfCustomer.BankAcc
          THIS-OBJECT:category           = bfCustomer.Category
          THIS-OBJECT:company            = bfCustomer.CompanyName
-         THIS-OBJECT:foundationDate     = bfCustomer.FoundationDate.
+         THIS-OBJECT:foundationDate     = bfCustomer.FoundationDate
+         THIS-OBJECT:pro                = ( INDEX(objOrder:orderChannel,"PRO") > 0 ) 
+         THIS-OBJECT:selfEmployed       = Func.ValidateACC:mIsSelfEmpl(bfCustomer.category)
+         .
 
       FIND CustomerReport NO-LOCK WHERE
            CustomerReport.Custnum = bfCustomer.Custnum NO-ERROR.
@@ -387,6 +398,7 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:authCustId         = objDefaultCustomer:AuthCustId
             THIS-OBJECT:birthDay           = objDefaultCustomer:BirthDay
             THIS-OBJECT:profession         = objDefaultCustomer:Profession
+            THIS-OBJECT:category           = objDefaultCustomer:category
             THIS-OBJECT:street             = objOrderCustomerAddress:GetCharacter("street")
             THIS-OBJECT:region             = objOrderCustomerAddress:GetCharacter("region")
             THIS-OBJECT:zipCode            = objOrderCustomerAddress:GetCharacter("zip")
@@ -413,6 +425,8 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:fixedNumber        = objDefaultCustomer:FixedNumber
             THIS-OBJECT:bankCode           = (IF objOrder:objCustomer:isNewCustomer THEN mGetBankAcctNum() ELSE objOrder:objCustomer:OrderCustBankAcct) 
             THIS-OBJECT:foundationDate     = objDefaultCustomer:FoundationDate
+            THIS-OBJECT:pro                = ( INDEX(objOrder:orderChannel,"PRO") > 0 )
+            THIS-OBJECT:selfEmployed       = objDefaultCustomer:selfEmployed
              .
                       	          
 	END.
@@ -466,6 +480,9 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.AddressCodC        = THIS-OBJECT:addressCodC
          OrderCustomer.AddressCodP        = THIS-OBJECT:addressCodP
          OrderCustomer.AddressCodM        = THIS-OBJECT:addressCodM
+         OrderCustomer.pro                = THIS-OBJECT:pro
+         OrderCustomer.SelfEmployed       = THIS-OBJECT:selfEmployed
+         OrderCustomer.Category           = THIS-OBJECT:category
          .
          
        IF OrderCustomer.BuildingNum NE ""  THEN 

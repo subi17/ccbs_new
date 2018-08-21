@@ -23,3 +23,5 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Func/freacmobsub.i}
 {Migration/migrationfunc.i}
+{Func/custfunc.i}
+{Func/orderchk.i}
