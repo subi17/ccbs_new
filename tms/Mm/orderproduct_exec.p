@@ -872,9 +872,13 @@ PROCEDURE pMobile:
         
         RUN pSetDefaultsToMissingAttributesOfOrder.
 
-        RUN pValidateMSISDN(lcMSISDN).
-        IF RETURN-VALUE NE "" THEN
-            RETURN RETURN-VALUE.
+        IF NOT Func.ValidateOrder:mIsConvergentTariff(lcTariff) THEN 
+        DO:
+            RUN pValidateMSISDN(lcMSISDN).
+            
+            IF RETURN-VALUE NE "" THEN
+                RETURN RETURN-VALUE.
+        END.
 
         IF lcTariff = "" THEN 
         DO:
