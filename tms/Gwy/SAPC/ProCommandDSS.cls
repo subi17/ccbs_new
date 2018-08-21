@@ -92,6 +92,54 @@ CLASS Gwy.SAPC.ProCommandDSS INHERITS ProCommand:
 
    END METHOD.
 
+
+   METHOD PRIVATE DECIMAL mGetModifyAmount():
+
+      DEFINE BUFFER ShaperConf FOR ShaperConf.
+      DEFINE BUFFER ServiceLimit FOR ServiceLimit.
+      DEFINE BUFFER MServiceLimit FOR MServiceLimit.
+
+      DEFINE VARIABLE ldeActStamp AS DECIMAL NO-UNDO.
+
+      IF MSRequest.ReqCparam3 EQ {&DSS4}
+      THEN DO:
+         FIND FIRST ShaperConf NO-LOCK WHERE
+                    ShaperConf.Brand        EQ "1" AND
+                    ShaperConf.ShaperConfID EQ {&DSS4SHAPERID}
+         NO-ERROR.
+         IF NOT AVAILABLE ShaperConf
+         THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find shaperconf '&1'",
+                                                  {&DSS4SHAPERID})).
+         RETURN ShaperConf.LimitUnshaped / 1048576.
+      END.
+
+      ldeActStamp = IF MsRequest.ActStamp > Func.Common:mMakeTS()
+                    THEN MsRequest.ActStamp
+                    ELSE Func.Common:mMakeTS().
+
+      FOR EACH ServiceLimit NO-LOCK WHERE
+               ServiceLimit.GroupCode BEGINS "DSS":
+
+         IF ServiceLimit.GroupCode MATCHES "*UPSELL*"
+         THEN NEXT.
+
+         FOR EACH MServiceLimit NO-LOCK WHERE
+                  MServiceLimit.CustNum  = MsRequest.CustNum     AND
+                  MServiceLimit.DialType = ServiceLimit.DialType AND
+                  MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                  MServiceLimit.EndTS   >= ldeActStamp:
+
+            RETURN MServiceLimit.InclAmt.
+         END.
+      END.
+
+      UNDO, THROW NEW AppError("DSS modify limit not available").
+
+   END METHOD.
+
+
+
+
    METHOD PRIVATE VOID mModifyDSS():
 
       DEFINE VARIABLE loJson    AS CLASS JsonObject NO-UNDO.
@@ -104,7 +152,7 @@ CLASS Gwy.SAPC.ProCommandDSS INHERITS ProCommand:
                                             MsRequest.CustNum).
 
       loJson:Add("priority", "1000"). /* For Base tariff = 1000 */
-      loJson:Add("totalDataAmount", mToMB(mGetValue(MSRequest.ReqCParam2, "LIMIT_UNSHAPED"))).
+      loJson:Add("totalDataAmount", STRING(mGetModifyAmount())).
 
       FINALLY:
          IF VALID-OBJECT(loJson)
