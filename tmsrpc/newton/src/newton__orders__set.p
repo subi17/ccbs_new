@@ -63,6 +63,22 @@ Syst.Var:gcBrand = "1".
 &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Func/lib/eventlog.i}
 
+FUNCTION fSetOrderMobileICC RETURNS LOGICAL
+    (INPUT iiOrderId AS INT,
+     INPUT icICC     AS CHAR):
+
+    FIND FIRST OrderMobile WHERE 
+               OrderMobile.OrderId        = Order.OrderId AND 
+               OrderMobile.OrderProductID > 0             EXCLUSIVE-LOCK NO-WAIT NO-ERROR.   
+    IF AVAIL OrderMobile THEN 
+       ASSIGN OrderMobile.ICC = icICC.
+
+    RELEASE OrderMobile.
+       
+    RETURN TRUE.
+                     
+END FUNCTION.
+
 FUNCTION mTS2DateTime RETURNS DATETIME
    (ideTS AS DECIMAL):
 
@@ -255,10 +271,12 @@ IF pcRiskCode NE ? OR
       Order.SendToROI  = {&ROI_HISTORY_TO_SEND} WHEN
          Order.OrderType NE {&ORDER_TYPE_STC}.
       
-   IF pcICC > "" THEN DO:
+   IF pcICC > "" THEN 
+   DO:
       ASSIGN
          SIM.simstat = 4.
          Order.ICC = pcICC.
+      fSetOrderMobileICC(Order.OrderId,Order.ICC).
       RELEASE SIM.
    END.
    
