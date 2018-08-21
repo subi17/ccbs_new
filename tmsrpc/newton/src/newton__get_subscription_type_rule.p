@@ -159,7 +159,8 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
 
    lcBono = fGetCurrentSpecificBundle(Mobsub.MsSeq,"BONO").
 
-   IF NOT fSTCPossible(MobSub.CustNum, pcNewCLIType)
+   IF fCLITypeIsExtraLine(pcNewCLIType)   AND               
+      NOT fValidateExtraLineSTC(MobSub.CustNum, pcNewCLIType)
    THEN DO:
       add_string(warning_array,"","STC_EXTRALINE_ERROR").
       RETURN FALSE.
@@ -198,10 +199,11 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
       lcParentValue = "CONVERGENT".
       /* If the old CLIType can have extraline and the extraline actually exists */
       IF fCLITypeIsMainLine(MobSub.CLIType) AND
-         CAN-FIND(FIRST lELMobSub NO-LOCK WHERE
-                        lELMobSub.MsSeq         EQ MobSub.MultiSimId          AND
-                        lELMobSub.MultiSimId    EQ MobSub.MsSeq               AND
-                        lELMobSub.MultiSimtype  EQ {&MULTISIMTYPE_EXTRALINE}  AND
+         CAN-FIND(FIRST lELMobSub USE-INDEX MultiSimID NO-LOCK WHERE
+                        lELMobSub.Brand        EQ Syst.Var:gcBrand AND
+                        lELMobSub.MultiSimId   EQ MobSub.MsSeq               AND
+                        lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE}  AND
+                        lELMobSub.Custnum      EQ Mobsub.Custnum AND
                        (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
                         lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}))
       THEN lcParentValue = fExtraLineForMainLine(MobSub.CLIType).
@@ -295,6 +297,7 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
 
 END FUNCTION. 
 
+/* Moved to Func/penaltyfee.i
 FUNCTION fGetReferenceTariff RETURNS CHARACTER
          (INPUT pcDCEvent      AS CHAR,
           INPUT pdtValidFrom   AS DATE,
@@ -345,6 +348,7 @@ FUNCTION fGetReferenceTariff RETURNS CHARACTER
 
    RETURN lcCLIType.
 END FUNCTION.
+*/
 
 /*
    Purpose: Fetch Quota 25 refinance remaining amount

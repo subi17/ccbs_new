@@ -46,13 +46,28 @@ IF icText BEGINS "HT:" THEN DO:
    ELSE icText = "".   
 END.
 
-ASSIGN
+IF MsRequest.ReqIParam4 > 0 THEN DO:
+   FIND FIRST OrderCustomer NO-LOCK WHERE
+              OrderCustomer.Brand = Syst.Var:gcBrand AND
+              OrderCustomer.OrderID = MsRequest.ReqIParam4 AND
+              OrderCustomer.RowType = {&ORDER_TYPE_ACC} NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN RETURN "".
+   
+   lcNewOwner = IF OrderCustomer.CustIDType EQ "CIF" 
+                THEN OrderCustomer.Company
+                ELSE OrderCustomer.FirstName + " " +
+                     OrderCustomer.SurName1 + " " + 
+                     OrderCustomer.SurName2.
+END.
+ELSE
    lcNewOwner = IF ENTRY(12,MsRequest.ReqCParam1,";") = "CIF"
                 THEN ENTRY(5,MsRequest.ReqCParam1,";")
                 ELSE ENTRY(2,MsRequest.ReqCParam1,";") + " " + 
                      ENTRY(1,MsRequest.ReqCParam1,";") + " " +
-                     ENTRY(3,MsRequest.ReqCParam1,";")
-   lcSMSText  = REPLACE(lcSMSText,"#NewOwner",lcNewOwner)
+                     ENTRY(3,MsRequest.ReqCParam1,";").
+
+ASSIGN
+   lcSMSText  = REPLACE(lcSMSText,"#NewOwner",TRIM(lcNewOwner))
    lcSMSText  = REPLACE(lcSMSText,"#Description",icText).
            
 /* tags */

@@ -1,0 +1,11 @@
+ADD FIELD "WebContractID" OF "DCCLi" AS CHARACTER 
+  DESCRIPTION "Web Contract ID"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Web Contract ID"
+  MAX-WIDTH 40
+  COLUMN-LABEL "Web.Contr."
+  HELP "Web contract ID"
+  ORDER 150
+  
+  

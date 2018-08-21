@@ -344,6 +344,12 @@ PROCEDURE pSetBarring:
          icBarrCommand = RIGHT-TRIM(lcRemoveBarring,",").
       END.
       IF liAmt EQ 0 THEN RETURN "ERROR:Debt barring not active".
+      ELSE DO:
+         /*YDR-2843: Generate sms when barring is removed.*/
+         IF Mm.MManMessage:mGetMessage("SMS", "ReconnSMS", 1) EQ TRUE THEN DO:
+            Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
+         END.
+      END.
    END.
 
    /*nbs: If there is already D level barring, IFS operation overwrites it*/

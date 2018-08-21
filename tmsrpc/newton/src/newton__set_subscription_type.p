@@ -16,6 +16,7 @@
           extend_term_contract;boolean;optional;false=terminate,true=extent
           exclude_term_penalty (boolean, optional) * To accept the penalty exemption
           memo;struct;optional;
+          merge_with:string;optional;
  * @memo  title;string;mandatory;memo title
           contents;string;mandatory;memo content
  * @output success;boolean
@@ -52,6 +53,7 @@ DEF VAR pcMemoContent        AS CHAR NO-UNDO.
 DEF VAR pcContractID         AS CHAR NO-UNDO.
 DEF VAR pcChannel            AS CHAR NO-UNDO.
 DEF VAR lcProValidation      AS CHAR NO-UNDO.
+DEF VAR pcMergeWith          AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcc AS CHAR NO-UNDO.
@@ -66,8 +68,13 @@ DEF VAR lcError          AS CHAR NO-UNDO.
 DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR iiRequestFlags   AS INT  NO-UNDO.
+DEF VAR liSTCMsSeq       AS INT  NO-UNDO.
+DEF VAR liMergeMsSeq     AS INT  NO-UNDO.
+DEF VAR llgMerge         AS LOG  NO-UNDO INIT FALSE.
 
 DEF BUFFER NewCliType   FOR CliType.
+DEF BUFFER bMergeMobSub FOR MobSub.
+DEF BUFFER bChkMobSub   FOR MobSub.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
@@ -79,36 +86,38 @@ pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct, 
    "brand!,msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
    "charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass," +
-   "extend_term_contract,exclude_term_penalty,memo,contract_id,channel").
+   "extend_term_contract,exclude_term_penalty,memo,contract_id,channel,merge_with").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-pcTenant    = get_string(pcStruct, "brand").
-pcMSISDN    = get_string(pcStruct, "msisdn").
-pcSalesman  = get_string(pcStruct, "username").
-pcCliType   = get_string(pcStruct, "subscription_type_id").
-pdActivation = get_timestamp(pcStruct, "activation_stamp").
-pdeCharge = get_double(pcStruct, "charge").
-pdeChargeLimit = get_double(pcStruct, "charge_limit").
+ASSIGN pcTenant       = get_string(pcStruct, "brand")
+       pcMSISDN       = get_string(pcStruct, "msisdn")
+       pcSalesman     = get_string(pcStruct, "username")
+       pcCliType      = get_string(pcStruct, "subscription_type_id")
+       pdActivation   = get_timestamp(pcStruct, "activation_stamp")
+       pdeCharge      = get_double(pcStruct, "charge")
+       pdeChargeLimit = get_double(pcStruct, "charge_limit").
 
 {newton/src/settenant.i pcTenant}
 
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
-ASSIGN
-   pcBankAcc = get_string(pcStruct, "bank_account") 
-      WHEN LOOKUP("bank_account", lcstruct) > 0
-   pcDataBundleId = get_string(pcStruct, "data_bundle_id")
-      WHEN LOOKUP(pcCliType,lcBundleCLITypes) > 0
-   plByPass = get_bool(pcStruct, "bypass") WHEN LOOKUP("bypass", lcstruct) > 0
-   plExtendContract = get_bool(pcStruct,"extend_term_contract")
-      WHEN LOOKUP("extend_term_contract", lcstruct) > 0
-   pcContractID = get_string(pcStruct,"contract_id")
-         WHEN LOOKUP("contract_id", lcstruct) > 0
-   pcChannel = get_string(pcStruct,"channel")
-            WHEN LOOKUP("channel", lcstruct) > 0
-   plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
-      WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
+ASSIGN pcBankAcc            = get_string(pcStruct, "bank_account") 
+                                 WHEN LOOKUP("bank_account", lcstruct) > 0
+       pcDataBundleId       = get_string(pcStruct, "data_bundle_id")
+                                 WHEN LOOKUP(pcCliType,lcBundleCLITypes) > 0
+       plByPass             = get_bool(pcStruct, "bypass") 
+                                 WHEN LOOKUP("bypass", lcstruct) > 0
+       plExtendContract     = get_bool(pcStruct,"extend_term_contract")
+                                 WHEN LOOKUP("extend_term_contract", lcstruct) > 0
+       pcContractID         = get_string(pcStruct,"contract_id")
+                                 WHEN LOOKUP("contract_id", lcstruct) > 0
+       pcChannel            = get_string(pcStruct,"channel")
+                                 WHEN LOOKUP("channel", lcstruct) > 0
+       plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
+                                 WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0
+       pcMergeWith          = get_string(pcStruct,"merge_with")
+                                 WHEN LOOKUP("merge_with", lcStruct) > 0.
 
 IF LOOKUP("memo", lcstruct) > 0 THEN DO:
    pcMemoStruct = get_struct(pcStruct,"memo").
@@ -134,30 +143,26 @@ IF NOT AVAILABLE mobsub THEN
 /* Set the Syst.Var:katun to check correct barring */
 Syst.Var:katun = "NewtonAd".
 
-IF NOT fSTCPossible(MobSub.CustNum, pcCliType)
-THEN RETURN appl_err("Mainline not available for the La Duo").
+IF fCLITypeIsExtraLine(pcCliType)                       AND
+   NOT fValidateExtraLineSTC(MobSub.CustNum, pcCliType) THEN 
+   RETURN appl_err("Mainline not available for the La Duo").
 
-/* Various validations */
-IF fValidateMobTypeCh(
-   MobSub.Msseq,
-   pcCliType,
-   pdActivation,
-   plExtendContract,
-   FALSE, /* bypass stc type check */
-   0, /* stc order id */
-   {&REQUEST_SOURCE_NEWTON}, 
-   OUTPUT lcError) EQ FALSE THEN RETURN appl_err(lcError).
+IF pcMergeWith GT "" AND
+   pcMergeWith NE ?  THEN
+   llgMerge = TRUE.
 
 /* Set the Syst.Var:katun again with original username */
 Syst.Var:katun = "VISTA_" + pcSalesman.
 
-IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
-                       INPUT plByPass, OUTPUT lcError) NE 0
-THEN RETURN appl_err(lcError).
+IF fValidateNewCliType(INPUT pcCliType, 
+                       INPUT pcDataBundleId,
+                       INPUT plByPass, 
+                       OUTPUT lcError) NE 0 THEN 
+   RETURN appl_err(lcError).
 
-FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = Syst.Var:gcBrand AND
-           NewCLIType.CLIType = pcCliType NO-LOCK.
+FIND FIRST NewCliType NO-LOCK WHERE
+           NewCLIType.Brand   EQ Syst.Var:gcBrand AND
+           NewCLIType.CLIType EQ pcCliType        NO-ERROR.
 IF NOT AVAIL NewCLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcCliType)).
    
@@ -169,11 +174,10 @@ IF fServAttrValue(MobSub.CLIType,
    OR NewCLIType.PayType = 2 THEN liCreditcheck = 0.
 
 IF pdeCharge > 0 THEN DO:
-   lcError = fCheckChargeLimits (
-      Mobsub.CLI,
-      Mobsub.PayType,
-      pdeCharge,
-      pdeChargeLimit).
+   lcError = fCheckChargeLimits(Mobsub.CLI,
+                                Mobsub.PayType,
+                                pdeCharge,
+                                pdeChargeLimit).
 END.
 
 IF lcError > "" THEN RETURN appl_err(lcError).
@@ -196,27 +200,77 @@ ELSE
 IF plExcludeTermPenalty THEN
    iiRequestFlags = 2.   
 
-liRequest = fCTChangeRequest(MobSub.msseq,
-                  pcCliType,
-                  pcDataBundleId,
-                  pcBankAcc,      /* validation is already done in newton */
-                  pdActivation,
-                  liCreditCheck,  /* 0 = Credit check ok */
-                  iiRequestFlags,
-                  "" /* pcSalesman */,
-                  (pdeCharge > 0),
-                  llSendSMS,
-                  "",
-                  pdeCharge,
-                  {&REQUEST_SOURCE_NEWTON}, 
-                  0, /* order id */
-                  0,
-                  pcContractId, /*dms: contract_id,channel ->ReqCParam6*/
-                  OUTPUT lcInfo).
+liSTCMsSeq = MobSub.MsSeq.
+
+IF llgMerge THEN DO:
+
+    IF MobSub.Fixednumber NE ? AND
+       MobSub.Fixednumber > '' THEN DO:
+
+       liMergeMsSeq = MobSub.MsSeq.
+
+       FIND bChkMobSub NO-LOCK WHERE
+            bChkMobSub.CLI EQ pcMergeWith NO-ERROR.
+
+       IF AVAILABLE bChkMobSub THEN
+          liSTCMsSeq = bChkMobSub.MsSeq.
+    END.
+    ELSE DO:
+        FIND bChkMobSub NO-LOCK WHERE
+             bChkMobSub.CLI EQ pcMergeWith NO-ERROR.
+
+        IF AVAILABLE bChkMobSub THEN
+           liMergeMsSeq = bChkMobSub.MsSeq.
+    END.
+
+    FIND FIRST bMergeMobSub NO-LOCK WHERE
+               bMergeMobSub.MsSeq    EQ liMergeMsSeq                  AND
+               bMergeMobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} NO-ERROR.
+ 
+    IF NOT AVAIL bMergeMobSub THEN
+       RETURN appl_err(SUBST("Convergent subscription &1 is not 2P standalone", STRING(liMergeMsSeq))).
+
+END.
+
+/* Various validations */
+IF fValidateMobTypeCh(liSTCMsSeq,
+                      pcCliType,
+                      pdActivation,
+                      plExtendContract,
+                      FALSE, /* bypass stc type check */
+                      0, /* stc order id */
+                      {&REQUEST_SOURCE_NEWTON},
+                      llgMerge,
+                      OUTPUT lcError) EQ FALSE THEN 
+   RETURN appl_err(lcError).
+
+liRequest = fCTChangeRequest(liSTCMsSeq,
+                             pcCliType,
+                             pcDataBundleId,
+                             pcBankAcc,      /* validation is already done in newton */
+                             pdActivation,
+                             liCreditCheck,  /* 0 = Credit check ok */
+                             iiRequestFlags,
+                             "" /* pcSalesman */,
+                             (pdeCharge > 0),
+                             llSendSMS,
+                             "",
+                             pdeCharge,
+                             {&REQUEST_SOURCE_NEWTON}, 
+                             0, /* order id */
+                             0,
+                             pcContractId, /*dms: contract_id,channel ->ReqCParam6*/
+                             OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:
    RETURN appl_err("Request creation failed: " +  lcInfo).
 END.
+
+IF llgMerge THEN
+   fCreateMsRequestParam(liRequest,
+                         {&MERGE2P3P},
+                         {&INTVAL},
+                         STRING(bMergeMobSub.MsSeq)).
 
 IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
    CREATE Memo.
@@ -224,7 +278,7 @@ IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
       Memo.CreStamp  = {&nowTS}
       Memo.Brand     = Syst.Var:gcBrand
       Memo.HostTable = "MobSub"
-      Memo.KeyValue  = STRING(MobSub.MsSeq)
+      Memo.KeyValue  = STRING(liSTCMsSeq)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = pcMemoTitle

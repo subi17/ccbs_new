@@ -33,6 +33,9 @@
 {Func/orderfunc.i}
 {Func/custfunc.i}
 {Func/addline_discount.i}
+{Func/profunc.i}
+   
+DEF TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -168,12 +171,8 @@ PROCEDURE pOwnerChange:
    DEF VAR lcDataField  AS CHAR NO-UNDO.
    DEF VAR lcInvGroup   AS CHAR NO-UNDO. 
    DEF VAR liOrigStat   AS INT  NO-UNDO.
-   DEF VAR lcCustIDType AS CHAR NO-UNDO.
    DEF VAR llValue      AS LOG  NO-UNDO.
    DEF VAR liNewValue   AS INT  NO-UNDO.
-   DEF VAR lcCityCode   AS CHAR NO-UNDO. 
-   DEF VAR lcStreetCode AS CHAR NO-UNDO. 
-   DEF VAR lcTownCode   AS CHAR NO-UNDO.
    DEF VAR lcEmail      AS CHAR NO-UNDO.
    DEF VAR lcResult     AS CHAR NO-UNDO.
    DEF VAR liRequest    AS INT  NO-UNDO.
@@ -184,24 +183,53 @@ PROCEDURE pOwnerChange:
    DEF VAR lcChannel     AS CHAR NO-UNDO.
    DEF VAR lcCategory    AS CHAR NO-UNDO. 
 
-   DEF BUFFER bSubRequest   FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bMsRequest    FOR MsRequest.
    DEF BUFFER bOldCustCat   FOR CustCat.
-   
+   DEF BUFFER bACCOrder     FOR Order.
+
    liOrigStat = MsRequest.ReqStat.
       
    /* Set request under work status */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
    
    ASSIGN liNewOwner = MsRequest.ReqIParam1.
+      
+   IF MsRequest.ReqIParam4 > 0 THEN DO:
+
+      FIND bAccOrder NO-LOCK WHERE
+           bAccOrder.brand = Syst.Var:gcBrand AND
+           bAccOrder.OrderID = MsRequest.ReqIParam4 NO-ERROR. 
+
+      IF NOT AVAIL bAccOrder THEN RETURN "ERROR: Order not found".
+
+      IF bAccOrder.StatusCode NE {&ORDER_STATUS_ONGOING} THEN
+         RETURN SUBST("ERROR: Incorrect order status &1", bAccOrder.StatusCode).
+
+      IF NOT fParseAccOrderCustomer(
+         bAccOrder.OrderID,
+         OUTPUT TABLE ttCustomer BY-REFERENCE) THEN
+         RETURN "ERROR: New customer data parsing failed".
+      
+   END.
+   ELSE DO:
+
+      IF NOT fParseAccDataParam(
+        MsRequest.ReqCParam1,
+        OUTPUT TABLE ttCustomer BY-REFERENCE) THEN
+        RETURN "ERROR: New customer data parsing failed".
+   END.
+
+   IF NOT AVAIL ttCustomer THEN 
+      RETURN "ERROR: New customer data not available§".
+
    /* Double check existing customer */
    IF liNewOwner = 0 THEN DO: 
       
       FIND FIRST bNewCust WHERE
          bNewCust.Brand      = Syst.Var:gcBrand AND
-         bNewCust.OrgId      = ENTRY(13,MsRequest.ReqCParam1,";") AND
-         bNewCust.CustIdType = ENTRY(12,MsRequest.ReqCParam1,";") AND
+         bNewCust.OrgId      = ttCustomer.OrgID AND
+         bNewCust.CustIdType = ttCustomer.CustIDType AND
          bNewCust.Roles NE "inactive"
       NO-LOCK NO-ERROR.
       
@@ -213,44 +241,43 @@ PROCEDURE pOwnerChange:
       END.
    END.
 
-   RUN pCheckSubscriptionForACC (MsRequest.MsSeq,
-                                 MsRequest.MsRequest,
-                                 MsRequest.ReqSource,
-                                 OUTPUT lcInfo).
+   lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(MsRequest.MsSeq,
+                                                      MsRequest.MsRequest,
+                                                      MsRequest.ReqIParam4,
+                                                      MsRequest.ReqSource).
    
-   IF lcInfo = "" AND MsRequest.ReqIParam1 > 0 THEN
-      RUN pCheckTargetCustomerForACC (MsRequest.ReqIParam1,
-                                      OUTPUT lcInfo).
+   IF lcInfo EQ "" AND MsRequest.ReqIParam1 > 0
+   THEN lcInfo = Func.ValidateACC:mCheckTargetCustomerForACC(MsRequest.ReqIParam1).
    
    IF lcInfo > "" THEN DO:
 
       /* 'superuser' can skip some rules */
-      IF RETURN-VALUE BEGINS "CHECK" AND
+      IF ENTRY(1,lcInfo,"|") EQ "CHECK" AND
          fTokenRights(MsRequest.UserCode,"CCSUPER") = "RW"
       THEN DO:
-         IF INDEX(MsRequest.Memo,lcInfo) = 0 THEN DO:   
+         IF INDEX(MsRequest.Memo,SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1)) = 0 THEN DO:   
             FIND CURRENT MsRequest EXCLUSIVE-LOCK.
             MsRequest.Memo = MsRequest.Memo + 
                             (IF MsRequest.Memo > ""
                              THEN ", " 
                              ELSE "") +
                              "Superuser " + MsRequest.UserCode + 
-                             " overrode rejection reason: " + lcInfo.
+                             " overrode rejection reason: " + SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1).
          END.
       END.
    
       ELSE DO:
-         IF liOrigStat > 0 AND INDEX(RETURN-VALUE,"SMS") > 0 THEN DO:
+         IF liOrigStat > 0 AND INDEX(ENTRY(1,lcInfo,"|"),"SMS") > 0 THEN DO:
             
             RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Rejected",
-                            IF NUM-ENTRIES(RETURN-VALUE,"/") >= 3 
-                            THEN "HT:" + ENTRY(3,RETURN-VALUE,"/")
-                            ELSE lcInfo).
+                            IF NUM-ENTRIES(ENTRY(1,lcInfo,"|"),"/") >= 3 
+                            THEN "HT:" + ENTRY(3,ENTRY(1,lcInfo,"|"),"/")
+                            ELSE SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1)).
          END.
                
-         fReqError(lcInfo).
+         fReqError(SUBSTRING(lcInfo,INDEX(lcInfo,"|") + 1)).
          RETURN "ERROR:Subscr. not valid".
       END.   
    END.
@@ -273,7 +300,9 @@ PROCEDURE pOwnerChange:
    END. 
  
    /* nor an existing customer nbr or a name for the new customer is given */
-   IF MsRequest.ReqIParam1 = 0 AND MsRequest.ReqCParam1 = "" THEN DO:
+   IF MsRequest.ReqIParam1 = 0 AND 
+      MsRequest.ReqCParam1 = "" AND
+      MsRequest.ReqIparam4 = 0 THEN DO:
       fReqError("Nothing to do").
       RETURN. 
    END.
@@ -291,16 +320,14 @@ PROCEDURE pOwnerChange:
    Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
-
-   lcCustIDType = ENTRY(12,MsRequest.ReqCParam1,";").
    
    /* 1. phase for normal agr.cust change */
-   IF liOrigStat = 0 AND MsRequest.ReqIParam3 NE 1 THEN DO:
+   IF liOrigStat = 0 THEN DO:
 
       /* credit check for postpaid (not for companies) */
       IF MobSub.PayType = FALSE THEN DO:
       
-         IF lcCustIDType = "CIF" THEN DO:
+         IF ttCustomer.CustIdType = "CIF" THEN DO:
             fReqStatus(8,"").
          END.
             
@@ -329,47 +356,42 @@ PROCEDURE pOwnerChange:
    END.
 
    ELSE IF liOrigStat = 8 THEN DO:
+         
+      /* mark final activation time and send notification to customer */
+      IF MobSub.PayType = FALSE AND 
+         MsRequest.ReqDParam1 > MsRequest.ActStamp
+      THEN DO:
+         
+         RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
+                         MsRequest.CustNum,
+                         "Accepted",
+                         "").
 
-      IF MsRequest.ReqIParam3 = 1 THEN DO:
-         RUN pFinalize(MsRequest.ActStamp, 
-                       MsRequest.MsSeq,
-                       MsRequest.Cli).
-
-         fReqStatus(2,"").
+         RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
+                         MsRequest.CustNum,
+                         "PreviousDay",
+                         "").
+         
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+         MsRequest.ActStamp = MsRequest.ReqDparam1.
+         
+         fReqStatus(8,"").
          RETURN.
       END.
+   END.
    
-      ELSE DO:
-         
-         /* mark final activation time and send notification to customer */
-         IF MobSub.PayType = FALSE AND 
-            MsRequest.ReqDParam1 > MsRequest.ActStamp
-         THEN DO:
-            
-            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
-                            MsRequest.CustNum,
-                            "Accepted",
-                            "").
-
-            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
-                            MsRequest.CustNum,
-                            "PreviousDay",
-                            "").
-            
-            FIND CURRENT MsRequest EXCLUSIVE-LOCK.
-            MsRequest.ActStamp = MsRequest.ReqDparam1.
-            
-            fReqStatus(8,"").
-            RETURN.
-         END.
-
+   IF AVAIL bAccOrder AND
+      fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+      RUN Gwy/masmovil_acc.p(bAccOrder.OrderID).
+      IF RETURN-VALUE NE "OK" THEN DO:
+         fReqError(SUBST("Fixed line ACC failed: &1", RETURN-VALUE)).
+         RETURN.
       END.
    END.
    
    ASSIGN liOldOwner   = MobSub.AgrCust
           liCreated    = 0
           lhRequest    = BUFFER MsRequest:HANDLE.
-
 
    /* a new customer will be created */
    DO liReqCnt = 1 TO 3:
@@ -452,7 +474,7 @@ PROCEDURE pOwnerChange:
          
          /* default group using region */  
          IF lcInvGroup = "" THEN 
-            lcInvGroup = fDefInvGroup(ENTRY(17,lcDataField,";")).
+            lcInvGroup = fDefInvGroup(ttCustomer.Region).
 
          liDefCust = fCParamI("DefCust" + lcInvGroup).
       
@@ -499,7 +521,7 @@ PROCEDURE pOwnerChange:
          lcMemo = "ACC" + CHR(255) +
                   STRING(bNewCust.CustNum) + CHR(255) +
                   STRING(MobSub.MsSeq) + CHR(255) +
-                  ENTRY(11,MsRequest.ReqCParam1,";") + CHR(255) +
+                  ttCustomer.SalesMan + CHR(255) +
                   lcChannel.
 
          /* DCH */
@@ -511,40 +533,35 @@ PROCEDURE pOwnerChange:
                                 bMobSub.CustNum   = bNewCust.CustNum AND
                                 bMobSub.PayType   = FALSE)) THEN DO:
             ASSIGN
-               bNewCust.BirthDay        = DATE(ENTRY(14,lcDataField,";"))
-               bNewCust.HonTitle        = ENTRY(16,lcDataField,";")
-               bNewCust.FirstName       = ENTRY(2,lcDataField,";")
-               bNewCust.CustName        = ENTRY(1,lcDataField,";")
-               bNewCust.Surname2        = ENTRY(3,lcDataField,";")
-               bNewCust.Companyname     = ENTRY(5,lcDataField,";")
-               bNewCust.COName          = ENTRY(4,lcDataField,";")
-               bNewCust.Address         = ENTRY(6,lcDataField,";")
-               bNewCust.ZipCode         = ENTRY(7,lcDataField,";")
-               bNewCust.PostOffice      = ENTRY(8,lcDataField,";")
-               bNewCust.Country         = ENTRY(9,lcDataField,";")
-               bNewCust.CustIdType      = ENTRY(12,lcDataField,";")
-               bNewCust.OrgId           = ENTRY(13,lcDataField,";")
-               bNewCust.Nationality     = ENTRY(19,lcDataField,";")
-               bNewCust.Language        = INT(ENTRY(15,lcDataField,";"))
-               bNewCust.Region          = ENTRY(17,lcDataField,";")
-               bNewCust.BankAcc         = ENTRY(18,lcDataField,";")
-               bNewCust.FoundationDate  = DATE(ENTRY(20,lcDataField,";"))
-               bNewCust.smsnumber       = ENTRY(21,lcDataField,";")
-               bNewCust.phone           = ENTRY(22,lcDataField,";")
-               bNewCust.DirMarkSMS      = LOGICAL(ENTRY(23,lcDataField,";"))
-               bNewCust.DirMarkEmail    = LOGICAL(ENTRY(24,lcDataField,";"))
-               bNewCust.DirMarkPost     = LOGICAL(ENTRY(25,lcDataField,";"))
-               bNewCust.OutMarkSMS      = LOGICAL(ENTRY(26,lcDataField,";"))
-               bNewCust.OutMarkEmail    = LOGICAL(ENTRY(27,lcDataField,";"))
-               bNewCust.OutMarkPost     = LOGICAL(ENTRY(28,lcDataField,";"))
-               lcStreetCode             = ENTRY(29,lcDataField,";")
-               lcCityCode               = ENTRY(30,lcDataField,";") 
-               bNewCust.AuthCustIdType  = ENTRY(32,lcDataField,";")
-               bNewCust.AuthCustId      = ENTRY(33,lcDataField,";")
-               lcTownCode               = ENTRY(34,lcDataField,";") WHEN
-                                          NUM-ENTRIES(lcDataField,";") >= 34
-               bNewCust.SearchName      = SUBSTRING(bNewCust.CustName + " " + 
-                                                    bNewCust.FirstName,1,8)
+               bNewCust.BirthDay        = ttCustomer.BirthDay
+               bNewCust.HonTitle        = ttCustomer.HonTitle
+               bNewCust.FirstName       = ttCustomer.FirstName
+               bNewCust.CustName        = ttCustomer.CustName
+               bNewCust.Surname2        = ttCustomer.SurName2
+               bNewCust.Companyname     = ttCustomer.CompanyName
+               bNewCust.COName          = ttCustomer.COName
+               bNewCust.Address         = ttCustomer.Address
+               bNewCust.ZipCode         = ttCustomer.ZipCode
+               bNewCust.PostOffice      = ttCustomer.PostOffice
+               bNewCust.Country         = ttCustomer.Country
+               bNewCust.CustIdType      = ttCustomer.CustIDType
+               bNewCust.OrgId           = ttCustomer.OrgId
+               bNewCust.Nationality     = ttCustomer.Nationality
+               bNewCust.Language        = ttCustomer.Language
+               bNewCust.Region          = ttCustomer.Region
+               bNewCust.BankAcc         = ttCustomer.BankAcc
+               bNewCust.FoundationDate  = ttCustomer.FoundationDate
+               bNewCust.smsnumber       = ttCustomer.SMSNumber
+               bNewCust.phone           = ttCustomer.Phone
+               bNewCust.DirMarkSMS      = ttCustomer.DirMarkSMS
+               bNewCust.DirMarkEmail    = ttCustomer.DirMarkEmail
+               bNewCust.DirMarkPost     = ttCustomer.DirMarkPost
+               bNewCust.OutMarkSMS      = ttCustomer.OutMarkSMS
+               bNewCust.OutMarkEmail    = ttCustomer.OutMarkEmail
+               bNewCust.OutMarkPost     = ttCustomer.OutMarkPost
+               bNewCust.AuthCustIdType  = ttCustomer.AuthCustIdType
+               bNewCust.AuthCustId      = ttCustomer.AuthCustId
+               bNewCust.SearchName      = ttCustomer.SearchName
                bNewCust.InvGroup        = fDefInvGroup(bNewCust.Region)
                                         WHEN bNewCust.Region NE "00"
                NO-ERROR.
@@ -553,6 +570,28 @@ PROCEDURE pOwnerChange:
                fReqError("Wrong format in new customer data").
                RETURN.
             END.
+            
+            /* Category according to id type */ 
+            FOR EACH CustCat NO-LOCK WHERE 
+                     CustCat.Brand = Syst.Var:gcBrand: 
+               IF LOOKUP(bNewCust.CustIDType,CustCat.CustIDType) > 0 THEN DO: 
+                  bNewCust.Category = CustCat.Category.
+                  bNewCust.PaymTerm = CustCat.PaymTerm.
+                  LEAVE.
+               END.
+            END.
+
+            /* Preserve Pro customer category 
+               in case the old customer was pro  */
+            IF AVAIL bOldCustCat AND bOldCustCat.Pro EQ TRUE THEN DO:
+               fgetCustSegment(bNewCust.CustIDType, 
+                               (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
+                                ELSE bOldCustCat.SelfEmployed),
+                               bOldCustCat.pro,
+                               bNewCust.OrgId,   /* YDR-2621 */
+                               OUTPUT lcCategory).
+               IF lcCategory > "" THEN bNewCust.Category = lcCategory.
+            END.
 
             FIND FIRST CustomerReport WHERE
                        CustomerReport.Custnum = bNewCust.Custnum
@@ -560,9 +599,9 @@ PROCEDURE pOwnerChange:
             IF NOT AVAIL CustomerReport THEN CREATE CustomerReport.
             ASSIGN
                CustomerReport.Custnum = bNewCust.Custnum
-               CustomerReport.StreetCode = lcStreetCode
-               CustomerReport.CityCode = lcCityCode
-               CustomerReport.TownCode = lcTownCode.
+               CustomerReport.StreetCode = ttCustomer.StreetCode
+               CustomerReport.CityCode = ttCustomer.CityCode
+               CustomerReport.TownCode = ttCustomer.TownCode.
 
             /* If customer makes an ACC to company customer and in Vista 
                there is no possibility to provide Contact person information 
@@ -586,8 +625,7 @@ PROCEDURE pOwnerChange:
             END.
 
             /* Electronic Invoice project */
-            IF NUM-ENTRIES(lcDataField,";") >= 10 THEN
-               lcEmail = ENTRY(10,lcDataField,";").
+            lcEmail = ttCustomer.Email.
          END.
 
          IF liReqCnt = 1 AND lcEmail > "" AND
@@ -653,27 +691,6 @@ PROCEDURE pOwnerChange:
             bNewCust.RateCust   = bNewCust.CustNum 
             bNewCust.ContrBeg   = TODAY.
 
-            /* Category according to id type */ 
-            FOR EACH CustCat NO-LOCK WHERE 
-                     CustCat.Brand = Syst.Var:gcBrand: 
-               IF LOOKUP(bNewCust.CustIDType,CustCat.CustIDType) > 0 THEN DO: 
-                  bNewCust.Category = CustCat.Category.
-                  bNewCust.PaymTerm = CustCat.PaymTerm.
-                  LEAVE.
-               END.
-            END.
-            
-            /* Preserve Pro customer category in case the old customer was pro  */
-            IF AVAIL bOldCustCat AND bOldCustCat.Pro EQ TRUE THEN DO:
-               fgetCustSegment(bNewCust.CustIDType, 
-                               (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
-                                ELSE bOldCustCat.SelfEmployed),
-                               bOldCustCat.pro,
-                               bNewCust.OrgId,   /* YDR-2621 */
-                               OUTPUT lcCategory).
-               IF lcCategory > "" THEN bNewCust.Category = lcCategory.
-            END.
-            
             /* default counter limits; for all, also prepaids */
             fTMRLimit2Customer(bNewCust.CustNum).
          END.  
@@ -753,50 +770,6 @@ PROCEDURE pOwnerChange:
          OUTPUT liChargeReqId) NO-ERROR.
 
    END.
-   
-   /* request handled succesfully */   
-   
-   /* ReqIParam3 Value 1 indicates that this is special agrcust change
-      (from TARJ3 to TARJ1) */
-   IF MsRequest.ReqIParam3 = 1 THEN DO:
-
-      /* Set msrequest status to temporary status 99 so that
-         CTChange request can be done */
-      IF NOT fReqStatus(99,"") THEN DO:
-         fReqError("Temporary status 99 failed!").
-         RETURN.
-      END.
-
-      liSubRequest = fCTChangeRequest(MsRequest.MsSeq,
-                                      "TARJ",
-                                      "",              /* data bundle id */
-                                      "",              /* bank-account */
-                                      MsRequest.ActStamp,  /* new tsbegin  */
-                                      0,           /* 0 = Credit check ok */
-                                      0, /* extend contract 0=no extend_term_contract */
-                                      "",
-                                      FALSE,           /* llCreateFees */
-                                      FALSE,           /* llSendSMS    */
-                                      "",
-                                      0,
-                                      {&REQUEST_SOURCE_ACC},
-                                      0, /* order id */
-                                      0,
-                                      "", /*contract id*/
-                                      OUTPUT lcInfo).
-      
-      FIND bSubRequest EXCLUSIVE-LOCK WHERE
-           bSubRequest.MsRequest = liSubRequest NO-ERROR.
-      ASSIGN 
-         bSubRequest.OrigRequest = MsRequest.MsRequest
-         bSubRequest.Mandatory   = 1.
-
-      IF NOT fReqStatus(7,"") THEN DO:
-         fReqError("7Update failed").
-      END.
-
-      RETURN.
-   END.
 
    IF MobSub.MultiSimId > 0 AND
       MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN DO:
@@ -815,13 +788,13 @@ PROCEDURE pOwnerChange:
          FIND FIRST CustomerReport WHERE
                     CustomerReport.Custnum = Customer.Custnum NO-LOCK NO-ERROR.
          
-         RUN pCheckSubscriptionForACC (
-            bMobSub.MsSeq,
-            0,
-            MsRequest.ReqSource,
-            OUTPUT lcInfo).
 
-         IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
+         lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(bMobSub.MsSeq,
+                                                            0,
+                                                            0,
+                                                            MsRequest.ReqSource).
+      
+         IF NOT ENTRY(1,lcInfo,"|") BEGINS "ERROR" THEN DO:
 
             lcCode = fCreateAccDataParam(
                       (BUFFER Customer:HANDLE),
@@ -882,13 +855,15 @@ PROCEDURE pOwnerChange:
        Msrequest.MsRequest,
        MsRequest.ActStamp).
    
-   /* request handled succesfully */   
-   IF MsRequest.ReqIParam3 NE 1 THEN DO:
-      RUN pFinalize(MsRequest.ActStamp, 
-                    MsRequest.MsSeq,
-                    MsRequest.Cli).
-      fReqStatus(2,""). 
-   END.
+   fSetSpecialTTFLimit(liNewOwner,
+                       MobSub.CLIType).
+
+   RUN pFinalize(MsRequest.ActStamp, 
+                 MsRequest.MsSeq,
+                 MsRequest.Cli).
+   fReqStatus(2,""). 
+   IF AVAIL bAccOrder THEN
+      fSetOrderStatus(bAccOrder.OrderId,"6").  
    
 END PROCEDURE.
 
@@ -924,6 +899,16 @@ PROCEDURE pMsCustMove:
    DEF BUFFER bLimit      FOR Limit. 
    DEF BUFFER bCounter    FOR TMCounter.
    DEF BUFFER lbMLMobSub  FOR MobSub.
+
+   IF MsRequest.ReqIParam4 > 0 THEN DO:
+      FIND OrderAction NO-LOCK WHERE
+           OrderAction.Brand = Syst.Var:gcBrand AND
+           OrderAction.OrderID = Order.OrderID AND
+           OrderAction.ItemType = "Mandate" NO-ERROR.
+      IF AVAIL OrderAction THEN lcMandate = OrderAction.ItemKey.
+   END.
+   ELSE IF NUM-ENTRIES(MsRequest.ReqCParam1,";") >= 35 THEN
+       lcMandate = ENTRY(35,MsRequest.ReqCParam1,";").
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK.
    
@@ -1278,10 +1263,8 @@ PROCEDURE pMsCustMove:
       /* Create Mandate for Subscription and store it into MsOwner */
       Func.Common:mSplitTS(MsRequest.CreStamp, OUTPUT ldaDate, OUTPUT liManTime).
    
-      IF NUM-ENTRIES(MsRequest.ReqCParam1,";") >= 35 AND
-         LENGTH(ENTRY(35,MsRequest.ReqCParam1,";")) EQ 30 THEN
+      IF LENGTH(lcMandate) >= 30 THEN
          ASSIGN
-             lcMandate          = ENTRY(35,MsRequest.ReqCParam1,";")
              bOwner.MandateId   = lcMandate
              lcDate             = SUBSTRING(lcMandate,25,6)
              bOwner.MandateDate = DATE(INT(SUBSTR(lcDate,3,2)),
@@ -1312,10 +1295,6 @@ PROCEDURE pMsCustMove:
           MobSub.InvCust = iiNewInvCust WHEN iiNewInvCust > 0
           MobSub.AgrCust = iiNewOwner.
    
-   IF MsRequest.ReqIParam3 = 1 THEN DO: 
-      Mobsub.Salesman = ENTRY(11,MsRequest.ReqCParam1,";").
-   END.   
-
    /* Extraline discount will be closed WITH last date of previous month 
       if ACC is done on Extraline subscription */
    IF fCLITypeIsExtraLine(MobSub.CliType) AND 
@@ -1323,9 +1302,7 @@ PROCEDURE pMsCustMove:
       MobSub.MultiSimType                 EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
 
       FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
-                 lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND
-                 lbMLMobSub.MultiSimId   = MobSub.MsSeq            AND
-                 lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+                 lbMLMobSub.MsSeq = MobSub.MultiSimId NO-ERROR. 
       
       IF AVAIL lbMLMobSub THEN DO:
          
@@ -1336,9 +1313,7 @@ PROCEDURE pMsCustMove:
                                  TODAY).
          
          /* Hard association is also removed because ACC was done to extraline */
-         ASSIGN lbMLMobSub.MultiSimId   = 0
-                lbMLMobSub.MultiSimType = 0
-                MobSub.MultiSimId       = 0
+         ASSIGN MobSub.MultiSimId       = 0
                 MobSub.MultiSimType     = 0.
 
       END.           
@@ -1814,11 +1789,12 @@ PROCEDURE pUpdateDSS2Account:
    
    IF fOngoingDSSAct(MobSub.Custnum) THEN RETURN.
 
-   IF NOT fIsDSS2Allowed(MobSub.Custnum,
-                         MobSub.MsSeq,
-                         ideActStamp,
-                         OUTPUT liDSSMsSeq,
-                         OUTPUT lcError) THEN RETURN.
+   IF NOT fIsDSSActivationAllowed(MobSub.Custnum,
+                                  MobSub.MsSeq,
+                                  ideActStamp,
+                                  {&DSS2},
+                                  OUTPUT liDSSMsSeq,
+                                  OUTPUT lcError) THEN RETURN.
 
    liRequest = fDSSRequest(liDSSMsSeq,
                            MobSub.CustNum,
@@ -1902,7 +1878,7 @@ PROCEDURE pHandleAdditionalLines:
       RETURN.
    END.
 
-   llIsACCAllowed = fSubscriptionLimitCheck(INPUT Customer.OrgId,
+   llIsACCAllowed = Func.ValidateACC:mSubscriptionLimitCheck(INPUT Customer.OrgId,
                                           INPUT Customer.CustIdType,
                                           fIsSelfEmpl(Customer.Category),
                                           fIsPro(Customer.Category),
@@ -1949,13 +1925,13 @@ PROCEDURE pHandleAdditionalLines:
       IF llIsACCAllowed AND
          liSubs < liSubLimit THEN DO:
 
-         RUN pCheckSubscriptionForACC (
-            bMobSub.MsSeq,
-            0,
-            MsRequest.ReqSource,
-            OUTPUT lcInfo).
 
-         IF NOT RETURN-VALUE BEGINS "ERROR" THEN DO:
+         lcInfo = Func.ValidateACC:mCheckSubscriptionForACC(bMobSub.MsSeq,
+                                                            0,
+                                                            0,
+                                                            MsRequest.ReqSource).
+
+         IF NOT ENTRY(1,lcInfo,"|") BEGINS "ERROR" THEN DO:
             liRequest = fMSCustChangeRequest(
                bMobSub.MsSeq,
                "agrcust",

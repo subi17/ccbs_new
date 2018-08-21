@@ -119,7 +119,7 @@ PROCEDURE pRequestActions:
    BY RequestAction.Action DESC    /* terminations before activations */
    BY ttAction.ActionType
    BY ttAction.ActionKey:
- 
+
       /* additional rules defined */
       RUN pDoRulesAllow(liMsSeq,
                         icCLIType,
@@ -190,6 +190,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR liFFCount AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO. 
    DEF VAR lcBundleId AS CHAR NO-UNDO. 
+   DEF VAR lcParamValue AS CHAR NO-UNDO.
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -304,6 +305,15 @@ PROCEDURE pPeriodicalContract:
                         OrderAction.ItemType = "FixedPermanency") THEN RETURN.
 
       /*End of FLP temporary change*/
+
+      /* Skip permanency creation request in case of merge stc request */
+      IF bOrigRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+         ttAction.ActionKey   BEGINS "FTERM"                         AND
+         fCheckMsRequestParam(bOrigRequest.MsRequest,
+                              {&MERGE2P3P},
+                              OUTPUT lcParamValue)                   THEN
+         RETURN.
+
 
       /* Temporary check due to ongoing orders created before 5.6.2017
          TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
@@ -619,6 +629,30 @@ PROCEDURE pPeriodicalContract:
                                         iiMsRequest,
                                         FALSE,
                                         OUTPUT lcResult).
+   END.
+   /* Refresh active contract without penalty */
+   WHEN 7 THEN DO:
+
+      IF NOT CAN-FIND(FIRST DCCLI WHERE
+                            DCCLI.Brand   = Syst.Var:gcBrand AND
+                            DCCLI.DCEvent = ttAction.ActionKey AND
+                            DCCLI.MsSeq   = liMsSeq AND
+                            DCCLI.ValidTo > ldaReqDate) THEN RETURN.
+
+      liRequest = fPCActionRequest(liMsSeq,
+                                   ttAction.ActionKey,
+                                   "recreate",
+                                   idActStamp,
+                                   FALSE,
+                                   icSource,
+                                   "",
+                                   iiMsRequest,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                   "",
+                                   OUTPUT lcResult).
    END.
   
    OTHERWISE RETURN.

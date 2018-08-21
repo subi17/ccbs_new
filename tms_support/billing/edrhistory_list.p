@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "qvantel".
-{../tms_support/billing/edrhistory_changes.i}
+{billing/edrhistory_changes.i}
 
 DEF VAR i           AS INT  NO-UNDO.
 DEF VAR ldaFromDate AS DATE NO-UNDO.

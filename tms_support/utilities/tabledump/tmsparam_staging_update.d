@@ -9,6 +9,7 @@
 "EI" "WebServerPDFLink" "C" 0 0 "https://miyoigo.staging.qvantel.net/download" ? "" "" "" "" "" "" "" "" "" "" "Web Server eInvoice PDF Link" no "1"
 "EIF" "WebServerLink" "C" 0 0 "https://ysita-tienda.staging.qvantel.net/fusion_billing/resumen_factura/" ? "" "" "" "" "" "" "" "" "" "" "Fusion invoice server link" no "1"
 "FuncRun" "FRDaemonInterval" "I" 15 0 "" ? "" "" "" "" "" "" "" "" "" "" "Interval between loops" no "1"
+"GESCON" "Host" "C" 0 0 "95.169.251.117" ? "" "" "" "" "" "" "" "" "" "" "Host name" no "1"
 "HPD.Interface" "HPD.QueueCommon.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "HPD.Interface" "HPD.QueueMobile.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "HPD.Interface" "HPD.QueueOrdercanal.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"

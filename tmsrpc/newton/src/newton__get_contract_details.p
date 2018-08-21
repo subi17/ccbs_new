@@ -59,7 +59,7 @@ DEFINE TEMP-TABLE ttContractDetails NO-UNDO
 
 DEFINE BUFFER bttContractDetails FOR ttContractDetails.
 
-IF validate_request(param_toplevel_id,"brand,string,string,string,string,datetime") EQ ? THEN
+IF validate_request(param_toplevel_id,"string,string,string,string,string,datetime") EQ ? THEN
    RETURN.
 
 ASSIGN 

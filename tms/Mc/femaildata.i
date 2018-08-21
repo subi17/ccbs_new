@@ -22,7 +22,7 @@
 {Syst/tmsconst.i}
 {Func/profunc.i}
 {Func/transname.i}
-
+{Func/fixedlinefunc.i}
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"
 &SCOPED-DEFINE ORDERTYPE_NEW_EN "New number"
@@ -59,6 +59,7 @@ lcMiddleTag = '</td><td style="width:34px; text-align:right; padding:0 5px 0 0 ;
 lcEndTag = '&euro;</strong></td></tr>'.
 
 ASSIGN Syst.Var:gcBrand = "1".
+
 
 FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
 /* Check if order is needed to get */
@@ -1598,6 +1599,8 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcTariffType AS CHAR NO-UNDO.
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
    DEF VAR lcText AS CHAR NO-UNDO. 
+   DEF VAR lcTermName AS CHAR NO-UNDO.
+
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
    
    RUN Mc/offer_penaltyfee.p(Order.OrderID,
@@ -1643,7 +1646,18 @@ PROCEDURE pGetPENALTYFEE:
       ELSE liMonths = 12.
       lcText = REPLACE(lcText,"#MONTHS",STRING(liMonths)).
 
+      /*YCO-279 + refactoring text 532*/
+      /*before this 532 was hardcoded with 100E + 12 months*/
+      lcErr =  fSelectFTERMFee(Order.OrderId,
+                               OUTPUT ldAmt,
+                               OUTPUT lcTermName).
+      IF lcErr EQ "" THEN                         
+         lcText = REPLACE(lcText,"#AMOUNT",STRING(ldAmt)).
+      ELSE
+         lcText = REPLACE(lcText,"#AMOUNT",STRING(100)).
+
       lcList = lclist + CHR(10) + lcText.
+
    END.
                   
    lcList = REPLACE(lcList,"euros","&euro;"). 
@@ -2210,10 +2224,8 @@ PROCEDURE pGetCTNAME:
                Order.MultiSimType = {&MULTISIMTYPE_EXTRALINE} THEN DO:
           
           FIND FIRST lbMLOrder NO-LOCK WHERE
-                     lbMLOrder.Brand        = Syst.Var:gcBrand          AND
-                     lbMLOrder.OrderId      = Order.MultiSimId AND
-                     lbMLOrder.MultiSimId   = Order.OrderId    AND
-                     lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+                     lbMLOrder.Brand   = Syst.Var:gcBrand AND
+                     lbMLOrder.OrderId = Order.MultiSimId NO-ERROR. 
  
          IF AVAIL lbMLOrder THEN DO:
 
@@ -2445,10 +2457,8 @@ PROCEDURE pGetEXTRA_LINE_INFO:
          END.
          WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
             FIND FIRST lbMLOrder NO-LOCK WHERE
-                       lbMLOrder.Brand        = Syst.Var:gcBrand            AND
-                       lbMLOrder.OrderId      = lbOrder.MultiSimId AND
-                       lbMLOrder.MultiSimId   = lbOrder.OrderId    AND
-                       lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+                       lbMLOrder.Brand   = Syst.Var:gcBrand   AND
+                       lbMLOrder.OrderId = lbOrder.MultiSimId NO-ERROR. 
 
             IF AVAIL lbMLOrder THEN
                ASSIGN 

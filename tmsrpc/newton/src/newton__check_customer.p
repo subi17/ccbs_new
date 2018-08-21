@@ -14,21 +14,20 @@
  * @check_customer order_allowed;boolean;mandatory;
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
+                   reasons;string;optional;possible fail reasons, returned if order_allowed = false and are | seperated reasons                   
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
                    extra_line_allowed;string;mandatory;comma separated list of allowed extra lines
                    segment;string;mandatory;
+                   extra_line_status;integer;mandatory;status for extra lines orders (YCO-272). Only make sense if asking for a Extra Line CliType.
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-{Syst/commpaa.i}
-Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/orderchk.i}
 {Func/custfunc.i}
 {Func/profunc.i}
 {Func/barrfunc.i}
-
+{Func/profunc_request.i}
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR pcPersonId       AS CHAR NO-UNDO.
@@ -64,7 +63,21 @@ DEF VAR lcResult                      AS CHAR NO-UNDO.
 DEF VAR lii                           AS INT  NO-UNDO.
 DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
 DEF VAR liMLMsSeq                     AS INT  NO-UNDO. 
+DEF VAR lcReasons                     AS CHAR NO-UNDO.
+DEF VAR llAllowedELCliTypeCurrent     AS LOG  NO-UNDO.  
+DEF VAR llAllowedELCliTypeOther       AS LOG  NO-UNDO. 
+DEF VAR lcClitypeAux                  AS CHAR NO-UNDO.
+DEF VAR liExtraLineStatus             AS INT  NO-UNDO.
+DEF VAR llAllowedProMig               AS LOGI NO-UNDO.
+DEF VAR lcCliTypeTo                   AS CHAR NO-UNDO.
 
+DEF BUFFER bCustomer  FOR Customer.
+DEF BUFFER bMobSub    FOR MobSub.
+DEF BUFFER bCustCat   FOR Custcat.
+DEF BUFFER bOrder     FOR Order.
+DEF BUFFER bClitype   FOR CLIType.
+DEF VARIABLE llHasLegacyTariff AS LOGICAL NO-UNDO.
+   
 top_array = validate_request(param_toplevel_id, "string!,string!,string!,boolean!,int!,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
 
@@ -95,6 +108,28 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.
 
+FUNCTION fSetError RETURNS LOG (INPUT icError AS CHARACTER):
+      ASSIGN
+         llOrderAllowed = FALSE
+         lcReason       = icError
+         lcReasons      = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.  
+      RETURN TRUE .
+END FUNCTION .        
+
+/* YCO-712                              */
+/* Returns TRUE if any subscription of  */
+/* this customer has TV Service active. */      
+FUNCTION fTVService RETURNS LOGICAL ():
+   DEFINE BUFFER bMobSub FOR MobSub.
+   FOR EACH bMobsub NO-LOCK WHERE 
+            bMobsub.Brand   EQ Syst.Var:gcBrand AND 
+            bMobsub.AgrCust EQ Customer.CustNum:
+      IF fIsTVServiceActive(bMobsub.MsSeq) THEN 
+        RETURN TRUE.            
+   END.           
+   RETURN FALSE.
+END FUNCTION.
+
 FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF BUFFER Order FOR Order.
@@ -102,10 +137,9 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF VAR llOnlyActiveFound AS LOG NO-UNDO.
 
-   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-      ASSIGN
-         llOrderAllowed = FALSE
-         lcReason = "PRO migration not possible because of not company or selfemployed".
+   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService()) /* YCO-712 */
+      THEN
+       fSetError ("PRO migration not possible because of not company or selfemployed") .
    ELSE DO:
       FIND Mobsub WHERE Mobsub.Brand EQ Syst.Var:gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
       IF AMBIG MobSub THEN
@@ -114,86 +148,34 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                Mobsub.Brand EQ Syst.Var:gcBrand AND
                                Mobsub.InvCust EQ Customer.CustNum AND
                                Mobsub.paytype) THEN DO:
-               ASSIGN
-                  llOrderAllowed = FALSE
-                  lcReason = "PRO migration not possible because of prepaid subscription".
+               fSetError ("PRO migration not possible because of prepaid subscription").
              END.
              /* Check any ongoing orders */
-             ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+             ELSE IF Func.ValidateACC:mCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                     0) THEN DO:
-             ASSIGN
-                llOrderAllowed = FALSE
-                lcReason = "PRO migration not possible because of active non pro orders".
+                   fSetError ("PRO migration not possible because of active non pro orders").
              END.
-             ELSE DO:
-                llOnlyActiveFound = FALSE.             
-                /* Check that customer got at least one 3P convergent
-                   and all convergent subscriptions are commercially
-                   active webstatus */
+             ELSE 
+             DO:
                 FOR EACH Mobsub NO-LOCK WHERE 
-                         Mobsub.Brand EQ Syst.Var:gcBrand AND 
-                         Mobsub.InvCust EQ Customer.CustNum:
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
-                   FIND FIRST Clitype WHERE
-                              Clitype.brand EQ "1" AND
-                              Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                   IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1) THEN DO:
-                      IF fHasTVService(Mobsub.msseq) THEN DO:
-                         /* TV service not allowed for PRO */
-                         ASSIGN
-                            llOrderAllowed = FALSE
-                            lcReason = "PRO migration not possible because of TV service".
-                         LEAVE.
-                      END.
-                      ELSE
-                         /* at least one found */
-                         IF llOnlyActiveFound EQ FALSE THEN
-                            llOnlyActiveFound = TRUE.
-                   END.
-                   ELSE DO:
-                      llOnlyActiveFound = FALSE.
+                         Mobsub.Brand   EQ Syst.Var:gcBrand AND 
+                         Mobsub.AgrCust EQ Customer.CustNum:
+
+                   IF fIsFixedOnly(Mobsub.Clitype) THEN
+                   DO:
+                      fSetError ("PRO migration not possible because of fixed only").
                       LEAVE.
-                   END.                  
-                END.
-                IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
-                   ASSIGN
-                      llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
-                END.
-                ELSE DO:
-                   /* Check that mobile subscriptions are commercially active
-                      or possible to migrate to active according to defined
-                      mapping */
-                   FOR EACH Mobsub NO-LOCK WHERE
-                            Mobsub.Brand EQ Syst.Var:gcBrand AND
-                            Mobsub.InvCust EQ Customer.CustNum:
-                      IF fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
-                      FIND FIRST Clitype WHERE
-                                 Clitype.brand EQ "1" AND
-                                 Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                      IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
-                         IF fHasTVService(Mobsub.msseq) THEN DO:
-                         /* TV service not allowed for PRO */
-                            ASSIGN
-                               llOrderAllowed = FALSE
-                               lcReason = "PRO migration not possible because of TV service".
-                            LEAVE.
-                         END.
-                      END.
-                      ELSE DO:
-                         /* found subscription that rejects migration 
-                            commercially non active that does not have 
-                            migration mapping or tv service activated */
-                         llOnlyActiveFound = FALSE.
-                         LEAVE.
-                      END.                   
+                   END.     
+
+                   /* Check all subscriptions of this customer are possible to migrate per defined mapping */ 
+                   llAllowedProMig = fCheckSubscriptionTypeAllowedForProMigration(MobSub.CliType, OUTPUT lcClitypeTo).
+                   IF NOT llAllowedProMig THEN 
+                   DO:
+                      fSetError ("PRO migration not possible, as mapping to change tariff to the commercially active pro tariff is missing.").
+                      LEAVE.        
                    END.
-                   IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
-                      ASSIGN
-                         llOrderAllowed = FALSE
-                         lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
-                   END.
+
+                   /* YCO-712. "PRO migration not possible because of TV service" removed. */
 
                 END.
              END.
@@ -206,91 +188,54 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                Mobsub.Brand EQ Syst.Var:gcBrand AND
                                Mobsub.InvCust EQ Customer.CustNum AND
                                Mobsub.paytype) THEN DO:
-               ASSIGN
-                  llOrderAllowed = FALSE
-                  lcReason = "PRO migration not possible because of prepaid subscription".
+               fSetError ("PRO migration not possible because of prepaid subscription").
              END.
              /* Check any ongoing orders */
-             ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+             ELSE IF Func.ValidateACC:mCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                     0) THEN DO:
              ASSIGN
                 llOrderAllowed = FALSE
-                lcReason = "PRO migration not possible because of active non pro orders".
+                lcReason = "PRO migration not possible because of active non pro orders"
+                lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
              END.
-             ELSE DO:
-                llOnlyActiveFound = FALSE.
-                FOR EACH Mobsub NO-LOCK WHERE
-                         Mobsub.Brand EQ Syst.Var:gcBrand AND
-                         Mobsub.InvCust EQ Customer.CustNum:
-                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN DO:
-                      NEXT.
-                   END.
-                   ELSE DO:
-                      llOnlyActiveFound = TRUE.
+             ELSE 
+             DO:
+                FOR EACH Mobsub NO-LOCK WHERE 
+                         Mobsub.Brand   EQ Syst.Var:gcBrand AND 
+                         Mobsub.AgrCust EQ Customer.CustNum:
+
+                   IF fIsFixedOnly(Mobsub.Clitype) THEN
+                   DO:
+                      fSetError ("PRO migration not possible because of fixed only").
                       LEAVE.
+                   END.     
+
+                   /* Check all subscriptions of this customer are possible to migrate per defined mapping */ 
+                   llAllowedProMig = fCheckSubscriptionTypeAllowedForProMigration(MobSub.CliType, OUTPUT lcClitypeTo).
+                   IF NOT llAllowedProMig THEN 
+                   DO:
+                      fSetError ("PRO migration not possible, as mapping to change tariff to the commercially active pro tariff is missing.").
+                      LEAVE.        
                    END.
-                END.
-                IF llOnlyActiveFound THEN DO:
-                   ASSIGN
-                      llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed because of active 3P convergent".
-                END.
-                ELSE DO:
-                   FOR EACH Mobsub NO-LOCK WHERE
-                            Mobsub.Brand EQ Syst.Var:gcBrand AND
-                            Mobsub.InvCust EQ Customer.CustNum:
-                      FIND FIRST Clitype WHERE
-                                 Clitype.brand EQ "1" AND
-                                 Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                      IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
-                         IF fHasTVService(Mobsub.msseq) THEN DO:
-                         /* TV service not allowed for PRO */
-                            ASSIGN
-                               llOrderAllowed = FALSE
-                               lcReason = "PRO migration not possible because of TV service".
-                            LEAVE.
-                         END.
-                         ELSE
-                            IF llOnlyActiveFound EQ FALSE THEN
-                               llOnlyActiveFound = TRUE.
-                      END.
-                      ELSE DO:
-                         /* found subscription that rejects migration
-                            commercially non active that does not have
-                            migration mapping or tv service activated */
-                         llOnlyActiveFound = FALSE.
-                         LEAVE.
-                      END.
-                   END.
-                END. 
-                IF NOT llOnlyActiveFound  THEN DO:
-                   ASSIGN
-                      llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
+
+                   /* YCO-712. "PRO migration not possible because of TV service" removed. */
+
                 END.                
              END.             
           END.          
           ELSE
-          ASSIGN
-             llOrderAllowed = FALSE
-             lcReason = "PRO migration not possible because of multiple mobile lines".
+              fSetError ("PRO migration not possible because of multiple mobile lines") .
       ELSE IF AVAIL MobSub THEN
       DO:
-         IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+         IF Func.ValidateACC:mCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                 mobsub.msseq) THEN DO:
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of active non pro orders".
+               fSetError ("PRO migration not possible because of active non pro orders").
          END.         
          ELSE IF Mobsub.paytype THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of prepaid subscription".
-         ELSE IF fHasTVService(Mobsub.msseq) THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of TV service".
+               fSetError ("PRO migration not possible because of prepaid subscription" ).
+               
+         /* YCO-712. "PRO migration not possible because of TV service" removed. */
+         
          /* Migration not possible for retired or non active convergent */
          ELSE IF fIsConvergenceTariff(Mobsub.clitype) AND
             CAN-FIND(First CliType WHERE
@@ -299,11 +244,13 @@ FUNCTION fCheckMigration RETURNS LOG ():
                            Clitype.webstatuscode NE {&CLITYPE_WEBSTATUSCODE_ACTIVE}) THEN
             ASSIGN
                llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of non commercial active convergent subscription".
+               lcReason = "PRO migration not possible because of non commercial active convergent subscription"
+               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
          ELSE IF fIsFixedOnly(Mobsub.Clitype) THEN
              ASSIGN
                  llOrderAllowed = FALSE
-                 lcReason = "PRO migration not possible because of fixed only".
+                 lcReason = "PRO migration not possible because of fixed only"
+                 lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
          ELSE IF NOT llNonProToProMigrationOngoing THEN
          DO:
              /* There exists only 1 non-pro mobile subscription, so this is for blocking migrating of non-pro mobile line to pro mobile line */
@@ -311,18 +258,20 @@ FUNCTION fCheckMigration RETURNS LOG ():
              IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
                  ASSIGN
                      llOrderAllowed = FALSE
-                     lcReason = "Mobile line for non-pro customer from PRO channel".
+                     lcReason = "Mobile line for non-pro customer from PRO channel"
+                     lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
          END.
       END.
       ELSE IF NOT llNonProToProMigrationOngoing AND
               NOT fIsConvergent3POnly(pcCliType) THEN
          ASSIGN
              llOrderAllowed = FALSE
-             lcReason = "PRO migration not possible because of no mobile lines exists".
+             lcReason = "PRO migration not possible because of no mobile lines exists"
+             lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
    END.
 END.
 
-llOrderAllowed = fSubscriptionLimitCheck(
+llOrderAllowed = Func.ValidateACC:mSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
@@ -350,7 +299,8 @@ FIND FIRST Customer NO-LOCK WHERE
 IF AVAIL Customer AND
    fExistBarredSubForCustomer(Customer.CustNum) THEN ASSIGN
    lcReason = "barring"
-   llOrderAllowed = FALSE.
+   llOrderAllowed = FALSE
+   lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
 
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
@@ -370,7 +320,8 @@ IF AVAIL Customer AND
     fGetSegment(Customer.custnum, 0) EQ "SOHO-AUTONOMO") THEN DO:
    ASSIGN
       llOrderAllowed = FALSE
-      lcReason = "The customer must have self employed set to true".
+      lcReason = "The customer must have self employed set to true"
+      lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
 END.
 ELSE IF AVAIL Customer AND
    CAN-FIND(FIRST MobSub WHERE 
@@ -387,10 +338,12 @@ ELSE IF AVAIL Customer AND
 
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
-        IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-           ASSIGN
-              llOrderAllowed = FALSE
-              lcReason = "PRO migration not possible because of not company or selfemployed". 
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService())  /* YCO-712 */
+       THEN
+          ASSIGN
+             llOrderAllowed = FALSE
+             lcReason = "PRO migration not possible because of not company or selfemployed"
+             lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
         ELSE IF llCustCatPro THEN 
         DO:            
             IF NOT fIsConvergent3POnly(pcCliType) AND 
@@ -398,11 +351,13 @@ ELSE IF AVAIL Customer AND
                      fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType))) THEN
                 ASSIGN 
                     llOrderAllowed = FALSE
-                    lcReason       = "Additional mobile line is not compatible with respective to main convergent line".
+                    lcReason       = "Additional mobile line is not compatible with respective to main convergent line"
+                    lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
             ELSE IF llProToNonProMigrationOngoing THEN  
                 ASSIGN
                     llOrderAllowed = FALSE
-                    lcReason       = "Ongoing non PRO order".
+                    lcReason       = "Ongoing non PRO order"
+                    lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
         END.
         ELSE 
         DO: /* NOT llCustCatPro */
@@ -411,7 +366,8 @@ ELSE IF AVAIL Customer AND
             ELSE
                ASSIGN
                   llOrderAllowed = FALSE
-                  lcReason = "Non PRO customer in PRO channel without migrate".
+                  lcReason = "Non PRO customer in PRO channel without migrate"
+                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
         END.
     END.
     ELSE 
@@ -425,23 +381,27 @@ ELSE IF AVAIL Customer AND
                 IF AVAIL MobSub AND NOT llProToNonProMigrationOngoing THEN 
                     ASSIGN 
                         llOrderAllowed = FALSE
-                        lcReason = "PRO migration not possible because of mobile line".
+                        lcReason = "PRO migration not possible because of mobile line"
+                        lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
                 ELSE IF NOT llProToNonProMigrationOngoing THEN 
                     ASSIGN 
                         llOrderAllowed = FALSE
-                        lcReason = "PRO migration not possible because, no mobile lines exists".
+                        lcReason = "PRO migration not possible because, no mobile lines exists"
+                        lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
             END.
             ELSE
             ASSIGN
                llOrderAllowed = FALSE
-               lcReason = "PRO customer in non-PRO channel".
+               lcReason = "PRO customer in non-PRO channel"
+               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
         END.
         ELSE
         DO:
            IF llNonProToProMigrationOngoing THEN 
               ASSIGN
                  llOrderAllowed = FALSE
-                 lcReason = "Customer already exists with PRO category".
+                 lcReason = "Customer already exists with PRO category"
+                 lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
            ELSE IF (pcChannel EQ "Newton" OR pcChannel EQ "VFR") AND
                    plSTCMigrate THEN DO:
               fCheckMigration().
@@ -449,29 +409,42 @@ ELSE IF AVAIL Customer AND
         END.
     END.
 END.
-ELSE DO:
-   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
-      IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-           ASSIGN
-              llOrderAllowed = FALSE
-              lcReason = "PRO migration not possible because of not company or selfemployed". 
-      ELSE DO:
-         FOR EACH OrderCustomer WHERE
+ELSE 
+DO:
+   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
+   DO:
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND (NOT plSelfEmployed) AND (NOT fTVService())  /* YCO-712 */
+       THEN
+          ASSIGN
+             llOrderAllowed = FALSE
+             lcReason = "PRO migration not possible because of not company or selfemployed"
+             lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+       ELSE 
+       DO:
+         FOR EACH OrderCustomer NO-LOCK WHERE
                   OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
                   OrderCustomer.CustIdType EQ pcIdType   AND
-                  OrderCustomer.CustId     EQ pcPersonId NO-LOCK:
+                  OrderCustomer.CustId     EQ pcPersonId AND
+                  OrderCustomer.Rowtype    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+            FIRST Order NO-LOCK WHERE
+                  Order.Brand EQ Syst.Var:gcBrand AND
+                  Order.OrderID = OrderCustomer.OrderID:
+
+             IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+                Order.OrderType NE {&ORDER_TYPE_MNP} AND
+                Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
              IF OrderCustomer.PRO EQ FALSE THEN 
              DO:    
-                FIND FIRST Order WHERE Order.Brand EQ Syst.Var:gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
-                IF AVAIL Order AND LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
+                IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
                 DO:
                     llOrderAllowed = FALSE.
                     lcReason = "Ongoing non PRO order".
+                    lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
                     LEAVE.    
                 END.
              END.
-             ELSE 
+             ELSE IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN
                 ASSIGN llPROOngoingOrder = TRUE.
          END.
 
@@ -483,12 +456,39 @@ ELSE DO:
              DO:
                  llOrderAllowed = FALSE.
                  lcReason = "Mobile line for non-pro customer from PRO channel".
+                 lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
              END.
          END.
+       END.
+   END.
+   ELSE 
+   DO: /* Block nonpro order's from non-pro channels when pro order is ongoing */
+      FOR EACH OrderCustomer NO-LOCK WHERE
+               OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
+               OrderCustomer.CustIdType EQ pcIdType   AND
+               OrderCustomer.CustId     EQ pcPersonId AND
+               OrderCustomer.Rowtype    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+         FIRST Order NO-LOCK WHERE
+               Order.Brand EQ Syst.Var:gcBrand AND
+               Order.OrderID = OrderCustomer.OrderID:
+
+          IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+             Order.OrderType NE {&ORDER_TYPE_MNP} AND
+             Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
+
+           IF OrderCustomer.PRO THEN 
+           DO:    
+              IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
+              DO:
+                  llOrderAllowed = FALSE.
+                  lcReason = "Ongoing PRO order".
+                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+                  LEAVE.    
+              END.
+           END.
       END.
    END.
 END.
-
 
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
@@ -542,6 +542,7 @@ IF lcAddLineAllowed = "" THEN DO:
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
             Order.OrderType          NE {&ORDER_TYPE_STC} AND 
+            Order.OrderType          NE {&ORDER_TYPE_ACC} AND 
             Order.SalesMan NE "GIFT" AND
             LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0,
        FIRST CLIType NO-LOCK WHERE
@@ -565,10 +566,66 @@ END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 
+YCO-272: /* When asking about a new Extra Line... */
+DO: 
+   liExtraLineStatus = -1. /* Initializing variable */      
+   IF LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 THEN DO: 
+      
+      /* Check if current extra line CliType is allowed for this customer */
+      llAllowedELCliTypeCurrent = fELCliTypeAllowedForCustomer (INPUT pcIdType,
+                                                                INPUT pcPersonId,
+                                                                INPUT pcCliType).
+   
+      /* Check if other extra line CliType is allowed for this customer */
+      llAllowedELCliTypeOther = FALSE.
+      DO lii = 1 TO NUM-ENTRIES(lcExtraLineCliTypes):
+         lcCliTypeAux = TRIM(ENTRY(lii,lcExtraLineCliTypes)).
+         IF lcCliTypeAux = pcCliType THEN 
+           NEXT.
+         llAllowedELCliTypeOther = fELCliTypeAllowedForCustomer (INPUT pcIdType,
+                                                                 INPUT pcPersonId,
+                                                                 INPUT lcCliTypeAux).
+         IF llAllowedELCliTypeOther THEN
+           LEAVE.                                                                           
+      END.               
+      
+      /* Cases */
+      IF LOOKUP(pcCliType, lcExtraLineAllowed) > 0 THEN DO:
+         liExtraLineStatus = 0. /* Extra Line allowed. Go on. */
+         LEAVE YCO-272.         
+      END.               
+      IF (NOT llAllowedELCliTypeCurrent) AND (NOT llAllowedELCliTypeOther) THEN DO:
+         liExtraLineStatus = 1. /* No subscriptions compatible with Extra Lines */
+         fSetError ("Extra Line not allowed").
+         LEAVE YCO-272.         
+      END.               
+      IF lcExtraLineAllowed = "" THEN DO:
+         liExtraLineStatus = 2. /* No more Extra Lines allowed */
+         fSetError ("Extra Line not allowed").         
+         LEAVE YCO-272.         
+      END.                 
+      IF lcExtraLineAllowed <> "" AND (NOT llAllowedELCliTypeCurrent) THEN DO:
+         liExtraLineStatus = 3. /* Extra Line allowed, but no this one that is not compatible */
+         fSetError ("Extra Line not allowed").        
+         LEAVE YCO-272.         
+      END.                                                
+      IF lcExtraLineAllowed <> "" AND LOOKUP(pcCliType, lcExtraLineAllowed) = 0 THEN DO:
+         IF LOOKUP(pcCliType, lcExtraLineCliTypes) = 1 THEN 
+           liExtraLineStatus = 5. /* Not allowed itself, but you can try other one of the allowed */
+         ELSE
+           liExtraLineStatus = 4. /* Not allowed itself, but you can try other one of the allowed */
+         fSetError ("Extra Line not allowed").
+         LEAVE YCO-272.             
+      END.                                                                                       
+   END. /* IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 */
+   
+END. /* YCO-272 */
+
 lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
+IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reasons',lcReasons).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
 
 IF lcExtraLineAllowed EQ ""
@@ -586,6 +643,8 @@ ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).
 
 add_string(lcReturnStruct, 'segment',lcSegment).
+
+add_int(lcReturnStruct, 'extra_line_status',liExtraLineStatus).
 
 FINALLY:
    END.

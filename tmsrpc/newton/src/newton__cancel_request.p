@@ -232,6 +232,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
          IF MsRequest.ReqStatus = 0 OR 
             MsRequest.ReqStatus = 8 THEN DO:
             fReqStatus(4, pcMemo).
+            fChangeOrderStatus(MsRequest.ReqIParam4, {&ORDER_STATUS_CLOSED}).
             RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",

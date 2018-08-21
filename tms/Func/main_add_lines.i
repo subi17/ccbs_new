@@ -2,8 +2,6 @@
 &THEN
 &GLOBAL-DEFINE MAIN_ADD_LINES_I YES
 
-{Mnp/mnpoutchk.i}
- 
 FUNCTION fIsMainLineSubActive RETURNS LOGICAL
    (INPUT pcIdType AS CHAR,
     INPUT pcPersonId AS CHAR):
@@ -105,7 +103,7 @@ FUNCTION fHasPendingRequests RETURNS LOGICAL
           LOOKUP(STRING(MsRequest.ReqStatus),
                  {&REQ_INACTIVE_STATUSES}) = 0) THEN RETURN TRUE.
 
-   IF fIsMNPOutOngoing(INPUT icCLI) THEN RETURN TRUE.
+   IF Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT icCLI) THEN RETURN TRUE.
 
    RETURN FALSE.
 

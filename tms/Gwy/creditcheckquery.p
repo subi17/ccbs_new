@@ -3,6 +3,7 @@
 {Func/mathfunction.i}
 {Func/msreqfunc.i}
 {Syst/tmsconst.i}
+{Mm/msagrcustchg.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INT             NO-UNDO.
 
@@ -267,6 +268,8 @@ PROCEDURE pHeader:
    DEF VAR lcIMEI        AS CHAR NO-UNDO.
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 
+   DEF BUFFER bACCOrder FOR Order.
+
    FIND FIRST MSrequest WHERE 
               MSRequest.Brand     = Syst.Var:gcBrand    AND
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -316,19 +319,43 @@ PROCEDURE pHeader:
    ASSIGN
       lcOldOperator = "Yoigo".
       
+   EMPTY TEMP-TABLE ttCustomer.
+      
    IF lcType EQ "ACC" THEN DO:
+   
+      IF bOrigRequest.ReqIParam4 > 0 THEN DO:
+
+         FIND bAccOrder NO-LOCK WHERE
+              bAccOrder.brand = Syst.Var:gcBrand AND
+              bAccOrder.OrderID = bOrigRequest.ReqIParam4 NO-ERROR. 
+
+         IF NOT AVAIL bAccOrder THEN RETURN "ERROR: Order not found".
+
+         IF NOT fParseAccOrderCustomer(
+            bAccOrder.OrderID,
+            OUTPUT TABLE ttCustomer BY-REFERENCE) THEN
+            RETURN "ERROR: New customer data parsing failed".
+         
+      END.
+      ELSE DO:
+
+         IF NOT fParseAccDataParam(
+           bOrigRequest.ReqCParam1,
+           OUTPUT TABLE ttCustomer BY-REFERENCE) THEN
+           RETURN "ERROR: New customer data parsing failed".
+      END.
       
       ASSIGN 
-         lcCustIdType  = ENTRY(12,bOrigRequest.ReqCParam1,";")
-         lcOrgId       = ENTRY(13,bOrigRequest.ReqCParam1,";")
-         lcAddress     = ENTRY(6,bOrigRequest.ReqCParam1,";")
-         lcZipCode     = ENTRY(7,bOrigRequest.ReqCParam1,";")
-         lcRegion      = ENTRY(17,bOrigRequest.ReqCParam1,";")
-         lcPostOffice  = ENTRY(8,bOrigRequest.ReqCParam1,";")
+         lcCustIdType  = ttCustomer.CustIDType
+         lcOrgId       = ttCustomer.OrgID
+         lcAddress     = ttCustomer.Address
+         lcZipCode     = ttCustomer.ZipCode
+         lcRegion      = ttCustomer.Region
+         lcPostOffice  = ttCustomer.PostOffice
          lcNationality = "ES"
-         lcBankAcc     = ENTRY(18,bOrigRequest.ReqCParam1,";")
+         lcBankAcc     = ttCustomer.BankAcct
          lcNumberType  = "N"
-         lcEMail       = ENTRY(10,bOrigRequest.ReqCParam1,";")
+         lcEMail       = ttCustomer.Email
          lcPhone1      = ""
          lcPhone2      = ""
          lcSalesman    = "Y200000000"
@@ -341,22 +368,22 @@ PROCEDURE pHeader:
           
       IF lcCustIDType = "CIF" THEN ASSIGN 
          lcFirstName   = ""
-         lcSurName1    = ENTRY(5,bOrigRequest.ReqCParam1,";")
+         lcSurName1    = ttCustomer.CustName
          lcSurName2    = ""
-         lcBirthDay    = STRING(DATE(ENTRY(20,bOrigRequest.ReqCParam1,";")),
+         lcBirthDay    = STRING(ttCustomer.Birthday,
                                "99999999").
       ELSE ASSIGN 
-         lcFirstName   = ENTRY(2,bOrigRequest.ReqCParam1,";")
-         lcSurName1    = ENTRY(1,bOrigRequest.ReqCParam1,";")
-         lcSurname2    = ENTRY(3,bOrigRequest.ReqCParam1,";")
-         lcBirthDay    = STRING(DATE(ENTRY(14,bOrigRequest.ReqCParam1,";")),
+         lcFirstName   = ttCustomer.FirstName
+         lcSurName1    = ttCustomer.Custname
+         lcSurname2    = ttCustomer.Surname2
+         lcBirthDay    = STRING(ttCustomer.Birthday,
                                "99999999").
 
    END.
 
    ELSE DO:
-      FIND FIRST Customer WHERE 
-                 Customer.CustNum = MSRequest.CustNum NO-LOCK NO-ERROR.
+      FIND Customer WHERE 
+           Customer.CustNum = MSRequest.CustNum NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Customer THEN RETURN "ERROR:Customer missing".
 
       ASSIGN

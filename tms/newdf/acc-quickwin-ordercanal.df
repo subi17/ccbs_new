@@ -1,0 +1,141 @@
+ADD TABLE "OrderProduct"
+  MULTITENANT yes
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderproduct.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderproduct.p" CRC "?" 
+  AREA "Sta_Data_64"
+  DUMP-NAME "orderproduct"
+
+ADD FIELD "OrderId" OF "OrderProduct" AS integer
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 10
+
+ADD FIELD "OrderProductID" OF "OrderProduct" AS integer
+  DESCRIPTION "Order product internal id"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderProductID"
+  COLUMN-LABEL "OrderProductID"
+  ORDER 20
+
+ADD FIELD "ParentID" OF "OrderProduct" AS integer
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Parent ID"
+  COLUMN-LABEL "ParentID"
+  ORDER 30
+
+ADD FIELD "ProductID" OF "OrderProduct" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Product ID"
+  COLUMN-LABEL "ProductID"
+  HELP "Product Catalog product ID"
+  ORDER 40
+
+ADD FIELD "ProductOfferingID" OF "OrderProduct" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Product Offering ID"
+  COLUMN-LABEL "ProductOfferingID"
+  HELP "Product Catalog product offering ID"
+  ORDER 50
+
+ADD FIELD "ActionType" OF "OrderProduct" AS character
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Action Type"
+  COLUMN-LABEL "ActionType"
+  ORDER 60
+
+ADD INDEX "OrderProductID" ON "OrderProduct"
+  AREA "Dyn_Index_1"
+  PRIMARY
+  UNIQUE
+  INDEX-FIELD "OrderProductID" ASCENDING
+
+ADD INDEX "OrderID" ON "OrderProduct"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OrderId" ASCENDING
+
+ADD TABLE "OrderProductParam"
+  MULTITENANT yes
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderproductparam.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-orderproductparam.p" CRC "?" 
+  AREA "Sta_Data_128"
+  DUMP-NAME "orderproductparam"
+
+ADD FIELD "OrderProductID" OF "OrderProductParam" AS integer
+  DESCRIPTION "Order product internal id"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Order Product ID"
+  COLUMN-LABEL "OrderProductID"
+  ORDER 10
+
+ADD FIELD "ParamName" OF "OrderProductParam" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Param Name"
+  COLUMN-LABEL "ParamName"
+  ORDER 20
+
+ADD FIELD "ValueType" OF "OrderProductParam" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Value Type"
+  COLUMN-LABEL "ValueType"
+  ORDER 30
+
+ADD FIELD "CharValue" OF "OrderProductParam" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "CharValue"
+  COLUMN-LABEL "CharValue"
+  ORDER 40
+
+ADD FIELD "DateValue" OF "OrderProductParam" AS date
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "DateValue"
+  COLUMN-LABEL "DateValue"
+  ORDER 50
+
+ADD FIELD "DecValue" OF "OrderProductParam" AS decimal
+  FORMAT "->>>>>>>9.99<<"
+  DECIMALS 5
+  INITIAL "0"
+  LABEL "DecValue"
+  COLUMN-LABEL "DecValue"
+  ORDER 60
+
+ADD FIELD "IntValue" OF "OrderProductParam" AS  integer
+  FORMAT "->>>>>>>9"
+  INITIAL "0"
+  LABEL "IntValue"
+  COLUMN-LABEL "IntValue"
+  ORDER 70
+
+ADD FIELD "OrderId" OF "OrderProductParam" AS integer
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 80
+
+ADD INDEX "OrderProductID" ON "OrderProductParam"
+  AREA "Dyn_Index_1"
+  PRIMARY
+  UNIQUE
+  INDEX-FIELD "OrderProductID" ASCENDING
+  INDEX-FIELD "ParamName" ASCENDING
+
+ADD SEQUENCE "OrderProductID"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0

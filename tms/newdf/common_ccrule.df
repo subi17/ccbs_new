@@ -1,0 +1,152 @@
+ADD FIELD "CCRuleID" OF "CCRule" AS integer
+  DESCRIPTION "ID of the CCRULE Record"
+  FORMAT ">>>>>>>9"
+  POSITION 7
+  INITIAL "0"
+  LABEL "Rule ID"
+  COLUMN-LABEL "Rule ID"
+  ORDER 60
+  MAX-WIDTH 4
+
+ADD FIELD "BillCode" OF "CCRule" AS character
+  DESCRIPTION "BillCode for the CCRule record."
+  FORMAT "x(16)"
+  POSITION 8
+  INITIAL ""
+  LABEL "BillItem"
+  COLUMN-LABEL "BillItem"
+  ORDER 70
+  MAX-WIDTH 32
+
+ADD FIELD "ValidTo" OF "CCRule" AS date
+  DESCRIPTION "Date when rule becomes ineffective"
+  FORMAT "99-99-99"
+  POSITION 9
+  INITIAL ?
+  LABEL "InEff. Date"
+  COLUMN-LABEL "InEff. Date"
+  ORDER 80
+  MAX-WIDTH 4
+
+ADD FIELD "AccNum" OF "CCRule" AS integer
+  DESCRIPTION "Account Number"
+  FORMAT ">>>>>>>9"
+  POSITION 10
+  INITIAL "0"
+  HELP "Account Number"
+  LABEL "Account"
+  COLUMN-LABEL "Account"
+  ORDER 90
+  MAX-WIDTH 4
+
+ADD FIELD "EUAccNum" OF "CCRule" AS integer
+  DESCRIPTION "Account number for EU sales"
+  FORMAT ">>>>>>>9"
+  POSITION 11
+  INITIAL "0"
+  HELP "Account number for EU sales"
+  LABEL "EU Sales Account"
+  COLUMN-LABEL "EU"
+  ORDER 100
+  MAX-WIDTH 4
+
+ADD FIELD "EUConAccNum" OF "CCRule" AS integer
+  DESCRIPTION "Account number for EU sales with VAT (consumers)"
+  FORMAT ">>>>>>>9"
+  POSITION 12
+  INITIAL "0"
+  HELP "Account number for EU sales with VAT (consumers)"
+  LABEL "EU Cons. Sales"
+  COLUMN-LABEL "EUCon"
+  ORDER 110
+  MAX-WIDTH 4
+
+ADD FIELD "FSAccNum" OF "CCRule" AS integer
+  DESCRIPTION "Account number for sales outside EU"
+  FORMAT ">>>>>>>9"
+  POSITION 13
+  INITIAL "0"
+  HELP "Account number for sales outside EU"
+  LABEL "Foreign Sales Account"
+  COLUMN-LABEL "Foreign"
+  ORDER 120
+  MAX-WIDTH 4
+
+ADD FIELD "ReportingID" OF "CCRule" AS character
+  DESCRIPTION "Reporting ID"
+  FORMAT "x(8)"
+  POSITION 14
+  INITIAL ""
+  HELP "Reporting ID"
+  LABEL "Reporting ID"
+  COLUMN-LABEL "Reporting ID"
+  ORDER 130
+  MAX-WIDTH 16
+  
+ADD FIELD "CLIType" OF "CCRule" AS character
+  DESCRIPTION "CLIType"
+  FORMAT "X(13)"
+  POSITION 15
+  INITIAL ""
+  HELP "CLIType"
+  LABEL "CLIType"
+  COLUMN-LABEL "CLIType"
+  ORDER 140
+  MAX-WIDTH 26
+  
+ADD FIELD "AccountingID" OF "CCRule" AS character
+  DESCRIPTION "AccountingID"
+  FORMAT "X(12)"
+  POSITION 16
+  INITIAL ""
+  HELP "AccountingID"
+  LABEL "AccountingID"
+  COLUMN-LABEL "AccountingID"
+  ORDER 150
+  MAX-WIDTH 24
+  
+RENAME INDEX "Category" TO "temp-36034" ON "CCRule"
+
+ADD INDEX "BillCode" ON "CCRule"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "BillCode" ASCENDING
+  INDEX-FIELD "ValidTo" DESCENDING
+
+ADD INDEX "Category" ON "CCRule"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "Category" ASCENDING
+  INDEX-FIELD "BillCode" ASCENDING
+  INDEX-FIELD "CLIType"  ASCENDING
+  INDEX-FIELD "ValidTo"  DESCENDING
+
+ADD INDEX "CCRuleID" ON "CCRule"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "CCRuleID" ASCENDING
+
+ADD INDEX "CLIType" ON "CCRule"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "CLIType"  ASCENDING
+  INDEX-FIELD "Category" ASCENDING
+  INDEX-FIELD "ValidTo"  DESCENDING
+
+UPDATE PRIMARY INDEX "Category" ON "CCRule"
+
+DROP INDEX "temp-36034" ON "CCRule"
+DROP INDEX "Pgcode" ON "CCRule"
+
+ADD SEQUENCE "CCRuleSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000002645

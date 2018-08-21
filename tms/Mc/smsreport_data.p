@@ -128,8 +128,9 @@ DEFINE VARIABLE liMGMSalesToday AS INTEGER NO-UNDO.
 /* Today Orders */
 FOR EACH Order WHERE
          Order.Brand = Syst.Var:gcBrand AND
-         Order.CrStamp > ldeBegin NO-LOCK:
- 
+         Order.CrStamp > ldeBegin AND
+         Order.OrderType <= {&ORDER_TYPE_STC} NO-LOCK:
+
    FIND FIRST OrderAccessory OF Order NO-LOCK WHERE
               OrderAccessory.ProductCode ne "" AND
               OrderAccessory.TerminalType EQ ({&TERMINAL_TYPE_PHONE}) NO-ERROR.
@@ -189,7 +190,8 @@ DEFINE VARIABLE liMGMSalesYesterday AS INTEGER NO-UNDO.
 FOR EACH Order WHERE
          Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp >= ldeBegin AND
-         Order.CrStamp < ldeEnd NO-LOCK:
+         Order.CrStamp < ldeEnd AND
+         Order.OrderType <= {&ORDER_TYPE_STC} NO-LOCK:
 
    liOrdersYesterday = liOrdersYesterday + 1.
 
@@ -211,7 +213,8 @@ DEFINE VARIABLE liSelfSalesCum AS INTEGER NO-UNDO.
 DEFINE VARIABLE liMGMSalesCum AS INTEGER NO-UNDO. 
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = Syst.Var:gcBrand:
+         Order.Brand = Syst.Var:gcBrand AND
+         Order.OrderType <= {&ORDER_TYPE_STC}:
 
    IF Order.PayType THEN
    liPrepaids = liPrepaids + 1.
@@ -330,6 +333,8 @@ DEFINE VARIABLE liCorporatePostpaidMNP AS INTEGER NO-UNDO.
 FOR EACH Order WHERE
          Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp >= ldeBegin NO-LOCK:
+
+   IF Order.OrderType EQ {&ORDER_TYPE_ACC} THEN NEXT.
    
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = Syst.Var:gcBrand AND

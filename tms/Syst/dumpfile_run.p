@@ -307,6 +307,7 @@ ELSE IF DumpFile.TransDir > "" THEN DO:
    IF NUM-ENTRIES(lcFile,".") > 1 THEN 
       lcExtension = "." + ENTRY(NUM-ENTRIES(lcFile,"."),lcFile,".").
       
+      
    lcFinalFile = fMove2TransDir(lcFile,
                                 lcExtension,
                                 DumpFile.TransDir).
@@ -770,6 +771,9 @@ PROCEDURE pWriteDumpFile:
             
             ELSE DO:
                /* value to file */
+               IF LOOKUP(DumpFile.DumpName, "CustDumpTXT") > 0 THEN  
+                   lcvalue = REPLACE(lcValue, lcDelimiter , " ").
+
                PUT STREAM sFile UNFORMATTED lcValue.
          
                /* delimiter between fields */

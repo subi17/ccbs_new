@@ -184,11 +184,17 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.Var:ufk   = 0
-        Syst.Var:ufk[8]= 8 
-        Syst.Var:ehto  = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey = FALSE.
-        
+       
+        FIND FIRST MsRequestParam NO-LOCK WHERE 
+                   MsRequestParam.MsRequest EQ iiMsRequest NO-ERROR.
+
+        IF AVAIL MsRequestParam THEN 
+           Syst.Var:ufk[4] = 9859.  
+
         RUN Syst/ufkey.p.
       END.
 
@@ -355,6 +361,10 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:
+        RUN Mm/msrequestparam.p(iiMsRequest).
+        ufkey = TRUE. 
+     END.   
 
   END.  /* BROWSE */
 END.  /* LOOP */

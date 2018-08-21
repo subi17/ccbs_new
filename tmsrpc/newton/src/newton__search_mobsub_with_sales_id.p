@@ -122,7 +122,9 @@ IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
    FIND FIRST Order NO-LOCK WHERE 
               Order.Brand = Syst.Var:gcBrand      AND 
               Order.MsSeq = MobSub.MsSeq AND 
-              Order.CLI   = MobSub.CLI   NO-ERROR. 
+              Order.CLI   = MobSub.CLI AND
+              Order.OrderType NE {&ORDER_TYPE_RENEWAL} AND
+              Order.OrderType NE {&ORDER_TYPE_ACC} NO-ERROR. 
    
    IF AVAIL Order AND LOOKUP(Order.OrderChannel,lcIndirectChannels) > 0 AND 
       AVAIL Salesman                                                    THEN

@@ -110,6 +110,7 @@
 "" 5 "Customer" "AuthCustIdType" "AuthCustIdType" 105 04/11/15 31/12/49
 "" 5 "Customer" "AuthCustId" "AuthCustId" 106 04/11/15 31/12/49
 "" 5 "Customer" "DontSharePersData" "DontSharePersData" 107 19/01/17 31/12/49
+"" 5 "Customer" "NWProfile" "NWProfile" 108 10/04/18 31/12/49
 "" 9 "MSRequest" "Brand" "Brand" 1 26/02/10 31/12/49
 "" 9 "MSRequest" "MsSeq" "MobSub Sequence" 2 26/02/10 31/12/49
 "" 9 "MSRequest" "CLI" "MSISDN" 3 26/02/10 31/12/49
@@ -722,6 +723,7 @@
 "" 98 "MSOwner" "TariffBundle" "Tariff Bundle" 20 20/04/15 31/12/49
 "" 98 "MSOwner" "FixedNumber" "Fixed Number" 21 27/10/16 31/12/49
 "" 98 "MsOwner" "#Segment" "Segment" 22 11/09/17 31/12/49
+"" 98 "MsOwner" "#NWProfile" "NWProfile" 23 12/04/18 31/12/49
 "" 99 "SMSMessage" "OrderId" "OrderId" 1 02/06/15 31/12/49
 "" 99 "SMSMessage" "#CONTRACT_ID" "Order contract" 2 02/06/15 31/12/49
 "" 99 "SMSMessage" "MSISDN" "MSISDN" 3 02/06/15 31/12/49
@@ -858,6 +860,15 @@
 "" 204 "Customer" "#ActLimit" "ActLimit" 31 05/07/17 31/12/49
 "" 204 "Customer" "#Segment" "Segment" 32 05/07/17 31/12/49
 "" 204 "Customer" "CreDate" "CreDate" 33 06/11/17 31/12/49
+"" 204 "Customer" "DirMarkSMS" "DirMarkSMS" 34 04/04/18 31/12/49
+"" 204 "Customer" "DirMarkEmail" "DirMarkEmail" 35 04/04/18 31/12/49
+"" 204 "Customer" "DirMarkPost" "DirMarkPost" 36 04/04/18 31/12/49
+"" 204 "Customer" "OutMarkPost" "OutMarkPost" 37 04/04/18 31/12/49
+"" 204 "Customer" "OutMarkSMS" "OutMarkSMS" 38 04/04/18 31/12/49
+"" 204 "Customer" "OutMarkEmail" "OutMarkEmail" 39 04/04/18 31/12/49
+"" 204 "Customer" "OutMarkBank" "OutMarkBank" 40 04/04/18 31/12/49
+"" 204 "Customer" "DontSharePersData" "DontSharePersData" 41 04/04/18 31/12/49
+"" 204 "Customer" "NWProfile" "NWProfile" 42 04/04/18 31/12/49
 "" 205 "MServiceLimit" "#KeyValue" "KeyValue" 1 01/01/14 31/12/49
 "" 205 "MServiceLimit" "@Version" "1" 2 01/01/14 31/12/49
 "" 205 "MServiceLimit" "MSID" "MSID" 3 01/01/14 31/12/49
@@ -890,7 +901,6 @@
 "" 207 "DayCampaign" "InstanceLimit" "InstanceLimit" 11 01/01/14 31/12/49
 "" 207 "DayCampaign" "BundleUpsell" "BundleUpsell" 12 01/01/14 31/12/49
 "" 207 "DayCampaign" "DSSPriority" "DSSPriority" 13 01/01/14 31/12/49
-"" 207 "DayCampaign" "#DSS2Compatible" "DSS2Compatible" 14 01/01/14 31/12/49
 "" 208 "DCCLI" "PerContractID" "PerContractID" 1 01/01/14 31/12/49
 "" 208 "DCCLI" "@Version" "1" 2 01/01/14 31/12/49
 "" 208 "DCCLI" "MsSeq" "MsSeq" 3 01/01/14 31/12/49
@@ -902,6 +912,7 @@
 "" 208 "DCCLI" "RenewalDate" "RenewalDate" 9 01/01/14 31/12/49
 "" 208 "DCCLI" "Amount" "Amount" 10 01/01/14 31/12/49
 "" 208 "DCCLI" "TermDate" "TermDate" 11 01/01/14 31/12/49
+"" 208 "DCCLI" "ServiceStatus" "ServiceStatus" 12 24/05/18 31/12/49
 "" 209 "DiscountPlan" "DPId" "DPId" 1 01/01/14 31/12/49
 "" 209 "DiscountPlan" "@Version" "1" 2 01/01/14 31/12/49
 "" 209 "DiscountPlan" "DPId" "DPId" 3 01/01/14 31/12/49
@@ -1039,6 +1050,9 @@
 "" 220 "MobSub" "OldTariffBundle" "MSOwner.TariffBundle" 16 01/01/14 31/12/49
 "" 220 "MobSub" "TariffActTS" "TariffActTS" 17 01/01/14 31/12/49
 "" 220 "MobSub" "FixedNumber" "FixedNumber" 18 16/11/16 31/12/49
+"" 220 "MobSub" "TerritoryOwner" "TerritoryOwner" 19 25/04/18 31/12/49
+"" 220 "MobSub" "@ProfileText" "" 20 25/04/18 31/12/49
+"" 220 "MobSub" "MsStatus" "MsStatus" 21 25/04/18 31/12/49
 "" 221 "MsRequest" "MsRequest" "MsRequest" 1 01/01/14 31/12/49
 "" 221 "MsRequest" "@Version" "1" 2 01/01/14 31/12/49
 "" 221 "MsRequest" "MsRequest" "MsRequest" 3 01/01/14 31/12/49
@@ -1152,6 +1166,19 @@
 "" 225 "OrderCustomer" "#Segment" "Segment" 33 05/07/17 31/12/49
 "" 225 "OrderCustomer" "AuthCustId" "AuthCustID" 34 26/07/17 31/12/49
 "" 225 "OrderCustomer" "AuthCustIdType" "AuthCustIDType" 35 26/07/17 31/12/49
+"" 225 "OrderCustomer" "OperSMSMarketing" "OperSMSMarketing" 36 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OperEMailMarketing" "OperEMailMarketing" 37 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OperPostMarketing" "OperPostMarketing" 38 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OutEMailMarketing" "OutEMailMarketing" 39 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OutPostMarketing" "OutPostMarketing" 40 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OutSMSMarketing" "OutSMSMarketing" 41 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OutBankMarketing" "OutBankMarketing" 42 04/04/18 31/12/49
+"" 225 "OrderCustomer" "DontSharePersData" "DontSharePersData" 43 04/04/18 31/12/49
+"" 225 "OrderCustomer" "OperAllMarketing" "OperAllMarketing" 44 06/06/18 31/12/49
+"" 225 "OrderCustomer" "FixedNumber" "FixedNumber" 45 06/06/18 31/12/49
+"" 225 "OrderCustomer" "BankCode" "BankCode" 46 06/06/18 31/12/49
+"" 225 "OrderCustomer" "Country" "Country" 47 06/06/18 31/12/49
+"" 225 "OrderCustomer" "#Language" "Language" 48 06/06/18 31/12/49
 "" 226 "OrderDelivery" "#KeyValue" "KeyValue" 1 01/01/14 31/12/49
 "" 226 "OrderDelivery" "@Version" "1" 2 01/01/14 31/12/49
 "" 226 "OrderDelivery" "OrderId" "OrderId" 3 01/01/14 31/12/49
@@ -1486,6 +1513,7 @@
 "" 504 "CLIType" "FixedLineDownload" "FixedLineDownload" 4 16/11/16 31/12/49
 "" 504 "CLIType" "FixedLineType" "FixedLineType" 5 16/11/16 31/12/49
 "" 504 "CLIType" "FixedLineUpload" "FixedLineUpload" 6 16/11/16 31/12/49
+"" 504 "CLIType" "#DSS2Compatible" "DSS2Compatible" 7 15/05/18 31/12/49
 "" 506 "TPService" "MsSeq" "MsSeq" 1 28/11/17 31/12/49
 "" 506 "TPService" "ServSeq" "ServSeq" 2 28/11/17 31/12/49
 "" 506 "TPService" "ServType" "ServType" 3 28/11/17 31/12/49
@@ -1551,3 +1579,20 @@
 "1" 552 "" "#PAYTERMAMT" "PayTerm Amount" 7 21/02/18 31/12/49
 "1" 552 "" "#Q25AMT" "Q25 Amount" 8 21/02/18 31/12/49
 "1" 552 "" "#Q25EXTNAMT" "Q25 Extension Amount" 9 21/02/18 31/12/49
+"" 554 "OrderProduct" "OrderProductID" "OrderProductID" 1 01/05/18 31/12/49
+"" 554 "OrderProduct" "@version" "1" 2 01/05/18 31/12/49
+"" 554 "OrderProduct" "OrderProductID" "OrderProductID" 3 01/05/18 31/12/49
+"" 554 "OrderProduct" "OrderId" "OrderId" 4 01/05/18 31/12/49
+"" 554 "OrderProduct" "ActionType" "ActionType" 5 01/05/18 31/12/49
+"" 554 "OrderProduct" "ProductID" "ProductID" 6 01/05/18 31/12/49
+"" 554 "OrderProduct" "ProductOfferingID" "ProductOfferingID" 7 01/05/18 31/12/49
+"" 555 "OrderProductParam" "#KeyValue" "KeyValue" 1 01/05/18 31/12/49
+"" 555 "OrderProductParam" "@Version" "1" 2 01/05/18 31/12/49
+"" 555 "OrderProductParam" "OrderProductID" "OrderProductID" 3 01/05/18 31/12/49
+"" 555 "OrderProductParam" "ParamName" "ParamName" 4 01/05/18 31/12/49
+"" 555 "OrderProductParam" "ValueType" "ValueType" 5 01/05/18 31/12/49
+"" 555 "OrderProductParam" "DateValue" "DateValue" 6 01/05/18 31/12/49
+"" 555 "OrderProductParam" "CharValue" "CharValue" 7 01/05/18 31/12/49
+"" 555 "OrderProductParam" "IntValue" "IntValue" 8 01/05/18 31/12/49
+"" 555 "OrderProductParam" "DecValue" "DecValue" 9 01/05/18 31/12/49
+"" 555 "OrderProductParam" "OrderID" "OrderID" 10 01/05/18 31/12/49

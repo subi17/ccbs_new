@@ -244,9 +244,21 @@ FOR EACH MsRequest NO-LOCK USE-INDEX MsSeq WHERE
       /* IF MsRequest.ReqIParam1 > 0 THEN we change to an existing customer */
          IF MsRequest.ReqIParam1 > 0 THEN
             add_string(hist_struct, "new_value", STRING(MsRequest.ReqIParam1)).
-         ELSE add_string(hist_struct,"new_value", 
-               ENTRY(12,MsRequest.ReqCParam1,";") + ";" +
-               ENTRY(13,MsRequest.ReqCParam1,";")).
+         ELSE IF MsRequest.ReqIParam4 > 0 THEN DO:
+            FIND OrderCustomer NO-LOCK WHERE
+                 OrderCustomer.Brand   = Syst.Var:gcBrand     AND
+                 OrderCustomer.OrderID = MsRequest.ReqIParam4 AND
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_ACC}
+            NO-ERROR.
+            IF AVAILABLE OrderCustomer THEN
+               add_string(hist_struct,"new_value",
+                  OrderCustomer.CustIDType + ";" +
+                  OrderCustomer.CustID).
+         END.
+         ELSE IF NUM-ENTRIES(MsRequest.ReqCParam1,";") >= 13 THEN
+            add_string(hist_struct,"new_value",
+                  ENTRY(12,MsRequest.ReqCParam1,";") + ";" +
+                  ENTRY(13,MsRequest.ReqCParam1,";")).
             
       END.
    END.

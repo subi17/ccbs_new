@@ -121,7 +121,7 @@ FOR EACH MsRequest NO-LOCK WHERE
         rmInternetBarring = FALSE 
         rmCustLostBarring = FALSE .
       /* Check barring status */
-      lcBarrings = fGetActiveBarrings (MsRequest.MsSeq).
+      lcBarrings = Func.BarrMethod:mGetActiveBarrings(MsRequest.MsSeq).
       
       IF lcBarrings <> "" THEN DO:
          IF LOOKUP("DEBT_LP", lcBarrings) <> 0 OR LOOKUP("DEBT_HOTLP", lcBarrings) <> 0 THEN DO:

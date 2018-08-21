@@ -278,7 +278,7 @@ FIND FIRST CustCat NO-LOCK WHERE
 IF AVAIL custcat THEN           
    add_string(top_struct, "segment", CustCat.Segment).
 
-fSubscriptionLimitCheck(
+Func.ValidateACC:mSubscriptionLimitCheck(
    Customer.orgId,
    Customer.custidType,
    llSelfEmployed,

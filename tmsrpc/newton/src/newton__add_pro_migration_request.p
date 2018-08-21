@@ -17,7 +17,7 @@ Syst.Var:gcBrand = "1".
 {Func/profunc_request.i}
 
 DEFINE VARIABLE piMsseq           AS INTEGER     NO-UNDO.
-DEFINE VARIABLE liMsreq           AS INTEGER     NO-UNDO.
+DEFINE VARIABLE liRequest         AS INTEGER     NO-UNDO.
 DEFINE VARIABLE lcResult          AS CHARACTER   NO-UNDO.
 DEFINE VARIABLE lcStruct          AS CHARACTER   NO-UNDO.
 DEFINE VARIABLE pcMigrStruct      AS CHARACTER   NO-UNDO.
@@ -51,19 +51,23 @@ IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not found").
 
 /* Create Reactivation Request */
-liMsReq = fProMigrationRequest(INPUT piMsseq,
+liRequest = fProMigrationRequest(INPUT piMsseq,
                                INPUT Syst.Var:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                0,
                                OUTPUT lcResult).
+IF liRequest > 0 THEN
+   lcResult = fProMigrateOtherSubs(Mobsub.AgrCust, 
+                                   Mobsub.MsSeq, 
+                                   liRequest, 
+                                   Syst.Var:katun).
 
-IF liMsReq > 0 THEN
+IF lcResult = "" THEN
    add_boolean(response_toplevel_id, "", true).
-ELSE
-   RETURN appl_err(lcResult).
-
-
+ELSE 
+   RETURN appl_err(lcResult).  
+    
 FINALLY:
-   END.
+END.
 
 

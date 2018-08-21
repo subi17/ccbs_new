@@ -42,6 +42,10 @@ IF NOT AVAIL Order THEN RETURN "".
 
 IF LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 THEN RETURN "".
 
+IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+   Order.OrderType NE {&ORDER_TYPE_MNP} AND
+   Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN RETURN "".
+
 IF ilCheckLOStatus THEN DO:
 
    FIND FIRST OrderDelivery OF Order NO-LOCK USE-INDEX OrderId NO-ERROR.

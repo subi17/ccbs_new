@@ -8,7 +8,7 @@
 "1" "CONT26" "La Sinfín 5 GB" 01/02/17 31/12/49
 "1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
 "1" "CONT28" "La Dúo" 21/08/17 31/12/49
-"1" "CONT29" "La Dúo extra" 18/12/17 31/12/49
+"1" "CONT29" "La Dúo" 18/12/17 31/12/49
 "1" "CONT30" "Contrato 30" 18/12/17 31/12/49
 "1" "CONT31" "La Tarifa Tic Tac" 18/12/17 31/12/49
 "1" "CONT32" "La Sinfín 3 GB" 23/01/18 31/12/49
@@ -67,6 +67,7 @@
 "1" "DSS2" "Data Sharing Service 2" 01/09/13 31/12/49
 "1" "DSS200_UPSELL" "DSS200 Bundle Upsell" 01/06/15 31/12/49
 "1" "DSS2_UPSELL" "DSS 2 Bundle Upsell" 01/09/13 31/12/49
+"1" "DSS4" "Data Sharing Service 4" 07/05/18 31/12/49
 "1" "DSS_FLEX_500MB_UPSELL" "DSS 500MB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_5GB_UPSELL" "DSS 5GB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_UPSELL" "DSS Mobile Data Usage Flex Ups" 01/11/17 31/12/49
@@ -76,6 +77,10 @@
 "1" "DUB2" "Data Usage Bundle 1 GB" 01/05/12 31/12/49
 "1" "DUB3" "Data Usage Bundle 1 GB" 01/12/12 31/12/49
 "1" "FAXTOEMAIL" "FAX TO EMAIL" 04/07/17 31/12/49
+"1" "FID3GB_12m_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
+"1" "FID3GB_3m_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
+"1" "FID3GB_6m_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
+"1" "FID3GB_R_UPSELL" "Mobile Data Usage Upsell 3G" 07/05/18 31/12/49
 "1" "FIX_VOICE1000" "National fixed voice 1000" 05/07/17 31/12/49
 "1" "FLEX_500MB_UPSELL" "Flex 500MB Upsell" 05/07/17 31/12/49
 "1" "FLEX_5GB_UPSELL" "Flex 5GB Upsell" 05/07/17 31/12/49
@@ -102,6 +107,12 @@
 "1" "OFFICE365" "OFFICE 365 Essentials" 04/07/17 31/12/49
 "1" "PMDUB" "Prepaid MDUB" 01/05/11 31/12/49
 "1" "PMDUB_UPSELL" "Pre Mobile Data Usage Bundle" 01/06/11 31/12/49
+"1" "RET5GB_12mP_R_UPSELL" "Mobile Data Usage Upsell 5G permanency" 01/06/18 31/12/49
+"1" "RET5GB_12m_R_UPSELL" "Mobile Data Usage Upsell 5G" 24/05/18 31/12/49
+"1" "RET5GB_3mP_R_UPSELL" "Mobile Data Usage Upsell 5G permanency" 01/06/18 31/12/49
+"1" "RET5GB_3m_R_UPSELL" "Mobile Data Usage Upsell 5G" 24/05/18 31/12/49
+"1" "RET5GB_6mP_R_UPSELL" "Mobile Data Usage Upsell 5G permanency" 01/06/18 31/12/49
+"1" "RET5GB_6m_R_UPSELL" "Mobile Data Usage Upsell 5G" 24/05/18 31/12/49
 "1" "SAN1GB_001" "Mobile Data Usage Upsell 1G" 21/02/18 31/12/49
 "1" "SAN5GB_002" "Mobile Data Usage Upsell 5G" 21/02/18 31/12/49
 "1" "SMS5000" "SMS 5000" 05/07/17 31/12/49

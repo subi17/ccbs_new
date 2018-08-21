@@ -30,8 +30,11 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF VAR ldeBundleLimit         AS DEC   NO-UNDO.
    DEF VAR lcExcludeBundles       AS CHAR  NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType  AS CHAR  NO-UNDO.
-   DEF VAR lcDSS2PrimarySubsType  AS CHAR  NO-UNDO.
-   DEF VAR llDSS2PrimaryAvail     AS LOG   NO-UNDO.
+   DEF VAR lcAllowedDSS4SubsType  AS CHAR  NO-UNDO.
+   DEF VAR lcDSSRelatedSubsType   AS CHAR  NO-UNDO. 
+   DEF VAR llDSSPrimaryAvail      AS LOG   NO-UNDO.
+   DEF VAR lcDSSBundleId          AS CHAR  NO-UNDO. 
+   DEF VAR lcDSS4CommLine         AS CHAR  NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMserviceLPool   FOR MserviceLPool.
@@ -39,6 +42,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
+   DEF BUFFER lbShaperConf     FOR ShaperConf.
 
    ASSIGN liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
           lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
@@ -50,37 +54,45 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       RETURN FALSE.
    END. /* IF fIsDSSActive(INPUT iiCustnum) THEN DO: */
 
-   IF icBundleId = "DSS2" THEN
-      ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
+   IF icBundleId = {&DSS2} THEN
+      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+             lcDSSRelatedSubsType  = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
-   FOR EACH bMobSub WHERE
-            bMobSub.Brand   = Syst.Var:gcBrand   AND
-            bMobSub.InvCust = iiCustnum AND
-            NOT bMobSub.PayType NO-LOCK:
+   IF icBundleId = {&DSS4} THEN 
+      ASSIGN lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
+             lcDSSRelatedSubsType  = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
 
-      IF icBundleId = "DSS2" AND
+   FOR EACH bMobSub NO-LOCK WHERE
+            bMobSub.Brand   EQ Syst.Var:gcBrand   AND
+            bMobSub.InvCust EQ iiCustnum          AND
+            NOT bMobSub.PayType:
+
+      IF icBundleId = {&DSS2} AND
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
            
-      IF icBundleId = "DSS2" AND
+      IF icBundleId = {&DSS4} AND
+         LOOKUP(bMobSub.CLIType,lcAllowedDSS4SubsType) = 0 THEN NEXT.
+
+      IF (icBundleId EQ {&DSS2} OR icBundleId EQ {&DSS4}) AND
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR 
-         fCLITypeIsMainLine(bMobSub.CLIType)) THEN 
-         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.CLIType) THEN NEXT.
+         fCLITypeIsMainLine(bMobSub.CLIType))             THEN 
+         IF NOT fCheckActiveExtraLinePair(bMobSub.MsSeq,
+                                          bMobSub.CLIType,
+                                          OUTPUT lcDSSBundleId) THEN NEXT.
       
       ASSIGN liMobSubCount = liMobSubCount + 1
              lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
       
-      FOR EACH bMServiceLimit WHERE
-               bMServiceLimit.MsSeq   = bMobSub.MsSeq AND
-               bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
-               bMServiceLimit.FromTS <= ideActStamp   AND
-               bMServiceLimit.EndTS  >= ideActStamp NO-LOCK,
+      FOR EACH bMServiceLimit NO-LOCK WHERE
+               bMServiceLimit.MsSeq    EQ bMobSub.MsSeq     AND
+               bMServiceLimit.DialType EQ {&DIAL_TYPE_GPRS} AND
+               bMServiceLimit.FromTS   <= ideActStamp       AND
+               bMServiceLimit.EndTS    >= ideActStamp,
          FIRST bServiceLimit NO-LOCK WHERE
-               bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
-         FIRST bDayCampaign WHERE
-               bDayCampaign.Brand = Syst.Var:gcBrand AND
-               bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-LOCK:
+               bServiceLimit.SLSeq EQ bMServiceLimit.SLSeq,
+         FIRST bDayCampaign NO-LOCK WHERE
+               bDayCampaign.Brand   EQ Syst.Var:gcBrand    AND
+               bDayCampaign.DCEvent EQ bServiceLimit.GroupCode:
 
          /* might happen with ACC if the old customer has still active DSS */
          IF bDayCampaign.DCEvent BEGINS "DSS" THEN NEXT.
@@ -93,32 +105,32 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
 
          /* pending termination request */
          IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                     MsRequest.MsSeq = bMServiceLimit.MsSeq AND
-                     MsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} AND
-                     MsRequest.ReqCParam3 = bServiceLimit.GroupCode AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),
-                                   {&REQ_INACTIVE_STATUSES}) = 0 AND
-                     MsRequest.ActStamp <= ideActStamp) THEN NEXT.
+                           MsRequest.MsSeq      EQ bMServiceLimit.MsSeq            AND
+                           MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_TERMINATION} AND
+                           MsRequest.ReqCParam3 EQ bServiceLimit.GroupCode         AND
+             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0     AND
+                     MsRequest.ActStamp <= ideActStamp)                            THEN NEXT.
 
-         IF icBundleId = "DSS2" THEN DO:
-            IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
-               (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND
+         IF (icBundleId EQ {&DSS2}  OR 
+             icBundleId EQ {&DSS4}) THEN DO:
+            IF (LOOKUP(bDayCampaign.DCEvent,lcDSSRelatedSubsType) > 0) OR
+               (LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType)      > 0  AND
                  CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand      = Syst.Var:gcBrand         AND
-                                CLIType.CLIType    = bMobSub.CLIType AND
-                                CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN
-            llDSS2PrimaryAvail = TRUE.
+                                CLIType.Brand      EQ Syst.Var:gcBrand       AND
+                                CLIType.CLIType    EQ bMobSub.CLIType        AND
+                                CLIType.BaseBundle EQ bDayCampaign.DCEvent)) THEN
+            llDSSPrimaryAvail = TRUE.
          END.
 
          ldeBundleLimit = 0.
                
          /* All bundle + UPSELL limits for first month DSS */
          IF bDayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN DO:
-            FIND FIRST bMServiceLPool WHERE
-                       bMserviceLPool.MsSeq   = bMServiceLimit.MsSeq  AND
-                       bMserviceLPool.SLSeq   = bMServiceLimit.SLSeq  AND
-                       bMserviceLPool.EndTS  >= ideActStamp           AND
-                       bMserviceLPool.FromTS <= ideActStamp NO-LOCK NO-ERROR.
+            FIND FIRST bMServiceLPool NO-LOCK WHERE
+                       bMserviceLPool.MsSeq  EQ bMServiceLimit.MsSeq AND
+                       bMserviceLPool.SLSeq  EQ bMServiceLimit.SLSeq AND
+                       bMserviceLPool.EndTS  >= ideActStamp          AND
+                       bMserviceLPool.FromTS <= ideActStamp          NO-ERROR.
             IF AVAILABLE bMserviceLPool THEN
                ASSIGN odeCurrMonthLimit = odeCurrMonthLimit + bMserviceLPool.LimitAmt
                       ldeBundleLimit    = bMserviceLPool.LimitAmt.
@@ -150,8 +162,9 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    ASSIGN lcHSDPASubsList = TRIM(lcHSDPASubsList,";")
           lcALLSubsList   = TRIM(lcALLSubsList,";").
 
-   IF icBundleId = "DSS2" AND NOT llDSS2PrimaryAvail THEN DO:
-      ocResult = "dss2_no_primary_subscription".
+   IF (icBundleId = {&DSS2} OR icBundleId = {&DSS4}) AND 
+      NOT llDSSPrimaryAvail THEN DO:
+      ocResult = "no_primary_subscription " + icBundleId.
       RETURN FALSE.
    END.
 
@@ -160,7 +173,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       RETURN FALSE.
    END. /* IF odeOtherMonthLimit <= 0 THEN DO: */
 
-   IF (ilNewSubscription EQ TRUE AND liMobSubCount < 1) OR
+   IF (ilNewSubscription EQ TRUE  AND liMobSubCount < 1) OR
       (ilNewSubscription EQ FALSE AND liMobSubCount < 2) THEN DO:
       ocResult = "dss_no_postpaid_subscription".
       RETURN FALSE.
@@ -168,17 +181,43 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
 
    ASSIGN liTotalDSSLimit = (odeOtherMonthLimit * 1024 * 1024).
 
+   IF icBundleId EQ {&DSS4} THEN DO:
+
+      FIND FIRST lbShaperConf NO-LOCK WHERE
+                 lbShaperConf.Brand        EQ Syst.Var:gcBrand AND
+                 lbShaperConf.ShaperConfID EQ {&DSS4SHAPERID}  NO-ERROR.
+
+      IF NOT AVAIL lbShaperConf THEN 
+         RETURN FALSE.
+
+      ASSIGN odeCurrMonthLimit  = (lbShaperConf.LimitUnshaped / 1024 / 1024)
+             odeOtherMonthLimit = (lbShaperConf.LimitUnshaped / 1024 / 1024)
+             lcDSS4CommLine     = "DSS-ACCOUNT="    + STRING(iiCustnum)                  + "," +
+                                  "TEMPLATE="       + lbShaperConf.Template              + "," +
+                                  "TARIFF_TYPE="    + lbShaperConf.TariffType            + "," +
+                                  "TARIFF="         + icBundleId                         + "," +
+                                  "LIMIT_UNSHAPED=" + STRING(lbShaperConf.LimitUnshaped) + "," +
+                                  "LIMIT_SHAPED="   + STRING(lbShaperConf.LimitShaped)   + "," +
+                                  "MSISDNS="        + lcALLSubsList.
+   END.
+
    /* If it blanks then return only create param list otherwise specific */
    IF icReturnParamType = "HSDPA_MSISDN" THEN
       ocResult = "MSISDNS=" + lcHSDPASubsList.
-   ELSE
-      ocResult = "DSS-ACCOUNT="    + STRING(iiCustnum)       + "," +
-                 "TEMPLATE=DSS_MONTHLY"                      + "," +
-                 "TARIFF_TYPE=DSS"                           + "," +
-                 "TARIFF="         + icBundleId              + "," +
-                 "LIMIT_UNSHAPED=" + STRING(liTotalDSSLimit) + "," +
-                 "LIMIT_SHAPED="   + STRING({&PL_LIMIT_SHAPED}) + "," +
-                 "MSISDNS="        + lcALLSubsList.
+   ELSE DO:
+      
+      IF icBundleId = {&DSS4} THEN 
+         ocResult = lcDSS4CommLine.
+      ELSE 
+         ocResult = "DSS-ACCOUNT="    + STRING(iiCustnum)       + "," +
+                    "TEMPLATE=DSS_MONTHLY"                      + "," +
+                    "TARIFF_TYPE=DSS"                           + "," +
+                    "TARIFF="         + icBundleId              + "," +
+                    "LIMIT_UNSHAPED=" + STRING(liTotalDSSLimit) + "," +
+                    "LIMIT_SHAPED="   + STRING({&PL_LIMIT_SHAPED}) + "," +
+                    "MSISDNS="        + lcALLSubsList.
+
+   END.              
   
    RETURN TRUE.
 
@@ -222,18 +261,24 @@ FUNCTION fIsDSSAllowed RETURNS LOG
                                    OUTPUT ocResult).
 END.
 
-FUNCTION fIsDSS2Allowed RETURNS LOG
+FUNCTION fIsDSSActivationAllowed RETURNS LOG
    (INPUT  iiCustnum      AS INT,
     INPUT  iiMsSeq        AS INT,
     INPUT  ideActStamp    AS DEC,
-    OUTPUT oiDSS2PriMsSeq AS INT, 
+    INPUT  icBundleId     AS CHAR,
+    OUTPUT oiDSSPriMsSeq  AS INT, 
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liMobSubCount           AS INT  NO-UNDO.
    DEF VAR lcExcludeBundles        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
    DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO.
-   DEF VAR llDSS2PrimaryAvail      AS LOG  NO-UNDO.
+   DEF VAR llDSSPrimaryAvail       AS LOG  NO-UNDO.
+   DEF VAR lcAllowedDSS4SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS4PrimarySubsType   AS CHAR NO-UNDO.
+   DEF VAR llDSS4PrimaryAvail      AS LOG  NO-UNDO.
+   DEF VAR lcDSSRelatedSubsType    AS CHAR NO-UNDO. 
+   DEF VAR lcDSSBundleId           AS CHAR NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
@@ -241,13 +286,23 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
 
-   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
-          lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
-          lcExcludeBundles        = fCParamC("EXCLUDE_BUNDLES").
+   ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+          lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+          lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
+          lcDSS4PrimarySubsType = fCParamC("DSS4_PRIMARY_SUBS_TYPE")
+          lcExcludeBundles      = fCParamC("EXCLUDE_BUNDLES")
+          lcDSSRelatedSubsType  = "".
+
+   IF icBundleId EQ {&DSS4} THEN 
+      lcDSSRelatedSubsType = lcDSS4PrimarySubsType.
+   ELSE IF icBundleId EQ {&DSS2} THEN 
+      lcDSSRelatedSubsType = lcDSS2PrimarySubsType.
 
    IF iiMsSeq > 0 THEN DO:
-      FIND FIRST bMobSub WHERE
-                 bMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+
+      FIND FIRST bMobSub NO-LOCK WHERE
+                 bMobSub.MsSeq EQ iiMsSeq NO-ERROR.
+   
       IF NOT AVAILABLE bMobSub THEN DO:
          ocResult = "MobSub not found".
          RETURN FALSE.
@@ -256,18 +311,18 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
       IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
-                        "DSS2" + ";" + bMobSub.CLIType,
+                        icBundleId + ";" + bMobSub.CLIType,
                         OUTPUT ocResult) NE 1 THEN DO:
          ocResult = "ERROR:Contract is not allowed for this subscription type".
          RETURN FALSE.
       END. /* IF fMatrixAnalyse(Syst.Var:gcBrand */
 
-      IF LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND 
+      IF LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType) > 0 AND 
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR
-         fCLITypeIsMainLine(bMobSub.CLIType)) THEN
-         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.CLIType) THEN 
-         DO:
+         fCLITypeIsMainLine(bMobSub.CLIType))             THEN
+         IF NOT fCheckActiveExtraLinePair(bMobSub.MsSeq,
+                                          bMobSub.CLIType,
+                                          OUTPUT lcDSSBundleId) THEN DO:
             ocResult = "Primary manline or Extraline is not hard associated".
             RETURN FALSE.
          END. 
@@ -276,58 +331,57 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
    MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = Syst.Var:gcBrand   AND
-            bMobSub.InvCust = iiCustnum AND
+            bMobSub.Brand   EQ Syst.Var:gcBrand AND
+            bMobSub.InvCust EQ iiCustnum        AND
             NOT bMobSub.PayType NO-LOCK:
 
       /* Exclude current operated subs and not allowed list */
-      IF bMobSub.MsSeq = iiMsSeq OR
-         LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
+      IF bMobSub.MsSeq EQ iiMsSeq OR
+         LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType) EQ 0 THEN NEXT.
 
       /* Extraline hard association subscription check */
-      IF (fCLITypeIsExtraLine(bMobSub.CLIType) OR
-          fCLITypeIsMainLine(bMobSub.CLIType)) THEN
-          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                   bMobSub.CLIType) THEN NEXT. 
+      IF LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType) > 0 AND
+         (fCLITypeIsExtraLine(bMobSub.CLIType) OR
+          fCLITypeIsMainLine(bMobSub.CLIType))            THEN
+          IF NOT fCheckActiveExtraLinePair(bMobSub.MsSeq,
+                                           bMobSub.CLIType,
+                                           OUTPUT lcDSSBundleId) THEN NEXT. 
       
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
+                         MsRequest.MsSeq    EQ bMobSub.MsSeq                           AND
+                         MsRequest.ReqType  EQ {&REQTYPE_SUBSCRIPTION_TERMINATION}     AND
+                         MsRequest.ActStamp <= ideActStamp                             AND
+           LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3,19") = 0) THEN NEXT.
 
       /* Exclude subs. if STC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                   LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0) THEN NEXT.
+                         MsRequest.MsSeq    EQ bMobSub.MsSeq                          AND
+                         MsRequest.ReqType  EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}    AND
+                         MsRequest.ActStamp <= ideActStamp                            AND
+           LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3,19") = 0 AND
+                  LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)             THEN NEXT.
       
       /* Exclude subs. if ACC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
+                         MsRequest.MsSeq    EQ bMobSub.MsSeq                        AND
+                         MsRequest.ReqType  EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
+                         MsRequest.ActStamp <= ideActStamp                          AND
+          LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0)  THEN NEXT.
 
       liMobSubCount = liMobSubCount + 1.
       
       FOR EACH bMServiceLimit WHERE
-               bMServiceLimit.MsSeq    = bMobSub.MsSeq AND
-               bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
-               bMServiceLimit.FromTS  <= ideActStamp   AND
-               bMServiceLimit.EndTS   >= ideActStamp NO-LOCK,
+               bMServiceLimit.MsSeq    EQ bMobSub.MsSeq     AND
+               bMServiceLimit.DialType EQ {&DIAL_TYPE_GPRS} AND
+               bMServiceLimit.FromTS   <= ideActStamp       AND
+               bMServiceLimit.EndTS    >= ideActStamp       NO-LOCK,
          FIRST bServiceLimit NO-LOCK WHERE
-               bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
+               bServiceLimit.SLSeq EQ bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = Syst.Var:gcBrand AND
-               bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
-               LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
+               bDayCampaign.Brand   EQ Syst.Var:gcBrand        AND
+               bDayCampaign.DCEvent EQ bServiceLimit.GroupCode AND
+               LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) GT 0:
 
          /* Should not count DSS/UPSELL */
          IF bDayCampaign.DCEvent BEGINS {&DSS} OR
@@ -335,34 +389,34 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
          /* pending termination request */
          IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                     MsRequest.MsSeq = bMServiceLimit.MsSeq AND
-                     MsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} AND
-                     MsRequest.ReqCParam3 = bServiceLimit.GroupCode AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),
-                                   {&REQ_INACTIVE_STATUSES}) = 0 AND
-                     MsRequest.ActStamp <= ideActStamp) THEN NEXT.
+                           MsRequest.MsSeq      EQ bMServiceLimit.MsSeq            AND
+                           MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_TERMINATION} AND
+                           MsRequest.ReqCParam3 EQ bServiceLimit.GroupCode         AND
+             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) EQ 0     AND
+                           MsRequest.ActStamp <= ideActStamp)                      THEN NEXT.
 
-         IF NOT llDSS2PrimaryAvail THEN DO:
-            IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
-               (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
+         IF NOT llDSSPrimaryAvail THEN DO:
+            IF (LOOKUP(bDayCampaign.DCEvent,lcDSSRelatedSubsType) GT 0) OR
+               (LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType)      GT 0  AND 
                 CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                               CLIType.Brand      = Syst.Var:gcBrand         AND 
-                               CLIType.CLIType    = bMobSub.CLIType AND 
-                               CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN DO:
-               ASSIGN oiDSS2PriMsSeq     = bMobSub.MsSeq
-                      llDSS2PrimaryAvail = TRUE.
+                               CLIType.Brand      EQ Syst.Var:gcBrand       AND 
+                               CLIType.CLIType    EQ bMobSub.CLIType        AND 
+                               CLIType.BaseBundle EQ bDayCampaign.DCEvent)) THEN DO:
+               ASSIGN oiDSSPriMsSeq     = bMobSub.MsSeq
+                      llDSSPrimaryAvail = TRUE.
                LEAVE.
-            END.   
-         END.                  
+            END.
+         END.
+
       END. /* FOR EACH bMServiceLimit WHERE */
 
-      IF llDSS2PrimaryAvail AND
+      IF llDSSPrimaryAvail AND
          ((iiMsSeq > 0 AND liMobSubCount >= 1) OR
           (iiMsSeq = 0 AND liMobSubCount >= 2)) THEN LEAVE MOBSUB_LOOP.
 
    END. /* FOR EACH bMobSub NO-LOCK WHERE */
 
-   IF NOT llDSS2PrimaryAvail THEN DO:
+   IF NOT llDSSPrimaryAvail THEN DO:
       ocResult = "Customer does not have any active primary subscription".
       RETURN FALSE.
    END.
@@ -384,17 +438,15 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
       INPUT  icBundle       AS CHAR,
       INPUT  ideActStamp    AS DEC):
    /* DSS related variables */
-   DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
-   DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
-   DEF VAR ldeCurrMonthLimit AS DEC NO-UNDO.
-   DEF VAR ldeConsumedData AS DEC NO-UNDO.
-   DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO.
-   DEF VAR lcResult AS CHAR NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
-   DEF VAR llDSSneeded             AS LOG  NO-UNDO.
+   DEF VAR lcResult              AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+   DEF VAR llDSSneeded           AS LOG  NO-UNDO.
+   DEF VAR lcDSSBundleId         AS CHAR NO-UNDO. 
 
    DEF BUFFER Mobsub FOR Mobsub.
-   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
+
+   lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+
    IF icDSSId BEGINS "DSS" THEN
       llDSSNeeded = TRUE.
    IF icDSSId EQ "DSS" THEN DO: 
@@ -402,7 +454,9 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
          llDSSNeeded = FALSE.
    END.
    ELSE IF icDSSId EQ "DSS2" THEN DO:
+      
       FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
+      
       IF AVAIL MobSub THEN DO:
          IF fMatrixAnalyse(Syst.Var:gcBrand,
                            "PERCONTR",
@@ -414,11 +468,9 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
          ELSE IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
            (fCLITypeIsMainLine(Mobsub.CLIType) OR
             fCLITypeIsExtraLine(Mobsub.CLIType)) THEN
-            IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
-                                                     Mobsub.CLIType) THEN
-            llDSSNeeded = FALSE.
-         ELSE IF NOT fIsDSS2Allowed(iiCustnum,0,ideActStamp,liDSSMsseq,
-                                    lcResult) THEN
+            IF NOT fCheckActiveExtraLinePair(Mobsub.MsSeq,
+                                             Mobsub.CLIType,
+                                             OUTPUT lcDSSBundleId) THEN
             llDSSNeeded = FALSE.
       END.
       ELSE
@@ -453,8 +505,11 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
    DEF VAR lcExcludeBundles      AS CHAR  NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR  NO-UNDO.
    DEF VAR lcDSS2PrimarySubsType AS CHAR  NO-UNDO.
-   DEF VAR llDSS2PrimaryAvail    AS LOG   NO-UNDO.
-   
+   DEF VAR llDSSPrimaryAvail     AS LOG   NO-UNDO.
+   DEF VAR lcDSS4PrimarySubsType AS CHAR  NO-UNDO. 
+   DEF VAR lcAllowedDSS4SubsType AS CHAR  NO-UNDO. 
+   DEF VAR lcDSSRelatedSubsType  AS CHAR  NO-UNDO. 
+
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
@@ -464,47 +519,49 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
 
    lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
-   IF icBundleId = "DSS2" THEN
-      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
+   ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+          lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+          lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
+          lcDSS4PrimarySubsType = fCParamC("DSS4_PRIMARY_SUBS_TYPE").
+
+   IF icBundleId EQ {&DSS4} THEN
+      lcDSSRelatedSubsType = lcAllowedDSS4SubsType.
+   ELSE IF icBundleId EQ {&DSS2} THEN
+      lcDSSRelatedSubsType = lcAllowedDSS2SubsType.     
 
    MOBSUB_LOOP:
-   FOR EACH bMobSub WHERE
-            bMobSub.Brand   = Syst.Var:gcBrand   AND
-            bMobSub.InvCust = iiCustnum AND
-            NOT bMobSub.PayType NO-LOCK:
+   FOR EACH bMobSub NO-LOCK WHERE
+            bMobSub.Brand   EQ Syst.Var:gcBrand AND
+            bMobSub.InvCust EQ iiCustnum        AND
+            NOT bMobSub.PayType:
 
       /* Exclude current operated subs. to check further DSS valid */
       IF bMobSub.MsSeq = iiMsSeq OR
-         (icBundleId = "DSS2" AND
-          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0) THEN NEXT.
+         ((icBundleId = {&DSS2} OR icBundleId EQ {&DSS4}) AND
+          LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType) = 0) THEN NEXT.
 
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
+                         MsRequest.MsSeq    EQ bMobSub.MsSeq                       AND
+                         MsRequest.ReqType  EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                         MsRequest.ActStamp <= ideActStamp                         AND
+           LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3,19") = 0) THEN NEXT.
 
       /* Exclude subs. if STC request is ongoing */
-      IF icBundleId = "DSS2" AND
+      IF (icBundleId EQ {&DSS2} OR icBundleId EQ {&DSS4}) AND
          CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                   LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)
-      THEN NEXT.
+                         MsRequest.MsSeq    EQ bMobSub.MsSeq                          AND
+                         MsRequest.ReqType  EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}    AND
+                         MsRequest.ActStamp <= ideActStamp                            AND
+           LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3,19") = 0 AND
+                  LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)             THEN NEXT.
 
       IF icBundleId = "DSS" THEN DO:
          FOR EACH MsRequest NO-LOCK WHERE
-                  MsRequest.MsSeq   = bMobSub.MsSeq AND
-                  MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                  MsRequest.ActStamp <= ideActStamp AND
-                  LOOKUP(STRING(MsRequest.ReqStatus),
-                         {&REQ_INACTIVE_STATUSES} + ",3") = 0:
+                  MsRequest.MsSeq    EQ bMobSub.MsSeq                       AND
+                  MsRequest.ReqType  EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                  MsRequest.ActStamp <= ideActStamp                         AND
+                  LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0:
 
              IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                                CLIType.CLIType = MsRequest.ReqCparam2 AND
@@ -515,24 +572,23 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
 
       /* Exclude subs. if ACC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
+                         MsRequest.MsSeq    EQ bMobSub.MsSeq                        AND
+                         MsRequest.ReqType  EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
+                         MsRequest.ActStamp <= ideActStamp                          AND
+                   LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
 
       liMobSubCount = liMobSubCount + 1.
 
-      FOR EACH bMServiceLimit WHERE
-               bMServiceLimit.MsSeq   = bMobSub.MsSeq AND
-               bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
-               bMServiceLimit.FromTS <= ideActStamp   AND
-               bMServiceLimit.EndTS  >= ideActStamp NO-LOCK,
+      FOR EACH bMServiceLimit NO-LOCK WHERE
+               bMServiceLimit.MsSeq    EQ bMobSub.MsSeq     AND
+               bMServiceLimit.DialType EQ {&DIAL_TYPE_GPRS} AND
+               bMServiceLimit.FromTS   <= ideActStamp       AND
+               bMServiceLimit.EndTS    >= ideActStamp,
          FIRST bServiceLimit NO-LOCK WHERE
-               bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
+               bServiceLimit.SLSeq EQ bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = Syst.Var:gcBrand AND
-               bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
+               bDayCampaign.Brand   EQ Syst.Var:gcBrand        AND
+               bDayCampaign.DCEvent Eq bServiceLimit.GroupCode AND
                LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
 
          /* Should not count DSS/UPSELL */
@@ -541,23 +597,29 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
 
          /* pending termination request */
          IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                     MsRequest.MsSeq = bMServiceLimit.MsSeq AND
-                     MsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} AND
-                     MsRequest.ReqCParam3 = bServiceLimit.GroupCode AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),
-                                   {&REQ_INACTIVE_STATUSES}) = 0 AND
-                     MsRequest.ActStamp <= ideActStamp) THEN NEXT.
+                           MsRequest.MsSeq      EQ bMServiceLimit.MsSeq            AND
+                           MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_TERMINATION} AND
+                           MsRequest.ReqCParam3 EQ bServiceLimit.GroupCode         AND
+             LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0      AND
+                           MsRequest.ActStamp   <= ideActStamp)                    THEN NEXT.
 
-         IF icBundleId = "DSS2" AND
-            LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0 THEN
-            llDSS2PrimaryAvail = TRUE.
-               
+         IF (icBundleId EQ {&DSS2} OR icBundleId EQ {&DSS4}) AND
+            ((LOOKUP(bDayCampaign.DCEvent,lcDSSRelatedSubsType) GT 0) OR
+             (LOOKUP(bMobSub.CLIType,lcDSSRelatedSubsType)      GT 0  AND
+                CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                               CLIType.Brand      EQ Syst.Var:gcBrand AND
+                               CLIType.CLIType    EQ bMobSub.CLIType  AND
+                               CLIType.BaseBundle EQ bDayCampaign.DCEvent))) THEN
+            llDSSPrimaryAvail = TRUE.
+
          llDataBundleActive = TRUE.
 
       END. /* FOR EACH bMServiceLimit WHERE */
+
    END. /* FOR EACH bMobSub NO-LOCK WHERE */
 
-   IF icBundleId = "DSS2" AND NOT llDSS2PrimaryAvail THEN DO:
+   IF (icBundleId EQ {&DSS2} OR icBundleId EQ {&DSS4}) 
+      AND NOT llDSSPrimaryAvail THEN DO:
       ocResult = "Customer does not have any active primary subscription".
       RETURN FALSE.
    END.
@@ -887,7 +949,8 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
 
    DEF BUFFER ProvSolog        FOR Solog.
    DEF BUFFER ProvMsRequest    FOR MsRequest.
-   
+   DEF BUFFER lbShaperConf     FOR ShaperConf.   
+
    FIND FIRST ProvSolog WHERE
               ProvSolog.Solog = iiSolog NO-LOCK NO-ERROR.
 
@@ -906,17 +969,37 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
                         OUTPUT lcDSSBundleId).
 
    IF ldeCurrentDSSLimit > 0 THEN DO TRANSACTION:
-      ASSIGN liDSSLimit      = (ldeCurrentDSSLimit * 1024 * 1024).
+      ASSIGN liDSSLimit = (ldeCurrentDSSLimit * 1024 * 1024).
          
       FIND CURRENT ProvMsRequest EXCLUSIVE-LOCK.
-      IF AVAILABLE ProvMsRequest THEN
-         ProvMSRequest.ReqCparam2 =
-         "DSS-ACCOUNT=" + STRING(ProvMSRequest.CustNum)  + "," +
-         "TEMPLATE=DSS_MONTHLY"                          + "," +
-         "TARIFF_TYPE=DSS"                               + "," +
-         "TARIFF="          + ProvMsRequest.ReqCparam3   + "," +
-         "LIMIT_UNSHAPED="  + STRING(liDSSLimit)         + "," +
-         "LIMIT_SHAPED="    + STRING({&PL_LIMIT_SHAPED}).
+
+      IF AVAILABLE ProvMsRequest THEN DO:
+         
+         IF ProvMSRequest.ReqCparam3 EQ {&DSS4} THEN DO: 
+            FIND FIRST lbShaperConf NO-LOCK WHERE
+                       lbShaperConf.Brand        EQ Syst.Var:gcBrand AND
+                       lbShaperConf.ShaperConfID EQ {&DSS4SHAPERID}  NO-ERROR.
+
+            IF NOT AVAIL lbShaperConf THEN
+               RETURN lcReturn.
+
+            ProvMSRequest.ReqCparam2 = "DSS-ACCOUNT="    + STRING(ProvMSRequest.CustNum)      + "," +
+                                       "TEMPLATE="       + lbShaperConf.Template              + "," +
+                                       "TARIFF_TYPE="    + lbShaperConf.TariffType            + "," +
+                                       "TARIFF="         + ProvMSRequest.ReqCparam3           + "," +
+                                       "LIMIT_UNSHAPED=" + STRING(lbShaperConf.LimitUnshaped) + "," +
+                                       "LIMIT_SHAPED="   + STRING(lbShaperConf.LimitShaped).
+         END.
+         ELSE    
+            ProvMSRequest.ReqCparam2 = "DSS-ACCOUNT=" + STRING(ProvMSRequest.CustNum)  + "," +
+                                       "TEMPLATE=DSS_MONTHLY"                          + "," +
+                                       "TARIFF_TYPE=DSS"                               + "," +
+                                       "TARIFF="          + ProvMsRequest.ReqCparam3   + "," +
+                                       "LIMIT_UNSHAPED="  + STRING(liDSSLimit)         + "," +
+                                       "LIMIT_SHAPED="    + STRING({&PL_LIMIT_SHAPED}).
+
+      END.
+
       FIND CURRENT ProvMSRequest NO-LOCK.
    END. /* IF ProvMSRequest.ReqCparam1 = "MODIFY" THEN DO: */
 

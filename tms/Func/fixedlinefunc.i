@@ -244,7 +244,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
        EACH bOrder NO-LOCK WHERE
             bOrder.Brand      EQ Syst.Var:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
+            LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Var:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
@@ -253,8 +253,6 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
 
-      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
-          
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
 
@@ -268,24 +266,37 @@ END FUNCTION.
 FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
    (INPUT iiCustNum AS INT):
 
-   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
-   DEFINE BUFFER bOrder         FOR Order.
-   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
-   DEFINE BUFFER bClitype       FOR Clitype.
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER Order         FOR Order.
+   DEFINE BUFFER OrderFusion   FOR OrderFusion.
+   DEFINE BUFFER Clitype       FOR Clitype.
    DEFINE BUFFER Customer       FOR Customer.
    DEFINE BUFFER CustCat        FOR CustCat.
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
-       EACH CustCat WHERE CustCat.Brand = Syst.Var:gcBrand AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
-       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = TRUE NO-LOCK,
-       EACH bOrder WHERE bOrder.Brand EQ Syst.Var:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK,
-       FIRST bOrderFusion WHERE bOrderFusion.Brand = Syst.Var:gcBrand AND bOrderFusion.OrderID = bOrder.OrderID NO-LOCK,
-       FIRST bCliType WHERE bCliType.Brand = Syst.Var:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
+       EACH CustCat WHERE 
+            CustCat.Brand EQ Syst.Var:gcBrand AND 
+            CustCat.Category EQ Customer.Category AND 
+            CustCat.Pro EQ False NO-LOCK, 
+       EACH OrderCustomer WHERE 
+            OrderCustomer.Brand EQ Syst.Var:gcBrand AND 
+            OrderCustomer.CustIdType EQ Customer.CustIdType     AND
+            OrderCustomer.CustId     EQ Customer.OrgId          AND
+            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND 
+            OrderCustomer.Pro EQ TRUE NO-LOCK,
+       EACH Order WHERE 
+            Order.Brand EQ Syst.Var:gcBrand AND 
+            Order.orderid EQ OrderCustomer.Orderid AND
+            LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
+      FIRST OrderFusion WHERE 
+            OrderFusion.Brand EQ Syst.Var:gcBrand AND 
+            OrderFusion.OrderID EQ Order.OrderID NO-LOCK,
+      FIRST CliType WHERE 
+            CliType.Brand EQ Syst.Var:gcBrand AND 
+            CliType.CliType EQ Order.CliType aND
+            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} NO-LOCK:
 
-      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-          NEXT.
-
-      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
+      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
          NEXT.    
 
       RETURN TRUE.
@@ -299,20 +310,31 @@ END FUNCTION.
 FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
    (INPUT iiCustNum AS INT):
 
-   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
-   DEFINE BUFFER bOrder         FOR Order.
-   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
-   DEFINE BUFFER bClitype       FOR Clitype.
-   DEFINE BUFFER Customer       FOR Customer.
-   DEFINE BUFFER CustCat        FOR CustCat.
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER Order         FOR Order.
+   DEFINE BUFFER Customer      FOR Customer.
+   DEFINE BUFFER CustCat       FOR CustCat.
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
-       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = True NO-LOCK, 
-       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = False NO-LOCK,
-       EACH bOrder WHERE bOrder.Brand EQ Syst.Var:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK:
+       EACH CustCat WHERE 
+            CustCat.Brand = Syst.Var:gcBrand AND 
+            CustCat.Category = Customer.Category AND 
+            CustCat.Pro = True NO-LOCK, 
+       EACH OrderCustomer WHERE 
+            OrderCustomer.Brand = Syst.Var:gcBrand AND 
+            OrderCustomer.CustIdType = Customer.CustIdType AND 
+            OrderCustomer.CustId = Customer.OrgID AND 
+            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND 
+            OrderCustomer.Pro = False NO-LOCK,
+       EACH Order NO-LOCK WHERE 
+            Order.Brand EQ Syst.Var:gcBrand AND 
+            Order.orderid EQ OrderCustomer.Orderid:
 
-      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
-         NEXT.    
+      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
+
+      IF Order.OrderType NE {&ORDER_TYPE_NEW} OR
+         Order.OrderType NE {&ORDER_TYPE_MNP} OR
+         Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
       RETURN TRUE.
 
@@ -378,7 +400,6 @@ FUNCTION fCheckOngoing2PConvergentOrder RETURNS LOGICAL
        EACH bOrder NO-LOCK WHERE
             bOrder.Brand      EQ Syst.Var:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
             bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Var:gcBrand AND
@@ -498,16 +519,15 @@ FUNCTION fIsProSubscription RETURNS LOGICAL
    DEFINE BUFFER bCustCat  FOR CustCat.
 
    FIND FIRST bMobSub WHERE bMobSub.MsSeq = iiMsSeq AND bMobSub.PayType = FALSE NO-LOCK NO-ERROR.
-   IF AVAIL bMobsub THEN 
+   IF NOT AVAIL bMobSub THEN RETURN FALSE.
+
+   FIND FIRST bCustomer WHERE bCustomer.CustNum = bMobSub.Custnum NO-LOCK NO-ERROR.
+   IF AVAIL bCustomer THEN 
    DO:
-       FIND FIRST bCustomer WHERE bCustomer.CustNum = bMobSub.InvCust AND bCustomer.Roles <> "inactive" NO-LOCK NO-ERROR.
-       IF AVAIL bCustomer THEN 
-       DO:
-           FIND FIRST bCustCat WHERE bCustCat.Brand = Syst.Var:gcBrand AND bCustCat.Category = bCustomer.Category AND bCustCat.Pro = TRUE NO-LOCK NO-ERROR.
-           IF AVAIL bCustCat THEN 
-               RETURN TRUE.    
-       END.        
-   END.
+       FIND FIRST bCustCat WHERE bCustCat.Brand = Syst.Var:gcBrand AND bCustCat.Category = bCustomer.Category AND bCustCat.Pro = TRUE NO-LOCK NO-ERROR.
+       IF AVAIL bCustCat THEN 
+           RETURN TRUE.    
+   END.        
 
    RETURN FALSE.
        
@@ -650,6 +670,38 @@ FUNCTION fIsAddLineTariff RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Function selects correct permanency amount for an order */
+FUNCTION fSelectFTERMFee RETURNS CHAR
+   (INPUT iiOrderID  AS INT,
+    OUTPUT odValue   AS DEC,
+    OUTPUT ocFeeName AS CHAR):
+
+   odValue = 0.0.
+   ocFeeName = "".
+
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand EQ Syst.Var:gcBrand AND
+              OrderAction.Orderid EQ iiOrderId AND
+              OrderAction.itemkey BEGINS "fterm" NO-ERROR.
+   IF NOT AVAIL OrderAction THEN RETURN "No FTERM orderaction".
+
+   FIND FIRST DayCampaign NO-LOCK WHERE
+              DayCampaign.brand EQ Syst.Var:gcBrand AND
+              DayCampaign.dcevent eq OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DayCampaign THEN RETURN "No FTERM dayycampaign".
+
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand  EQ DayCampaign.Brand AND
+              FMItem.FeeModel EQ DayCampaign.TermFeeModel NO-ERROR.
+   IF NOT AVAIL FMItem THEN RETURN "No FTERM fmitem".
+
+   odValue = FMItem.Amount.
+   ocFeeName = FMItem.FeeModel.
+   RETURN "".
+END.
+
+
+
 /* Return true if order made for convergent additional line */
 FUNCTION fIsAddLineOrder RETURNS LOGICAL
    (INPUT iiOrderId AS INT):
@@ -666,99 +718,6 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
-
-
-/* FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
-   (INPUT icExtraLineCLIType AS CHAR,
-    INPUT icCustIDType       AS CHAR,
-    INPUT icCustID           AS CHAR):
-
-   IF NOT icExtraLineCLIType > ""
-   THEN RETURN 0.
-
-   DEFINE BUFFER Customer FOR Customer.
-   DEFINE BUFFER MobSub   FOR MobSub.
-   DEFINE BUFFER Order    FOR Order.
-
-   FOR FIRST Customer WHERE
-             Customer.Brand      = Syst.Var:gcBrand AND
-             Customer.OrgId      = icCustID                AND
-             Customer.CustidType = icCustIDType            AND
-             Customer.Roles     NE "inactive"              NO-LOCK,
-       EACH  MobSub NO-LOCK USE-INDEX CustNum WHERE
-             MobSub.Brand    = Syst.Var:gcBrand AND
-             MobSub.CustNum  = Customer.CustNum        AND
-             MobSub.PayType  = FALSE                   AND
-             MobSub.MultiSimID = 0                     AND
-             MobSub.MultiSimType = 0                   AND
-            (MobSub.MsStatus = {&MSSTATUS_ACTIVE} OR
-             MobSub.MsStatus = {&MSSTATUS_BARRED})
-       BY MobSub.ActivationTS:
-
-       IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)
-       THEN NEXT.
-
-       FIND LAST Order NO-LOCK WHERE 
-                 Order.MsSeq      = MobSub.MsSeq              AND 
-                 Order.CLIType    = MobSub.CLIType            AND 
-                 Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
-          LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
-          IF NOT AVAIL Order THEN 
-             FIND LAST Order NO-LOCK WHERE 
-                       Order.MsSeq      = MobSub.MsSeq              AND 
-                       Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
-                LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
-
-       IF NOT AVAIL Order THEN NEXT.          
-
-       RETURN Order.OrderId. 
-
-   END.
-
-   RETURN 0.
-
-END FUNCTION.
-
-FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
-   (INPUT icExtraLineCLIType AS CHAR,
-    INPUT icCustIDType       AS CHAR,
-    INPUT icCustID           AS CHAR):
-   
-   IF NOT icExtraLineCLIType > ""
-   THEN RETURN 0.
-
-   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
-   DEFINE BUFFER Order         FOR Order.
-   DEFINE BUFFER OrderFusion   FOR OrderFusion.
-
-   FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
-            OrderCustomer.CustId     EQ icCustID                AND
-            OrderCustomer.CustIdType EQ icCustIDType            AND
-            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-       EACH Order NO-LOCK WHERE
-            Order.Brand        EQ Syst.Var:gcBrand AND
-            Order.orderid      EQ OrderCustomer.Orderid   AND
-            Order.OrderType    NE {&ORDER_TYPE_RENEWAL}   AND
-            Order.MultiSimId   EQ 0                       AND 
-            Order.MultiSimType EQ 0,
-      FIRST OrderFusion NO-LOCK WHERE
-            OrderFusion.Brand   = Syst.Var:gcBrand AND
-            OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
-
-       IF NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)
-       THEN NEXT.
-
-      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
- 
-      RETURN Order.OrderId.
- 
-   END.
-
-   RETURN 0.
-
-END FUNCTION. */
-
 
 /* If main line is installed for Main line (Convergent order or Mobile only)
    then don't move additional line order to 76 */
@@ -867,7 +826,122 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
 
     RETURN ldeFee.
 
-END FUNCTION. 
+END FUNCTION.
 
+FUNCTION fSendFixedLineTermReqToMuleDB RETURNS CHAR
+   ( INPUT iiOrderId AS INTEGER ):
+
+   DEFINE VARIABLE lcUriPath        AS CHARACTER       NO-UNDO.
+   DEFINE VARIABLE objRESTClient    AS CLASS Gwy.ParamRESTClient.
+   DEFINE VARIABLE loOMParser       AS CLASS Progress.Json.ObjectModel.ObjectModelParser NO-UNDO.
+   DEFINE VARIABLE loJsonConstruct  AS CLASS Progress.Json.ObjectModel.JsonConstruct     NO-UNDO.
+   DEFINE VARIABLE lii              AS INTEGER         NO-UNDO.
+   DEFINE VARIABLE lcError          AS CHARACTER       NO-UNDO.
+   DEFINE VARIABLE liMuleESBIFInUse AS INT             NO-UNDO.
+
+   liMuleESBIFInUse = Syst.Parameters:geti("TerminatioNotificationAPIInUse", "RESTMuleESB").
+   IF liMuleESBIFInUse EQ 0 THEN
+      RETURN "".
+
+   DO ON ERROR UNDO, THROW:
+
+      objRESTClient = NEW Gwy.ParamRESTClient("RESTMuleESB").
+      objRESTClient:mSetURIPath(SUBSTITUTE("api/orders/1/Order/Y&1/TerminateLandline",iiOrderId)).
+
+      objRESTClient:mPOST().
+
+      CATCH loRESTError AS Gwy.RESTError:
+
+         /* NOTE: The errors automatically are logged to the client log */
+
+         IF loRESTError:ErrorMessage > ""
+         THEN DO ON ERROR UNDO, THROW:
+            ASSIGN
+               loOMParser      = NEW Progress.Json.ObjectModel.ObjectModelParser()
+               loJsonConstruct = loOMParser:Parse(loRESTError:ErrorMessage).
+
+            IF TYPE-OF(loJsonConstruct, Progress.Json.ObjectModel.JsonObject)
+               THEN RETURN CAST(loJsonConstruct, Progress.Json.ObjectModel.JsonObject):GetCharacter("resultDescription").
+            ELSE RETURN STRING(SUBSTRING(loRESTError:ErrorMessage, 1, 30000)).
+
+            CATCH loError AS Progress.Lang.Error:
+               RETURN STRING(SUBSTRING(loRESTError:ErrorMessage, 1, 30000)).
+            END CATCH.
+
+            FINALLY:
+               IF VALID-OBJECT(loOMParser)
+                  THEN DELETE OBJECT loOMParser.
+            END FINALLY.
+         END.
+
+         IF loRESTError:ReturnValue > ""
+            THEN RETURN loRESTError:ReturnValue.
+   
+         DO lii = 1 TO loRESTError:NumMessages:
+            lcError = lcError + "," + loRESTError:GetMessage(lii).
+         END.
+
+         IF lcError > ""
+            THEN RETURN LEFT-TRIM(lcError,",").
+   
+         RETURN "Error was thrown but no error message available".
+
+      END CATCH.
+     
+      FINALLY:
+         IF VALID-OBJECT(objRESTClient)
+            THEN DELETE OBJECT objRESTClient.
+      END FINALLY.
+
+   END.
+   RETURN "".
+
+END FUNCTION.
+
+
+FUNCTION fFindFixedLineOrder RETURNS INTEGER
+   ( iiMsSeq AS INTEGER ):
+
+   DEFINE BUFFER Order      FOR Order.
+   DEFINE BUFFER MobSub     FOR MobSub.
+   DEFINE BUFFER bActionLog FOR ActionLog.
+
+   DEF VAR liMsSeq AS INT NO-UNDO.
+
+   FIND FIRST Mobsub NO-LOCK USE-INDEX MsSeq WHERE
+              Mobsub.MsSeq       EQ iiMsSeq AND
+              Mobsub.FixedNumber GT ""      NO-ERROR.
+
+   IF NOT AVAILABLE MobSub THEN 
+      RETURN 0.
+
+   /* Check if terminated subscription is Merged 3P subscription */
+   FIND FIRST bActionLog NO-LOCK  WHERE
+              bActionLog.Brand     EQ Syst.Var:gcBrand     AND
+              bActionLog.TableName EQ "MobSub"             AND
+              bActionLog.KeyValue  EQ STRING(MobSub.MsSeq) AND
+              bActionLog.ActionID  EQ {&MERGE2P3P}         NO-ERROR.
+
+   IF AVAIL bActionLog THEN
+      liMsSeq = INT(ENTRY(1,bActionLog.ActionChar,CHR(255))).
+   ELSE liMsSeq = iiMsSeq.
+
+   FOR EACH Order NO-LOCK WHERE 
+            Order.MsSeq EQ liMSSeq BY Order.CrStamp DESC:
+
+      IF NOT CAN-FIND(FIRST OrderFusion NO-LOCK USE-INDEX OrderId WHERE
+                            OrderFusion.Brand        EQ "1"                AND
+                            OrderFusion.OrderId      EQ Order.OrderId      AND
+                            OrderFusion.FixedNumber  EQ Mobsub.FixedNumber AND
+                            OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED})
+      THEN NEXT.
+
+      RETURN Order.OrderId.
+
+   END.
+
+   RETURN 0.
+
+END FUNCTION.
 
 &ENDIF

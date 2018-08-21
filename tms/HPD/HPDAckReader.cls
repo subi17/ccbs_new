@@ -203,8 +203,8 @@ CLASS HPD.HPDAckReader ABSTRACT
       IF llDisconnected
       THEN DO:
          mDisConnect().
-         mLogMsg("Socket disconnected, retry after 10 seconds","ERROR").
-         PAUSE 10 NO-MESSAGE.
+         mLogMsg("Socket disconnected, retry after 1 second","ERROR").
+         PAUSE 1 NO-MESSAGE.
          llDisconnected = FALSE.
       END.
       

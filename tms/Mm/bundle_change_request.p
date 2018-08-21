@@ -419,7 +419,7 @@ PROCEDURE pMultiSimBTC:
       MsRequest.MsSeq   = lbMobSub.Msseq AND
       MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
       LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) OR
-      fIsMNPOutOngoing(INPUT lbMobSub.CLI)
+      Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT lbMobSub.CLI)
    THEN RETURN.
 
    fTermAdditionalSim(lbMobSub.MsSeq,
@@ -474,8 +474,12 @@ PROCEDURE pActivateDSS2:
    IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
       NOT fIsDSSActive(MobSub.CustNum,ideActStamp) AND
       NOT fOngoingDSSAct(MobSub.CustNum) AND
-      fIsDSS2Allowed(MobSub.CustNum,0,ideActStamp,
-                     OUTPUT liDSSMsSeq,OUTPUT lcError)
+      fIsDSSActivationAllowed(MobSub.CustNum,
+                              0,
+                              ideActStamp,
+                              {&DSS2},
+                              OUTPUT liDSSMsSeq,
+                              OUTPUT lcError)
    THEN DO:
       FIND FIRST bMobSub WHERE
                  bMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.

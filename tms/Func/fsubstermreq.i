@@ -9,7 +9,6 @@
 &GLOBAL-DEFINE FSUBSTERMREQ_I YES
    
 {Func/flimitreq.i}
-{Mnp/mnpoutchk.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
 
@@ -25,7 +24,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
     INPUT  icSource       AS CHAR,   /* source of request */
     INPUT  icCreator      AS CHAR,   /* who made the request */
     INPUT  iiOrigReq      AS INT,    /* father request */
-    INPUT  icTermType     AS CHAR,    /* Termination type full, Partial */
+    INPUT  icTermType     AS CHAR,   /* Termination type full, Partial */
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
@@ -79,20 +78,14 @@ FUNCTION fTerminationRequest RETURNS INTEGER
              (bOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
               bOrder.StatusCode = {&ORDER_STATUS_MNP} OR
               bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):          
-         
+
          RUN Mc/closeorder.p(bOrder.OrderId, TRUE).
-         
+
       END.
                     
       /* Do not change the memo text (used by DWH) */
       IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
          bCreaReq.Memo = "Fixed line need to be terminated by Yoigo BO".
-      ELSE IF NOT 
-         CAN-FIND(FIRST Order NO-LOCK WHERE
-                        Order.MsSeq = iiMsSeq AND
-                        Order.OrderType = {&ORDER_TYPE_STC} AND
-                        Order.StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE})
-         THEN bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
    END.
 
    RELEASE bCreaReq.
@@ -156,7 +149,7 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
       RETURN 4.
    END.
    
-   IF fIsMNPOutOngoing(mobsub.cli) THEN DO:
+   IF Mnp.MNPOutGoing:mIsMNPOutOngoing(mobsub.cli) THEN DO:
       ocError = "Ongoing MNP OUT Process".
       RETURN 5.
    END.
@@ -380,5 +373,7 @@ FUNCTION fInitialiseValues RETURNS INT
 
    END.
 END.
+
+
 
 &ENDIF

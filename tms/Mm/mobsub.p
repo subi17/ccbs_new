@@ -34,7 +34,6 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 {Func/fsubser.i}
 {Func/fctserval.i}
 {Func/barrfunc.i}
-{Mnp/mnpoutchk.i}
 {Func/fdss.i}
 
 IF llDoEvent THEN DO:
@@ -105,6 +104,7 @@ DEF VAR lcMNP         AS CHARACTER NO-UNDO.
 DEF VAR liMultiSIMType AS INT NO-UNDO. 
 DEF VAR llMore        AS LOGICAL                NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType AS CHAR           NO-UNDO.
+DEF VAR lcAllowedDSS4SubsType AS CHAR           NO-UNDO. 
 
 DEF BUFFER SearchCustomer FOR Customer.
 DEF BUFFER UserCustomer   FOR Customer.
@@ -127,8 +127,9 @@ DEFINE TEMP-TABLE ttServPac
 
 ASSIGN lcSaldoFatime = fCParamC("SaldoAgreementAccount")
        lcDCEvent     = fCParamC("PerContractID")
-       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
- 
+       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+       lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
+
 FUNCTION fIsPermittedModule RETURNS LOGICAL  
  ( icCliType AS CHAR,
    icModule AS CHAR):
@@ -1151,7 +1152,7 @@ PROCEDURE local-find-others.
 */      
       lcBarrMask = fGetFinalMask(MobSub.MsSeq).
       
-      lcMNP = fGetMNPOutOngoing(MobSub.CLI).
+      lcMNP = Mnp.MNPOutGoing:mGetMNPOutOngoing(MobSub.CLI).
       IF lcMNP NE "" THEN lcMNP = "MNP: " + lcMNP.
 
       /* Display DSS related information */
@@ -1173,7 +1174,10 @@ PROCEDURE local-find-others.
 
          IF lcBundleId = {&DSS} THEN
             lcDSSInfo  = "DSS Active: " + lcDSSInfo.
-         ELSE IF lcBundleId = "DSS2" AND
+         ELSE IF lcBundleId = {&DSS4} AND
+            LOOKUP(MobSub.CLIType,lcAllowedDSS4SubsType) > 0 THEN
+            lcDSSInfo  = "DSS4 Active: " + lcDSSInfo.
+         ELSE IF lcBundleId = {&DSS2} AND
             LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 THEN
             lcDSSInfo  = "DSS2 Active: " + lcDSSInfo.
          ELSE lcDSSInfo = "".

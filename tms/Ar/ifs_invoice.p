@@ -12,8 +12,7 @@
 {Syst/dumpfile_run.i}
 {Func/finvbal.i}
 {Syst/tmsconst.i}
-{Func/fixedlinefunc.i}
-{Func/extralinefunc.i}
+{Func/wayofpayment.i}
 {Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -523,32 +522,11 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             lcSalesman = Order.Salesman.
          END.
 
-         lcPayType = "20".
-         FOR FIRST MsOwner NO-LOCK USE-INDEX CLI_S WHERE
-                   MsOwner.CLI   = SubInvoice.CLI AND
-                   MsOwner.MsSeq = SubInvoice.MsSeq AND
-                   MsOwner.TSEnd >= ldFromPeriod AND
-                   MsOwner.TsBeg <= ldToPeriod AND
-                   MsOwner.PayType = FALSE:
-            IF INDEX(MsOwner.CLIType,"CONTRD") > 0 OR
-               MsOwner.CLIType EQ "CONTD" THEN 
-               lcPayType = "30".
-            /* YOT-5126 Convergent, Fixed and Additional line */
-            ELSE IF fIsFixedOnly(MsOwner.CLIType) THEN DO: /* FIXED DSL/TFH */
-               IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "62".
-               ELSE lcPayType = "63". /* CONTTFH */
-            END.
-            ELSE IF fIsConvergentORFixedOnly(MsOwner.CLIType) THEN DO:
-               IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "60".
-               ELSE lcPayType = "61".  /* Convergent CONTTFH */
-            END.
-            ELSE IF (fIsAddLineTariff(SubInvoice.CLI) OR fCLITypeIsExtraLine(MsOwner.CLIType)) AND
-                    NOT MsOwner.PayType THEN DO:            
-               /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
-               lcPayType = fGetPayType(MsOwner.CustNum).
-            END.
-
-         END.      
+         /*  Way of Payment value YDR-2883 */
+         lcPayType = fIfsWayOfPayment(SubInvoice.CLI,
+                                      SubInvoice.MsSeq,
+                                      ldFromPeriod,
+                                      ldToPeriod).
 
          CREATE ttSub.
          ASSIGN
@@ -750,10 +728,17 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                  BillItem.Brand    = Syst.Var:gcBrand AND
                  BillItem.BillCode = InvRow.BillCode NO-LOCK NO-ERROR.
                  
-      IF NOT AVAILABLE BillItem THEN DO:           
-         fError(InvRow.BillCode + ": missing").
-         NEXT InvoiceLoop.
-      END.   
+       IF NOT AVAILABLE BillItem THEN 
+       DO:           
+           fError(InvRow.BillCode + ": missing").
+           NEXT InvoiceLoop.
+       END.   
+       FIND FIRST CCRule NO-LOCK WHERE 
+                  CCRule.Brand      =   BillItem.Brand      AND 
+                  CCRule.Category   =   "*"                 AND 
+                  CCRule.BillCode   =   BillItem.BillCode   AND
+                  CCRule.CLIType    =   ""                  AND 
+                  CCRule.ValidTo    >=  TODAY NO-ERROR.
 
       IF llSalesInv THEN DO:
          IF LOOKUP(STRING(InvRow.SlsAcc),lcSkipSlsCode) > 0 THEN
@@ -762,11 +747,11 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          IF ttRow.ProductCode > "" THEN ttRow.Operator = "010".
       END.
       
-      ELSE DO:
-         IF BillItem.SAPRid > "" THEN DO:
+      ELSE DO:         
+         IF AVAILABLE CCRule AND CCRule.ReportingID > "" THEN DO:
             ASSIGN
                ttRow.Operator    = "010"
-               ttRow.ProductCode = BillItem.SAPRid. 
+               ttRow.ProductCode = CCRule.ReportingID. 
          END.
       END.
        
@@ -778,8 +763,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
       END.
 
       IF LOOKUP(SUBSTRING(STRING(InvRow.SlsAcc),1,1),"6,7") > 0 THEN 
-      ASSIGN
-         ttRow.CostCentre = BillItem.CostCentre
+      ASSIGN          
+         ttRow.CostCentre = ( IF AVAILABLE CCRule THEN CCRule.CostCentre ELSE "" )
          ttRow.PayType    = ttSub.PayType
          ttRow.Segment    = lcSegment
          ttRow.SlsChannel = ttSub.SlsChannel.
@@ -956,13 +941,24 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                        BillItem.BillCode = ttRow.BillCode NO-LOCK NO-ERROR.
                        
             IF AVAILABLE BillItem THEN DO:
-               ASSIGN ttRow.SlsAcc = BillItem.AccNum /* Only used account number currently */
-                      ttRow.CostCentre = BillItem.CostCentre.
+               
+               FIND FIRST CCRule NO-LOCK WHERE 
+                          CCRule.Brand      =   BillItem.Brand      AND 
+                          CCRule.Category   =   "*"                 AND  
+                          CCRule.BillCode   =   BillItem.BillCode   AND
+                          CCRule.CLIType    =   ""                  AND 
+                          CCRule.ValidTo    >=  TODAY NO-ERROR.
+                
+               IF AVAILABLE CCRule       
+               THEN ASSIGN ttRow.SlsAcc     = CCRule.AccNum /* Only used account number currently */
+                           ttRow.CostCentre = CCRule.CostCentre.
 
-               IF NOT llSalesInv AND BillItem.SAPRid > "" THEN
-                  ASSIGN
-                     ttRow.Operator    = "010"
-                     ttRow.ProductCode = BillItem.SAPRid. 
+               IF AVAILABLE CCRule    AND 
+                   NOT llSalesInv     AND 
+                   CCRule.ReportingID  > "" 
+               THEN ASSIGN ttRow.Operator     =   "010"
+                           ttRow.ProductCode  =   CCRule.ReportingID.
+                      
             END.
             ELSE DO:
                fError(ttRow.BillCode + ": missing").

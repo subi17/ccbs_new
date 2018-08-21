@@ -1,0 +1,49 @@
+echo "-- UAT Screens --"
+echo $REQRUNDATE
+sleep 1
+screen 1 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 1 $REQRUNDATE -clientlog /scratch/log/requester/requ1.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 2 $REQRUNDATE -clientlog /scratch/log/requester/requ2.log -logthreshold 1048576 -logentrytypes "Temp-tables" -logginglevel 4
+screen 3 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 3 $REQRUNDATE -clientlog /scratch/log/requester/requ3.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 4 $REQRUNDATE -clientlog /scratch/log/requester/requ4.log -logthreshold 1048576 -logginglevel 4 -logentrytypes DB.Connects,4GLTrace:4
+screen 5 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 5 $REQRUNDATE -clientlog /scratch/log/requester/requ5.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 6 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 6 $REQRUNDATE -clientlog /scratch/log/requester/requ6.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 7 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 7 $REQRUNDATE -clientlog /scratch/log/requester/requ7.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 8 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 8 $REQRUNDATE -clientlog /scratch/log/requester/requ8.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 9 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 9 $REQRUNDATE -clientlog /scratch/log/requester/requ9.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 10 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 10 $REQRUNDATE -clientlog /scratch/log/requester/requ10.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+screen 11 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner all tenant=super -param 11 $REQRUNDATE -clientlog /scratch/log/requester/requ11.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+
+screen 20 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun all tenant=super -clientlog /scratch/log/requester/orderrun.log -logthreshold 1048576 -logginglevel 2 -logentrytypes DB.Connects,4GLTrace:2
+
+screen 22 xfear Gwy/topup_queue
+screen 23 xfear test/fake/fake_solog_response.p
+
+screen 24 pike -C /apps/yoigo/tms terminal -- Mnp/mnpsendnc all tenant=super
+screen 25 pike -C /apps/yoigo/tms terminal -- Mnp/mnpresp all tenant=super
+screen 26 pike -C /apps/yoigo/tms terminal -- Mnp/mnpanalyse all tenant=super
+screen 27 pike -C /apps/yoigo/tms terminal -- Mnp/mnperr_resend all tenant=super
+
+#screen 11 xfear Gwy/roi_history_send:w
+screen 28 pike -C /apps/yoigo/tms terminal -- Mm/te_analyses all tenant=yoigo -clientlog /scratch/log/requester/te_analysis.yoigo.log -logthreshold 1048576
+screen 29 pike -C /apps/yoigo/tms terminal -- Mm/te_analyses all tenant=masmovil -clientlog /scratch/log/requester/te_analysis.masmovil.log -logthreshold 1048576
+screen 30 pike -C /apps/yoigo/tms terminal -- Rate/run_triggerrate all tenant=yoigo -clientlog /scratch/log/requester/run_triggerrate.yoigo.log -logthreshold 1048576
+screen 31 pike -C /apps/yoigo/tms terminal -- Rate/run_triggerrate all tenant=masmovil -clientlog /scratch/log/requester/run_triggerrate.masmovil.log -logthreshold 1048576
+
+screen 32 xfear Gwy/topup_request
+screen 33 pike -C /apps/yoigo/tms terminal -- test/fake/fake_solog_response all tenant=masmovil
+#screen 33 pike -C /apps/yoigo/tms terminal -- Gwy/sogrequest all tenant=masmovil
+screen 34 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo -clientlog /scratch/log/requester/tmqueue_analyses.yoigo.log -logthreshold 1048576
+screen 35 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=masmovil -clientlog /scratch/log/requester/tmqueue_analyses.masmovil.log -logthreshold 1048576
+
+#screen 36 pike -C /apps/yoigo/tms terminal -- Gwy/sogrequest all tenant=masmovil -clientlog /scratch/log/requester/sogrequest.masmovil.log -logthreshold 1048576
+#screen 37 pike -C /apps/yoigo/tms terminal -- Gwy/sogresponse all tenant=masmovil -clientlog /scratch/log/requester/sogresponse.masmovil.log -logthreshold 1048576
+screen 36 pike -C /apps/yoigo/tms terminal -- Gwy/sogrequest all tenant=super -clientlog /scratch/log/requester/sogrequest.super.log -logthreshold 1048576
+screen 37 pike -C /apps/yoigo/tms terminal -- Gwy/sogresponse all tenant=super -clientlog /scratch/log/requester/sogresponse.super.log -logthreshold 1048576
+
+#screen 22 xfear test/fake/sms_hpd_sender_mock
+
+screen 38 pike -C /apps/yoigo/tms terminal -- Gwy/sms_hpd_sender all tenant=yoigo
+#screen 26 xfear Gwy/sms_hpd_sender
+
+# NOTE! Check that callalarm_sender don't send message to real customers !!!
+# screen 4 /home/anttis/screen/xfear Gwy/callalarm_sender

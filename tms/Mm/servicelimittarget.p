@@ -77,10 +77,10 @@ form
       membername NO-LABEL format "X(25)" SKIP
    ServiceLimitTarget.Insiderate  
       COLON 30 LABEL  "Inside B-Destination"  
-      FORMAT "X(20)" SKIP
+      FORMAT "X(41)" SKIP
    ServiceLimitTarget.OutSiderate     
       COLON 30 LABEL "Outside B-Destination" 
-      FORMAT "X(20)" SKIP(1) 
+      FORMAT "X(41)" SKIP(1)
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.Var:cfc)
     TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr

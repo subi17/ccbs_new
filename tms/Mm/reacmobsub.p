@@ -192,7 +192,8 @@ DO TRANSACTION:
    END. /* IF NOT AVAILABLE Msowner THEN DO: */
    ELSE DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
-      IF MSOwner.clievent EQ "F" THEN DO: /* react of partial terminated */
+      IF MSOwner.clievent EQ "F" OR /* react of partial terminated */
+         MSOwner.cli NE TermMobsub.cli THEN DO:
          BUFFER-COPY msowner TO ttoldmsowner.
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
          MSOwner.TsEnd = ldCurrTS.
@@ -403,8 +404,12 @@ DO TRANSACTION:
              IF bSubMsRequest.ReqStatus <> {&REQUEST_STATUS_NEW} THEN NEXT.
              IF NOT (llMultiSIMActive OR
                      (bSubMsRequest.ReqCParam3 = "DSS2" AND
-                      fIsDSS2Allowed(MobSub.CustNum,MobSub.MsSeq,ldCurrTS,
-                                     OUTPUT liDSSMsSeq,OUTPUT lcError)))
+                      fIsDSSActivationAllowed(MobSub.CustNum,
+                                              MobSub.MsSeq,
+                                              ldCurrTS,
+                                              {&DSS2},
+                                              OUTPUT liDSSMsSeq,
+                                              OUTPUT lcError)))
              THEN NEXT.
           END. /* IF bSubMsRequest.ReqCParam3 = {&DSS} THEN DO: */
           
@@ -528,8 +533,12 @@ DO TRANSACTION:
                          ttContract.DCEvent BEGINS {&DSS}) AND
       NOT fIsDSSActive(MobSub.CustNum,ldCurrTS) AND
       NOT fOngoingDSSAct(MobSub.CustNum) AND
-      fIsDSS2Allowed(MobSub.CustNum,MobSub.MsSeq,ldCurrTS,
-                     OUTPUT liDSSMsSeq,OUTPUT lcError) THEN DO:
+      fIsDSSActivationAllowed(MobSub.CustNum,
+                              MobSub.MsSeq,
+                              ldCurrTS,
+                              {&DSS2},
+                              OUTPUT liDSSMsSeq,
+                              OUTPUT lcError) THEN DO:
       FIND FIRST lbMobSub WHERE
                  lbMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.
       IF AVAIL lbMobSub THEN DO:
@@ -797,8 +806,9 @@ DO TRANSACTION:
       If Main line is getting reactivated then
       activate the additional line discount */
    ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                    CLIType.Brand      = Syst.Var:gcBrand                           AND
-                    CLIType.CLIType    = MobSub.CLIType                    AND                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) 
+                          CLIType.Brand      EQ Syst.Var:gcBrand AND
+                          CLIType.CLIType    EQ MobSub.CLIType   AND
+                          CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY}) 
    THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = Syst.Var:gcBrand        AND

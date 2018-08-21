@@ -11,7 +11,6 @@
  * @output success;boolean
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Mnp/mnpoutchk.i}
 {Syst/commpaa.i}
 Syst.Var:katun = "Newton".
 Syst.Var:gcBrand = "1".

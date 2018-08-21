@@ -130,10 +130,11 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
    DEF BUFFER MobSub FOR MobSub.
 
-   DEF VAR lcResult   AS CHAR    NO-UNDO. 
-   DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR lcResult       AS CHAR    NO-UNDO. 
+   DEF VAR llHardBook     AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
-   DEF VAR liRequest  AS INT NO-UNDO.
+   DEF VAR liRequest      AS INT     NO-UNDO.
+   DEF VAR lcPrevStatus   AS CHAR    NO-UNDO INIT "". 
 
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -147,11 +148,14 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
            bfOrder.OrderId = iOrderId
          EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE bfOrder THEN DO:  
-         bfOrder.StatusCode = icStatus.
+         
+         ASSIGN lcPrevStatus       = bfOrder.StatusCode
+                bfOrder.StatusCode = icStatus.
 
          /* orders to status new should not be reported to ROI */
          IF LOOKUP(icStatus,"1,3,30") = 0 AND
-            bfOrder.Ordertype NE {&ORDER_TYPE_STC} THEN 
+            bfOrder.Ordertype NE {&ORDER_TYPE_STC} AND
+            bfOrder.OrderType NE {&ORDER_TYPE_ACC} THEN 
             bfOrder.SendToROI  = {&ROI_HISTORY_TO_SEND}.
 
          /* RES-538 Digital Signature for Tienda and Telesales only */
@@ -178,6 +182,25 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                                   0).
                END.
 
+               IF (bfOrder.OrderType EQ {&ORDER_TYPE_NEW} OR 
+                   bfOrder.OrderType EQ {&ORDER_TYPE_MNP} OR 
+                   bfOrder.OrderType EQ {&ORDER_TYPE_STC})  AND 
+                   bfOrder.CLIType BEGINS "CONTFH"          AND 
+            LOOKUP(lcPrevStatus,{&ORDER_ROI_STATUSES}) GT 0 THEN DO:
+
+                  CREATE FusionMessage.
+                  ASSIGN FusionMessage.MessageSeq      = NEXT-VALUE(FusionMessageSeq)
+                         FusionMessage.OrderID         = bfOrder.OrderID
+                         FusionMessage.MsSeq           = bfOrder.MsSeq
+                         FusionMessage.CreatedTS       = Func.Common:mMakeTS()
+                         FusionMessage.UpdateTS        = FusionMessage.CreatedTS
+                         FusionMessage.MessageType     = {&FUSIONMESSAGE_TYPE_CANCEL_APPOINTMENT}
+                         FusionMessage.MessageStatus   = {&FUSIONMESSAGE_STATUS_NEW}
+                         FusionMessage.Source          = {&FUSIONMESSAGE_SOURCE_TMS}
+                         FusionMessage.OrderType       = STRING(bfOrder.OrderType).
+
+               END.    
+
                FIND FIRST OrderAccessory OF bfOrder WHERE
                           OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
                           NO-LOCK NO-ERROR.
@@ -198,6 +221,18 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      OrderFusion.UpdateTS = Func.Common:mMakeTS().
                   RELEASE OrderFusion.
                END.
+
+               IF bfOrder.OrderType EQ {&ORDER_TYPE_ACC} THEN
+                  FOR EACH MsRequest WHERE 
+                           MsRequest.MsSeq = Order.Msseq AND
+                           MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND
+                           MsRequest.ReqIParam4 = Order.OrderID AND
+                           MsRequest.Actstamp > Func.Common:mMakeTS() AND
+                     LOOKUP(STRING(MsRequest.ReqStatus),
+                           {&REQ_INACTIVE_STATUSES}) = 0:
+                     fChangeReqStatus(MsRequest.MsRequest,
+                                      4,"Cancelled by ACC order closing").
+                  END.
 
                /* Convergent mobile part closing */
                IF fIsConvergenceTariff (bfOrder.CLIType) THEN DO:
@@ -844,8 +879,16 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
                                                                         lbMLOrderCustomer.CustIdType,
                                                                         lbMLOrderCustomer.CustID,
                                                                         OUTPUT liMLMsSeq).
-                  IF liMLOrderID > 0 THEN 
+                  IF liMLOrderID > 0 THEN DO: 
                      lbELOrder.MultiSimId = liMLOrderId.
+                     
+                     /* If we reassign the extraline to exisiting Mainline of a 
+                        customer then release it immediately */
+                     lcNewOrderStatus = fGetReleaseStatus(lbELOrder.OrderType).
+
+                     fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+                  END.   
                   ELSE DO:
                      liMLOrderId = fCheckOngoingMainLineAvailForExtraLine(lbELOrder.CLIType,
                                                                           lbMLOrderCustomer.CustIdType,

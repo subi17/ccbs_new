@@ -1,0 +1,1 @@
+{triggers/hpdwrite_generic.i OrderProductParam ORDERPRODUCTPARAM Ordercanal OrderProductID ParamName}

@@ -78,6 +78,21 @@ IF lcError EQ "OK" THEN DO:
       FusionMessage.UpdateTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
+      /* PRO3D2-55 */
+      /* Because of possibility to have empty fixednumber (ItemParam begins |) 
+         in ordering phase we need to update related data to orderaction */
+      FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                 OrderAction.Brand EQ OrderFusion.Brand AND
+                 OrderAction.OrderID EQ OrderFusion.OrderID AND
+                 OrderACtion.ItemKey EQ "FAXTOEMAIL" AND 
+                 OrderACtion.ItemParam BEGINS "|" NO-ERROR.
+      IF AVAIL OrderAction THEN DO:
+         OrderACtion.ItemParam = lcFixedNumber + OrderACtion.ItemParam.
+         RELEASE OrderAction.
+      END.
+
+
+
    IF NOT fCreateFusionCreateOrderMessage(OrderFusion.OrderId,
                                           OUTPUT lcError) THEN DO:
 

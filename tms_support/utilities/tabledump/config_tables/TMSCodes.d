@@ -319,6 +319,9 @@
 "Customer" "CustomerIDType" "CustCare" "N/A" "Not defined" "" "" 0
 "Customer" "InvoiceTargetRule" "Billing" "1" "Default group" "" "" 1
 "Customer" "InvoiceTargetRule" "Billing" "2" "Separate group" "" "" 1
+"Customer" "NWProfiles" "NWProfile" "1" "Solo Yoigo" "" "" 0
+"Customer" "NWProfiles" "NWProfile" "2" "Yoigo + Orange" "" "" 1
+"Customer" "NWProfiles" "NWProfile" "3" "Yoigo + Orange + Movistar" "" "" 1
 "Customer" "Title" "CustCare" "Mr" "English title for males" "" "" 1
 "Customer" "Title" "CustCare" "Mrs" "English title for females" "" "" 1
 "Customer" "Title" "CustCare" "Sr." "Spanish title for males" "" "" 1
@@ -1082,18 +1085,22 @@
 "OrderCustomer" "AdditionalDoc" "Orders" "1" "Requested" "" "" 1
 "OrderCustomer" "AdditionalDoc" "Orders" "2" "Accepted" "" "" 1
 "OrderCustomer" "AdditionalDoc" "Orders" "3" "Denied" "" "" 1
-"OrderCustomer" "Profession" "Order" "1" "Administrative assistance" "" "0005,0007" 1
-"OrderCustomer" "Profession" "Order" "10" "Pensioner, Subsidy Receiver" "" "0005,0002" 1
-"OrderCustomer" "Profession" "Order" "11" "Transport and distribution" "" "0001,0014" 1
-"OrderCustomer" "Profession" "Order" "12" "Other" "" "0005,0007" 1
-"OrderCustomer" "Profession" "Order" "2" "Agriculture, Cattle Industry and Fisheries" "" "0001,0101" 1
-"OrderCustomer" "Profession" "Order" "3" "Housewife" "" "0005,0007" 1
-"OrderCustomer" "Profession" "Order" "4" "Banking, Finance Services and Insurance Companies" "" "0001,0015" 1
-"OrderCustomer" "Profession" "Order" "5" "Retail Trade" "" "0001,0060" 1
-"OrderCustomer" "Profession" "Order" "6" "Construction" "" "0001,0004" 1
-"OrderCustomer" "Profession" "Order" "7" "Education" "" "0001,0063" 1
-"OrderCustomer" "Profession" "Order" "8" "Student" "" "0005,0007" 1
-"OrderCustomer" "Profession" "Order" "9" "Civil Servant" "" "0001,0002" 1
+"OrderCustomer" "Profession" "Order" "1" "Obrero - Sector Privado" "" "0001,0001,0001,0004" 1
+"OrderCustomer" "Profession" "Order" "10" "Rentista" "" "0005,0010,0005,0002" 1
+"OrderCustomer" "Profession" "Order" "11" "Vigilante de seguridad" "" "0001,0011,0001,0004" 1
+"OrderCustomer" "Profession" "Order" "12" "Camarero / Vendedor de la once" "" "0001,0012,0001,0004" 1
+"OrderCustomer" "Profession" "Order" "13" "Bombero, Militar, Policia, Guardia Civil" "" "0001,0013,0001,0002" 1
+"OrderCustomer" "Profession" "Order" "14" "Estudiante, Universitario, Master y Doctorado" "" "0005,0014,0005,0007" 1
+"OrderCustomer" "Profession" "Order" "15" "Jubilado, Pensionista" "" "0005,0015,0005,0002" 1
+"OrderCustomer" "Profession" "Order" "16" "No trabaja" "" "0005,0016,0005,0007" 1
+"OrderCustomer" "Profession" "Order" "2" "Técnico, Administrativo-Sector Privado" "" "0001,0002,0005,0007" 1
+"OrderCustomer" "Profession" "Order" "3" "Cargo intermedio- Sector Privado" "" "0001,0003,0001,0004" 1
+"OrderCustomer" "Profession" "Order" "4" "Directivo - Sector Privado" "" "0001,0004,0001,0004" 1
+"OrderCustomer" "Profession" "Order" "5" "Obrero, Técnico, Administrativo - Sector Público" "" "0001,0005,0001,0002" 1
+"OrderCustomer" "Profession" "Order" "6" "Cargo intermedio, Directivo - Sector Público" "" "0001,0006,0001,0002" 1
+"OrderCustomer" "Profession" "Order" "7" "Otros" "" "0005,0007,0005,0007" 1
+"OrderCustomer" "Profession" "Order" "8" "Autonomo" "" "0005,0008,0001,0003" 1
+"OrderCustomer" "Profession" "Order" "9" "Empresario" "" "0005,0009,0001,0003" 1
 "OrderCustomer" "RowType" "Orders" "1" "AgrCust" "" "" 1
 "OrderCustomer" "RowType" "Orders" "2" "InvCust" "" "" 1
 "OrderCustomer" "RowType" "Orders" "3" "UserCust" "" "" 1
@@ -1375,6 +1382,7 @@
 "requem" "94,0,1,2,3,9" "SubsLMenu" "1" "Push invoice" "" "" 1
 "requem" "95,0,1,2,3,7,8,9" "SubsLMenu" "1" "Pro Migration" "" "" 1
 "requem" "96,0,1,2,3,4,9" "SubsLMenu" "1" "ESI Invoice" "" "" 1
+"requem" "97,0,1,2" "SubsLMenu" "1" "Customer Category change" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
@@ -1446,6 +1454,7 @@
 "Salesman" "SmPrefix" "IFS" "EB" "EMERGIA BACKOFFICE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EM" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EO" "CELLCOM EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "ES" "EOS CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EU" "Emision Unisono" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "FR" "FACTORIA INBOUND OF" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "FW" "FACTORIA INBOUND ON" "" "15" 1
@@ -1494,6 +1503,7 @@
 "Salesman" "SmPrefix" "IFS" "TM" "TELESTANT TM" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TO" "Telestant Online" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TP" "The Phone House exlusivo Yoigo" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "TT" "ATENTO" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TU" "Tu Y Tu" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "UN" "Unisono" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "UR" "Urende" "" "23" 0

@@ -10,6 +10,7 @@
 
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
+{Syst/tmsconst.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT  PARAMETER idLastDump       AS DECIMAL   NO-UNDO.
@@ -95,7 +96,8 @@ FOR EACH EventLog WHERE
 
    FOR FIRST Order WHERE
              Order.Brand = lcBrand AND
-             ORder.OrderID = liOrderId NO-LOCK,
+             Order.OrderID = liOrderId AND
+             Order.OrderType NE {&ORDER_TYPE_ACC} NO-LOCK,
       EACH OrderCustomer OF Order NO-LOCK:
       fCollect().
    END.

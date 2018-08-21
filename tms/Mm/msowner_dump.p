@@ -185,6 +185,15 @@ FOR EACH ttMsOwner NO-LOCK:
             WHEN "#Segment" THEN DO:
                lcValue = fGetSegment(ttMSOwner.CustNum,0).
             END.
+            /* NRTR-13 BI(TRACK) changes */
+            WHEN "#NWProfile" THEN DO:
+               FIND FIRST Customer NO-LOCK WHERE
+                  Customer.CustNum = ttMSOwner.Custnum NO-ERROR.
+               IF AVAIL Customer THEN
+                 lcValue = STRING(Customer.NWProfile).
+               ELSE
+                 lcValue = "".
+            END.
             OTHERWISE lcValue = "".
          END CASE.
       END.

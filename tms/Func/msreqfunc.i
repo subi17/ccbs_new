@@ -333,4 +333,31 @@ FUNCTION fChkReqStatusChange RETURNS LOG
    RETURN FALSE.
 END.
 
+FUNCTION fChangeOrderStatus RETURNS LOGICAL
+   ( iiOrderID     AS INTEGER,
+     icOrderStatus AS CHARACTER ):
+
+   IF NOT iiOrderID > 0
+   THEN RETURN FALSE.
+
+   DEFINE BUFFER Order FOR Order.
+
+   FOR Order NO-LOCK WHERE
+       Order.Brand   = Syst.Var:gcBrand AND
+       Order.OrderId = iiOrderId:
+
+      IF Order.StatusCode NE icOrderStatus
+      THEN DO TRANSACTION:
+         BUFFER Order:FIND-CURRENT(EXCLUSIVE-LOCK).
+         Order.StatusCode = icOrderStatus.
+         RELEASE Order.
+      END.
+
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF

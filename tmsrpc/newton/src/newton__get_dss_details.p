@@ -13,6 +13,7 @@
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
+{Func/extralinefunc.i}
 
 /* Input parameters */
 DEF VAR piCustNum           AS INT  NO-UNDO.
@@ -34,8 +35,10 @@ DEF VAR lcCONTSFContracts   AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes    AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles    AS CHAR NO-UNDO.
 DEF VAR lcDSSBundleId       AS CHAR NO-UNDO.
+DEF VAR lcBundleId          AS CHAR NO-UNDO.  
 
 DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO. 
 
 DEF BUFFER bMServiceLimit   FOR MServiceLimit.
 DEF BUFFER bMserviceLPool   FOR MserviceLPool.
@@ -48,7 +51,7 @@ piCustNum = get_int(param_toplevel_id, "0").
 
 ASSIGN ldeCurrentTS = Func.Common:mMakeTS()
        ldFromDate   = DATE(MONTH(TODAY),1,YEAR(TODAY))
-       ldToDate     = Func.Common:mLastDayOfMonth(TODAY)
+       ldToDate     = TODAY
        ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
        ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399)
        lcIPLContracts   = fCParamC("IPL_CONTRACTS")
@@ -95,21 +98,35 @@ END. /* FOR EACH ServiceLimit WHERE */
 
 top_array = add_array(response_toplevel_id, "").
 
-IF lcDSSBundleId = "DSS2" THEN
+IF lcDSSBundleId EQ {&DSS4} THEN 
+   lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
+ELSE IF lcDSSBundleId = {&DSS2} THEN
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
 
 FOR EACH bMsOwner NO-LOCK WHERE
          bMsOwner.InvCust  = Customer.CustNum AND
          bMsOwner.TsBegin <= ldPeriodTo       AND
-         bMsOwner.TsEnd   >= ldPeriodFrom     AND
+        (bMsOwner.TsEnd   >= ldPeriodFrom AND
+         bMsOwner.TsEnd   >= ldPeriodTo)      AND
          NOT bMsOwner.PayType
     BREAK BY bMsOwner.MsSeq
           BY bMsOwner.TsEnd DESC:
 
    IF NOT FIRST-OF(bMsOwner.MsSeq) THEN NEXT.
 
-   IF lcDSSBundleId = "DSS2" AND
+   IF lcDSSBundleId EQ {&DSS4} AND 
+      LOOKUP(bMsOwner.CLIType,lcAllowedDSS4SubsType) = 0 THEN NEXT.
+   ELSE IF lcDSSBundleId = {&DSS2} AND
       LOOKUP(bMsOwner.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
+   
+   IF (LOOKUP(bMsOwner.CLIType,lcAllowedDSS4SubsType) > 0 OR
+       LOOKUP(bMsOwner.CLIType,lcAllowedDSS2SubsType) > 0)   AND
+      (fCLITypeIsMainLine(bMsOwner.CLIType)   OR
+       fCLITypeIsExtraLine(bMsOwner.CLIType))                THEN
+      IF NOT fCheckActiveExtraLinePair(bMsOwner.MsSeq,
+                                       bMsOwner.CLIType,
+                                       OUTPUT lcBundleId) THEN
+         NEXT.
    
    dss_struct = add_struct(top_array, "").
    ASSIGN ldeDataBundleLimit = 0

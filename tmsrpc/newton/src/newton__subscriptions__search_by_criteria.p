@@ -518,6 +518,7 @@ FOR EACH MobSub NO-LOCK WHERE
    IF pdtEndDate <> ? OR pdtStartDate <> ? THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
                Order.MsSeq  EQ MobSub.MsSeq AND
+               Order.OrderType <= {&ORDER_TYPE_STC} AND
                LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0
            BY Order.CrStamp DESC:
        
@@ -534,7 +535,8 @@ FOR EACH MobSub NO-LOCK WHERE
 
    IF plgOrderStatus THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
-               Order.MsSeq  EQ MobSub.MsSeq
+               Order.MsSeq  EQ MobSub.MsSeq AND
+               Order.OrderType <= {&ORDER_TYPE_STC}
            BY Order.CrStamp DESC:
        
          IF NOT Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN
@@ -591,7 +593,7 @@ FOR EACH MobSub NO-LOCK WHERE
    END. /* DO liCount = 1 TO liNumberOfBundles: */
    
    /*Any Barrings Exist*/
-   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.
+   IF plBarring AND Func.BarrMethod:mGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.
 
    /* YDA-1012 and YDA-1017 */
    IF CAN-FIND(FIRST Order WHERE Order.MsSeq = MobSub.MsSeq AND

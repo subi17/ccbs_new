@@ -1,0 +1,12 @@
+ADD FIELD "ServiceStatus" OF "DCCLi" AS integer 
+  DESCRIPTION "Service Status"
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Status"
+  POSITION 17
+  MAX-WIDTH 4
+  COLUMN-LABEL "Status"
+  HELP "Service Status"
+  ORDER 160
+
+

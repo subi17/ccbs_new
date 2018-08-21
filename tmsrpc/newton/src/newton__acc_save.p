@@ -47,7 +47,13 @@
  * @output success;boolean
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+
+{Mm/msagrcustchg.i}
+{Func/fcustchangereq.i}
+{Func/fcharge_comp_loaded.i}
+{Func/orderchk.i}
 {Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -79,12 +85,6 @@ DEF VAR llProCust AS LOG NO-UNDO.
 DEF VAR llSelfEmployed AS LOG NO-UNDO.
 
 DEF BUFFER bOriginalCustomer FOR Customer.
-
-DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
-   FIELD cBirthDay AS CHAR
-   FIELD CityCode LIKE CustomerReport.CityCode
-   FIELD StreetCode LIKE CustomerReport.StreetCode
-   FIELD TownCode LIKE CustomerReport.TownCode.
 
 DEF VAR lcAgrCustID AS CHARACTER NO-UNDO.
 DEF VAR lcAgrCustIDType AS CHARACTER NO-UNDO.
@@ -212,22 +212,20 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* PARSING ENDS */
 
-{Syst/commpaa.i}
 ASSIGN
-   Syst.Var:katun = "VISTA_" + pcSalesMan
-   Syst.Var:gcBrand = "1".
-{Mm/msagrcustchg.i}
-{Func/fcustchangereq.i}
-{Func/fcharge_comp_loaded.i}
-{Func/orderchk.i}
+   Syst.Var:katun = "VISTA_" + pcSalesMan.
 
 /*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
 IF AVAIL Customer THEN
-   lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
-                                  Customer.Custnum).
+   lcError = Func.ValidateACC:mExistingCustomerACCCompability
+                                    (bOriginalCustomer.Category,
+                                     Customer.Category,
+                                     Customer.CustNum,
+                                     Customer.CustIdType,
+                                     Customer.OrgId).
 IF lcError > "" THEN RETURN appl_err(lcError).                               
 
-lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
+lcError = Func.ValidateACC:mPreCheckSubscriptionForACC(MobSub.MsSeq).
 IF lcError > "" THEN RETURN appl_err(lcError).
 
 IF pdeCharge > 0 THEN
@@ -242,37 +240,31 @@ ASSIGN lcReqSource = (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
                       ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
                       ELSE {&REQUEST_SOURCE_MANUAL_TMS}).
 
-RUN pCheckSubscriptionForACC (
-   MobSub.MsSeq,
-   0,
-   lcReqSource,
-   OUTPUT lcError).
-IF lcError > "" THEN RETURN appl_err(lcError).
+lcError = Func.ValidateACC:mCheckSubscriptionForACC(MobSub.MsSeq,
+                                                    0,
+                                                    0,
+                                                    lcReqSource).
+
+IF lcError > "" THEN RETURN appl_err(SUBSTRING(lcError,INDEX(lcError,"|") + 1)).
 
 IF AVAIL Customer THEN DO:
-   RUN pCheckTargetCustomerForACC (
-      Customer.Custnum,
-      OUTPUT lcError).
-   IF lcError > "" THEN
-      RETURN appl_err(lcError).
+   lcError = Func.ValidateACC:mCheckTargetCustomerForACC(Customer.Custnum).
+   IF lcError > ""
+   THEN RETURN appl_err(SUBSTRING(lcError,INDEX(lcError,"|") + 1)).
 END.
 ELSE DO:
-
-   llProCust = fIsPro(bOriginalCustomer.category).
-   IF llProCust THEN 
-      llSelfEmployed = fIsSelfEmpl(bOriginalCustomer.category).
-
-   IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
-                                  INPUT ttCustomer.CustIdType,
-                                  llProCust,
-                                  llSelfEmployed, 
-                                  1,
-                                  OUTPUT liSubLimit,
-                                  OUTPUT liSubs,
-                                  OUTPUT liActLimit,
-                                  OUTPUT liActs) THEN
-   RETURN appl_err("Subscription limit exceeded").
+   lcError = Func.ValidateACC:mNewCustomerACCCompability(bOriginalCustomer.category,
+                                                         ttCustomer.OrgId,
+                                                         ttCustomer.CustIdType).
+   IF lcError > ""
+   THEN RETURN appl_err(lcError).
 END.
+
+/*YPR-4772*/
+/*acc is not allowed for convergent tariffs.*/
+IF fIsConvergenceTariff(MobSub.CLIType) AND
+   LOOKUP(STRING(MobSub.MsSeq), fCParamC("PassConvergentACC")) = 0 THEN
+   RETURN appl_err("Not allowed for fixed line tariffs").
 
 lcCode = fCreateAccDataParam(
           (BUFFER ttCustomer:HANDLE),

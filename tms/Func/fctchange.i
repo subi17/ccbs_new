@@ -17,7 +17,6 @@
 {Func/fctserval.i}
 {Func/matrix.i}
 {Syst/tmsconst.i}
-{Mnp/mnpoutchk.i}
 {Mnp/mnp.i}
 {Mm/requestaction_exec.i}
 {Func/fcustpl.i}
@@ -172,14 +171,15 @@ FUNCTION fIsSTCAllowed RETURNS LOGIC
 END FUNCTION. /* FUNCTION fIsSTCAllowed RETURNS LOGIC */
    
 FUNCTION fValidateMobTypeCh RETURNS LOGICAL
-   (INPUT  iiMsSeq AS INT,
-    INPUT  icNewCLIType AS CHAR,
-    INPUT  ideSTCtamp AS DEC,
-    INPUT  ilExtendContract AS LOG,
+   (INPUT  iiMsSeq           AS INT,
+    INPUT  icNewCLIType      AS CHAR,
+    INPUT  ideSTCtamp        AS DEC,
+    INPUT  ilExtendContract  AS LOG,
     INPUT  plByPassTypeCheck AS LOG,
-    INPUT  piOrderID AS INT,
-    INPUT  icReqSource   AS CHAR,
-    OUTPUT ocError      AS CHAR):
+    INPUT  piOrderID         AS INT,
+    INPUT  icReqSource       AS CHAR,
+    INPUT  llgMerge          AS LOG, 
+    OUTPUT ocError           AS CHAR):
 
    DEF VAR ocResult AS CHARACTER NO-UNDO.
    DEF VAR lcMNP AS CHARACTER NO-UNDO. 
@@ -230,17 +230,20 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       END. 
    END.
    ELSE DO:
-      IF fIsConvergenceTariff(NewCLIType.Clitype) AND fIsConvergenceTariff(MobSub.CLItype) EQ FALSE AND
-         piOrderID EQ 0 THEN DO:
+      IF NOT llgMerge                                  AND 
+         fIsConvergenceTariff(NewCLIType.Clitype)      AND 
+         fIsConvergenceTariff(MobSub.CLItype) EQ FALSE AND
+         piOrderID                            EQ 0     THEN DO:
          ocError = "Function not allowed due to business rules!".
          RETURN FALSE.
       END.
    END.
 
    /* partial convergent to mobile */
-   IF (mobsub.msstatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+   IF NOT llgMerge                                       AND
+      (mobsub.msstatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
        mobsub.msstatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND 
-       piOrderID EQ 0 THEN DO:
+       piOrderID       EQ 0                              THEN DO:
 
       IF CAN-FIND(FIRST Order NO-LOCK WHERE
                         Order.MsSeq = mobsub.msseq AND
@@ -267,7 +270,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    IF ocError NE "" THEN RETURN FALSE.
    
    /* 4 */
-   lcMNP = fGetMNPOutOngoing(MobSub.CLI).
+   lcMNP = Mnp.MNPOutGoing:mGetMNPOutOngoing(MobSub.CLI).
    IF lcMNP NE "" THEN DO: 
       
       FIND MNPProcess WHERE

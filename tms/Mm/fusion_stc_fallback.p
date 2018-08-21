@@ -73,6 +73,7 @@ IF fValidateMobTypeCh(
    TRUE, /* bypass stc type check */
    0, /* stc order id */
    "",
+   FALSE,
    OUTPUT lcError) EQ FALSE THEN RETURN lcError.
 
 IF fValidateNewCliType(INPUT lcCLIType, INPUT lcBundleID,

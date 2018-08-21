@@ -29,12 +29,15 @@ DEF VAR liParams       AS INT     NO-UNDO.
 DEF VAR ldPrice        AS DECIMAL NO-UNDO.
 DEF VAR liServStatus   AS INT     NO-UNDO.
 DEF VAR lcServCompList AS CHAR    NO-UNDO.
+DEF VAR lcReqMemo      AS CHAR    NO-UNDO.
+DEF VAR lcStatusStr    AS CHAR    NO-UNDO.
 
 DEFINE BUFFER bf_TPService_Deactivation FOR TPService.
 
 FUNCTION fGetSVAStatus RETURNS INTEGER
   (iiMsSeq   AS INT,
-   icDCEvent AS CHAR):
+   icDCEvent AS CHARACTER ,
+   OUTPUT ocReqMemo AS CHARACTER):
 
   DEF VAR liStatus AS INT     NO-UNDO.
 
@@ -58,6 +61,7 @@ FUNCTION fGetSVAStatus RETURNS INTEGER
         liStatus = 3. /*Pending deactivation*/
      ELSE 
         liStatus = 0. /*Inactive*/
+     ocReqMemo = MsRequest.Memo.
   END.
   ELSE 
       liStatus = 0. /*Inactive, never requested activation*/
@@ -65,6 +69,18 @@ FUNCTION fGetSVAStatus RETURNS INTEGER
   RETURN liStatus.
       
 END FUNCTION.  
+
+FUNCTION fExtractWebContractId RETURNS CHARACTER(INPUT icMemo AS CHARACTER ) :
+    DEFINE VARIABLE ii     AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcChar AS CHARACTER NO-UNDO.
+    DO ii = 1 TO NUM-ENTRIES(icMemo):
+        lcChar = ENTRY(ii,icMemo).
+        IF TRIM(lcChar) BEGINS 'WebContractID=' THEN 
+            RETURN ENTRY(2,lcChar,"="). 
+    END.
+    RETURN ''.
+END FUNCTION. 
+
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN 
     RETURN.
@@ -112,6 +128,12 @@ FOR EACH daycampaign NO-LOCK:
                               FMItem.PriceList <> ""                   AND
                               FMItem.FromDate  <= TODAY                AND 
                               FMItem.ToDate    >= TODAY                NO-LOCK NO-ERROR.
+      FIND FIRST DCCLI NO-LOCK WHERE
+                 DCCLI.MsSeq      = mobsub.MsSeq         AND
+                 DCCLi.ValidTo   >= TODAY                AND
+                 DCCLI.Brand      = Syst.Var:gcBrand     AND
+                 DCCLi.DCEvent    = DayCampaign.DCEvent NO-ERROR. 
+                    
       IF AVAIL FMItem THEN 
           ldPrice = FMItem.Amount.
       ELSE 
@@ -120,8 +142,17 @@ FOR EACH daycampaign NO-LOCK:
       top_struct = add_struct(top_array, "").
       add_string(top_struct, "service_id", daycampaign.dcevent).    
       add_double(top_struct, "price"   , ldPrice).
-      add_string(top_struct, "status"  , STRING(fGetSVAStatus(piMsSeq, daycampaign.dcevent))).
+      lcStatusStr = STRING(fGetSVAStatus(piMsSeq, daycampaign.dcevent , OUTPUT lcReqMemo)).
+      add_string(top_struct, "status"  , lcStatusStr ).
       add_string(top_struct, "category", "pro").
+      IF AVAILABLE DCCLI THEN 
+         add_string(top_struct, "contract_id", DCCli.WebContractId ).
+      ELSE DO:
+         IF lcStatusStr NE '0' THEN  
+            add_string(top_struct, "contract_id", fExtractWebContractId(lcReqMemo)).
+         ELSE 
+            add_string(top_struct, "contract_id", "").         
+      END.
    END.
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
@@ -169,7 +200,7 @@ FOR EACH daycampaign NO-LOCK:
        IF AVAIL FMItem THEN 
            ldPrice = FMItem.Amount.
        ELSE 
-           ldPrice = 0.
+           ldPrice = 0. 
 
        top_struct = add_struct(top_array, "").
        add_string(top_struct, "service_id", Daycampaign.DCEvent).    

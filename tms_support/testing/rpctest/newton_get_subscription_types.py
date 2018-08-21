@@ -19,7 +19,7 @@ else:
    var1 = sys.argv[1]
    var2 = sys.argv[2]
 
-p=s.newton.get_subscription_types({'cli_type':var1,
+p=s.newton.get_subscription_types('yoigo',{'cli_type':var1,
                                    'bundle_id':var2})
 
 print_results(p)

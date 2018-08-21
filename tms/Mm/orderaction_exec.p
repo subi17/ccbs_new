@@ -31,6 +31,9 @@ DEF VAR lcAllPostpaidContracts AS CHAR NO-UNDO.
 DEF VAR lcFHParam AS CHAR NO-UNDO. 
 DEF VAR lcSHParam AS CHAR NO-UNDO. 
 DEF VAR lcBundleId AS CHAR NO-UNDO.
+DEFINE VARIABLE lcContractID AS CHARACTER NO-UNDO.
+DEFINE VARIABLE iCounter     AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcItemParams AS CHARACTER NO-UNDO.
 
 FIND FIRST MSRequest WHERE
            MSRequest.brand EQ Syst.Var:gcBrand AND
@@ -359,10 +362,28 @@ PROCEDURE pPeriodicalContract:
          END.     
       END.
 
-      ASSIGN lcSVAParams = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "").
+      ASSIGN
+          lcSVAParams  = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "")
+          lcContractID = "" .
 
-      IF lcSVAParams <> "" THEN
-          lcSVAParams = lcSVAParams + (IF OrderAction.ItemParam <> "" THEN "|||" ELSE "") + OrderAction.ItemParam.
+      IF lcSVAParams <> "" THEN DO:
+          lcItemParams = OrderAction.ItemParam.
+          DO iCounter = 2 TO 5:
+              IF NUM-ENTRIES(lcItemParams,"|") >= iCounter THEN  
+                  IF ENTRY(iCounter,lcItemParams,"|") BEGINS "contract_id" THEN
+                    ASSIGN  
+                      lcContractID = ENTRY(2,ENTRY(iCounter,lcItemParams,"|"),"=")
+                      ENTRY(iCounter,lcItemParams,"|") = CHR(10) + CHR(13)
+                      lcItemParams = REPLACE(lcItemParams ,( "|" + CHR(10) + CHR(13) )  , "") .
+          END.
+          CASE DayCampaign.DCEvent :
+              WHEN "OFFICE365" OR 
+              WHEN "FAXTOEMAIL" THEN DO:
+                  lcSVAParams = lcSVAParams + "|" + lcItemParams.
+              END.
+              OTHERWISE lcSVAParams = lcSVAParams + (IF lcItemParams <> "" THEN "|||" ELSE "") + lcItemParams. 
+          END CASE.
+      END.
 
       liRequest = fPCActionRequest(MobSub.MsSeq,
                                 OrderAction.ItemKey,
@@ -381,6 +402,11 @@ PROCEDURE pPeriodicalContract:
                                 0,
                                 lcSVAParams,
                                 OUTPUT lcResult).
+         IF liRequest NE 0 AND lcContractID NE "" THEN DO:
+            FIND MsRequest WHERE MsRequest.MsRequest = liRequest EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+               IF AVAIL MsRequest THEN
+                    ASSIGN MsRequest.Memo = MsRequest.Memo + (IF MsRequest.Memo > "" THEN ", "  ELSE "") + "WebContractID=" + lcContractID.
+         END.
    END.
  
    IF liRequest = 0 THEN 

@@ -25,6 +25,7 @@
 "1" "NAM" "Network access" "" "" "" "" "" "" "" "" "" "" "Network access" "" no 0 1 yes 0 "1" "" 0 0 no 0 no "" "" "" 0 "" "" "" ""
 "9" "NTFNBR" "Notify Number" "" "" "" "" "" "" "" "" "" "" "Numero SMS-viesteille" "" yes 0 1 yes 0 "1" "" 1 0 no 1 no "" "" "" 0 "" "" "" ""
 "9" "NUMBERINQ" "Number inquiry" "" "" "" "" "" "" "" "" "" "" "Numerotiedustelu" "" no 0 1 yes 0 "1" "" 1 0 yes 0 no "" "" "" 0 "" "" "" ""
+"1" "NW" "Network profile" "" "" "" "" "" "" "" "" "" "" "Network profile" "" no 1 3 yes 0 "1" "" 0 0 no 0 no "" "" "" 0 "" "" "" ""
 "1" "OBA" "Barring of all incoming and outgoing calls" "" "" "" "" "" "" "" "" "" "" "Barring of all incoming and outgoing calls" "" no 0 1 yes 0 "1" "" 0 0 no 0 no "" "" "" 0 "" "" "" ""
 "1" "OBI" "Operator determined barring of incoming calls" "" "" "" "" "" "" "" "" "" "" "" "" no 0 2 yes 0 "1" "" 0 0 no 0 no "" "" "" 0 "" "" "" ""
 "1" "OBO" "Operator Determined Barring Of All outgoing C" "" "" "" "" "" "" "" "" "" "" "" "" no 0 2 yes 0 "1" "" 0 0 no 0 no "" "" "" 0 "" "" "" ""

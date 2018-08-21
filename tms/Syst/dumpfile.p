@@ -82,7 +82,7 @@ FORM
     DumpFile.Brand          COLON 20
     DumpFile.BatchID        COLON 60
     DumpFile.DumpID         COLON 20
-    DumpFile.DumpName       COLON 20
+    DumpFile.DumpName       COLON 20 FORMAT "X(22)"
     DumpFile.Active         COLON 20
     DumpFile.FileCategory   COLON 20
     DumpFile.MainTable      COLON 20 

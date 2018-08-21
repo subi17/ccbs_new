@@ -7,6 +7,7 @@
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/istc.i}
+{Func/bundleupsells.i}
    
 DEF VAR lcPMDUBUpsell     AS CHAR NO-UNDO.
 DEF VAR lcIPLData         AS CHAR NO-UNDO. 
@@ -26,7 +27,7 @@ ASSIGN
    lcDSSUpsell     = fCParamC("TMQueueDSSUpsell")
    lcIPLData       = fCParamC("TMQueueIPLData")
    lcBonoData      = fCParamC("TMQueueBonoData").
-
+      
 FUNCTION fGetBDestCount RETURNS DECIMAL (INPUT iiMsSeq       AS INT,
                                      INPUT icBundleId    AS CHAR,
                                      INPUT idActDate     AS DATE):
@@ -73,7 +74,8 @@ FUNCTION fUpsellBundleCountNew RETURN INT
    DEF VAR lcUpsellContracts AS CHAR NO-UNDO.
    DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
    DEF VAR lcIPLContracts    AS CHAR NO-UNDO.
-   DEF VAR lcFLATContracts   AS CHAR NO-UNDO.
+   DEF VAR liLoop            AS INT NO-UNDO. 
+   DEF VAR lcBundleUpsell    AS CHAR NO-UNDO.
 
    DEF BUFFER ServiceLimit   FOR ServiceLimit.
    DEF BUFFER MServiceLimit  FOR MServiceLimit.
@@ -88,8 +90,7 @@ FUNCTION fUpsellBundleCountNew RETURN INT
           ldeTime     = Func.Common:mMake2DT(idtDate, 86399)
           ldeMonthBegin = Func.Common:mMake2DT(DATE(MONTH(idtDate),1,YEAR(idtDate)),0)
           lcIPLContracts  = fCParamC("IPL_CONTRACTS")
-          lcBONOContracts = fCParamC("BONO_CONTRACTS")
-          lcFLATContracts = fCParamC("FLAT_CONTRACTS").
+          lcBONOContracts = fCParamC("BONO_CONTRACTS").
    
    IF LOOKUP(STRING(iiTMRuleSeq),lcBonoData) > 0 THEN
       lcDataBundleContract = "BONO".
@@ -100,18 +101,22 @@ FUNCTION fUpsellBundleCountNew RETURN INT
    ELSE IF LOOKUP(STRING(iiTMRuleSeq),lcBaseContracts) > 0 THEN DO:
       lcDataBundleContract = "BASE_CONTRACT".
 
-      FOR EACH ServiceLimit NO-LOCK WHERE 
-               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0 AND 
-               ServiceLimit.ValidFrom <= idtDate  AND
-               ServiceLimit.ValidTo   >= idtDate,
-         FIRST MServiceLimit WHERE 
-               MServiceLimit.MSSeq    = iiMSSeq               AND
-               MServiceLimit.DialType = ServiceLimit.DialType AND
-               MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND 
-               MServiceLimit.FromTS  <= ldeTime              AND
-               MServiceLimit.EndTS   >= ldeTime NO-LOCK:
-         /* Set a high number to prevent limit triggering */
-         liUpSellCount = 100.
+      BONO_CONTRACT_LOOP:
+      DO liLoop = 1 TO NUM-ENTRIES(lcBONOContracts):
+         FOR EACH ServiceLimit NO-LOCK WHERE 
+                  ServiceLimit.GroupCode = ENTRY(liLoop,lcBONOContracts) AND 
+                  ServiceLimit.ValidFrom <= idtDate  AND
+                  ServiceLimit.ValidTo   >= idtDate,
+            FIRST MServiceLimit WHERE 
+                  MServiceLimit.MSSeq    = iiMSSeq               AND
+                  MServiceLimit.DialType = ServiceLimit.DialType AND
+                  MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND 
+                  MServiceLimit.FromTS  <= ldeTime              AND
+                  MServiceLimit.EndTS   >= ldeTime NO-LOCK:
+            /* Set a high number to prevent limit triggering */
+            liUpSellCount = 100.
+            LEAVE BONO_CONTRACT_LOOP.
+         END.
       END.
    END.
 
@@ -128,19 +133,21 @@ FUNCTION fUpsellBundleCountNew RETURN INT
             DayCampaign.DCEvent = bServiceLimit.GroupCode AND
             LOOKUP(STRING(DayCampaign.DCType),
                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
+                       
+      ASSIGN lcBundleUpsell = fGetDayCampaignUpsells(DayCampaign.DCEvent).
       
       CASE lcDataBundleContract:
          WHEN "BONO" THEN DO:
             IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) = 0 THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell + ",UPGRADE_UPSELL".
+            lcUpsellContracts = lcBundleUpsell + ",UPGRADE_UPSELL".
          END.
          WHEN "CONTRD" THEN DO:
             IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) = 0 THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell + ",UPGRADE_UPSELL".
+            lcUpsellContracts = lcBundleUpsell + ",UPGRADE_UPSELL".
          END.
          WHEN "PMDUB" THEN DO:
             IF DayCampaign.DCEvent <> lcDataBundleContract THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell.
+            lcUpsellContracts = lcBundleUpsell.
          END.
          WHEN "BASE_CONTRACT" THEN DO:
             IF NOT (DayCampaign.DCEvent BEGINS "DUB"    OR
@@ -155,15 +162,16 @@ FUNCTION fUpsellBundleCountNew RETURN INT
                     DayCampaign.DCEvent BEGINS "CONTF"  OR
                     DayCampaign.DCEvent BEGINS "CONTD"  OR
                     DayCampaign.DCevent EQ "CONT15") THEN NEXT.
-            lcUpsellContracts = DayCampaign.BundleUpsell.
+            lcUpsellContracts = lcBundleUpsell.
          END.
          OTHERWISE NEXT.
       END CASE. /* CASE icBundleType: */
 
       odeLimitAmt = bMServiceLimit.InclAmt.
 
+      DO liLoop = 1 TO NUM-ENTRIES(lcUpsellContracts):
       FOR EACH ServiceLimit NO-LOCK WHERE 
-         LOOKUP(ServiceLimit.GroupCode,lcUpsellContracts) > 0 AND
+               ServiceLimit.GroupCode = ENTRY(liLoop,lcUpsellContracts) AND
                 ServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
                 ServiceLimit.ValidFrom <= idtDate  AND
                 ServiceLimit.ValidTo   >= idtDate,
@@ -189,6 +197,7 @@ FUNCTION fUpsellBundleCountNew RETURN INT
                   ldeUpsellAmt = MserviceLPool.LimitAmt WHEN 
                      ldeUpsellAmt < MserviceLPool.LimitAmt.
             END CASE.
+      END.
       END.
       
       odeLimitAmt = odeLimitAmt + ldeUpsellAmt.

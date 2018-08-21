@@ -18,6 +18,7 @@ DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 DEFINE STREAM strexport.
 
 {utilities/newtariff/chartointmap.i}
+{Syst/tmsconst.i}
 
 &GLOBAL-DEFINE TYPE "Type"
 &GLOBAL-DEFINE BTYPE "BundleType"
@@ -297,6 +298,7 @@ PROCEDURE pReadBundle:
 
    DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcTempVar   AS CHARACTER NO-UNDO.
 
    INPUT STREAM strin FROM VALUE(icFile).
 
@@ -316,27 +318,29 @@ PROCEDURE pReadBundle:
    IF lcError > ""
    THEN UNDO, THROW NEW Progress.Lang.AppError(lcError, 1).
    
-   IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = fGetFieldValue({&BUNDLE}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Bundle '&1' already exists", fGetFieldValue({&BUNDLE})), 1). 
+   lcTempVar = fGetFieldValue({&BUNDLE}).
+   IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = lcTempVar)
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Bundle '&1' already exists", lcTempVar), 1).
 
-   IF fGetFieldValue({&MFBILLCODE}) > "" AND CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE}))    
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Feemodel '&1' already exists", fGetFieldValue({&MFBILLCODE})), 1).
-   
-   IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = fGetFieldValue({&BUNDLE}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("ServiceLimitGroup having GroupCode '&1' already exists", fGetFieldValue({&BUNDLE})), 1).
+   IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = lcTempVar)
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("ServiceLimitGroup having GroupCode '&1' already exists", lcTempVar), 1).
 
-   IF fGetFieldValue({&PRICELIST}) > "" AND
-      CAN-FIND(FIRST PriceList NO-LOCK WHERE PriceList.Brand = Syst.Var:gcBrand AND PriceList.PriceList = fGetFieldValue({&PRICELIST}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("PriceList '&1' already exists", fGetFieldValue({&PRICELIST})), 1). 
+   lcTempVar = fGetFieldValue({&MFBILLCODE}).
+   IF lcTempVar > "" AND CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = lcTempVar)    
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Feemodel '&1' already exists", lcTempVar), 1).
+
+   lcTempVar = fGetFieldValue({&PRICELIST}).
+   IF lcTempVar > "" AND
+      NOT CAN-FIND(FIRST PriceList NO-LOCK WHERE PriceList.Brand = Syst.Var:gcBrand AND PriceList.PriceList = lcTempVar)
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("PriceList '&1' doesn't exists", lcTempVar), 1). 
 
    CATCH err AS Progress.Lang.Error:
-      UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file data' + err:GetMessage(1), 1). 
+      UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file data ' + err:GetMessage(1), 1). 
    END CATCH.
 
    FINALLY:
       INPUT STREAM strin CLOSE.
-   END FINALLY.   
-
+   END FINALLY.
 
 END PROCEDURE.
 
@@ -703,6 +707,8 @@ PROCEDURE pStoreBundle:
    DEFINE VARIABLE lcProcessType    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liSlSeq          AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcDCUpsells      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liCount          AS INTEGER   NO-UNDO.
       
    ASSIGN
       lcBundle     = fGetFieldValue({&BUNDLE})
@@ -757,14 +763,36 @@ PROCEDURE pStoreBundle:
                                      THEN 0
                                      ELSE 1)
       DayCampaign.WeekDay         = ""
-      DayCampaign.BundleUpsell    = fGetFieldValue({&UPSELL})
       DayCampaign.FeeModel        = DayCampaign.BillCode
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          
       DayCampaign.TermFeeCalc     = 0.
-
-   fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).
       
+   fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).  
+    
+   ASSIGN lcDCUpsells = fGetFieldValue({&UPSELL}).
+   
+   DO liCount = 1 TO NUM-ENTRIES(lcDCUpsells):
+       
+       Syst.TMSRelation:mAddRelation({&DCTABLENAME},
+                                     {&DCKEYTYPE},
+                                     DayCampaign.DCEvent,
+                                     ENTRY(liCount,lcDCUpsells),
+                                     {&DCRELATIONTYPE},
+                                     YES).
+       
+       
+   END.
+   
+   FOR EACH TMSRelation NO-LOCK WHERE 
+            TMSRelation.TableName    =  {&DCTABLENAME}      AND 
+            TMSRelation.KeyType      =  {&DCKEYTYPE}        AND
+            TMSRelation.ParentValue  =  DayCampaign.DCEvent :
+   
+       fExport(icSpoolDir + "tmsrelation.d", HPD.HPDCommon:mDynExport(BUFFER TMSRelation:HANDLE, " ")).
+       
+   END.
+         
    IF ldeDataLimit > 0 THEN   
       RUN pDCServicePackage(lcBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).
 

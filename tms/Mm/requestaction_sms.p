@@ -84,6 +84,9 @@ PROCEDURE pRequestActions:
       CASE ttAction.ActionType:
 
       WHEN "SMS" THEN DO:
+         IF ihRequest::ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND ihRequest::SendSMS = FALSE THEN
+            NEXT. 
+
          IF NUM-ENTRIES(ttAction.ActionKey,"|") >= 1 THEN DO:
             ASSIGN lcSMSName = ENTRY(1,ttAction.ActionKey,"|")
                    lcSender  = ENTRY(2,ttAction.ActionKey,"|") no-error.

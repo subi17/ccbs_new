@@ -47,12 +47,14 @@ FORM
     SKIP
     "Customer Type.....:" OrderFusion.CustomerType
     SKIP
+    "IUA...............:" Orderfusion.IUA FORMAT "X(24)"
+    SKIP
     "Fixed Inst Time...:" lcInstallationTime FORMAT "X(24)"
     SKIP
     "Fixed status Time.:" lcFixedTime FORMAT "X(24)" 
     SKIP
     "Updated...........:" lcUpdateTS FORMAT "X(24)" 
-    SKIP(7)
+    SKIP(6)
  
 
 WITH OVERLAY ROW 1 WIDTH 80 centered

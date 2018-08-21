@@ -1,5 +1,5 @@
-1 "Available"
-4 "IN USE (Subscription)"
+1 ""
+4 ""
 5 "Temporally"
 7 "LOST"
 9 "RELEASED (optio for manual selection)"

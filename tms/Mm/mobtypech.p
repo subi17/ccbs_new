@@ -41,7 +41,6 @@
 {Func/fbankdata.i}
 {Func/matrix.i}
 {Syst/tmsconst.i}
-{Mnp/mnpoutchk.i}
 {Func/profunc.i}
 
 IF llDoEvent THEN DO:
@@ -59,8 +58,8 @@ DEF INPUT PARAMETER    iiMsSeq LIKE MobSub.MsSeq NO-UNDO.
 DEF NEW SHARED VAR siirto AS CHAR.
 
 DEF VAR ok            AS LOG                          NO-UNDO FORMAT "Yes/No".
-DEF VAR new-type      AS CHAR  FORMAT "X(8)"          NO-UNDO.
-DEF VAR new-type-nimi AS CHAR  FORMAT "X(12)"         NO-UNDO.
+DEF VAR new-type      AS CHAR  FORMAT "X(16)"          NO-UNDO.
+DEF VAR new-type-nimi AS CHAR  FORMAT "X(16)"         NO-UNDO.
 DEF VAR i             AS INT                          NO-UNDO.
 DEF VAR UserName      AS CHAR                         NO-UNDO. 
 DEF VAR minutes       AS INT                          NO-UNDO. 
@@ -170,7 +169,7 @@ form /* asks MSISDN number */
    " Customer ID....:" AgrCust.OrgID                                    
        "Active postpaid:" AT 41 liPostPaid                              SKIP
 "------------------------------------------------------------------------------"                                                                       SKIP
-   " New CLIType....:" new-type FORMAT "X(12)"
+   " New CLIType....:" new-type FORMAT "X(16)"
         HELP "Enter new mobile CONNECTION Cli Type"
        "(F9)"     
       "Bank Acc..:" AT 41 lcBankAccount FORMAT "X(24)"              SKIP
@@ -181,7 +180,7 @@ form /* asks MSISDN number */
      HELP "Time format (hh.mm)"                                         SKIP
    
    " Change fee ....:"   llCreateFees SKIP
-   " Data Bundle....:" lcBundle FORMAT "x(12)" SKIP
+   " Data Bundle....:" lcBundle FORMAT "x(12)" 
    WITH  OVERLAY ROW 2 centered
    COLOR VALUE(Syst.Var:cfc)TITLE COLOR VALUE(Syst.Var:ctc) " Subscription type change " 
    NO-LABELS SIDE-LABEL FRAME main.
@@ -608,6 +607,7 @@ REPEAT  WITH FRAME main:
       FALSE, /* bypass stc type check */
       0, /* stc order id */
       {&REQUEST_SOURCE_MANUAL_TMS},
+      FALSE,
       OUTPUT lcError) EQ FALSE THEN DO:
      MESSAGE
          lcError 
@@ -689,7 +689,7 @@ REPEAT  WITH FRAME main:
                    MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                    LOOKUP(STRING(MsRequest.ReqStatus),
                    {&REQ_INACTIVE_STATUSES}) = 0) AND
-               NOT fIsMNPOutOngoing(INPUT bbMobSub.CLI) THEN DO:
+               NOT Mnp.MNPOutGoing:mIsMNPOutOngoing(INPUT bbMobSub.CLI) THEN DO:
                MESSAGE "STC will also trigger subscription " +
                        bbMobSub.CLI + " termination (multisim secondary subscription)"
                VIEW-AS ALERT-BOX.

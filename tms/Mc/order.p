@@ -121,6 +121,7 @@ DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 {Func/orderfunc.i}
 {Mnp/mnp.i}
 {Func/freacmobsub.i}
+{Func/lib/accesslog.i}
 
 session:system-alert-boxes = true.
 
@@ -230,13 +231,14 @@ DEF VAR liRequestId AS INT NO-UNDO.
 DEF VAR lcDeliveryType AS CHAR NO-UNDO. 
 DEF VAR liDeliveryType AS INT NO-UNDO. 
 DEF VAR lcSIMonlyMNP AS CHAR NO-UNDO.   /* Added since this is used in ordersender.i */
+DEF VAR lcProgram    AS CHAR NO-UNDO.
+DEF VAR llAccess     AS LOG  NO-UNDO.
 
-DEF BUFFER UserCust    FOR Customer.
-DEF BUFFER InvCustomer FOR Customer.
-DEF BUFFER AgrCust     FOR Customer.
 DEF BUFFER bOldOrder FOR Order.
 DEF BUFFER bSIM FOR SIM.
 DEF BUFFER lbOrder FOR Order.
+
+lcProgram = PROGRAM-NAME(1).
 
 form
     "Title ........:" OrderCustomer.CustTitle                
@@ -385,58 +387,58 @@ FORM
 form
     "OrderID/status:" Order.OrderID "/" Order.Statuscode FORMAT "X(2)"
         lcStatus FORMAT "X(15)"
-
-    "Orderer .:" AT 48 Order.Orderer FORMAT "X(20)" 
+    "OrderType:" AT 48 Order.OrderType FORMAT ">9"
     SKIP
 
     "ContractID ...:" Order.ContractID 
-    "AuthCType:" AT 48 lcAuthCustIdType
+    "Custnum .:" AT 48 Order.Custnum FORMAT ">>>>>>>>9" 
     SKIP
 
     "MSISDN .......:" Order.CLI FORMAT "X(30)"
-    "AuthCusID:" AT 48 lcAuthCustId
+    "AuthCType:" AT 48 lcAuthCustIdType
     SKIP
     
     "ICC ..........:" Order.ICC FORMAT "X(30)" 
-    "OrdererIP:" AT 48 Order.OrdererIP FORMAT "X(20)"
+    "AuthCusID:" AT 48 lcAuthCustId
     SKIP
 
     "CLIType ......:" Order.CLIType FORMAT "X(12)"                     
-    "Campaign :" AT 48 Order.Campaign FORMAT "X(15)"
+    "OrdererIP:" AT 48 Order.OrdererIP
     SKIP                     
     
     "Payment Method:" Order.PayType 
-    "FATime ..:" AT 48 Order.FATAmount FORMAT "->>>9.99"
-       lcFatGroup FORMAT "X(11)"
+    "Campaign :" AT 48 Order.Campaign FORMAT "X(15)"
     SKIP
      
     "SubscriptionID:" Order.MsSeq 
-    "Reseller :" AT 48 Order.Reseller
+    "FATime ..:" AT 48 Order.FATAmount FORMAT "->>>9.99"
+       lcFatGroup FORMAT "X(11)"
     SKIP
 
     "Create request:" liMSrequest FORMAT ">>>>>>>>>"
-    "RiskCode:" AT 48 Order.RiskCode
+    "Reseller :" AT 48 Order.Reseller
     SKIP
     
     "MNP ..........:" NPStatName                         
-    "Salesman.:" AT 48  Order.SalesMan FORMAT "x(20)"
+    "RiskCode:" AT 48 Order.RiskCode
     SKIP
  
     "Operator .....:" Order.CurrOper FORMAT "x(30)"                    
        HELP "Current Operator. Choose entry with F9"
-    "OrderCh..:" AT 48  Order.OrderChannel                
+    "Salesman.:" AT 48  Order.SalesMan FORMAT "x(20)"
     SKIP
      
     "Old ICC ......:" Order.OldICC FORMAT "X(30)" 
-    "Source ..:" AT 48  Order.Source  
+    "OrderCh..:" AT 48  Order.OrderChannel                
     SKIP
 
     "Old P.Method .:" Order.OldPayType
-    "O.Payment:" AT 48 lcOrdPayMeth FORMAT "X(20)"
+    "Source ..:" AT 48  Order.Source  
     SKIP
 
     "Referee ......:" Order.Referee 
-    "Order Timestamps" AT 48 SKIP
+    "O.Payment:" AT 48 lcOrdPayMeth FORMAT "X(20)"
+    SKIP
 
     "Curr LO Status:" lcLOStatus FORMAT "x(30)"
     "Created .:" AT 48 lcCrStamp FORMAT "x(16)" 
@@ -1037,6 +1039,8 @@ BROWSE:
               NEXT Browse.
            END.
            
+           RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
+           
            RUN Mc/orderbr.p(lcCustomerId,lcCustIdType,icStatus,OUTPUT oOrderID).
                  
            FIND FIRST Order WHERE
@@ -1057,6 +1061,8 @@ BROWSE:
                          ordercustomer.brand      = lcBrand
               NO-LOCK NO-ERROR.
               IF AVAILABLE OrderCustomer THEN DO:
+                 RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
+                 
                  RUN Mc/orderbr.p(OrderCustomer.CustId,
                              OrderCustomer.CustIdType,icStatus,
                              OUTPUT oOrderID).
@@ -1203,7 +1209,7 @@ PROCEDURE pOrderView:
                         THEN 2242 /* invoice customer */
                         ELSE 0)
               Syst.Var:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
-                              RowType = {&ORDERCUSTOMER_ROWTYPE_USER})
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_ACC})
                         THEN 2247 /* user customer */
                         ELSE 0)
               Syst.Var:ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
@@ -1238,7 +1244,7 @@ PROCEDURE pOrderView:
            END.
 
            ELSE IF Syst.Var:toimi = 3 THEN DO:
-              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_USER},FALSE).
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_ACC},FALSE).
            END.
 
            ELSE IF Syst.Var:toimi = 4 THEN DO:
@@ -1652,11 +1658,17 @@ PROCEDURE local-find-others-common.
 
    ASSIGN lcStamp = Func.Common:mTS2HMS(Order.CrStamp)
           lcStatus = fStatusText(Order.StatusCode).
-   FIND FIRST OrderCustomer OF Order WHERE
-              OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+   FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
    IF AVAIL OrderCustomer THEN
       lcCustID = OrderCustomer.CustID.
-   ELSE lcCustID = "".
+   ELSE DO:
+      FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
+           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_ACC} NO-ERROR.
+      IF AVAIL OrderCustomer THEN
+      lcCustID = OrderCustomer.CustID.
+      ELSE lcCustID = "".
+   END.
     
    IF CAN-FIND(FIRST Memo WHERE
                      Memo.Brand     = Order.Brand AND
@@ -1722,10 +1734,8 @@ PROCEDURE local-find-others.
             OrderCustomer.OrderId = Order.OrderId:
 
       CASE OrderCustomer.RowType:
-      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
-         IF OrderCustomer.CustNum > 0 THEN 
-            FIND AgrCust WHERE AgrCust.CustNum = OrderCustomer.CustNum 
-               NO-LOCK NO-ERROR.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} OR
+      WHEN {&ORDERCUSTOMER_ROWTYPE_ACC} THEN DO:
          lcAgrCust = Func.Common:mDispOrderName(BUFFER OrderCustomer).
          ASSIGN
             lcAuthCustId     = OrderCustomer.AuthCustId
@@ -1787,6 +1797,11 @@ PROCEDURE local-find-others.
                     MSRequest.MSSeq      = Order.MSSeq    AND 
                     MSrequest.ReqType    = 46             AND 
                     MSrequest.ReqIparam1 = Order.OrderId No-LOCK NO-ERROR.
+      ELSE IF Order.OrderType = {&ORDER_TYPE_ACC} THEN
+         FIND FIRST Msrequest WHERE 
+                    MSRequest.MSSeq      = Order.MSSeq    AND 
+                    MSrequest.ReqType    = 10             AND 
+                    MSrequest.ReqIparam4 = Order.OrderId No-LOCK NO-ERROR.
       ELSE DO:
          FIND FIRST Msrequest WHERE 
                     MSRequest.MSSeq      = Order.MSSeq    AND 
@@ -1825,9 +1840,10 @@ PROCEDURE local-disp-lis:
          Order.StatusCode
          lcStatus
          Order.ContractID
-         Order.Orderer
+         Order.Custnum
          lcAuthCustIdType
          lcAuthCustId
+         Order.OrderType
          Order.OrdererIP
          Order.CLIType
          Order.CLI 
@@ -1991,8 +2007,15 @@ PROCEDURE local-update-customer:
    ASSIGN liCustRole   = iiRole
           lcCurrHeader = ac-hdr.
           
+   llAccess = FALSE. 
+      
    CASE iiRole:
-      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN lcNewHeader = " AGREEMENT".
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
+         ASSIGN
+            lcNewHeader = " AGREEMENT"
+            llAccess    = TRUE
+            .      
+      END. 
       WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
          IF Order.InvCustRole NE 2 THEN DO:
             MESSAGE "Invoice customer role is" Order.InvCustRole
@@ -2024,6 +2047,9 @@ PROCEDURE local-update-customer:
       WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER} THEN DO:
          lcNewHeader = " FIX DONOR".
       END.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_ACC} THEN DO:
+         lcNewHeader = " ACC".
+      END.
    END CASE.
 
    IF Order.StatusCode = "73" AND
@@ -2039,6 +2065,9 @@ PROCEDURE local-update-customer:
       VIEW-AS ALERT-BOX ERROR.
       RETURN.
    END.
+
+   IF llAccess THEN
+      RUN CreateReadAccess("OrderCustomer", Syst.Var:katun, OrderCustomer.OrderId, lcProgram, "OrderId" ).
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderCustomer).
 

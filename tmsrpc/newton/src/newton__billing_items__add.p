@@ -118,23 +118,32 @@ IF llDoEvent THEN DO:
    lhBillItem = BUFFER BillItem:HANDLE.
    RUN StarEventInitialize(lhBillItem).
 END.
-
+ 
 CREATE BillItem.       
 ASSIGN
-   BillItem.Brand    = lcBrand
-   BillItem.BillCode = pcId
-   BillItem.DispMPM = FALSE
-   BillItem.BIGroup = pcBIGroup
-   BillItem.BIName  = pcName 
-   BillItem.AccNum = liccAcount
-   BillItem.AltAccNum = liccAcount
-   BillItem.VipAccNum = liccAcount
-   BillItem.EUConAccNum = liccAcount
-   BillItem.EUAccNum = liccAcount
-   BillItem.FSAccNum = liccAcount
-   BillItem.TaxClass = lcTaxClass
-   BillItem.SAPRid = lcCCSAPRId. 
+    BillItem.Brand    = lcBrand
+    BillItem.BillCode = pcId
+    BillItem.DispMPM  = FALSE
+    BillItem.BIGroup  = pcBIGroup
+    BillItem.BIName   = pcName 
+    BillItem.TaxClass = lcTaxClass
+    NO-ERROR. 
 
+CREATE CCRule.
+ASSIGN 
+    CCRule.Brand       = BillItem.Brand
+    CCRule.CCRuleID    = NEXT-VALUE(CCRuleSeq)
+    CCRule.Category    = "*"
+    CCRule.BillCode    = BillItem.BillCode
+    CCRule.ValidFrom   = TODAY
+    CCRule.ValidTo     = DATE(12,31,2049)   
+    CCRule.ReportingID = BillItem.SAPRid
+    CCRule.AccNum      = liccAcount
+    CCRule.EUAccNum    = liccAcount
+    CCRule.EUConAccNum = liccAcount
+    CCRule.FSAccNum    = liccAcount
+    CCRule.ReportingID = lcCCSAPRId NO-ERROR. 
+        
 IF llDoEvent THEN DO:
    RUN StarEventMakeCreateEvent (lhBillItem).
    fCleanEventObjects().

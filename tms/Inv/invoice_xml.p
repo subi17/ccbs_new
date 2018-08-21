@@ -756,6 +756,7 @@ PROCEDURE pSubInvoice2XML:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
          lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
+         lhXML:WRITE-DATA-ELEMENT("CustomerIUA", ttSub.IUA).
          lhXML:END-ELEMENT("CustomContract").
       END.
       IF ttSub.MessageType > "" THEN DO:

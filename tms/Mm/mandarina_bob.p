@@ -193,7 +193,7 @@ REPEAT:
       END.
 
       /* Check DEBT barring status */
-      lcBarrings = fGetActiveBarrings (mobsub.MsSeq).
+      lcBarrings = Func.BarrMethod:mGetActiveBarrings(mobsub.MsSeq).
       IF lcBarrings <> "" THEN DO:
          IF LOOKUP("DEBT_LP", lcBarrings) <> 0 OR LOOKUP("DEBT_HOTLP", lcBarrings) <> 0 THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
@@ -216,12 +216,10 @@ REPEAT:
       END.
       lcErr = "".
       IF lcAction EQ "on" THEN DO:
-         /* No activate LP if ICC Changed */
-         IF fICCDoneRecently(mobsub.MsSeq) THEN DO:
-            PUT STREAM sCurrentLog UNFORMATTED
-               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ICC_DONE_RECENTLY" SKIP.
-            NEXT.
-         END.
+
+         /* YBU-6046: Removed "Recently ICC Change" checking.  */
+         /* "Recently ICC Change" mustn't to be check anymore. */ 
+         
          /* Begin YDR-2668 */
          IF LcLP EQ "InternetBarring" THEN DO:
             IF LOOKUP("Internet", lcBarrings) <> 0 THEN DO:
@@ -261,11 +259,11 @@ REPEAT:
                                                       ELSE "REDIRECTION_OTFAILED2"),         
                                                INPUT mobsub.CustNum,                          /*Customer number for memo*/
                                                INPUT (IF LcLP EQ "Mandarina1"                  /*Memo title*/ 
-                                                      THEN "LP1 - Migración red - Activada"
-                                                      ELSE "LP2 - Migración red - Activada"),  
+                                                      THEN "LP GDPR Activada"
+                                                      ELSE "LP GDPR Activada"),  
                                                INPUT  (IF LcLP EQ "Mandarina1"                 /*Memo text*/ 
-                                                     THEN "Landing Page 1 - Activada"
-                                                      ELSE "Landing Page 2 - Activada"),       
+                                                      THEN "Activada la LP de GDPR"
+                                                      ELSE "Activada la LP de GDPR"),       
                                                INPUT "Sistema",                               /*Creator tag for memo*/
                                                INPUT "11",                                    /*Source, 11 -> Bob Tool*/ 
                                                INPUT-OUTPUT lcErr).                           /*Request creation info*/
@@ -322,11 +320,11 @@ REPEAT:
                                                INPUT "remove",         
                                                INPUT mobsub.CustNum,                              /*Customer number for memo*/
                                                INPUT (IF LcLP EQ "Mandarina1"                      /*Memo title*/ 
-                                                      THEN "LP1 - Migración red - Desactivada"
-                                                      ELSE "LP2 - Migración red - Desactivada"),  
+                                                      THEN "LP GDPR Desactivada"
+                                                      ELSE "LP GDPR Desactivada"),  
                                                INPUT  (IF LcLP EQ "Mandarina1"                     /*Memo text*/ 
-                                                      THEN "Landing Page 1 - Desactivada"
-                                                      ELSE "Landing Page 2 - Desactivada"),       
+                                                      THEN "Desactivada la LP de GDPR"
+                                                      ELSE "Desactivada la LP de GDPR"),       
                                                INPUT "Sistema",                                   /*Creator tag for memo*/
                                                INPUT "11",                                        /*Source, 11 -> Bob Tool*/ 
                                                INPUT-OUTPUT lcErr).                               /*Request creation info*/

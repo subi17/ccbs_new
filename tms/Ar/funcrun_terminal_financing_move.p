@@ -97,7 +97,7 @@ OUTPUT STREAM sout to VALUE(lcLogFile).
 OUTPUT STREAM sout2 to VALUE(lcLogFile2).
 
 put stream sout unformatted
-   "ORDER_ID|MSSEQ|CUSTNUM|FF_ID|FINANCED_RESULT|<MOVE/UPDATE/ERROR>:[DETAILS]" skip.
+   "ORDER_ID|MSSEQ|CUSTNUM|FF_ID|FINANCED_RESULT|LO_STATUS|<MOVE/UPDATE/ERROR>:[DETAILS]" skip.
 
 put stream sout2 unformatted
   "MSISDN;SUBSCRIPTION_ID;ORDER_ID;PAYTERM_TYPE_MOVED;DATE" SKIP.
@@ -257,13 +257,20 @@ FOR EACH FixedFee NO-LOCK WHERE
       
       FIND LAST bffitem NO-LOCK USE-INDEX FFNum WHERE
                 bffitem.ffnum = fixedfee.ffnum NO-ERROR.
+
+      FIND FIRST OrderDelivery NO-LOCK USE-INDEX OrderID WHERE
+                 OrderDelivery.Brand = Order.Brand AND
+                 OrderDelivery.OrderID = Order.OrderID NO-ERROR.
       
       put stream sout unformatted 
          Order.OrderID "|"
          Order.MsSeq "|"
          Order.Custnum "|"
          FixedFee.FFNUM "|"
-         FixedFee.FinancedResult "|MOVE:"
+         FixedFee.FinancedResult "|" 
+         (IF AVAIL OrderDelivery 
+          THEN STRING(OrderDelivery.LOStatusID) ELSE "")
+         "|MOVE:"
          FFItem.FFItemNum ";"
          DCCLI.PerContractId ";"
          "|BEFORE_VALUES;"
@@ -275,6 +282,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          FixedFee.BegPeriod ";"
          DCCLI.ValidFrom ";"
          DCCLI.ValidTo ";"
+         DCCLI.ContractDate ";"
          (IF AVAIL SingleFee THEN SingleFee.billperiod ELSE ?) ";"
          (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) ";".
 
@@ -316,6 +324,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          FixedFee.BegPeriod ";"
          DCCLI.ValidFrom ";"
          DCCLI.ValidTo ";"
+         DCCLI.ContractDate ";"
          (IF AVAIL SingleFee THEN SingleFee.billperiod ELSE ?) ";"
          (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) skip.
      

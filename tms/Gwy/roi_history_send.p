@@ -15,6 +15,7 @@
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
+{Func/dms.i}
 
 Syst.Var:gcBrand = "1".
 
@@ -32,8 +33,28 @@ DEFINE VARIABLE lcOrderTime AS CHARACTER NO-UNDO.
 DEFINE VARIABLE cConnURL AS CHARACTER NO-UNDO.
 DEFINE VARIABLE iTimeOut AS INTEGER NO-UNDO.
 DEFINE VARIABLE liNumMsgs AS INTEGER NO-UNDO.
+DEFINE VARIABLE liPrintXML AS INTEGER NO-UNDO.
 
 DEF BUFFER bOrder FOR Order.
+/*For testing*/
+liPrintXML = 0.
+DEF STREAM sOut.
+ 
+/*NOTE: This must be modified to match our functionality naming. */
+FUNCTION fwriexml_ROI_test RETURNS CHAR /* Ilkka: change good function name and output writinc values.*/
+   (icMethod AS CHAR):
+   IF liPrintXML NE 0 THEN DO:
+      xmlrpc_initialize(FALSE).
+      OUTPUT STREAM sOut TO VALUE("/tmp/ROI_xml_" +
+      REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") +
+      ".xml") APPEND.
+      PUT STREAM sOut UNFORMATTED
+         string(serialize_rpc_call( icMethod)) SKIP.
+      PUT STREAM sOut "" SKIP.
+      OUTPUT STREAM sOut CLOSE.
+      xmlrpc_initialize(FALSE).
+   END.
+END.
 
 FORM
    SKIP(1)
@@ -59,6 +80,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    add_string(pcStruct, "cli", Order.CLI). 
    add_string(pcStruct, "subscription_type", Order.CLIType).
    add_string(pcStruct, "order_id", STRING(Order.OrderId)).
+   add_string(pcStruct, "dms_status", fGetOrderDMSStatus(Order.OrderId)).
    /* optionals  */
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = Syst.Var:gcBrand AND
@@ -307,6 +329,32 @@ FUNCTION fFillAccessoryStruct RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+FUNCTION fFillPOSStruct RETURNS LOGICAL
+   (INPUT pcStruct AS CHARACTER):
+
+   FIND FIRST OrderCustomer WHERE
+              OrderCustomer.Brand   = Syst.Var:gcBrand   AND
+              OrderCustomer.OrderId = Order.OrderId      AND 
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} NO-LOCK NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
+
+   add_string(pcStruct, "gescal"       ,  OrderCustomer.Gescal       ).
+   add_string(pcStruct, "street_type"  ,  OrderCustomer.StreetType   ).
+   add_string(pcStruct, "street_name"  ,  OrderCustomer.Street       ).
+   add_string(pcStruct, "street_number",  OrderCustomer.BuildingNum  ).
+   add_string(pcStruct, "floor"        ,  OrderCustomer.Floor        ).
+   add_string(pcStruct, "door"         ,  OrderCustomer.Door         ).
+   add_string(pcStruct, "block"        ,  OrderCustomer.Block        ).
+   add_string(pcStruct, "stair"        ,  OrderCustomer.Stair        ).
+   add_string(pcStruct, "bis"          ,  OrderCustomer.BisDuplicate ).
+   add_string(pcStruct, "town"         ,  OrderCustomer.PostOffice   ).
+   add_string(pcStruct, "zip_code"     ,  OrderCustomer.ZipCode      ).
+   add_string(pcStruct, "province"     ,  OrderCustomer.Region       ).
+
+   RETURN TRUE.
+
+END.
+
 /* MAIN */
 
 clsNagios = NEW Class.nagios().
@@ -378,7 +426,8 @@ PROCEDURE pSendROIHistory:
    DEFINE VARIABLE lcAddressStruct AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcAccessoryStruct AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcContactStruct AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcPOSStruct         AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcResp AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcResult AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcDescription AS CHARACTER NO-UNDO. 
@@ -406,6 +455,9 @@ PROCEDURE pSendROIHistory:
    lcContactStruct = add_struct(param_toplevel_id,"").
    fFillCustomerStruct(lcContactStruct,5).
 
+   lcPOSStruct = add_struct(param_toplevel_id,"").
+   fFillPOSStruct(lcPOSStruct).
+
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLog( "ROI History, ERROR Creating message: " + gc_xmlrpc_error,"NW_ERR"). 
       PUT SCREEN ROW 23 COL 4  "ERROR Creating message " + gc_xmlrpc_error.
@@ -427,6 +479,7 @@ PROCEDURE pSendROIHistory:
       RETURN.
    END.
  
+   fwriexml_ROI_test("ROIHistoryInterface.store_order"). 
    RUN pRPCMethodCall("ROIHistoryInterface.store_order", TRUE). 
 
    IF gi_xmlrpc_error NE 0 THEN DO:

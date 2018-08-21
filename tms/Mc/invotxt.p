@@ -121,7 +121,7 @@ form
     
     InvText.KeyValue                  Format "x(25)" COLON 12 
        targetname       NO-LABEL      Format "x(35)"             SKIP
-    
+    InvText.TemplateID                Format "x(35)" SKIP
     InvText.FromDate LABEL "Valid"              COLON 12 "-"
        InvText.ToDate   NO-LABEL                                 
     InvText.Language   COLON 57 lcLanguage NO-LABEL              SKIP
@@ -150,7 +150,7 @@ form
     
     InvText.InvText COLON 1
         NO-LABEL 
-        VIEW-AS EDITOR SIZE 75 BY 8 
+        VIEW-AS EDITOR SIZE 75 BY 7 
 
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.Var:cfc)
@@ -1077,6 +1077,7 @@ PROCEDURE local-update-record:
          expl
          InvText.KeyValue
          targetname
+         InvText.TemplateID
          InvText.FromDate 
          InvText.ToDate 
          InvText.TxtTitle 
@@ -1157,7 +1158,8 @@ PROCEDURE local-update-record:
             InvText.MainTitle
             InvText.TxtTitle
             InvText.InvText
-         WITH FRAME lis  EDITING:
+            InvText.TemplateID
+         WITH FRAME lis EDITING:
 
             READKEY.
 

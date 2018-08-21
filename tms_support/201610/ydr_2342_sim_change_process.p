@@ -361,7 +361,7 @@ REPEAT TRANSACTION:
  
    RELEASE MobSub.
 
-   IF fIsMNPOutOngoing(lcCLI) THEN DO:
+   IF Mnp.MNPOutGoing:mIsMNPOutOngoing(lcCLI) THEN DO:
       PUT STREAM sOut UNFORMATTED
          ";Ongoing MNP OUT in ACON Status"
          SKIP.

@@ -248,8 +248,9 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
                      Order.CLI   = TermMobSub.CLI AND
                      Order.OrderType NE {&ORDER_TYPE_RENEWAL} AND
                      Order.OrderType NE {&ORDER_TYPE_STC} AND
+                     Order.OrderType NE {&ORDER_TYPE_ACC} AND
                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK) THEN
-      RETURN appl_err("MSISDN is alreay in use").
+      RETURN appl_err("MSISDN is already in use").
 
    FIND FIRST IMSI WHERE
               IMSI.IMSI = TermMobSub.IMSI NO-LOCK NO-ERROR.

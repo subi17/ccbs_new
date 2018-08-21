@@ -35,6 +35,23 @@ CLASS HPD.OrderCustomerDump FINAL INHERITS GenericDump:
 
    END METHOD.
 
+   METHOD PRIVATE CHARACTER mLanguage():
+
+      DEFINE VARIABLE liLanguage AS INTEGER NO-UNDO.
+      ASSIGN
+         liLanguage = INTEGER(lhMainTable::Language) NO-ERROR.
+
+      IF ERROR-STATUS:ERROR
+      THEN RETURN "es".
+
+      FOR FIRST Language NO-LOCK WHERE
+          Language.Language = liLanguage:
+         RETURN Language.LanguageCode.
+      END.
+
+      RETURN "es".
+
+   END METHOD.
 
    METHOD PUBLIC OVERRIDE CHARACTER mSpecialHandling
       (icField     AS CHARACTER,
@@ -49,6 +66,10 @@ CLASS HPD.OrderCustomerDump FINAL INHERITS GenericDump:
          THEN IF ilCheckOnly
               THEN RETURN "OK".
               ELSE RETURN mGetSegment().
+         WHEN "Language"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN mLanguage().
          OTHERWISE RETURN "".         
       END CASE.
 

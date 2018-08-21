@@ -211,11 +211,12 @@ FOR EACH bELMobSub NO-LOCK WHERE
 
    IF NOT AVAIL bMLMobSub THEN NEXT.
 
-   IF fIsDSS2Allowed(bMLMobSub.CustNum,
-                     0,
-                     Func.Common:mMakeTS(),
-                     OUTPUT liDSSPriMsSeq,
-                     OUTPUT lcResult) THEN DO:
+   IF fIsDSSActivationAllowed(bMLMobSub.CustNum,
+                              0,
+                              Func.Common:mMakeTS(),
+                              {&DSS2},
+                              OUTPUT liDSSPriMsSeq,
+                              OUTPUT lcResult) THEN DO:
 
       liRequest = fDSSRequest(bMLMobSub.MsSeq,
                               bMLMobSub.CustNum,

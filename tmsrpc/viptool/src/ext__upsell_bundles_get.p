@@ -58,7 +58,7 @@ IF lcContract NE "" THEN DO:
               DayCampaign.DCEvent = lcContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign THEN
-      lcUpsellContract = DayCampaign.BundleUpsell.
+      lcUpsellContract = fGetDayCampaignUpsells(DayCampaign.DCEvent).
 
    liUpsellCount = fGetUpsellCount(
                       lcUpsellContract,
@@ -128,7 +128,7 @@ IF lcCustomerContract NE "" THEN DO:
               DayCampaign.DCEvent = lcCustomerContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign THEN
-      lcUpsellContract = DayCampaign.BundleUpsell.
+      lcUpsellContract = fGetDayCampaignUpsells(DayCampaign.DCEvent).
 
    liUpsellCount = fGetUpsellCount(
                       lcUpsellContract,

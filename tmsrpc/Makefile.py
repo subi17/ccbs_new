@@ -196,15 +196,15 @@ def compile(match, *a):
 
     systemrpc_compiledir = ''
 
-    if match == 'compile':
-        # First compile systemrpc to temporary directory
+    rpc_having_source = _compile(match, rpclist=list(set(parameters or rpcs.keys())))
+
+    _compile_cls(match, rpclist=list(set(parameters or rpcs.keys())))
+
+    if match == 'compile' and rpc_having_source:
+        # Compile systemrpc to temporary directory
         systemrpc_compiledir = tempfile.mkdtemp()
         _compile(match, work_dir + '/tools/fcgi_agent/systemrpc', systemrpc_compiledir, [''])
-
-    _compile(match, rpclist=list(set(parameters or rpcs.keys())))
-
-    if systemrpc_compiledir:
-        for rpc in parameters or rpcs.keys():
+        for rpc in rpc_having_source:
             recursive_overwrite(systemrpc_compiledir, '{0}/tmsrpc/{1}/rpcmethods'.format(work_dir, rpc))
         shutil.rmtree(systemrpc_compiledir)
 
@@ -245,6 +245,21 @@ def worker(compfile, files, args, compdir):
             with open(sigandhelpfile.replace('.p', '.confluence'), 'wb') as fd:
                 fd.write(helpobj.to_confluence())
 
+class myThreadOnlyCompile (threading.Thread):
+   def __init__(self, compfile, args):
+      threading.Thread.__init__(self)
+      self.compfile = compfile
+      self.args = args
+   def run(self):
+      worker_only_compile(self.compfile, self.args)
+
+def worker_only_compile(compfile, args):
+    """thread worker function"""
+    comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', compfile], stdout=PIPE)
+    call('/bin/cat', stdin=comp.stdout)
+    comp.wait()
+    os.unlink(compfile)
+
 def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
 
     if not 'multi' in globals():
@@ -262,6 +277,7 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
             raise PikeException('multi must be integer from 1 to 16')
 
     source_files = []
+    rpc_having_source = []
 
     if not source_dir:
         source_dir = '{0}/src'
@@ -290,6 +306,8 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
 
     for rpc in rpclist:
         source_dir_to_use = source_dir.format(rpc)
+        if not os.path.isdir(source_dir_to_use):
+            continue
         compile_dir_to_use = compile_dir.format(rpc) if compile_dir else ''
         seen = []
         for root, dirs, files in os.walk(source_dir_to_use):
@@ -298,15 +316,21 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
                 if relative_dir.startswith('/'):
                     relative_dir = relative_dir[1:]
                 source_files.append(tuple([rpc, '/' + relative_dir if relative_dir else relative_dir, filename]))
-                if compile_dir and relative_dir not in seen:
-                    mkdir_p(os.path.join(compile_dir_to_use, relative_dir))
-                    if compile_type == 'compile':
-                        mkdir_p(os.path.join(os.path.join('{0}/doc'.format(compile_dir_to_use), relative_dir)))
-                        if rpc:
-                            mkdir_p(os.path.join('{0}/pp'.format(rpc), relative_dir))
-                        else:
-                            mkdir_p(os.path.join('{0}/pp'.format(compile_dir), relative_dir))
-                    seen.append(relative_dir)
+                if compile_dir:
+                    if relative_dir not in seen:
+                        mkdir_p(os.path.join(compile_dir_to_use, relative_dir))
+                        if compile_type == 'compile':
+                            mkdir_p(os.path.join(os.path.join('{0}/doc'.format(compile_dir_to_use), relative_dir)))
+                            if rpc:
+                                mkdir_p(os.path.join('{0}/pp'.format(rpc), relative_dir))
+                            else:
+                                mkdir_p(os.path.join('{0}/pp'.format(compile_dir), relative_dir))
+                        seen.append(relative_dir)
+                    if rpc not in rpc_having_source:
+                        rpc_having_source.append(rpc)
+
+    if not rpc_having_source:
+        return rpc_having_source
 
     args = ['-pf', getpf('../db/progress/store/all')]
     dbcount = len(databases)
@@ -340,6 +364,96 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
 
     if compile_type == 'compile' and rpclist[0] == '':
         shutil.rmtree('{0}/pp'.format(compile_dir))
+
+    print('')
+
+    return rpc_having_source
+
+def _compile_cls(compile_type, rpclist):
+
+    if not 'multi' in globals():
+        global multi
+        multi = 1
+    else:
+        try:
+           multi = int(multi)
+        except ValueError as verr:
+          raise PikeException('multi must be integer from 1 to 16')
+        except Exception as ex:
+          raise PikeException('multi must be integer from 1 to 16')
+
+        if int(multi) > 16 or int(multi) < 1:
+            raise PikeException('multi must be integer from 1 to 16')
+
+    source_files = []
+
+    source_dir = '{0}/cls'
+
+    # For the compile command there are following position parameters
+    # (the same information is stored to source_files variable tuple values)
+    # 0 = <rpc>
+    # 1 = relative_dir (if available begins with flash character)
+    # 2 = source_file_name (no path)
+
+    if compile_type == 'compile':
+        compile_dir = '{0}/rpcmethods'
+        compilecommand = 'COMPILE {0}/cls{1}/{2} SAVE INTO {0}/rpcmethods NO-ERROR.'
+    elif compile_type == 'compilec':
+        compile_dir = ''
+        compilecommand = 'COMPILE {0}/cls{1}/{2} NO-ERROR.'
+    elif compile_type == 'preprocess':
+        compile_dir = '{0}/pp'
+        compilecommand = 'COMPILE {0}/cls{1}/{2} PREPROCESS {0}/pp{1}/{2} NO-ERROR.'
+    elif compile_type == 'xref':
+        compile_dir = '{0}/xref'
+        compilecommand = 'COMPILE {0}/cls{1}/{2} XREF {0}/xref{1}/{2} NO-ERROR.'
+
+    for rpc in rpclist:
+        source_dir_to_use = source_dir.format(rpc)
+        if not os.path.isdir(source_dir_to_use):
+            continue
+        compile_dir_to_use = compile_dir.format(rpc) if compile_dir else ''
+        if compile_dir_to_use:
+            mkdir_p(compile_dir_to_use)
+        for root, dirs, files in os.walk(source_dir_to_use):
+            for filename in fnmatch.filter(files, '*.cls'):
+                relative_dir = root.replace(source_dir_to_use,'')
+                if relative_dir.startswith('/'):
+                    relative_dir = relative_dir[1:]
+                source_files.append(tuple([rpc, '/' + relative_dir if relative_dir else relative_dir, filename]))
+
+    if not source_files:
+        return
+
+    args = ['-pf', getpf('../db/progress/store/all')]
+    dbcount = len(databases)
+
+    cdr_dict = {}
+    for cdr_database in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        if cdr_database in cdr_dict:
+            args.extend(cdr_dict[cdr_database])
+            dbcount += 1
+
+    if environment == 'safeproduction':
+        os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
+
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
+
+    args.extend(['-h', str(dbcount)])
+
+    threads = []
+    for subfiles in chunks(source_files, (len(source_files) + multi - 1) // multi):
+        compile_p = make_compiler(compilecommand, subfiles, show='name' if show_file else '.')
+        thread = myThreadOnlyCompile(compile_p, args)
+        thread.start()
+        threads.append(thread)
+
+    # Wait for all threads to complete
+    for t in threads:
+        t.join()
 
     print('')
 

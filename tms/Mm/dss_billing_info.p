@@ -9,6 +9,7 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
+{Func/extralinefunc.i}
 
 DEF INPUT PARAMETER iiCustNum   AS INT NO-UNDO.
 
@@ -76,10 +77,11 @@ DEF VAR lcMobSubActTS    AS CHAR               NO-UNDO.
 DEF VAR lcBundleFromTS   AS CHAR               NO-UNDO.
 DEF VAR lcBundleENDTS    AS CHAR               NO-UNDO.
 
-DEF VAR lcIPLContracts          AS CHAR        NO-UNDO.
-DEF VAR lcBONOContracts         AS CHAR        NO-UNDO.
-DEF VAR lcAllowedDSS2SubsType   AS CHAR        NO-UNDO.
-DEF VAR lcExcludeBundles        AS CHAR        NO-UNDO.
+DEF VAR lcIPLContracts                AS CHAR  NO-UNDO.
+DEF VAR lcBONOContracts               AS CHAR  NO-UNDO.
+DEF VAR lcAllowedDSS2SubsType         AS CHAR  NO-UNDO.
+DEF VAR lcAllowedDSS4SubsType         AS CHAR  NO-UNDO. 
+DEF VAR lcExcludeBundles              AS CHAR  NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
 {Mm/dss_bundle_first_month_fee.i}
@@ -491,6 +493,7 @@ PROCEDURE pGetDSSBillingInfo:
    DEF VAR ldeDSSLimit              AS DEC  NO-UNDO. 
    DEF VAR ldeDataAllocated         AS DEC  NO-UNDO.
    DEF VAR lcBundleId               AS CHAR NO-UNDO.
+   DEF VAR lcDSSBundleId            AS CHAR NO-UNDO. 
 
    DEF BUFFER bMServiceLimit        FOR MServiceLimit.
    DEF BUFFER bServiceLimit         FOR ServiceLimit.
@@ -499,7 +502,7 @@ PROCEDURE pGetDSSBillingInfo:
 
    ASSIGN liPeriod     = YEAR(TODAY) * 100 + MONTH(TODAY)
           ldFromDate   = DATE(MONTH(today), 1, YEAR(today))
-          ldToDate     = Func.Common:mLastDayOfMonth(TODAY)
+          ldToDate     = TODAY 
           ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
           ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399).
 
@@ -514,24 +517,35 @@ PROCEDURE pGetDSSBillingInfo:
                               INPUT TODAY,
                               OUTPUT ldeDSSLimit).
 
-   ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
-          lcBONOContracts  = fCParamC("BONO_CONTRACTS")
-          lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES")
-          lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+   ASSIGN lcIPLContracts                = fCParamC("IPL_CONTRACTS")
+          lcBONOContracts               = fCParamC("BONO_CONTRACTS")
+          lcExcludeBundles              = fCParamC("EXCLUDE_BUNDLES")
+          lcAllowedDSS2SubsType         = fCParamC("DSS2_SUBS_TYPE")
+          lcAllowedDSS4SubsType         = fCParamC("DSS4_SUBS_TYPE")
           lcFirstMonthUsageBasedBundles = fCParamC("FIRST_MONTH_USAGE_BASED_BUNDLES").
 
    fGetMsOwnerTempTable(Customer.CustNum,ldFromDate,ldToDate,FALSE,FALSE).
 
    FOR EACH ttMsOwner BREAK BY ttMsOwner.MsSeq:
 
-      IF lcBundleId = "DSS2" AND
+      IF lcBundleId EQ {&DSS4} AND 
+         LOOKUP(ttMsOwner.CLIType,lcAllowedDSS4SubsType) = 0 THEN NEXT.
+      ELSE IF lcBundleId EQ {&DSS2} AND
          LOOKUP(ttMsOwner.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
 
+      IF fCLITypeIsMainLine(ttMsOwner.CLIType) AND
+         NOT fCheckActiveExtraLinePair(ttMsOwner.MsSeq,
+                                       ttMsOwner.CLIType,
+                                       OUTPUT lcDSSBundleId) THEN
+         NEXT.      
+
       FOR EACH bMServiceLimit WHERE
-               bMServiceLimit.MsSeq   = ttMsOwner.MsSeq    AND
-               bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
-               bMServiceLimit.FromTS <= ttMsOwner.PeriodTo AND
-               bMServiceLimit.EndTS  >= ttMsOwner.PeriodFrom NO-LOCK,
+               bMServiceLimit.MsSeq    = ttMsOwner.MsSeq          AND
+               bMServiceLimit.DialType = {&DIAL_TYPE_GPRS}        AND
+               bMServiceLimit.FromTS  <= ttMsOwner.PeriodTo       AND
+              (bMServiceLimit.EndTS   >= ttMsOwner.PeriodFrom AND 
+               bMServiceLimit.EndTS   >= ttMsOwner.PeriodTo   AND
+               bMServiceLimit.EndTS   >= Func.Common:mMakeTS())   NO-LOCK,
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
@@ -747,6 +761,16 @@ PROCEDURE pGetDSSBillingInfo:
       /* Make entry for a subscription without any bundle */
       IF NOT CAN-FIND(FIRST ttDSSInfo WHERE
                             ttDSSInfo.MsSeq = ttMsOwner.MsSeq) THEN DO:
+         
+         IF (LOOKUP(ttMsOwner.CLIType,lcAllowedDSS4SubsType) > 0 OR 
+             LOOKUP(ttMsOwner.CLIType,lcAllowedDSS2SubsType) > 0)   AND 
+            (fCLITypeIsMainLine(ttMsOwner.CLIType)               OR 
+             fCLITypeIsExtraLine(ttMsOwner.CLIType))                THEN 
+            IF NOT fCheckActiveExtraLinePair(ttMsOwner.MsSeq,
+                                             ttMsOwner.CLIType,
+                                             OUTPUT lcDSSBundleId) THEN 
+               NEXT.
+
          CREATE ttDSSInfo.
          ASSIGN ttDSSInfo.MsSeq           = ttMsOwner.MsSeq
                 ttDSSInfo.CustNum         = ttMsOwner.CustNum

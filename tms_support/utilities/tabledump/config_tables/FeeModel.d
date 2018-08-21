@@ -1,8 +1,9 @@
+"" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_POSTPAID" "Agreement Customer Change Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_PREPAID" "Agreement Customer Change Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "AGILETVMF" "Agile TV Service" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ANGELTECHMF" "Angel Tecnologico" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"ASISTMF" "Asistencia Negocios" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"ASISTMF" "Soluciona Negocios" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BALANCE_PREPAID" "Balance Query Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "BBMF" "BlackBerry Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BONO_VOIPMF" "Mobile data usage bundle VoIP" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -100,14 +101,20 @@
 "DSS2MFUPS" "Data Sharing Service 2 Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSSMF" "Data Sharing Service Bundle package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSSMFUPS" "Data Sharing Service Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"DTERMPERIOD120" "Discount permanency" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"DTERMPERIOD240" "Discount permanency" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ERROR_RECARGA" "Compensa 20euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "FAXTOEMAILMF" "FAX TO EMAIL" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_500MB_UPSELLMF" "500MB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_5GB_UPSELLMF" "5GB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_MFUPS" "Flex upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD110" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD140" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD177" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD187" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD233" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD243" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_PREPAID" "Change of ICC Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
@@ -138,6 +145,9 @@
 "MDUBTOMDUB9" "Bono 8 to Bono 9 Upgrade Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "MSISDN_POSTPAID" "Change MSISDN Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "MSISDN_PREPAID" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"NEBTERMPERIOD160" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"NEBTERMPERIOD237" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"NEBTERMPERIOD293" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "OFFICE365MF" "OFFICE 365 Essentials" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELSIM" "Payment on deliver cost - SIM only" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELTER" "Payment on deliver cost - Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -151,18 +161,43 @@
 "PAYTERM2410" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM2415" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_1" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_11" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_12" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_13" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_14" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_16" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_17" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_18" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_19" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_2" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_20" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_21" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_22" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_23" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_24" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_25" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_26" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_27" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_28" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_29" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_3" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_30" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_31" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_32" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_33" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_34" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_35" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_36" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_37" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_38" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_39" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_4" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_40" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_5" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_6" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_7" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_8" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_9" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM25" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCG1E" "Commission fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCGBC" "Commission fee CETELEM" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -687,6 +722,9 @@
 "UPSELL_PMDUBFee" "PMDUB UPSELL Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "Uso No Razonable" "Uso No Razonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "UsoNoRazonable" "UsoNoRazonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"UTERMPERIOD120" "Upsell permanency" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"UTERMPERIOD30" "Upsell permanency" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"UTERMPERIOD60" "Upsell permanency" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "VOICE200BMF" "Voice 200 package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "X9305871W" "X9305871W" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "XMASGIFT" "Gift 2007" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

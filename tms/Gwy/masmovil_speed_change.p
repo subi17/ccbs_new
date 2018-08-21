@@ -1,6 +1,7 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Progress.Json.ObjectModel.*.
+USING OpenEdge.Net.HTTP.MethodEnum.
 
 {Syst/tmsconst.i}
 {Func/log.i}
@@ -25,6 +26,8 @@ DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
 DEF VAR liLogRequest   AS INTE       NO-UNDO.
 DEF VAR llLogRequest   AS LOGICAL    NO-UNDO INIT TRUE.
 DEF VAR loRequestJson  AS JsonObject NO-UNDO.
+DEF VAR oiStatusCode   AS INTEGER    NO-UNDO.
+DEF VAR ocStatusReason AS CHARACTER  NO-UNDO.
 DEF VAR loJson         AS JsonObject NO-UNDO.
 
 DEF STREAM sOut.
@@ -100,15 +103,19 @@ loRequestJson = fGetRequestJson(piOrderId, pcDownloadSpeed, pcUploadSpeed).
 
 fLogRequest(piOrderId, loRequestJson).
 
-RUN Gwy/http_rest_client.p("put"     ,
+RUN Gwy/http_rest_client.p(STRING(MethodEnum:PUT),
                            lcHost    ,
                            liPort    ,     
+                           ""        , /* authorization type */
+                           ""        , /* realm or domain */
                            ""        ,
                            ""        ,
                            lcUriPath ,
                            lcUriQuery,
                            lcUriQueryVal,
                            loRequestJson,
+                           OUTPUT oiStatusCode,
+                           OUTPUT ocStatusReason,
                            OUTPUT loJson).
 
 IF VALID-OBJECT(loJson) THEN

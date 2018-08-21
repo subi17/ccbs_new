@@ -29,6 +29,7 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
+{Func/lib/accesslog.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
 
@@ -44,7 +45,9 @@ DEF VAR liCustNum   AS INT                             NO-UNDO.
 DEF VAR liInvCust   AS INT                             NO-UNDO.
 DEF VAR liAgrCust   AS INT                             NO-UNDO.
 DEF VAR lcCLI       AS CHAR                            NO-UNDO.
+DEF VAR lcProgram   AS CHAR                            NO-UNDO.
 
+lcProgram  = PROGRAM-NAME(1).
 lcPassword = fCParamC("TestUser").
 
 IF lcPassword = ? THEN lcPassword = "".
@@ -100,8 +103,10 @@ DO WHILE TRUE:
 
    IF FRAME-INDEX EQ 1 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
-                        Customer.CustNum = liAgrCust) THEN
+                        Customer.CustNum = liAgrCust) THEN DO:
+         RUN CreateReadAccess("Customer", Syst.Var:katun, liAgrCust, lcProgram, "CustNum" ).
          RUN Mc/nnasse.p(liAgrCust,"").
+      END.
       ELSE 
          MESSAGE
             "Agreement customer " + STRING(liAgrCust) + " does not exist!"
@@ -116,8 +121,10 @@ DO WHILE TRUE:
 
       ELSE DO:
          IF CAN-FIND(FIRST Customer WHERE
-                           Customer.CustNum = liInvCust) THEN
+                           Customer.CustNum = liInvCust) THEN DO:
+            RUN CreateReadAccess("Customer", Syst.Var:katun, liInvCust, lcProgram, "CustNum" ).
             RUN Mc/nnasse.p(liInvCust,"").
+         END.
          ELSE 
             MESSAGE
                "Invoice customer " + STRING(liAgrCust) + " does not exist!"
@@ -127,8 +134,10 @@ DO WHILE TRUE:
    
    ELSE IF FRAME-INDEX = 3 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
-                        Customer.CustNum = liCustNum) THEN
+                        Customer.CustNum = liCustNum) THEN DO:
+         RUN CreateReadAccess("Customer", Syst.Var:katun, liCustNum, lcProgram, "CustNum" ).
          RUN Mc/nnasse.p(liCustNum,"").
+      END.
       ELSE 
          MESSAGE
             "User customer " + STRING(liCustNum) + " does not exist!"

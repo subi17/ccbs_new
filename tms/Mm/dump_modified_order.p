@@ -103,6 +103,7 @@ DEF VAR liRowType     AS INT NO-UNDO.
 IF icDumpMode = "Full" THEN DO:
    FOR EACH Order NO-LOCK WHERE
             Order.Brand = Syst.Var:gcBrand:
+      IF Order.OrderType EQ {&ORDER_TYPE_ACC} THEN NEXT.
       fCollect().
    END.
 END.
@@ -116,6 +117,7 @@ ELSE DO:
       FOR EACH Order NO-LOCK WHERE
                Order.Brand = Syst.Var:gcBrand AND
                Order.StatusCode = STRING(liOrderStatus):
+         IF Order.OrderType EQ {&ORDER_TYPE_ACC} THEN NEXT.
          fCollect().
       END.
    END.

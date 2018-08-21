@@ -4,12 +4,13 @@
  *
  * @input msseq;int;mandatory;id of subscription
  *        username;string;mandatory; who create the Discount
-          discount;structure;mandatory; discount details
+          discount;structure;mandatory; discount details          
  * @discount id;string;mandatory; Discount Plan Rule ID
              disc_value;decimal;mandatory; Amount of discount
              valid_from;date;mandatory; Discount start date
              valid_periods;int;mandatory; Discount duration
              discount_monthly_limit;double;mandatory;Discount amount monthly limit
+             permanency;string;optional;Periodical contract
   * @output ret;boolean; Return value
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -19,13 +20,15 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fcounter.i}
 {Func/fixedlinefunc.i}
+{Func/fmakemsreq.i}
 
 /* Input parameters */
 DEFINE VARIABLE piMsSeq          AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcUserName       AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcStruct         AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcStruct         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStruct         AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStructType     AS CHARACTER NO-UNDO.
+
 /* Output parameters */
 /* Local variables */
 DEFINE VARIABLE lcDPRuleID       AS CHARACTER NO-UNDO.
@@ -38,13 +41,18 @@ DEFINE VARIABLE ldeMonthlyLimit  AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcPerContract    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liResult         AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcResult         AS CHARACTER NO-UNDO.
+
 /* ALFMO-14 for web memo creation */
 DEFINE VARIABLE lcMainLine    AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
+DEFINE BUFFER bMXItem       FOR MXItem.
 
-lcStructType = validate_request(param_toplevel_id, "int,string,struct,[boolean]").
+lcStructType = validate_request(param_toplevel_id, "int,string,struct,[string]").
 IF lcStructType EQ ? THEN RETURN.
 
 /* ALFMO-14 Procedure returns the convergent main line MSISDN 
@@ -134,13 +142,18 @@ pcUserName = "VISTA_" + get_string(param_toplevel_id, "1").
 pcStruct = get_struct(param_toplevel_id,"2").
 
 lcStruct = validate_struct(pcStruct, "id!,disc_value!,valid_from!," +
-                                     "valid_periods!,discount_monthly_limit!").
+                                     "valid_periods!,discount_monthly_limit!," +
+                                     "permanency").
+
 
 lcDPRuleID     = get_string(pcStruct, "id").
 ldeAmount      = get_double(pcStruct, "disc_value").
 ldaValidFrom   = get_date(pcStruct, "valid_from").
 liValidPeriods = get_int(pcStruct, "valid_periods").
 ldeMonthlyLimit = get_double(pcStruct, "discount_monthly_limit").
+
+ASSIGN lcPerContract = get_string(pcStruct, "permanency") WHEN
+         LOOKUP ("permanency", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -203,6 +216,27 @@ IF liValidPeriods = 999 THEN
 ELSE
    ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
 
+/* YCO-468. Periodical contract for Permanency. Validation. */
+IF lcPerContract <> "" THEN DO:
+   /* Does Periodical contract exist? */
+   FIND FIRST DayCampaign NO-LOCK WHERE 
+              DayCampaign.Brand   EQ Syst.Var:gcBrand AND 
+              DayCampaign.DCEvent EQ lcPerContract
+              USE-INDEX DCEvent NO-ERROR.
+   IF NOT AVAILABLE DayCampaign THEN 
+      RETURN appl_err("Unknown Periodical Contract " + lcPerContract). 
+     
+   /* YTS-13260 - Is Periodical Contract allowed for this subscription type? */    
+   IF NOT CAN-FIND(FIRST MXItem WHERE 
+                         MXItem.MXValue EQ MobSub.CliType  AND  
+                         MXItem.MXName  EQ "SubsTypeTo"    AND 
+                         CAN-FIND(FIRST bMXItem WHERE 
+                                        bMXItem.MxSeq   EQ MXItem.MXSeq  AND 
+                                        bMXItem.MxName  EQ "PerContract" AND 
+                                        bMXItem.MxValue EQ lcPerContract)) THEN                                                                             
+      RETURN appl_err("Periodical Contract Not Allowed: " + lcPerContract). 
+END.
+
 /* ALFMO-14 Additional Line with mobile only ALFMO-5 */
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN 
 DO:      
@@ -233,17 +267,10 @@ DO:
    END.
 END.
 
-FOR EACH bDiscountPlan NO-LOCK WHERE
-         bDiscountPlan.Brand = Syst.Var:gcBrand AND
-  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0,
-  FIRST DPMember NO-LOCK WHERE
-        DPMember.DPId       = bDiscountPlan.DPId   AND
-        DPMember.HostTable  = "MobSub"             AND
-        DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-        DPMember.ValidTo   >= ldaValidFrom         AND
-        DPMember.ValidFrom <= ldaValidTo:
-   RETURN appl_err("Discount Plan already exists").
-END.
+/* YCO-458. Validation about existing additional lines */
+/* discounts removed, as far as now we are checking    */
+/* "incompatible discount matrix" (TMSRelation table)  */
+/* in fAddDiscountPlanMember (dpmember.i)              */ 
 
 IF DiscountPlan.DPUnit = "Percentage" THEN
    ldeMaxAmount = DiscountPlan.MaxAmount.
@@ -276,6 +303,27 @@ lcError = fAddDiscountPlanMember(MobSub.MsSeq,
 
 IF lcError BEGINS "ERROR"
 THEN RETURN appl_err(lcError).
+
+/* YCO-468. Assign permanency when lcPerContract <> "" */
+IF lcPerContract <> "" THEN DO:
+   liResult = fPCActionRequest(
+                        Mobsub.MsSeq,             /* subscription */
+                        lcPerContract,            /* DayCampaign.DCEvent */
+                        "act",                    /* act,term,canc,iterm,cont */
+                        0,                        /* when request should be handled, 0 --> Now */
+                        TRUE,                     /* fees */
+                        {&REQUEST_SOURCE_NEWTON}, /* where created */
+                        pcUserName,               /* creator  */
+                        0,                        /* main request  */
+                        FALSE,                    /* main request waits for this */
+                        "",                       /* sms                  */
+                        0,                        /* payterm residual fee */
+                        0,                        /* Periodical Contract-ID  */ 
+                        "",                       /* Parameters to be stored for SVA       */
+                        OUTPUT lcResult).
+   IF liResult EQ 0 THEN 
+      RETURN appl_err(lcResult).   
+END.    
 
 /* ALFMO-14 For creating web memo */
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 OR
