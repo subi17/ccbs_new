@@ -1205,10 +1205,7 @@ PROCEDURE pOrderView:
               Syst.Var:ufk[2] = (IF CAN-FIND(FIRST CustomerAccount OF Order)
                         THEN 9864 /* customer account */
                         ELSE 0)
-              Syst.Var:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
-                              RowType = {&ORDERCUSTOMER_ROWTYPE_ACC})
-                        THEN 2247 /* user customer */
-                        ELSE 0)
+              Syst.Var:ufk[3] = 0
               Syst.Var:ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY})
                         THEN 1071 /* delivery address */
@@ -1238,10 +1235,6 @@ PROCEDURE pOrderView:
 
            ELSE IF Syst.Var:toimi = 2 THEN DO:
               RUN Mc/customeraccount.p(Order.AccountID).
-           END.
-
-           ELSE IF Syst.Var:toimi = 3 THEN DO:
-              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_ACC},FALSE).
            END.
 
            ELSE IF Syst.Var:toimi = 4 THEN DO:
@@ -1654,13 +1647,7 @@ PROCEDURE local-find-others-common.
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
    IF AVAIL OrderCustomer THEN
       lcCustID = OrderCustomer.CustID.
-   ELSE DO:
-      FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
-           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_ACC} NO-ERROR.
-      IF AVAIL OrderCustomer THEN
-      lcCustID = OrderCustomer.CustID.
-      ELSE lcCustID = "".
-   END.
+   ELSE lcCustID = "".
     
    IF CAN-FIND(FIRST Memo WHERE
                      Memo.Brand     = Order.Brand AND
@@ -1726,8 +1713,7 @@ PROCEDURE local-find-others.
             OrderCustomer.OrderId = Order.OrderId:
 
       CASE OrderCustomer.RowType:
-      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} OR
-      WHEN {&ORDERCUSTOMER_ROWTYPE_ACC} THEN DO:
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
          lcAgrCust = Func.Common:mDispOrderName(BUFFER OrderCustomer).
          ASSIGN
             lcAuthCustId     = OrderCustomer.AuthCustId
@@ -2037,9 +2023,6 @@ PROCEDURE local-update-customer:
       END.
       WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER} THEN DO:
          lcNewHeader = " FIX DONOR".
-      END.
-      WHEN {&ORDERCUSTOMER_ROWTYPE_ACC} THEN DO:
-         lcNewHeader = " ACC".
       END.
    END CASE.
 

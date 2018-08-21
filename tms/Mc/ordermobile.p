@@ -8,6 +8,9 @@
 
 {Syst/commali.i}
 {Syst/eventval.i} 
+{Syst/tmsconst.i}
+{Func/lib/accesslog.i}
+{Mc/lib/tokenlib.i}
 
 IF llDoEvent THEN 
 DO:
@@ -18,7 +21,7 @@ DO:
    DEFINE VARIABLE lhOrderMobile AS HANDLE NO-UNDO.
    lhOrderMobile = BUFFER OrderMobile:HANDLE.
    RUN StarEventInitialize(lhOrderMobile).
-               
+            
 ON F12 ANYWHERE 
    DO:
       RUN Mc/eventview2.p(lhOrderMobile).
@@ -129,9 +132,11 @@ form
   OrderMobile.PayType       
      LABEL "PayType ......."
   
-  WITH  CENTERED OVERLAY ROW 1 WIDTH 80 
+  WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
   SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
   FRAME lis.
+  
+{Mc/updateordcustomer.i}
 
 IF iiOrderID > 0 THEN ASSIGN 
    order = 1
@@ -274,7 +279,11 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-            Syst.Var:ufk[1]= 0 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
+            Syst.Var:ufk[1]= (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
+                        THEN 2248 /* mobile donor (holder) */
+                        ELSE 0) 
+            Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
             Syst.Var:ufk[5]= 0 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
             Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
@@ -447,6 +456,13 @@ BROWSE:
          NEXT LOOP.
       END.
 
+      ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO: 
+         RUN local-disp-customer({&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER},FALSE).
+         ufkey = TRUE.  
+         NEXT loop.
+      END.
+      
+      
       ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
@@ -527,6 +543,14 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE local-find-others:
+   FIND FIRST Order WHERE 
+              Order.Brand   = Syst.Var:gcBrand  AND 
+              Order.OrderId = iiOrderID NO-LOCK NO-ERROR.
+
+   FIND FIRST OrderCustomer WHERE 
+              OrderCustomer.Brand   = Syst.Var:gcBrand  AND 
+              OrderCustomer.OrderId = iiOrderID NO-LOCK NO-ERROR.
+    
 END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:
