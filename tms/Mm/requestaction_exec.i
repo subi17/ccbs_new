@@ -749,8 +749,6 @@ PROCEDURE pFeeComparison:
    DEF VAR liComp                    AS INT  NO-UNDO.
    DEF VAR lcBONOContracts           AS CHAR NO-UNDO.
    DEF VAR lcNewCLIType              AS CHAR NO-UNDO. 
-   DEF VAR lcTryAndBuyCliTypes       AS CHAR NO-UNDO. 
-   DEF VAR lcLaSinfin25CliTypes      AS CHAR NO-UNDO. 
 
    DEF BUFFER bCLIType       FOR CLIType.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -870,16 +868,11 @@ PROCEDURE pFeeComparison:
          IF ihRequest::ReqSource EQ {&REQUEST_SOURCE_FUSION_ORDER_FALLBACK} 
             THEN olMatch = FALSE.
          
-         ASSIGN 
-            lcTryAndBuyCliTypes = fCParamC("Try&BuyCliTypes").
-         
          /* YCO-969 */
          IF icDCEvent BEGINS "TERM" AND 
-            LOOKUP(lcOrigCLIType, lcTryAndBuyCliTypes) > 0 THEN DO:
+            LOOKUP(lcOrigCLIType, {&CLITYPES_TRY_AND_BUY}) > 0 THEN DO:
 
-            lcLaSinfin25CliTypes = fCParamC("LaSinfin25CliTypes").   
-            
-            IF LOOKUP(ihRequest::ReqCparam2,lcLaSinfin25CliTypes) > 0 THEN DO:
+            IF LOOKUP(ihRequest::ReqCparam2,{&CLITYPES_LA_SINFIN_25}) > 0 THEN DO:
                olMatch = FALSE.
             END.
             ELSE DO:

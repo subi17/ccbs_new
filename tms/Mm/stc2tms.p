@@ -648,8 +648,6 @@ PROCEDURE pUpdateSubscription:
    DEF VAR lcAssignSubId           AS CHAR NO-UNDO.
    DEF VAR liAssignSubId           AS INT  NO-UNDO.
    DEF VAR liOrigMsSeq             AS INT  NO-UNDO.
-   DEF VAR lcNewCliType            AS CHAR NO-UNDO.
-   DEF VAR lcNewCliTypeMtx         AS CHAR NO-UNDO.
 
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -658,7 +656,6 @@ PROCEDURE pUpdateSubscription:
    DEF BUFFER lMLMobSub      FOR MobSub.
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
-   DEF BUFFER bMsRequest     FOR Msrequest.
    DEF BUFFER lbOrigRequest  FOR MsRequest.
 
    /* make sure that customer has a billtarget with correct rateplan */
@@ -756,12 +753,8 @@ PROCEDURE pUpdateSubscription:
          lcFixedNumber = OrderFusion.FixedNumber.
       END.
    
-   /* YTS-10293 */ 
-   IF ( fisConvergenceTariff(MsRequest.reqcparam1) OR 
-        CAN-FIND(FIRST bMsRequest /* 2p3p-merge */
-                 WHERE bMsRequest.MSRequest = MsRequest.OrigRequest
-                   AND bMsRequest.ReqType = {&REQTYPE_2P3P_MERGE}) )
-                                                 AND
+   /* YTS-10293 */
+   IF fisConvergenceTariff(MsRequest.reqcparam1) AND
       fisConvergenceTariff(MsRequest.reqcparam2) AND
       lcFixedNumber EQ ? THEN
       lcFixedNumber = mobsub.fixednumber.
@@ -864,21 +857,7 @@ PROCEDURE pUpdateSubscription:
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
 
-   lcNewCliType =  MsRequest.ReqCParam2.
-
-   IF fIsConvergenceTariff(MobSub.CLIType) AND
-      bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:      
-    
-      IF fListMatrix(Syst.Var:gcBrand,
-                     "CONVMOBILESTC",
-                     "SubsTypeFrom;SubsTypeTo",
-                     lcNewCliType,
-                     OUTPUT lcNewCliTypeMtx) = 1 THEN DO:
-         lcNewCliType =  lcNewCliTypeMtx.
-      END.
-   END.  
-
-   ASSIGN Mobsub.CLIType       = lcNewCliType
+   ASSIGN Mobsub.CLIType       = MsRequest.ReqCParam2
           Mobsub.BillTarget    = liBillTarg
           Mobsub.Paytype       = (CLIType.PayType = 2)
           Mobsub.TariffActDate = ldtActDate
@@ -1112,7 +1091,6 @@ PROCEDURE pFinalize:
    DEF VAR liTermReq             AS INT  NO-UNDO.
    DEF VAR ocResult              AS CHAR NO-UNDO.
    DEF VAR liMergeOrderId        AS INT  NO-UNDO.
-   DEF VAR lcTryAndBuyCliTypes     AS CHAR NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
    DEF BUFFER Order           FOR Order.
@@ -1125,8 +1103,6 @@ PROCEDURE pFinalize:
    DEF BUFFER lbELMobSub      FOR MobSub.
    DEF BUFFER lbCustomer      FOR Customer.
    
-   ASSIGN 
-      lcTryAndBuyCliTypes    = fCParamC("Try&BuyCliTypes").
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -1483,7 +1459,7 @@ PROCEDURE pFinalize:
    fReqStatus(2,"").
   
    /* YCO-968 */ 
-   IF LOOKUP(MsRequest.ReqCparam2, lcTryAndBuyCliTypes) > 0 AND
+   IF LOOKUP(MsRequest.ReqCparam2, {&CLITYPES_TRY_AND_BUY}) > 0 AND
       ldtActDate <= 12/31/2018 THEN DO:
       lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
                                        "CONT_DISC_TB_20",
