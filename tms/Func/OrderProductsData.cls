@@ -92,22 +92,23 @@ CLASS Func.OrderProductsData FINAL:
                                       NO-LOCK NO-ERROR.
         END.
         
-        IF AVAILABLE bfOrderProduct
-        THEN RETURN bfOrderProduct.ProductID.
+        IF AVAILABLE bfOrderProduct THEN 
+            RETURN bfOrderProduct.ProductID.
         
         RETURN "".
         
     END METHOD.
     
-    METHOD PUBLIC STATIC CHARACTER mGetFixNumber(INPUT liOrderID AS INTEGER ) :
+    METHOD PUBLIC STATIC CHARACTER mGetOrderProductFixedNumber(INPUT iiOrderID        AS INTEGER,
+                                                               INPUT iiOrderProductID AS INTEGER  ) :
         
         DEFINE BUFFER bfOrderProduct FOR OrderProduct.
         
         DEFINE VARIABLE lcParamType  AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcParamValue AS CHARACTER NO-UNDO.
         
-        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID     =  liOrderID
-                                   AND bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_FIXED_LINE}
+        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID         =  iiOrderID
+                                    AND bfOrderProduct.OrderProductID  =  iiOrderProductID
                                   NO-LOCK NO-ERROR.
                                   
         IF NOT AVAILABLE bfOrderProduct THEN RETURN "".
@@ -225,14 +226,17 @@ CLASS Func.OrderProductsData FINAL:
         
     END METHOD.          
     
-    METHOD PUBLIC STATIC CHARACTER mGetOrderMobileICC(INPUT iiOrderID AS INTEGER):
+    METHOD PUBLIC STATIC CHARACTER mGetOrderMobileICC(INPUT iiOrderID        AS INTEGER,
+                                                      INPUT iiOrderProductId AS INTEGER  ):
         
         DEFINE BUFFER bfpcOrderMobile FOR OrderMobile.
         
-        FIND FIRST bfpcOrderMobile  
-            WHERE bfpcOrderMobile.OrderID   = iiOrderID NO-LOCK NO-ERROR.
+        FIND FIRST bfpcOrderMobile WHERE
+                   bfpcOrderMobile.OrderID          = iiOrderID 
+                   bfpcOrderMobile.OrderProductID   = iiOrderProductId NO-LOCK NO-ERROR.
             
-        IF NOT AVAILABLE bfpcOrderMobile THEN RETURN "".
+        IF NOT AVAILABLE bfpcOrderMobile THEN 
+            RETURN "".
         
         RETURN bfpcOrderMobile.ICC.
         
@@ -296,6 +300,46 @@ CLASS Func.OrderProductsData FINAL:
        RETURN bfpcOrderProduct.ProductOfferingID.                                     
        
        
-   END METHOD.                                                             
+   END METHOD.    
+   
+   METHOD PUBLIC STATIC CHARACTER mGetOrderProductCLI (INPUT iiOrderProductID AS INTEGER) :
+       
+       DEFINE BUFFER bfpcOrderProduct FOR OrderProduct.
+       
+       DEFINE VARIABLE lcParamType    AS CHARACTER NO-UNDO.
+       DEFINE VARIABLE lcParamValue   AS CHARACTER NO-UNDO.
+       
+       FIND FIRST bfpcOrderProduct WHERE 
+                  bfpcOrderProduct.OrderProductID = iiOrderProductID NO-LOCK NO-ERROR.
+                  
+       IF NOT AVAILABLE bfpcOrderProduct THEN 
+           RETURN "".
+           
+       Func.OrderProductsData:mGetOrderProductParamValue(INPUT bfpcOrderProduct.OrderID ,
+                                                         INPUT bfpcOrderProduct.OrderProductID,
+                                                         INPUT {&ORDER_PRODUCT_PARAM_MOBILE_NUMBER},
+                                                         OUTPUT lcParamType ,
+                                                         OUTPUT lcParamValue).
+                                                          
+       IF lcParamType = {&CHARACTER_PARAM} THEN /*CLI Is char value in db while order saving*/
+           RETURN lcParamValue.
+        
+       RETURN "".  
+       
+   END.     
+   
+    METHOD PUBLIC STATIC CHARACTER mGetOrderProductCLIType (INPUT iiOrderProductID AS INTEGER) :
+       
+        DEFINE BUFFER bfpcOrderProduct FOR OrderProduct.
+       
+        FIND FIRST bfpcOrderProduct WHERE 
+                   bfpcOrderProduct.OrderProductID = iiOrderProductID NO-LOCK NO-ERROR.
+                  
+        IF NOT AVAILABLE bfpcOrderProduct THEN 
+            RETURN "".
+           
+        RETURN bfOrderProduct.ProductID.
+       
+    END.                                                       
     
 END CLASS.
