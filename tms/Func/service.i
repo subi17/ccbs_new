@@ -502,8 +502,7 @@ PROCEDURE pCopyPackage:
                lcServPac  = "".
          END.
 
-         /* No need to get Shaper CondId if it is VOIP Shaper */
-         IF ttServCom.ServPac BEGINS "SHAPER" AND lcDefParam <> "VOIP" THEN
+         IF ttServCom.ServPac BEGINS "SHAPER" THEN
             lcDefParam = fGetShaperConfId(iiMSSeq,
                              icDCEvent,
                              lcDefParam,
@@ -548,10 +547,6 @@ PROCEDURE pCopyPackage:
                   lcDefParam = lcDefParam + "," + lcTemplate.
             END. /* IF INDEX(lcDefParam,"#GRACELIMIT") > 0 THEN DO: */
          END. /* IF INDEX(lcDefParam,"#GRACELIMIT") > 0 THEN DO: */
-
-         /* Special conversion for VOIP */
-         IF lcDefParam = "VOIP" THEN
-            lcDefParam = lcDefParam + "_ADD".
 
          IF lcDefParam = "TARJ7" THEN
             FOR FIRST ServiceLimit NO-LOCK WHERE
@@ -909,14 +904,8 @@ PROCEDURE pTerminatePackage:
       /* DEFAULT profile should be created from next month.              */
       IF ilSolog THEN DO:
          
-         IF ttServCom.ServCom = "SHAPER" THEN 
-         DO:
-            IF icOrigDCEvent = "BONO_VOIP" THEN 
-                lcParam = "VOIP_REMOVE".
-            ELSE 
-                lcParam = ttServCom.DefParam.
-         END. /* IF ttServCom.ServCom = "SHAPER" THEN DO: */
-         
+         IF ttServCom.ServCom = "SHAPER"
+         THEN lcParam = ttServCom.DefParam.
          ELSE IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
          ELSE lcParam = ttServCom.DefParam.
       
