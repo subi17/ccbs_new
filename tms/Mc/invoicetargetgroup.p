@@ -119,15 +119,15 @@ form
      LABEL "Due Date ......"
      SKIP
   
-  InvoiceTargetGroup.StatusCode
-     LABEL "Status Code ..."   
-     SKIP
-     
   InvoiceTargetGroup.FromDate
      LABEL "Valid From ...."
   InvoiceTargetGroup.ToDate AT 38
      LABEL "Valid To ......"   
      SKIP   
+  InvoiceTargetGroup.StatusCode
+     LABEL "Status Code ..."   
+     SKIP
+
   WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
   SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
   FRAME lis.
