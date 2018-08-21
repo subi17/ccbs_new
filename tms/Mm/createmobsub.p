@@ -202,11 +202,11 @@ DO:
 
     IF llIsFixedOnly THEN
         ASSIGN  
-            lcProductCLI  = Func.OrderProductsData:mGetOrderProductFixedNumber(Order.OrderID, liSubscriptionProductId)
+            lcProductCLI  = Func.OrderProductsData:mGetOrderProductFixedNumber(liSubscriptionProductId)
             lcOrderSubICC = "".
     ELSE
         ASSIGN  
-            lcProductCLI  = Func.OrderProductsData:mGetOrderProductCLI(Order.OrderID, liSubscriptionProductId)
+            lcProductCLI  = Func.OrderProductsData:mGetOrderProductCLI(liSubscriptionProductId)
             lcOrderSubICC = Func.OrderProductsData:mGetOrderMobileICC(Order.OrderID, liSubscriptionProductId).
 END.        
 ELSE 
