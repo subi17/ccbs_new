@@ -183,7 +183,7 @@ CLASS om.Address IMPLEMENTS bss.cls.IObjectStorage:
                    THIS-OBJECT:municipalityCode =   objAddrValidationStruct:GetCharacter("municipality_code")
                    .
 	    END. 
-	    ELSE UNDO, THROW NEW ParamError("Validation Data missing for the AddressID " + STRING(THIS-OBJECT:addrId)).    
+	    ELSE UNDO, THROW NEW ParamError("Validation Data missing for the AddressID " + STRING(THIS-OBJECT:addrId)).      
 	    
 	END.
 	
