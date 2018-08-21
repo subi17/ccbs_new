@@ -308,6 +308,7 @@ ACTION:
                     INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  new-icc,
+                    INPUT  "",
                     INPUT  "", /*for old SIM*/
                     INPUT  "", /*for Reason info*/
                     INPUT  "", /*for ContractID*/

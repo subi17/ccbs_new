@@ -96,6 +96,7 @@ FOR EACH Order NO-LOCK WHERE
                                        Func.Common:mMakeTS(),    /*ActStamp*/
                                        "CHANGEICC",              /*ReqParam*/
                                        SIM.ICC,                  /*ReqParam2*/
+                                       "",
                                        "",                       /*old SIM*/
                                        "",                       /*Reason*/
                                        "",                       /*ContractID*/

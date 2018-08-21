@@ -2688,6 +2688,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     "",
                     "",
                     "",
+                    "",
                     INPUT  FALSE,
                     INPUT  0.0,
                     INPUT {&REQUEST_SOURCE_ICC_CHANGE_AUTO},

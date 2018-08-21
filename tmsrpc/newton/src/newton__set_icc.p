@@ -120,6 +120,7 @@ liReq = fSubscriptionRequest(
             ?,                        /*ActStamp*/
             "CHANGEICC",              /*ReqParam*/
             pcValue,                  /*ReqParam2*/
+            "",                       /*OrderProductId*/ 
             lcOldICC,               /*old SIM*/
             pcReason,                 /*Reason*/
             pcContractID,             /*ContractID*/
