@@ -1313,6 +1313,7 @@ PROCEDURE local-UPDATE-record:
       
       ASSIGN Syst.Var:ufk    = 0 
              Syst.Var:ehto   = 0
+             Syst.Var:ufk[1] = 9861 /* SAPC-46 */
              Syst.Var:ufk[2] = 1643
              Syst.Var:ufk[4] = 927
              Syst.Var:ufk[5] = 1697
@@ -1356,6 +1357,13 @@ PROCEDURE local-UPDATE-record:
                 
       RUN Syst/ufkey.p. 
 
+      /* SAPC-46  SAPC Commands */     
+      IF Syst.Var:toimi = 1 THEN DO:
+          RUN Mc/ProCommandView.p(INPUT 0,  /* mobsub.msseq */
+                                  INPUT MSRequest.MSrequest). 
+       
+      END. 
+      ELSE 
       /* parameters */  
       IF Syst.Var:toimi = 2 THEN DO:
          RUN Mm/msreqparam.p(MSRequest.MSrequest).

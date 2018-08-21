@@ -759,7 +759,8 @@ BROWSE:
 
        RUN local-find-this(FALSE).
        IF AVAILABLE mobsub THEN 
-          RUN Mc/ProCommandView.p(INPUT mobsub.msseq).
+          RUN Mc/ProCommandView.p(INPUT mobsub.msseq, 
+                                  INPUT 0).  /* MsRequest.MsRequest */
 
        NEXT LOOP.
      END. 

@@ -11,7 +11,9 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 
-DEF INPUT PARAMETER iiMsSeq AS INT NO-UNDO.
+/* Program expects at least one of the values */
+DEF INPUT PARAMETER iiMsSeq     AS INT NO-UNDO.
+DEF INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
 DEF VAR firstrow        AS INT          NO-UNDO INITIAL 0.
 DEF VAR FrmRow          AS INT          NO-UNDO INITIAL 1.
@@ -26,7 +28,7 @@ DEF VAR pr-procommand   AS INT          NO-UNDO.
 DEF VAR ufkey           AS LOG          NO-UNDO INITIAL TRUE.
 DEF VAR rtab            AS RECID        NO-UNDO EXTENT 24.
 DEF VAR i               AS INT          NO-UNDO.
-DEF VAR ldtResponseTS AS DATETIME-TZ  NO-UNDO.
+DEF VAR ldtResponseTS   AS DATETIME-TZ  NO-UNDO.
 DEF VAR lcCli           LIKE mobsub.cli NO-UNDO.
 DEF VAR lcCommand_Ed    AS LONGCHAR     NO-UNDO 
    VIEW-AS EDITOR LARGE SIZE 76 BY 3.
@@ -39,13 +41,13 @@ FORM
    ProCommand.msseq            COLUMN-LABEL "SubscrID"
    lcCli                       COLUMN-LABEL "MSISDN" FORMAT "x(11)"
    ProCommand.OrderId          COLUMN-LABEL "Order ID" 
-   ProCommand.ProCommandTarget COLUMN-LABEL "Target" FORMAT "X(4)"
+   ProCommand.ProCommandTarget COLUMN-LABEL "Target" FORMAT "X(5)"
    ProCommand.ProCommandStatus COLUMN-LABEL "Sts" FORMAT ">>9"
    ldtResponseTS             COLUMN-LABEL "Updated" FORMAT "99/99/99 HH:MM:SS" 
    ProCommand.ProCommandId     COLUMN-LABEL "Command ID"
    WITH ROW FrmRow WIDTH 80 OVERLAY FrmDown DOWN
    COLOR VALUE(Syst.Var:cfc)
-   TITLE COLOR VALUE(Syst.Var:ctc) "Procommands" + (IF iiMsSeq <> 0 THEN (" for " + STRING(iiMsSeq)) ELSE "")
+   TITLE COLOR VALUE(Syst.Var:ctc) "Procommands" + (IF iiMsSeq <> 0 THEN (" for " + STRING(iiMsSeq)) ELSE (IF iiMsRequest <> 0 THEN (" for " + STRING(iiMsRequest)) ELSE ""))
    FRAME sel.    
 
 FORM
@@ -73,31 +75,57 @@ RUN Syst/ufcolor.p.
 ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
-commands = " By ActivationTS". /* add other sortings (and the code) if needed */
+commands = " By Creation". /* add other sortings (and the code) if needed */
 
-/* Pre-check */
-IF iiMsSeq > 0 THEN
+
+/* Pre-checks ********************************************** */
+
+/* Enough data? */
+IF iiMsSeq = 0 AND iiMsRequest = 0 THEN
 DO:
-   FIND FIRST ProCommand NO-LOCK WHERE
-              ProCommand.MsSeq EQ iiMsSeq NO-ERROR. 
-   IF NOT AVAIL ProCommand THEN DO:
-      MESSAGE "ProCommands not found for" iiMsSeq "!" VIEW-AS ALERT-BOX.
+   MESSAGE "No data provided for filtering!" VIEW-AS ALERT-BOX.
+   RETURN.
+END.
+
+/* Checking when getting more data than needed */
+IF iiMsSeq <> 0 AND iiMsRequest <> 0 THEN
+DO: 
+   FIND FIRST MsRequest WHERE MsRequest.Msrequest = iiMsRequest NO-LOCK NO-ERROR.
+   IF NOT AVAIL MsRequest THEN
+   DO:
+      MESSAGE "Request not found" iiMsRequest "!" VIEW-AS ALERT-BOX.
+      RETURN.
+   END.
+   ELSE 
+   IF MsRequest.MsSeq <> iiMsSeq THEN
+   DO:
+      MESSAGE "Controversial SubscrID/RequestID data for filtering!" VIEW-AS ALERT-BOX.
       RETURN.
    END.
 END.
-ELSE 
-   FIND FIRST ProCommand NO-LOCK NO-ERROR. 
 
-IF NOT AVAILABLE ProCommand THEN
+/* Is there any ProCommand? */
+IF iiMsSeq <> 0 THEN
+   FIND FIRST ProCommand NO-LOCK WHERE
+              ProCommand.MsSeq EQ iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR.
+ELSE 
+   FIND FIRST ProCommand NO-LOCK WHERE
+              Procommand.MsRequest EQ iiMsRequest USE-INDEX Ix_MsRequest NO-ERROR.
+ 
+IF NOT AVAIL ProCommand THEN
 DO:
-   MESSAGE "No ProCommands available!" VIEW-AS ALERT-BOX.
-   RETURN.
+   IF iiMsSeq <> 0 THEN 
+       MESSAGE "ProCommands not found for SubscrID" iiMsSeq "!" VIEW-AS ALERT-BOX.
+   ELSE 
+       MESSAGE "ProCommands not found for REqeustId" iiMsRequest "!" VIEW-AS ALERT-BOX.
+   
+    RETURN.
 END.
-ELSE
-   ASSIGN
-      memory     = RECID(ProCommand)
-      must-print = TRUE
-      procommand = 1. 
+
+ASSIGN
+   memory     = RECID(ProCommand)
+   must-print = TRUE
+   procommand = 1. 
 
 LOOP:
 REPEAT WITH FRAME sel:
@@ -441,25 +469,28 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
    IF iiMsSeq <> 0 THEN
       FIND FIRST ProCommand NO-LOCK WHERE 
-                 ProCommand.MsSeq = iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR.
+                 ProCommand.MsSeq EQ iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR. 
    ELSE
-      FIND FIRST ProCommand NO-LOCK USE-INDEX Ix_ProCommandId NO-ERROR.   
+      FIND FIRST ProCommand NO-LOCK WHERE
+                 Procommand.MsRequest EQ iiMsRequest USE-INDEX Ix_MsRequest NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF iiMsSeq <> 0 THEN
       FIND LAST ProCommand NO-LOCK WHERE 
-                ProCommand.MsSeq = iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR.
+                ProCommand.MsSeq EQ iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR. 
    ELSE
-      FIND LAST ProCommand NO-LOCK USE-INDEX Ix_ProCommandId NO-ERROR.   
+      FIND LAST ProCommand NO-LOCK WHERE
+                Procommand.MsRequest EQ iiMsRequest USE-INDEX Ix_MsRequest NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF iiMsSeq <> 0 THEN
       FIND NEXT ProCommand NO-LOCK WHERE 
-                ProCommand.MsSeq = iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR.
+                ProCommand.MsSeq EQ iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR.
    ELSE
-      FIND NEXT ProCommand NO-LOCK USE-INDEX Ix_ProCommandId NO-ERROR.   
+      FIND NEXT ProCommand NO-LOCK WHERE
+                Procommand.MsRequest EQ iiMsRequest USE-INDEX Ix_MsRequest NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-prev:
@@ -467,7 +498,8 @@ PROCEDURE local-find-prev:
       FIND PREV ProCommand NO-LOCK WHERE 
                 ProCommand.MsSeq = iiMsSeq USE-INDEX Ix_MsSeq NO-ERROR.
    ELSE
-      FIND PREV ProCommand NO-LOCK USE-INDEX Ix_ProCommandId NO-ERROR.
+      FIND PREV ProCommand NO-LOCK WHERE
+                Procommand.MsRequest EQ iiMsRequest USE-INDEX Ix_MsRequest NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -479,8 +511,8 @@ PROCEDURE local-disp-row:
    /* set values */
    FIND mobsub WHERE mobsub.msseq = ProCommand.Msseq NO-LOCK NO-ERROR.
    ASSIGN
-      ldtResponseTS   = DATETIME-TZ(ProCommand.ResponseTS,TIMEZONE)
-      lcCli           = (IF AVAILABLE mobsub THEN mobsub.cli ELSE "").
+      ldtResponseTS = DATETIME-TZ(ProCommand.ResponseTS,TIMEZONE)
+      lcCli         = (IF AVAILABLE mobsub THEN mobsub.cli ELSE "").
    
    DISPLAY
       ProCommand.msseq
