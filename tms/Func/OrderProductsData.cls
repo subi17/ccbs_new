@@ -99,8 +99,7 @@ CLASS Func.OrderProductsData FINAL:
         
     END METHOD.
     
-    METHOD PUBLIC STATIC CHARACTER mGetOrderProductFixedNumber(INPUT iiOrderID        AS INTEGER,
-                                                               INPUT iiOrderProductID AS INTEGER  ) :
+    METHOD PUBLIC STATIC CHARACTER mGetOrderProductFixedNumber(INPUT iiOrderProductID AS INTEGER):
         
         DEFINE BUFFER bfOrderProduct FOR OrderProduct.
         

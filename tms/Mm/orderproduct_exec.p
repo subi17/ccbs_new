@@ -867,7 +867,7 @@ PROCEDURE pFixedLine:
     
     ASSIGN 
         lcCLIType     = Func.OrderProductsData:mGetOrderCLIType(iiOrderID)
-        lcFixedNumber = Func.OrderProductsData:mGetOrderProductFixedNumber(iiOrderID, iiOrderProductID).
+        lcFixedNumber = Func.OrderProductsData:mGetOrderProductFixedNumber(iiOrderProductID).
 
     IF fIsADSLFixedLineRouterShipped() AND 
        fIsFixedLineProvisioningDone()  AND
