@@ -104,31 +104,6 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         SUPER(iObjOrder).
         
 	END CONSTRUCTOR.
-	
-    DESTRUCTOR PUBLIC OrderProductSubscription ( ):
-        
-        IF VALID-OBJECT(ObjAggrementCustomer) THEN 
-            DELETE OBJECT ObjAggrementCustomer.
-            
-        IF VALID-OBJECT(objTopup) THEN 
-            DELETE OBJECT objTopup.    
-            
-        IF VALID-OBJECT(objParamFactory) THEN 
-            DELETE OBJECT objParamFactory.
-            
-        IF VALID-OBJECT(objOrderMobile) THEN 
-            DELETE OBJECT objOrderMobile.
-            
-        IF VALID-OBJECT(objOrderFusion) THEN 
-            DELETE OBJECT objOrderFusion.
-            
-        IF VALID-OBJECT (objFixedPoCustomer) THEN 
-            DELETE OBJECT objFixedPoCustomer.
-         
-        IF VALID-OBJECT (objMobilePoCustomer) THEN 
-            DELETE OBJECT objMobilePoCustomer.
-
-    END DESTRUCTOR.
 
 	METHOD PUBLIC OVERRIDE VOID mCreateDataForType ( iObjItemStruct AS CLASS JsonObject ):
 
@@ -393,6 +368,13 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             objOrderFusion = NEW om.OrderFusion(THIS-OBJECT).
         objOrderFusion:mCreateData(loAttributes).    
         
+        IF Func.ValidateOrder:mIsConvergentTariff(THIS-OBJECT:productId) THEN 
+        DO:            
+            ASSIGN 
+                objOrderMobile = NEW om.OrderMobile(THIS-OBJECT).
+            objOrderMobile:mCreateData(loAttributes).
+        END.
+        
         ASSIGN 
             objAggrementCustomer         = NEW om.OrderCustomer(objOrder)
             objAggrementCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
@@ -451,9 +433,6 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         IF VALID-OBJECT(objTopup) THEN 
             objTopup:mStoreData(THIS-OBJECT:orderProductID).
             
-        IF VALID-OBJECT(objOrderMobile) THEN 
-            objOrderMobile:mStoreData().
-            
     END METHOD.
     
     METHOD PUBLIC VOID mStoreFixedorConvergentProduct():
@@ -478,6 +457,9 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         
         IF VALID-OBJECT(objParamFactory) THEN 
             objParamFactory:mStoreData().
+            
+        IF VALID-OBJECT(objOrderMobile) THEN 
+            objOrderMobile:mStoreData().
         
     END METHOD.
     
@@ -526,5 +508,30 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         AddressObj:Add("validation_data" , loValidationObj).
         
     END METHOD.
+    
+    DESTRUCTOR PUBLIC OrderProductSubscription ( ):
+        
+        IF VALID-OBJECT(ObjAggrementCustomer) THEN 
+            DELETE OBJECT ObjAggrementCustomer.
+            
+        IF VALID-OBJECT(objTopup) THEN 
+            DELETE OBJECT objTopup.    
+            
+        IF VALID-OBJECT(objParamFactory) THEN 
+            DELETE OBJECT objParamFactory.
+            
+        IF VALID-OBJECT(objOrderMobile) THEN 
+            DELETE OBJECT objOrderMobile.
+            
+        IF VALID-OBJECT(objOrderFusion) THEN 
+            DELETE OBJECT objOrderFusion.
+            
+        IF VALID-OBJECT (objFixedPoCustomer) THEN 
+            DELETE OBJECT objFixedPoCustomer.
+         
+        IF VALID-OBJECT (objMobilePoCustomer) THEN 
+            DELETE OBJECT objMobilePoCustomer.
+
+    END DESTRUCTOR.
         
 END CLASS.
