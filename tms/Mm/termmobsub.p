@@ -643,7 +643,7 @@ BROWSE:
        RUN local-find-this(FALSE).
        IF AVAILABLE termmobsub THEN 
           RUN Mc/ProCommandView.p(INPUT termmobsub.msseq,
-                                  INPUT 0).  /* MsRequest.MsRequest */).
+                                  INPUT 0).  /* MsRequest.MsRequest */
 
        NEXT LOOP.
      END. 
