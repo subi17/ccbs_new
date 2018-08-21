@@ -232,8 +232,8 @@ CLASS Func.OrderProductsData FINAL:
         DEFINE BUFFER bfpcOrderMobile FOR OrderMobile.
         
         FIND FIRST bfpcOrderMobile WHERE
-                   bfpcOrderMobile.OrderID          = iiOrderID 
-                   bfpcOrderMobile.OrderProductID   = iiOrderProductId NO-LOCK NO-ERROR.
+                   bfpcOrderMobile.OrderID        = iiOrderID AND 
+                   bfpcOrderMobile.OrderProductID = iiOrderProductId NO-LOCK NO-ERROR.
             
         IF NOT AVAILABLE bfpcOrderMobile THEN 
             RETURN "".
@@ -247,8 +247,8 @@ CLASS Func.OrderProductsData FINAL:
         DEFINE BUFFER bfOrderProduct        FOR OrderProduct.
         DEFINE BUFFER bfOrderProductParam   FOR OrderProductParam.
         
-        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID     =  iiOrderID
-                                    AND bfOrderProduct.ActionType  =  {&ORDER_PRODUCT_MOBILE}
+        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID    = iiOrderID
+                                    AND bfOrderProduct.ActionType = {&ORDER_PRODUCT_MOBILE}
                                     NO-LOCK NO-ERROR.
                                     
         IF NOT AVAILABLE bfOrderProduct THEN RETURN NO.
