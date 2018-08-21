@@ -99,15 +99,16 @@ CLASS Func.OrderProductsData FINAL:
         
     END METHOD.
     
-    METHOD PUBLIC STATIC CHARACTER mGetFixNumber(INPUT liOrderID AS INTEGER ) :
+    METHOD PUBLIC STATIC CHARACTER mGetOrderProductFixedNumber(INPUT iiOrderID        AS INTEGER,
+                                                               INPUT iiOrderProductID AS INTEGER  ) :
         
         DEFINE BUFFER bfOrderProduct FOR OrderProduct.
         
         DEFINE VARIABLE lcParamType  AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcParamValue AS CHARACTER NO-UNDO.
         
-        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID     =  liOrderID
-                                   AND bfOrderProduct.ActionType   =  {&ORDER_PRODUCT_FIXED_LINE}
+        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID         =  iiOrderID
+                                    AND bfOrderProduct.OrderProductID  =  iiOrderProductID
                                   NO-LOCK NO-ERROR.
                                   
         IF NOT AVAILABLE bfOrderProduct THEN RETURN "".
