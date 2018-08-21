@@ -749,10 +749,12 @@ PROCEDURE pFeeComparison:
    DEF VAR liComp                    AS INT  NO-UNDO.
    DEF VAR lcBONOContracts           AS CHAR NO-UNDO.
    DEF VAR lcNewCLIType              AS CHAR NO-UNDO. 
+   DEF VAR lcTryAndBuyCliTypes       AS CHAR NO-UNDO. 
+   DEF VAR lcLaSinfin25CliTypes      AS CHAR NO-UNDO. 
 
    DEF BUFFER bCLIType       FOR CLIType.
    DEF BUFFER bMobSub        FOR MobSub.
-   
+   DEF BUFFER bPrevMsRequest FOR MsRequest.
     
    ASSIGN olMatch = FALSE
           lcBONOContracts = fCParamC("BONO_CONTRACTS").
@@ -867,6 +869,34 @@ PROCEDURE pFeeComparison:
             from Fusion order (STC) fallback */
          IF ihRequest::ReqSource EQ {&REQUEST_SOURCE_FUSION_ORDER_FALLBACK} 
             THEN olMatch = FALSE.
+         
+         ASSIGN 
+            lcTryAndBuyCliTypes = fCParamC("Try&BuyCliTypes").
+         
+         /* YCO-969 */
+         IF icDCEvent BEGINS "TERM" AND 
+            LOOKUP(lcOrigCLIType, lcTryAndBuyCliTypes) > 0 THEN DO:
+
+            lcLaSinfin25CliTypes = fCParamC("LaSinfin25CliTypes").   
+            
+            IF LOOKUP(ihRequest::ReqCparam2,lcLaSinfin25CliTypes) > 0 THEN DO:
+               olMatch = FALSE.
+            END.
+            ELSE DO:
+
+               FIND FIRST bPrevMsRequest NO-LOCK WHERE
+                          bPrevMsRequest.MsSeq EQ ihRequest::MsSeq AND
+                          bPrevMsRequest.ReqType EQ 0 AND
+                          bPrevMsRequest.ReqCParam2 EQ lcOrigCLIType AND
+                          bPrevMsRequest.ActStamp < ihRequest::ActStamp AND
+                          bPrevMsRequest.Reqstatus EQ 2
+               USE-INDEX MsActStamp NO-ERROR.
+
+               IF AVAIL bPrevMsRequest AND
+                  bPrevMsRequest.ReqCParam1 EQ ihRequest::ReqCparam2 THEN 
+                  olMatch = FALSE.
+            END.
+         END.
       END.
    END.
 
