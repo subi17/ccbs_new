@@ -365,7 +365,27 @@ PROCEDURE pSolog:
          CASE MsRequest.ReqType:
             WHEN {&REQTYPE_DSS}
             THEN IF LOOKUP(MsRequest.ReqCparam3,{&DSS_BUNDLES} ) > 0
-                 THEN loProCommand = NEW Gwy.SAPC.ProCommandDSS(MsRequest.MsRequest). 
+                 THEN DO:
+                    /* VOIPVIDEO is not going to SAPC.
+                       The request is VOIPVIDEO request when the parent request
+                       reqtype EQ {&REQTYPE_DSS}
+
+                       When request is "MODIFY" then the request needs to be
+                       either upsell related (contains text QUOTA) or
+                       limit update (contains text LIMIT)
+                    */
+                    IF ( NOT CAN-FIND(FIRST bbMsRequest NO-LOCK WHERE
+                                            bbMsRequest.MsRequest = MsRequest.OrigRequest AND
+                                            bbMsRequest.ReqType   = {&REQTYPE_DSS}) ) AND
+                       ( MsRequest.ReqCParam1 NE "MODIFY" OR
+                         INDEX(MsRequest.ReqCParam2, "QUOTA") > 0 OR
+                         INDEX(MsRequest.ReqCParam2, "LIMIT") > 0 )
+                    THEN loProCommand = NEW Gwy.SAPC.ProCommandDSS(MsRequest.MsRequest).
+                    ELSE DO:
+                       fReqStatus({&REQUEST_STATUS_HLR_DONE}, "").
+                       RETURN.
+                    END.
+                 END.
             WHEN {&REQTYPE_SUBSCRIPTION_CREATE}
             THEN loProCommand = NEW Gwy.SAPC.ProCommandBPMOrder(MsRequest.MsRequest).
             WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION} OR WHEN
