@@ -41,13 +41,18 @@ CLASS Gwy.SAPC.ProCommandNBCH INHERITS ProCommandOrder:
 
          WHEN {&REQTYPE_CONTRACT_ACTIVATION}
          THEN DO:
+            IF MsRequest.ReqCParam3 MATCHES "*_UPSELL"
+            THEN ASSIGN
+                    aoOrderEnum      = OrderEnum:UPSELL_ADD
+                    acProCommandType = "ADD_UPSELL".
+
             /* Parent request needs to be checked when
                requesttype is contract activation to get
                information if this a modify dataplan type.
                Only activation request can have the STC or
                bundle change parent request due to logic
                in percontr.p file */
-            IF MsRequest.OrigRequest > 0
+            ELSE IF MsRequest.OrigRequest > 0
             THEN DO:
                FIND lbMsRequest NO-LOCK WHERE
                     lbMsRequest.MsRequest = MsRequest.OrigRequest NO-ERROR.
@@ -78,12 +83,6 @@ CLASS Gwy.SAPC.ProCommandNBCH INHERITS ProCommandOrder:
                        acProCommandType = "MODIFY_DATAPLAN"
                        acEMACode        = DayCampaign.EMACode.
                END.
-               ELSE 
-               IF lbMsRequest.ReqCparam3 MATCHES "*_UPSELL" THEN
-                  ASSIGN
-                     aoOrderEnum      = OrderEnum:UPSELL_ADD
-                     acProCommandType = "ADD_UPSELL"
-                     acEMACode        = DayCampaign.EMACode.
             END.
 
             IF acProCommandType EQ ""

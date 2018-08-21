@@ -157,7 +157,7 @@ CLASS Gwy.ProCommandHandler FINAL:
                THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/api/northbound-tms/1/sync/orders",
                                                                acURIPrefix).
                WHEN TargetEnum:BPM
-               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/crm-integration-tms/Order",
+               THEN ttProcess.ProCommandURIPrefix = SUBSTITUTE("&1/tms/Order",
                                                                acURIPrefix).
             END CASE. 
          END.

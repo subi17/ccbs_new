@@ -28,30 +28,35 @@ CLASS Gwy.SAPC.Service.ChangeAPI.Upsell INHERITS ServiceObject:
 
    METHOD PROTECTED OVERRIDE VOID mFetchData():
 
-      DEFINE BUFFER DayCampaign FOR DayCampaign.
+      DEFINE BUFFER ServiceLimit FOR ServiceLimit.
 
-      DEFINE VARIABLE lcAction AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE ldeAmount AS DECIMAL INITIAL ? NO-UNDO.
 
-      FIND DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = "1" AND
-           DayCampaign.DCEvent = aoProCommandOrder:ahMsRequest::ReqCParam3
-      NO-ERROR.
+      FOR EACH ServiceLimit NO-LOCK WHERE
+               ServiceLimit.GroupCode = aoProCommandOrder:ahMsRequest::ReqCParam3
+          BY ServiceLimit.ValidTo DESCENDING:
 
-      IF NOT AVAILABLE DayCampaign
-      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find upsell '&1' stored to msrequest",
+         IF ServiceLimit.ValidTo >= TODAY AND ServiceLimit.ValidFrom <= TODAY
+         THEN DO:
+            ldeAmount = ServiceLimit.InclAmt.
+            LEAVE.
+         END.
+      END.
+
+      IF ldeAmount EQ ?
+      THEN UNDO, THROW NEW AppError(SUBSTITUTE("Cannot find servicelimit for upsell '&1'",
                                                aoProCommandOrder:ahMsRequest::ReqCParam3)).
 
-      CASE aoProCommandOrder:aoOrderEnum:
-         WHEN OrderEnum:UPSELL_ADD    THEN lcAction = "Add".
-         OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("Cannot handle type &1",
-                                                       STRING(aoProCommandOrder:aoOrderEnum))).
-      END CASE.
-
-      aoJsonObject:Add("action", lcAction).
+      aoJsonObject:Add("action", "Add").
 
       aoJsonObject:Add("type", "UPSELL").
 
-      mAddCharacteristicsArray(mNameValue("emaUnshapedLimit", DayCampaign.EMACode)).
+      mAddCharacteristicsArray(mNameValue("emaUnshapedLimit", STRING(ldeAmount))).
+
+      mAddCharacteristicsArray
+         (mNameValue("subscriptionType",
+                     STRING(aoProCommandOrder:alPayType,
+                            "prepaid/postpaid"))).
 
       aoJsonObject:Add("Characteristics", aoCharacteristicArray).
 
