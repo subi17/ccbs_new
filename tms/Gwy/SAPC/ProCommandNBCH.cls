@@ -41,7 +41,7 @@ CLASS Gwy.SAPC.ProCommandNBCH INHERITS ProCommandOrder:
 
          WHEN {&REQTYPE_CONTRACT_ACTIVATION}
          THEN DO:
-            IF lbMsRequest.ReqCparam3 MATCHES "*_UPSELL"
+            IF MsRequest.ReqCParam3 MATCHES "*_UPSELL"
             THEN ASSIGN
                     aoOrderEnum      = OrderEnum:UPSELL_ADD
                     acProCommandType = "ADD_UPSELL".

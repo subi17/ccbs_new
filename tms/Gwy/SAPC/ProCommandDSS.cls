@@ -137,9 +137,6 @@ CLASS Gwy.SAPC.ProCommandDSS INHERITS ProCommand:
 
    END METHOD.
 
-
-
-
    METHOD PRIVATE VOID mModifyDSS():
 
       DEFINE VARIABLE loJson    AS CLASS JsonObject NO-UNDO.
