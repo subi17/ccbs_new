@@ -93,7 +93,7 @@ DEF VAR lcOrderSubICC         AS CHAR NO-UNDO.
 DEF VAR lcTopupPrefix         AS CHAR NO-UNDO.
 DEF VAR lcTopupReference      AS CHAR NO-UNDO.
 DEF VAR liSubscriptionProductId AS INTE NO-UNDO.
-DEF VAR llIsFixedOnly         AS CHAR NO-UNDO.
+DEF VAR llIsFixedOnly         AS LOGI NO-UNDO.
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
