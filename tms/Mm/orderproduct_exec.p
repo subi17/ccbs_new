@@ -720,7 +720,11 @@ PROCEDURE pSIM:
        fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}).
 
        IF Func.ValidateOrder:mIsConvergentTariff(bf_Order.CliType) THEN  
-          RUN pMobile(iiOrderProductID).
+       DO:
+           fSetOrderProductStatus(bf_Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_DELIVERED}).
+           RUN pMobile(iiOrderProductID).
+       END.
+          
     END.   
 
     RETURN "".

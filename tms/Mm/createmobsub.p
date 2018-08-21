@@ -743,7 +743,7 @@ IF NOT AVAIL mobsub THEN DO:
       IF NOT llIsFixedOnly THEN 
       DO:
          IF liSubscriptionProductId > 0 THEN
-            fSetOrderProductStatus(Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_DELIVERED}). 
+            fSetOrderProductStatus(Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_PENDING_MOBILE_LINE}). 
          RETURN.
       END.   
    END.
