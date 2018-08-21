@@ -117,7 +117,7 @@ DO:
    IF iiMsSeq <> 0 THEN 
        MESSAGE "ProCommands not found for SubscrID" iiMsSeq "!" VIEW-AS ALERT-BOX.
    ELSE 
-       MESSAGE "ProCommands not found for REqeustId" iiMsRequest "!" VIEW-AS ALERT-BOX.
+       MESSAGE "ProCommands not found for RequestID" iiMsRequest "!" VIEW-AS ALERT-BOX.
    
     RETURN.
 END.
