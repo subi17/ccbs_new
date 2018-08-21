@@ -1344,7 +1344,7 @@ PROCEDURE pFinalize:
 
    /* DSS related activity */
    RUN pUpdateDSSAccount(INPUT MsRequest.MsRequest,
-                         INPUT MsRequest.ActStamp,
+                         INPUT Func.Common:mMakeTS(),
                          INPUT ldtActDate,
                          INPUT MsRequest.UserCode).
 
