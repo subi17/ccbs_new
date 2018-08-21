@@ -216,6 +216,8 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             objCustomer:orderChannel  = THIS-OBJECT:orderChannel                   
             .
 
+        RUN Mc/libfunc.p PERSISTENT SET lhOrderLibrary.  /* This is for the complicated business logic */
+        
         IF VALID-OBJECT(loAgrCust) THEN 
         DO:          
             IF loAgrCust:Has("custnum") THEN 
@@ -244,7 +246,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                      
                 objCustomer:mFindCustomer(objCustomerAcct:mGetCustNum()).     
             END.    
-            ELSE objCustomer:mCreateData(INPUT ObjCustomerStruct).
+            ELSE DO:
+                objCustomer:mCreateData(INPUT ObjCustomerStruct).
+                mAssignCustomerCategory().
+            END.
       
             IF ObjCustomerStruct:Has("billing_accounts") THEN
             DO:             
@@ -486,7 +491,14 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
    
    METHOD PUBLIC VOID mCheckDuplicateOrders():
        
-       IF Func.ValidateOrder:mCheckOtherOngoingOrders(INPUT THIS-OBJECT:lcCLI , INPUT THIS-OBJECT:mobileNumberType) THEN
+       DEFINE VARIABLE lHasOngoingOrders AS LOGICAL NO-UNDO.
+       
+       ASSIGN 
+           lHasOngoingOrders = DYNAMIC-FUNCTION("fOngoingOrders" IN THIS-OBJECT:lhOrderLibrary , 
+                                                INPUT THIS-OBJECT:lcCLI,
+                                                INPUT THIS-OBJECT:mobileNumberType).
+       
+       IF lHasOngoingOrders THEN
        DO:
            ASSIGN THIS-OBJECT:statusCode  =  {&ORDER_STATUS_IN_CONTROL}.
            
@@ -625,6 +637,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
                                            INPUT "",
                                            INPUT "",
                                            INPUT "",
+                                           INPUT "",
                                            INPUT FALSE,
                                            INPUT 0.0,
                                            INPUT {&REQUEST_SOURCE_ICC_CHANGE_AUTO},
@@ -674,6 +687,22 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
         END.
         ELSE 
             UNDO, THROW NEW ParamError("Unable to update the SIM Status.").
+        
+    END METHOD.
+        
+    METHOD PUBLIC VOID mAssignCustomerCategory():
+        
+        DEFINE VARIABLE lcCategory AS CHARACTER NO-UNDO.
+        
+        DYNAMIC-FUNCTION("fgetCustSegment" IN THIS-OBJECT:lhOrderLibrary , 
+                         INPUT objCustomer:custIdType , 
+                         INPUT objCustomer:selfEmployed ,
+                         INPUT objCustomer:isProCustomer,
+                         INPUT objCustomer:custId,
+                         OUTPUT lcCategory).
+
+        ASSIGN 
+            objCustomer:category = lcCategory.
         
     END METHOD.
     

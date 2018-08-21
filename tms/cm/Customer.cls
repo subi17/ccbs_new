@@ -373,8 +373,6 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
        /*Example for the CustAcctData format
         custacctid1;billacct1,billaccct2|custacct2;billacct3,billacct4|etc.. */
               
-       mAssignCategory().
-     
    END METHOD.
 
     METHOD PUBLIC VOID mStoreCustomer():
@@ -494,70 +492,8 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         RETURN ioCustObj.
         
     END METHOD.
-    
-    METHOD PUBLIC VOID mAssignCategory():
         
-        DEFINE BUFFER bfCustCat FOR CustCat.
-        DEFINE VARIABLE lcSegment AS CHARACTER NO-UNDO.
-
-        IF THIS-OBJECT:isProCustomer THEN 
-        DO:
-            FIND FIRST bfCustCat NO-LOCK WHERE
-                       bfCustCat.brand          =   Syst.Var:gcBrand         AND
-                       bfCustCat.custidtype     =   THIS-OBJECT:custIdType   AND
-                       bfCustCat.selfemployed   =   THIS-OBJECT:selfEmployed AND
-                       bfCustCat.pro            =   THIS-OBJECT:isProCustomer NO-ERROR.
-            IF AVAIL bfCustCat THEN 
-            DO:
-                THIS-OBJECT:category = bfCustCat.category.
-            END.
-        END.
-        ELSE 
-        DO:
-            IF THIS-OBJECT:custIdType EQ {&CUSTID_COMPANY} THEN 
-            DO:
-                IF THIS-OBJECT:custId BEGINS "V00" THEN
-                    THIS-OBJECT:category = "30".  
-                ELSE
-                    THIS-OBJECT:category = "23".
-            END.
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND THIS-OBJECT:selfEmployed THEN 
-                ASSIGN THIS-OBJECT:category = "44".         
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIF} AND NOT THIS-OBJECT:selfEmployed THEN 
-                ASSIGN THIS-OBJECT:category = "10". 
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND THIS-OBJECT:selfEmployed THEN 
-                ASSIGN THIS-OBJECT:category = "45".         
-            ELSE IF THIS-OBJECT:custIdType EQ {&CUSTID_RESIDENTIAL_NIE} AND NOT THIS-OBJECT:selfEmployed THEN 
-                ASSIGN THIS-OBJECT:category = "11". 
-            IF THIS-OBJECT:category > "" THEN 
-            DO:
-                FIND FIRST bfCustCat NO-LOCK WHERE
-                           bfCustCat.brand    EQ Syst.Var:gcBrand AND
-                           bfCustCat.category EQ THIS-OBJECT:category NO-ERROR.
-
-                IF AVAIL bfCustCat THEN 
-                    ASSIGN lcSegment = bfCustCat.Segment.
-            END.
-            ELSE 
-            DO:
-                FIND FIRST bfCustCat NO-LOCK WHERE
-                           bfCustCat.brand        EQ Syst.Var:gcBrand         AND
-                           bfCustCat.custidtype   EQ THIS-OBJECT:custIdType   AND
-                           bfCustCat.selfemployed EQ THIS-OBJECT:selfEmployed AND
-                           bfCustCat.pro          EQ THIS-OBJECT:isProCustomer NO-ERROR.
-                IF AVAIL CustCat THEN 
-                DO:
-                    ASSIGN 
-                        lcSegment            = bfCustCat.Segment
-                        THIS-OBJECT:category = bfCustCat.category.
-                END.
-            END.
-        END.
-        
-    END METHOD.
-    
     METHOD PUBLIC VOID mCheckSubscriptionLimit( INPUT lcNumberType AS CHARACTER ) :
-        
         
         DEFINE VARIABLE liSubLimit     AS INTEGER NO-UNDO. 
         DEFINE VARIABLE lisubs         AS INTEGER NO-UNDO.
