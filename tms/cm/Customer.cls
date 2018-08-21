@@ -208,7 +208,7 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
 
         ASSIGN 
            THIS-OBJECT:custIdType = lobjCustomerType:GetCharacter("id_type")  
-           THIS-OBJECT:custId     = lobjCustomerType:GetCharacter("id").
+           THIS-OBJECT:custId     = lobjCustomerType:GetCharacter("id").  
      END.
      ELSE IF ioJsonObject:Has("company") THEN 
      DO:

@@ -426,7 +426,7 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:bankCode           = (IF objOrder:objCustomer:isNewCustomer THEN mGetBankAcctNum() ELSE objOrder:objCustomer:OrderCustBankAcct) 
             THIS-OBJECT:foundationDate     = objDefaultCustomer:FoundationDate
             THIS-OBJECT:pro                = ( INDEX(objOrder:orderChannel,"PRO") > 0 )
-            THIS-OBJECT:selfEmployed       = objDefaultCustomer:selfEmployed
+            THIS-OBJECT:selfEmployed       = objDefaultCustomer:selfEmployed  
              .
                       	          
 	END.
