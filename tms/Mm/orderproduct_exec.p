@@ -694,7 +694,14 @@ PROCEDURE pSIM:
        RUN pValidateSIM(lcICC).
        IF RETURN-VALUE NE "" THEN
             RETURN RETURN-VALUE.
-       
+
+       IF fIsMNPOrder(bf_Order.OrderType) THEN 
+       DO:
+          RUN pInitiatePortability(liSubscriptionProductId).
+          IF RETURN-VALUE NE "" THEN
+             RETURN RETURN-VALUE.
+       END.  
+
        RUN pReserveSIM(bf_Order.MsSeq, lcICC).
 
        IF bf_Order.ResignationPeriod AND fIsResignationPeriod() THEN /* Delayed order */
@@ -734,6 +741,37 @@ PROCEDURE pSetupBox:
     
     RETURN "".
 
+END PROCEDURE.
+
+PROCEDURE pInitiatePortability:
+    DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
+
+    IF bf_Order.SalesMan EQ "order_correction_mnp" AND
+       LOOKUP(bf_Order.OrderChannel, "telesales,fusion_telesales,pos,fusion_pos," +
+                                     "telesales_pro,fusion_telesales_pro,pos_pro," +
+                                     "fusion_pos_pro") > 0 THEN
+       ASSIGN bf_Order.MNPStatus = 6. /* fake mnp process (ACON) */ /* YBP-620 */
+    /*MB_Migration has special MNP/Migration handler*/
+    ELSE IF bf_Order.Orderchannel BEGINS "migration" THEN
+       ASSIGN bf_Order.StatusCode = {&ORDER_STATUS_MIGRATION_PENDING}. /*60*/
+    ELSE IF bf_Order.MNPStatus NE 6 THEN 
+    DO: /* Confirmed MNP */   
+       RUN Mnp/mnprequestnc.p(bf_Order.Orderid). /* YBP-621 */
+       
+       IF RETURN-VALUE EQ "ERROR:AREC CUPO4" THEN
+       DO:
+          fSetOrderStatus(bf_Order.OrderId, {&ORDER_STATUS_MNP_PENDING}).
+          fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_MNP_PENDING}).
+       END.   
+       ELSE 
+       DO:
+          fSetOrderStatus(bf_Order.OrderId, {&ORDER_STATUS_ONGOING}).
+          fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_ONGOING}).
+       END.   
+    END.
+
+    RETURN "Portability is initiated".
+                
 END PROCEDURE.
 
 PROCEDURE pValidateSubscriptionType:
