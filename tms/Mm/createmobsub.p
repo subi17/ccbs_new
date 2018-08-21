@@ -741,7 +741,11 @@ IF NOT AVAIL mobsub THEN DO:
                       {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}). 
       fReqStatus(2,"").
       IF NOT llIsFixedOnly THEN 
-      RETURN.
+      DO:
+         IF liSubscriptionProductId > 0 THEN
+            fSetOrderProductStatus(Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_DELIVERED}). 
+         RETURN.
+      END.   
    END.
 
 END.
