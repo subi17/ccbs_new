@@ -106,9 +106,9 @@ CLASS Func.OrderProductsData FINAL:
         DEFINE VARIABLE lcParamType  AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcParamValue AS CHARACTER NO-UNDO.
         
-        FIND FIRST bfOrderProduct WHERE bfOrderProduct.OrderID         =  iiOrderID
-                                    AND bfOrderProduct.OrderProductID  =  iiOrderProductID
-                                  NO-LOCK NO-ERROR.
+        FIND FIRST bfOrderProduct WHERE 
+                   bfOrderProduct.OrderProductID = iiOrderProductID
+                   NO-LOCK NO-ERROR.
                                   
         IF NOT AVAILABLE bfOrderProduct THEN RETURN "".
         
