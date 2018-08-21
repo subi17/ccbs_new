@@ -1335,9 +1335,6 @@ PROCEDURE check-order:
       IF NOT AVAIL clitype THEN DO:
         ocError =  "Invalid CLIType !".
       END.
-      
-      IF NOT llIsFixedOnly AND lcOrderSubICC = "" THEN 
-          ASSIGN ocError  = "ICC is not assigned.".
 
       IF ocError ne "" THEN RETURN.
       
