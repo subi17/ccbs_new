@@ -75,30 +75,33 @@ function fCreateRequestParam return logical
 end function.
 
 function fCreateTMSParam return logical
-   (INPUT icCharVal AS CHAR,
+   (INPUT iiIntVal AS INT,
+    INPUT icCharVal AS CHAR,
     INPUT icParamCode AS CHAR,
     INPUT icParamGroup AS CHAR,
     INPUT icParamName AS CHAR):
    
-   CREATE TMSParam.
-   ASSIGN
-      TMSParam.Brand = "1"
-      TMSParam.CharVal = icCharVal
-      TMSParam.Online = FALSE
-      TMSParam.ParamCode = icParamCode
-      TMSParam.ParamGroup = icParamGroup
-      TMSParam.ParamName = icParamName
-      TMSParam.ParamType = "C".
+    CREATE TMSParam.
+    ASSIGN
+        TMSParam.Brand      = "1"
+        TMSParam.CharVal    = icCharVal
+        TMSParam.IntVal     = iiIntVal
+        TMSParam.Online     = FALSE
+        TMSParam.ParamCode  = icParamCode
+        TMSParam.ParamGroup = icParamGroup
+        TMSParam.ParamName  = icParamName      
+        TMSParam.ParamType  = (if iiIntVal > 0 THEN "I" ELSE "C").
+        
 end function.
 
-fCreateTMSParam("masmovil-test-staging.apigee.net","InflightHost","Masmovil","Host Name").
-fCreateTMSParam("443","InflightPort","Masmovil","Port Number").
-fCreateTMSParam("private/v1/microservices/orders/","InflightUriPath","Masmovil","API Uri Path").
-fCreateTMSParam("","InflightUriQuery","Masmovil","URI QUERY").
-fCreateTMSParam("","InflightUriQueryValue","Masmovil","URI QUERY Value").
-fCreateTMSParam("X-ApiKey","InflightHeaderName","Masmovil","API Header Name").
-fCreateTMSParam("NWMGo8R3Hb5pa8dmSw5w6vAvQ6bJwxyy","InflightHeaderValue","Masmovil","API Header Value").
-fCreateTMSParam("1","InflightLogRequest","Masmovil","Log Request").
+fCreateTMSParam(0,"masmovil-test-staging.apigee.net","InflightHost","Masmovil","Host Name").
+fCreateTMSParam(443,"","InflightPort","Masmovil","Port Number").
+fCreateTMSParam(0,"private/v1/microservices/orders/","InflightUriPath","Masmovil","API Uri Path").
+fCreateTMSParam(0,"","InflightUriQuery","Masmovil","URI QUERY").
+fCreateTMSParam(0,"","InflightUriQueryValue","Masmovil","URI QUERY Value").
+fCreateTMSParam(0,"X-ApiKey","InflightHeaderName","Masmovil","API Header Name").
+fCreateTMSParam(0,"NWMGo8R3Hb5pa8dmSw5w6vAvQ6bJwxyy","InflightHeaderValue","Masmovil","API Header Value").
+fCreateTMSParam(1,"","InflightLogRequest","Masmovil","Log Request").
 
 
 
