@@ -546,6 +546,15 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
        
    END METHOD.
    
+   METHOD PUBLIC VOID mAssignAuthorisedCustomer():
+       
+       ASSIGN 
+           THIS-OBJECT:authCustId     = objOrder:objCustomer:authCustId
+           THIS-OBJECT:authCustIdType = objOrder:objCustomer:authCustIdType.
+       
+       
+   END METHOD.
+   
    DESTRUCTOR PUBLIC OrderCustomer():
         
        IF VALID-OBJECT (objOrder) THEN 

@@ -231,6 +231,8 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             ELSE 
                 ObjAggrementCustomer:mCreateRowCustomerData(AddressObj).
                 
+            ObjAggrementCustomer:mAssignAuthorisedCustomer().
+                
             objParamFactory = NEW pm.OrderProductParamFactory(THIS-OBJECT).
             objParamFactory:mCreateData(loAttributes).
             
@@ -356,9 +358,9 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         IF THIS-OBJECT:mobileNumber > "" AND Func.ValidateOrder:mIsMigrationCLI(INPUT THIS-OBJECT:mobileNumber) THEN 
             UNDO , THROW  NEW ParamError("Requested number is in migration"). 
             
-        IF THIS-OBJECT:fixNumberType  =  {&TYPE_MNP} THEN
+        IF THIS-OBJECT:mobileNumberType  =  {&TYPE_MNP} THEN
             ASSIGN objOrder:orderType = {&ORDER_TYPE_MNP}.
-        ELSE IF THIS-OBJECT:fixNumberType  =  {&TYPE_NEW} THEN
+        ELSE IF THIS-OBJECT:mobileNumberType  =  {&TYPE_NEW} THEN
             ASSIGN objOrder:orderType = {&ORDER_TYPE_NEW}.  
             
         ASSIGN objParamFactory = NEW pm.OrderProductParamFactory(INPUT THIS-OBJECT).
@@ -384,9 +386,10 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         IF objOrder:objCustomer:isNewCustomer THEN 
             objAggrementCustomer:mCreateRowCustomerData(objOrder:objCustomer:DefaultAddressObj). 
             
-        IF loAttributes:Has("fixed_line_holder") THEN 
-        DO:
+        ObjAggrementCustomer:mAssignAuthorisedCustomer().
             
+        IF loAttributes:Has("fixed_line_holder") THEN 
+        DO:            
             ASSIGN 
                 objFixedPoCustomer         = NEW om.OrderCustomer(objOrder)
                 objFixedPoCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}.
@@ -399,8 +402,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         END.
         
         IF loAttributes:Has("mobile_line_holder") THEN
-        DO:
-            
+        DO:            
             ASSIGN 
                 objMobilePoCustomer         = NEW om.OrderCustomer(objOrder)
                 objMobilePoCustomer:RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}.
@@ -410,8 +412,7 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
                 objMobilePoCustomer:mCreateRowCustomerData(objOrder:objCustomer:DefaultAddressObj).
             /*aoMobilePOCustomer:mCreateHolderData(loAttributes:GetJsonObject("mobile_line_holder")).*/
             END.
-        END.
-                
+        END.                        
         ASSIGN 
             objOrder:statusCode = {&ORDER_STATUS_PENDING_FIXED_LINE}.  
             
