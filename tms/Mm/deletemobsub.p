@@ -1102,6 +1102,7 @@ PROCEDURE pTerminate:
 
    /* COFF Partial termination */
    IF lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN DO:
+
       CREATE TermMobsub.
       BUFFER-COPY Mobsub TO TermMobsub.
       ASSIGN 
@@ -1110,7 +1111,7 @@ PROCEDURE pTerminate:
          Mobsub.icc = ""
          Mobsub.imsi = ""
          MobSub.msStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
-      
+                       
       /* YDR-2495 Auto STC for Convergent After Mobile Line Termination to Fixed Line  */
       liRequest = fConvFixedSTCReq(MobSub.CLIType,
                                    MobSub.MsSeq,
