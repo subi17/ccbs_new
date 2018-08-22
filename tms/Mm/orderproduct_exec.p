@@ -715,15 +715,18 @@ PROCEDURE pSIM:
           loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
 
           RETURN "Resignation Period".
-       END.   
-
-       fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}).
+       END.
 
        IF Func.ValidateOrder:mIsConvergentTariff(bf_Order.CliType) THEN  
        DO:
-           fSetOrderProductStatus(bf_Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_DELIVERED}).
+           fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}). /* SIM */
+
+           fSetOrderProductStatus(bf_Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_ONGOING}). /* convergent_subscription */
+
            RUN pMobile(iiOrderProductID).
        END.
+       ELSE 
+          fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}).
           
     END.   
 
@@ -869,16 +872,6 @@ PROCEDURE pMobile:
         ASSIGN 
             lcMSISDN = Func.OrderProductsData:mGetOrderCLI(bf_Order.OrderId)
             lcTariff = Func.OrderProductsData:mGetOrderCLIType(bf_Order.OrderId).
-        
-        RUN pSetDefaultsToMissingAttributesOfOrder.
-
-        IF NOT Func.ValidateOrder:mIsConvergentTariff(lcTariff) THEN 
-        DO:
-            RUN pValidateMSISDN(lcMSISDN).
-            
-            IF RETURN-VALUE NE "" THEN
-                RETURN RETURN-VALUE.
-        END.
 
         IF lcTariff = "" THEN 
         DO:
@@ -887,12 +880,26 @@ PROCEDURE pMobile:
             fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_IN_CONTROL}). 
 
             RETURN "".
+        END.    
+        ELSE
+        DO:
+            RUN pValidateSubscriptionType(lcTariff).
+            IF RETURN-VALUE NE "" THEN
+                RETURN RETURN-VALUE.
         END.
 
-        RUN pValidateSubscriptionType(lcTariff).
-        IF RETURN-VALUE NE "" THEN
-            RETURN RETURN-VALUE.
+        IF NOT Func.ValidateOrder:mIsConvergentTariff(lcTariff) THEN 
+        DO:
+            /* In case of convergent no need to validate this, as by this time subscription
+               for fixedline activation might be processed and mobsub should exists with cli */
+            RUN pValidateMSISDN(lcMSISDN).
+            
+            IF RETURN-VALUE NE "" THEN
+                RETURN RETURN-VALUE.
+        END.
 
+        RUN pSetDefaultsToMissingAttributesOfOrder.
+                    
         RUN pReserveMSISDN(bf_Order.MsSeq, lcMSISDN).
 
         RUN pMobileActivationRequest(iiOrderProductID, lcMSISDN).
