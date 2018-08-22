@@ -268,14 +268,16 @@ CLASS Gwy.SAPC.ProCommandDSS INHERITS ProCommand:
       DEFINE VARIABLE liKeyPos AS INTEGER NO-UNDO.
       DEFINE VARIABLE liEndPos AS INTEGER NO-UNDO.
 
-      icKey = icKey + "=".
-
-      liKeyPos = INDEX(icText,icKey).
+      ASSIGN
+         icKey = icKey + "="
+         liKeyPos = INDEX(icText,icKey).
 
       IF liKeyPos EQ 0
       THEN RETURN "".
 
-      liEndPos = INDEX(icText,",",liKeyPos + LENGTH(icKey)).
+      ASSIGN
+         liKeyPos = liKeyPos + LENGTH(icKey)
+         liEndPos = INDEX(icText,",",liKeyPos).
 
       IF liEndPos EQ 0
       THEN RETURN SUBSTRING(icText, liKeyPos).
