@@ -635,9 +635,12 @@ PROCEDURE local-disp-ordermobile:
       RETURN.
    END. 
    
+   ASSIGN 
+      ac-hdr = " Mobile Subscription for OrderProduct:" + STRING(iiOrdProductID) + " ".                 
+
    ACTION: 
    repeat with frame fOrdMobile:
-                    
+       
    DISP
       OrderMobile.OrderID          
       OrderMobile.OrderProductID   
@@ -698,6 +701,9 @@ PROCEDURE local-disp-orderfusion:
       VIEW-AS ALERT-BOX ERROR.
       RETURN.
    END. 
+  
+   ASSIGN 
+      ac-hdr = " Fixed Subscription for OrderProduct:" + STRING(iiOrdProductID) + " ".                 
    
    ACTION: 
    repeat with frame fOrdFusion:

@@ -63,32 +63,32 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
 {Func/brand.i}
 
 form
-  InvoiceTargetGroup.Brand   
-     LABEL "Brand ........." 
-  InvoiceTargetGroup.ITGroupID AT 38
+  InvoiceTargetGroup.ITGroupID 
      LABEL "IT GroupID ...."  
-     help "Invoice Target Group ID"     
+     help "Invoice Target Group ID"   
+  InvoiceTargetGroup.AccountID AT 38
+     LABEL "Account ID ...."      
      SKIP
      
-  InvoiceTargetGroup.AccountID 
-     LABEL "Account ID ...." 
-  InvoiceTargetGroup.CustAccName AT 38
+  InvoiceTargetGroup.CustAccName 
      LABEL "Account Name .."
-     SKIP
-  
-  InvoiceTargetGroup.Currency 
-     LABEL "Currency ......" 
   InvoiceTargetGroup.BankAccount AT 38
      LABEL "BankAccount ..." 
+     SKIP
+
+  InvoiceTargetGroup.Currency 
+     LABEL "Currency ......" 
+  InvoiceTargetGroup.PaymentMethod AT 38
+     LABEL "Pay Mode ......" 
      SKIP
 
   InvoiceTargetGroup.BankName 
      LABEL "BankName ......"
      HELP  "Bank Name" 
-  InvoiceTargetGroup.PaymentMethod AT 38
-     LABEL "Pay Mode ......" 
-     SKIP
- 
+  InvoiceTargetGroup.BillCycle AT 38
+     LABEL "BillCycle ....."
+     SKIP    
+  
   InvoiceTargetGroup.MandateID 
      LABEL "MandateID ....."
   InvoiceTargetGroup.MandateDate AT 38
@@ -103,9 +103,9 @@ form
      
   InvoiceTargetGroup.DefaultGroup
      LABEL "DefaultGroup .."
-  InvoiceTargetGroup.BillCycle AT 38
-     LABEL "BillCycle ....."
-     SKIP    
+  InvoiceTargetGroup.StatusCode AT 38
+     LABEL "Status Code ..."   
+     SKIP
      
   InvoiceTargetGroup.InvInterval 
      LABEL "InvInterval ..." 
@@ -124,10 +124,7 @@ form
   InvoiceTargetGroup.ToDate AT 38
      LABEL "Valid To ......"   
      SKIP   
-  InvoiceTargetGroup.StatusCode
-     LABEL "Status Code ..."   
-     SKIP
-
+  
   WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
   SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
   FRAME lis.
@@ -698,7 +695,6 @@ PROCEDURE local-UPDATE-record:
    RUN local-find-others.
    
    DISP 
-      InvoiceTargetGroup.Brand
       InvoiceTargetGroup.ITGroupID     
       InvoiceTargetGroup.AccountID     
       InvoiceTargetGroup.CustAccName   
