@@ -69,7 +69,7 @@ FUNCTION fGetMDUBStatus RETURNS INT (
    DEF BUFFER MServiceLimit FOR MServiceLimit.
    liStat= 0. /* desactivated */ 
 
-   llUpComingDataBundle = fBundleWithSTC(Mobsub.MsSeq,Func.Common:mSecOffSet(ldEndStamp,1),FALSE).
+   llUpComingDataBundle = fBundleWithSTC(Mobsub.MsSeq,Func.Common:mSecOffSet(ldEndStamp,1)).
     
    /* Activated */
    FOR EACH ServiceLimitGroup NO-LOCK WHERE 
@@ -126,16 +126,6 @@ FUNCTION fGetMDUBStatus RETURNS INT (
                                           LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 
                                           USE-INDEX MsSeq) THEN 
       liStat = 2. /* cancelled ongoing */
-   /* if there is no active data bundle the return cancelled ongoing */
-   ELSE IF pcBundle = "BONO_VOIP" AND
-           fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundle) > "" AND
-           fGetActiveDataBundle(Mobsub.MsSeq,ldEndStamp) = "" AND
-           NOT llUpComingDataBundle THEN DO:
-      IF (Mobsub.TariffBundle <> "CONTS15" AND Mobsub.CLIType <> "CONTM2") OR
-         fGetActiveDSSId(MobSub.CustNum,Func.Common:mSecOffSet(ldEndStamp,1)) <> "DSS2"
-      THEN liStat = 2. /* cancelled ongoing */
-   END.
-
    /* pending request for bundle activation */
    ELSE IF CAN-FIND(FIRST MsRequest WHERE
                      MsRequest.MsSeq      = MobSub.MsSeq  AND

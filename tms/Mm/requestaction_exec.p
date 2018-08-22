@@ -452,12 +452,6 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "KeepInstallment" NO-LOCK)
       THEN RETURN.
-
-      /* If subscription has ongoing STC or BTC with data bundle
-         then no need to terminate Voip service */
-      IF DayCampaign.DCEvent = "BONO_VOIP" AND 
-         LOOKUP(icSource,"4,6,11,15") > 0 AND
-         fBundleWithSTC(liMsSeq,idActStamp,TRUE) THEN RETURN.
          
       IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN DO:
 
@@ -686,8 +680,6 @@ PROCEDURE pServicePackage:
 
    /* activation */
    WHEN 1 THEN DO:
-         
-      /* used for special BONO_VOIP activation */
       IF NUM-ENTRIES(ttAction.ActionKey,"|") EQ 2 THEN ASSIGN
          lcActionKey = ENTRY(1,ttAction.ActionKey,"|")
          lcDCEvent   = ENTRY(2,ttAction.ActionKey,"|").
@@ -772,7 +764,7 @@ PROCEDURE pServicePackage:
                then no need to suspend BB service */
             IF SubSer.ServCom = "BB" AND
                LOOKUP(icSource,"4,6,11,15") > 0 AND
-               fBundleWithSTC(liMsSeq,idActStamp,FALSE) THEN RETURN.
+               fBundleWithSTC(liMsSeq,idActStamp) THEN RETURN.
 
             liRequest = fServiceRequest(liMsSeq,
                                         SubSer.ServCom,
@@ -855,7 +847,6 @@ PROCEDURE pServiceRequest:
    DEF VAR lcParam          AS CHAR NO-UNDO. 
    DEF VAR lcService        AS CHAR NO-UNDO. 
    DEF VAR liAction         AS INT  NO-UNDO. 
-   DEF VAR llNotDssActive   AS LOG  NO-UNDO.
    DEF VAR lcDSSBundleId    AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
 
@@ -875,46 +866,26 @@ PROCEDURE pServiceRequest:
       lcService = ttAction.ActionKey
       lcParam   = "".
 
-   llNotDssActive = TRUE.
-   IF lcService = "VOIPVIDEO" THEN DO:
-      lcDSSBundleId = fGetActiveDSSId(liCustNum,idActStamp).
-      IF lcDSSBundleId > "" THEN DO:
-         IF lcDSSBundleId = "DSS2" THEn DO:
-            lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
-            FIND FIRST bMsOwner WHERE
-                       bMsOwner.MsSeq = liMsSeq NO-LOCK NO-ERROR.
-            IF AVAIL bMsOwner AND
-               LOOKUP(bMsOwner.CLIType,lcAllowedDSS2SubsType) > 0 THEN
-               llNotDssActive = FALSE.
-         END.
-         ELSE llNotDssActive = FALSE.
-      END.
-      ELSE IF liAction = 0 AND fIsVoIPAllowed(liMsSeq,idActStamp) THEN
-         llNotDssActive = FALSE.
-   END.
-
-   IF llNotDssActive THEN DO:
-      liRequest = fServiceRequest(liMsSeq,
-                                  lcService,
-                                  liAction,
-                                  lcParam,
-                                  idActStamp,
-                                  "",
-                                  FALSE, /* fees */
-                                  FALSE, /* sms */
-                                  "",
-                                  icSource,
-                                  iiMsRequest, /* father request */
-                                  FALSE,
-                                  OUTPUT lcResult).
-      IF liRequest = 0 THEN
-         /* write possible error to a memo */
-         Func.Common:mWriteMemo(lcMemoTable,
-                          lcMemoKey,
-                          liCustNum,
-                          "SERVICE REQUEST CREATION FAILED",
-                          ttAction.ActionKey).
-   END. /* IF llNotDssActive THEN DO: */
+   liRequest = fServiceRequest(liMsSeq,
+                               lcService,
+                               liAction,
+                               lcParam,
+                               idActStamp,
+                               "",
+                               FALSE, /* fees */
+                               FALSE, /* sms */
+                               "",
+                               icSource,
+                               iiMsRequest, /* father request */
+                               FALSE,
+                               OUTPUT lcResult).
+   IF liRequest = 0 THEN
+      /* write possible error to a memo */
+      Func.Common:mWriteMemo(lcMemoTable,
+                       lcMemoKey,
+                       liCustNum,
+                       "SERVICE REQUEST CREATION FAILED",
+                       ttAction.ActionKey).
 
 END.
 

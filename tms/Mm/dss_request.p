@@ -25,11 +25,6 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD CustNum  AS INT
     FIELD CLI      AS CHAR.
 
-DEF TEMP-TABLE ttContract NO-UNDO
-    FIELD MsSeq    AS INT
-    FIELD CustNum  AS INT
-    FIELD DCEvent  AS CHAR.
-
 /******** Main start *********/
 
 FIND FIRST MSRequest WHERE
@@ -290,44 +285,10 @@ PROCEDURE pFinalize:
       END.
    END.
 
-   /* Terminate possible BB, VoIP from additional lines */
+   /* Terminate possible BB from additional lines */
    IF MsRequest.ReqCparam3 = "DSS2" AND
       MsRequest.ReqCparam1 = "DELETE" THEN
       RUN pHandleOtherServices(INPUT iiMsRequest).
-         
-   IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
-      MsRequest.ReqCparam1 = "DELETE" THEN DO:
-
-      IF NOT fIsDSSActive(MsRequest.Custnum, ldeCurrentTS) THEN DO:
-         
-         FOR EACH lbMobSub NO-LOCK WHERE
-                  lbMobSub.Custnum = MsRequest.Custnum AND
-                  lbMobSub.PayType = FALSE:
-            IF fIsVoIPAllowed(lbMobsub.MsSeq, MsRequest.ActStamp) THEN DO:
-               liRequest = fServiceRequest(
-                                lbMobsub.MsSeq,
-                                "VOIPVIDEO",
-                                1, /* on */
-                                "",
-                                ldeCurrentTS,
-                                "", /* salesman */
-                                FALSE, /* fees */
-                                FALSE, /* sms */
-                                "", /* creator */
-                                {&REQUEST_SOURCE_BTC},
-                                MsRequest.MsRequest, /* father request */
-                                FALSE, /* mandatory for father request */
-                                OUTPUT lcError).
-               IF liRequest = 0 THEN 
-                  Func.Common:mWriteMemo("MobSub",
-                             STRING(MsRequest.MsSeq),
-                             MsRequest.Custnum,
-                             "Voip activation failed;",
-                             lcError).
-            END.
-         END. /* IF AVAILABLE MobSub THEN DO: */
-      END. /* IF NOT fIsDSSActive(MsRequest.Custnum, Func.Common:mMakeTS()) THEN DO: */
-   END. /* IF MsRequest.ReqCparam3 BEGINS "DSS" AND */
 
    FIND FIRST MobSub WHERE
               MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -385,45 +346,6 @@ PROCEDURE pFinalize:
       END.
    END. 
 
-   /* Bono VoIP activation  */
-   IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
-      MsRequest.ReqCparam1 = "CREATE" THEN DO:
-
-      CASE MsRequest.ReqCparam3:
-         WHEN "DSS" THEN DO:
-            LOOP:
-            FOR EACH lbMobSub NO-LOCK WHERE
-                     lbMobSub.Custnum = MsRequest.Custnum AND
-                     lbMobSub.PayType = FALSE:
-               IF fIsVoIPAllowed(lbMobsub.MsSeq, MsRequest.ActStamp) THEN DO:
-                  RUN pUpdateDSSNetwork(INPUT MobSub.MsSeq,
-                                        INPUT MobSub.CLI,
-                                        INPUT MobSub.CustNum,
-                                        INPUT "VOIPVIDEO_ADD",
-                                        INPUT "",           /* Optional param list */
-                                        INPUT MsRequest.MsRequest,
-                                        INPUT MsRequest.ActStamp, 
-                                        INPUT {&REQUEST_SOURCE_DSS},
-                                        INPUT {&DSS}).
-                  LEAVE LOOP.
-               END.
-            END. /* FOR EACH MobSub NO-LOCK WHERE */
-         END.
-         WHEN "DSS2" THEN 
-            RUN pUpdateDSSNetwork(INPUT MobSub.MsSeq,
-                                  INPUT MobSub.CLI,
-                                  INPUT MobSub.CustNum,
-                                  INPUT "VOIPVIDEO_ADD",
-                                  INPUT "",           /* Optional param list */
-                                  INPUT MsRequest.MsRequest,
-                                  INPUT MsRequest.ActStamp, 
-                                  INPUT {&REQUEST_SOURCE_DSS},
-                                  INPUT "DSS2").
-
-      END CASE. /* CASE MsRequest.ReqCparam3: */
-
-   END. /* IF MsRequest.ReqCparam3 BEGINS {&DSS} AND */
-
    RETURN "".
    
 END PROCEDURE.
@@ -442,7 +364,6 @@ PROCEDURE pHandleOtherServices:
    DEF BUFFER MsRequest             FOR MsRequest.
 
    EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-   EMPTY TEMP-TABLE ttContract      NO-ERROR.
 
    FIND FIRST MsRequest WHERE
               MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.
@@ -477,61 +398,7 @@ PROCEDURE pHandleOtherServices:
 
    END. /* FOR EACH lbMobSub WHERE */
 
-   FOR EACH ttAdditionalSIM NO-LOCK:
-
-      /* Deactivate BONO_VOIP bundle if there is no active data bundle */
-      IF fGetActiveSpecificBundle(ttAdditionalSIM.MsSeq,ldeStamp,
-                                  "BONO_VOIP") > "" THEN DO:
-         CREATE ttContract.
-         ASSIGN ttContract.DCEvent = "BONO_VOIP"
-                ttContract.MsSeq   = ttAdditionalSIM.MsSeq
-                ttContract.CustNum = ttAdditionalSIM.CustNum.
-      END. /* IF fGetActiveSpecificBundle(Mobsub.MsSeg */
-
-   END. /* FOR EACH ttAdditionalSIM NO-LOCK: */
-
-   FOR EACH ttContract:
-      FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = Syst.Var:gcBrand AND
-                 DayCampaign.DCEvent = ttContract.DCEvent AND
-                 DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
-      IF NOT AVAIL DayCampaign THEN DO:
-         Func.Common:mWriteMemo("MobSub",
-                          STRING(ttContract.MsSeq),
-                          ttContract.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract information is missing!").
-         DELETE ttContract.
-         NEXT.
-      END. /* IF NOT AVAIL DayCampaign THEN DO: */
-
-      liRequest = fPCActionRequest(ttContract.MsSeq,
-                       ttContract.DCEvent,
-                       "term",
-                       ldeStamp,
-                       TRUE,             /* create fees */
-                       {&REQUEST_SOURCE_DSS},
-                       "",
-                       MsRequest.MsRequest, /* Father Request */
-                       FALSE,
-                       "",
-                       0,
-                       0,
-                       "",
-                       OUTPUT lcError).
-      IF liRequest = 0 THEN
-         /* Write memo */
-         Func.Common:mWriteMemo("MobSub",
-                          STRING(ttContract.MsSeq),
-                          ttContract.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract is not closed: " + lcError).
-   END. /* FOR EACH ttContract: */
-
    EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-   EMPTY TEMP-TABLE ttContract      NO-ERROR.
 
 END PROCEDURE.
 

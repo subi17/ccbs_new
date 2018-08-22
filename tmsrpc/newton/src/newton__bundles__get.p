@@ -51,10 +51,7 @@ DEF VAR ldeFee                 AS DEC  NO-UNDO.
 DEF VAR liLineType             AS INT  NO-UNDO.
 DEF VAR llDss2Compatible       AS LOG NO-UNDO. 
 DEF VAR liFixedLineType        AS INT  NO-UNDO.
-DEF VAR lcVoIPBaseContracts    AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.
-DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
-DEF VAR llVoIPCompatible       AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles     AS CHAR NO-UNDO. 
 DEF VAR lcVoiceBundles         AS CHAR NO-UNDO.
 DEF VAR lcSupplementaryVoiceBundles AS CHAR NO-UNDO.
@@ -94,8 +91,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
            lcBONOContracts             = fCParamC("BONO_CONTRACTS")
            lcCONTSContracts            = fCParamC("CONTS_CONTRACTS")
            lcCONTSFContracts           = fCParamC("CONTSF_CONTRACTS")
-           lcVoIPBaseContracts         = fCParamC("BONO_VOIP_BASE_BUNDLES")
-           lcAllVoIPNativeBundles      = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
            lcAllowedDSS2SubsType       = fCParamC("DSS2_SUBS_TYPE")
            lcPromotionBundles          = fCParamC("PROMOTION_BUNDLES")
            lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
@@ -117,8 +112,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       ldeFee = 0
       liLineType = 0
       liFixedLineType = 0
-      llDss2Compatible = FALSE
-      llVoIPCompatible = FALSE.
+      llDss2Compatible = FALSE.
 
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + fConvertTenantToBrand(pcTenant)).
@@ -147,12 +141,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                ServiceLimit.ValidFrom <= TODAY              AND
                ServiceLimit.ValidTo   >= TODAY NO-LOCK:
 
-          IF ServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
-             IF ServiceLimit.GroupCode = "HSPA_ROAM_EU" THEN
-                add_double(lcResultStruct,"data_amount", 20.0).
-             ELSE
-                add_double(lcResultStruct,"data_amount", ServiceLimit.InclAmt).
-          END.
+          IF ServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN
+             add_double(lcResultStruct,"data_amount", ServiceLimit.InclAmt).
           ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
              add_double(lcResultStruct,"voice_amount", ServiceLimit.InclAmt).
           ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN 
@@ -164,10 +154,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       END. /* FOR EACH ServiceLimit WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
-   IF (LOOKUP(DayCampaign.DCEvent,lcBONOContracts    ) > 0 OR
+   IF  LOOKUP(DayCampaign.DCEvent,lcBONOContracts)     > 0 OR
        LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
-       LOOKUP(DayCampaign.DCEvent,lcDefaultBundles)    > 0 OR 
-       DayCampaign.DCEvent = "HSPA_ROAM_EU")               THEN
+       LOOKUP(DayCampaign.DCEvent,lcDefaultBundles)    > 0 THEN
    DO:
       IF LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 THEN   
          lcBundleType = "supplemental_bundle".
@@ -216,11 +205,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                 ldeFee = CLIType.CommercialFee
 
       llDss2Compatible = LOOKUP(lcCLIType, lcAllowedDSS2SubsType) > 0.
-      llVoIPCompatible = LOOKUP(lcCLIType, lcAllVoIPNativeBundles) > 0.
    END. /* IF lcCLIType > "" THEN DO: */
-
-   IF LOOKUP(DayCampaign.DCEvent,lcAllVoIPNativeBundles) > 0 THEN
-      llVoIPCompatible = TRUE.
 
    add_string(lcResultStruct,"bundle_type", lcBundleType).
    add_string(lcResultStruct,"subscription_type_id", lcCLIType).
@@ -229,14 +214,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_int(lcResultStruct,"line_type", liLineType).
    add_int(lcResultStruct,"fixed_line_type", liFixedLineType).
    add_boolean(lcResultStruct,"dss2_compatible", llDss2Compatible).
-   add_boolean(lcResultStruct,"voip_compatible", llVoIPCompatible).
-
-   IF LOOKUP(DayCampaign.DCEvent,lcVoIPBaseContracts) > 0 THEN DO:
-      FIND FIRST ServiceLimit WHERE
-                 ServiceLimit.GroupCode = "BONO_VOIP" NO-LOCK NO-ERROR.
-      IF AVAIL ServiceLimit THEN
-         add_double(lcResultStruct,"voip_amount", ServiceLimit.InclAmt).
-   END.
+   add_boolean(lcResultStruct,"voip_compatible", FALSE).
 
    lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE

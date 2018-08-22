@@ -30,7 +30,6 @@
 
 DEF VAR lcCLITypeTransName     AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.
-DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR ldaCont15PromoEnd      AS DATE NO-UNDO.
 DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
@@ -53,7 +52,6 @@ FUNCTION fGetSLAmount RETURNS DECIMAL
 END FUNCTION.  
 
 ASSIGN lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE")
-       lcAllVoIPNativeBundles = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
        ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate").
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
@@ -98,8 +96,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_boolean(lcResultStruct,"bundled", CLIType.BundleType).
    add_boolean(lcResultStruct,"dss2_compatible",
                LOOKUP(CLIType.CLIType, lcAllowedDSS2SubsType) > 0).
-   add_boolean(lcResultStruct,"voip_compatible",
-               LOOKUP(CLIType.CLIType,lcAllVoIPNativeBundles) > 0).
+   add_boolean(lcResultStruct,"voip_compatible", FALSE).
 
    IF CLIType.BaseBundle > "" THEN
    DO:

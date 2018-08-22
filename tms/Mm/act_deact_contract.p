@@ -98,10 +98,6 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
             NOT fAllowMDUBActivation("") THEN
             RETURN "ERROR:Contract activation is not allowed".
 
-         IF icContract EQ "BONO_VOIP" AND
-            NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeActStamp) THEN 
-               RETURN "ERROR:Contract activation is not allowed".
-
          /* DATA200_UPSELL and DSS200_UPSELL can't be 
             activate from TMS CUI, Vista/VFR */
          IF icContract = "DATA200_UPSELL" OR
@@ -140,11 +136,6 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
                RETURN "ERROR:Bundle termination is not allowed since " +
                       "subscription has ongoing BTC with upgrade upsell".
          END. /* IF LOOKUP(icContract,lcBONOContracts) > 0 THEN DO: */
-         ELSE IF icContract = "BONO_VOIP" AND
-            fGetActiveSpecificBundle(Mobsub.MsSeq,
-                                     ldNextMonthActStamp,
-                                     icContract) = "" THEN
-            RETURN "ERROR:Contract termination is not allowed".
    
          ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(TODAY)
                 ldeActStamp = Func.Common:mMake2DT(ldEndDate,86399).
@@ -370,7 +361,7 @@ PROCEDURE pCheckContract:
    IF NOT AVAIL Customer THEN RETURN "ERROR:Customer not found".
 
    IF LOOKUP(lcContract,lcBONOContracts +
-             ",BONO_VOIP,VOICE3000,VOICE100,VOICE200,VOICE200B") > 0 THEN DO:
+             ",VOICE3000,VOICE100,VOICE200,VOICE200B") > 0 THEN DO:
       lcError = fHandleContract(lcContract,lcInputAction).
    END. /* IF LOOKUP(lcContract,lcBONOContracts */
    ELSE IF LOOKUP(lcContract,"BB,LTE") > 0 THEN

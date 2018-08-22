@@ -365,7 +365,6 @@ DEF VAR pcAdditionalOfferList   AS CHAR NO-UNDO.
 DEF VAR pcAdditionalOfferArray  AS CHAR NO-UNDO.
 DEF VAR pcMobsubBundleType      AS CHAR NO-UNDO. 
 DEF VAR plDSSActivate           AS LOG  NO-UNDO. 
-DEF VAR plBonoVoipActivate      AS LOG  NO-UNDO.
 DEF VAR plByPassRules           AS LOG  NO-UNDO.
 DEF VAR lcdelivery_channel      AS CHAR NO-UNDO.
 DEF VAR pcUsageType             AS CHAR NO-UNDO. 
@@ -664,9 +663,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('delivery_channel', lcOrderStruct) > 0 THEN
       lcdelivery_channel = get_string(pcOrderStruct,"delivery_channel").
     
-   IF LOOKUP('bono_voip', lcOrderStruct) GT 0 THEN
-      plBonoVoipActivate = get_bool(pcOrderStruct,"bono_voip").
-   
    IF LOOKUP('bypass_rules', lcOrderStruct) GT 0 THEN
       plBypassRules = get_bool(pcOrderStruct,"bypass_rules").
 
@@ -2610,10 +2606,6 @@ END.
 
 /* YBP-575 */ 
 IF plDSSActivate THEN fCreateOrderAction(Order.Orderid,"BundleItem",{&DSS},"").
-
-/* YBP-576 */ 
-IF plBonoVoipActivate THEN
-   fCreateOrderAction(Order.Orderid,"BundleItem","BONO_VOIP","").
 
 /* YBP-577 */ 
 /* SIM Type */
