@@ -322,15 +322,12 @@ form
     
 PROCEDURE local-disp-customer:
    
-   
    DEF INPUT PARAMETER iiRole AS INT NO-UNDO.
    DEF INPUT PARAMETER lNew   AS LOG NO-UNDO.
 
    DEF VAR lcCurrHeader AS CHAR NO-UNDO.
    DEF VAR lcNewHeader  AS CHAR NO-UNDO.
    DEFINE VARIABLE llCustIdUpdateOK AS LOGICAL INITIAL FALSE NO-UNDO.
-   
-  // HIDE FRAME sel no-pause.
    
    ASSIGN liCustRole   = iiRole
           lcCurrHeader = ac-hdr.
