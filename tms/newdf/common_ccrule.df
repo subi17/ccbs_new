@@ -1,7 +1,6 @@
 ADD FIELD "CCRuleID" OF "CCRule" AS integer
   DESCRIPTION "ID of the CCRULE Record"
   FORMAT ">>>>>>>9"
-  POSITION 7
   INITIAL "0"
   LABEL "Rule ID"
   COLUMN-LABEL "Rule ID"
@@ -11,7 +10,6 @@ ADD FIELD "CCRuleID" OF "CCRule" AS integer
 ADD FIELD "BillCode" OF "CCRule" AS character
   DESCRIPTION "BillCode for the CCRule record."
   FORMAT "x(16)"
-  POSITION 8
   INITIAL ""
   LABEL "BillItem"
   COLUMN-LABEL "BillItem"
@@ -21,7 +19,6 @@ ADD FIELD "BillCode" OF "CCRule" AS character
 ADD FIELD "ValidTo" OF "CCRule" AS date
   DESCRIPTION "Date when rule becomes ineffective"
   FORMAT "99-99-99"
-  POSITION 9
   INITIAL ?
   LABEL "InEff. Date"
   COLUMN-LABEL "InEff. Date"
@@ -31,7 +28,6 @@ ADD FIELD "ValidTo" OF "CCRule" AS date
 ADD FIELD "AccNum" OF "CCRule" AS integer
   DESCRIPTION "Account Number"
   FORMAT ">>>>>>>9"
-  POSITION 10
   INITIAL "0"
   HELP "Account Number"
   LABEL "Account"
@@ -42,7 +38,6 @@ ADD FIELD "AccNum" OF "CCRule" AS integer
 ADD FIELD "EUAccNum" OF "CCRule" AS integer
   DESCRIPTION "Account number for EU sales"
   FORMAT ">>>>>>>9"
-  POSITION 11
   INITIAL "0"
   HELP "Account number for EU sales"
   LABEL "EU Sales Account"
@@ -53,7 +48,6 @@ ADD FIELD "EUAccNum" OF "CCRule" AS integer
 ADD FIELD "EUConAccNum" OF "CCRule" AS integer
   DESCRIPTION "Account number for EU sales with VAT (consumers)"
   FORMAT ">>>>>>>9"
-  POSITION 12
   INITIAL "0"
   HELP "Account number for EU sales with VAT (consumers)"
   LABEL "EU Cons. Sales"
@@ -64,7 +58,6 @@ ADD FIELD "EUConAccNum" OF "CCRule" AS integer
 ADD FIELD "FSAccNum" OF "CCRule" AS integer
   DESCRIPTION "Account number for sales outside EU"
   FORMAT ">>>>>>>9"
-  POSITION 13
   INITIAL "0"
   HELP "Account number for sales outside EU"
   LABEL "Foreign Sales Account"
@@ -75,7 +68,6 @@ ADD FIELD "FSAccNum" OF "CCRule" AS integer
 ADD FIELD "ReportingID" OF "CCRule" AS character
   DESCRIPTION "Reporting ID"
   FORMAT "x(8)"
-  POSITION 14
   INITIAL ""
   HELP "Reporting ID"
   LABEL "Reporting ID"
@@ -86,7 +78,6 @@ ADD FIELD "ReportingID" OF "CCRule" AS character
 ADD FIELD "CLIType" OF "CCRule" AS character
   DESCRIPTION "CLIType"
   FORMAT "X(13)"
-  POSITION 15
   INITIAL ""
   HELP "CLIType"
   LABEL "CLIType"
@@ -97,7 +88,6 @@ ADD FIELD "CLIType" OF "CCRule" AS character
 ADD FIELD "AccountingID" OF "CCRule" AS character
   DESCRIPTION "AccountingID"
   FORMAT "X(12)"
-  POSITION 16
   INITIAL ""
   HELP "AccountingID"
   LABEL "AccountingID"
@@ -145,8 +135,3 @@ ADD SEQUENCE "CCRuleSeq"
   CYCLE-ON-LIMIT no
   MIN-VAL 0
 
-.
-PSC
-cpstream=ISO8859-1
-.
-0000002645
