@@ -2115,6 +2115,10 @@
 1 "" 2 "Compra 1,5 GB" 0 "DSS2MFUPS1" "1" 15/09/15 31/12/49
 1 "" 3 "1,5 GB-ren erosketa" 0 "DSS2MFUPS1" "1" 15/09/15 31/12/49
 1 "" 5 "Buy 1.5 GB" 0 "DSS2MFUPS1" "1" 15/09/15 31/12/49
+1 "" 1 "Consumido entre todas la líneas" 0 "DSS4" "1" 01/08/18 31/12/49
+1 "" 2 "Consumit entre totes les línies" 0 "DSS4" "1" 01/08/18 31/12/49
+1 "" 3 "Linea guztien artean kontsumitua" 0 "DSS4" "1" 01/08/18 31/12/49
+1 "" 5 "Spend on all lines" 0 "DSS4" "1" 01/08/18 31/12/49
 1 "" 1 "Promo Internet Multilínea" 0 "DSSCPFREE" "1" 01/04/12 31/12/49
 1 "" 1 "Compensación" 0 "DSSCPFREE" "1" 01/04/12 31/03/12
 1 "" 2 "Promo Internet Multilínea" 0 "DSSCPFREE" "1" 01/04/12 31/12/49
@@ -4348,6 +4352,76 @@
 1 "" 3 "Motorola Moto E4" 0 "G0000408" "1" 25/07/18 31/12/49
 1 "" 4 "Motorola Moto E4" 0 "G0000408" "1" 25/07/18 31/12/49
 1 "" 5 "Motorola Moto E4" 0 "G0000408" "1" 25/07/18 31/12/49
+1 "" 1 "Alcatel 1X" 0 "G0000409" "1" 02/08/18 31/12/49
+1 "" 2 "Alcatel 1X" 0 "G0000409" "1" 02/08/18 31/12/49
+1 "" 3 "Alcatel 1X" 0 "G0000409" "1" 02/08/18 31/12/49
+1 "" 4 "Alcatel 1X" 0 "G0000409" "1" 02/08/18 31/12/49
+1 "" 5 "Alcatel 1X" 0 "G0000409" "1" 02/08/18 31/12/49
+1 "" 1 "Alcatel 3X" 0 "G0000410" "1" 02/08/18 31/12/49
+1 "" 2 "Alcatel 3X" 0 "G0000410" "1" 02/08/18 31/12/49
+1 "" 3 "Alcatel 3X" 0 "G0000410" "1" 02/08/18 31/12/49
+1 "" 4 "Alcatel 3X" 0 "G0000410" "1" 02/08/18 31/12/49
+1 "" 5 "Alcatel 3X" 0 "G0000410" "1" 02/08/18 31/12/49
+1 "" 1 "LG K11" 0 "G0000411" "1" 02/08/18 31/12/49
+1 "" 2 "LG K11" 0 "G0000411" "1" 02/08/18 31/12/49
+1 "" 3 "LG K11" 0 "G0000411" "1" 02/08/18 31/12/49
+1 "" 4 "LG K11" 0 "G0000411" "1" 02/08/18 31/12/49
+1 "" 5 "LG K11" 0 "G0000411" "1" 02/08/18 31/12/49
+1 "" 1 "Samsung Galaxy Note 9" 0 "G0000412" "1" 02/08/18 31/12/49
+1 "" 2 "Samsung Galaxy Note 9" 0 "G0000412" "1" 02/08/18 31/12/49
+1 "" 3 "Samsung Galaxy Note 9" 0 "G0000412" "1" 02/08/18 31/12/49
+1 "" 4 "Samsung Galaxy Note 9" 0 "G0000412" "1" 02/08/18 31/12/49
+1 "" 5 "Samsung Galaxy Note 9" 0 "G0000412" "1" 02/08/18 31/12/49
+1 "" 1 "Samsung Galaxy Note 9 128GB" 0 "G0000413" "1" 02/08/18 31/12/49
+1 "" 2 "Samsung Galaxy Note 9 128GB" 0 "G0000413" "1" 02/08/18 31/12/49
+1 "" 3 "Samsung Galaxy Note 9 128GB" 0 "G0000413" "1" 02/08/18 31/12/49
+1 "" 4 "Samsung Galaxy Note 9 128GB" 0 "G0000413" "1" 02/08/18 31/12/49
+1 "" 5 "Samsung Galaxy Note 9 128GB" 0 "G0000413" "1" 02/08/18 31/12/49
+1 "" 1 "Samsung Galaxy Note 9 512GB" 0 "G0000414" "1" 02/08/18 31/12/49
+1 "" 2 "Samsung Galaxy Note 9 512GB Azul" 0 "G0000414" "1" 02/08/18 31/12/49
+1 "" 3 "Samsung Galaxy Note 9 512GB Azul" 0 "G0000414" "1" 02/08/18 31/12/49
+1 "" 4 "Samsung Galaxy Note 9 512GB Azul" 0 "G0000414" "1" 02/08/18 31/12/49
+1 "" 5 "Samsung Galaxy Note 9 512GB" 0 "G0000414" "1" 02/08/18 31/12/49
+1 "" 1 "Google Chromecast" 0 "G0000415" "1" 03/08/18 31/12/49
+1 "" 2 "Google Chromecast" 0 "G0000415" "1" 03/08/18 31/12/49
+1 "" 3 "Google Chromecast" 0 "G0000415" "1" 03/08/18 31/12/49
+1 "" 4 "Google Chromecast" 0 "G0000415" "1" 03/08/18 31/12/49
+1 "" 5 "Google Chromecast" 0 "G0000415" "1" 03/08/18 31/12/49
+1 "" 1 "Google Chromecast" 0 "G0000416" "1" 03/08/18 31/12/49
+1 "" 2 "Google Chromecast" 0 "G0000416" "1" 03/08/18 31/12/49
+1 "" 3 "Google Chromecast" 0 "G0000416" "1" 03/08/18 31/12/49
+1 "" 4 "Google Chromecast" 0 "G0000416" "1" 03/08/18 31/12/49
+1 "" 5 "Google Chromecast" 0 "G0000416" "1" 03/08/18 31/12/49
+1 "" 1 "Google Home" 0 "G0000417" "1" 03/08/18 31/12/49
+1 "" 2 "Google Home" 0 "G0000417" "1" 03/08/18 31/12/49
+1 "" 3 "Google Home" 0 "G0000417" "1" 03/08/18 31/12/49
+1 "" 4 "Google Home" 0 "G0000417" "1" 03/08/18 31/12/49
+1 "" 5 "Google Home" 0 "G0000417" "1" 03/08/18 31/12/49
+1 "" 1 "Google Home Mini" 0 "G0000418" "1" 03/08/18 31/12/49
+1 "" 2 "Google Home Mini" 0 "G0000418" "1" 03/08/18 31/12/49
+1 "" 3 "Google Home Mini" 0 "G0000418" "1" 03/08/18 31/12/49
+1 "" 4 "Google Home Mini" 0 "G0000418" "1" 03/08/18 31/12/49
+1 "" 5 "Google Home Mini" 0 "G0000418" "1" 03/08/18 31/12/49
+1 "" 1 "Google Chromecast Negro" 0 "G053CHRN2" "1" 03/08/18 31/12/49
+1 "" 2 "Google Chromecast" 0 "G053CHRN2" "1" 03/08/18 31/12/49
+1 "" 3 "Google Chromecast" 0 "G053CHRN2" "1" 03/08/18 31/12/49
+1 "" 4 "Google Chromecast" 0 "G053CHRN2" "1" 03/08/18 31/12/49
+1 "" 5 "Google Chromecast Black" 0 "G053CHRN2" "1" 03/08/18 31/12/49
+1 "" 1 "Google Home Blanco" 0 "G053HOEW2" "1" 03/08/18 31/12/49
+1 "" 2 "Google Home Blanco" 0 "G053HOEW2" "1" 03/08/18 31/12/49
+1 "" 3 "Google Home Blanco" 0 "G053HOEW2" "1" 03/08/18 31/12/49
+1 "" 4 "Google Home Blanco" 0 "G053HOEW2" "1" 03/08/18 31/12/49
+1 "" 5 "Google Home White" 0 "G053HOEW2" "1" 03/08/18 31/12/49
+1 "" 1 "Google Home Mini Negro" 0 "G053HOMN2" "1" 03/08/18 31/12/49
+1 "" 2 "Google Home Mini Negro" 0 "G053HOMN2" "1" 03/08/18 31/12/49
+1 "" 3 "Google Home Mini Negro" 0 "G053HOMN2" "1" 03/08/18 31/12/49
+1 "" 4 "Google Home Mini Negro" 0 "G053HOMN2" "1" 03/08/18 31/12/49
+1 "" 5 "Google Home Mini Black" 0 "G053HOMN2" "1" 03/08/18 31/12/49
+1 "" 1 "Google Home Mini Blanco" 0 "G053HOMW2" "1" 03/08/18 31/12/49
+1 "" 2 "Google Home Mini Blanco" 0 "G053HOMW2" "1" 03/08/18 31/12/49
+1 "" 3 "Google Home Mini Blanco" 0 "G053HOMW2" "1" 03/08/18 31/12/49
+1 "" 4 "Google Home Mini Blanco" 0 "G053HOMW2" "1" 03/08/18 31/12/49
+1 "" 5 "Google Home Mini White" 0 "G053HOMW2" "1" 03/08/18 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4719,10 +4793,10 @@
 1 "" 3 "Aquí un amigo deskontua" 0 "MGMPOST" "1" 01/04/12 31/12/49
 1 "" 3 "Deskontu Aquí un amigo" 0 "MGMPOST" "1" 27/02/09 31/03/12
 1 "" 5 "Aquí un amigo discount" 0 "MGMPOST" "1" 27/02/09 31/12/54
-1 "" 1 "Descuento Coste de InstalaciÃ³n" 0 "NEBTERMPERIOD" "1" 27/07/18 31/12/49
-1 "" 2 "Descompte cost dâ€™instalÂ·laciÃ³" 0 "NEBTERMPERIOD" "1" 27/07/18 31/12/49
-1 "" 3 "Instalazio-kostuaren deskontua" 0 "NEBTERMPERIOD" "1" 27/07/18 31/12/49
-1 "" 5 "Discount on the cost of installation" 0 "NEBTERMPERIOD" "1" 27/07/18 31/12/49
+1 "" 1 "Incumplimiento de Permanencia" 0 "NEBTERMPERIOD" "1" 01/07/18 31/12/49
+1 "" 2 "Incompliment de Permanència" 0 "NEBTERMPERIOD" "1" 01/07/18 31/12/49
+1 "" 3 "Iraupen-konpromisoa ez betetzea" 0 "NEBTERMPERIOD" "1" 01/07/18 31/12/49
+1 "" 5 "Failure to comply with Minimum Contract Period" 0 "NEBTERMPERIOD" "1" 01/07/18 31/12/49
 1 "" 1 "OFFICE 365 ESSENTIALS" 0 "OFFICE365" "1" 04/07/17 31/12/49
 1 "" 2 "OFFICE 365 ESSENTIALS" 0 "OFFICE365" "1" 04/07/17 31/12/49
 1 "" 3 "OFFICE 365 ESSENTIALS" 0 "OFFICE365" "1" 04/07/17 31/12/49
@@ -4807,6 +4881,11 @@
 1 "" 3 "Sony Xperia Mini Pro Negro" 0 "P013MPRN2" "1" 24/05/12 31/12/49
 1 "" 4 "Sony Xperia Mini Pro Negro" 0 "P013MPRN2" "1" 24/05/12 31/12/49
 1 "" 5 "Sony Xperia Mini Pro Black" 0 "P013MPRN2" "1" 24/05/12 31/12/49
+1 "" 1 "Sony Xperia XZ2 Azul con altavoz inalámbrico" 0 "P013PZ2AC" "1" 02/08/18 31/12/49
+1 "" 2 "Sony Xperia XZ2 Azul con altavoz inalámbrico" 0 "P013PZ2AC" "1" 02/08/18 31/12/49
+1 "" 3 "Sony Xperia XZ2 Azul con altavoz inalámbrico" 0 "P013PZ2AC" "1" 02/08/18 31/12/49
+1 "" 4 "Sony Xperia XZ2 Azul con altavoz inalámbrico" 0 "P013PZ2AC" "1" 02/08/18 31/12/49
+1 "" 5 "Sony Xperia XZ2 Petrol Blue with wireless speaker" 0 "P013PZ2AC" "1" 02/08/18 31/12/49
 1 "" 5 "Sony Ericsson T280i Copper on Silver" 0 "P013T28B2" "1" 24/06/09 31/12/49
 1 "" 5 "Sony Ericsson T280i Silver on Black" 0 "P013T28N2" "1" 25/06/09 31/12/49
 1 "" 1 "Sony Ericsson T280i Rosa y plata" 0 "P013T28R2" "1" 27/10/08 31/12/54
@@ -7605,6 +7684,11 @@
 1 "" 3 "Sony Xperia XZ Premium Negro con PS4" 0 "P037PXPNC" "1" 26/04/18 31/12/49
 1 "" 4 "Sony Xperia XZ Premium Negro con PS4" 0 "P037PXPNC" "1" 26/04/18 31/12/49
 1 "" 5 "Sony Xperia XZ Premium Negro with PS4" 0 "P037PXPNC" "1" 26/04/18 31/12/49
+1 "" 1 "Sony Xperia XZ1 Negro con altavoz inalámbrico" 0 "P037PZ1NC" "1" 02/08/18 31/12/49
+1 "" 2 "Sony Xperia XZ1 Negro con altavoz inalámbrico" 0 "P037PZ1NC" "1" 02/08/18 31/12/49
+1 "" 3 "Sony Xperia XZ1 Negro con altavoz inalámbrico" 0 "P037PZ1NC" "1" 02/08/18 31/12/49
+1 "" 4 "Sony Xperia XZ1 Negro con altavoz inalámbrico" 0 "P037PZ1NC" "1" 02/08/18 31/12/49
+1 "" 5 "Sony Xperia XZ1 Black with wireless speaker" 0 "P037PZ1NC" "1" 02/08/18 31/12/49
 1 "" 1 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
 1 "" 2 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
 1 "" 3 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49

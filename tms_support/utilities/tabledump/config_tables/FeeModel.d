@@ -114,8 +114,10 @@
 "FTERMPERIOD140" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD150" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD177" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD181" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD187" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD190" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD231" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD233" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD243" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD283" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -152,6 +154,7 @@
 "NEBTERMPERIOD150" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "NEBTERMPERIOD160" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "NEBTERMPERIOD190" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"NEBTERMPERIOD231" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "NEBTERMPERIOD237" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "NEBTERMPERIOD283" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "NEBTERMPERIOD293" "Neba line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

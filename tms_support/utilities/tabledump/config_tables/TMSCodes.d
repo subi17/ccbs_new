@@ -1363,7 +1363,7 @@
 "requem" "77,0,1,2,3,4,9" "SubsLMenu" "1" "Duplicate Invoice" "" "" 0
 "requem" "78,0,2,3,7" "SubsLMenu" "1" "Bundle Activation/Termination" "" "" 1
 "requem" "79,0,1,2,3,9" "SubsLMenu" "1" "SMS invoice" "" "" 1
-"requem" "8,0,1,2,3,4,7,8,9" "SubsLMenu" "1" "Periodical contract creation" "" "" 1
+"requem" "8,0,1,2,3,4,6,7,8,9" "SubsLMenu" "1" "Periodical contract creation" "" "" 1
 "requem" "80,2" "SubsLMenu" "1" "IMEI change" "" "" 1
 "requem" "81,0,1,2,3,4,6,7,8,9" "SubsLMenu" "1" "Bundle Type Change" "" "" 1
 "requem" "82,0,1,2,3,4,5,6,7,8,9,19" "SubsLMenu" "1" "Subscription Reactivation" "" "" 1
@@ -1441,6 +1441,7 @@
 "Salesman" "SmPrefix" "IFS" "BY" "ByMovil" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "CA" "Carrefour" "" "12" 0
 "Salesman" "SmPrefix" "IFS" "CE" "CANAL EXCLUSIVO NEGOCIOS" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CK" "KONECTA CANCELACIONES" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CL" "Casturtel Leon" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CN" "CANCELACIONES MARKTEL" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CO" "EOS OUTBOUND" "" "15" 1
@@ -1468,6 +1469,7 @@
 "Salesman" "SmPrefix" "IFS" "GW" "GSS WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KC" "KONECTA CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "KI" "KONECTA INBOUND CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
@@ -1498,6 +1500,7 @@
 "Salesman" "SmPrefix" "IFS" "RC" "CASTURTEL RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "SC" "SERVINFORM CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "SE" "SERVINFORM OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "SO" "BYSIDECAR ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TA" "Tal Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "TC" "Telecor" "" "25" 0
 "Salesman" "SmPrefix" "IFS" "TL" "TelAndCom" "" "26" 0
