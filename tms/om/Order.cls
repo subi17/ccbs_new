@@ -414,6 +414,7 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.Paytype       = (IF Func.ValidateOrder:mGetPayType(INPUT THIS-OBJECT:cliType) = 2 THEN YES ELSE NO) 
             Order.AccountId     = objCustomer:custAcctID
             Order.CLIType       = THIS-OBJECT:cliType
+            Order.ICC           = THIS-OBJECT:lcICC
             THIS-OBJECT:payType = Order.Paytype.
             
         IF VALID-OBJECT(objBillAcctArray) THEN 

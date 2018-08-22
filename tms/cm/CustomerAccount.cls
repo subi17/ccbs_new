@@ -91,7 +91,7 @@ CLASS cm.CustomerAccount IMPLEMENTS bss.cls.IObjectStorage :
           THIS-OBJECT:validFrom   =  DATETIME-TZ(TODAY)
           THIS-OBJECT:validTo     =  DATETIME-TZ(DATE(12,31,2049))
           THIS-OBJECT:accountId   =  NEXT-VALUE (accountid)            
-          THIS-OBJECT:statusCode  =  0
+          THIS-OBJECT:statusCode  =  1
           objCustomer:custAcctID  =  THIS-OBJECT:accountId. /*0=pending, 1=active*/
           
       IF ioCustAcctObject:Has("billing_address") THEN 
