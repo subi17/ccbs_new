@@ -191,14 +191,14 @@ def compile(match, *a):
 
     if parameters:
         for rpc in parameters:
-            if rpc not in rpcs.keys():
+            if rpc not in rpcs:
                 raise PikeException('Invalid rpc name')
 
     systemrpc_compiledir = ''
 
-    rpc_having_source = _compile(match, rpclist=list(set(parameters or rpcs.keys())))
+    rpc_having_source = _compile(match, rpclist=list(set(parameters or rpcs)))
 
-    _compile_cls(match, rpclist=list(set(parameters or rpcs.keys())))
+    _compile_cls(match, rpclist=list(set(parameters or rpcs)))
 
     if match == 'compile' and rpc_having_source:
         # Compile systemrpc to temporary directory
@@ -553,7 +553,7 @@ def build(*a):
 
 
     currentdir = os.getcwd()
-    for rpc in rpcs.keys():
+    for rpc in rpcs:
         os.chdir(rpc)
         rpcbuilddir = os.path.join(build_dir, rpc)
         mkdir_p(rpcbuilddir)
@@ -617,7 +617,7 @@ def connect_confluence(host):
 def documentation(*a):
     if parameters:
         for rpc in parameters:
-            if rpc not in rpcs.keys():
+            if rpc not in rpcs:
                 raise PikeException('Invalid rpc name')
 
     confluencefile = 'confluence.json'
@@ -629,7 +629,7 @@ def documentation(*a):
     print('      have updated the documentation files using')
     print('      the "pike compile" command in this directory!\n')
 
-    rpclist = list(set(parameters or rpcs.keys()))
+    rpclist = list(set(parameters or rpcs))
 
     with open(confluencefile, 'r') as jsonfile:
         jsondata = json.load(jsonfile)
