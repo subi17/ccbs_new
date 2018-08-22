@@ -200,7 +200,9 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    DEF VAR liCReqTime    AS INT  NO-UNDO.
    DEF VAR ldtCReqDate   AS DATE NO-UNDO.
    DEF VAR llProCustomer AS LOGI NO-UNDO.
-
+   DEF VAR lcNewCliType  AS CHAR NO-UNDO.
+   DEF VAR lcNewCliTypeMtx  AS CHAR NO-UNDO.
+   
    ocResult = fChkRequest(iiMsSeq,
                           0,
                           "",
@@ -280,8 +282,28 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                   1=extend_term_contract
                   2=exclude_term_penalty)
       */
+
+   lcNewCliType =  icNewType.
+
+   FIND CLIType WHERE CLIType.Brand   = Syst.Var:gcBrand AND
+                      CLIType.CLIType = icNewType NO-LOCK NO-ERROR.
+
+   IF AVAILABLE CLIType THEN DO:
+      IF fIsConvergenceTariff(bReqSub.CLIType) AND
+         CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:
+    
+         IF fListMatrix(Syst.Var:gcBrand,
+                        "CONVMOBILESTC",
+                        "SubsTypeFrom;SubsTypeTo",
+                        lcNewCliType,
+                        OUTPUT lcNewCliTypeMtx) = 1 THEN DO:
+            lcNewCliType =  lcNewCliTypeMtx.
+         END.
+      END. 
+   END.
+
    ASSIGN bCreaReq.ReqCParam1  = bReqSub.CLIType
-          bCreaReq.ReqCParam2  = icNewType
+          bCreaReq.ReqCParam2  = lcNewCliType
           bCreaReq.ReqCparam3  = icBankNumber
           bCreaReq.ReqCparam5  = icBundleType
           bCreaReq.ReqCparam6  = icDMSInfo
