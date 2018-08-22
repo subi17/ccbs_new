@@ -485,7 +485,7 @@ OUTPUT STREAM sLog TO VALUE(lcLog) APPEND.
 
 IF llLogRequest THEN fLogMsg("Started by Cron at " + Func.Common:mTS2HMS(ldCurrentTimeTS)).
 
-iTimeOut = 10.
+iTimeOut = 40.
 initialize(lcUrlAdapter, iTimeOut).
 
 RUN pCheckActionLog("dssent").
