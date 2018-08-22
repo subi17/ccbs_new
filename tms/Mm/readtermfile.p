@@ -51,7 +51,8 @@ DEF VAR lcTenant         AS CHAR      NO-UNDO.
 DEF VAR llYoigoTenant    AS LOGI      NO-UNDO INIT FALSE.
 DEF VAR llMasmovilTenant AS LOGI      NO-UNDO INIT FALSE.
 DEF VAR liBillPerm       AS INT  NO-UNDO. 
-DEF VAR liError          AS INT  NO-UNDO. 
+DEF VAR liError          AS INT  NO-UNDO.
+DEF VAR lcNewCliTypeMtx  AS CHAR NO-UNDO.
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -303,8 +304,10 @@ REPEAT:
       END.
 
       IF fIsConvergenceTariff(lcCLIType) AND 
-         NOT CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = MobSub.MsSeq)
-      THEN DO.
+         NOT CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = MobSub.MsSeq) AND
+         MobSub.MSStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND /* YTS-13493 */
+         MobSub.MSStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}
+      THEN DO:
          IF lcTerminationType EQ "MOBILE" THEN DO:
             liRequest = fTerminationRequest(MobSub.MSSeq,
                                             ldKillStamp,
@@ -333,11 +336,14 @@ REPEAT:
                   OldCliType.Brand   = Syst.Var:gcBrand AND
                   OldCliType.CliType = lcCLIType NO-LOCK NO-ERROR.
 
-               IF LOOKUP(OldCliType.BaseBundle, "DUB,CONT30,CONTS2GB") > 0 THEN 
-                  lcNewCliType = "CONT25".
-               ELSE IF OldCliType.BaseBundle EQ "CONT32" THEN              
-                  lcNewCliType = "CONT33".
-               ELSE lcNewCliType = OldCliType.BaseBundle.
+               IF fListMatrix(Syst.Var:gcBrand,
+                              "CONVMOBILESTC",
+                              "SubsTypeFrom;SubsTypeTo",
+                              OldCliType.BaseBundle,
+                              OUTPUT lcNewCliTypeMtx) = 1 THEN DO:
+                  lcNewCliType =  lcNewCliTypeMtx.
+               END.
+               ELSE lcNewCliType = OldCliType.BaseBundle.             
             END.
             
             liRequest = fCTChangeRequest(MobSub.msseq,
@@ -365,7 +371,10 @@ REPEAT:
          END.
       END.
       ELSE DO:
-         fError("Subscription is partially terminated. Use FULL termination.").
+         IF MobSub.MSStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
+            fError("Mobile part not yet activated. Use FULL termination.").
+         ELSE
+            fError("Subscription is partially terminated. Use FULL termination.").
          NEXT.
       END.   
       
