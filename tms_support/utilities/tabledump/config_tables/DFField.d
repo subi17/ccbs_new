@@ -899,8 +899,7 @@
 "" 207 "DayCampaign" "TermFeeModel" "TermFeeModel" 9 01/01/14 31/12/49
 "" 207 "DayCampaign" "DurMonths" "DurMonths" 10 01/01/14 31/12/49
 "" 207 "DayCampaign" "InstanceLimit" "InstanceLimit" 11 01/01/14 31/12/49
-"" 207 "DayCampaign" "BundleUpsell" "BundleUpsell" 12 01/01/14 31/12/49
-"" 207 "DayCampaign" "DSSPriority" "DSSPriority" 13 01/01/14 31/12/49
+"" 207 "DayCampaign" "DSSPriority" "DSSPriority" 12 01/01/14 31/12/49
 "" 208 "DCCLI" "PerContractID" "PerContractID" 1 01/01/14 31/12/49
 "" 208 "DCCLI" "@Version" "1" 2 01/01/14 31/12/49
 "" 208 "DCCLI" "MsSeq" "MsSeq" 3 01/01/14 31/12/49
@@ -1596,3 +1595,13 @@
 "" 555 "OrderProductParam" "IntValue" "IntValue" 8 01/05/18 31/12/49
 "" 555 "OrderProductParam" "DecValue" "DecValue" 9 01/05/18 31/12/49
 "" 555 "OrderProductParam" "OrderID" "OrderID" 10 01/05/18 31/12/49
+"1" 556 "TMSRelation" "TMSRelationID" "TMSRelationID" 1 11/07/18 31/12/49
+"1" 556 "TMSRelation" "@version" "1" 2 11/07/18 31/12/49
+"1" 556 "TMSRelation" "TMSRelationID" "TMSRelationID" 3 11/07/18 31/12/49
+"1" 556 "TMSRelation" "TableName" "TableName" 4 11/07/18 31/12/49
+"1" 556 "TMSRelation" "KeyType" "KeyType" 5 11/07/18 31/12/49
+"1" 556 "TMSRelation" "ParentValue" "ParentValue" 6 11/07/18 31/12/49
+"1" 556 "TMSRelation" "ChildValue" "ChildValue" 7 11/07/18 31/12/49
+"1" 556 "TMSRelation" "RelationType" "RelationType" 8 11/07/18 31/12/49
+"1" 556 "TMSRelation" "FromTime" "FromTime" 9 11/07/18 31/12/49
+"1" 556 "TMSRelation" "ToTime" "ToTime" 10 11/07/18 31/12/49

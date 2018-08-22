@@ -1392,6 +1392,7 @@
 "RequestAction" "Action" "Request" "4" "Precheck" "" "" 1
 "RequestAction" "Action" "Request" "5" "Leave as is" "" "" 1
 "RequestAction" "Action" "Request" "6" "Extend contract" "" "" 1
+"RequestAction" "Action" "Request" "7" "Refresh" "" "" 1
 "RequestAction" "ActionType" "Request" "BarringsNotAllowed" "Barrings that prevent action" "" "" 1
 "RequestAction" "ActionType" "Request" "CTServPac" "Service package" "" "" 1
 "RequestAction" "ActionType" "Request" "DayCampaign" "Periodical contract" "" "" 1

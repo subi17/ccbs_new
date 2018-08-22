@@ -355,6 +355,7 @@
 "ISLVW" "Viking Wireless" "Iceland" "IS" "" "354"
 "ISR01" "Partner Communications" "Israel" "IL" "" "972"
 "ISRCL" "Cellcom" "Israel" "IL" "" "972"
+"ITAFM" "Iliad" "ITALY" "IT" "" "39"
 "ITAGT" "TIM" "Italy" "IT" "" "39"
 "ITAH3" "3" "Italy" "IT" "" "39"
 "ITAOM" "Vodafone Omnitel" "Italy" "IT" "" "39"
