@@ -154,7 +154,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       END. /* FOR EACH ServiceLimit WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
-   IF (LOOKUP(DayCampaign.DCEvent,lcBONOContracts    ) > 0 OR
+   IF  LOOKUP(DayCampaign.DCEvent,lcBONOContracts)     > 0 OR
        LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
        LOOKUP(DayCampaign.DCEvent,lcDefaultBundles)    > 0 THEN
    DO:
