@@ -179,49 +179,52 @@ CLASS cm.Customer IMPLEMENTS bss.cls.IObjectStorage:
         lobjCustomerType = NEW JsonObject().
 
         lobjCustomerType = ioJsonObject:GetJsonObject("residential").
-
-        RETURN lobjCustomerType:GetCharacter("id").
      END.
      ELSE IF ioJsonObject:Has("company") THEN 
      DO:
            lobjCustomerType = NEW JsonObject().
 
            lobjCustomerType = ioJsonObject:GetJsonObject("company").
-
-           RETURN lobjCustomerType:GetCharacter("company_id").
      END.    
 
-     RETURN "".
+     RETURN lobjCustomerType:GetCharacter("id").
       
   END METHOD.
 
-  METHOD PUBLIC VOID mFillCustomerIDDetails
-    (ioJsonObject AS CLASS JsonObject):
+    METHOD PUBLIC VOID mFillCustomerIDDetails
+        (ioJsonObject AS CLASS JsonObject):
 
-     DEFINE VARIABLE lobjCustomerType AS CLASS JsonObject NO-UNDO.
+        DEFINE VARIABLE lobjCustomerType  AS CLASS JsonObject NO-UNDO.
+        DEFINE VARIABLE loAdminCustStruct AS CLASS JsonObject NO-UNDO.
 
-     IF ioJsonObject:Has("residential") THEN 
-     DO:
-        lobjCustomerType = NEW JsonObject().
+        IF ioJsonObject:Has("residential") THEN 
+        DO:
+            lobjCustomerType = NEW JsonObject().
+            lobjCustomerType = ioJsonObject:GetJsonObject("residential").
 
-        lobjCustomerType = ioJsonObject:GetJsonObject("residential").
+            ASSIGN 
+                THIS-OBJECT:custIdType = lobjCustomerType:GetCharacter("id_type")  
+                THIS-OBJECT:custId     = lobjCustomerType:GetCharacter("id").  
+        END.
+        ELSE IF ioJsonObject:Has("company") THEN 
+        DO:
+            lobjCustomerType = NEW JsonObject().
+            lobjCustomerType = ioJsonObject:GetJsonObject("company").
 
-        ASSIGN 
-           THIS-OBJECT:custIdType = lobjCustomerType:GetCharacter("id_type")  
-           THIS-OBJECT:custId     = lobjCustomerType:GetCharacter("id").  
-     END.
-     ELSE IF ioJsonObject:Has("company") THEN 
-     DO:
-         lobjCustomerType = NEW JsonObject().
-
-         lobjCustomerType = ioJsonObject:GetJsonObject("company").
-
-         ASSIGN    
-            THIS-OBJECT:custId         =  lobjCustomerType:GetCharacter("company_id")
-            THIS-OBJECT:custIdType     =  lobjCustomerType:GetCharacter("id_type")
-            THIS-OBJECT:foundationDate =  Func.Common:mGetDate(lobjCustomerType:GetCharacter("foundation_date"))
-            THIS-OBJECT:companyName    =  lobjCustomerType:GetCharacter("site_name").          
-     END.
+            ASSIGN    
+                THIS-OBJECT:custId         = lobjCustomerType:GetCharacter("id")
+                THIS-OBJECT:custIdType     = lobjCustomerType:GetCharacter("id_type")
+                THIS-OBJECT:foundationDate = Func.Common:mGetDate(lobjCustomerType:GetCharacter("foundation_date"))
+                THIS-OBJECT:companyName    = lobjCustomerType:GetCharacter("site_name").          
+        END.
+     
+        IF ioJsonObject:Has("administrator_person") THEN 
+        DO:
+            ASSIGN
+                loAdminCustStruct          = NEW JsonObject() 
+                THIS-OBJECT:authCustId     = loAdminCustStruct:GetCharacter("id")
+                THIS-OBJECT:authCustIdType = loAdminCustStruct:GetCharacter("id_type").
+        END.
 
     END METHOD.  
 
