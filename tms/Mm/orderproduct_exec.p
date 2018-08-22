@@ -717,17 +717,10 @@ PROCEDURE pSIM:
           RETURN "Resignation Period".
        END.
 
-       IF Func.ValidateOrder:mIsConvergentTariff(bf_Order.CliType) THEN  
-       DO:
-           fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}). /* SIM */
+       fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}). /* SIM */
 
-           fSetOrderProductStatus(bf_Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_ONGOING}). /* convergent_subscription */
-
+       IF Func.ValidateOrder:mIsConvergentTariff(bf_Order.CliType) THEN
            RUN pMobile(iiOrderProductID).
-       END.
-       ELSE 
-          fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_DELIVERED}).
-          
     END.   
 
     RETURN "".
@@ -1016,15 +1009,18 @@ PROCEDURE pMobileActivationRequest:
     DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER   NO-UNDO.
     DEFINE INPUT PARAMETER icMSISDN         AS CHARACTER NO-UNDO.
 
-    DEF VAR lcResult         AS CHAR    NO-UNDO.
-    DEF VAR ldeSwitchTS      AS DECIMAL NO-UNDO.
-    DEF VAR llStatusAssigned AS LOGICAL NO-UNDO.
+    DEF VAR lcResult                AS CHAR    NO-UNDO.
+    DEF VAR ldeSwitchTS             AS DECIMAL NO-UNDO.
+    DEF VAR llStatusAssigned        AS LOGICAL NO-UNDO.
+    DEF VAR liSubscriptionProductId AS INTEGER NO-UNDO.
+
+    ASSIGN liSubscriptionProductId = fGetParentProductIDBasedOnChild(bf_Order.OrderId, iiOrderProductID).
 
     IF fIsMNPOrder(bf_Order.OrderType) THEN 
         ASSIGN ldeSwitchTS = fGetPortabilitySwitchTS().
     ELSE 
         ASSIGN ldeSwitchTS = Func.Common:mMakeTS().
-    
+
     fSubscriptionRequest(INPUT  bf_Order.MSSeq,
                          INPUT  icMSISDN,
                          INPUT  bf_Order.CustNum,
@@ -1033,7 +1029,7 @@ PROCEDURE pMobileActivationRequest:
                          INPUT  ldeSwitchTS,
                          INPUT  "CREATE",
                          INPUT  STRING(bf_Order.OrderId),
-                         INPUT  STRING(iiOrderProductID),
+                         INPUT  STRING(liSubscriptionProductId),
                          INPUT  "", /*for old SIM*/
                          INPUT  "", /*for Reason info*/
                          INPUT  "", /*for ContractID*/
@@ -1061,9 +1057,10 @@ PROCEDURE pMobileActivationRequest:
 
         IF llStatusAssigned THEN 
         DO:
-           fMarkOrderStamp(bf_Order.OrderID,"Change",0.0).  /* Mark timestamp as change */     
+           fMarkOrderStamp(bf_Order.OrderID,"Change",0.0).  /* Mark timestamp as change */
 
-           fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_ONGOING}).
+           IF liSubscriptionProductId > 0 THEN 
+              fSetOrderProductStatus(bf_Order.OrderId, liSubscriptionProductId, {&ORDER_STATUS_ONGOING}). /* convergent_subscription */
         END.   
     END.
     
