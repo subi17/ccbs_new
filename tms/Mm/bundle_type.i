@@ -17,8 +17,6 @@ FUNCTION fGetBundles RETURNS CHAR (icBundleType AS CHAR):
       WHEN "CONTS"        THEN lcContracts = fCParamC("CONTS_CONTRACTS").
       WHEN "CONTSF"       THEN lcContracts = fCParamC("CONTSF_CONTRACTS").
       WHEN "DSS"          THEN lcContracts = {&DSS_BUNDLES}.
-      WHEN "BONO_VOIP"    THEN lcContracts = "BONO_VOIP".
-      WHEN "HSPA_ROAM_EU" THEN lcContracts = "HSPA_ROAM_EU".
       WHEN "VOICE"       THEN lcContracts = "VOICE100,VOICE200,VOICE200B,MM_VOICE40,MM_VOICE100,MM_VOICE250". 
       WHEN "FREE100MINUTES" THEN lcContracts = "FREE100MINUTES".
       OTHERWISE RETURN "".

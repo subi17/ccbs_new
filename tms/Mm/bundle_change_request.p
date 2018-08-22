@@ -24,9 +24,6 @@ DEF VAR ldEndStamp        AS DEC  NO-UNDO.
 DEF VAR ldaActivationDate AS DATE NO-UNDO.
 DEF VAR liActivationTime  AS INT  NO-UNDO.
 
-DEF TEMP-TABLE ttContract NO-UNDO
-    FIELD DCEvent AS CHAR.
-
 DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
     FIELD CustNum  AS INT
@@ -202,8 +199,6 @@ PROCEDURE pFinalize:
    DEFINE VARIABLE lhDPMember AS HANDLE NO-UNDO.
 
    DEF BUFFER bDPMember  FOR DPMember.
-
-   EMPTY TEMP-TABLE ttContract.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
@@ -520,16 +515,13 @@ PROCEDURE pCloseContracts:
    DEF VAR lcAllowedBonoSTCContracts AS CHAR NO-UNDO. 
    DEF VAR lcError                   AS CHAR NO-UNDO. 
    DEF VAR liRequest                 AS INT  NO-UNDO.
-   DEF VAR lcNativeVoipTariffs      AS CHAR NO-UNDO.
-   DEF VAR lcNativeVoipBundles      AS CHAR NO-UNDO.
    
    ASSIGN lcAllowedBonoSTCContracts = fCParamC("ALLOWED_BONO_STC_CONTRACTS")
-          lcBONOContracts = fCParamC("BONO_CONTRACTS")
-          lcNativeVoipTariffs    = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
-          lcNativeVoipBundles    = fCParamC("NATIVE_VOIP_BUNDLES").
+          lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
-   IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) = 0 THEN DO:
-
+   IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) > 0
+   THEN RETURN.
+   
    lcBonoBundle = fGetActiveSpecificBundle(MobSub.MsSeq,
                                            MsRequest.ActStamp,
                                            "BONO").
@@ -572,13 +564,6 @@ PROCEDURE pCloseContracts:
                                  INPUT {&REQUEST_SOURCE_BTC},
                                  BUFFER MsRequest,
                                  BUFFER MobSub).
-
-            /* Deactivate BONO_VOIP bundle if there is no active data bundle */
-            IF fGetActiveSpecificBundle(Mobsub.MsSeq,MsRequest.ActStamp,
-                                        "BONO_VOIP") > "" THEN DO:
-               CREATE ttContract.
-                      ttContract.DCEvent = "BONO_VOIP".
-            END. /* IF fGetActiveSpecificBundle(Mobsub.MsSeg */
          END. /* IF LOOKUP(lcBonoBundle,lcBONOContracts) = 0 THEN DO: */
          ELSE
             RUN pChangedBBStatus(INPUT 1,
@@ -588,60 +573,6 @@ PROCEDURE pCloseContracts:
                                  BUFFER MobSub).
       END. /* IF LOOKUP(MsRequest.ReqCParam2,lcOnlyVoiceContracts) > 0 */
    END. /* IF INDEX(MsRequest.ReqCParam2,"CONTF") > 0 THEN DO: */
-   END. /* IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) = 0 THEN DO: */
-   
-   IF (LOOKUP(MsRequest.ReqCParam2,lcNativeVoipTariffs) > 0 OR 
-       LOOKUP(MsRequest.ReqCParam2,lcNativeVoipBundles) > 0) AND
-      NOT CAN-FIND(FIRST ttContract WHERE
-                         ttContract.DCEvent  = "BONO_VOIP") AND
-      fGetActiveSpecificBundle(Mobsub.MsSeq,
-                               MsRequest.ActStamp,
-                               "BONO_VOIP") > "" THEN DO:
-      CREATE ttContract.
-             ttContract.DCEvent = "BONO_VOIP".
-   END.
-
-   FOR EACH ttContract:
-      FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = Syst.Var:gcBrand AND
-                 DayCampaign.DCEvent = ttContract.DCEvent AND
-                 DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
-      IF NOT AVAIL DayCampaign THEN DO:
-         Func.Common:mWriteMemo("MobSub",
-                          STRING(Mobsub.MsSeq),
-                          Mobsub.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract information is missing!").
-         DELETE ttContract.
-         NEXT.
-      END. /* IF NOT AVAIL DayCampaign THEN DO: */
-
-      liRequest = fPCActionRequest(MobSub.MsSeq,
-                       ttContract.DCEvent,
-                       "term",
-                       ldEndStamp,
-                       TRUE,             /* create fees */
-                       {&REQUEST_SOURCE_BTC},
-                       "",
-                       MsRequest.MsRequest, /* Father Request */
-                       FALSE,
-                       "",
-                       0,
-                       0,
-                       "",
-                       OUTPUT lcError).
-      IF liRequest = 0 THEN
-         /* Write memo */
-         Func.Common:mWriteMemo("MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract is not closed: " + lcError).
-   END. /* FOR EACH ttContract: */
-
-   EMPTY TEMP-TABLE ttContract NO-ERROR.
 
 END PROCEDURE.
 

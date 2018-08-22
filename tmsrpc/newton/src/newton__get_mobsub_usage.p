@@ -469,32 +469,6 @@ IF NOT MobSub.PayType THEN DO:
 
 END. /* IF NOT MobSub.PayType THEN DO: */
 
-FOR FIRST ServiceLimit NO-LOCK WHERE
-          ServiceLimit.GroupCode = "HSPA_ROAM_EU",
-    EACH MServiceLimit NO-LOCK WHERE
-         MServiceLimit.MsSeq   = MobSub.MsSeq AND
-         MServiceLimit.DialType = ServiceLimit.DialType AND 
-         MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
-         MServiceLimit.EndTS  >= ldeCurrentTS AND
-         MServiceLimit.FromTs <= ldeCurrentTS AND
-         MServiceLimit.EndTS >= MServiceLimit.FromTS:
-
-   FIND FIRST ServiceLCounter NO-LOCK WHERE
-              ServiceLCounter.MsSeq  = MServiceLimit.MsSeq  AND
-              ServiceLCounter.Period = liDayPeriod AND
-              ServiceLCounter.SlSeq  = MServiceLimit.SlSeq  AND
-              ServiceLCounter.MSID   = MServiceLimit.MSID NO-ERROR.
-   IF AVAIL ServiceLCounter THEN
-       ldeRoamBundleUsage = ldeRoamBundleUsage + 
-                            (ServiceLCounter.Amt / 1024 / 1024).
-   
-   /* filter out base bundle (activated from consumption). YTS-7114 */
-   IF INT(MServiceLimit.FromTs) EQ MServiceLimit.FromTS THEN NEXT.
-    
-   liRoamUpsellCount = liRoamUpsellCount + 1.
-
-END.
-
 /* Return all data/voice bundles limit and usage */
 ASSIGN
    liDialTypes[1] = {&DIAL_TYPE_GENERAL}

@@ -121,13 +121,6 @@ FUNCTION fSetMDUB RETURNS INT
             ELSE 
                liReturnValue = 2. /* Ongoing Termination */
          END. 
-         ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-            IF fGetActiveSpecificBundle(Mobsub.MsSeq,
-                                        ldNextMonthActStamp,
-                                        pcBundleId) = "" THEN
-               ocError = pcBundleId + " termination is not allowed".
-            ELSE liReturnValue = 2. /* Ongoing Termination */
-         END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
          ELSE IF pcBundleId = {&TARJ_UPSELL} THEN DO:
             ocError = pcBundleId + " termination is not allowed".
          END.
@@ -183,14 +176,6 @@ FUNCTION fSetMDUB RETURNS INT
             ELSE 
                liReturnValue = 3. /* Ongoing Activation */
          END. 
-         ELSE IF pcBundleId = "BONO_VOIP" THEN 
-         DO:
-            IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeActStamp) THEN DO:
-               ocError = pcBundleId + " activation is not allowed".
-               RETURN 0.
-            END.
-            liReturnValue = 3. /* Ongoing Activation */
-         END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
          ELSE IF pcBundleId = {&TARJ_UPSELL} THEN .
          /* Customer level - As of now DSS only */
          ELSE DO:
@@ -373,8 +358,7 @@ ASSIGN lcMemoTitle                 = DayCampaign.DcName
        lcBundleList                = TRIM(lcBONOContracts             + "," + 
                                           lcSupplementaryDataBundles  + "," + 
                                           lcVoiceBONOContracts        + "," + 
-                                          lcSupplementaryVoiceBundles + "," + 
-                                          "HSPA_ROAM_EU,BONO_VOIP",",").
+                                          lcSupplementaryVoiceBundles,",").
 
 IF LOOKUP(pcBundleId, lcBundleList) > 0 OR 
    pcBundleId = {&DSS}                  OR 
@@ -421,7 +405,7 @@ ELSE
 IF lcError NE "" THEN 
     RETURN appl_err(lcError).  
 
-IF pcBundleId MATCHES ("*_UPSELL") OR pcBundleId EQ "HSPA_ROAM_EU" THEN 
+IF pcBundleId MATCHES ("*_UPSELL") THEN 
 DO:   
    liReturnValue = fGetUpsellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcCounterError).
    liReturnValue = liReturnValue + 1. 

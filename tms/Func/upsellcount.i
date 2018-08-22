@@ -50,7 +50,7 @@ FUNCTION fGetUpSellCount RETURNS INT
                END.
            END. /* FOR EACH MServiceLPool WHERE */
         END.
-        ELSE IF icDCEvent = "HSPA_ROAM_EU" OR icDCEvent = {&TARJ_UPSELL} THEN DO:
+        ELSE IF icDCEvent = {&TARJ_UPSELL} THEN DO:
            FOR EACH MServiceLimit WHERE 
                     MServiceLimit.MSSeq    = iiMsSeq AND
                     MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -58,10 +58,6 @@ FUNCTION fGetUpSellCount RETURNS INT
                     MServiceLimit.EndTS <= ldeMonthEnd AND
                     MServiceLimit.EndTS > ldeMonthBegin AND
                     MServiceLimit.FromTs >= ldeMonthBegin:
-              
-              /* YTS-7114 */
-              IF icDCEvent EQ "HSPA_ROAM_EU" AND
-                 INT(MServiceLimit.FromTS) EQ MServiceLimit.FromTS THEN NEXT.
 
               liUpSellCount = liUpSellCount + 1.
            END.

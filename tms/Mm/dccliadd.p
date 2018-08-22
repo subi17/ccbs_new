@@ -345,14 +345,6 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                              OUTPUT liCreated,
                              OUTPUT lcError).
       ELSE DO:
-            
-         IF lcDCEvent EQ "BONO_VOIP" AND
-            NOT fIsBonoVoIPAllowed(MobSub.MsSeq,ldActStamp) THEN DO:
-            MESSAGE "BONO VOIP Activation is not allowed"
-            VIEW-AS ALERT-BOX ERROR.
-            LEAVE.
-         END.
-
          /* user can select manually if a
             TERM contract source is "new" or "renewal" */
          IF lcDCEvent BEGINS "TERM" AND NOT llContrSource 

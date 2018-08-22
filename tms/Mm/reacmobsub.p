@@ -567,10 +567,9 @@ DO TRANSACTION:
 
    FOR EACH ttContract:
 
-      /* Don't reactivate prepaid service periodical contract 
-         Don't reactivate BONO_VOIP YPR-3458 */
-      IF LOOKUP(ttContract.DCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 OR
-         ttContract.DCEvent = "BONO_VOIP" THEN NEXT.
+      /* Don't reactivate prepaid service periodical contract */
+      IF LOOKUP(ttContract.DCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0
+      THEN NEXT.
 
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand   = Syst.Var:gcBrand AND
