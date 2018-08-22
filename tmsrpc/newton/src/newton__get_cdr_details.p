@@ -506,26 +506,28 @@ IF MobSub.FixedNumber <> ? AND
 END.
 
 /* Create CallScanner record from XML-RPC query */
-CREATE CallScanner.
-ASSIGN
-   CallScanner.TMSTime     = Func.Common:mMakeTS()
-   CallScanner.UserCode    = pcUserName 
-   CallScanner.SystemID    = "XFERA_WEB" 
-   CallScanner.EventType   = "CLI"
-   CallScanner.ReasonCode  = STRING(piReasonCode) + " " + pcReason
-   CallScanner.Level       = ""
-   CallScanner.Target      = MobSub.Cli
-   CallScanner.StartTime   = STRING(pdStartDate,"99/99/99") + " " +
-                             STRING("00:00:00")
-                                         
-   CallScanner.AccessType  = "r"
-   CallScanner.EndTime     = STRING(pdEndDate,"99/99/99") + " " +
-                             STRING("23:59:59")
-                                         
-   CallScanner.SearchRule  = "cli = " + STRING(MobSub.CLI)   +    " AND " +
-                             "DateST >= " + STRING(pdStartDate) + " AND " +
-                             "DateST <= " + STRING(pdEndDate) + ";" 
-                             NO-ERROR.
+DO TRANS:
+   CREATE CallScanner.
+   ASSIGN
+      CallScanner.TMSTime     = Func.Common:mMakeTS()
+      CallScanner.UserCode    = pcUserName 
+      CallScanner.SystemID    = "XFERA_WEB" 
+      CallScanner.EventType   = "CLI"
+      CallScanner.ReasonCode  = STRING(piReasonCode) + " " + pcReason
+      CallScanner.Level       = ""
+      CallScanner.Target      = MobSub.Cli
+      CallScanner.StartTime   = STRING(pdStartDate,"99/99/99") + " " +
+                                STRING("00:00:00")
+                                            
+      CallScanner.AccessType  = "r"
+      CallScanner.EndTime     = STRING(pdEndDate,"99/99/99") + " " +
+                                STRING("23:59:59")
+                                            
+      CallScanner.SearchRule  = "cli = " + STRING(MobSub.CLI)   +    " AND " +
+                                "DateST >= " + STRING(pdStartDate) + " AND " +
+                                "DateST <= " + STRING(pdEndDate) + ";" 
+                                NO-ERROR.
+END.
 
 FINALLY:
    EMPTY TEMP-TABLE ttCall.
