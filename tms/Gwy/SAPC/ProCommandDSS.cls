@@ -189,7 +189,7 @@ CLASS Gwy.SAPC.ProCommandDSS INHERITS ProCommand:
          acProCommandVerb      = "PUT"
          acProCommandtargetURL = SUBSTITUTE("/groups/&1", MsRequest.CustNum).
 
-      loJson:Add("type", STRING(CLIType.PayType, "prepaid/postpaid")).
+      loJson:Add("type", IF CLIType.PayType EQ 2 THEN "prepaid" ELSE "postpaid").
       loJson:Add("priority", "1000"). /* For Base tariff = 1000 */
       loJson:Add("totalDataAmount", mToMB(mGetValue(MSRequest.ReqCParam2, "LIMIT_UNSHAPED"))).
 
