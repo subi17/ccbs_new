@@ -136,6 +136,190 @@ form
     COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS SIDE-LABEL FRAME fCustomer.
     
+ form
+  OrderMobile.OrderID   
+     LABEL "Order ID ......" 
+  OrderMobile.OrderProductID AT 38
+     LABEL "Product ID ...."  
+     help "Order Product ID"     
+     SKIP
+     
+  OrderMobile.MsSeq 
+     LABEL "MsSeq ........." 
+  OrderMobile.ICC AT 38
+     LABEL "ICC ..........."
+     SKIP
+  
+  OrderMobile.NumberType 
+     LABEL "Number Type ..." 
+     FORMAT "X(12)"    
+  OrderMobile.Product AT 38
+     LABEL "Order Product ." 
+     SKIP
+
+  OrderMobile.StatusCode 
+     LABEL "StatusCode ...."
+     HELP  "StatusCode" 
+     FORMAT "X(12)"
+  OrderMobile.CurrOper AT 38
+     LABEL "Curr.Operator ." 
+     SKIP
+ 
+  OrderMobile.CreatedTS 
+     LABEL "CreatedTS ....."
+     FORMAT "99999999.99999"
+  OrderMobile.CLI AT 38
+     LABEL "CLI ..........."
+     FORMAT "X(12)"
+     SKIP
+  
+  OrderMobile.UpdatedTS 
+     LABEL "UpdatedTS ....."
+     FORMAT "99999999.99999"
+  OrderMobile.ActivationTS AT 38
+     LABEL "ActivationTS .."
+     FORMAT "99999999.99999"
+     SKIP
+     
+  OrderMobile.RequestedPortingDate
+     LABEL "REQ.PortDate .."
+     FORMAT "99-99-9999"
+  OrderMobile.PortingTime AT 38
+     LABEL "PortTime ......"
+     FORMAT "99.99"
+     SKIP    
+     
+  OrderMobile.MNPStatus 
+     LABEL "MNP Status ...." 
+     FORMAT "99"     
+  OrderMobile.OldICC AT 38
+     LABEL "Old ICC ......."
+     FORMAT "X(12)"
+     SKIP          
+     
+  OrderMobile.PayType       
+     LABEL "PayType ......."
+  
+  WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
+  SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
+  FRAME fOrdMobile.   
+  
+  form
+  OrderFusion.Brand  
+     LABEL "Brand ........."
+  OrderFusion.OrderID   AT 46
+     LABEL "Order ID ......" 
+     SKIP
+
+  OrderFusion.Product 
+     LABEL "Order Product ."  
+     help "Order Product "     
+  OrderFusion.OrderProductID AT 46
+     LABEL "Product ID ...." 
+     SKIP
+
+  OrderFusion.FusionStatus 
+     LABEL "FusionStatus .."
+     FORMAT "X(12)"
+  OrderFusion.FixedNumberType AT 46
+     LABEL "FixedN. Type .." 
+     SKIP
+
+  OrderFusion.FixedNumber 
+     LABEL "Fix Number ...." 
+     FORMAT "X(12)" 
+  OrderFusion.FixedCurrOper AT 46
+     LABEL "Curr.Operator ." 
+     SKIP
+ 
+  OrderFusion.FixedOrderId 
+     LABEL "Fixed Order ID "
+     FORMAT "X(12)"
+  OrderFusion.OrderDate AT 46
+     LABEL "Date .........."
+     FORMAT "99-99-9999"
+     SKIP
+  
+  OrderFusion.FixedStatus 
+     LABEL "Fixed Status .."
+     FORMAT "X(12)"
+  OrderFusion.FixedSubStatus AT 46
+     LABEL "FixedSubStatus "
+     FORMAT "X(12)"
+     SKIP
+     
+  OrderFusion.Salesman
+     LABEL "Salesman ......"
+     FORMAT "X(12)"
+     SKIP
+     
+  OrderFusion.FixedMNPTime
+     LABEL "FixL. MNPTime ."
+     FORMAT "X(12)"
+  OrderFusion.CustomerType AT 46
+     LABEL "CustomerType .."
+     FORMAT "X(12)"
+     SKIP    
+     
+  OrderFusion.PhoneBook 
+     LABEL "PhoneBook ....."
+     FORMAT "YES/NO"     
+  OrderFusion.FixedContractID AT 46
+     LABEL "Contract ID ..."
+     FORMAT "X(12)"
+     SKIP          
+  
+  OrderFusion.CreatedTS
+     LABEL "Created TS ...."
+  OrderFusion.UpdateTS AT 46      
+     LABEL "UpdateTS ......"
+     FORMAT "99999999.99999"
+     SKIP
+     
+  OrderFusion.FixedInstallationTS 
+     LABEL "Installat. TS ."
+     FORMAT "99999999.99999"
+  OrderFusion.FixedStatusTS AT 46
+     LABEL "Status TS ....."
+     FORMAT "99999999.99999"
+     SKIP
+     
+  OrderFusion.routerStat
+     LABEL "Router Status ."
+     FORMAT "X(10)"   
+  OrderFusion.EstimatedDataSpeed AT 46
+     LABEL "Data Speed....."
+     FORMAT ">>>>>>>>9"
+     SKIP
+     
+  OrderFusion.portStat
+     LABEL "Port Status ..."
+     FORMAT "X(15)"
+  OrderFusion.portDate AT 46
+     LABEL "Port Date ....."
+     FORMAT "X(15)"
+     SKIP   
+     
+  OrderFusion.ADSLLinkState
+     LABEL "ADSL L.Status ."
+     FORMAT "X(15)"
+  OrderFusion.IUA AT 46
+     LABEL "IUA ..........."
+     FORMAT "X(14)"
+     SKIP      
+     
+ OrderFusion.SerialNumber
+     LABEL "Serial Number ."
+     FORMAT "X(15)"
+  OrderFusion.AppointmentDate AT 46
+     LABEL "AppointmentDate"
+     FORMAT "X(14)"
+     SKIP(2)          
+    
+  WITH  CENTERED OVERLAY ROW 1 WIDTH 80 
+  SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
+  FRAME fOrdFusion.
+    
 PROCEDURE local-disp-customer:
    
    
@@ -146,7 +330,7 @@ PROCEDURE local-disp-customer:
    DEF VAR lcNewHeader  AS CHAR NO-UNDO.
    DEFINE VARIABLE llCustIdUpdateOK AS LOGICAL INITIAL FALSE NO-UNDO.
    
-   HIDE FRAME sel no-pause.
+  // HIDE FRAME sel no-pause.
    
    ASSIGN liCustRole   = iiRole
           lcCurrHeader = ac-hdr.
@@ -326,13 +510,11 @@ PROCEDURE local-disp-customer:
       IF Syst.Var:toimi = 8 then do:
          hide frame fCustomer NO-PAUSE.
          ac-hdr = lcCurrHeader.
-         
-         LEAVE.
+         LEAVE action. 
       END.
    END. 
 
    HIDE FRAME fCustomer no-pause.
-   view frame sel.
    FIND Current OrderCustomer NO-LOCK.
     
 END PROCEDURE.        

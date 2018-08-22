@@ -471,15 +471,16 @@ PROCEDURE pOrderProductView:
          NEXT ACTION.
       END.
       
+      /* Order Mobile */
       ELSE IF Syst.Var:toimi = 2 THEN DO:
-         FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.
-         RUN Mc/ordermobile.p(iiOrderID,OrderProduct.OrderProductID).
-         NEXT ACTION.
+        FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.  
+        RUN local-disp-ordermobile(iiOrderID,OrderProduct.OrderProductID).  
+        NEXT Action. 
       END. 
       
       ELSE IF Syst.Var:toimi = 3 THEN DO:
          FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.
-         RUN Mc/orderfusion.p(iiOrderID,OrderProduct.OrderProductID).
+         RUN local-disp-orderfusion(iiOrderID,OrderProduct.OrderProductID).
          NEXT ACTION.
       END. 
       
@@ -619,3 +620,140 @@ PROCEDURE local-UPDATE-record:
       LEAVE.
    END.
 END PROCEDURE.
+PROCEDURE local-disp-ordermobile:
+   
+   DEF INPUT PARAMETER iiOrderID AS INT NO-UNDO.
+   DEF INPUT PARAMETER iiOrdProductID AS INT NO-UNDO.
+   
+   FIND FIRST OrderMobile WHERE 
+              OrderMobile.OrderID = iiOrderID AND
+              OrderMobile.OrderProductID = iiOrdProductID
+              NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE OrderMobile THEN DO:
+      MESSAGE "Order Mobile is not available"
+      VIEW-AS ALERT-BOX ERROR.
+      RETURN.
+   END. 
+   
+   ACTION: 
+   repeat with frame fOrdMobile:
+                    
+   DISP
+      OrderMobile.OrderID          
+      OrderMobile.OrderProductID   
+      OrderMobile.MsSeq            
+      OrderMobile.ICC              
+      OrderMobile.Product          
+      OrderMobile.NumberType       
+      OrderMobile.CurrOper         
+      OrderMobile.StatusCode       
+      OrderMobile.CreatedTS        
+      OrderMobile.UpdatedTS        
+      OrderMobile.CLI              
+      OrderMobile.ActivationTS      
+      OrderMobile.RequestedPortingDate  
+      OrderMobile.PortingTime      
+      OrderMobile.MNPStatus        
+      OrderMobile.OldICC           
+      OrderMobile.PayType   
+      WITH FRAME fOrdMobile.    
+      
+   ASSIGN
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
+                        THEN 2248 /* mobile donor (holder) */
+                        ELSE 0) 
+      Syst.Var:ufk[5] = 0
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0
+      ufkey = true.
+   RUN Syst/ufkey.p.
+                                                             
+   IF Syst.Var:toimi = 8 then do:
+      hide frame fOrdMobile.
+      LEAVE ACTION.
+   END.
+   ELSE IF Syst.Var:toimi = 1 THEN 
+      RUN local-disp-customer({&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER},FALSE).
+
+   END. 
+
+   HIDE FRAME fOrdMobile no-pause.
+   view frame lis.
+
+END PROCEDURE. 
+
+PROCEDURE local-disp-orderfusion:
+      
+   DEF INPUT PARAMETER iiOrderID AS INT NO-UNDO.
+   DEF INPUT PARAMETER iiOrdProductID AS INT NO-UNDO.
+   
+   FIND FIRST OrderFusion WHERE 
+              OrderFusion.OrderID = iiOrderID AND
+              OrderFusion.OrderProductID = iiOrdProductID
+              NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE OrderFusion THEN DO:
+      MESSAGE "Order Mobile is not available"
+      VIEW-AS ALERT-BOX ERROR.
+      RETURN.
+   END. 
+   
+   ACTION: 
+   repeat with frame fOrdFusion:
+                    
+   DISPLAY 
+         OrderFusion.Brand            
+         OrderFusion.OrderID          
+         OrderFusion.OrderProductID   
+         OrderFusion.FixedNumberType            
+         OrderFusion.FusionStatus              
+         OrderFusion.Product          
+         OrderFusion.FixedNumber      
+         OrderFusion.FixedCurrOper         
+         OrderFusion.FixedOrderId       
+         OrderFusion.FixedStatus        
+         OrderFusion.FixedSubStatus        
+         OrderFusion.OrderDate              
+         OrderFusion.Salesman      
+         OrderFusion.FixedMNPTime  
+         OrderFusion.CustomerType      
+         OrderFusion.PhoneBook        
+         OrderFusion.FixedContractID           
+         OrderFusion.EstimatedDataSpeed
+         OrderFusion.FixedInstallationTS
+         OrderFusion.ADSLLinkState
+         OrderFusion.FixedStatusTS
+         OrderFusion.portStat
+         OrderFusion.portDate
+         OrderFusion.routerStat
+         OrderFusion.IUA
+         OrderFusion.SerialNumber
+         OrderFusion.AppointmentDate
+         WITH FRAME fOrdFusion.   
+      
+   ASSIGN
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF OrderFusion WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})
+                        THEN 2249 /* fixed donor (holder) */
+                        ELSE 0) 
+      Syst.Var:ufk[5] = 0
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0
+      ufkey = true.
+   RUN Syst/ufkey.p.
+                                                             
+   IF Syst.Var:toimi = 8 then do:
+      hide frame fOrdFusion.
+      LEAVE ACTION.
+   END.
+   ELSE IF Syst.Var:toimi = 1 THEN 
+      RUN local-disp-customer({&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER},FALSE).
+   
+   END. 
+
+   HIDE FRAME fOrdFusion no-pause.
+   view frame lis.
+
+END PROCEDURE.       
