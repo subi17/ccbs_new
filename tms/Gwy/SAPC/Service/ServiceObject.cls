@@ -12,6 +12,7 @@
 USING Progress.Json.ObjectModel.*.
 USING Gwy.SAPC.Service.IService.
 USING Gwy.SAPC.ProCommandOrder.
+USING Gwy.SAPC.OrderEnum.
 
 {Syst/tmsconst.i}
 
@@ -79,6 +80,13 @@ CLASS Gwy.SAPC.Service.ServiceObject ABSTRACT:
 
       loJsonObject = NEW JsonObject().
       loJsonObject:Add("phoneNumber", aoProCommandOrder:acCLI).
+
+      IF aoProCommandOrder:acDonorOperator > ""
+      THEN DO:
+         loJsonObject:Add("portabilityType", "Portabilidad").
+         loJsonObject:Add("portabilityDate", DATETIME-TZ(Func.Common:mTimeStamp2DateTime(aoProCommandOrder:ahMsRequest::ActStamp))).
+         loJsonObject:Add("donorOperator", aoProCommandOrder:acDonorOperator).
+      END.
 
       RETURN loJsonObject.
 

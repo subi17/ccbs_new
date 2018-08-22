@@ -70,7 +70,8 @@ CLASS Gwy.SAPC.ProCommandBPMOrder INHERITS ProCommandBPM:
          aiOrderId          = Order.OrderId
          acICC              = Order.ICC
          acCLIType          = Order.CLIType
-         alPayType          = Order.PayType.
+         alPayType          = Order.PayType
+         acDonorOperator    = mDonorOperator(aiOrderId) WHEN Order.MNPStatus > 0.
 
       mCreateCommandLine(OrderCustomer.CustId, OrderCustomer.Category).
 
