@@ -318,11 +318,14 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    IF lcCliTypeTo <> "" OR llIsExtraLineOrProMigrationAllowed THEN 
    DO:
       fgetCustSegment(bCustomer.CustIdType,
-                      TRUE, /* Self Employed */
+                      (IF bCustomer.CustIdType = "CIF" THEN FALSE
+                       ELSE TRUE), /* Self Employed */
                       TRUE, /* Pro */
                       bCustomer.OrgId, 
                       OUTPUT lcNewCategory).
 
+      IF lcNewCategory = "" THEN RETURN 0.
+      
       IF lcNewCategory NE bCustomer.Category THEN 
       DO TRANSACTION:
          lhCustomer = BUFFER bCustomer:HANDLE.
