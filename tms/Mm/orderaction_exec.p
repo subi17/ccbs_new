@@ -535,14 +535,24 @@ PROCEDURE pDiscountPlan:
    THEN ASSIGN
           ldeDiscAmt    = DPRate.DiscValue
           liDiscPeriods = DiscountPlan.ValidPeriods.
-
-   RETURN fAddDiscountPlanMember(Order.MsSeq,
-                                 DiscountPlan.DPRuleID,
-                                 ldeDiscAmt,
-                                 TODAY,
-                                 ?,
-                                 liDiscPeriods,
-                                 0).
+          
+   /* YCO-1063. If not defined periods, then create until "validto"  */
+   IF liDiscPeriods = 0 THEN 
+      RETURN fAddDiscountPlanMember(Order.MsSeq,
+                                    DiscountPlan.DPRuleID,
+                                    ldeDiscAmt,
+                                    TODAY,
+                                    DiscountPlan.ValidTo,
+                                    ?,
+                                    0).      
+   ELSE                          
+      RETURN fAddDiscountPlanMember(Order.MsSeq,
+                                    DiscountPlan.DPRuleID,
+                                    ldeDiscAmt,
+                                    TODAY,
+                                    ?,
+                                    liDiscPeriods,
+                                    0).
 
 END PROCEDURE.
 
