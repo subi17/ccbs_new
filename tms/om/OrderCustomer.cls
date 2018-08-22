@@ -400,7 +400,6 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:profession         = objDefaultCustomer:Profession
             THIS-OBJECT:category           = objDefaultCustomer:category
             THIS-OBJECT:street             = objOrderCustomerAddress:GetCharacter("street")
-            THIS-OBJECT:region             = objOrderCustomerAddress:GetCharacter("region")
             THIS-OBJECT:zipCode            = objOrderCustomerAddress:GetCharacter("zip")
             THIS-OBJECT:country            = objOrderCustomerAddress:GetCharacter("country")
             THIS-OBJECT:addressID          = objOrderCustomerAddress:GetCharacter("address_id")
@@ -428,6 +427,8 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
             THIS-OBJECT:pro                = ( INDEX(objOrder:orderChannel,"PRO") > 0 )
             THIS-OBJECT:selfEmployed       = objDefaultCustomer:selfEmployed  
              .
+             
+             mValidateRegion(objOrderCustomerAddress:GetCharacter("region")).
                       	          
 	END.
 
@@ -536,15 +537,23 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
     */   
    END METHOD.
    
-    DESTRUCTOR PUBLIC OrderCustomer():
+   METHOD PUBLIC VOID mValidateRegion(INPUT lcRegion AS CHARACTER):
+       
+       IF NOT CAN-FIND(FIRST Region WHERE Region.Region = lcRegion) THEN 
+           UNDO, THROW NEW ParamError(SUBSTITUTE("Invalid region:&1", lcRegion)). 
+           
+       ASSIGN THIS-OBJECT:region = lcRegion.
+       
+   END METHOD.
+   
+   DESTRUCTOR PUBLIC OrderCustomer():
         
-        IF VALID-OBJECT (objOrder) THEN 
-            DELETE OBJECT objOrder.
+       IF VALID-OBJECT (objOrder) THEN 
+           DELETE OBJECT objOrder.
             
-        IF VALID-OBJECT (objDefaultCustomer) THEN 
-            DELETE OBJECT objDefaultCustomer.
-    
+       IF VALID-OBJECT (objDefaultCustomer) THEN 
+           DELETE OBJECT objDefaultCustomer.
              
-    END DESTRUCTOR.
+   END DESTRUCTOR.
 
 END CLASS.

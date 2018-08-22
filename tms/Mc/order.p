@@ -278,7 +278,7 @@ form
                          "Unknown language") 
 	SKIP
 
-    "Floor ........:" OrderCustomer.AddressCompl
+    "Floor ........:" OrderCustomer.floor
       "Nationality:" AT 50 OrderCustomer.Nationality FORMAT "X(2)"
        VALIDATE(CAN-FIND(Nationality WHERE 
                          Nationality.Nationality = 
