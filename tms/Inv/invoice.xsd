@@ -207,6 +207,7 @@
                   <xs:enumeration value="Compensation"/>
                   <xs:enumeration value="SubTotal"/>
                   <xs:enumeration value="Total"/>
+                  <xs:enumeration value="GOOGLEVAS"/>
                 </xs:restriction>
               </xs:simpleType>
             </xs:attribute>

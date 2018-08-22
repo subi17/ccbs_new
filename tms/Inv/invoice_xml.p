@@ -813,8 +813,11 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
          END.
-         
-         lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
+         IF ttRow.RowType > "" AND
+            ttRow.RowGroup EQ "46" THEN /* Convergent uses CLI Type Name */
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",CAPS(ttSub.CTName)).
+         ELSE 
+            lhXML:WRITE-DATA-ELEMENT("BillingItem",ttRow.RowName).
 
          lhXML:WRITE-DATA-ELEMENT("Quantity", STRING(ttRow.RowQty)).
  
@@ -887,7 +890,8 @@ PROCEDURE pSubInvoice2XML:
       lhXML:INSERT-ATTRIBUTE("Type","Sub").
 
       lhXML:WRITE-DATA-ELEMENT("AmountExclTax",
-                                fDispXMLDecimal(SubInvoice.AmtExclVat)).
+                                fDispXMLDecimal(SubInvoice.AmtExclVat
+                                + ttSub.Discounts)). /* Negative value, thus plus */
       lhXML:WRITE-DATA-ELEMENT("TaxAmount",fDispXMLDecimal(SubInvoice.VatAmt)).
       
       lhXML:START-ELEMENT("AdditionalDetail").

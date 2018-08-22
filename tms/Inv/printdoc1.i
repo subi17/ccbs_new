@@ -1197,8 +1197,8 @@ Yoigo is requesting to merge the "billing groups" "Llamadas desde Fijo", "Servic
              ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
 
          /* YDR-2848 Subscription level TOTAL sum */
-         IF ttRow.RowCode BEGINS "18" OR
-            ttRow.RowCode BEGINS "46" THEN
+         IF (ttRow.RowCode BEGINS "18" OR
+             ttRow.RowCode BEGINS "46") THEN
             ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
 
          /* ttRows contains combined invrows => no need to check duplicates */
