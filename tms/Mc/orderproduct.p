@@ -319,7 +319,7 @@ BROWSE:
                   Memory  = rtab[1].
                   
             END.
-        END.
+         END.
       ELSE up 1.
       END. /* PREVious ROW */
         
@@ -346,7 +346,7 @@ BROWSE:
                /* save RECID of uppermost ROW */
                Memory = rtab[1].
                
-           END.
+            END.
          END.
          ELSE DOWN 1 .
       END. /* NEXT ROW */
@@ -473,9 +473,9 @@ PROCEDURE pOrderProductView:
       
       /* Order Mobile */
       ELSE IF Syst.Var:toimi = 2 THEN DO:
-        FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.  
-        RUN local-disp-ordermobile(iiOrderID,OrderProduct.OrderProductID).  
-        NEXT Action. 
+         FIND OrderProduct where recid(OrderProduct) = rtab[FRAME-LINE] NO-LOCK.  
+         RUN local-disp-ordermobile(iiOrderID,OrderProduct.OrderProductID).  
+         NEXT Action. 
       END. 
       
       ELSE IF Syst.Var:toimi = 3 THEN DO:
@@ -734,7 +734,7 @@ PROCEDURE local-disp-orderfusion:
       
    ASSIGN
       Syst.Var:ufk = 0
-      Syst.Var:ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF OrderFusion WHERE
+      Syst.Var:ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})
                         THEN 2249 /* fixed donor (holder) */
                         ELSE 0) 
