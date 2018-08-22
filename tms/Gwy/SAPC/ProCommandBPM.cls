@@ -13,6 +13,8 @@ USING Progress.Json.ObjectModel.JsonObject.
 USING Gwy.SAPC.OrderEnum.
 USING Gwy.SAPC.ProCommandOrder.
 
+{Syst/tmsconst.i}
+
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder ABSTRACT:
@@ -73,11 +75,35 @@ CLASS Gwy.SAPC.ProCommandBPM INHERITS ProCommandOrder ABSTRACT:
    METHOD PRIVATE CHARACTER mGetSegment
       ( icCategory AS CHARACTER ):
 
+      DEFINE BUFFER CustCat FOR CustCat.
+
       FOR
          FIRST CustCat FIELDS (Brand Category Segment) NO-LOCK WHERE
             CustCat.Brand    = "1" AND
             CustCat.Category = icCategory:
          RETURN CustCat.Segment.
+      END.
+
+      RETURN "".
+
+   END METHOD.
+
+   METHOD PROTECTED CHARACTER mDonorOperator
+      ( iiOrderId AS INTEGER ):
+
+      DEFINE BUFFER MNPProcess FOR MNPProcess.
+
+      FOR EACH MNPProcess NO-LOCK WHERE
+               MNPProcess.OrderId = iiOrderId AND
+               MNPProcess.MNPType = {&MNP_TYPE_IN}
+          BY MNPProcess.CreatedTS DESC:
+
+         IF NOT (MNPProcess.StatusCode = {&MNP_ST_ACON} OR
+                 MNPProcess.StatusCode = {&MNP_ST_APOR})
+         THEN NEXT.
+
+         RETURN MNPProcess.OperCode.
+
       END.
 
       RETURN "".

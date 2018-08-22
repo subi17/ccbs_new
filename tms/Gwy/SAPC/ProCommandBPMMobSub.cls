@@ -35,11 +35,13 @@ CLASS Gwy.SAPC.ProCommandBPMMobSub INHERITS ProCommandBPM:
          WHEN {&REQTYPE_SUBSCRIPTION_REACTIVATION}
          THEN ASSIGN
                  aoOrderEnum      = OrderEnum:SUBSCRIPTION_REACTIVATE
-                 acProCommandType = "SUBSCRIPTION_REACTIVATE".
+                 acProCommandType = "SUBSCRIPTION_REACTIVATE"
+                 acDonorOperator  = mDonorOperator(MsRequest.ReqIParam1) WHEN MsRequest.ReqIParam1 > 0.
          WHEN {&REQTYPE_SUBSCRIPTION_TERMINATION}
          THEN ASSIGN
                  aoOrderEnum = OrderEnum:SUBSCRIPTION_TERMINATE
-                 acProCommandType = "SUBSCRIPTION_TERMINATE".
+                 acProCommandType = "SUBSCRIPTION_TERMINATE"
+                 acDonorOperator = "005" WHEN MsRequest.ReqCParam2 > "".
          OTHERWISE UNDO, THROW NEW AppError(SUBSTITUTE("ProCommandBPMMobSub cannot " +
                                                        "handle ReqType &1",
                                                        MsRequest.ReqType)).
