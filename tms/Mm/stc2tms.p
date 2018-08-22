@@ -640,7 +640,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liConfigExtraLineCount  AS INT  NO-UNDO.
    DEF VAR lcMandatoryExtraLines   AS CHAR NO-UNDO.
    DEF VAR lcAllowedExtraLines     AS CHAR NO-UNDO.   
-   DEF VAR liAllowedELCount       AS INT  NO-UNDO.
+   DEF VAR liAllowedELCount        AS INT  NO-UNDO.
    DEF VAR liManELCount            AS INT  NO-UNDO.
    DEF VAR liAvailExtraLineCount   AS INT  NO-UNDO.
    DEF VAR llgMandatoryExtraLine   AS LOG  NO-UNDO.
@@ -1344,7 +1344,7 @@ PROCEDURE pFinalize:
 
    /* DSS related activity */
    RUN pUpdateDSSAccount(INPUT MsRequest.MsRequest,
-                         INPUT MsRequest.ActStamp,
+                         INPUT Func.Common:mMakeTS(),
                          INPUT ldtActDate,
                          INPUT MsRequest.UserCode).
 
@@ -1424,18 +1424,18 @@ PROCEDURE pFinalize:
                                    lcResult).
                END.
             END.
-			
+         
             FIND FIRST OrderCustomer NO-LOCK WHERE
                        OrderCustomer.Brand EQ Syst.Var:gcBrand AND
                        Ordercustomer.OrderID EQ Order.OrderID AND
                        OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} AND
                        OrderCustomer.TerritoryOwner NE "" NO-ERROR.
 
-				IF Avail OrderCustomer THEN DO:
+            IF Avail OrderCustomer THEN DO:
                FIND CURRENT Mobsub EXCLUSIVE-LOCK NO-ERROR.
                   ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
-               FIND CURRENT Mobsub NO-LOCK NO-ERROR.				
-				END.
+               FIND CURRENT Mobsub NO-LOCK NO-ERROR.           
+            END.
 
             /* YTS-11912 */
             IF fCLITypeIsMainLine(Order.CLIType) THEN  
@@ -1457,6 +1457,25 @@ PROCEDURE pFinalize:
 
    /* request handled succesfully */
    fReqStatus(2,"").
+  
+   /* YCO-968 */ 
+   IF LOOKUP(MsRequest.ReqCparam2, {&CLITYPES_TRY_AND_BUY}) > 0 AND
+      ldtActDate <= 12/31/2018 THEN DO:
+      lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                       "CONT_DISC_TB_20",
+                                       16.53, /* discount */
+                                       ldtActDate,
+                                       12/31/2018, 
+                                       ?,
+                                       0).
+
+      IF lcError BEGINS "ERROR" THEN
+         Func.Common:mWriteMemo("MobSub",
+              STRING(MobSub.MsSeq),
+              MobSub.Custnum,
+              "CONT_DISC_TB_20 discount creation failed",
+              lcError).
+   END.
   
    MERGEREQUEST:
    DO:
