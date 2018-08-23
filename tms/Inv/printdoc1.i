@@ -51,6 +51,9 @@ DEF VAR lcFusionCLITypes AS CHAR NO-UNDO.
 DEF VAR gcCallQueryBegin AS CHAR NO-UNDO.
 DEF VAR gcCallQueryEnd AS CHAR NO-UNDO.
 
+DEF STREAM sTestLog.
+DEF VAR liWrites AS INT NO-UNDO INIT 0.
+
 DEFINE VARIABLE objDBConn AS CLASS Syst.CDRConnect NO-UNDO.
 
 DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
@@ -146,6 +149,11 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD GBValue         AS DEC
    FIELD PrintCLI        AS LOGICAL INITIAL FALSE
    FIELD IUA             AS CHAR
+   FIELD Discounts       AS DEC
+   FIELD Bundles         AS DEC
+   FIELD Charges         AS DEC
+   FIELD Others          AS DEC
+   FIELD SubscriptionTotal AS DEC
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -194,6 +202,22 @@ DEFINE TEMP-TABLE ttMSOwner NO-UNDO
    INDEX Type Type InvCust TSBegin DESCENDING TSEnd DESCENDING.
 
 DEF BUFFER bttRow FOR ttRow.
+
+/*
+   Function can be used to print test logs.
+   Set path below.
+*/
+FUNCTION fTestLog RETURN LOG(
+   icLogText AS CHAR):
+ 
+   IF liWrites EQ 0 THEN
+      OUTPUT STREAM sTestLog TO VALUE("./testlog.txt") APPEND.
+ 
+   liWrites = liWrites + 1.
+ 
+   PUT STREAM sTestLog UNFORMATTED
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) ":" icLogText skip.
+END.
 
 FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
@@ -887,7 +911,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
       ASSIGN ttSub.CLI         = SubInvoice.CLI
              ttSub.FixedNumber = SubInvoice.FixedNumber
              ttSub.MsSeq       = SubInvoice.MsSeq. 
-      
+
       /*NEBACO-7*/
       /*Find IUA for the subscription*/
       IF ttSub.FixedNumber NE "" AND ttSub.FixedNumber NE ? THEN DO:
@@ -1129,58 +1153,84 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
-      /*Google billing*/
       FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "44" NO-LOCK:
-         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
-      END.
-      FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "45" NO-LOCK:
-         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
-      END.
+               ttRow.SubInvNum = SubInvoice.SubInvNum NO-LOCK:
 
-      /* ttRows contains combined invrows => no need to check duplicates */
-      FOR EACH ttRow WHERE
-               ttRow.SubInvNum = SubInvoice.SubInvNum AND
-               ttRow.RowCode BEGINS "33" AND
-               ttRow.RowType = "":
+         /*Google billing*/
+         IF ttRow.RowCode BEGINS "44" THEN
+            ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
+      
+         IF ttRow.RowCode BEGINS "45" THEN
+            ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
 
-         IF (ttRow.RowBillCode EQ "TERMPERIOD" OR
-             ttRow.RowBillCode EQ "FTERMPERIOD") AND
-             ttRow.RowVatAmt EQ 0 THEN
-             ttSub.PenaltyAmt = ttSub.PenaltyAmt + ttRow.RowAmt.
+         /* YDR-2848 The sum of the discounts applied to the line */
+         IF (ttRow.RowCode BEGINS "13" AND
+             ttRow.RowAmtExclVat < 0) THEN DO:
+            ttSub.Discounts = ttSub.Discounts + ttRow.RowAmtExclVat.
+            /* Check phone discounts */
+            IF ttSub.InstallmentAmt > 0 THEN
+               IF LOOKUP(ttRow.RowBillCode,{&INSTALLMENT_DISCOUNT_BILLCODES}) > 0 THEN
+                  ttSub.InstallmentDiscAmt = ttSub.InstallmentDiscAmt + ttRow.RowAmt.
+         END.
+
+          /* YDR-2848 The sum of the charges applied to the line */
+          IF ttRow.RowCode BEGINS "31" THEN
+             ttSub.Charges = ttSub.Charges + ttRow.RowAmtExclVat.
+          IF (ttRow.RowCode BEGINS "13" AND
+             ttRow.RowAmtExclVat > 0) THEN
+             ttSub.Charges = ttSub.Charges + ttRow.RowAmtExclVat.
+
+          /* YDR-2848 Sum of amount due to bundles of data and data upsells */
+          IF ttRow.RowGroup EQ "3" AND
+             (ttRow.Rowname BEGINS "INTERNET" OR
+              ttRow.Rowname BEGINS "MOBILE") /* mobile internet */ THEN
+             ttSub.Bundles = ttSub.Bundles + ttRow.RowAmtExclVat.
+ 
+          /* YDR-2848 The sum of outgoings that aren.t included in the 
+             tariff fee: SMS, MMS, international calls, AgileTV etc.
+Comment from ticket:
+Yoigo is requesting to merge the "billing groups" "Llamadas desde Fijo", "Servicio Premium Fijo" and "Llamadas desde Móvil" in only one, and this amount will be the amount of "Otros Consumos".  It means all the "billing groups" that NOT are "Tarifa" nor "Internet desde el móvil" will be accumulated and this amount will be shown in "Otros consumos". */
+          IF (ttRow.RowGroup EQ "1" OR
+              ttRow.RowGroup EQ "4" OR
+              ttRow.RowGroup EQ "51" OR
+              ttRow.RowGroup EQ "53") AND ttRow.RowCode EQ "" THEN /* RowCode checked to avoid duplicate summing. */
+             ttSub.Others = ttSub.Others + ttRow.RowAmtExclVat.
+
+         /* YDR-2848 Subscription level TOTAL sum */
+         IF (ttRow.RowCode BEGINS "18" OR
+             ttRow.RowCode BEGINS "46") THEN
+            ttSub.SubscriptionTotal = ttSub.SubscriptionTotal + ttRow.RowAmtExclVat.
+
+         /* ttRows contains combined invrows => no need to check duplicates */
+         IF ttRow.RowCode BEGINS "33" AND
+               ttRow.RowType = "" THEN DO:
+
+            IF (ttRow.RowBillCode EQ "TERMPERIOD" OR
+                ttRow.RowBillCode EQ "FTERMPERIOD") AND
+                ttRow.RowVatAmt EQ 0 THEN
+                ttSub.PenaltyAmt = ttSub.PenaltyAmt + ttRow.RowAmt.
                   
-         IF NOT (ttRow.RowBillCode BEGINS "PAYTERM" OR
-                 ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
+            IF NOT (ttRow.RowBillCode BEGINS "PAYTERM" OR
+                    ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
             
-         ASSIGN
-            ttSub.InstallmentAmt = ttSub.InstallmentAmt + ttRow.RowAmt.
+            ASSIGN
+               ttSub.InstallmentAmt = ttSub.InstallmentAmt + ttRow.RowAmt.
 
-         IF (LOOKUP(ttRow.RowBillCode,{&TF_BANK_RVTERM_BILLCODES})           > 0) OR
-            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES})     > 0) OR 
-            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) OR
-            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_PAYTERM_BILLCODES}) > 0) OR
-            /* included due to Q25 picture check */
-            ttRow.RowBillCode EQ "PAYTERM" THEN 
-            llPTFinancedByBank = TRUE.
+            IF (LOOKUP(ttRow.RowBillCode,{&TF_BANK_RVTERM_BILLCODES})           > 0) OR
+               (LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES})     > 0) OR 
+               (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) OR
+               (LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_PAYTERM_BILLCODES}) > 0) OR
+               /* included due to Q25 picture check */
+               ttRow.RowBillCode EQ "PAYTERM" THEN 
+               llPTFinancedByBank = TRUE.
             
-         ELSE IF 
-            LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
-            LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 OR
-            LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0
-         THEN llRVFinancedByBank = TRUE.
+            ELSE IF 
+               LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
+               LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 OR
+               LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0
+            THEN llRVFinancedByBank = TRUE.
+         END.
       END.
-
-      IF ttSub.InstallmentAmt > 0 THEN
-         FOR EACH ttRow NO-LOCK WHERE 
-                  ttRow.SubInvNum = SubInvoice.SubInvNum AND 
-                  ttRow.RowCode BEGINS "13" AND
-                  ttRow.RowGroup  = "13" AND
-                  LOOKUP(ttRow.RowBillCode,{&INSTALLMENT_DISCOUNT_BILLCODES}) > 0:
-            ttSub.InstallmentDiscAmt = ttSub.InstallmentDiscAmt + ttRow.RowAmt.
-         END.              
 
       IF llPTFinancedByBank THEN 
          fTFBankFooterText("PAYTERM"). 
@@ -1325,10 +1375,29 @@ PROCEDURE pGetInvoiceRowData:
 
          lcRowCode = STRING(ttBillItemAndGroup.BiGroup) + lcRowName.
 
+         /* YDR-2848 - group 55 handling */
+         CASE ttBillItemAndGroup.BIGroup:
+         WHEN "55"
+         THEN
+            IF lcRowname BEGINS "Agile" THEN
+               /* Amount charged for TV service (taxes are not applicable). */
+               ttInvoice.AgileTV = ttInvoice.AgileTV + InvRow.Amt.
+            ELSE
+               /* Any concept that must be included in the invoice without taxes */
+               ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRow.Amt.
+         /* Sum all other consumptions with else branch to OtherConcepts */
+         OTHERWISE IF NOT (InvRow.RowType EQ 4 OR    /* Penalty */
+                           InvRow.RowType EQ 9 OR    /* Installment discounts */
+               ttBillItemAndGroup.BIGroup EQ "44" OR /* Google purchase */
+               ttBillItemAndGroup.BIGroup EQ "45" OR /* Google refund   */
+               ttBillItemAndGroup.BIGroup EQ "33")   /* Installments   */
+            THEN ttInvoice.OtherConcepts = ttInvoice.OtherConcepts + InvRow.Amt.
+         END CASE.
+
          FIND FIRST ttRow WHERE
                     ttRow.SubInvNum = InvRow.SubInvNum AND
                     ttRow.RowCode   = lcRowCode NO-ERROR.
-            
+
          IF NOT AVAILABLE ttRow THEN DO:
       
             CREATE ttRow.
@@ -1352,6 +1421,9 @@ PROCEDURE pGetInvoiceRowData:
             ttRow.RowBillCode   = ttBillItemAndGroup.BillCode
             ttRow.RowName       = lcRowName
             ttRow.RowToDate     = InvRow.ToDate.
+
+         /* YDR-2848 -  group the fee of 3p tariff in only one concept*/
+         IF ttRow.RowGroup EQ "46" THEN ttRow.RowGroup = "18".
       END.
 
       /* subtotals are wanted as headers, so calculate them here and make
@@ -1393,7 +1465,6 @@ PROCEDURE pGetInvoiceRowData:
                bttRow.RowAmt    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmt).
          END.
       END.
-
    END.
 
    RETURN "".

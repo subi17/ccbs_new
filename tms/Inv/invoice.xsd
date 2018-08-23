@@ -55,6 +55,11 @@
                                   <xs:documentation>Summary amounts of EDRs</xs:documentation>
                                 </xs:annotation>
                               </xs:element>
+                              <xs:element minOccurs="1" maxOccurs="1" name="Discounts" type="OrderType"/>
+                              <xs:element minOccurs="1" maxOccurs="1" name="Bundles" type="OrderType"/>
+                              <xs:element minOccurs="1" maxOccurs="1" name="Charges" type="OrderType"/>
+                              <xs:element minOccurs="1" maxOccurs="1" name="Others" type="OrderType"/>
+                              <xs:element minOccurs="1" maxOccurs="1" name="TotalCategory" type="OrderType"/>
                               <xs:element minOccurs="0" maxOccurs="unbounded" ref="EDR">
                                 <xs:annotation>
                                   <xs:documentation>Detailed EDRs</xs:documentation>
@@ -83,7 +88,7 @@
       <xs:attribute name="Document" type="xs:string"/>
       <xs:attribute name="Version" type="xs:string">
         <xs:annotation>
-          <xs:documentation>Version 3.4</xs:documentation>
+          <xs:documentation>Version 3.5</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -147,6 +152,7 @@
               <xs:enumeration value="3"/>
               <xs:enumeration value="4"/>
             </xs:restriction></xs:simpleType></xs:element>
+        <xs:element minOccurs="0" maxOccurs="1" name="Segment" type="xs:string"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -201,6 +207,7 @@
                   <xs:enumeration value="Compensation"/>
                   <xs:enumeration value="SubTotal"/>
                   <xs:enumeration value="Total"/>
+                  <xs:enumeration value="GOOGLEVAS"/>
                 </xs:restriction>
               </xs:simpleType>
             </xs:attribute>
@@ -382,6 +389,11 @@
           </xs:simpleContent>
         </xs:complexType>
       </xs:element>
+       <xs:element minOccurs="0" maxOccurs="1" name="OldContractType" type="ContractTypeName">
+        <xs:annotation>
+          <xs:documentation>Old Subscription type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element minOccurs="0" maxOccurs="1" name="ContractName" type="NameType">
         <xs:annotation>
           <xs:documentation>User</xs:documentation>
@@ -393,6 +405,13 @@
         </xs:annotation>
       </xs:element>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomContract" type="CustomDataType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ContractTypeName">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="TariffName" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="TariffType" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="TariffDate" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="NameType">
@@ -597,7 +616,13 @@
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="CustomType" type="xs:string"/>
       <xs:element minOccurs="0" maxOccurs="1" name="CustomContent" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="CustomerIUA" type="xs:string"/>
       <xs:element minOccurs="0" maxOccurs="1" name="CustomValue" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Amount" type="xs:decimal"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

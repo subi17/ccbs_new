@@ -14,6 +14,8 @@ DEF TEMP-TABLE ttInvoice NO-UNDO
    FIELD Q25Phase AS INT INIT 99
    FIELD GBValue AS DEC
    FIELD GBDiscValue AS DEC
+   FIELD AgileTV       AS DEC
+   FIELD OtherConcepts AS DEC
    INDEX InvNum IS UNIQUE InvNum
    INDEX ZipCode ZipCode InvNum.
 
