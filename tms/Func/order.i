@@ -53,7 +53,11 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
 
    IF OrderCustomer.Email > "" AND
       Customer.Email <> OrderCustomer.Email THEN DO:
-      Customer.Email = OrderCustomer.EMail.
+      ASSIGN 
+         Customer.Email = OrderCustomer.EMail
+         /* APIBSS-188 Changing email: new email has to be validated
+            1 = not validated. */
+         Customer.Email_validated = 1.
 
       IF Customer.DelType EQ {&INV_DEL_TYPE_EMAIL} OR
          Customer.DelType EQ {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
