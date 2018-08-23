@@ -70,8 +70,8 @@ CLASS Func.OrderProductsData FINAL:
                                                           OUTPUT lcParamValue).    
                                                           
                                                                                             
-        IF lcParamType = {&CHARACTER_PARAM}  /* ICC is charvalue in orderproductparam*/
-        THEN RETURN lcParamValue.
+        IF lcParamType = {&CHARACTER_PARAM} THEN  /* ICC is charvalue in orderproductparam*/
+            RETURN (IF lcParamValue = ? THEN "" ELSE lcParamValue).
         
         RETURN "".
         
@@ -237,7 +237,7 @@ CLASS Func.OrderProductsData FINAL:
         IF NOT AVAILABLE bfpcOrderMobile THEN 
             RETURN "".
         
-        RETURN bfpcOrderMobile.ICC.
+        RETURN (IF bfpcOrderMobile.ICC = ? THEN "" ELSE bfpcOrderMobile.ICC).
         
     END METHOD.              
     
