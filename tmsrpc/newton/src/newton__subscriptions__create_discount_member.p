@@ -49,6 +49,11 @@ DEFINE VARIABLE lcResult         AS CHARACTER NO-UNDO.
 /* ALFMO-14 for web memo creation */
 DEFINE VARIABLE lcMainLine    AS CHARACTER NO-UNDO.
 
+DEFINE VARIABLE liDiscCreDelay  AS INTEGER NO-UNDO.
+DEFINE VARIABLE ldActStamp      AS DECIMAL NO-UNDO.
+DEFINE VARIABLE lcList          AS CHAR NO-UNDO. /* list From Cparam */
+DEFINE VARIABLE i               AS INT NO-UNDO.
+
 DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
 DEFINE BUFFER bMXItem       FOR MXItem.
 
@@ -306,11 +311,20 @@ THEN RETURN appl_err(lcError).
 
 /* YCO-468. Assign permanency when lcPerContract <> "" */
 IF lcPerContract <> "" THEN DO:
+
+   /* YCO-757. Delay for permanency */
+   lcList = Syst.Parameters:getc("DelayedPermanencies", "Discount").
+   IF LOOKUP(lcPerContract, lcList) > 0 THEN DO:
+      liDiscCreDelay = Syst.Parameters:geti("DelayPermanencyValue", "Discount").
+      /* def = 0 current functionality without delay. For YCO-757 def value is 432000 */
+      ldActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDiscCreDelay).
+   END. 
+      
    liResult = fPCActionRequest(
                         Mobsub.MsSeq,             /* subscription */
                         lcPerContract,            /* DayCampaign.DCEvent */
                         "act",                    /* act,term,canc,iterm,cont */
-                        0,                        /* when request should be handled, 0 --> Now */
+                        /* 0, */ ldActStamp,      /* when request should be handled, 0 --> Now */
                         TRUE,                     /* fees */
                         {&REQUEST_SOURCE_NEWTON}, /* where created */
                         pcUserName,               /* creator  */
