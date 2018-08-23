@@ -3,6 +3,7 @@
 {Func/fmakemsreq.i}
 {Func/dss_matrix.i}
 {Func/msreqfunc.i}
+{Func/fsapc.i}
                     
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
@@ -222,6 +223,9 @@ PROCEDURE pSolog:
 
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
+   /* SAPC-56 redirecting new SAPC customers to new logic */
+   llSAPC = fCustomerSAPC(MsRequest.CustNum).
+
    IF MsRequest.ReqType = {&REQTYPE_DSS} THEN lcCli = MsRequest.CLI.
 
    ELSE IF MsRequest.ReqCParam1 = "CREATE" THEN DO:
@@ -374,13 +378,6 @@ PROCEDURE pSolog:
    ldActStamp = MSRequest.ActStamp.
    IF liOffSet NE 0 THEN 
       ldActStamp = Func.Common:mSecOffSet(ldActStamp,liOffSet).
-
-   /* SAPC-56 redirecting new SAPC customers to new logic */
-   IF MsRequest.CustNum EQ 0
-   THEN llSAPC = fCParam("SAPC", "SAPC_ENABLED_NEW_CUSTOMERS") EQ "SAPC".
-   ELSE llSAPC = CAN-FIND(FIRST Customer NO-LOCK WHERE
-                                Customer.CustNum EQ MsRequest.CustNum AND
-                                Customer.AccGrp EQ 2).
 
    DO TRANSACTION:
 

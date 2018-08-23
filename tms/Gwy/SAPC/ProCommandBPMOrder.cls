@@ -79,13 +79,11 @@ CLASS Gwy.SAPC.ProCommandBPMOrder INHERITS ProCommandBPM:
 
    METHOD PROTECTED OVERRIDE JsonObject mContactObject():
 
-      /* No need for contact object so far.. */
-      RETURN ?.
-
-      /*
       DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
 
       loJsonObject = NEW JsonObject().
+
+      loJsonObject:Add("firstName", OrderCustomer.FirstName).
       loJsonObject:Add("middleName", OrderCustomer.Surname1).
       loJsonObject:Add("lastName", IF OrderCustomer.Surname2 NE ""
                                    THEN OrderCustomer.Surname2
@@ -98,7 +96,6 @@ CLASS Gwy.SAPC.ProCommandBPMOrder INHERITS ProCommandBPM:
                                       ELSE OrderCustomer.FixedNumber).
 
       RETURN loJsonObject.
-      */
 
    END METHOD.
 

@@ -22,14 +22,14 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Gwy.SAPC.ProCommandBPMMobSub INHERITS ProCommandBPM: 
 
-   DEFINE PRIVATE BUFFER MobSub FOR MobSub.
+   DEFINE PRIVATE BUFFER Customer FOR Customer.
 
    CONSTRUCTOR ProCommandBPMMobSub
       ( iiMsRequest AS INTEGER ):
 
       SUPER(iiMsRequest).
 
-      DEFINE BUFFER Customer FOR Customer.
+      DEFINE BUFFER MobSub FOR MobSub.
 
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_SUBSCRIPTION_REACTIVATION}
@@ -74,8 +74,25 @@ CLASS Gwy.SAPC.ProCommandBPMMobSub INHERITS ProCommandBPM:
    END CONSTRUCTOR.
 
    METHOD PROTECTED OVERRIDE JsonObject mContactObject():
-      /* No need for contact object so far.. */
-      RETURN ?.
+
+      DEFINE VARIABLE loJsonObject AS CLASS JsonObject NO-UNDO.
+
+      loJsonObject = NEW JsonObject().
+
+      loJsonObject:Add("firstName", Customer.FirstName).
+      loJsonObject:Add("middleName", Customer.CustName).
+      loJsonObject:Add("lastName", IF Customer.SurName2 NE ""
+                                   THEN Customer.SurName2
+                                   ELSE Customer.CustName).
+      loJsonObject:Add("documentNumber", Customer.OrgId).
+      loJsonObject:Add("documentType", Customer.CustIDType).
+      loJsonObject:Add("email", Customer.Email).
+      loJsonObject:Add("phoneNumber", IF Customer.SMSNumber > ""
+                                      THEN Customer.SMSNumber
+                                      ELSE Customer.Phone).
+
+      RETURN loJsonObject.
+
    END METHOD.
 
 END CLASS.

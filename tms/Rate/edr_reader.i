@@ -288,10 +288,6 @@ PROCEDURE pHandleEDR:
          lcBundles = fGetCurrentBundle(MobSub.Msseq).
          
          IF LOOKUP(ttEDR.CLIType,lcBundles) > 0 THEN DO:
-
-            FIND Customer NO-LOCK WHERE
-                 Customer.custnum = MobSub.Custnum NO-ERROR.
-            IF NOT AVAIL Customer THEN RETURN.
             
             /* Benefit is already active, just send the renewal SMS 
                and possible counter reset*/
@@ -368,66 +364,61 @@ PROCEDURE pHandleEDR:
                   END.
                END.
 
-               /* When SAPC is enabled for the customer no accumulator updates
-                  is send */
-               IF Customer.AccGrp NE 2
-               THEN DO:
-                  /* YPR-2200 - Reset Voice Package during renewal */
-                  IF ((ttEDR.CLIType EQ "TARJ9"  AND ttEDR.ServiceFeeType = "SC9" ) OR
-                      (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
-                      (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
-                      (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12")) THEN 
-                  DO:
-                     liRequest = fServiceRequest(MobSub.MsSeq,
-                                                 "TEMPLATE",
-                                                 1,
-                                                 "LADEL1_PRE_PLUS_RESET",
-                                                 ldeNow,
-                                                 "",
-                                                 FALSE, /* fees */
-                                                 FALSE, /* sms */
-                                                 "",
-                                                 {&REQUEST_SOURCE_SCRIPT},
-                                                 0, /* father request */
-                                                 FALSE,
-                                                 OUTPUT lcResult).
-                     IF liRequest = 0 THEN
-                        Func.Common:mWriteMemo("MobSub",
-                                         STRING(MobSub.MsSeq),
-                                         MobSub.CustNum,
-                                         "PREP_VOICE",
-                                         "PREP_VOICE deactivation request failed; " +
-                                         lcResult).
-                  END.
-   
-                  /* YDR-2625 - Reset Data Package during renewal */
-                  IF ((ttEDR.CLIType EQ "TARJ7"  AND ttEDR.ServiceFeeType = "SC3" ) OR
-                      (ttEDR.CLIType EQ "TARJ9"  AND ttEDR.ServiceFeeType = "SC9" ) OR
-                      (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
-                      (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
-                      (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12")) THEN
-                  DO:
-                     liRequest = fServiceRequest(MobSub.MsSeq,
-                                                 "TEMPLATE",
-                                                 1,
-                                                 "DATA_RESET",
-                                                 ldeNow,
-                                                 "",
-                                                 FALSE, /* fees */
-                                                 FALSE, /* sms */
-                                                 "",
-                                                 {&REQUEST_SOURCE_SCRIPT},
-                                                 0, /* father request */
-                                                 FALSE,
-                                                 OUTPUT lcResult).
-                     IF liRequest = 0 THEN
-                        Func.Common:mWriteMemo("MobSub",
-                                         STRING(MobSub.MsSeq),
-                                         MobSub.CustNum,
-                                         "PREP_DATA",
-                                         "PREPAID DATA reset request failed; " +
-                                         lcResult).
-                  END.
+               /* YPR-2200 - Reset Voice Package during renewal */
+               IF ((ttEDR.CLIType EQ "TARJ9"  AND ttEDR.ServiceFeeType = "SC9" ) OR
+                   (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
+                   (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
+                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12")) THEN 
+               DO:
+                  liRequest = fServiceRequest(MobSub.MsSeq,
+                                              "TEMPLATE",
+                                              1,
+                                              "LADEL1_PRE_PLUS_RESET",
+                                              ldeNow,
+                                              "",
+                                              FALSE, /* fees */
+                                              FALSE, /* sms */
+                                              "",
+                                              {&REQUEST_SOURCE_SCRIPT},
+                                              0, /* father request */
+                                              FALSE,
+                                              OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                     Func.Common:mWriteMemo("MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "PREP_VOICE",
+                                      "PREP_VOICE deactivation request failed; " +
+                                      lcResult).
+               END.
+
+               /* YDR-2625 - Reset Data Package during renewal */
+               IF ((ttEDR.CLIType EQ "TARJ7"  AND ttEDR.ServiceFeeType = "SC3" ) OR
+                   (ttEDR.CLIType EQ "TARJ9"  AND ttEDR.ServiceFeeType = "SC9" ) OR
+                   (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
+                   (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
+                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12")) THEN
+               DO:
+                  liRequest = fServiceRequest(MobSub.MsSeq,
+                                              "TEMPLATE",
+                                              1,
+                                              "DATA_RESET",
+                                              ldeNow,
+                                              "",
+                                              FALSE, /* fees */
+                                              FALSE, /* sms */
+                                              "",
+                                              {&REQUEST_SOURCE_SCRIPT},
+                                              0, /* father request */
+                                              FALSE,
+                                              OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                     Func.Common:mWriteMemo("MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "PREP_DATA",
+                                      "PREPAID DATA reset request failed; " +
+                                      lcResult).
                END.
 
                IF llActivatePromo THEN DO:
@@ -532,6 +523,11 @@ PROCEDURE pHandleEDR:
                
                LEAVE.
             END.
+            
+
+            FIND Customer NO-LOCK WHERE
+                 Customer.custnum = MobSub.Custnum NO-ERROR.
+            IF NOT AVAIL Customer THEN RETURN.
 
             lcSMSText = fGetSMSTxt(ttEDR.CLIType + "RenewalOk", 
                                    TODAY,
