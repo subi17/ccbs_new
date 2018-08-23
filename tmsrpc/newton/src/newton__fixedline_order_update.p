@@ -226,8 +226,8 @@ IF NOT AVAIL CliType THEN
 CASE pcAmendmentType:
     WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:
 
-       IF fCheckFusionMessage({&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}) THEN    
-          RETURN "ERROR:Ongoing message , not possible to update order".
+       IF NOT fCheckFusionMessage({&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}) THEN    
+          RETURN appl_err("ERROR:Ongoing message , not possible to update order").
        
        ASSIGN
           lcAmendmentType = pcAmendmentType
@@ -274,8 +274,8 @@ CASE pcAmendmentType:
        IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
           RETURN appl_err("Fixednumber is not correct" ).
       
-       IF fCheckFusionMessage({&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE}) THEN  
-          RETURN "ERROR:Ongoing message , not possible to update order".
+       IF NOT fCheckFusionMessage({&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE}) THEN  
+          RETURN appl_err("ERROR:Ongoing message , not possible to update order").
                  
        ASSIGN
           lcAmendmentType  = pcAmendmentType
@@ -290,8 +290,6 @@ CASE pcAmendmentType:
       
 END CASE. 
   
-		    
- 
 fOrderUpdateRequest(pcSalesManId,
                     piOrderId,
                     0,

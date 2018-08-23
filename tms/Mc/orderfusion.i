@@ -266,8 +266,8 @@ FUNCTION fCheckFusionMessage RETURNS LOGICAL
                       FusionMessage.OrderID       EQ OrderFusion.OrderID AND
                       FusionMessage.MessageType   EQ icFusionMessage AND
                       FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN
-                RETURN TRUE.
-   RETURN FALSE.
+                RETURN FALSE.
+   RETURN TRUE.
 
 END.
 
@@ -304,7 +304,7 @@ FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
    IF lcMessageType EQ "" THEN
       RETURN FALSE.
          
-   IF fCheckFusionMessage(lcMessageType) THEN DO:
+   IF NOT fCheckFusionMessage(lcMessageType) THEN DO:
       ocError = "ERROR:Ongoing message , not possible to update order".
       RETURN FALSE.
    END.
