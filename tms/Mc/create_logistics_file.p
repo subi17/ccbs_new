@@ -1766,6 +1766,15 @@ FOR EACH OrderGroup NO-LOCK WHERE
 
          fUpdateOrderLogisticsValue(Order.OrderId).
 
+         /* If convergent order fixed line is not installed, and even if (Router + Mobile) info 
+            is sent to logistics - Order status should not be changed from 77 */
+         IF fIsConvergenceTariff(Order.CLIType) THEN
+            IF NOT CAN-FIND(FIRST OrderFusion NO-LOCK WHERE
+                                  OrderFusion.Brand        EQ Syst.Var:gcBrand AND
+                                  OrderFusion.OrderId      EQ Order.OrderId    AND
+                                  OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}) THEN
+               NEXT.
+         
          IF llDoEvent THEN DO:
             lhOrder = BUFFER Order:HANDLE.
             RUN StarEventInitialize(lhOrder).

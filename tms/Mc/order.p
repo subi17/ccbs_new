@@ -1647,8 +1647,14 @@ PROCEDURE local-find-others-common.
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
    IF AVAIL OrderCustomer THEN
       lcCustID = OrderCustomer.CustID.
-   ELSE lcCustID = "".
-    
+   ELSE DO:
+      FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
+           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_ACC} NO-ERROR.
+      IF AVAIL OrderCustomer THEN
+      lcCustID = OrderCustomer.CustID.
+      ELSE lcCustID = "".
+   END.    
+   
    IF CAN-FIND(FIRST Memo WHERE
                      Memo.Brand     = Order.Brand AND
                      Memo.Hosttable = "Order" AND
@@ -1713,7 +1719,8 @@ PROCEDURE local-find-others.
             OrderCustomer.OrderId = Order.OrderId:
 
       CASE OrderCustomer.RowType:
-      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} OR
+      WHEN {&ORDERCUSTOMER_ROWTYPE_ACC} THEN DO:
          lcAgrCust = Func.Common:mDispOrderName(BUFFER OrderCustomer).
          ASSIGN
             lcAuthCustId     = OrderCustomer.AuthCustId

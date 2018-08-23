@@ -224,7 +224,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER CLIType FOR CLIType.
    DEF BUFFER OrderFusion FOR OrderFusion.
-
+   
    ORDER_TRANS:
    DO TRANS:
       FIND bfOrder WHERE
@@ -258,12 +258,13 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                           MobSub.MsSeq = bfOrder.MsSeq NO-ERROR.
                IF AVAILABLE MobSub THEN DO:
                   IF MobSub.CLIType  EQ bfOrder.CLIType             AND
-                     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
+                     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN DO:
                      liRequest = fConvFixedSTCReq(bfOrder.CLIType,
                                                   bfOrder.MsSeq,
                                                   Func.Common:mMake2DT(TODAY + 1,0),
                                                   {&REQUEST_SOURCE_ORDER_CANCELLATION},
                                                   0).
+                  END.                                                 
                END.
 
                IF (bfOrder.OrderType EQ {&ORDER_TYPE_NEW} OR 

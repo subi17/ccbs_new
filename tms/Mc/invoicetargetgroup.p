@@ -63,69 +63,75 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
 {Func/brand.i}
 
 form
-  InvoiceTargetGroup.ITGroupID 
-     LABEL "IT GroupID ...."  
-     help "Invoice Target Group ID"   
+  InvoiceTargetGroup.ITGroupID
+     LABEL "IT GroupID ...."
+     help "Invoice Target Group ID"
   InvoiceTargetGroup.AccountID AT 38
-     LABEL "Account ID ...."      
+     LABEL "Account ID ...."
      SKIP
-     
-  InvoiceTargetGroup.CustAccName 
+
+  InvoiceTargetGroup.CustAccName
+     FORMAT "X(12)"
      LABEL "Account Name .."
   InvoiceTargetGroup.BankAccount AT 38
-     LABEL "BankAccount ..." 
+     FORMAT "X(12)"
+     LABEL "BankAccount ..."
      SKIP
 
-  InvoiceTargetGroup.Currency 
-     LABEL "Currency ......" 
+  InvoiceTargetGroup.Currency
+     LABEL "Currency ......"
   InvoiceTargetGroup.PaymentMethod AT 38
-     LABEL "Pay Mode ......" 
+     LABEL "Pay Mode ......"
      SKIP
 
-  InvoiceTargetGroup.BankName 
+  InvoiceTargetGroup.BankName
      LABEL "BankName ......"
-     HELP  "Bank Name" 
+     FORMAT "X(12)"
+     HELP  "Bank Name"
   InvoiceTargetGroup.BillCycle AT 38
      LABEL "BillCycle ....."
-     SKIP    
-  
-  InvoiceTargetGroup.MandateID 
+     SKIP
+
+  InvoiceTargetGroup.MandateID
      LABEL "MandateID ....."
+     FORMAT "X(12)"
   InvoiceTargetGroup.MandateDate AT 38
      LABEL "Mandate Date .."
      SKIP
-  
-  InvoiceTargetGroup.CustNum 
+
+  InvoiceTargetGroup.CustNum
      LABEL "CustNum ......."
   InvoiceTargetGroup.AgrCust AT 38
      LABEL "Agr. Customer ."
      SKIP
-     
+
   InvoiceTargetGroup.DefaultGroup
      LABEL "DefaultGroup .."
   InvoiceTargetGroup.StatusCode AT 38
-     LABEL "Status Code ..."   
+     LABEL "Status Code ..."
      SKIP
-     
-  InvoiceTargetGroup.InvInterval 
-     LABEL "InvInterval ..." 
+
+  InvoiceTargetGroup.InvInterval
+     LABEL "InvInterval ..."
   lcDelType AT 38
+     FORMAT "X(10)"
      LABEL "DelType ......."
-     SKIP          
-     
-  InvoiceTargetGroup.InvGroup       
+     SKIP
+
+  InvoiceTargetGroup.InvGroup
+     FORMAT "X(8)"
      LABEL "PayType ......."
   InvoiceTargetGroup.DueDateOffSet AT 38
      LABEL "Due Date ......"
      SKIP
-  
+
   InvoiceTargetGroup.FromDate
      LABEL "Valid From ...."
   InvoiceTargetGroup.ToDate AT 38
-     LABEL "Valid To ......"   
-     SKIP   
-  
-  WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
+     LABEL "Valid To ......"
+     SKIP
+
+  WITH  CENTERED OVERLAY ROW 3 WIDTH 80
   SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
   FRAME lis.
 
