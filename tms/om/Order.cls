@@ -167,6 +167,17 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
        GET.
        SET.
        
+    DEFINE PUBLIC PROPERTY oldIcc AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY currOper AS CHARACTER NO-UNDO
+       GET.
+       SET.
+       
+    DEFINE PUBLIC PROPERTY oldPayType AS LOGICAL NO-UNDO
+       GET.
+       SET.       
     /* A value for this property is populated in OrderProduct class */
     DEFINE PUBLIC PROPERTY msSeq AS INTEGER NO-UNDO
         GET.
@@ -317,7 +328,10 @@ CLASS om.Order IMPLEMENTS bss.cls.IObjectStorage:
             Order.CrStamp            = Func.Common:mDateTimeTZ2TS(THIS-OBJECT:crStamp)
             THIS-OBJECT:createdStamp = Order.CrStamp
             THIS-OBJECT:orderId      = Order.OrderId
-            Order.MNPStatus          = (INTEGER(THIS-OBJECT:mobileNumberType = {&TYPE_MNP})).
+            Order.MNPStatus          = (INTEGER(THIS-OBJECT:mobileNumberType = {&TYPE_MNP}))
+            Order.OldIcc             = THIS-OBJECT:oldIcc
+            Order.OldPayType         = THIS-OBJECT:oldPayType
+            Order.CurrOper           = THIS-OBJECT:currOper.
             
         CASE THIS-OBJECT:mobileNumberType:
             

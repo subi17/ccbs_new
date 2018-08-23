@@ -88,6 +88,8 @@ CLASS om.OrderMobile:
     
     METHOD PUBLIC VOID mCreateData(INPUT iObjAttributeStruct AS CLASS JsonObject):
         
+        DEFINE VARIABLE lcPayType AS CHARACTER NO-UNDO.
+        
         ASSIGN 
             THIS-OBJECT:product             = objOrderProduct:productId
             THIS-OBJECT:numberType          = iObjAttributeStruct:GetCharacter("mobile_number_type")                                               
@@ -100,9 +102,10 @@ CLASS om.OrderMobile:
                                               WHEN iObjAttributeStruct:Has("mnptime")  
             THIS-OBJECT:mnpStatus           = INTEGER(THIS-OBJECT:numberType = {&TYPE_MNP})   
             THIS-OBJECT:oldIcc              = iObjAttributeStruct:GetCharacter("mobile_old_icc") 
-                                              WHEN iObjAttributeStruct:Has("mobile_old_icc")     
-            THIS-OBJECT:oldPayType          = iObjAttributeStruct:GetLogical("mobile_old_product_type") 
-                                              WHEN iObjAttributeStruct:Has("mobile_old_product_type") 
+                                              WHEN iObjAttributeStruct:Has("mobile_old_icc")
+            lcPayType                       = iObjAttributeStruct:GetCharacter("mobile_old_product_type") 
+                                              WHEN iObjAttributeStruct:Has("mobile_old_product_type")                                 
+            THIS-OBJECT:oldPayType          = (lcPayType = "prepaid") 
             .                                                                          
         
     END METHOD.

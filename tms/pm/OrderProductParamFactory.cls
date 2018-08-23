@@ -112,6 +112,11 @@ CLASS pm.OrderProductParamFactory IMPLEMENTS bss.cls.IObjectStorage :
                                      "mobile_old_operator_name",
                                      {&CHARACTER_PARAM}). 
                                      
+        IF iObjParamStruct:Has("mobile_old_product_type") THEN 
+            mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_old_product_type"),
+                                     "mobile_old_product_type",
+                                     {&CHARACTER_PARAM}). 
+                                     
         IF iObjParamStruct:Has("mobile_old_icc") THEN 
             mCreateOrderProductParam(iObjParamStruct:GetCharacter("mobile_old_icc"),
                                      "mobile_old_icc",

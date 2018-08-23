@@ -134,9 +134,11 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         
         DEFINE VARIABLE lcReturnValue     AS CHARACTER NO-UNDO.
         DEFINE VARIABLE lcOldOperatorCode AS CHARACTER NO-UNDO.
+        DEFINE VARIABLE lcOldIcc          AS CHARACTER NO-UNDO.
         DEFINE VARIABLE loBillAddrObj     AS CLASS     JsonObject NO-UNDO.
         DEFINE VARIABLE liCustNum         AS INTEGER   NO-UNDO.
         DEFINE VARIABLE objTopupStruct    AS CLASS     JsonObject NO-UNDO.
+        DEFINE VARIABLE lgOldPaytype      AS LOGICAL   NO-UNDO.
         
         ASSIGN 
             loAttributes = NEW Progress.Json.ObjectModel.JsonObject()
@@ -147,7 +149,10 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         DO:                                                
             ASSIGN
                 THIS-OBJECT:mobileNumberType = loAttributes:GetCharacter("mobile_number_type") 
-                THIS-OBJECT:mobileNumber     = loAttributes:GetCharacter("mobile_number")                
+                THIS-OBJECT:mobileNumber     = loAttributes:GetCharacter("mobile_number")    
+                lcOldIcc                     = loAttributes:GetCharacter("mobile_old_icc") WHEN loAttributes:Has("mobile_old_icc")
+                lcOldOperatorCode            = loAttributes:GetCharacter("mobile_old_operator_code") WHEN loAttributes:Has("mobile_old_operator_code")   
+                lgOldPaytype                 = (loAttributes:GetCharacter("mobile_old_product_type") = "prepaid") WHEN loAttributes:Has("mobile_old_product_type")
                 .
                             
             IF LOOKUP(THIS-OBJECT:mobileNumberType,"new,mnp") = 0 THEN
@@ -168,7 +173,10 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
             ASSIGN 
                 objOrder:lcCLI          = THIS-OBJECT:mobileNumber
                 objOrder:isPrePaidOrder = Func.ValidateOrder:mIsPrepaidOrder(THIS-OBJECT:ProductID)
-                objOrder:cliType        = THIS-OBJECT:ProductID.
+                objOrder:cliType        = THIS-OBJECT:ProductID
+                objOrder:oldIcc         = lcOldIcc
+                objOrder:currOper       = lcOldOperatorCode
+                objOrder:oldPayType     = lgOldPaytype.
                 
             IF objOrder:isPrePaidOrder AND INDEX(objOrder:orderChannel,"PRO") > 0 THEN
                 UNDO , THROW NEW ParamError("Prepaid subscriptions are not allowed for PRO customer(s)").
