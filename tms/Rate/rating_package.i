@@ -324,10 +324,11 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
                /* if a voice cdr fits only partially to package then 
                   the leftover is rated with normal tariff but without 
-                  starting charge */
+                  starting charge if it's the last available package */
                IF ldPackageAmt > 0 AND 
-                  liDialType = {&DIAL_TYPE_VOICE} OR
-                  liDialType = {&DIAL_TYPE_FIXED_VOICE}
+                 (liDialType = {&DIAL_TYPE_VOICE} OR
+                  liDialType = {&DIAL_TYPE_FIXED_VOICE}) AND
+                  liSLGPacket EQ NUM-ENTRIES(lcSLGroupList)
                THEN DO:
                   c_dur = ldPackageAmt.
                   fTariff().
