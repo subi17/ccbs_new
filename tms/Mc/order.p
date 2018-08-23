@@ -1719,6 +1719,7 @@ PROCEDURE local-find-others.
             OrderCustomer.OrderId = Order.OrderId:
 
       CASE OrderCustomer.RowType:
+          
       WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} OR
       WHEN {&ORDERCUSTOMER_ROWTYPE_ACC} THEN DO:
          lcAgrCust = Func.Common:mDispOrderName(BUFFER OrderCustomer).
