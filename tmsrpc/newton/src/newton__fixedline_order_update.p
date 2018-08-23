@@ -38,6 +38,7 @@ USING Progress.Json.ObjectModel.*.
 {Syst/tmsconst.i}
 Syst.Var:gcBrand = "1".
 {Func/fmakemsreq.i}
+{Mc/orderfusion.i}
  
 /* Input parameters */
 DEF VAR pcSalesManId      AS CHAR NO-UNDO.
@@ -198,9 +199,6 @@ FIND FIRST OrderCustomer NO-LOCK WHERE
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
            NO-ERROR.
 
-IF NOT AVAILABLE OrderCustomer THEN 
-   RETURN appl_err("Order Update possible for fixedline order only").
-   
 FIND FIRST OrderFusion NO-LOCK WHERE
            OrderFusion.Brand   EQ Syst.Var:gcBrand AND
            OrderFusion.OrderID EQ piOrderId 
@@ -218,23 +216,18 @@ IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCES
 FIND FIRST CliType NO-LOCK WHERE
            CliType.Brand      EQ Syst.Var:gcBrand AND
            CliType.CliType    EQ Order.CliType    AND
-           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} 
+           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} OR
+           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}
            NO-ERROR.
 
-IF AVAIL CliType THEN
+IF NOT AVAIL CliType THEN
    RETURN appl_err("Invalid TariffType").
-            
-IF NOT fIsConvergenceTariff(Order.CLIType) THEN 
-   RETURN appl_err("Only Convergent Orders are allowed for address update" ).   
-
+             
 CASE pcAmendmentType:
     WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:
 
-       IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
-                          FusionMessage.OrderID       EQ OrderFusion.OrderID AND
-                          FusionMessage.MessageType   EQ {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
-                          FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN 
-          RETURN appl_err("Ongoing message, not possible to update order").      
+       IF fCheckFusionMessage({&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}) THEN    
+          RETURN "ERROR:Ongoing message , not possible to update order".
        
        ASSIGN
           lcAmendmentType = pcAmendmentType
@@ -280,16 +273,13 @@ CASE pcAmendmentType:
         
        IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
           RETURN appl_err("Fixednumber is not correct" ).
-        
-       IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
-           FusionMessage.OrderID       EQ OrderFusion.OrderID AND
-           FusionMessage.MessageType   EQ {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} AND
-           FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN 
-          RETURN appl_err("Ongoing message, not possible to update order").      
-       
+      
+       IF fCheckFusionMessage({&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE}) THEN  
+          RETURN "ERROR:Ongoing message , not possible to update order".
+                 
        ASSIGN
           lcAmendmentType  = pcAmendmentType
-          lcCurrentDetails = OrderCustomer.FixedNumber
+          lcCurrentDetails = OrderFusion.FixedNumber
           lcAmendmentValue = pcFixedNumber.
 
     END.
@@ -298,7 +288,9 @@ CASE pcAmendmentType:
        RETURN appl_err("Invalid AmendmentType").
     END. 
       
-END CASE.   
+END CASE. 
+  
+		    
  
 fOrderUpdateRequest(pcSalesManId,
                     piOrderId,

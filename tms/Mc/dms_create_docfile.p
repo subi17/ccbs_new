@@ -1281,7 +1281,10 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcNewPermanency       AS CHAR NO-UNDO.
    DEF VAR lcPrevPermanency      AS CHAR NO-UNDO.
    DEF VAR lcSfId                AS CHAR NO-UNDO INIT "MASOSS".
-
+   DEF VAR lcCurrAddress         AS CHAR NO-UNDO.
+   DEF VAR lcAmendAddress        AS CHAR NO-UNDO.
+   DEF VAR liCount               AS INT  NO-UNDO.
+   
    DEF BUFFER MobSub FOR MobSub.
 
    ASSIGN
@@ -1311,24 +1314,21 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
          WHEN {&REQTYPE_FIXEDLINE_ORDER_UPDATE} THEN DO:
             CASE MsRequest.ReqCParam2:
                WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:  
-                  DEF VAR lcCurrAddress  AS CHAR NO-UNDO.
-                  DEF VAR lcAmendAddress AS CHAR NO-UNDO.
-                  DEF VAR liCount        AS INT NO-UNDO.
                   
                   ASSIGN
                      lcCurrAddress = ""
                      lcAmendAddress = "".
                     
-                  DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam3,"|"):
+                  DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam3, lcDelim):
                      IF liCount < 10 THEN 
                         ASSIGN 
-                           lcAmendAddress = lcAmendAddress + ";" + ENTRY(liCount,MsRequest.ReqCParam3,"|")
+                           lcAmendAddress = lcAmendAddress + ";" + ENTRY(liCount,MsRequest.ReqCParam3,lcDelim)
                            lcAmendAddress = TRIM(lcAmendAddress,";").
                   END.
-                  DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam4,"|"):
+                  DO liCount = 1 TO NUM-ENTRIES(MsRequest.ReqCParam4, lcDelim):
                      IF liCount < 10 THEN 
                         ASSIGN 
-                           lcCurrAddress = lcCurrAddress + ";" + ENTRY(liCount,MsRequest.ReqCParam4,"|")
+                           lcCurrAddress = lcCurrAddress + ";" + ENTRY(liCount,MsRequest.ReqCParam4, lcDelim)
                            lcCurrAddress = TRIM(lcCurrAddress,";").
                   END.
                   ASSIGN        
