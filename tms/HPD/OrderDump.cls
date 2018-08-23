@@ -24,6 +24,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
    DEFINE PRIVATE VARIABLE lcTerm         AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE lcPayTerm      AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE ldeTermLeasAmt AS DECIMAL   NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcAccessories  AS CHARACTER NO-UNDO. /* APIBSS-282 */       
   
    CONSTRUCTOR PUBLIC OrderDump
       (iiDumpID AS INTEGER):
@@ -60,6 +61,29 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
    END CONSTRUCTOR.
 
 
+	/*------------------------------------------------------------------------------
+	 Purpose: Collect OrderAccesories
+	 Notes:   APIBSS-282
+	------------------------------------------------------------------------------*/
+
+	METHOD PUBLIC VOID mDataFromAccessories(  ):
+      
+      ASSIGN lcAccessories = "".
+
+      FOR EACH OrderAccessory NO-LOCK 
+         WHERE OrderAccessory.Brand   = "1" AND
+               OrderAccessory.OrderId = lbOrder.OrderId:
+
+         ASSIGN lcAccessories = lcAccessories + "," + 
+                                OrderAccessory.Productcode.
+      END.
+		
+      ASSIGN lcAccessories = LEFT-TRIM(lcAccessories,",").
+		
+		RETURN.
+
+	END METHOD.
+
    METHOD PUBLIC OVERRIDE CHARACTER mSpecialHandling
       (icField     AS CHARACTER,
        ilCheckOnly AS LOGICAL):
@@ -89,6 +113,10 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
          THEN IF ilCheckOnly
               THEN RETURN "OK".
               ELSE RETURN TRIM(STRING(ldeTermLeasAmt,"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<")).
+         WHEN "Accessories"  /* APIBSS-282 */
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN lcAccessories.
          WHEN "OnlySimAmt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
@@ -196,6 +224,8 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
       mOrderTimes().
 
       mDataFromOfferItems().
+      
+      mDataFromAccessories(). /* APIBSS-282 */
 
       FIND FIRST lbOrderAccessory NO-LOCK WHERE
          lbOrderAccessory.Brand        = "1"                    AND
