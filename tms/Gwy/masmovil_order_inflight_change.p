@@ -251,17 +251,11 @@ ELSE DO:
       
    CASE MSRequest.ReqCParam2:
       WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO: 
-         RUN pUpdateAddress(FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
-         RUN pUpdateAddress(FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}).  
-   
-         fReqStatus(2,"").
-         
+         RUN pUpdateInflightOrderDetails({&INFLIGHT_ADDRESS_UPDATE},FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
+         RUN pUpdateInflightOrderDetails({&INFLIGHT_ADDRESS_UPDATE},FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}).  
       END.   
-      WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
-      	RUN pUpdateFixedNumber(FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
-   
-         fReqStatus(2,"").
-      END.     
+      WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN 
+      	RUN pUpdateInflightOrderDetails({&INFLIGHT_PHONE_NUMBER_UPDATE},FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
          
       OTHERWISE RETURN.
    END CASE.
@@ -274,10 +268,11 @@ FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
 END.
 
-PROCEDURE pUpdateAddress:
-       
-   DEF INPUT PARAMETER iiOrderID AS INT NO-UNDO.
-   DEF INPUT PARAMETER iiRowType AS INT NO-UNDO. 
+PROCEDURE pUpdateInflightOrderDetails:
+   
+   DEF INPUT PARAMETER icAmendmentType AS CHAR NO-UNDO.   
+   DEF INPUT PARAMETER iiOrderID       AS INT NO-UNDO.
+   DEF INPUT PARAMETER iiRowType       AS INT NO-UNDO. 
    
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE 
               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
@@ -289,75 +284,59 @@ PROCEDURE pUpdateAddress:
     
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrdCustomer).
    
-   ASSIGN
-      OrderCustomer.StreetType   = ENTRY(1,lcAmendamentValue,"|")
-      OrderCustomer.Street       = ENTRY(2,lcAmendamentValue,"|")
-      OrderCustomer.BuildingNum  = ENTRY(3,lcAmendamentValue,"|")
-      OrderCustomer.Floor        = ENTRY(4,lcAmendamentValue,"|")
-      OrderCustomer.Door         = ENTRY(5,lcAmendamentValue,"|")
-      OrderCustomer.Letter       = ENTRY(6,lcAmendamentValue,"|")
-      OrderCustomer.Stair        = ENTRY(7,lcAmendamentValue,"|")
-      OrderCustomer.Block        = ENTRY(8,lcAmendamentValue,"|")
-      OrderCustomer.BisDuplicate = ENTRY(9,lcAmendamentValue,"|")
-      OrderCustomer.ZipCode      = ENTRY(10,lcAmendamentValue,"|")
-      OrderCustomer.PostOffice   = ENTRY(11,lcAmendamentValue,"|")
-      OrderCustomer.Gescal       = ENTRY(12,lcAmendamentValue,"|")
-      OrderCustomer.AddressId    = ENTRY(13,lcAmendamentValue,"|")
-      OrderCustomer.Country      = ENTRY(14,lcAmendamentValue,"|")
-      OrderCustomer.Km           = ENTRY(15,lcAmendamentValue,"|")
-      OrderCustomer.Region       = ENTRY(16,lcAmendamentValue,"|")
-      OrderCustomer.Hand         = ENTRY(17,lcAmendamentValue,"|")
-      OrderCustomer.Address      = OrderCustomer.Street.
+   CASE icAmendmentType:
+      WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO: 
+        
+         ASSIGN
+            OrderCustomer.StreetType   = ENTRY(1,lcAmendamentValue,"|")
+            OrderCustomer.Street       = ENTRY(2,lcAmendamentValue,"|")
+            OrderCustomer.BuildingNum  = ENTRY(3,lcAmendamentValue,"|")
+            OrderCustomer.Floor        = ENTRY(4,lcAmendamentValue,"|")
+            OrderCustomer.Door         = ENTRY(5,lcAmendamentValue,"|")
+            OrderCustomer.Letter       = ENTRY(6,lcAmendamentValue,"|")
+            OrderCustomer.Stair        = ENTRY(7,lcAmendamentValue,"|")
+            OrderCustomer.Block        = ENTRY(8,lcAmendamentValue,"|")
+            OrderCustomer.BisDuplicate = ENTRY(9,lcAmendamentValue,"|")
+            OrderCustomer.ZipCode      = ENTRY(10,lcAmendamentValue,"|")
+            OrderCustomer.PostOffice   = ENTRY(11,lcAmendamentValue,"|")
+            OrderCustomer.Gescal       = ENTRY(12,lcAmendamentValue,"|")
+            OrderCustomer.AddressId    = ENTRY(13,lcAmendamentValue,"|")
+            OrderCustomer.Country      = ENTRY(14,lcAmendamentValue,"|")
+            OrderCustomer.Km           = ENTRY(15,lcAmendamentValue,"|")
+            OrderCustomer.Region       = ENTRY(16,lcAmendamentValue,"|")
+            OrderCustomer.Hand         = ENTRY(17,lcAmendamentValue,"|")
+            OrderCustomer.Address      = OrderCustomer.Street.
          
-   IF OrderCustomer.BuildingNum NE "" THEN 
-      OrderCustomer.Address = OrderCustomer.Address + "|" +
-      OrderCustomer.BuildingNum.
+         IF OrderCustomer.BuildingNum NE "" THEN 
+            OrderCustomer.Address = OrderCustomer.Address + "|" +
+                                     OrderCustomer.BuildingNum.
+         
+         IF llDoEvent THEN 
+            RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer, 
+                                                 {&STAR_EVENT_USER}, 
+                                                 "Installation Address Updated").    
+         
+      END.
+         
+      WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
+         
+         ASSIGN
+            OrderFusion.FixedNumber     = lcAmendamentValue 
+            OrderFusion.FixedNumberType = "NEW" .
+         
+            IF llDoEvent THEN DO:
+               RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer,
+                                                   {&STAR_EVENT_USER},
+                                                   "Fixed Number Updated").
+               RUN StarEventMakeModifyEventWithMemo(lhOrdFusion,
+                                                    {&STAR_EVENT_USER},
+                                                    "Fixed Number and Type Updated").
+            END.
+      END.     
+         
+      OTHERWISE RETURN.
+   END CASE.
                
-   IF llDoEvent THEN 
-      RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer, 
-                                           {&STAR_EVENT_USER}, 
-                                           "Installation Address Updated").    
-      
    RELEASE OrderCustomer.
-    
+   fReqStatus(2,""). 
 END PROCEDURE.
-
-PROCEDURE pUpdateFixedNumber:
-       
-   DEF INPUT PARAMETER iiOrderID AS INT NO-UNDO.
-   DEF INPUT PARAMETER iiRowType AS INT NO-UNDO. 
-
-   FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                    OrderCustomer.Brand   EQ Syst.Var:gcBrand      AND
-                    OrderCustomer.OrderId EQ FusionMessage.OrderID AND
-                    OrderCustomer.RowType EQ iiRowType
-                    NO-WAIT NO-ERROR.
-   
-   IF NOT AVAIL OrderCustomer THEN
-      RETURN "ErrorCode: OrderCustomer is not available".
-      
-   IF llDoEvent THEN DO:
-      RUN StarEventSetOldBuffer(lhOrdCustomer).
-      RUN StarEventSetOldBuffer(lhOrdFusion).
-   END.
-      
-   ASSIGN
-      OrderCustomer.FixedNumber   = lcAmendamentValue
-      OrderFusion.FixedNumber     = lcAmendamentValue 
-      OrderFusion.FixedNumberType = "NEW" .
-          
-   IF llDoEvent THEN DO:
-      RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer,
-                                           {&STAR_EVENT_USER},
-                                           "Fixed Number Updated").
-      RUN StarEventMakeModifyEventWithMemo(lhOrdFusion,
-                                           {&STAR_EVENT_USER},
-                                           "Fixed Number and Type Updated").
-   END. 
-   
-   RELEASE OrderCustomer.
-
-END PROCEDURE.
-
-
-       
