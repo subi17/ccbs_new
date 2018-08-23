@@ -640,6 +640,7 @@ PROCEDURE pSIM:
             END.
 
             loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
+            RETURN "MNP Order with missing icc".
         END.
         ELSE
         DO: /* When parent product is of type 'mobile subscription' */ 
@@ -671,7 +672,8 @@ PROCEDURE pSIM:
 
                     fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_SENDING_TO_LO}). 
                 END.
-                loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).        
+                loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).  
+                RETURN "MNP Order with missing icc".      
             END.
         END.
 
