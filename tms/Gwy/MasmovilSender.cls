@@ -40,7 +40,7 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
       IF LOG-MANAGER:LOGGING-LEVEL < 2 AND LOG-MANAGER:LOGFILE-NAME <> ?
       THEN LOG-MANAGER:WRITE-MESSAGE("Daemon stopped", "INFO").
                  
-   END DESTRUCTOR.   
+   END DESTRUCTOR.  
 
    METHOD PUBLIC OVERRIDE LOGICAL processOne():
       
@@ -89,6 +89,11 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
             
             WHEN {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN DO:
                RUN Gwy/masmovil_cancel_order.p(FusionMessage.MessageSeq). 
+               lcReturnValue = RETURN-VALUE.
+            END.
+            
+            WHEN {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} OR WHEN {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} THEN DO:
+               RUN Gwy/masmovil_order_inflight_change.p(FusionMessage.MessageSeq). 
                lcReturnValue = RETURN-VALUE.
             END.
 
