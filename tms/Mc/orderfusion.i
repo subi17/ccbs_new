@@ -100,22 +100,27 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
  (iiOrderID AS INT,
   icMessageType AS CHAR):
 
-   DEF BUFFER Order FOR Order.
+   DEF BUFFER Order   FOR Order.
    DEF BUFFER CLIType FOR CLIType.
 
-   DEF VAR lcPrefix AS CHAR NO-UNDO. 
+   DEF VAR lcPrefix    AS CHAR NO-UNDO. 
    DEF VAR lcOrderType AS CHAR NO-UNDO. 
 
    FIND Order NO-LOCK WHERE
-        Order.Brand = Syst.Var:gcBrand AND
-        Order.OrderID = iiOrderID.
+        Order.Brand   EQ Syst.Var:gcBrand AND
+        Order.OrderID EQ iiOrderID.
 
    FIND CLIType NO-LOCK WHERE
         CLIType.CLIType = Order.CLiType.
 
-   IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
-      lcPrefix = "Cancelación".
-   ELSE lcPrefix = "Alta".
+   IF icMessageType      EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
+      lcPrefix = "Cancelaciï¿½n".
+   ELSE IF icMessageType EQ {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} THEN 
+      lcPrefix = "AddressChange".   
+   ELSE IF icMessageType EQ {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE} THEN 
+      lcPrefix = "FixedLineChange".   
+   ELSE 
+      lcPrefix = "Alta".
 
    IF CLIType.FixedLineType EQ 1 THEN
       lcOrderType = "xDSL".
@@ -130,15 +135,15 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
 
    CREATE FusionMessage.
    ASSIGN
-      FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
-      FusionMessage.OrderID = iiOrderID
-      FusionMessage.MsSeq = Order.Msseq WHEN AVAIL Order
-      FusionMessage.CreatedTS = Func.Common:mMakeTS()
-      FusionMessage.MessageType = icMessageType
+      FusionMessage.MessageSeq    = NEXT-VALUE(FusionMessageSeq)
+      FusionMessage.OrderID       = iiOrderID
+      FusionMessage.MsSeq         = Order.Msseq WHEN AVAIL Order
+      FusionMessage.CreatedTS     = Func.Common:mMakeTS()
+      FusionMessage.MessageType   = icMessageType
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
-      FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
-      FusionMessage.OrderType = lcPrefix + " " + lcOrderType
-      FusionMessage.UpdateTS = FusionMessage.CreatedTS.
+      FusionMessage.Source        = {&FUSIONMESSAGE_SOURCE_TMS}
+      FusionMessage.OrderType     = lcPrefix + " " + lcOrderType
+      FusionMessage.UpdateTS      = FusionMessage.CreatedTS.
 END.
 
 FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL
@@ -255,6 +260,64 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+FUNCTION fCheckOngoingFusionMessage RETURNS LOGICAL
+   (INPUT iiOrderId       AS INT,
+    INPUT icFusionMessage AS CHAR):
+
+   IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
+                      FusionMessage.OrderID       EQ iiOrderID                    AND
+                      FusionMessage.MessageType   EQ icFusionMessage              AND
+                      FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
+END.
+
+FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
+   (INPUT iiOrderID       AS INT,
+    INPUT icAmendmentType AS CHAR,
+    OUTPUT ocError        AS CHAR):
+
+   DEF BUFFER OrderFusion    FOR OrderFusion.
+   DEF BUFFER bFusionMessage FOR FusionMessage.
+   DEF VAR lcMessageType AS CHAR NO-UNDO.
+   
+   FIND OrderFusion NO-LOCK WHERE
+        OrderFusion.Brand   EQ Syst.Var:gcBrand AND
+        OrderFusion.OrderID EQ iiOrderId        NO-ERROR.
+
+   IF NOT AVAIL OrderFusion THEN DO:
+      ocError = "ERROR:Order data not found".
+      RETURN FALSE.
+   END.
+   
+   IF OrderFusion.FixedNumber EQ "" OR
+      OrderFusion.FixedNumber EQ ? THEN DO:
+      ocError = "ERROR:Fixed number is missing".
+      RETURN FALSE.
+   END. 
+
+   CASE icAmendmentType:
+      WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN lcMessageType = {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}.
+      WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN lcMessageType = {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE}.   
+      OTHERWISE lcMessageType = "".
+   END CASE.
+      
+   IF lcMessageType EQ "" THEN
+      RETURN FALSE.
+         
+   IF fCheckOngoingFusionMessage(OrderFusion.OrderId,
+                                 lcMessageType) THEN DO:
+      ocError = "ERROR:Ongoing message , not possible to update order".
+      RETURN FALSE.
+   END.
+ 
+   _fCreateFusionMessage(OrderFusion.OrderId,
+                                   lcMessageType).
+                                   
+   RETURN TRUE.
+END.
+
 FUNCTION fIsFixedNumberInUse RETURNS LOGICAL
  (icFixedNumber AS CHAR,
   iiOrderID AS INT):
@@ -263,14 +326,14 @@ FUNCTION fIsFixedNumberInUse RETURNS LOGICAL
   DEF BUFFER Order FOR Order.
 
   IF icFixedNumber EQ ? OR icFixedNumber EQ "" THEN RETURN FALSE.
-
+ 
   FOR EACH OrderFusion NO-LOCK WHERE
            OrderFusion.FixedNumber = icFixedNumber AND
            OrderFusion.OrderID NE iiOrderID,
       FIRST Order NO-LOCK WHERE
             Order.Brand = OrderFusion.Brand AND
             Order.OrderID = OrderFusion.OrderID AND
-     LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
 
      RETURN TRUE.
   END.
@@ -279,5 +342,6 @@ FUNCTION fIsFixedNumberInUse RETURNS LOGICAL
                         MobSub.Brand = Syst.Var:gcBrand AND
                         MobSub.FixedNumber = icFixedNumber).
 END.
-
+   
+ 
 &ENDIF

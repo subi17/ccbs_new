@@ -699,6 +699,78 @@ FUNCTION fAddressRequest RETURNS INTEGER
      
 END FUNCTION.
 
+/* Installation Address Update */
+FUNCTION fOrderUpdateRequest RETURNS INTEGER 
+   (INPUT  icsfid           AS CHAR,
+    INPUT  iiOrderId        AS INT,
+    INPUT  idActStamp       AS DEC,
+    INPUT  icAmendmentType  AS CHAR,
+    INPUT  icAmendmentValue AS CHAR,
+    INPUT  icCurrentDetails AS CHAR,
+    INPUT  icContractId     AS CHAR,
+    INPUT  icReason         AS CHAR,
+    INPUT  icSource         AS CHAR,        /* source of request */
+    INPUT  iiOrigReq        AS INT,         /* father request  */
+    OUTPUT ocResult         AS CHAR):
+    
+   DEF BUFFER bOrdCustomer FOR OrderCustomer.
+   DEF BUFFER bOrder FOR order.
+   
+   FIND FIRST bOrder NO-LOCK WHERE
+              bOrder.Brand   EQ Syst.Var:gcBrand AND
+              bOrder.OrderId EQ iiOrderId 
+              NO-ERROR.
+   IF NOT AVAIL bOrder THEN DO: 
+      ocResult = SUBST("Order for &1 not found", iiOrderId).
+      RETURN 0.
+   END.
+              
+   FIND FIRST bOrdCustomer NO-LOCK WHERE 
+              bOrdCustomer.Brand   EQ Syst.Var:gcBrand AND
+              bOrdCustomer.OrderId EQ iiOrderId AND 
+              bOrdCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+              NO-ERROR.
+   IF NOT AVAIL bOrdCustomer THEN DO: 
+      ocResult = SUBST("OrderCustomer for &1 not found", iiOrderId).
+      RETURN 0.
+   END.
+   
+   ocResult = fChkRequest(bOrder.msseq,
+                          {&REQTYPE_FIXEDLINE_ORDER_UPDATE},
+                          "",
+                          "").
+   IF (ocResult NE "" AND ocResult NE ?) THEN RETURN 0.  
+   
+   /* set activation time */
+   IF idActStamp = 0 OR idActStamp = ? THEN 
+      idActStamp = Func.Common:mMakeTS().
+
+   fCreateRequest({&REQTYPE_FIXEDLINE_ORDER_UPDATE},
+                  idActStamp,
+                  icsfid,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms */
+   ASSIGN
+      bCreaReq.MsSeq      = bOrder.MsSeq
+      bCreaReq.CustNum    = bOrder.CustNum
+      bCreaReq.cli        = bOrder.cli
+      bCreaReq.ReqCParam1 = icsfid
+      bCreaReq.ReqIParam1 = iiOrderId
+      bCreaReq.ReqCParam2 = icAmendmentType
+      bCreaReq.ReqCParam3 = icAmendmentValue
+      bCreaReq.ReqCParam4 = icCurrentDetails
+      bCreaReq.ReqCParam5 = icReason
+      bCreaReq.ReqCParam6 = icContractId
+      bCreaReq.ReqSource  = icSource
+      bCreaReq.OrigReq    = iiOrigReq
+      liReqCreated        = bCreaReq.MsRequest.
+   
+   RELEASE bCreaReq.
+   
+   RETURN liReqCreated.   
+
+END FUNCTION.
+
 /* changes to user account */
 FUNCTION fUserAccountRequest RETURNS INTEGER
    (INPUT  iiCustNum  AS INT,    /* whose account is changed */
