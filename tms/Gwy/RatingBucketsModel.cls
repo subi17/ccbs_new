@@ -151,7 +151,7 @@ CLASS Gwy.RatingBucketsModel IMPLEMENTS Gwy.ModelInterface:
         IF NOT AVAILABLE SLTemplate THEN
             RETURN loRequestMaker:logError("Unknown SLTemplate").
       
-        lcError = validate_sltemplate(FALSE).
+        lcError = validate_sltemplate().
         IF lcError > "" THEN RETURN loRequestMaker:logError(lcError).
     
         loEventLogMaker:make_eventlog("oldbuffer",BUFFER SLTemplate:HANDLE).
