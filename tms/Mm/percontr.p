@@ -2135,6 +2135,7 @@ PROCEDURE pContractTermination:
       liActTime  = 86399.
    
    ASSIGN
+      llSAPC    = Customer.AccGrp EQ 2
       lcDCEvent = MsRequest.ReqCParam3
       lcTerminationType = MsRequest.ReqCParam2
       liCustNum = MsRequest.CustNum.
