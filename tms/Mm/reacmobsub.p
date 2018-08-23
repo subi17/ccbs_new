@@ -1062,7 +1062,7 @@ PROCEDURE pRecoverSTC PRIVATE:
                           CLIType.CLIType EQ bMSRequestSTC.ReqCparam2 AND
                           CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID}))
       OR DAY(TODAY) EQ 1 THEN DO:
-      ldeSTCStamp = Func.Common:mMake2DT(TODAY,0).
+      ldeSTCStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),300). /* make after react */
    END.
    ELSE ldeSTCStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY) + 1,0).
 
