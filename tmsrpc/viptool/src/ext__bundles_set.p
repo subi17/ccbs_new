@@ -2,7 +2,7 @@
  * Set data bundle 
  *
  * @input  int;mandatory;subscription id
-           string;mandatory;bundle id (Bono Contracts, Bono VoIP and DSS) 
+           string;mandatory;bundle id (Bono Contracts and DSS) 
            string;mandatory;status value (on,off) 
  * @output int;bundle request id
  * @Exceptions  1;MobSub not found
@@ -74,7 +74,7 @@ ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcBONOContracts        = fCParamC("BONO_CONTRACTS").
 
 /* currently we support only manual activation/termination for MDUB and MDUB2 */
-IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
+IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
    pcBundleId <> {&DSS}
 THEN RETURN appl_err("Incorrect Bundle Id").
 
@@ -108,12 +108,6 @@ CASE pcActionValue :
                             "subscription has ongoing BTC with upgrade upsell").
 
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-         IF fGetActiveSpecificBundle(Mobsub.MsSeq,
-                                     ldNextMonthActStamp,
-                                     pcBundleId) = "" THEN
-            RETURN appl_err("Bundle termination is not allowed").
-      END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
       ELSE DO:
          IF NOT fIsDSSActive(Mobsub.Custnum,ldNextMonthActStamp) THEN
@@ -143,10 +137,6 @@ CASE pcActionValue :
          IF NOT fServPackagesActive() THEN
             RETURN appl_err("Bundle activation is not allowed").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-         IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq,ldeActStamp) THEN 
-            RETURN appl_err("Bundle activation is not allowed").
-      END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
       ELSE DO:
          IF pcBundleId = {&DSS} THEN

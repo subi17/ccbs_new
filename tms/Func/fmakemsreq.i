@@ -1013,7 +1013,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    RELEASE bCreaReq.
 
    /* Send right away SMS related to the bundle (de)activation */
-   IF LOOKUP(icContrType,lcBONOContracts + ",HSPA_ROAM_EU,TARJ_UPSELL") > 0 THEN DO:
+   IF LOOKUP(icContrType,lcBONOContracts + ",TARJ_UPSELL") > 0 THEN DO:
       FIND FIRST bReqOwner WHERE bReqOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE bReqOwner THEN
          RUN Mm/requestaction_sms.p(INPUT liReqCreated,

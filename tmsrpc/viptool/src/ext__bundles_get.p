@@ -2,7 +2,7 @@
  * Get data bundle status 
  *
  * @input  int;mandatory;subscription id
-           string;mandatory;bundle id (Bono Contracts, Bono VoIP and DSS) 
+           string;mandatory;bundle id (Bono Contracts and DSS) 
  * @output bundle status id;bundle status 
            0;inactive
            1;active
@@ -40,7 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN ldEndStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399)
        lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
-IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
+IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
    pcBundleId <> {&DSS} THEN
    RETURN appl_err("Incorrect Bundle Id").
 
@@ -119,15 +119,6 @@ ELSE IF CAN-FIND(FIRST MsRequest WHERE
                        LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
                        USE-INDEX MsSeq) THEN
       liStatus = 3. /* activation ongoing */
-
-/* if there is no active data bundle the return cancelled ongoing */
-ELSE IF pcBundleId = "BONO_VOIP" AND
-        fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundleId) > "" AND
-        fGetActiveDataBundle(Mobsub.MsSeq,ldEndStamp) = "" THEN DO:
-   IF (Mobsub.TariffBundle <> "CONTS15" AND Mobsub.CLIType <> "CONTM2") OR
-      fGetActiveDSSId(MobSub.CustNum,Func.Common:mSecOffSet(ldEndStamp,1)) <> "DSS2"
-   THEN liStatus = 2. /* cancelled ongoing */
-END.
 
 add_int(response_toplevel_id, "", liStatus).
 

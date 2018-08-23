@@ -185,10 +185,6 @@ PROCEDURE pUpdateDSSNetwork:
       /* Update HSDPA MSISDN LIST */
       WHEN "MODIFY" THEN
          lcParam = "TEMPLATE=DSS," + icParamList.
-      /* Add VoIP provision */
-      WHEN "VOIPVIDEO_ADD" THEN
-         ASSIGN icAction = "MODIFY"
-                lcParam  = "VOIPVIDEO=1".
       OTHERWISE
          lcParam = "MSISDN=34" + icCLI.
    END.
