@@ -273,10 +273,10 @@ FUNCTION fSendRetentionListEmail RETURNS CHAR
 
    lcEmailConfDir = fCParamC("RepConfDir").
    
-   IF icFilename MATCHES "*marktel*" THEN  
-      GetRecipients(lcEmailConfDir + "/mnp_retention_file.email").
-   ELSE
+   IF icFilename MATCHES "*business*" THEN  
       GetRecipients(lcEmailConfDir + "/mnp_retention_residential_file.email").
+   ELSE
+      GetRecipients(lcEmailConfDir + "/mnp_retention_file.email").
    
    IF xMailAddr EQ "" THEN RETURN "No address".
 
@@ -336,6 +336,8 @@ DEF BUFFER bMNPSub FOR MNPSub.
 DEFINE VARIABLE lcbarringstatus AS CHARACTER NO-UNDO INITIAL "Debt_Hotl,Debt_Restricted,Debt_HOTLP".
 DEFINE VARIABLE lcResCatNames   AS CHARACTER NO-UNDO INITIAL "RESIDENTIAL NIF,RESIDENTIAL NIE,UNKNOWN CONSUMER,CONSUMER PASSPORT,VIP - MM GROUP EXTERNAL CUSTOMER,SELF EMPLOYEE NIF,SELF EMPLOYEE NIE,DEFAULT CUSTOMERS".
 DEFINE VARIABLE lcCustCatName   AS CHARACTER NO-UNDO.
+DEFINE TEMP-TABLE b-ttMNPRetPlatform  LIKE ttMNPRetPlatform.
+DEF STREAM sout-bus.
 
 lcRetExcludeFile = lcRootDir + "/spool/" + "mnp_retention_exclude_" +
                    STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") +
@@ -426,7 +428,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                      NEXT  MNP_SUB_LOOP.
                   END.                  
                END CASE.
-               IF LOOKUP(CustCat.CatName,lcResCatNames) = 0 THEN NEXT  MNP_SUB_LOOP.
+              /* IF LOOKUP(CustCat.CatName,lcResCatNames) = 0 THEN NEXT  MNP_SUB_LOOP. */
                lcCustCatName  =  CustCat.CatName.
             END.
                       
@@ -567,6 +569,12 @@ END.
 RUN pFileDump.
 
 OUTPUT STREAM sout CLOSE.
+OUTPUT STREAM sout-bus CLOSE.
+
+FOR EACH b-ttMNPRetPlatForm NO-LOCK:
+   CREATE ttMNPRetPlatForm.
+   BUFFER-COPY b-ttMNPRetPlatForm TO ttMNPRetPlatForm.
+END.
 
 DEF VAR lcHandledFiles AS CHAR NO-UNDO. 
 /* Send email or move files to ongoing directory */
@@ -578,14 +586,16 @@ FOR EACH ttMNPRetPlatform NO-LOCK WHERE
    lcHandledFiles = (IF lcHandledFiles > "" THEN "," ELSE "") +
                     ttMNPRetPlatform.RetentionFile.
         
-   IF ttMNPRetPlatform.RetentionFile MATCHES "*marktel*" THEN DO:
+   IF ttMNPRetPlatform.RetentionFile MATCHES "*marktel*" AND NOT ttMNPRetPlatform.RetentionFile MATCHES "*business*" THEN DO:
       fSendRetentionListEmail(ttMNPRetPlatform.RetentionFile).
       fMove2TransDir(ttMNPRetPlatform.RetentionFile, "",
                      lcRootDir + "/processed/").
    END.   
    ELSE
    DO:
-      fSendRetentionListEmail(ttMNPRetPlatform.RetentionFile).
+      IF ttMNPRetPlatform.RetentionFile MATCHES "*business*" THEN 
+            fSendRetentionListEmail(ttMNPRetPlatform.RetentionFile).
+            
       fMove2TransDir(ttMNPRetPlatform.RetentionFile, "", 
                      lcRootDir + "/outgoing/").      
    END.      
@@ -652,6 +662,13 @@ PROCEDURE pFileDump:
          lcDate + "_" + lcTime + ".txt".                
       OUTPUT STREAM sout TO VALUE (ttMNPRetPlatform.RetentionFile) APPEND.
       
+      CREATE b-ttMNPRetPlatform.
+      BUFFER-COPY ttMNPRetPlatform EXCEPT ttMNPRetPlatform.RetentionFile ttMNPRetPlatform.RetentionPlatform TO b-ttMNPRetPlatform.
+      ASSIGN b-ttMNPRetPlatform.RetentionFile      =  lcRootDir + "/spool/" + "mnp_retention_business" + "_" +
+                                                      ttMNPRetPlatform.RetentionPlatformName + "_" + lcDate + "_" + lcTime + ".txt"  
+             b-ttMNPRetPlatform.RetentionPlatform  =  ttMNPRetPlatform.RetentionPlatform + "Business".      
+      OUTPUT STREAM sout-bus TO VALUE (b-ttMNPRetPlatform.RetentionFile) APPEND.      
+
       FOR EACH ttData NO-LOCK WHERE
                ttData.RetentionPlatform = ttMNPRetPlatform.RetentionPlatform,
          FIRST Customer NO-LOCK WHERE
@@ -674,7 +691,27 @@ PROCEDURE pFileDump:
              INPUT liMaxPeriods,
              OUTPUT ldaDueDate).
          
-         PUT STREAM sout UNFORMATTED 
+         IF LOOKUP(ttData.CustCatName,lcResCatNames) > 0 THEN 
+         DO:
+            PUT STREAM sout UNFORMATTED 
+                  mobsub.cli "|"
+                  Func.Common:mTS2HMS(mnpprocess.CreatedTS) "|"
+                  Func.Common:mTS2HMS(mnpprocess.portingtime) "|"
+                  lcopername "|"
+                  mobsub.clitype "|"
+                  customer.firstname "|"
+                  customer.custname "|"
+                  customer.surname2 "|"
+                  customer.smsnumber "|"
+                  customer.phone "|"
+                  Segmentation.SegmentCode "|"
+                  ttData.CustCatName "|"
+                  (IF liPeriods <= 3 THEN "Y" ELSE "")
+                  SKIP.           
+         END.
+         ELSE
+         DO:
+            PUT STREAM sout-bus UNFORMATTED 
                   mobsub.cli "|"
                   Func.Common:mTS2HMS(mnpprocess.CreatedTS) "|"
                   Func.Common:mTS2HMS(mnpprocess.portingtime) "|"
@@ -689,7 +726,8 @@ PROCEDURE pFileDump:
                   ttData.CustCatName "|"
                   (IF liPeriods <= 3 THEN "Y" ELSE "")
                   SKIP.
-                                                         
+         END.
+                                                                         
          lcRetentionSMSText = fGetSMSTxt(ttData.SMSText,
                                 TODAY,
                                 Customer.Language,
@@ -720,5 +758,6 @@ PROCEDURE pFileDump:
          END.
       END.   
       OUTPUT STREAM sout close.
+      OUTPUT STREAM sout-bus close.
    END. /*Category loop*/
 END PROCEDURE. 

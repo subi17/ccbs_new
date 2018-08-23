@@ -540,11 +540,12 @@ PROCEDURE pGetDSSBillingInfo:
          NEXT.      
 
       FOR EACH bMServiceLimit WHERE
-               bMServiceLimit.MsSeq   = ttMsOwner.MsSeq    AND
-               bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
-               bMServiceLimit.FromTS <= ttMsOwner.PeriodTo AND
-              (bMServiceLimit.EndTS  >= ttMsOwner.PeriodFrom AND 
-               bMServiceLimit.EndTS  >= ttMsOwner.PeriodTo) NO-LOCK,
+               bMServiceLimit.MsSeq    = ttMsOwner.MsSeq          AND
+               bMServiceLimit.DialType = {&DIAL_TYPE_GPRS}        AND
+               bMServiceLimit.FromTS  <= ttMsOwner.PeriodTo       AND
+              (bMServiceLimit.EndTS   >= ttMsOwner.PeriodFrom AND 
+               bMServiceLimit.EndTS   >= ttMsOwner.PeriodTo   AND
+               bMServiceLimit.EndTS   >= Func.Common:mMakeTS())   NO-LOCK,
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE

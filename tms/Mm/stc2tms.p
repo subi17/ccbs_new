@@ -640,7 +640,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liConfigExtraLineCount  AS INT  NO-UNDO.
    DEF VAR lcMandatoryExtraLines   AS CHAR NO-UNDO.
    DEF VAR lcAllowedExtraLines     AS CHAR NO-UNDO.   
-   DEF VAR liAllowedELCount       AS INT  NO-UNDO.
+   DEF VAR liAllowedELCount        AS INT  NO-UNDO.
    DEF VAR liManELCount            AS INT  NO-UNDO.
    DEF VAR liAvailExtraLineCount   AS INT  NO-UNDO.
    DEF VAR llgMandatoryExtraLine   AS LOG  NO-UNDO.
@@ -950,7 +950,48 @@ PROCEDURE pUpdateSubscription:
                                         TRUE).                        
       END.
    END.
-   
+   ELSE IF fCLITypeIsMainLine(CLIType.CliType) THEN DO:
+
+      fUpdateDSSAccount(MobSub.MsSeq,
+                        {&REQUEST_SOURCE_STC},
+                        MsRequest.MsRequest,
+                        Func.Common:mMakeTS(),
+                        "DELETE").
+
+      /* If old clitype is mainline then reset all associated extralines multisim values */
+      /* If old clitype is extraline then reset its multisim values                      */
+      IF fCLITypeIsMainLine(bOldType.CliType) THEN DO:
+
+         FOR EACH lbELMobSub NO-LOCK WHERE
+                  lbELMobSub.Brand        EQ Syst.Var:gcBrand AND
+                  lbELMobSub.MultiSimId   EQ MobSub.MsSeq     AND
+                  lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
+            fResetExtralineSubscription(lbELMobSub.MsSeq,
+                                        lbELMobSub.CLIType,
+                                        0,
+                                        0,
+                                        FALSE).
+         END.
+
+      END.
+      ELSE IF fCLITypeIsExtraLine(bOldType.CliType) THEN
+         fResetExtralineSubscription(MobSub.MsSeq,
+                                     CLIType.CLIType,
+                                     0,
+                                     0,
+                                     FALSE).
+
+      /* Check for available extralines of the customer and     */
+      /* then reassign them to new mainline and create discount */
+      IF CAN-FIND(FIRST ttExtraLines NO-LOCK) THEN
+         IF fReassigningExtralines(MobSub.MsSeq,
+                                   {&REQUEST_SOURCE_STC},
+                                   MsRequest.MsRequest) THEN
+            fCheckAndAssignOrphanExtraline(MobSub.MsSeq,
+                                           MobSub.CustNum,
+                                           MobSub.CLIType).
+   END.
+
    /* ADDLINE-324 Additional Line Discounts
       CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
       then CLOSE the all addline discounts to (STC Date - 1) */
@@ -1036,7 +1077,6 @@ PROCEDURE pFinalize:
    DEF VAR ldBegStamp            AS DEC  NO-UNDO.
    DEF VAR ldeNow                AS DEC  NO-UNDO.
    DEF VAR lcResult              AS CHAR NO-UNDO.
-   DEF VAR llgUpdateDSSAccount   AS LOG  NO-UNDO INITIAL TRUE.
    DEF VAR lcError               AS CHAR NO-UNDO.
    DEF VAR lcMultiLineSubsType   AS CHAR NO-UNDO.
    DEF VAR lcFusionSubsType      AS CHAR NO-UNDO.
@@ -1127,8 +1167,11 @@ PROCEDURE pFinalize:
                  OUTPUT lcCharValue).
 
    /* default counter limits */
-   IF MobSub.PayType = FALSE THEN 
+   IF MobSub.PayType = FALSE THEN DO:
       fTMRLimit2Subscription(MobSub.MsSeq).
+      fSetSpecialTTFLimit(MobSub.Custnum,
+                          MobSub.CLIType).
+   END.
 
    /* commission termination */
    IF llOldPayType NE MobSub.PayType THEN 
@@ -1299,6 +1342,12 @@ PROCEDURE pFinalize:
       END.
    END.
 
+   /* DSS related activity */
+   RUN pUpdateDSSAccount(INPUT MsRequest.MsRequest,
+                         INPUT Func.Common:mMakeTS(),
+                         INPUT ldtActDate,
+                         INPUT MsRequest.UserCode).
+
    IF Customer.Language NE 1 AND
       bOldType.PayType NE CLIType.PayType THEN DO:
 
@@ -1375,18 +1424,18 @@ PROCEDURE pFinalize:
                                    lcResult).
                END.
             END.
-			
+         
             FIND FIRST OrderCustomer NO-LOCK WHERE
                        OrderCustomer.Brand EQ Syst.Var:gcBrand AND
                        Ordercustomer.OrderID EQ Order.OrderID AND
                        OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} AND
                        OrderCustomer.TerritoryOwner NE "" NO-ERROR.
 
-				IF Avail OrderCustomer THEN DO:
+            IF Avail OrderCustomer THEN DO:
                FIND CURRENT Mobsub EXCLUSIVE-LOCK NO-ERROR.
                   ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
-               FIND CURRENT Mobsub NO-LOCK NO-ERROR.				
-				END.
+               FIND CURRENT Mobsub NO-LOCK NO-ERROR.           
+            END.
 
             /* YTS-11912 */
             IF fCLITypeIsMainLine(Order.CLIType) THEN  
@@ -1406,67 +1455,27 @@ PROCEDURE pFinalize:
       END.
    END.
 
-   /* If STC Request is Mainline, then its associate extralines has to be allinged */
-   IF (NOT fCLITypeIsMainLine(CLIType.CliType)  AND
-       NOT fCLITypeIsExtraLine(CLIType.CliType))   OR
-      fCLITypeIsMainLine(CLIType.CliType)          THEN DO:
-
-      fUpdateDSSAccount(MobSub.MsSeq,
-                        {&REQUEST_SOURCE_STC},
-                        MsRequest.MsRequest,
-                        Func.Common:mMakeTS(),
-                        "DELETE").
-
-      /* If old clitype is mainline then reset all associated extralines multisim values */
-      /* If old clitype is extraline then reset its multisim values                      */
-      IF fCLITypeIsMainLine(bOldType.CliType) THEN DO:
-
-         FOR EACH lbELMobSub NO-LOCK WHERE
-                  lbELMobSub.Brand        EQ Syst.Var:gcBrand AND
-                  lbELMobSub.MultiSimId   EQ MobSub.MsSeq     AND
-                  lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
-            fResetExtralineSubscription(lbELMobSub.MsSeq,
-                                        lbELMobSub.CLIType,
-                                        0,
-                                        0,
-                                        FALSE).
-         END.
-
-      END.
-      ELSE IF fCLITypeIsExtraLine(bOldType.CliType) THEN
-         fResetExtralineSubscription(MobSub.MsSeq,
-                                     CLIType.CLIType,
-                                     0,
-                                     0,
-                                     FALSE).
-
-      /* Check for available extralines of the customer and     */
-      /* then reassign them to new mainline and create discount */
-      IF fCLITypeIsMainLine(CLIType.CliType) THEN DO:
-
-         IF CAN-FIND(FIRST ttExtraLines NO-LOCK) THEN
-            llgUpdateDSSAccount = fReassigningExtralines(MobSub.MsSeq,
-                                                         {&REQUEST_SOURCE_STC},
-                                                         MsRequest.MsRequest).
-
-         IF llgUpdateDSSAccount THEN
-            fCheckAndAssignOrphanExtraline(MobSub.MsSeq,
-                                           MobSub.CustNum,
-                                           MobSub.CLIType).
-
-      END. /* IF fCLITypeIsMainLine(CLIType.CliType) */
-
-   END.
-
-   /* DSS related activity */
-   IF llgUpdateDSSAccount THEN
-      RUN pUpdateDSSAccount(INPUT MsRequest.MsRequest,
-                            INPUT MsRequest.ActStamp,
-                            INPUT ldtActDate,
-                            INPUT MsRequest.UserCode).
-
    /* request handled succesfully */
    fReqStatus(2,"").
+  
+   /* YCO-968 */ 
+   IF LOOKUP(MsRequest.ReqCparam2, {&CLITYPES_TRY_AND_BUY}) > 0 AND
+      ldtActDate <= 12/31/2018 THEN DO:
+      lcError = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                       "CONT_DISC_TB_20",
+                                       16.53, /* discount */
+                                       ldtActDate,
+                                       12/31/2018, 
+                                       ?,
+                                       0).
+
+      IF lcError BEGINS "ERROR" THEN
+         Func.Common:mWriteMemo("MobSub",
+              STRING(MobSub.MsSeq),
+              MobSub.Custnum,
+              "CONT_DISC_TB_20 discount creation failed",
+              lcError).
+   END.
   
    MERGEREQUEST:
    DO:

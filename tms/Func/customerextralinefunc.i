@@ -133,7 +133,7 @@ FUNCTION fCreateORAddDSSAccount RETURNS LOGICAL
    ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
           lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE")
           lcBundleId            = fGetActiveDSSId(INPUT lbMobSub.CustNum,
-                                                  INPUT Func.Common:mMakeTS()).
+                                                  INPUT ideActStamp).
   
    IF fCLITypeIsMainLine(lbMobSub.CLIType)  OR 
       fCLITypeIsExtraLine(lbMobSub.CLIType) THEN DO:
@@ -153,7 +153,7 @@ FUNCTION fCreateORAddDSSAccount RETURNS LOGICAL
          lcDSSBundleId EQ {&DSS4}                           AND
          fIsDSSActivationAllowed(lbELMobSub.CustNum,
                                  lbELMobSub.MsSeq,
-                                 lbELMobSub.ActivationTS,
+                                 ideActStamp,
                                  {&DSS4},
                                  OUTPUT liDSSPriMsSeq,
                                  OUTPUT lcResult) THEN
@@ -162,29 +162,29 @@ FUNCTION fCreateORAddDSSAccount RETURNS LOGICAL
          lcDSSBundleId EQ {&DSS2}                                AND
          fIsDSSActivationAllowed(lbELMobSub.CustNum,
                                  lbELMobSub.MsSeq,
-                                 lbELMobSub.ActivationTS,
+                                 ideActStamp,
                                  {&DSS2},
                                  OUTPUT liDSSPriMsSeq,
                                  OUTPUT lcResult) THEN
          lcDSSId = {&DSS2}.
    END.
    ELSE DO:
-      IF LOOKUP(lbMobSub.CLIType,lcAllowedDSS4SubsType) > 0 AND
-         fIsDSSActivationAllowed(lbMobSub.CustNum,
-                                 0,
-                                 ideActStamp,
-                                 {&DSS4},
-                                 OUTPUT liDSSPriMsSeq,
-                                 OUTPUT lcResult) THEN 
-         lcDSSId = {&DSS2}.
       IF LOOKUP(lbMobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
          fIsDSSActivationAllowed(lbMobSub.CustNum,
                                  0,
                                  ideActStamp,
                                  {&DSS2},
                                  OUTPUT liDSSPriMsSeq,
-                                 OUTPUT lcResult) THEN 
+                                 OUTPUT lcResult) THEN DO: 
          lcDSSId = {&DSS2}.
+
+         IF fCanDSSKeepActive(INPUT lbMobsub.CustNum,
+                              INPUT lbMobsub.MsSeq,
+                              INPUT ideActStamp,
+                              INPUT lcDSSId,
+                              OUTPUT lcResult) THEN
+            lcMLMsSeqList = STRING(lbMobsub.MsSeq).
+      END.      
    END.
 
    FIND FIRST lbPriMobSub NO-LOCK WHERE 
@@ -193,21 +193,9 @@ FUNCTION fCreateORAddDSSAccount RETURNS LOGICAL
    IF NOT AVAIL lbPriMobSub THEN 
       RETURN FALSE.
 
-   /* FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-              bTerMsRequest.Brand      EQ Syst.Var:gcBrand    AND
-              bTerMsRequest.ReqType    EQ {&REQTYPE_DSS}      AND
-              bTerMsRequest.Custnum    EQ lbPriMobSub.Custnum AND
-              bTerMsRequest.ReqCParam3 BEGINS "DSS"           AND
-              bTerMsRequest.ReqCParam1 EQ "DELETE"            AND
-              LOOKUP(STRING(bTerMsRequest.ReqStatus),
-                    {&REQ_INACTIVE_STATUSES} + ",3") EQ 0     NO-ERROR.
-
-   IF AVAIL bTerMsRequest THEN 
-      RETURN FALSE. */
- 
-   IF (lcBundleId        EQ ""          OR 
-       lbPriMobSub.MsSeq EQ lbMobSub.MsSeq)   AND
-      NOT fOngoingDSSAct(lbPriMobSub.CustNum) THEN DO:
+   IF (lcBundleId EQ "" OR lcMLMsSeqList EQ "") AND
+      lcDSSId     GT ""                         AND
+      NOT fOngoingDSSAct(lbPriMobSub.CustNum)   THEN DO:
 
       fDSSCreateRequest(lbPriMobSub.MsSeq,
                         lbPriMobSub.CustNum,
@@ -230,9 +218,9 @@ FUNCTION fCreateORAddDSSAccount RETURNS LOGICAL
                            "DSS creation failed in STC Request").
       RETURN TRUE.
    END.        
-   ELSE IF (LOOKUP(CLIType.CLIType,lcAllowedDSS4SubsType) GT 0 OR
-            LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType) GT 0) AND  
-           lcBundleId GT ""                                     THEN DO:
+   ELSE IF (LOOKUP(lbMobSub.CLIType,lcAllowedDSS4SubsType) GT 0 OR
+            LOOKUP(lbMobSub.CLIType,lcAllowedDSS2SubsType) GT 0) AND  
+           lcBundleId GT ""                                      THEN DO:
       IF llgMatrixAvailable THEN
          fDSSAddExtralineGroup(lbMobSub.MsSeq,
                                lcBundleId,

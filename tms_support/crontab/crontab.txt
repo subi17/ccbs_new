@@ -185,14 +185,15 @@
 # Cleanup of old orders in queue 44 (YOT-437)
 0 10 * * * pike -C /apps/yoigo/tms batch -- Mc/orderautoclose all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py orderautoclose >> /scratch/cron/batch.log
 # MNP confirmation/rejection message creation
-30 8,12,14,18 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnpautohandle all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpautohandle >> /scratch/cron/batch.log
+#30 8,12,14,18 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnpautohandle all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpautohandle >> /scratch/cron/batch.log
+30 11,17 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnpautohandle all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpautohandle >> /scratch/cron/batch.log
 0 9 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnp_release_orders all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_release_orders >> /scratch/cron/batch.log
 # MNP status file handling
 45 * * * * pike -C /apps/yoigo/tms batch -- Mnp/mnpstatusfile all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpstatusfile >> /scratch/cron/batch.log
 # Returned MSISDN file read
 30 * * * * pike -C /apps/yoigo/tms batch -- Mnp/read_msisdn_returned all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py read_msisdn_returned >> /scratch/cron/batch.log
 # MNP retention file creation
-0 9,10,11,12,13,14,16,17,18,19,20 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnp_retention_file all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_retention_file >> /scratch/cron/batch.log
+0 9,10,11,12,13,14,16,17,18,19,20 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnp_retention_file all -clientlog /scratch/cron/mnp_retention_file.log tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_retention_file >> /scratch/cron/batch.log
 # Special MNP retention file creation YTS-7574. Nodo Central break between 14-15 and TMS request new MNP orders at 15:06
 15 15 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnp_retention_file all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_retention_file >> /scratch/cron/batch.log
 # Release MNP ON HOLD orders
@@ -394,17 +395,22 @@
 0,15,30,45 * * * * pike -C /apps/yoigo/tms batch -- Syst/mmlog_count all -param 1 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mmlog_count >> /scratch/cron/batch.log
 
 #YCO-276 upsell renew
-#2 0,8,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_3m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_3m >> /scratch/cron/batch.log
-#1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_6m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_6m >> /scratch/cron/batch.log
-#1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_12m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_12m >> /scratch/cron/batch.log
+1 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_3m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_3m >> /scratch/cron/batch.log
+3 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_6m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_6m >> /scratch/cron/batch.log
+5 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-276_upsell_update_monthly-3Gb_12m all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-276_upsell_update_monthly-3Gb_12m >> /scratch/cron/batch.log
 
 #Create DSS cron job process
 00 08 * * * pike -C /apps/yoigo/tms batch -- Mm/create_dss_group_for_extralines all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py create_dss_group_for_extralines >> /scratch/cron/batch.log
 
-#YCO-275 5Gb 3m Promotion handler is run hourly
-#1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_3m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_3m_no_penalty >> /scratch/cron/batch.log
-#1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_6m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_6m_no_penalty >> /scratch/cron/batch.log
-#1 0,12 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_12m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_12m_no_penalty >> /scratch/cron/batch.log
+#YCO-275 5Gb 3m Promotion handler 
+7 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_3m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_3m_no_penalty >> /scratch/cron/batch.log
+9 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_6m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_6m_no_penalty >> /scratch/cron/batch.log
+11 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-275_upsell_update_monthly-5Gb_12m_no_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-275_upsell_update_monthly-5Gb_12m_no_penalty >> /scratch/cron/batch.log
+
+#YCO-440 5Gb with penalty Promotion handler 
+13 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-440_upsell_update_monthly-5Gb_3m_with_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-440_upsell_update_monthly-5Gb_3m_with_penalty >> /scratch/cron/batch.log
+15 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-440_upsell_update_monthly-5Gb_6m_with_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-440_upsell_update_monthly-5Gb_6m_with_penalty >> /scratch/cron/batch.log
+17 0 * * * pike -C /apps/yoigo/tms batch -- Mm/YCO-440_upsell_update_monthly-5Gb_12m_with_penalty all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py YCO-440_upsell_update_monthly-5Gb_12m_with_penalty >> /scratch/cron/batch.log
 
 #YCO-469 percontract_bob.p every 60 minutes
 #1 * * * * pike -C /apps/yoigo/tms batch -- Mm/percontract_bob all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py percontract_bob >> /scratch/cron/batch.log
@@ -413,4 +419,7 @@
 
 #ITOC-1590 automatic compression and removal of daemon related log files
 10 0 * * * /usr/bin/find /apps/var/log/ -type f -name 'd-*.log' -mtime +7 -exec gzip -9 {} \; > /dev/null 2>&1
-15 0 * * * /usr/bin/find /apps/var/log/ -type f -name 'd-*.log.gz' -mtime +180 -exec rm -f {} \; > /dev/null 2>&1 
+15 0 * * * /usr/bin/find /apps/var/log/ -type f -name 'd-*.log.gz' -mtime +180 -exec rm -f {} \; > /dev/null 2>&1
+
+#RES-1683 Massive STC every 30 minutes
+00,30 * * * * pike -C /apps/yoigo/tms batch -- Mc/stc_massive_bob all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py stc_massive_bob >> /scratch/cron/batch.log 
