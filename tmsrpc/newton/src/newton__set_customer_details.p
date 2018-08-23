@@ -136,7 +136,7 @@ DEF VAR lii AS INT NO-UNDO.
 DEF VAR llt AS LOGICAL NO-UNDO.
 DEF VAR llCustomerChanged AS LOGICAL INITIAL FALSE NO-UNDO.
 
-DEF VAR lcCustomerData AS CHAR EXTENT 24 NO-UNDO.    /* APIBSS-174 Changing for 23 to 24 */
+DEF VAR lcCustomerData AS CHAR EXTENT 25 NO-UNDO.    /* APIBSS-174 Changing for 23 to 24, APIBSS-188 Changing for 24 to 25 */
 DEF VAR llMarketingData AS LOGICAL EXTENT 8 NO-UNDO. /* APIBSS-86 */
 DEF VAR lcDataFields AS CHAR NO-UNDO.
 DEF VAR lcMarketingFields AS CHAR NO-UNDO.
@@ -156,6 +156,7 @@ DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR lcMemoHostTable AS CHAR NO-UNDO INIT "Customer".
 DEF VAR liChargeType AS INT NO-UNDO.
 DEF VAR lcMemo    AS CHAR  NO-UNDO.
+DEF VAR liEmail_validated AS INTEGER NO-UNDO. /* APIBSS-188 */
 
 lcMemo = "Agent" + CHR(255) + (IF scUser EQ "selfcare" 
                                THEN scUser ELSE "VISTA").
@@ -184,6 +185,7 @@ ASSIGN
     lcCustomerData[21] = customer.OrgId
     lcCustomerData[22] = customer.CompanyName
     lcCustomerData[24] = customer.Profession  /* APIBSS-174 */
+    lcCustomerData[25] = STRING(customer.email_validated)  /* APIBSS-188 */
     ldFoundationDate   = customer.FoundationDate
     liInvoiceTargetRule = customer.InvoiceTargetRule
     ldBirthDay         = customer.BirthDay
@@ -206,7 +208,8 @@ lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "language,nationality,bankaccount,country," +
                "email,sms_number,phone_number,person_id,city_code,street_code,"+
                "id_type,company_id,company_name," +
-               "birthday,profession,company_foundationdate,new_subscription_grouping,payment_method".   /* APIBSS-174 */
+               "birthday,profession," + /* APIBSS-174 */ 
+               "email_validated,company_foundationdate,new_subscription_grouping,payment_method".   /* APIBSS-188 */
 
 DEF VAR lcAddressValidtionFields AS CHAR NO-UNDO. 
 lcAddressValidtionFields = "street_code,city_code,municipality_code".
@@ -314,6 +317,18 @@ DO lii = 1 TO NUM-ENTRIES(lcDataFields):
             llCustomerChanged = TRUE.
          END.
       END.    
+      ELSE IF lcField EQ "email_validated" THEN DO:  /*APIBSS-188 */
+         liEmail_validated = get_int(pcstruct, lcField). 
+                 
+         IF liEmail_validated NE INTEGER(lcCustomerData[lii]) THEN 
+         DO: 
+            IF liEmail_validated < 0 OR liEmail_validated > 2 THEN
+               RETURN appl_err(SUBST("Incorrect email validated flag: &1", liEmail_validated)).
+            
+            lcCustomerData[lii] = STRING(liEmail_validated).
+            llCustomerChanged = TRUE.
+         END.
+      END.      
       ELSE DO:  
          lcc = get_string(pcstruct, ENTRY(lii, lcDataFields)).
          IF lcc NE lcCustomerData[lii] THEN DO:
@@ -534,7 +549,8 @@ IF llCustomerChanged THEN DO:
         customer.BirthDay = ldBirthDay
         customer.InvoiceTargetRule = liInvoiceTargetRule
         customer.ChargeType = liChargeType 
-        customer.profession = lcCustomerData[LOOKUP("profession", lcDataFields)].  /* APIBSS-174 */
+        customer.profession = lcCustomerData[LOOKUP("profession", lcDataFields)]  /* APIBSS-174 */
+        customer.email_validated = INTEGER(lcCustomerData[LOOKUP("email_validated", lcDataFields)]).  /* APIBSS-188 */
           
    IF llAddressChanged THEN DO:
        

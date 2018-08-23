@@ -1,0 +1,8 @@
+ADD FIELD "EmailValidated" OF "Customer" AS integer 
+  DESCRIPTION "Possible values: 0 = Unknown, 1 = Not validated, 2 = Validated"
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Email validated"
+  MAX-WIDTH 4
+  ORDER 1610
+  HELP "0 = Unknown, 1 = Not validated, 2 = Validated"
