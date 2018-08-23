@@ -249,10 +249,9 @@ FUNCTION fIsConvergentSubscriptionSIMShipped RETURNS LOGICAL():
 
 END FUNCTION.
 
-FUNCTION fIsSimOnlyMNPNonPosOrder RETURNS LOGICAL():
+FUNCTION fIsSimOnlyNonPosOrder RETURNS LOGICAL():
     
-    IF bf_Order.OrderType EQ {&ORDER_TYPE_MNP}   AND
-       bf_Order.CrStamp   >= 20150616.40200      AND
+    IF bf_Order.CrStamp   >= 20150616.40200      AND
        LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
        NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
                           OrderAccessory.Brand   EQ Syst.Var:gcBrand AND
@@ -568,44 +567,28 @@ END PROCEDURE.
 PROCEDURE pSIM:
     DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER NO-UNDO.
 
-    DEFINE VARIABLE lcICC AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE liSubscriptionProductId AS INT NO-UNDO.
+    DEFINE VARIABLE lcICC                   AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE liSubscriptionProductId AS INTEGER   NO-UNDO.
 
-    ASSIGN liSubscriptionProductId = fGetParentProductIDBasedOnChild(bf_Order.OrderId, iiOrderProductID).  
+    ASSIGN liSubscriptionProductId = fGetParentProductIDBasedOnChild(bf_Order.OrderId, iiOrderProductID).
+
     /* When SIM is still not alloted */
     IF NOT fIsSIMNumberAssigned(bf_Order.OrderId, liSubscriptionProductId, OUTPUT lcICC) THEN 
     DO:  
         /* When parent product is of type 'convergent subscription' */
         IF Func.ValidateOrder:mIsConvergentTariff(bf_Order.CliType) THEN 
         DO:
-            loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
-
-            IF bf_Order.OrderType EQ {&ORDER_TYPE_MNP} AND 
-               fGetMobileNumberPortingDate(bf_Order.OrderId, iiOrderProductID) <> ? THEN /* MNP */
-            DO:
-                fSetOrderStatus(bf_Order.OrderID, {&ORDER_STATUS_MNP_ON_HOLD}).
-
-                fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_MNP_ON_HOLD}).
-                
-                RETURN "MNP Order with missing Porting Date".
-            END.
-
-            IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN /* POS */
-            DO:
-                fSetOrderStatus(bf_Order.OrderID, {&ORDER_STATUS_PENDING_MOBILE_LINE}).
-
-                fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_PENDING_MOBILE_LINE}).
-            END.
-            ELSE IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN /* NON-POS */
-            DO:
+            IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN 
+            DO: /* POS */ 
+                RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_PENDING_MOBILE_LINE}).
+            END.      
+            ELSE IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN 
+            DO: /* NON-POS */
                 IF Func.ValidateOrder:mIsFiberType(Order.CLIType) THEN
                 DO:
                     IF bf_Order.DeliverySecure > 0 THEN
-                    DO: 
-                        /* Since, secure deliver is opted, sim need to be delivered by logistics operator. */
-                        fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_SENDING_TO_LO}).
-
-                        fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_SENDING_TO_LO}).
+                    DO: /* Since, secure deliver is opted, sim need to be delivered by logistics operator. */
+                        RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_SENDING_TO_LO}).
                     END.
                     ELSE 
                     DO:
@@ -614,9 +597,7 @@ PROCEDURE pSIM:
                            will kick in at end of the day and marks order status to ORDER_STATUS_SENDING_TO_LO if sim isn't alloted 
                            in 12hrs from order is marked to ORDER_STATUS_PENDING_ICC_FROM_INSTALLER and logistics operator take care 
                            of sim allotment */
-                        fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
-
-                        fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
+                        RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
                     END.
                 END.
                 ELSE 
@@ -625,33 +606,18 @@ PROCEDURE pSIM:
                                       OrderGroup.OrderId        EQ bf_Order.OrderId         AND
                                       OrderGroup.GroupType      EQ {&OG_LOFILE}             AND
                                       ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN 
-                    DO:
-                        fSetOrderStatus(bf_Order.OrderID,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
-
-                        fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_PENDING_ICC_FROM_LO}). 
-                    END.    
+                        RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_PENDING_ICC_FROM_LO}).  
                     ELSE 
-                    DO:
-                        fSetOrderStatus(bf_Order.OrderID,{&ORDER_STATUS_SENDING_TO_LO}).
-
-                        fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_SENDING_TO_LO}). 
-                    END.
+                        RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_SENDING_TO_LO}).
                 END.
             END.
-
-            loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
-            RETURN "MNP Order with missing icc".
         END.
         ELSE
         DO: /* When parent product is of type 'mobile subscription' */ 
-            loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
-
             IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN /* POS */
             DO: /* Ideally, this shouldn't be a possibility */
-                fSetOrderStatus(bf_Order.OrderID,{&ORDER_STATUS_ERROR}).
-
-                fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_ERROR}). 
-            END.
+               RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_ERROR}).  
+            END.   
             ELSE IF LOOKUP(bf_Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN /* NON-POS */
             DO:
                 /* New change in SIM reservation logic, when order is placed from telesalses
@@ -661,34 +627,10 @@ PROCEDURE pSIM:
                                   OrderGroup.OrderId        EQ bf_Order.OrderId          AND
                                   OrderGroup.GroupType      EQ {&OG_LOFILE}             AND
                                   ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN 
-                DO:
-                    fSetOrderStatus(bf_Order.OrderID,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
-
-                    fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_PENDING_ICC_FROM_LO}). 
-                END.    
+                    RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_PENDING_ICC_FROM_LO}).  /* Ideally, this shouldn't be a possibility */    
                 ELSE 
-                DO:
-                    fSetOrderStatus(bf_Order.OrderID,{&ORDER_STATUS_SENDING_TO_LO}).
-
-                    fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_SENDING_TO_LO}). 
-                END.
-                loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).  
-                RETURN "MNP Order with missing icc".      
+                    RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_SENDING_TO_LO}).       
             END.
-        END.
-
-        IF fIsSimOnlyMNPNonPosOrder() THEN
-        DO:
-            loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
-
-            fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_SIM_ONLY_MNP_IN}).
-
-            fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_SIM_ONLY_MNP_IN}). 
-
-            loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
-
-            /* Set additional OrderStamp to avoid infinitive loop */
-            fMarkOrderStamp(bf_Order.OrderID,"SimOnly",0.0).   
         END.
     END.
     ELSE 
@@ -699,23 +641,34 @@ PROCEDURE pSIM:
 
        IF fIsMNPOrder(bf_Order.OrderType) THEN 
        DO:
-          RUN pInitiatePortability(liSubscriptionProductId).
-          IF RETURN-VALUE NE "" THEN
-             RETURN RETURN-VALUE.
-       END.  
+          IF fIsSimOnlyNonPosOrder() THEN /* Once OrderTimeStamp is recorded, this function will return false */
+          DO:
+               RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_SIM_ONLY_MNP_IN}).
+
+               fMarkOrderStamp(bf_Order.OrderID,"SimOnly",0.0). /* Set additional OrderStamp to avoid infinitive loop */  
+
+               RETURN "Sim only portin order".
+          END.
+          ELSE IF fGetMobileNumberPortingDate(bf_Order.OrderId, iiOrderProductID) <> ? THEN /* MNP */
+          DO:
+              RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_MNP_ON_HOLD}).
+              
+              RETURN "MNP Order with missing Porting Date".
+          END.
+          ELSE
+          DO:
+              RUN pInitiatePortability(liSubscriptionProductId).
+              IF RETURN-VALUE NE "" THEN
+                 RETURN RETURN-VALUE.
+          END.   
+       END.
 
        RUN pReserveSIM(bf_Order.MsSeq, lcICC).
 
        IF bf_Order.ResignationPeriod AND fIsResignationPeriod() THEN /* Delayed order */
        DO:
-          loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
+          RUN pSetOrderAndProductStatus(iiOrderProductID, {&ORDER_STATUS_RESIGNATION}).
           
-          fSetOrderStatus(bf_Order.OrderId,{&ORDER_STATUS_RESIGNATION}).
-
-          fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, {&ORDER_STATUS_RESIGNATION}).
-
-          loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
-
           RETURN "Resignation Period".
        END.
 
@@ -743,6 +696,22 @@ PROCEDURE pSetupBox:
     
     RETURN "".
 
+END PROCEDURE.
+
+PROCEDURE pSetOrderAndProductStatus:
+    DEFINE INPUT PARAMETER iiOrderProductID AS INTEGER   NO-UNDO.
+    DEFINE INPUT PARAMETER icStatusCode     AS CHARACTER NO-UNDO.
+
+    loEventLogMaker:make_eventlog("oldbuffer",BUFFER bf_Order:HANDLE).
+
+    fSetOrderStatus(bf_Order.OrderId, icStatusCode).
+
+    fSetOrderProductStatus(bf_Order.OrderId, iiOrderProductID, icStatusCode). 
+
+    loEventLogMaker:make_eventlog("modify",BUFFER bf_Order:HANDLE).
+
+    RETURN "".
+       
 END PROCEDURE.
 
 PROCEDURE pInitiatePortability:
