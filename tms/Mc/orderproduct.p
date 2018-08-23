@@ -265,6 +265,8 @@ form
      
   OrderMobile.PayType       
      LABEL "PayType ......."
+  OrderMobile.OldPayType AT 38
+     LABEL "OldPayType ...."  
   
   WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
   SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
@@ -963,6 +965,7 @@ PROCEDURE local-disp-ordermobile:
       OrderMobile.MNPStatus        
       OrderMobile.OldICC           
       OrderMobile.PayType   
+      OrderMobile.OldPayType
       WITH FRAME fOrdMobile.    
       
    ASSIGN
