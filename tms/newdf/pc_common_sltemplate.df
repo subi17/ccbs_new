@@ -12,7 +12,7 @@ ADD FIELD "SLCode" OF "SLTemplate" AS character
   HELP "Code of Servicelimit"
   ORDER 10
 
-ADD FIELD "elementtype" OF "SLTemplate" AS integer 
+ADD FIELD "Dialtype" OF "SLTemplate" AS integer 
   FORMAT ">9"
   INITIAL "0"
   MAX-WIDTH 4
@@ -27,13 +27,13 @@ ADD FIELD "BCC" OF "SLTemplate" AS integer
   HELP "Billing call case"
   ORDER 40
 
-ADD FIELD "unlimitedUsage" OF "SLTemplate" AS logical 
+ADD FIELD "UnlimitedUsage" OF "SLTemplate" AS logical 
   FORMAT "yes/no"
   INITIAL "false"
   MAX-WIDTH 1
   ORDER 50
 
-ADD FIELD "trafficType" OF "SLTemplate" AS character 
+ADD FIELD "DestinationType" OF "SLTemplate" AS character 
   FORMAT "x(12)"
   INITIAL ""
   LABEL "TrafficType"
@@ -98,8 +98,6 @@ ADD INDEX "SLCode" ON "SLTemplate"
   AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "SLCode" ASCENDING 
-.
-PSC
-cpstream=1252
-.
-0000001508
+
+
+
