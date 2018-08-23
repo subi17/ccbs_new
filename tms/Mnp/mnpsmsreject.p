@@ -29,10 +29,13 @@ DEFINE OUTPUT PARAMETER olInterrupted AS LOGICAL    NO-UNDO.
 /* ********************  Stream/Variable Definitions  ************************** */
 DEFINE STREAM sdump.
 
-DEFINE VARIABLE lcDelimiter   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcStatusReason  AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC ENUME,RECH_BNUME,RECH_ICCID,RECH_IDENT".
+DEFINE VARIABLE lcDelimiter      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcStatusReason   AS CHARACTER NO-UNDO INITIAL "AREC EXIST,AREC ENUME,RECH_BNUME,RECH_ICCID,RECH_IDENT".
+DEFINE VARIABLE ldtActStamp      AS DECIMAL   NO-UNDO.
 
 /* ***************************  Main Block  *************************** */
+
+ldtActStamp = Func.Common:mDate2TS( TODAY - 30 ).
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN lcDelimiter = DumpFile.DumpDelimiter.
@@ -45,36 +48,48 @@ FORM
 OUTPUT STREAM sdump TO value (icFile).
 
 ERROR_LOOP:
-FOR EACH MNPProcess NO-LOCK 
-    WHERE MNPProcess.Brand       =  Syst.Var:gcBrand 
-      AND MNPProcess.MNPType     =  {&MNP_TYPE_IN} 
-      AND MNPProcess.StatusCode  =  {&MNP_ST_AREC}   
-      AND MNPProcess.UpdateTS    >  idLastDump:
-    IF LOOKUP(MNPProcess.StatusReason,lcStatusReason) = 0 THEN NEXT ERROR_LOOP.
+FOR EACH CallAlarm NO-LOCK
+   WHERE CallAlarm.Brand      = Syst.Var:gcBrand
+     AND CallAlarm.ActStamp   >= ldtActStamp     /* Checking for last 30 day ActStamp to follow index */
+     AND CallAlarm.DeliStat   = {&CA_DELISTAT_SENT}
+     AND CallAlarm.CreditType = {&SMSTYPE_MNP}
+     AND CallAlarm.Delitype   = 1
+     AND CallAlarm.DeliStamp  > idLastDump
+     USE-INDEX ActStamp
+     :
+   FOR EACH MnpSub NO-LOCK
+      WHERE MnpSub.CLI = CallAlarm.CLI,
+       EACH MnpProcess NO-LOCK
+      WHERE MNPProcess.Brand       = Syst.Var:gcBrand
+        AND MnpProcess.MnpSeq      = MnpSub.MnpSeq
+        AND MNPProcess.MNPType     = {&MNP_TYPE_IN}
+        AND (MNPProcess.StatusCode = {&MNP_ST_AREC}
+         OR  MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED})
+        AND MNPProcess.FormRequest    = CallAlarm.DeliPara
+        AND LOOKUP(MnpProcess.StatusReason, lcStatusReason) > 0
+         BY MNPProcess.UpdateTS DESCENDING:
             
-       FIND FIRST MNPDetails NO-LOCK 
-            WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
-       IF NOT AVAILABLE MNPDetails THEN NEXT ERROR_LOOP.     
+      FIND FIRST MNPDetails NO-LOCK 
+           WHERE MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
        
-       FOR EACH MNPSub NO-LOCK 
-            WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq:
-                                                                        
-            PUT STREAM sdump UNFORMATTED 
-                Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
-                MNPSub.Cli lcDelimiter
-                MNPDetails.DonorCode lcDelimiter
-                MNPProcess.PortRequest lcDelimiter
-                MNPProcess.StatusReason lcDelimiter
-                Func.Common:mTS2HMS(MNPProcess.UpdateTS) SKIP.
+      PUT STREAM sdump UNFORMATTED
+         MNPSub.CLI                                                  lcDelimiter
+         IF AVAILABLE MNPDetails THEN MNPDetails.DonorCode ELSE ""   lcDelimiter
+         MNPProcess.PortRequest                                      lcDelimiter
+         MNPProcess.StatusReason                                     lcDelimiter
+         Func.Common:mTS2HMS(CallAlarm.DeliStamp)
+         SKIP.
                                 
-            oiEvents = oiEvents + 1.
-            IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN 
-            DO:
-                PAUSE 0.
-                DISP oiEvents WITH FRAME fColl.
-            END.  
-       END.                   
+      oiEvents = oiEvents + 1.
+      
+      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN
+      DO:
+         PAUSE 0.
+         DISP oiEvents WITH FRAME fColl.
+      END.
+      LEAVE.
+   END.                   
 END.
 
-OUTPUT STREAM sdump close.
+OUTPUT STREAM sdump CLOSE.
 HIDE FRAME fColl NO-PAUSE.
