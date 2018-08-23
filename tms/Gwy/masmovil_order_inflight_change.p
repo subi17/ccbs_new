@@ -74,14 +74,12 @@ IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE} AND
    RETURN SUBST("Incorrect message type: &1", FusionMessage.MessageType).
    
 FIND Order EXCLUSIVE-LOCK WHERE
-     Order.Brand = Syst.Var:gcBrand AND
-     Order.OrderId = FusionMessage.OrderID 
-     NO-WAIT NO-ERROR.
+     Order.Brand   EQ Syst.Var:gcBrand      AND
+     Order.OrderId EQ FusionMessage.OrderID NO-ERROR.
 
 FIND OrderFusion EXCLUSIVE-LOCK WHERE
-     OrderFusion.Brand = Syst.Var:gcBrand AND
-     OrderFusion.OrderID = FusionMessage.OrderID
-     NO-WAIT NO-ERROR.
+     OrderFusion.Brand   EQ Syst.Var:gcBrand      AND
+     OrderFusion.OrderID EQ FusionMessage.OrderID NO-ERROR.
 
 IF OrderFusion.FixedNumber EQ "" THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
@@ -251,11 +249,17 @@ ELSE DO:
       
    CASE MSRequest.ReqCParam2:
       WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO: 
-         RUN pUpdateInflightOrderDetails({&INFLIGHT_ADDRESS_UPDATE},FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
-         RUN pUpdateInflightOrderDetails({&INFLIGHT_ADDRESS_UPDATE},FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}).  
+         RUN pUpdateInflightOrderDetails({&INFLIGHT_ADDRESS_UPDATE},
+                                         FusionMessage.OrderID, 
+                                         {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
+         RUN pUpdateInflightOrderDetails({&INFLIGHT_ADDRESS_UPDATE},
+                                         FusionMessage.OrderID,
+                                         {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}).  
       END.   
       WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN 
-      	RUN pUpdateInflightOrderDetails({&INFLIGHT_PHONE_NUMBER_UPDATE},FusionMessage.OrderID, {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
+      	RUN pUpdateInflightOrderDetails({&INFLIGHT_PHONE_NUMBER_UPDATE},
+                                         FusionMessage.OrderID,
+                                         {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}).
          
       OTHERWISE RETURN.
    END CASE.
@@ -273,20 +277,32 @@ PROCEDURE pUpdateInflightOrderDetails:
    DEF INPUT PARAMETER icAmendmentType AS CHAR NO-UNDO.   
    DEF INPUT PARAMETER iiOrderID       AS INT NO-UNDO.
    DEF INPUT PARAMETER iiRowType       AS INT NO-UNDO. 
+  
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER OrderFusion   FOR OrderFusion.
    
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE 
               OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
               OrderCustomer.OrderId EQ iiOrderID        AND
-              OrderCustomer.RowType EQ iiRowType 
-              NO-WAIT NO-ERROR.      
+              OrderCustomer.RowType EQ iiRowType        NO-WAIT NO-ERROR.      
+
    IF NOT AVAIL OrderCustomer THEN 
       RETURN "ErrorCode: OrderCustomer is not available".
     
-   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrdCustomer).
+   FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE 
+              OrderFusion.Brand   EQ Syst.Var:gcBrand AND
+              OrderFusion.OrderId EQ iiOrderID        NO-WAIT NO-ERROR.
+
+   IF NOT AVAIL OrderFusion THEN 
+      RETURN "ErrorCode: OrderFusion is not available".
    
+
    CASE icAmendmentType:
       WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO: 
         
+         IF llDoEvent THEN 
+            RUN StarEventSetOldBuffer(lhOrdCustomer).
+         
          ASSIGN
             OrderCustomer.StreetType   = ENTRY(1,lcAmendamentValue,"|")
             OrderCustomer.Street       = ENTRY(2,lcAmendamentValue,"|")
@@ -309,34 +325,34 @@ PROCEDURE pUpdateInflightOrderDetails:
          
          IF OrderCustomer.BuildingNum NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + "|" +
-                                     OrderCustomer.BuildingNum.
+                                    OrderCustomer.BuildingNum.
          
          IF llDoEvent THEN 
             RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer, 
                                                  {&STAR_EVENT_USER}, 
                                                  "Installation Address Updated").    
          
+         RELEASE OrderCustomer.
       END.
-         
       WHEN {&INFLIGHT_PHONE_NUMBER_UPDATE} THEN DO:
+         
+         IF llDoEvent THEN 
+            RUN StarEventSetOldBuffer(lhOrdFusion).
          
          ASSIGN
             OrderFusion.FixedNumber     = lcAmendamentValue 
             OrderFusion.FixedNumberType = "NEW" .
          
-            IF llDoEvent THEN DO:
-               RUN StarEventMakeModifyEventWithMemo(lhOrdCustomer,
-                                                   {&STAR_EVENT_USER},
-                                                   "Fixed Number Updated").
+            IF llDoEvent THEN 
                RUN StarEventMakeModifyEventWithMemo(lhOrdFusion,
                                                     {&STAR_EVENT_USER},
                                                     "Fixed Number and Type Updated").
-            END.
+
+         RELEASE OrderFusion.
+
       END.     
-         
       OTHERWISE RETURN.
    END CASE.
                
-   RELEASE OrderCustomer.
    fReqStatus(2,""). 
 END PROCEDURE.

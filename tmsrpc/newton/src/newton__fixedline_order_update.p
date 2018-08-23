@@ -193,16 +193,9 @@ IF pcAmendmentType  EQ {&INFLIGHT_ADDRESS_UPDATE} AND
    Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
    RETURN appl_err("Order is not in valid state to update").   
    
-FIND FIRST OrderCustomer NO-LOCK WHERE 
-           OrderCustomer.Brand   EQ Syst.Var:gcBrand AND
-           OrderCustomer.OrderId EQ piOrderId        AND
-           OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-           NO-ERROR.
-
 FIND FIRST OrderFusion NO-LOCK WHERE
            OrderFusion.Brand   EQ Syst.Var:gcBrand AND
-           OrderFusion.OrderID EQ piOrderId 
-           NO-ERROR.
+           OrderFusion.OrderID EQ piOrderId        NO-ERROR.
 
 IF NOT AVAIL OrderFusion THEN
    RETURN appl_err("Fixed line connection is not available for this order").
@@ -211,22 +204,30 @@ IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT") EQ 0 THEN
    RETURN appl_err("Fusion status is not in valid state to update").
    
 IF LOOKUP(OrderFusion.FixedStatus,"CERRADA,CERRADA PARCIAL,CANCELACION EN PROCESO,CANCELADA,En proceso,EN PROCESO - NO CANCELABLE,PENDIENTE CANCELAR") > 0 THEN
-      RETURN appl_err("fixedline is not in valid state to update").
+   RETURN appl_err("fixedline is not in valid state to update").
       
 FIND FIRST CliType NO-LOCK WHERE
-           CliType.Brand      EQ Syst.Var:gcBrand AND
-           CliType.CliType    EQ Order.CliType    AND
-           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} OR
-           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY}
-           NO-ERROR.
+           CliType.Brand      EQ Syst.Var:gcBrand                   AND
+           CliType.CliType    EQ Order.CliType                      AND
+          (CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} OR
+           CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY})   NO-ERROR.
 
 IF NOT AVAIL CliType THEN
    RETURN appl_err("Invalid TariffType").
              
+FIND FIRST OrderCustomer NO-LOCK WHERE 
+           OrderCustomer.Brand   EQ Syst.Var:gcBrand                       AND
+           OrderCustomer.OrderId EQ piOrderId                              AND
+           OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} NO-ERROR.
+
+IF NOT AVAIL OrderCustomer THEN 
+   RETURN appl_err("OrderCustomer data is not available").
+
 CASE pcAmendmentType:
     WHEN {&INFLIGHT_ADDRESS_UPDATE} THEN DO:
 
-       IF NOT fCheckFusionMessage({&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}) THEN    
+       IF fCheckOngoingFusionMessage(INPUT OrderFusion.OrderId,
+                                     INPUT {&FUSIONMESSAGE_TYPE_ADDRESS_CHANGE}) THEN    
           RETURN appl_err("ERROR:Ongoing message , not possible to update order").
        
        ASSIGN
@@ -274,7 +275,8 @@ CASE pcAmendmentType:
        IF LENGTH(pcFixedNumber, "CHARACTER") <> 9  THEN
           RETURN appl_err("Fixednumber is not correct" ).
       
-       IF NOT fCheckFusionMessage({&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE}) THEN  
+       IF fCheckOngoingFusionMessage(INPUT OrderFusion.OrderId,
+                                     INPUT {&FUSIONMESSAGE_TYPE_PHONE_NUMBER_CHANGE}) THEN  
           RETURN appl_err("ERROR:Ongoing message , not possible to update order").
                  
        ASSIGN

@@ -260,21 +260,23 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
    RETURN TRUE.
 END.
 
-FUNCTION fCheckFusionMessage RETURNS LOGICAL
-(INPUT  icFusionMessage AS CHAR):
-   IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
-                      FusionMessage.OrderID       EQ OrderFusion.OrderID AND
-                      FusionMessage.MessageType   EQ icFusionMessage AND
-                      FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN
-                RETURN FALSE.
-   RETURN TRUE.
+FUNCTION fCheckOngoingFusionMessage RETURNS LOGICAL
+   (INPUT iiOrderId       AS INT,
+    INPUT icFusionMessage AS CHAR):
 
+   IF CAN-FIND (FIRST FusionMessage NO-LOCK WHERE
+                      FusionMessage.OrderID       EQ iiOrderID                    AND
+                      FusionMessage.MessageType   EQ icFusionMessage              AND
+                      FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}) THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
 END.
 
 FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
-   (iiOrderID AS INT,
-    icAmendmentType AS CHAR,
-    OUTPUT ocError AS CHAR):
+   (INPUT iiOrderID       AS INT,
+    INPUT icAmendmentType AS CHAR,
+    OUTPUT ocError        AS CHAR):
 
    DEF BUFFER OrderFusion    FOR OrderFusion.
    DEF BUFFER bFusionMessage FOR FusionMessage.
@@ -282,8 +284,8 @@ FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
    
    FIND OrderFusion NO-LOCK WHERE
         OrderFusion.Brand   EQ Syst.Var:gcBrand AND
-        OrderFusion.OrderID EQ iiOrderId 
-        NO-ERROR.
+        OrderFusion.OrderID EQ iiOrderId        NO-ERROR.
+
    IF NOT AVAIL OrderFusion THEN DO:
       ocError = "ERROR:Order data not found".
       RETURN FALSE.
@@ -304,7 +306,8 @@ FUNCTION fCreateFusionUpdateOrderMessage RETURNS LOGICAL
    IF lcMessageType EQ "" THEN
       RETURN FALSE.
          
-   IF NOT fCheckFusionMessage(lcMessageType) THEN DO:
+   IF fCheckOngoingFusionMessage(OrderFusion.OrderId,
+                                 lcMessageType) THEN DO:
       ocError = "ERROR:Ongoing message , not possible to update order".
       RETURN FALSE.
    END.
