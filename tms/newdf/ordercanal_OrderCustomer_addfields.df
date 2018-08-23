@@ -1,0 +1,15 @@
+ADD FIELD "DNIExpiry" OF "OrderCustomer" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "DNIExpiry"
+  COLUMN-LABEL "DNIExpiry"
+  HELP "DNI Expiry"
+  ORDER 1180
+
+ADD FIELD "Income" OF "OrderCustomer" AS character
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Income"
+  COLUMN-LABEL "Income"
+  HELP "Income"
+  ORDER 1190

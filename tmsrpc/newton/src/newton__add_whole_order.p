@@ -109,6 +109,8 @@
                   profession;string;optional;
                   retrieved;boolean;optional;
                   identified_cust_sms_number;string;optional;
+                  dni_expiry_date;string;optional;
+                  income;string;optional;
  * @address_data  fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -752,7 +754,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR lcField               AS CHARACTER NO-UNDO. 
    DEF VAR lcMarkOut             AS CHARACTER NO-UNDO. 
    DEF VAR lcMarketing           AS CHARACTER NO-UNDO. 
-   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 42.
+   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 44.
    DEF VAR lcIdOrderCustomer     AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR ldBirthDay            AS DATE      NO-UNDO.
@@ -959,7 +961,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.ExtInvRef          = data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
          OrderCustomer.TerritoryOwner     = data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.CoverageToken      = data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
-         OrderCustomer.AddressId          = data[LOOKUP("address_id", gcCustomerStructStringFields)] 
+         OrderCustomer.AddressId          = data[LOOKUP("address_id", gcCustomerStructStringFields)]
+         OrderCustomer.DNIExpiry          = data[LOOKUP("dni_expiry_date", gcCustomerStructStringFields)]
+         OrderCustomer.Income             = data[LOOKUP("income", gcCustomerStructStringFields)]
          OrderCustomer.pro                = llIsProCustomer
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
@@ -1522,7 +1526,9 @@ gcCustomerStructStringFields = "city," +
                                "km," +
                                "territory_owner," +
                                "coverage_token," +
-                               "address_id".   /* EXTENT value count 42 */ 
+                               "address_id," + 
+                               "dni_expiry_date," + 
+                               "income".   /* EXTENT value count 44 */ 
 
 gcPoUserStructFields = "fname!," +
                        "lname!," +
