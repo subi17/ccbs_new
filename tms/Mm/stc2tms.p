@@ -79,6 +79,7 @@ DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 DEF VAR liOrderId           AS INT  NO-UNDO.
 DEF VAR lcResult            AS CHAR NO-UNDO.
+DEF VAR lcTermVal           AS CHAR NO-UNDO.
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -229,10 +230,20 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
          liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
          IF liOrderId EQ 0
             THEN lcResult = "OrderID not found".
-         /* This call makes synchronous termination request to MuleDB */
-         ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).           TÄMÄ ON NYT SYNKRONINE.
-tässä mennään 81:een. Lippu päälle requestparam-tauluun. 
-toisella kerralla ei ajeta kun se on jo merkattu ajetuksi.
+         ELSE DO:
+            /* If fixed line is not terminated assign this to term que (81)*/
+            /* If termination is already done -> continue normally*/
+            IF NOT fCheckMsRequestParam(MsRequest.MsRequest,
+                                    {&FIXED_TERMINATION_PARAM},
+                                    OUTPUT lcTermVal) THEN DO:                        
+               fCreateMsRequestParam(liRequest,
+                                     {&FIXED_TERMINATION_PARAM},
+                                     {&INTVAL}, /* Store orderID */
+                                     liOrderId).
+               fReqStatus({&REQUEST_STATUS_FIXED_LINE_TERMINATION},"").
+
+            END.
+         END.
 
          IF lcResult NE "" THEN DO:  
             /* "Fixed number termination failed" */
@@ -244,7 +255,7 @@ toisella kerralla ei ajeta kun se on jo merkattu ajetuksi.
             fReqError(SUBST("La baja del sevicio fijo ha fallado: &1", lcResult)).
             RETURN.
          END.
-      END.
+      END. .....................................
 
       RUN pNetworkAction.
       IF RETURN-VALUE BEGINS "SubRequest" THEN RETURN.
