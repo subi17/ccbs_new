@@ -286,7 +286,7 @@ IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
                   MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
                   MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
                   MsRequest.ReqIParam1 = Order.OrderId NO-LOCK) THEN
-   add_boolean(top_struct,"reverted_renewal_order",True).
+   add_boolean(top_struct,"reverted_renewal_order",TRUE).
 
 add_string(top_struct, "terminal_return_contracts" , lcTermReturnContracts).
 add_string(top_struct, "extension_contracts" , lcExtensionContracts).
@@ -502,7 +502,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
    IF AVAIL OrderFusion AND OrderFusion.FusionStatus > "" THEN DO:
    
       lcFusionStruct = add_struct(top_struct, "fusion_data").
-      add_string(lcFusionStruct, "iua_value",OrderFusion.IUA).
+      add_string(lcFusionStruct, "fixed_line_iua",OrderFusion.IUA).
       add_string(lcFusionStruct, "fixed_number_type",OrderFusion.FixedNumberType).
       add_string(lcFusionStruct, "fixed_line_number",OrderFusion.FixedNumber).
       add_string(lcFusionStruct, "fixed_line_mnp_old_operator_name",OrderFusion.FixedCurrOper).

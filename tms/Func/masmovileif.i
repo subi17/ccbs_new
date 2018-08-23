@@ -29,7 +29,7 @@ FUNCTION fMasXMLGenerate_test RETURNS CHAR
       REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") +
       ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
-         string(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
+         STRING(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
       PUT STREAM sOut "" SKIP.   
       OUTPUT STREAM sOut CLOSE.
       xmlrpc_initialize(FALSE).
@@ -118,7 +118,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER OrderFusion FOR OrderFusion.
    DEF BUFFER CLIType FOR CliType.
 
-   FIND FIRST Order NO-LOCK where 
+   FIND FIRST Order NO-LOCK WHERE 
               Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL Order THEN 
@@ -258,14 +258,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
    
-   IF OrderFusion.IUA NE "" THEN DO:
-       fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "IUA",                   /*param name*/
-                         OrderFusion.IUA,         /*param value*/
-                         "").                     /*old value*/
-      
-   END.
-
    /*Mandatory in portability*/
    IF OrderFusion.FixedNumberType NE "new" THEN DO:
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
@@ -413,8 +405,21 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                          "DHCP", /*param value*/
                          "").                         /*old value*/
 /* YDR-2532 */
-
-   END.
+      IF OrderFusion.IUA NE "" THEN DO:
+         fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "IUA",                   /*param name*/
+                         OrderFusion.IUA,         /*param value*/
+                         "").                     /*old value*/      
+      END. /* NEBACO-105 */
+      
+      /* Logic to send PreviousInstallation information */   
+      fAddCharacteristic(lcCharacteristicsArray,                           /*base*/
+                         "PreviousInstallations",                          /*param name*/
+                         IF OrderFusion.CustomerType EQ "FIBER" THEN "SI"
+                         ELSE "NO",                                        /*param value*/
+                         "").                                              /*old value*/       
+   
+   END. /* IF lcConnServiceId EQ "FTTH" */
 
    IF LENGTH(OrderCustomer.Gescal) < 37 THEN
       lcGescalValue = OrderCustomer.Gescal + FILL(" ",(37 - LENGTH(OrderCustomer.Gescal))).
@@ -639,7 +644,7 @@ FUNCTION fMasmovil_ACC RETURNS CHAR
    DEF BUFFER OrderFusion   FOR OrderFusion.
    DEF BUFFER bActionLog    FOR ActionLog.
 
-   FIND FIRST Order NO-LOCK where 
+   FIND FIRST Order NO-LOCK WHERE 
               Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL Order THEN 
