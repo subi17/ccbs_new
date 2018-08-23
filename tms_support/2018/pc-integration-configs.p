@@ -63,6 +63,49 @@ FUNCTION fCreateTMSParamDE RETURN CHARACTER (INPUT icParamGroup AS CHARACTER ,
 
 END FUNCTION.
 
+FUNCTION fCreateTMSCodes RETURNS LOGICAL
+    (INPUT icTableName AS CHAR,
+     INPUT icFieldName AS CHAR,
+     INPUT icGroupCode AS CHAR,
+     INPUT icCodeValue AS CHAR,
+     INPUT icCodeName  AS CHAR):
+
+    FIND FIRST TMSCodes WHERE 
+               TMSCodes.TableName EQ icTableName AND
+               TMSCodes.FieldName EQ icFieldName NO-LOCK NO-ERROR.
+    IF NOT AVAIL TMSCodes THEN
+    DO:
+        CREATE TMSCodes.
+        ASSIGN
+            TMSCodes.CodeGroup = icGroupCode
+            TMSCodes.TableName = icTableName
+            TMSCodes.FieldName = icFieldName
+            TMSCodes.CodeName  = icCodeName
+            TMSCodes.InUse     = 1.
+    END.
+    ELSE
+    DO:
+        FIND CURRENT TMSCodes EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+        IF AVAIL TMSCodes THEN
+           ASSIGN TMSCodes.CodeValue = icCodeValue.
+    END.
+
+    RETURN TRUE.
+    
+END FUNCTION.
+
+
+
+IF NOT AVAIL TMSCodes THEN DO:
+   CREATE TMSCodes.
+   ASSIGN
+      TMSCodes.TableName = "Customer"
+      TMSCodes.FieldName = "NWProfiles"
+      TMSCodes.CodeGroup = "NWProfile"
+      TMSCodes.CodeValue = "1"
+      TMSCodes.CodeName  = "Solo Yoigo"
+      TMSCodes.InUse     = 0.
+
 fCreateTMSParam("PC.Interface","PC.Queue.ip","Messaging Broker IP Address","albireo.int.asp.qvantel.net"). 
 fCreateTMSParam("PC.Interface","PC.Queue.port","Port number","61617").
 fCreateTMSParam("PC.Interface","PC.Queue.Name","Queue Name", "rbs-messages").
@@ -71,6 +114,12 @@ fCreateTMSParam("PC.Interface","PC.Passcode","Password","qvantel").
 fCreateTMSParam("PC.Interface","UTF8_to_Scandics", "Scandics UTF-8","\u0142,\u2013,\u011d|l,-,g").
 fCreateTMSParam("PC.Interface","PC.Ack.QueueName", "Default queue for acknowledgments","tms-errors").
 fCreateTMSParamDE("PC.Interface","PC.Ack.Queue.Sleep", "Sleep time for process",1).
+
+fCreateTMSCodes("CLIType", "TariffType", "MobSub", "0", "Mobile").
+fCreateTMSCodes("CLIType", "TariffType", "MobSub", "1", "convergent").
+fCreateTMSCodes("CLIType", "TariffType", "MobSub", "2", "fixed_only").
+fCreateTMSCodes("CLIType", "TariffType", "MobSub", "3", "fusion").
+fCreateTMSCodes("CLIType", "TariffType", "MobSub", "4", "broadband").
 
 MESSAGE "TMSParam created successfully."
 VIEW-AS ALERT-BOX.
