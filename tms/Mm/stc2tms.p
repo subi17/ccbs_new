@@ -230,7 +230,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
          IF liOrderId EQ 0
             THEN lcResult = "OrderID not found".
          /* This call makes synchronous termination request to MuleDB */
-         ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).           
+         ELSE lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).           TÄMÄ ON NYT SYNKRONINE.
+tässä mennään 81:een. Lippu päälle requestparam-tauluun. 
+toisella kerralla ei ajeta kun se on jo merkattu ajetuksi.
 
          IF lcResult NE "" THEN DO:  
             /* "Fixed number termination failed" */
