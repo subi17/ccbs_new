@@ -269,7 +269,7 @@ form
      LABEL "OldPayType ...."  
   
   WITH  CENTERED OVERLAY ROW 3 WIDTH 80 
-  SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
+  SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) " Mobile Subscription for OrderProduct:" + STRING(OrderProduct.OrderProductID) + " "
   FRAME fOrdMobile.   
   
   form
@@ -385,7 +385,7 @@ form
      SKIP(2)          
     
   WITH  CENTERED OVERLAY ROW 1 WIDTH 80 
-  SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr
+  SIDE-LABELS TITLE COLOR VALUE(Syst.Var:ctc) " Fixed Subscription for OrderProduct:" + STRING(OrderProduct.OrderProductID) + " "
   FRAME fOrdFusion.
 
 IF iiOrderID > 0 THEN ASSIGN 
@@ -941,9 +941,6 @@ PROCEDURE local-disp-ordermobile:
       RETURN.
    END. 
    
-   ASSIGN 
-      ac-hdr = " Mobile Subscription for OrderProduct:" + STRING(iiOrdProductID) + " ".                 
-
    ACTION: 
    repeat with frame fOrdMobile:
        
@@ -1009,9 +1006,6 @@ PROCEDURE local-disp-orderfusion:
       RETURN.
    END. 
   
-   ASSIGN 
-      ac-hdr = " Fixed Subscription for OrderProduct:" + STRING(iiOrdProductID) + " ".                 
-   
    ACTION: 
    repeat with frame fOrdFusion:
                     
