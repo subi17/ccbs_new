@@ -242,11 +242,11 @@ lcProgram = PROGRAM-NAME(1).
 
 form
     "Title ........:" OrderCustomer.CustTitle                
-      "Cust. Nbr .:" AT 50 OrderCustomer.CustNum
+      "Cust. Nbr .:" AT 48 OrderCustomer.CustNum
 	SKIP
   
     "First Name ...:" OrderCustomer.FirstName
-      "ID Type ...:" AT 50 OrderCustomer.CustIDType 
+      "ID Type ...:" AT 48 OrderCustomer.CustIDType 
        VALIDATE(CAN-FIND(FIRST TMSCodes WHERE 
                                TMSCodes.TableName = "Customer"   AND
                                TMSCodes.FieldName = "CustIDType" AND
@@ -256,30 +256,31 @@ form
 	SKIP
  
     "SurName1 .....:" OrderCustomer.SurName1                
-      "Customer ID:" AT 50 OrderCustomer.CustID 
+      "Customer ID:" AT 48 OrderCustomer.CustID 
     SKIP
 
     "SurName2 .....:" OrderCustomer.SurName2                 
-      "Birthday ..:" AT 50 OrderCustomer.Birthday FORMAT "99-99-9999" 
+      "Birthday ..:" AT 48 OrderCustomer.Birthday FORMAT "99-99-9999" 
     SKIP
 
     "Company ......:" OrderCustomer.Company                  
-      "Founding date:" AT 50 OrderCustomer.FoundationDate FORMAT "99-99-9999"
+      "Founding Dt:" AT 48 OrderCustomer.FoundationDate FORMAT "99-99-9999"
     SKIP
 
-    "Address ......:" OrderCustomer.Street FORMAT "X(60)" 
-	SKIP
+    "Address ......:" OrderCustomer.Street FORMAT "X(15)"
+    "Floor .....:" AT 48 Ordercustomer.Floor format "X(10)"
+    SKIP
 
     "Building Num .:" OrderCustomer.BuildingNum
-      "Language ..:" AT 50 OrderCustomer.Language  
+      "Language ..:" AT 48 OrderCustomer.Language  
        VALIDATE(CAN-FIND(Language WHERE 
                          Language.Language = 
                          INTEGER(INPUT OrderCustomer.Language)),
                          "Unknown language") 
 	SKIP
 
-    "Floor ........:" OrderCustomer.floor FORMAT "X(10)"  
-      "Nationality:" AT 50 OrderCustomer.Nationality FORMAT "X(2)"
+    "Compl. Addr ..:" OrderCustomer.addresscompl FORMAT "X(10)"  
+      "Nationality:" AT 48 OrderCustomer.Nationality FORMAT "X(2)"
        VALIDATE(CAN-FIND(Nationality WHERE 
                          Nationality.Nationality = 
                          INPUT OrderCustomer.Nationality),
@@ -288,11 +289,11 @@ form
 	SKIP
 
     "Zip Code .....:" OrderCustomer.ZipCode     
-      "Fixed Num:" AT 50 OrderCustomer.FixedNumber FORMAT "X(10)" 
+      "Fixed Num .:" AT 48 OrderCustomer.FixedNumber FORMAT "X(10)" 
 	SKIP
 
     "City .........:" OrderCustomer.PostOffice 
-	  "Mobile Num:"  AT 50 OrderCustomer.MobileNumber  FORMAT "X(10)" 
+	  "Mobile Num :"  AT 48 OrderCustomer.MobileNumber  FORMAT "X(10)" 
 	SKIP
 
     "Region .......:" OrderCustomer.Region FORMAT "X(2)"
@@ -300,7 +301,7 @@ form
                          Region.Region = INPUT OrderCustomer.Region),
                          "Unknown region")
        lcRegion NO-LABEL FORMAT "X(15)"
-	  "CCReference:" AT 50 OrderPayment.CCReference
+	  "CCReference:" AT 48 OrderPayment.CCReference
 	SKIP 
 
     "Country ......:" OrderCustomer.Country FORMAT "X(2)" 
@@ -308,33 +309,33 @@ form
                          Country.Country = INPUT OrderCustomer.Country),
                          "Unknown country")
        lcCountry NO-LABEL FORMAT "X(20)"
-      "Profession:" AT 50 OrderCustomer.Profession FORMAT "X(2)"
+      "Profession :" AT 48 OrderCustomer.Profession FORMAT "X(2)"
         lcProfession NO-LABEL FORMAT "X(14)"
     SKIP	 
 	 
     "Courier Code .:" OrderCustomer.KialaCode NO-LABEL format "X(25)"
-      "Marketing:" AT 50
+      "Marketing .:" AT 48
     SKIP
 
     "Email ........:" OrderCustomer.Email FORMAT "X(30)"
-      "DontSharePD:" AT 50 OrderCustomer.DontSharePersData
+      "DontSharePD:" AT 48 OrderCustomer.DontSharePersData
       "Bank:" AT 69  OrderCustomer.OutBankMarketing
     SKIP
-    
+
     "Bank Code ....:" OrderCustomer.BankCode  FORMAT "X(24)" 
-      "SMS   Yoigo:" AT 50 OrderCustomer.OperSMSMarketing 
+      "SMS   Yoigo:" AT 48 OrderCustomer.OperSMSMarketing 
         "3rd:" AT 70 OrderCustomer.OutSMSMarketing
     SKIP
 
     lcBankName1 FORMAT "X(20)" AT 1
-      "Email Yoigo:" AT 50 OrderCustomer.OperEMailMarketing
+      "Email Yoigo:" AT 48 OrderCustomer.OperEMailMarketing
         "3rd:" AT 70 OrderCustomer.OutEMailMarketing
     SKIP
 
     lcBankAddr FORMAT "X(20)" AT 1
     lcBankPost FORMAT "X(22)" AT 26
     /*zip x(5) and city x(16) separated with space*/
-      "Post  Yoigo:" AT 50  OrderCustomer.OperPostMarketing
+      "Post  Yoigo:" AT 48  OrderCustomer.OperPostMarketing
         "3rd:" AT 70 OrderCustomer.OutPostMarketing
 		
  WITH OVERLAY ROW 1 WIDTH 80 centered
@@ -2146,7 +2147,8 @@ PROCEDURE local-update-customer:
          OrderCustomer.FoundationDate
          OrderCustomer.Profession lcProfession
          OrderCustomer.KialaCode
-         OrderCustomer.DontSharePersData		 
+         OrderCustomer.DontSharePersData
+         Ordercustomer.Floor		 
       WITH FRAME fCustomer.
   
       IF AVAIL OrderPayment THEN 
