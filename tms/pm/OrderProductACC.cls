@@ -71,6 +71,8 @@ CLASS pm.OrderProductACC INHERITS pm.OrderProduct:
       IF VALID-OBJECT(aoMemo)
       THEN aoMemo:mStoreData().
 
+      aoOrderCustomer:mAssignOrderProductID(THIS-OBJECT:orderProductID).
+
       aoExecutionDate:mStoreData().
       aoOrderCustomer:mStoreData().
 

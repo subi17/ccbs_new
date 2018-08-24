@@ -449,10 +449,16 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
         mStoreSubscriptionProduct().
         
         IF VALID-OBJECT(objMobilePoCustomer) THEN 
+        DO:
+            objMobilePoCustomer:mAssignOrderProductID(THIS-OBJECT:orderProductID).
             objMobilePoCustomer:mStoreData().
+        END.
         
-        IF VALID-OBJECT(objFixedPoCustomer) THEN 
+        IF VALID-OBJECT(objFixedPoCustomer) THEN
+        DO:
+            objFixedPoCustomer:mAssignOrderProductID(THIS-OBJECT:orderProductID).
             objFixedPoCustomer:mStoreData().
+        END. 
             
         IF VALID-OBJECT(objOrderFusion) THEN 
             objOrderFusion:mStoreData().
@@ -461,8 +467,11 @@ CLASS pm.OrderProductSubscription INHERITS pm.OrderProduct:
     
     METHOD PUBLIC VOID mStoreSubscriptionProduct():
         
-        IF VALID-OBJECT(objAggrementCustomer) THEN 
+        IF VALID-OBJECT(objAggrementCustomer) THEN
+        DO:
+            ObjAggrementCustomer:mAssignOrderProductID(THIS-OBJECT:orderProductID).
             objAggrementCustomer:mStoreData().
+        END. 
         
         IF VALID-OBJECT(objParamFactory) THEN 
             objParamFactory:mStoreData().

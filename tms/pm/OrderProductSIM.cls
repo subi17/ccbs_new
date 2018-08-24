@@ -103,7 +103,10 @@ CLASS pm.OrderProductSIM INHERITS pm.OrderProduct:
         END.
         
         IF VALID-OBJECT(objShipCustomer) THEN 
+        DO:
+            objShipCustomer:mAssignOrderProductID(THIS-OBJECT:orderProductID).            
             objShipCustomer:mStoreData().
+        END.
             
         IF VALID-OBJECT(objParamFactory) THEN 
             objParamFactory:mStoreData().
