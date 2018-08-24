@@ -14,6 +14,13 @@ DEF INPUT PARAMETER iiMsRequest AS INT.
 
 DEF VAR lcResult AS CHAR NO-UNDO.
 
+FIND FIRST MSRequest WHERE
+           MSRequest.MSrequest = iiMSrequest NO-LOCK NO-ERROR.
+
+IF NOT (MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+        MsRequest.ReqStatus EQ {&REQUEST_STATUS_FIXED_LINE_TERMINATION}) THEN
+   RETURN "ERROR".
+
 FIND Mobsub WHERE Mobsub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
 
 IF NOT AVAILABLE Mobsub THEN DO:
@@ -21,17 +28,14 @@ IF NOT AVAILABLE Mobsub THEN DO:
    RETURN "ERROR".
 END.
 
-IF NOT fCheckMsRequestParam(MsRequest.MsRequest,
-                            {&FIXED_TERMINATION_PARAM},
-                            OUTPUT lcOrderId) THEN DO:
-   fReqError("Request Param not found - Fixed Line Termination").
-   RETURN "ERROR".
- 
-END.
-liOrderId = INT(lcOrderId).
+liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).
+IF liOrderId EQ 0 THEN 
+   lcResult = "OrderID not found".
+ELSE DO:
 
-/* This call makes synchronous termination request to MuleDB */
-lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+   /* This call makes synchronous termination request to MuleDB */
+   lcResult = fSendFixedLineTermReqToMuleDB(liOrderId).
+END.
 
 IF lcResult NE "" THEN DO:
    /* "Fixed number termination failed" */
@@ -43,5 +47,8 @@ IF lcResult NE "" THEN DO:
     fReqError(SUBST("La baja del sevicio fijo ha fallado: &1", lcResult)).
     RETURN "ERROR".
 END.    
+
+/* Coing back to original status */
+fReqStatus({&REQUEST_STATUS_SUB_REQUEST_DONE},"").
 
 RETURN "OK".

@@ -77,7 +77,6 @@ DEF VAR ldeActStamp        AS DEC  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
-DEF VAR liOrderId           AS INT  NO-UNDO.
 DEF VAR lcResult            AS CHAR NO-UNDO.
 DEF VAR lcTermVal           AS CHAR NO-UNDO.
 
@@ -227,35 +226,18 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       IF fIsConvergenceTariff(MobSub.CLIType) AND
          CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:   
 
-         liOrderId = fFindFixedLineOrder(MSRequest.MSSeq).         
-         IF liOrderId EQ 0
-            THEN lcResult = "OrderID not found".
-         ELSE DO:
-            /* If fixed line is not terminated assign this to term que (81)*/
-            /* If termination is already done -> continue normally*/
-            IF NOT fCheckMsRequestParam(MsRequest.MsRequest,
+         /* If fixed line is not terminated assign this to term que (81)*/
+         /* If termination is already done -> continue normally*/
+         IF NOT fCheckMsRequestParam(MsRequest.MsRequest,
                                     {&FIXED_TERMINATION_PARAM},
                                     OUTPUT lcTermVal) THEN DO:                        
-               fCreateMsRequestParam(liRequest,
-                                     {&FIXED_TERMINATION_PARAM},
-                                     {&INTVAL}, /* Store orderID */
-                                     liOrderId).
-               fReqStatus({&REQUEST_STATUS_FIXED_LINE_TERMINATION},"").
-
-            END.
+            fCreateMsRequestParam(liRequest,
+                                  {&FIXED_TERMINATION_PARAM},
+                                  {&CHARVAL}, /* Store orderID */
+                                  {&FIXED_TERMINATION_STARTED}).
+            fReqStatus({&REQUEST_STATUS_FIXED_LINE_TERMINATION},"").
          END.
-
-         IF lcResult NE "" THEN DO:  
-            /* "Fixed number termination failed" */
-            Func.Common:mWriteMemo("MobSub",
-                                   STRING(MSrequest.MsSeq),
-                                   MobSub.CustNum,
-                                   "La baja del sevicio fijo ha fallado: ",
-                                   lcResult).
-            fReqError(SUBST("La baja del sevicio fijo ha fallado: &1", lcResult)).
-            RETURN.
-         END.
-      END. .....................................
+      END.
 
       RUN pNetworkAction.
       IF RETURN-VALUE BEGINS "SubRequest" THEN RETURN.
