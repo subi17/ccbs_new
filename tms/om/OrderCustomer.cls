@@ -214,6 +214,10 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
       GET.
       SET.
 
+   DEFINE PUBLIC PROPERTY orderProductId AS INTEGER NO-UNDO
+      GET.
+      SET.
+
    DEFINE PROTECTED VARIABLE objOrder AS CLASS om.Order NO-UNDO.
 
    CONSTRUCTOR PUBLIC OrderCustomer ( iObjOrder AS CLASS om.Order ):
@@ -484,6 +488,7 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
          OrderCustomer.pro                = THIS-OBJECT:pro
          OrderCustomer.SelfEmployed       = THIS-OBJECT:selfEmployed
          OrderCustomer.Category           = THIS-OBJECT:category
+         OrderCustomer.OrderProductID     = THIS-OBJECT:orderProductId
          .
          
        IF OrderCustomer.BuildingNum NE ""  THEN 
@@ -552,6 +557,12 @@ CLASS om.OrderCustomer IMPLEMENTS bss.cls.IObjectStorage:
            THIS-OBJECT:authCustId     = objOrder:objCustomer:authCustId
            THIS-OBJECT:authCustIdType = objOrder:objCustomer:authCustIdType.
        
+       
+   END METHOD.
+   
+   METHOD PUBLIC VOID mAssignOrderProductID(INPUT iiOrderProductId AS INTEGER):
+       
+       ASSIGN THIS-OBJECT:orderProductId = iiOrderProductId.
        
    END METHOD.
    

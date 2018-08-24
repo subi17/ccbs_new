@@ -7,5 +7,14 @@ ADD FIELD "AccountID" OF "Order" AS INTEGER
   COLUMN-LABEL "AccountID"
   ORDER 1180
 
+ADD FIELD "OrderProductID" OF "OrderCustomer" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL ""
+  LABEL "OrderProductID"
+  POSITION 81
+  MAX-WIDTH 16
+  COLUMN-LABEL "OrderProductID"
+  HELP "Product ID"
+  ORDER 1190
 
   
